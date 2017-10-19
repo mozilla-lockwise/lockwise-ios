@@ -1,16 +1,16 @@
 import Foundation
 import WebKit
 
-class DataStore : NSObject, WKNavigationDelegate, WKUIDelegate {
-    var webView:WebView
-    private let dataStoreName = "ds"
+class DataStore : NSObject, WKNavigationDelegate {
+    var webView:(WKWebView & TypedJavaScriptWebView)!
+    private let dataStoreName:String!
     
-    init(webview:WebView!) {
+    init<T: WKWebView>(webview: T, dataStoreName:String? = "ds") where T: TypedJavaScriptWebView {
         self.webView = webview
+        self.dataStoreName = dataStoreName
         super.init()
         
         self.webView.navigationDelegate = self
-        self.webView.uiDelegate = self
         
         let baseUrl = URL(string: "file://\(Bundle.main.bundlePath)/lockbox-datastore/")!
         let path = "file://\(Bundle.main.bundlePath)/lockbox-datastore/index.html"
@@ -19,11 +19,11 @@ class DataStore : NSObject, WKNavigationDelegate, WKUIDelegate {
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.webView.evaluateJavaScript("var \(self.dataStoreName);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName) = datastore;}));")
+        self.webView.evaluateJavaScript("var \(self.dataStoreName!);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName!) = datastore;}));")
     }
     
     func initialized(completionHandler: ((Bool) -> Void)?) {
-        self.webView.evaluateJavaScriptToBool("\(self.dataStoreName).initialized") { (value, error) in
+        self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).initialized") { (value, error) in
             if value != nil {
                 completionHandler?(value!)
                 return
@@ -34,27 +34,30 @@ class DataStore : NSObject, WKNavigationDelegate, WKUIDelegate {
     }
     
     func initialize(password:String) {
-        self.webView.evaluateJavaScript("\(self.dataStoreName).initialize({password:\"\(password)\",})")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({password:\"\(password)\",})")
     }
     
     func locked(completionHandler: ((Bool) -> Void)?) {
-        self.webView.evaluateJavaScriptToBool("\(self.dataStoreName).locked") { (value, error) in
+        self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).locked") { (value, error) in
             if value != nil {
                 completionHandler?(value!)
+                return
             }
+            
+            completionHandler?(false)
         }
     }
     
     func unlock(password:String) {
-        self.webView.evaluateJavaScript("\(self.dataStoreName).unlock(\"\(password)\")")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")")
     }
     
     func lock() {
-        self.webView.evaluateJavaScript("\(self.dataStoreName).lock()")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()")
     }
     
     func keyList(completionHandler: (([Any]) -> Void)?) {
-        self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName).list()") { (array, error) in
+        self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()") { (array, error) in
             if array != nil {
                 completionHandler?(array!)
             }

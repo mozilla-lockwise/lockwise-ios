@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-               BuildableName = "lockbox-exploration.app"
-               BlueprintName = "lockbox-exploration"
+               BuildableName = "lockbox-ios.app"
+               BlueprintName = "lockbox-ios"
                ReferencedContainer = "container:lockbox-ios.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,8 +34,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D5DF8861F87F2600039B23E"
-               BuildableName = "lockbox-explorationTests.xctest"
-               BlueprintName = "lockbox-explorationTests"
+               BuildableName = "lockbox-iosTests.xctest"
+               BlueprintName = "lockbox-iosTests"
                ReferencedContainer = "container:lockbox-ios.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -44,8 +44,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "lockbox-exploration.app"
-            BlueprintName = "lockbox-exploration"
+            BuildableName = "lockbox-ios.app"
+            BlueprintName = "lockbox-ios"
             ReferencedContainer = "container:lockbox-ios.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -68,8 +68,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "lockbox-exploration.app"
-            BlueprintName = "lockbox-exploration"
+            BuildableName = "lockbox-ios.app"
+            BlueprintName = "lockbox-ios"
             ReferencedContainer = "container:lockbox-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -87,8 +87,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "lockbox-exploration.app"
-            BlueprintName = "lockbox-exploration"
+            BuildableName = "lockbox-ios.app"
+            BlueprintName = "lockbox-ios"
             ReferencedContainer = "container:lockbox-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

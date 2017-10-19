@@ -3,7 +3,13 @@ import WebKit
 
 //todo: figure out custom errors for these methods!
 
-class WebView : WKWebView {
+protocol TypedJavaScriptWebView {
+    func evaluateJavaScriptToBool(_ javaScriptString: String, completionHandler: ((Bool?, Error?) -> Void)?)
+    func evaluateJavaScriptToString(_ javaScriptString: String, completionHandler: ((String?, Error?) -> Void)?)
+    func evaluateJavaScriptMapToArray(_ javaScriptString: String, completionHandler: (([Any]?, Error?) -> Void)?)
+}
+
+class WebView : WKWebView, TypedJavaScriptWebView {
     func evaluateJavaScriptToBool(_ javaScriptString: String, completionHandler: ((Bool?, Error?) -> Void)? = nil) {
         self.evaluateJavaScript(javaScriptString) { (value, error) in
             if error != nil {
