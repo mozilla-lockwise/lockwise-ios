@@ -58,10 +58,18 @@ class DataStore : NSObject, WKNavigationDelegate {
     
     func keyList(completionHandler: (([Item]) -> Void)?) {
         self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()") { (array, error) in
-            let mappedArray = array?.map({ (value) -> [String:Any] in
+            let mappedArray = array?.map({ (value) -> Item in
                 let itemDictionary = (value as! [Any])[1] as! [String:Any]
-                return itemDictionary
+                return Parser.itemFromDictionary(itemDictionary)
             })
+            
+            completionHandler!(mappedArray!)
         }
+    }
+    
+    func addItem(_ item:Item) {
+        let jsonItem = Parser.jsonStringFromItem(item)
+        
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
     }
 }

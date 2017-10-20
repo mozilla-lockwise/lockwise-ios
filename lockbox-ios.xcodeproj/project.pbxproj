@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D0D0EDD1F9A5CE2007D8960 /* ItemSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0D0EDC1F9A5CE2007D8960 /* ItemSpec.swift */; };
 		7D1B1ACE1F9902A500C1F5FF /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */; };
 		7D1B1ACF1F9902A800C1F5FF /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8D1F98F86600C1F5FF /* Quick.framework */; };
 		7D1B1AD11F9902B300C1F5FF /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D1B1A8D1F98F86600C1F5FF /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -15,7 +16,8 @@
 		7D38849B1F992A0B0058DAFF /* WebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */; };
 		7D38849C1F99374F0058DAFF /* lockbox-datastore in Resources */ = {isa = PBXBuildFile; fileRef = 7D1B1A991F98FC0600C1F5FF /* lockbox-datastore */; };
 		7D38849E1F9939520058DAFF /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D38849D1F9939520058DAFF /* Item.swift */; };
-		7D3884A01F9939680058DAFF /* ItemFromJSONParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D38849F1F9939680058DAFF /* ItemFromJSONParser.swift */; };
+		7D3884A01F9939680058DAFF /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D38849F1F9939680058DAFF /* Parser.swift */; };
+		7D3884A21F9A54D90058DAFF /* ParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3884A11F9A54D90058DAFF /* ParserSpec.swift */; };
 		7D5DF8771F87F2600039B23E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DF8761F87F2600039B23E /* AppDelegate.swift */; };
 		7D5DF8791F87F2600039B23E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5DF8781F87F2600039B23E /* ViewController.swift */; };
 		7D5DF87C1F87F2600039B23E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D5DF87A1F87F2600039B23E /* Main.storyboard */; };
@@ -23,6 +25,8 @@
 		7D5DF8811F87F2600039B23E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D5DF87F1F87F2600039B23E /* LaunchScreen.storyboard */; };
 		7D7878371F96BE4200BE6C9D /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7878361F96BE4200BE6C9D /* DataStore.swift */; };
 		7D7878391F97C63500BE6C9D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D7878381F97C63500BE6C9D /* WebView.swift */; };
+		7D88BD461F9A6F5B0082A838 /* ItemEntrySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D88BD451F9A6F5B0082A838 /* ItemEntrySpec.swift */; };
+		7D9860341F9A671900BAE0AF /* ItemEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9860331F9A671900BAE0AF /* ItemEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +54,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7D0D0EDC1F9A5CE2007D8960 /* ItemSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSpec.swift; sourceTree = "<group>"; };
 		7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		7D1B1A8D1F98F86600C1F5FF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		7D1B1A991F98FC0600C1F5FF /* lockbox-datastore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "lockbox-datastore"; path = "lockbox-ios/lockbox-datastore"; sourceTree = "<group>"; };
@@ -58,7 +63,8 @@
 		7D1B1AD31F9902C600C1F5FF /* DataStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreSpec.swift; sourceTree = "<group>"; };
 		7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewSpec.swift; sourceTree = "<group>"; };
 		7D38849D1F9939520058DAFF /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		7D38849F1F9939680058DAFF /* ItemFromJSONParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemFromJSONParser.swift; sourceTree = "<group>"; };
+		7D38849F1F9939680058DAFF /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		7D3884A11F9A54D90058DAFF /* ParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserSpec.swift; sourceTree = "<group>"; };
 		7D5DF8731F87F2600039B23E /* lockbox-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "lockbox-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D5DF8761F87F2600039B23E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D5DF8781F87F2600039B23E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,6 +74,8 @@
 		7D5DF8821F87F2600039B23E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D7878361F96BE4200BE6C9D /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		7D7878381F97C63500BE6C9D /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		7D88BD451F9A6F5B0082A838 /* ItemEntrySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEntrySpec.swift; sourceTree = "<group>"; };
+		7D9860331F9A671900BAE0AF /* ItemEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEntry.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +113,9 @@
 				7D1B1AC81F99028D00C1F5FF /* Info.plist */,
 				7D1B1AD31F9902C600C1F5FF /* DataStoreSpec.swift */,
 				7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */,
+				7D3884A11F9A54D90058DAFF /* ParserSpec.swift */,
+				7D0D0EDC1F9A5CE2007D8960 /* ItemSpec.swift */,
+				7D88BD451F9A6F5B0082A838 /* ItemEntrySpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -141,7 +152,8 @@
 				7D7878361F96BE4200BE6C9D /* DataStore.swift */,
 				7D7878381F97C63500BE6C9D /* WebView.swift */,
 				7D38849D1F9939520058DAFF /* Item.swift */,
-				7D38849F1F9939680058DAFF /* ItemFromJSONParser.swift */,
+				7D38849F1F9939680058DAFF /* Parser.swift */,
+				7D9860331F9A671900BAE0AF /* ItemEntry.swift */,
 			);
 			path = "lockbox-ios";
 			sourceTree = "<group>";
@@ -252,8 +264,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D88BD461F9A6F5B0082A838 /* ItemEntrySpec.swift in Sources */,
 				7D38849B1F992A0B0058DAFF /* WebViewSpec.swift in Sources */,
 				7D1B1AD41F9902C600C1F5FF /* DataStoreSpec.swift in Sources */,
+				7D3884A21F9A54D90058DAFF /* ParserSpec.swift in Sources */,
+				7D0D0EDD1F9A5CE2007D8960 /* ItemSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,10 +276,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9860341F9A671900BAE0AF /* ItemEntry.swift in Sources */,
 				7D38849E1F9939520058DAFF /* Item.swift in Sources */,
 				7D5DF8791F87F2600039B23E /* ViewController.swift in Sources */,
 				7D7878391F97C63500BE6C9D /* WebView.swift in Sources */,
-				7D3884A01F9939680058DAFF /* ItemFromJSONParser.swift in Sources */,
+				7D3884A01F9939680058DAFF /* Parser.swift in Sources */,
 				7D7878371F96BE4200BE6C9D /* DataStore.swift in Sources */,
 				7D5DF8771F87F2600039B23E /* AppDelegate.swift in Sources */,
 			);

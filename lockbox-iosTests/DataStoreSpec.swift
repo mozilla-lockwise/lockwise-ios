@@ -180,6 +180,23 @@ class DataStoreSpec : QuickSpec {
                     expect(self.webView.evaluateJavaScriptArgument).to(equal("\(self.dataStoreName).lock()"))
                 }
             }
+            
+            describe(".addItem(item:)") {
+                let item = Item.Builder()
+                    .origins(["www.barf.com"])
+                    .entry(ItemEntry.Builder().type("fart").build())
+                    .build()
+                
+                beforeEach {
+                    self.subject.addItem(item)
+                }
+                
+                it("evalutes .add() on the webview datastore with the correctly-JSONified item") {
+                    expect(self.webView.evaluateJSCalled).to(beTrue())
+                    expect(self.webView.evaluateJavaScriptArgument).to(equal("\(self.dataStoreName).add(\(Parser.jsonStringFromItem(item)))"))
+                }
+            }
+
         }
     }
 }
