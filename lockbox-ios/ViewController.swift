@@ -55,23 +55,18 @@ class ViewController: UIViewController {
         self.dataStore.lock()
     }
     
+    @IBAction func addClicked(_ sender: Any) {
+        let item = Item.Builder()
+            .entry(ItemEntry.Builder().type("fart").build())
+            .origins(["www.neopets.com"])
+            .build()
+        self.dataStore.addItem(item)
+    }
+    
     @IBAction func listButtonClicked(_ sender: Any) {
         self.dataStore.keyList { (array) in
             for item in array {
-                guard let data = item as? Data else {
-                    print("not data")
-                    continue
-                }
-                
-                var jsonObject:Any
-                do {
-                    jsonObject = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-                } catch {
-                    print("couldn't serialize!")
-                    continue
-                }
-                
-                print("I'm done!")
+                print(item.origins)
             }
         }
     }
