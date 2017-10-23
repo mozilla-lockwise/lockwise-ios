@@ -98,7 +98,16 @@ class ParserSpec : QuickSpec {
         }
     
         describe("jsonStringFromItem()") {
-            
+            it("forms a valid json string") {
+                let item = Item.Builder()
+                    .id("dfgljkfsdlead")
+                    .entry(ItemEntry.Builder().type("login").build())
+                    .origins(["www.neopets.com"])
+                    .build()
+                
+                let json = Parser.jsonStringFromItem(item)
+                expect(json).to(equal("{\"id\":\"dfgljkfsdlead\",\"origins\":[\"www.neopets.com\"],\"entry\":{\"type\":\"login\"}}"))
+            }
         }
     }
 }

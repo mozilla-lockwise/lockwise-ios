@@ -2,6 +2,10 @@ import Foundation
 
 class Parser : NSObject {
     
+    enum ParserError : Error {
+        case InvalidDictionary, InvalidItem
+    }
+    
     private static var itemProperties:[String] {
         get {
             return Mirror(reflecting: Item.Builder().build()).children.flatMap { $0.label }
@@ -20,7 +24,8 @@ class Parser : NSObject {
             
             return item
         } catch {
-            print("json deserialization failed!")
+            print("bad dictionary")
+//            throw ParserError.InvalidDictionary
         }
         
         return Item.ItemNotFound()
@@ -35,6 +40,7 @@ class Parser : NSObject {
             return jsonString!
         } catch {
             print("bad item")
+//            throw ParserError.InvalidItem
         }
         
         return ""
