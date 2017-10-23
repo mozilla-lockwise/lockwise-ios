@@ -182,21 +182,37 @@ class DataStoreSpec : QuickSpec {
             }
             
             describe(".addItem(item:)") {
-                let item = Item.Builder()
+                let itemBuilder = Item.Builder()
                     .origins(["www.barf.com"])
                     .entry(ItemEntry.Builder().type("fart").build())
-                    .build()
                 
-                beforeEach {
-                    self.subject.addItem(item)
-                }
-                
-                it("evalutes .add() on the webview datastore with the correctly-JSONified item") {
+                it("evalutes .add() on the webview datastore with the correctly-JSONified item when given an item without an ID") {
+                    self.subject.addItem(itemBuilder.build())
                     expect(self.webView.evaluateJSCalled).to(beTrue())
-                    expect(self.webView.evaluateJavaScriptArgument).to(equal("\(self.dataStoreName).add(\(Parser.jsonStringFromItem(item)))"))
+                    expect(self.webView.evaluateJavaScriptArgument).to(equal("\(self.dataStoreName).add(\(Parser.jsonStringFromItem(itemBuilder.build())))"))
                 }
             }
 
+            describe(".deleteItem(item:)") {
+                let id = "gdfkhjfdsmmmmmm12434hkd"
+                let itemBuilder = Item.Builder()
+                    .origins(["www.barf.com"])
+                    .entry(ItemEntry.Builder().type("fart").build())
+                var item:Item?
+                
+                it("evalutes .add() on the webview datastore with the correctly-JSONified item given an item with an ID") {
+                    item = itemBuilder.id(id).build()
+                    try! self.subject.deleteItem(item!)
+                    
+                    expect(self.webView.evaluateJSCalled).to(beTrue())
+                    expect(self.webView.evaluateJavaScriptArgument).to(equal("\(self.dataStoreName).delete(\"\(id)\")"))
+                    }
+                
+                it("throws an error when given an item without an id") {
+                    item = itemBuilder.build()
+                    expect { try self.subject.deleteItem(item!) }.to(throwError(DataStoreError.NoIDPassedToDelete))
+                }
+            }
         }
     }
 }
