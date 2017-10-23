@@ -1,6 +1,10 @@
 import Foundation
 import WebKit
 
+enum DataStoreError : Error {
+    case NoIDPassedToDelete
+}
+
 class DataStore : NSObject, WKNavigationDelegate {
     var webView:(WKWebView & TypedJavaScriptWebView)!
     private let dataStoreName:String!
@@ -71,5 +75,13 @@ class DataStore : NSObject, WKNavigationDelegate {
         let jsonItem = Parser.jsonStringFromItem(item)
         
         self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
+    }
+    
+    func deleteItem(_ item:Item) throws {
+        if item.id == nil {
+            throw DataStoreError.NoIDPassedToDelete
+        }
+        
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")")
     }
 }
