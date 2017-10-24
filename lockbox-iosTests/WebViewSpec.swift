@@ -1,159 +1,162 @@
 import Quick
 import Nimble
 import WebKit
+import RxTest
+import RxSwift
+import RxBlocking
 
 @testable import lockbox_ios
 
-class WebViewSpec : QuickSpec {
-    class StubbedEvaluateWebview : WebView {
-        var evaluateJSCalled:Bool = false
-        var evaluateJSArgument:String?
-        
-        var evaluteJSCompletionHandler:((Any?, Error?) -> Void)?
-        
+class WebViewSpec: QuickSpec {
+    class StubbedEvaluateWebview: WebView {
+        var evaluateJSCalled: Bool = false
+        var evaluateJSArgument: String?
+        var evaluateJSCompletionHandler: ((Any?, Error?) -> Void)?
+        var observable: Single<Any>?
+
         override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
             self.evaluateJSCalled = true
             self.evaluateJSArgument = javaScriptString
-            self.evaluteJSCompletionHandler = completionHandler
+            self.evaluateJSCompletionHandler = completionHandler
+        }
+
+        override func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
+            self.evaluateJSCalled = true
+            self.evaluateJSArgument = javaScriptString
+            return observable!
         }
     }
-    
-    var stubbedSuper:StubbedEvaluateWebview!
-    var subject:WebView!
-    
+
+    var stubbedSuper: StubbedEvaluateWebview!
+    var subject: WebView!
+    var scheduler = TestScheduler(initialClock: 0)
+    let disposeBag = DisposeBag()
+
     override func spec() {
         beforeEach {
             self.stubbedSuper = StubbedEvaluateWebview()
             self.subject = self.stubbedSuper
         }
-        
+
         describe("WebView") {
             let javaScriptString = "console.log(butts)"
-            
-            describe(".evaluateJavaScriptToBool(javaScriptString:, completionHandler:)") {
-                var evaluatedValue:Bool?
-                var evaluatedError:Error?
-                let error = NSError(domain: "domain", code: -1, userInfo: nil)
-                
+
+            describe(".evaluateJavaScriptToBool(javaScriptString:)") {
+                var boolObserver = self.scheduler.createObserver(Bool.self)
+
                 beforeEach {
-                    self.subject.evaluateJavaScriptToBool(javaScriptString, completionHandler: { (value, error) in
-                        evaluatedValue = value
-                        evaluatedError = error
-                    })
+                    boolObserver = self.scheduler.createObserver(Bool.self)
                 }
-                
-                it("evaluates the passed js string using the super method") {
-                    expect(self.stubbedSuper.evaluateJSCalled).to(beTrue())
-                    expect(self.stubbedSuper.evaluateJSArgument).to(equal(javaScriptString))
-                }
-                
-                describe("when completion handler called with an error & no value") {
+
+                describe("when provided a bool value") {
                     beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!(nil, error)
+                        self.stubbedSuper.observable = self.scheduler.createHotObservable([next(50, true)])
+                                .take(1)
+                                .asSingle()
+
+                        self.subject.evaluateJavaScriptToBool(javaScriptString)
+                                .asObservable()
+                                .subscribe(boolObserver)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
                     }
-                    
-                    it("calls the passed completion handler with the error") {
-                        expect(evaluatedValue).to(beNil())
-                        expect(evaluatedError).to(matchError(error))
+
+                    it("passes the javascript to regular evaluation") {
+                        expect(self.stubbedSuper.evaluateJSCalled).to(beTrue())
+                        expect(self.stubbedSuper.evaluateJSArgument).to(equal(javaScriptString))
                     }
-                }
-                
-                describe("when completion handler called with an error & a value") {
-                    beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!(false, error)
-                    }
-                    
-                    it("calls the passed completion handler with the error & no value") {
-                        expect(evaluatedValue).to(beNil())
-                        expect(evaluatedError).to(matchError(error))
-                    }
-                }
-                
-                describe("when completion handler called with no error & a non-boolean value") {
-                    beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!("bad string!", nil)
-                    }
-                    
-                    it("calls the passed completion handler with the error & no value") {
-                        expect(evaluatedValue).to(beNil())
-                        expect(evaluatedError).to(beNil())
+
+                    it("pushes the boolean value out to the single with no error") {
+                        let value = boolObserver.events.first!.value
+                        expect(value.element).to(beTrue())
+                        expect(value.error).to(beNil())
                     }
                 }
-                
-                describe("when completion handler called with no error & a boolean value") {
-                    let boolValue = true
+
+                describe("when provided a non-bool value") {
                     beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!(boolValue, nil)
+                        self.stubbedSuper.observable = self.scheduler.createHotObservable([next(100, "blarg")])
+                                .take(1)
+                                .asSingle()
+                        self.subject.evaluateJavaScriptToBool(javaScriptString)
+                                .asObservable()
+                                .subscribe(boolObserver)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
                     }
-                    
-                    it("calls the passed completion handler with no error & the value") {
-                        expect(evaluatedValue).to(equal(boolValue))
-                        expect(evaluatedError).to(beNil())
+
+                    it("passes the javascript to regular evaluation") {
+                        expect(self.stubbedSuper.evaluateJSCalled).to(beTrue())
+                        expect(self.stubbedSuper.evaluateJSArgument).to(equal(javaScriptString))
+                    }
+
+                    it("pushes the a no bool error out to the single with no value") {
+                        let value = boolObserver.events.first!.value
+                        expect(value.element).to(beNil())
+                        expect(value.error).to(matchError(WebViewError.ValueNotBool))
                     }
                 }
             }
-            
-            describe(".evaluateJavaScriptToString(javaScriptString:, completionHandler:)") {
-                var evaluatedValue:String?
-                var evaluatedError:Error?
-                let error = NSError(domain: "domain", code: -1, userInfo: nil)
-                
+
+            describe(".evaluateJavaScriptToString(javaScriptString:)") {
+                var stringObserver = self.scheduler.createObserver(String.self)
+
                 beforeEach {
-                    self.subject.evaluateJavaScriptToString(javaScriptString, completionHandler: { (value, error) in
-                        evaluatedValue = value
-                        evaluatedError = error
-                    })
+                    stringObserver = self.scheduler.createObserver(String.self)
                 }
-                
-                it("evaluates the passed js string using the super method") {
-                    expect(self.stubbedSuper.evaluateJSCalled).to(beTrue())
-                    expect(self.stubbedSuper.evaluateJSArgument).to(equal(javaScriptString))
-                }
-                
-                describe("when completion handler called with an error & no value") {
+
+                describe("when provided a string value") {
                     beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!(nil, error)
+                        self.stubbedSuper.observable = self.scheduler.createHotObservable([next(50, "purple")])
+                                .take(1)
+                                .asSingle()
+
+                        self.subject.evaluateJavaScriptToString(javaScriptString)
+                                .asObservable()
+                                .subscribe(stringObserver)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
                     }
-                    
-                    it("calls the passed completion handler with the error") {
-                        expect(evaluatedValue).to(beNil())
-                        expect(evaluatedError).to(matchError(error))
+
+                    it("passes the javascript to regular evaluation") {
+                        expect(self.stubbedSuper.evaluateJSCalled).to(beTrue())
+                        expect(self.stubbedSuper.evaluateJSArgument).to(equal(javaScriptString))
+                    }
+
+                    it("pushes the string value out to the single with no error") {
+                        let value = stringObserver.events.first!.value
+                        expect(value.element).to(equal("purple"))
+                        expect(value.error).to(beNil())
                     }
                 }
-                
-                describe("when completion handler called with an error & a value") {
+
+                describe("when provided a non-string value") {
                     beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!("false", error)
+                        self.stubbedSuper.observable = self.scheduler.createHotObservable([next(100, false)])
+                                .take(1)
+                                .asSingle()
+                        self.subject.evaluateJavaScriptToString(javaScriptString)
+                                .asObservable()
+                                .subscribe(stringObserver)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
                     }
-                    
-                    it("calls the passed completion handler with the error & no value") {
-                        expect(evaluatedValue).to(beNil())
-                        expect(evaluatedError).to(matchError(error))
+
+                    it("passes the javascript to regular evaluation") {
+                        expect(self.stubbedSuper.evaluateJSCalled).to(beTrue())
+                        expect(self.stubbedSuper.evaluateJSArgument).to(equal(javaScriptString))
                     }
-                }
-                
-                describe("when completion handler called with no error & a non-string value") {
-                    beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!(false, nil)
-                    }
-                    
-                    it("calls the passed completion handler with the error & no value") {
-                        expect(evaluatedValue).to(beNil())
-                        expect(evaluatedError).to(beNil())
-                    }
-                }
-                
-                describe("when completion handler called with no error & a string value") {
-                    let stringValue = "sup dawg"
-                    beforeEach {
-                        self.stubbedSuper.evaluteJSCompletionHandler!(stringValue, nil)
-                    }
-                    
-                    it("calls the passed completion handler with no error & the value") {
-                        expect(evaluatedValue).to(equal(stringValue))
-                        expect(evaluatedError).to(beNil())
+
+                    it("pushes the a no bool error out to the single with no value") {
+                        let value = stringObserver.events.first!.value
+                        expect(value.element).to(beNil())
+                        expect(value.error).to(matchError(WebViewError.ValueNotString))
                     }
                 }
+            }
+
+            describe(".evaluateJavaScriptMapToArray") {
+
             }
         }
     }

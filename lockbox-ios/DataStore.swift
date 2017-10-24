@@ -1,8 +1,9 @@
 import Foundation
 import WebKit
+import RxSwift
 
 enum DataStoreError : Error {
-    case NoIDPassed
+    case NoIDPassed, DataStoreLocked, DataStoreNotInitialized
 }
 
 class DataStore : NSObject, WKNavigationDelegate {
@@ -23,58 +24,37 @@ class DataStore : NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.webView.evaluateJavaScript("var \(self.dataStoreName!);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName!) = datastore;}));")
+        self.webView.evaluateJavaScript("var \(self.dataStoreName!);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName!) = datastore;}));").map { $0 }
     }
 
-    func initialized(completionHandler: ((Bool) -> Void)?) {
-        self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).initialized") { (value, error) in
-            if value != nil {
-                completionHandler?(value!)
-                return
-            }
-
-            completionHandler?(false)
-        }
+    func initialized() -> Single<Bool> {
+        return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).initialized")
     }
 
     func initialize(password:String) {
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({password:\"\(password)\",})")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({password:\"\(password)\",})").map { $0 }
     }
 
-    func locked(completionHandler: ((Bool) -> Void)?) {
-        self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).locked") { (value, error) in
-            if value != nil {
-                completionHandler?(value!)
-                return
-            }
-
-            completionHandler?(false)
-        }
+    func locked() -> Single<Bool> {
+        return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).locked")
     }
 
     func unlock(password:String) {
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")").map { $0 }
     }
 
     func lock() {
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()").map { $0 }
     }
 
-    func keyList(completionHandler: (([Item]) -> Void)?) {
-        self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()") { (array, error) in
-            let mappedArray = array?.map({ (value) -> Item in
-                let itemDictionary = (value as! [Any])[1] as! [String:Any]
-                return Parser.itemFromDictionary(itemDictionary)
-            })
-
-            completionHandler!(mappedArray!)
-        }
+    func keyList() -> Single<[Any]> {
+        return self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()")
     }
 
     func addItem(_ item:Item) {
         let jsonItem = Parser.jsonStringFromItem(item)
 
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))").map { $0 }
     }
 
     func deleteItem(_ item:Item) throws {
@@ -82,7 +62,7 @@ class DataStore : NSObject, WKNavigationDelegate {
             throw DataStoreError.NoIDPassed
         }
 
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")").map { $0 }
     }
 
     func updateItem(_ item:Item) throws {
@@ -91,6 +71,6 @@ class DataStore : NSObject, WKNavigationDelegate {
         }
         let jsonItem = Parser.jsonStringFromItem(item)
 
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
+        self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))").map { $0 }
     }
 }
