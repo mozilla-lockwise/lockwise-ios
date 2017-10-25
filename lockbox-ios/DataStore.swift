@@ -3,7 +3,7 @@ import WebKit
 import RxSwift
 
 enum DataStoreError : Error {
-    case NoIDPassed, DataStoreLocked, DataStoreNotInitialized
+    case NoIDPassed, DataStoreLocked, DataStoreNotInitialized, Unknown
 }
 
 class DataStore : NSObject, WKNavigationDelegate {
@@ -21,6 +21,10 @@ class DataStore : NSObject, WKNavigationDelegate {
         let path = "file://\(Bundle.main.bundlePath)/lockbox-datastore/index.html"
 
         self.webView.loadFileURL(URL(string:path)!, allowingReadAccessTo: baseUrl)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let _ = self.open().subscribe()
     }
 
     func open() -> Completable {
@@ -52,9 +56,14 @@ class DataStore : NSObject, WKNavigationDelegate {
     }
 
     func addItem(_ item:Item) -> Completable {
-        let jsonItem = Parser.jsonStringFromItem(item)
-
-        return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
+        do {
+            let jsonItem = try Parser.jsonStringFromItem(item)
+            return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
+        } catch ParserError.InvalidItem {
+            return Completable.error(ParserError.InvalidItem)
+        } catch {
+            return Completable.error(DataStoreError.Unknown)
+        }
     }
 
     func deleteItem(_ item:Item) -> Completable {
@@ -62,8 +71,14 @@ class DataStore : NSObject, WKNavigationDelegate {
     }
 
     func updateItem(_ item:Item) -> Completable {
-        let jsonItem = Parser.jsonStringFromItem(item)
+        do {
+            let jsonItem = try Parser.jsonStringFromItem(item)
 
-        return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
+            return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
+        } catch ParserError.InvalidItem {
+            return Completable.error(ParserError.InvalidItem)
+        } catch {
+            return Completable.error(DataStoreError.Unknown)
+        }
     }
 }

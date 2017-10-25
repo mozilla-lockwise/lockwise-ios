@@ -33,10 +33,22 @@ class ViewController: UIViewController {
 
     @IBAction func initClicked(_ sender: Any) {
         self.dataStore.initialize(password: "password")
+                .subscribe(onCompleted: {
+                            print("initialized!") },
+                        onError: { error in
+                            print(error)
+                        })
+                .disposed(by: self.disposeBag)
     }
 
     @IBAction func unlockClicked(_ sender: Any) {
         self.dataStore.unlock(password: "password")
+                .subscribe(onCompleted: {
+                    print("unlocked!!") },
+                        onError: { error in
+                            print(error)
+                        })
+                .disposed(by: self.disposeBag)
     }
 
     @IBAction func listClicked(_ sender: Any) {

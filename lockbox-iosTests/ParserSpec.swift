@@ -5,19 +5,13 @@ import Nimble
 
 class ParserSpec : QuickSpec {
     override func spec() {
-        let itemNotFound = Item.ItemNotFound()
-        
         describe(".itemFromDictionary()") {
-            it("returns ItemNotFound when provided an empty dictionary") {
-                let item = Parser.itemFromDictionary([:])
-                
-                expect(item).to(equal(itemNotFound))
+            it("throws invaliddictionary when provided an empty dictionary") {
+                expect(try Parser.itemFromDictionary([:])).to(throwError(ParserError.InvalidDictionary))
             }
             
-            it("returns ItemNotFound when provided a dictionary with only unexpected parameters") {
-                let item = Parser.itemFromDictionary(["bogus":"foo", "bar": false])
-                
-                expect(item).to(equal(itemNotFound))
+            it("throws invaliddictionary when provided a dictionary with only unexpected parameters") {
+                expect(try Parser.itemFromDictionary(["bogus":"foo", "bar": false])).to(throwError())
             }
             
             it("returns ItemNotFound when provided a dictionary without all required parameters") {
@@ -25,7 +19,7 @@ class ParserSpec : QuickSpec {
                 let origins = ["www.maps.com"]
                 let title = "butt"
                 let username = "me"
-                let item = Parser.itemFromDictionary(
+                expect( try Parser.itemFromDictionary(
                     [
                         "origins":origins,
                         "entry":[
@@ -33,16 +27,14 @@ class ParserSpec : QuickSpec {
                             "username":username
                         ],
                         "title":title
-                    ])
-                
-                expect(item).to(equal(itemNotFound))
+                    ])).to(throwError())
             }
             
             it("populates item correctly when provided a dictionary with some unexpected parameters") {
                 let type = "cat"
                 let id = "fdkjsfdhkjfds"
                 let origins = ["www.maps.com"]
-                let item = Parser.itemFromDictionary(
+                let item = try! Parser.itemFromDictionary(
                     ["bogus":"foo",
                      "bar": false,
                      "id":id,
@@ -71,7 +63,7 @@ class ParserSpec : QuickSpec {
                 let origins = ["www.maps.com"]
                 let title = "butt"
                 let username = "me"
-                let item = Parser.itemFromDictionary(
+                let item = try! Parser.itemFromDictionary(
                     [
                         "id":id,
                         "origins":origins,
@@ -105,7 +97,7 @@ class ParserSpec : QuickSpec {
                     .origins(["www.neopets.com"])
                     .build()
                 
-                let json = Parser.jsonStringFromItem(item)
+                let json = try! Parser.jsonStringFromItem(item)
                 expect(json).to(equal("{\"id\":\"dfgljkfsdlead\",\"origins\":[\"www.neopets.com\"],\"entry\":{\"type\":\"login\"}}"))
             }
         }

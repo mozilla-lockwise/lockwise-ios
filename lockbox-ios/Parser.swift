@@ -1,10 +1,15 @@
 import Foundation
 
+protocol ItemParser {
+    static func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item
+    static func jsonStringFromItem(_ item:Item) -> String
+}
+
+enum ParserError : Error {
+    case InvalidDictionary, InvalidItem
+}
+
 class Parser : NSObject {
-    
-    enum ParserError : Error {
-        case InvalidDictionary, InvalidItem
-    }
     
     private static var itemProperties:[String] {
         get {
@@ -12,7 +17,7 @@ class Parser : NSObject {
         }
     }
     
-    static func itemFromDictionary(_ dictionary:[String:Any]) -> Item {
+    static func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item {
         let sanitizedDictionary = dictionary.filter { pair -> Bool in
             return Parser.itemProperties.contains(pair.key)
         }
@@ -24,14 +29,11 @@ class Parser : NSObject {
             
             return item
         } catch {
-            print("bad dictionary")
-//            throw ParserError.InvalidDictionary
+            throw ParserError.InvalidDictionary
         }
-        
-        return Item.ItemNotFound()
     }
     
-    static func jsonStringFromItem(_ item:Item) -> String {
+    static func jsonStringFromItem(_ item:Item) throws -> String {
         let jsonEncoder = JSONEncoder()
         
         do {
@@ -39,10 +41,7 @@ class Parser : NSObject {
             let jsonString = String(data: jsonData, encoding: .utf8)
             return jsonString!
         } catch {
-            print("bad item")
-//            throw ParserError.InvalidItem
+            throw ParserError.InvalidItem
         }
-        
-        return ""
     }
 }

@@ -71,11 +71,14 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                 if let wkError = error as? WKError {
                     if wkError.code == .javaScriptResultTypeIsUnsupported {
                         single(.success(""))
+                        return
                     }
                 } else if error != nil {
                     single(.error(error!))
+                    return
                 } else if any != nil {
                     single(.success(any!))
+                    return
                 } else {
                     single(.error(WebViewError.Unknown))
                 }
@@ -88,8 +91,14 @@ class WebView: WKWebView, TypedJavaScriptWebView {
     func evaluateJavaScript(_ javaScriptString: String) -> Completable {
         return Completable.create() { completable in
             super.evaluateJavaScript(javaScriptString) { _, error in
-                if error != nil {
+                if let wkError = error as? WKError {
+                    if wkError.code == .javaScriptResultTypeIsUnsupported {
+                        completable(.completed)
+                        return
+                    }
+                } else if error != nil {
                     completable(.error(error!))
+                    return
                 }
             }
 
