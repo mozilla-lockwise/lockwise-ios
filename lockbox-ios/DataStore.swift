@@ -23,54 +23,47 @@ class DataStore : NSObject, WKNavigationDelegate {
         self.webView.loadFileURL(URL(string:path)!, allowingReadAccessTo: baseUrl)
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.webView.evaluateJavaScript("var \(self.dataStoreName!);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName!) = datastore;}));").map { $0 }
+    func open() -> Completable {
+        return self.webView.evaluateJavaScript("var \(self.dataStoreName!);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName!) = datastore;}));")
     }
 
     func initialized() -> Single<Bool> {
         return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).initialized")
     }
 
-    func initialize(password:String) {
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({password:\"\(password)\",})").map { $0 }
+    func initialize(password:String) -> Completable {
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({password:\"\(password)\",})")
     }
 
     func locked() -> Single<Bool> {
         return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).locked")
     }
 
-    func unlock(password:String) {
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")").map { $0 }
+    func unlock(password:String) -> Completable {
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")")
     }
 
-    func lock() {
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()").map { $0 }
+    func lock() -> Completable {
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()")
     }
 
     func keyList() -> Single<[Any]> {
         return self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()")
     }
 
-    func addItem(_ item:Item) {
+    func addItem(_ item:Item) -> Completable {
         let jsonItem = Parser.jsonStringFromItem(item)
 
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))").map { $0 }
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
     }
 
-    func deleteItem(_ item:Item) throws {
-        if item.id == nil {
-            throw DataStoreError.NoIDPassed
-        }
-
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")").map { $0 }
+    func deleteItem(_ item:Item) -> Completable {
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")")
     }
 
-    func updateItem(_ item:Item) throws {
-        if item.id == nil {
-            throw DataStoreError.NoIDPassed
-        }
+    func updateItem(_ item:Item) -> Completable {
         let jsonItem = Parser.jsonStringFromItem(item)
 
-        self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))").map { $0 }
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
     }
 }

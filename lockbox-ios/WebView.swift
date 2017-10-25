@@ -17,13 +17,13 @@ protocol TypedJavaScriptWebView {
 class WebView: WKWebView, TypedJavaScriptWebView {
     func evaluateJavaScriptToBool(_ javaScriptString: String) -> Single<Bool> {
         return self.evaluateJavaScript(javaScriptString)
-            .map { value -> Bool in
-                if let boolValue = value as? Bool {
-                    return boolValue
-                } else {
-                    throw WebViewError.ValueNotBool
+                .map { value -> Bool in
+                    if let boolValue = value as? Bool {
+                        return boolValue
+                    } else {
+                        throw WebViewError.ValueNotBool
+                    }
                 }
-             }
     }
 
     func evaluateJavaScriptToString(_ javaScriptString: String) -> Single<String> {
@@ -40,8 +40,10 @@ class WebView: WKWebView, TypedJavaScriptWebView {
     func evaluateJavaScriptMapToArray(_ javaScriptString: String) -> Single<[Any]> {
         let arrayName = "arrayVal"
 
-        return self.evaluateJavaScript("var \(arrayName);\(javaScriptString).then(function (listVal) {\(arrayName) = Array.from(listVal);});")
-                .map { $0 } // resolve overloaded function name
+        return self.evaluateJavaScriptWithoutCatchingInvalidType("var \(arrayName);\(javaScriptString).then(function (listVal) {\(arrayName) = Array.from(listVal);});")
+                .map {
+                    $0
+                } // resolve overloaded function name
                 .asObservable()
                 .catchError { error in
                     if let wkError = error as? WKError {
@@ -51,7 +53,7 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                     }
 
                     throw error
-                 }
+                }
                 .asSingle()
                 .map { any -> [Any] in
                     if let arrayVal = any as? [Any] {
@@ -59,14 +61,18 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                     } else {
                         throw WebViewError.ValueNotArray
                     }
-                 }
+                }
     }
 
     func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
         return Single<Any>.create() { single in
-            
+
             super.evaluateJavaScript(javaScriptString) { any, error in
-                if error != nil {
+                if let wkError = error as? WKError {
+                    if wkError.code == .javaScriptResultTypeIsUnsupported {
+                        single(.success(""))
+                    }
+                } else if error != nil {
                     single(.error(error!))
                 } else if any != nil {
                     single(.success(any!))
@@ -84,6 +90,23 @@ class WebView: WKWebView, TypedJavaScriptWebView {
             super.evaluateJavaScript(javaScriptString) { _, error in
                 if error != nil {
                     completable(.error(error!))
+                }
+            }
+
+            return Disposables.create()
+        }
+    }
+
+    private func evaluateJavaScriptWithoutCatchingInvalidType(_ javaScriptString: String) -> Single<Any> {
+        return Single<Any>.create() { single in
+
+            super.evaluateJavaScript(javaScriptString) { any, error in
+                if error != nil {
+                    single(.error(error!))
+                } else if any != nil {
+                    single(.success(any!))
+                } else {
+                    single(.error(WebViewError.Unknown))
                 }
             }
 
