@@ -7,27 +7,26 @@ class ParserSpec : QuickSpec {
     override func spec() {
         describe(".itemFromDictionary()") {
             it("throws invaliddictionary when provided an empty dictionary") {
-                expect(try Parser.itemFromDictionary([:])).to(throwError(ParserError.InvalidDictionary))
+                expect { try Parser.itemFromDictionary([:]) }.to(throwError(ParserError.InvalidDictionary))
             }
             
             it("throws invaliddictionary when provided a dictionary with only unexpected parameters") {
-                expect(try Parser.itemFromDictionary(["bogus":"foo", "bar": false])).to(throwError())
+                expect { try Parser.itemFromDictionary(["bogus":"foo", "bar": false]) }.to(throwError())
             }
             
             it("returns ItemNotFound when provided a dictionary without all required parameters") {
                 let type = "cat"
-                let origins = ["www.maps.com"]
                 let title = "butt"
                 let username = "me"
-                expect( try Parser.itemFromDictionary(
+                expect{ try Parser.itemFromDictionary(
                     [
-                        "origins":origins,
                         "entry":[
                             "type":type,
                             "username":username
                         ],
                         "title":title
-                    ])).to(throwError())
+                    ])
+                }.to(throwError())
             }
             
             it("populates item correctly when provided a dictionary with some unexpected parameters") {

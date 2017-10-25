@@ -11,7 +11,6 @@ protocol TypedJavaScriptWebView {
     func evaluateJavaScriptToString(_ javaScriptString: String) -> Single<String>
     func evaluateJavaScriptMapToArray(_ javaScriptString: String) -> Single<[Any]>
     func evaluateJavaScript(_ javaScriptString: String) -> Single<Any>
-    func evaluateJavaScript(_ javaScriptString: String) -> Completable
 }
 
 class WebView: WKWebView, TypedJavaScriptWebView {
@@ -81,24 +80,6 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                     return
                 } else {
                     single(.error(WebViewError.Unknown))
-                }
-            }
-
-            return Disposables.create()
-        }
-    }
-
-    func evaluateJavaScript(_ javaScriptString: String) -> Completable {
-        return Completable.create() { completable in
-            super.evaluateJavaScript(javaScriptString) { _, error in
-                if let wkError = error as? WKError {
-                    if wkError.code == .javaScriptResultTypeIsUnsupported {
-                        completable(.completed)
-                        return
-                    }
-                } else if error != nil {
-                    completable(.error(error!))
-                    return
                 }
             }
 

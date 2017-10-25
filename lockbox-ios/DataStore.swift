@@ -2,15 +2,15 @@ import Foundation
 import WebKit
 import RxSwift
 
-enum DataStoreError : Error {
-    case NoIDPassed, DataStoreLocked, DataStoreNotInitialized, Unknown
+enum DataStoreError: Error {
+    case NoIDPassed, Locked, NotInitialized, Unknown
 }
 
-class DataStore : NSObject, WKNavigationDelegate {
-    var webView:(WKWebView & TypedJavaScriptWebView)!
-    private let dataStoreName:String!
+class DataStore: NSObject, WKNavigationDelegate {
+    var webView: (WKWebView & TypedJavaScriptWebView)!
+    private let dataStoreName: String!
 
-    init<T: WKWebView>(webview: T, dataStoreName:String = "ds") where T: TypedJavaScriptWebView {
+    init<T:WKWebView>(webview: T, dataStoreName: String = "ds") where T: TypedJavaScriptWebView {
         self.webView = webview
         self.dataStoreName = dataStoreName
         super.init()
@@ -20,14 +20,14 @@ class DataStore : NSObject, WKNavigationDelegate {
         let baseUrl = URL(string: "file://\(Bundle.main.bundlePath)/lockbox-datastore/")!
         let path = "file://\(Bundle.main.bundlePath)/lockbox-datastore/index.html"
 
-        self.webView.loadFileURL(URL(string:path)!, allowingReadAccessTo: baseUrl)
+        self.webView.loadFileURL(URL(string: path)!, allowingReadAccessTo: baseUrl)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let _ = self.open().subscribe()
     }
 
-    func open() -> Completable {
+    func open() -> Single<Any> {
         return self.webView.evaluateJavaScript("var \(self.dataStoreName!);DataStoreModule.open().then((function (datastore) {\(self.dataStoreName!) = datastore;}));")
     }
 
@@ -35,7 +35,7 @@ class DataStore : NSObject, WKNavigationDelegate {
         return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).initialized")
     }
 
-    func initialize(password:String) -> Completable {
+    func initialize(password: String) -> Single<Any> {
         return self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({password:\"\(password)\",})")
     }
 
@@ -43,42 +43,77 @@ class DataStore : NSObject, WKNavigationDelegate {
         return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).locked")
     }
 
-    func unlock(password:String) -> Completable {
+    func unlock(password: String) -> Single<Any> {
         return self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")")
     }
 
-    func lock() -> Completable {
+    func lock() -> Single<Any> {
         return self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()")
     }
 
     func keyList() -> Single<[Any]> {
-        return self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()")
-    }
-
-    func addItem(_ item:Item) -> Completable {
-        do {
-            let jsonItem = try Parser.jsonStringFromItem(item)
-            return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
-        } catch ParserError.InvalidItem {
-            return Completable.error(ParserError.InvalidItem)
-        } catch {
-            return Completable.error(DataStoreError.Unknown)
+        return checkState().flatMap { _ in
+            return self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()")
         }
     }
 
-    func deleteItem(_ item:Item) -> Completable {
-        return self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")")
+    func addItem(_ item: Item) -> Single<Any> {
+        do {
+            let jsonItem = try Parser.jsonStringFromItem(item)
+            return checkState().flatMap { _ in
+                return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
+            }
+        } catch ParserError.InvalidItem {
+            return Single.error(ParserError.InvalidItem)
+        } catch {
+            return Single.error(DataStoreError.Unknown)
+        }
     }
 
-    func updateItem(_ item:Item) -> Completable {
+    func deleteItem(_ item: Item) -> Single<Any> {
+        if item.id == nil {
+            return Single.error(DataStoreError.NoIDPassed)
+        }
+
+        return checkState().flatMap { _ in
+            return self.webView.evaluateJavaScript("\(self.dataStoreName!).delete(\"\(item.id!)\")")
+        }
+    }
+
+    func updateItem(_ item: Item) -> Single<Any> {
+        if item.id == nil {
+            return Single.error(DataStoreError.NoIDPassed)
+        }
+
         do {
             let jsonItem = try Parser.jsonStringFromItem(item)
 
-            return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
+            return checkState().flatMap { _ in
+                return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
+            }
         } catch ParserError.InvalidItem {
-            return Completable.error(ParserError.InvalidItem)
+            return Single.error(ParserError.InvalidItem)
         } catch {
-            return Completable.error(DataStoreError.Unknown)
+            return Single.error(DataStoreError.Unknown)
         }
+    }
+
+    private func checkState() -> Single<Bool> {
+        return initialized().asObservable()
+                .flatMap { initialized -> Observable<Bool> in
+                    if !initialized {
+                        throw DataStoreError.NotInitialized
+                    }
+
+                    return self.locked().asObservable()
+                }
+                .map { locked -> Bool in
+                    if locked {
+                        throw DataStoreError.Locked
+                    }
+
+                    return locked
+                }
+                .asSingle()
     }
 }
