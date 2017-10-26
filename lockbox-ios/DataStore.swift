@@ -57,6 +57,14 @@ class DataStore: NSObject, WKNavigationDelegate {
         }
     }
 
+    func getItem(_ id:String) -> Single<Item> {
+        return checkState().flatMap { _ in
+            return self.webView.evaluateJavaScript("\(self.dataStoreName!).get(\"\(id)\")")
+        }.map { value -> Item in
+            return try Parser.itemFromDictionary(value as! [String:Any])
+        }
+    }
+
     func addItem(_ item: Item) -> Single<Any> {
         do {
             let jsonItem = try Parser.jsonStringFromItem(item)
