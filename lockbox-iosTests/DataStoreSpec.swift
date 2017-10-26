@@ -22,6 +22,7 @@ class DataStoreSpec: QuickSpec {
         var secondBoolSingle: Single<Bool>?
         var stringSingle: Single<String>?
         var arraySingle: Single<[Any]>?
+        var anySingle: Single<Any> = Single.just(false)
 
         private var boolCallCount = 0
 
@@ -51,7 +52,7 @@ class DataStoreSpec: QuickSpec {
             evaluateJSCalled = true
             evaluateJSArgument = javaScriptString
 
-            return Single.just(false)
+            return anySingle
         }
 
         override func loadFileURL(_ URL: URL, allowingReadAccessTo readAccessURL: URL) -> WKNavigation? {
@@ -172,6 +173,78 @@ class DataStoreSpec: QuickSpec {
                 it("evaluates .lock on the webview datastore") {
                     expect(self.webView.evaluateJSCalled).to(beTrue())
                     expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).lock()"))
+                }
+            }
+
+            describe(".getItem(item:)") {
+                let id = "dfslkjdfslkjsdf"
+                var observer = self.scheduler.createObserver(Item.self)
+
+                beforeEach {
+                    observer = self.scheduler.createObserver(Item.self)
+                }
+
+                describe("when the datastore is not initialized") {
+                    beforeEach {
+                        self.webView.firstBoolSingle = self.scheduler.createHotObservable([next(100, false)])
+                                .take(1)
+                                .asSingle()
+                        self.subject.getItem(id)
+                                .asObservable()
+                                .subscribe(observer)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
+                    }
+
+                    it("pushes the DataStoreNotInitialized error and no value") {
+                        expect(observer.events.first!.value.element).to(beNil())
+                        expect(observer.events.first!.value.error).to(matchError(DataStoreError.NotInitialized))
+                    }
+                }
+
+                describe("when the datastore is initialized but locked") {
+                    beforeEach {
+                        self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                .take(1)
+                                .asSingle()
+                        self.webView.secondBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                .take(1)
+                                .asSingle()
+                        self.subject.getItem(id)
+                                .asObservable()
+                                .subscribe(observer)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
+                    }
+
+                    it("pushes the DataStoreLocked error and no value") {
+                        expect(observer.events.first!.value.element).to(beNil())
+                        expect(observer.events.first!.value.error).to(matchError(DataStoreError.Locked))
+                    }
+                }
+
+                describe("when the datastore is initialized & unlocked") {
+                    beforeEach {
+                        self.webView.anySingle = self.scheduler.createColdObservable([next(100, ["origins": ["blah"], "entry": ["kind": "login"]])])
+                                .take(1)
+                                .asSingle()
+                        self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                .take(1)
+                                .asSingle()
+                        self.webView.secondBoolSingle = self.scheduler.createColdObservable([next(100, false)])
+                                .take(1)
+                                .asSingle()
+                        self.subject.getItem(id)
+                                .asObservable()
+                                .subscribe(observer)
+                                .disposed(by: self.disposeBag)
+                        self.scheduler.start()
+                    }
+
+                    it("evaluates .get() on the webview datastore") {
+                        expect(self.webView.evaluateJSCalled).to(beTrue())
+                        expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).get(\"\(id)\")"))
+                    }
                 }
             }
 
@@ -316,9 +389,7 @@ class DataStoreSpec: QuickSpec {
                     }
 
                     describe("when the datastore is initialized & unlocked") {
-                        var observer = self.scheduler.createObserver(Any.self)
                         beforeEach {
-                            observer = self.scheduler.createObserver(Any.self)
                             self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
                                     .take(1)
                                     .asSingle()
@@ -411,9 +482,7 @@ class DataStoreSpec: QuickSpec {
                     }
 
                     describe("when the datastore is initialized & unlocked") {
-                        var observer = self.scheduler.createObserver(Any.self)
                         beforeEach {
-                            observer = self.scheduler.createObserver(Any.self)
                             self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
                                     .take(1)
                                     .asSingle()
