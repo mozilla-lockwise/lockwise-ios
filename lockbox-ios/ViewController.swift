@@ -44,7 +44,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func listClicked(_ sender: Any) {
-        self.dataStore.keyList().subscribe(onSuccess: { list in
+        self.dataStore.list().subscribe(onSuccess: { list in
                     for item in list {
                         print(item)
                     }

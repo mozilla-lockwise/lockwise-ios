@@ -51,7 +51,7 @@ class DataStore: NSObject, WKNavigationDelegate {
         return self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()")
     }
 
-    func keyList() -> Single<[Any]> {
+    func list() -> Single<[Any]> {
         return checkState().flatMap { _ in
             return self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()")
         }
