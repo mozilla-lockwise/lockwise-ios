@@ -4,15 +4,26 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>unitspecs.xcscheme</key>
+		<key>All in DataStoreSpec.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false />
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>3</integer>
 		</dict>
-		<key>lockbox-ios.xcscheme</key>
+		<key>All in KeyManagerSpec.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false />
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>5</integer>
+		</dict>
+		<key>All in ParserSpec.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false />
+			<key>orderHint</key>
+			<integer>4</integer>
 		</dict>
 		<key>All in WebViewSpec.xcscheme</key>
 		<dict>
@@ -21,19 +32,20 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>All in DataStoreSpec.xcscheme</key>
+		<key>extract-cdependencies.xcscheme</key>
 		<dict>
-			<key>isShown</key>
-			<false />
 			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>6</integer>
 		</dict>
-		<key>All in ParserSpec.xcscheme</key>
+		<key>lockbox-ios.xcscheme</key>
 		<dict>
-			<key>isShown</key>
-			<false />
 			<key>orderHint</key>
-			<integer>4</integer>
+			<integer>0</integer>
+		</dict>
+		<key>unitspecs.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -44,6 +56,11 @@
 			<true />
 		</dict>
 		<key>7D5DF8861F87F2600039B23E</key>
+		<dict>
+			<key>primary</key>
+			<true />
+		</dict>
+		<key>7DBCD5E91FB25E390035CB0F</key>
 		<dict>
 			<key>primary</key>
 			<true />
