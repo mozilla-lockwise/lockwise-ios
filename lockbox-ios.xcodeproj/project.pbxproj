@@ -35,6 +35,11 @@
 		7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D83C9FBE1FAD3D5800D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
+		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
+		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
+		D8FD414F1FAD333E0080D183 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD414E1FAD333D0080D183 /* AppInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +74,7 @@
 			files = (
 				7D79C2801F9FEC28007B8D3F /* RxCocoa.framework in CopyFiles */,
 				7D8296591F9FA4E800ED1ADD /* RxSwift.framework in CopyFiles */,
+				D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +110,9 @@
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
+		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
+		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
+		D8FD414E1FAD333D0080D183 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +133,8 @@
 			files = (
 				7D79C27F1F9FEC28007B8D3F /* RxCocoa.framework in Frameworks */,
 				7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */,
+				D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */,
+				D83C9FBE1FAD3D5800D08AAE /* Telemetry.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +153,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */,
 				7DF469C91F9F8FDA00375C74 /* RxTest.framework */,
 				7DF469C71F9F8FD500375C74 /* RxBlocking.framework */,
 				7DF469C31F9F8F8000375C74 /* RxSwift.framework */,
@@ -201,6 +213,8 @@
 				7D7878381F97C63500BE6C9D /* WebView.swift */,
 				7D38849F1F9939680058DAFF /* Parser.swift */,
 				7AA542C9A0C1CC916E3C8050 /* Models */,
+				D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */,
+				D8FD414E1FAD333D0080D183 /* AppInfo.swift */,
 			);
 			path = "lockbox-ios";
 			sourceTree = "<group>";
@@ -328,9 +342,11 @@
 				7D7878391F97C63500BE6C9D /* WebView.swift in Sources */,
 				7D3884A01F9939680058DAFF /* Parser.swift in Sources */,
 				7D7878371F96BE4200BE6C9D /* DataStore.swift in Sources */,
+				D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */,
 				7D5DF8771F87F2600039B23E /* AppDelegate.swift in Sources */,
 				7AA54896CDA4031B568DE386 /* ItemEntry.swift in Sources */,
 				7AA54DC38FF49F029CDE96B3 /* Item.swift in Sources */,
+				D8FD414F1FAD333E0080D183 /* AppInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
