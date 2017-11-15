@@ -8,7 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		7AA5427F6298C0C9107E6A10 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5475A1F158FE6B93208B2 /* String+.swift */; };
+		7AA543D2B55F2968B976F8EF /* OAuthInfoSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA544EC2E10034239FCB256 /* OAuthInfoSpec.swift */; };
+		7AA544A399B0BB13DBA9368E /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FDB14CAE2EA615AE664 /* Data+.swift */; };
+		7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542B3E1A27FC2B8806363 /* String+Spec.swift */; };
+		7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA544DC0DBB5D050BD54806 /* FxAPresenterSpec.swift */; };
+		7AA5469C95DDD305EC9E03F5 /* FxAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5475104DA650C7FF5E60B /* FxAView.swift */; };
+		7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA541A2CBD1A142812687CE /* Data+Spec.swift */; };
 		7AA54896CDA4031B568DE386 /* ItemEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547E5549B49D4E0D0368D /* ItemEntry.swift */; };
+		7AA549A0A09C07E547A5D0F0 /* OAuthInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5455D02519DBA3D3711A9 /* OAuthInfo.swift */; };
+		7AA54C3AC887CF24CDC98FEC /* FxAPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547FD052A27631D77065D /* FxAPresenter.swift */; };
+		7AA54D41D654320B1C2F9753 /* FxAViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FA1C4E24F4DDBA39D1B /* FxAViewSpec.swift */; };
 		7AA54D2B9BA6B3140A7EE905 /* DataStoreIntegrationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5437C9484207EEC3C6B2E /* DataStoreIntegrationSpec.swift */; };
 		7AA54DC38FF49F029CDE96B3 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA546D5DCD090D9C9B24421 /* Item.swift */; };
 		7D0D0EDD1F9A5CE2007D8960 /* ItemSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0D0EDC1F9A5CE2007D8960 /* ItemSpec.swift */; };
@@ -93,16 +102,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7AA540791711435707BFBF69 /* buddybuild_postbuild.sh  */ = {isa = PBXFileReference; lastKnownFileType = "file.sh "; path = "buddybuild_postbuild.sh "; sourceTree = "<group>"; };
+		7AA541A2CBD1A142812687CE /* Data+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Spec.swift"; sourceTree = "<group>"; };
 		7AA5420714A76D776F035603 /* buddybuild_prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buddybuild_prebuild.sh; sourceTree = "<group>"; };
+		7AA542B3E1A27FC2B8806363 /* String+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Spec.swift"; sourceTree = "<group>"; };
 		7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = bootstrap.sh; sourceTree = "<group>"; };
+		7AA544DC0DBB5D050BD54806 /* FxAPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPresenterSpec.swift; sourceTree = "<group>"; };
+		7AA544EC2E10034239FCB256 /* OAuthInfoSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthInfoSpec.swift; sourceTree = "<group>"; };
+		7AA5455D02519DBA3D3711A9 /* OAuthInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthInfo.swift; sourceTree = "<group>"; };
 		7AA5437C9484207EEC3C6B2E /* DataStoreIntegrationSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreIntegrationSpec.swift; sourceTree = "<group>"; };
 		7AA546C7687189844E3E3BBF /* mkdocs.yml */ = {isa = PBXFileReference; lastKnownFileType = file.yml; path = mkdocs.yml; sourceTree = "<group>"; };
 		7AA546D5DCD090D9C9B24421 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		7AA546FD320F8F1431F20092 /* codecov.yml */ = {isa = PBXFileReference; lastKnownFileType = file.yml; path = codecov.yml; sourceTree = "<group>"; };
+		7AA5475104DA650C7FF5E60B /* FxAView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAView.swift; sourceTree = "<group>"; };
 		7AA5475A1F158FE6B93208B2 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		7AA547E5549B49D4E0D0368D /* ItemEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEntry.swift; sourceTree = "<group>"; };
 		7AA549F525E77FA0FE9D9B54 /* buddybuild_postbuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buddybuild_postbuild.sh; sourceTree = "<group>"; };
+		7AA547FD052A27631D77065D /* FxAPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPresenter.swift; sourceTree = "<group>"; };
 		7AA54E9846C5A9F801A7FE1C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		7AA54FA1C4E24F4DDBA39D1B /* FxAViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAViewSpec.swift; sourceTree = "<group>"; };
+		7AA54FDB14CAE2EA615AE664 /* Data+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+.swift"; sourceTree = "<group>"; };
 		7D0D0EDC1F9A5CE2007D8960 /* ItemSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemSpec.swift; sourceTree = "<group>"; };
 		7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		7D1B1A8D1F98F86600C1F5FF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -110,7 +129,6 @@
 		7D1B1AC41F99028D00C1F5FF /* lockbox-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "lockbox-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1B1AC81F99028D00C1F5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D1B1AD31F9902C600C1F5FF /* DataStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreSpec.swift; sourceTree = "<group>"; };
-		7D249DC21FB22F87007E603D /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = binaries/module.modulemap; sourceTree = "<group>"; };
 		7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewSpec.swift; sourceTree = "<group>"; };
 		7D38849F1F9939680058DAFF /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		7D3884A11F9A54D90058DAFF /* ParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserSpec.swift; sourceTree = "<group>"; };
@@ -129,6 +147,7 @@
 		7D7878361F96BE4200BE6C9D /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		7D7878381F97C63500BE6C9D /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		7D88BD451F9A6F5B0082A838 /* ItemEntrySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEntrySpec.swift; sourceTree = "<group>"; };
+		7D8D33EA1FC5FA2F00D4D725 /* lockbox-ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "lockbox-ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		7D93F7621FB1275B00354F03 /* KeyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
 		7D9D64921F9F8EE300279C39 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
@@ -178,6 +197,7 @@
 			children = (
 				7AA547E5549B49D4E0D0368D /* ItemEntry.swift */,
 				7AA546D5DCD090D9C9B24421 /* Item.swift */,
+				7AA5455D02519DBA3D3711A9 /* OAuthInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -186,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				7AA5475A1F158FE6B93208B2 /* String+.swift */,
+				7AA54FDB14CAE2EA615AE664 /* Data+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -218,6 +239,11 @@
 				7D0D0EDC1F9A5CE2007D8960 /* ItemSpec.swift */,
 				7D88BD451F9A6F5B0082A838 /* ItemEntrySpec.swift */,
 				7D39202B1FB215EB00709575 /* KeyManagerSpec.swift */,
+				7AA542B3E1A27FC2B8806363 /* String+Spec.swift */,
+				7AA541A2CBD1A142812687CE /* Data+Spec.swift */,
+				7AA544DC0DBB5D050BD54806 /* FxAPresenterSpec.swift */,
+				7AA544EC2E10034239FCB256 /* OAuthInfoSpec.swift */,
+				7AA54FA1C4E24F4DDBA39D1B /* FxAViewSpec.swift */,
 				7AA5437C9484207EEC3C6B2E /* DataStoreIntegrationSpec.swift */,
 			);
 			path = "lockbox-iosTests";
@@ -252,7 +278,6 @@
 		7D5DF8751F87F2600039B23E /* lockbox-ios */ = {
 			isa = PBXGroup;
 			children = (
-				7D249DC21FB22F87007E603D /* module.modulemap */,
 				7D93F7651FB1276800354F03 /* FxA */,
 				7D5DF8761F87F2600039B23E /* AppDelegate.swift */,
 				7D5DF8781F87F2600039B23E /* ViewController.swift */,
@@ -267,6 +292,7 @@
 				D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */,
 				D8FD414E1FAD333D0080D183 /* AppInfo.swift */,
 				7AA543921D0D9C2473451D87 /* Extensions */,
+				7D8D33EA1FC5FA2F00D4D725 /* lockbox-ios-Bridging-Header.h */,
 			);
 			path = "lockbox-ios";
 			sourceTree = "<group>";
@@ -275,6 +301,8 @@
 			isa = PBXGroup;
 			children = (
 				7D93F7621FB1275B00354F03 /* KeyManager.swift */,
+				7AA5475104DA650C7FF5E60B /* FxAView.swift */,
+				7AA547FD052A27631D77065D /* FxAPresenter.swift */,
 			);
 			path = FxA;
 			sourceTree = "<group>";
@@ -337,6 +365,7 @@
 					};
 					7D5DF8721F87F2600039B23E = {
 						CreatedOnToolsVersion = 9.0;
+						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -392,6 +421,11 @@
 				7D1B1AD41F9902C600C1F5FF /* DataStoreSpec.swift in Sources */,
 				7D3884A21F9A54D90058DAFF /* ParserSpec.swift in Sources */,
 				7D0D0EDD1F9A5CE2007D8960 /* ItemSpec.swift in Sources */,
+				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
+				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
+				7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */,
+				7AA543D2B55F2968B976F8EF /* OAuthInfoSpec.swift in Sources */,
+				7AA54D41D654320B1C2F9753 /* FxAViewSpec.swift in Sources */,
 				7AA54D2B9BA6B3140A7EE905 /* DataStoreIntegrationSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,6 +445,10 @@
 				D8FD414F1FAD333E0080D183 /* AppInfo.swift in Sources */,
 				7D93F7641FB1275C00354F03 /* KeyManager.swift in Sources */,
 				7AA5427F6298C0C9107E6A10 /* String+.swift in Sources */,
+				7AA5469C95DDD305EC9E03F5 /* FxAView.swift in Sources */,
+				7AA544A399B0BB13DBA9368E /* Data+.swift in Sources */,
+				7AA54C3AC887CF24CDC98FEC /* FxAPresenter.swift in Sources */,
+				7AA549A0A09C07E547A5D0F0 /* OAuthInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -608,27 +646,31 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
+					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox;
 				PRODUCT_NAME = "lockbox-ios";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/**";
+				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
+				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/lockbox-ios-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -638,27 +680,30 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
+					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox;
 				PRODUCT_NAME = "lockbox-ios";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/**";
+				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
+				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/lockbox-ios-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

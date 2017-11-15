@@ -3,12 +3,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import CJose
+import Foundation
 
 class KeyManager {
     private var jwk:OpaquePointer?
 
     func generateRandomECDH() -> String {
-        self.jwk = cjose_jwk_create_EC_random(CJOSE_JWK_EC_P_256, nil)
+        if self.jwk == nil {
+            self.jwk = cjose_jwk_create_EC_random(CJOSE_JWK_EC_P_256, nil)
+        }
 
         let jsonValue = cjose_jwk_to_json(self.jwk!, false, nil)
 
@@ -16,9 +19,26 @@ class KeyManager {
     }
 
     func decryptJWE(_ jwe: String) -> String {
-        let decryptedPayload = cjose_jwe_decrypt(cjose_jwe_import(jwe, jwe.count, nil), self.jwk, nil, nil)
+        let count = jwe.data(using: .utf8)!.count as size_t
+
+        let cjoseError = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
+
+        let cJoseJWE = cjose_jwe_import(jwe, count, cjoseError)
+        let decryptedPayload = cjose_jwe_decrypt(cJoseJWE, self.jwk, nil, nil)
 
         return String(cString: decryptedPayload!)
+    }
+
+    func random32() -> Data? {
+        var d = Data(count: 32)
+        let result = d.withUnsafeMutableBytes {
+            SecRandomCopyBytes(kSecRandomDefault, d.count, $0)
+        }
+        if result == errSecSuccess {
+            return d
+        } else {
+            return nil
+        }
     }
 }
 

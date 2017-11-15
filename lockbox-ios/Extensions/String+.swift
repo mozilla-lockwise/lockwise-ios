@@ -5,7 +5,20 @@
 import Foundation
 
 extension String {
-    func toBase64() -> String {
-        return Data(self.utf8).base64EncodedString()
+    func base64URL() -> String {
+        return Data(self.utf8).base64URLEncodedString()
+    }
+
+    func sha256withBase64URL() -> String? {
+        guard let data = self.data(using: String.Encoding.utf8),
+              let shaData = sha256(data)
+                else { return nil }
+        return shaData.base64URLEncodedString()
+    }
+
+    private func sha256(_ data: Data) -> Data? {
+        guard let res = NSMutableData(length: Int(CC_SHA256_DIGEST_LENGTH)) else { return nil }
+        CC_SHA256((data as NSData).bytes, CC_LONG(data.count), res.mutableBytes.assumingMemoryBound(to: UInt8.self))
+        return res as Data
     }
 }
