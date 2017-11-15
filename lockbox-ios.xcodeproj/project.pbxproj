@@ -6,20 +6,6 @@
 	objectVersion = 48;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		7DBCD5EF1FB25F6A0035CB0F /* extract-cdependencies */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 7DBCD5F01FB25F6B0035CB0F /* Build configuration list for PBXAggregateTarget "extract-cdependencies" */;
-			buildPhases = (
-				7DBCD5F31FB25F700035CB0F /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "extract-cdependencies";
-			productName = "extract-cdependencies";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		7AA5427F6298C0C9107E6A10 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5475A1F158FE6B93208B2 /* String+.swift */; };
 		7AA54896CDA4031B568DE386 /* ItemEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547E5549B49D4E0D0368D /* ItemEntry.swift */; };
@@ -66,13 +52,6 @@
 			remoteGlobalIDString = 7D5DF8721F87F2600039B23E;
 			remoteInfo = "lockbox-ios";
 		};
-		7DBCD5FA1FB2671F0035CB0F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7D5DF86B1F87F2600039B23E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7DBCD5EF1FB25F6A0035CB0F;
-			remoteInfo = "extract-cdependencies";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -101,6 +80,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = bootstrap.sh; sourceTree = "<group>"; };
 		7AA546D5DCD090D9C9B24421 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		7AA5475A1F158FE6B93208B2 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		7AA547E5549B49D4E0D0368D /* ItemEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEntry.swift; sourceTree = "<group>"; };
@@ -225,6 +205,7 @@
 				7D5DF8741F87F2600039B23E /* Products */,
 				7D1B1A8A1F98F86400C1F5FF /* Frameworks */,
 				7AA54E9846C5A9F801A7FE1C /* README.md */,
+				7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */,
 			);
 			sourceTree = "<group>";
 		};
@@ -299,7 +280,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				7DBCD5FB1FB2671F0035CB0F /* PBXTargetDependency */,
 			);
 			name = "lockbox-ios";
 			productName = "lockbox-exploration";
@@ -326,10 +306,6 @@
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
 					};
-					7DBCD5EF1FB25F6A0035CB0F = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 7D5DF86E1F87F2600039B23E /* Build configuration list for PBXProject "lockbox-ios" */;
@@ -347,7 +323,6 @@
 			targets = (
 				7D5DF8721F87F2600039B23E /* lockbox-ios */,
 				7D1B1AC31F99028D00C1F5FF /* lockbox-iosTests */,
-				7DBCD5EF1FB25F6A0035CB0F /* extract-cdependencies */,
 			);
 		};
 /* End PBXProject section */
@@ -372,22 +347,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		7DBCD5F31FB25F700035CB0F /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\ncd lockbox-ios\ntar xvfz binaries.tar.gz\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7D1B1AC01F99028D00C1F5FF /* Sources */ = {
@@ -426,11 +385,6 @@
 			isa = PBXTargetDependency;
 			target = 7D5DF8721F87F2600039B23E /* lockbox-ios */;
 			targetProxy = 7D1B1AC91F99028D00C1F5FF /* PBXContainerItemProxy */;
-		};
-		7DBCD5FB1FB2671F0035CB0F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7DBCD5EF1FB25F6A0035CB0F /* extract-cdependencies */;
-			targetProxy = 7DBCD5FA1FB2671F0035CB0F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -666,22 +620,6 @@
 			};
 			name = Release;
 		};
-		7DBCD5F11FB25F6B0035CB0F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		7DBCD5F21FB25F6B0035CB0F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -708,15 +646,6 @@
 			buildConfigurations = (
 				7D5DF8911F87F2600039B23E /* Debug */,
 				7D5DF8921F87F2600039B23E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7DBCD5F01FB25F6B0035CB0F /* Build configuration list for PBXAggregateTarget "extract-cdependencies" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7DBCD5F11FB25F6B0035CB0F /* Debug */,
-				7DBCD5F21FB25F6B0035CB0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
