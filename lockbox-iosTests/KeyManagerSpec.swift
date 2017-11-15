@@ -15,7 +15,7 @@ class KeyManagerSpec : QuickSpec {
         describe(".generateRandomECDH()") {
             let key = subject.generateRandomECDH()
             
-            it("generates an ECDH JSON string with correct parameters & data sizes") {
+            it("generates an ECDH public-key JSON string with correct parameters & data sizes") {
                 if let data = key.data(using: .utf8) {
                     do {
                         let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
@@ -24,6 +24,24 @@ class KeyManagerSpec : QuickSpec {
                         expect(jsonDict!["crv"]).to(equal("P-256"))
                         expect(jsonDict!["x"]!.count).to(equal(43))
                         expect(jsonDict!["y"]!.count).to(equal(43))
+                    } catch {
+                        fail("key generation not provided in json dictionary format!")
+                    }
+                }
+            }
+
+            it("caches the ECDH key and returns the same one on subsequent requests") {
+                let secondKey = self.subject.generateRandomECDH()
+
+                if let keyOneData = key.data(using: .utf8), let keyTwoData = secondKey.data(using: .utf8) {
+                    do {
+                        let keyOneJSONDict = try JSONSerialization.jsonObject(with: keyOneData, options: []) as? [String: String]
+                        let keyTwoJSONDict = try JSONSerialization.jsonObject(with: keyTwoData, options: []) as? [String: String]
+
+                        expect(keyOneJSONDict!["kty"]).to(equal(keyTwoJSONDict!["kty"]))
+                        expect(keyOneJSONDict!["crv"]).to(equal(keyTwoJSONDict!["crv"]))
+                        expect(keyOneJSONDict!["x"]!).to(equal(keyTwoJSONDict!["x"]!))
+                        expect(keyOneJSONDict!["y"]!).to(equal(keyTwoJSONDict!["y"]!))
                     } catch {
                         fail("key generation not provided in json dictionary format!")
                     }
@@ -50,6 +68,18 @@ class KeyManagerSpec : QuickSpec {
                 let serializedJWE = String(cString: cjose_jwe_export(jwe, nil))
 
                 expect(self.subject.decryptJWE(serializedJWE)).to(equal(payload))
+            }
+        }
+
+        describe(".random32") {
+            it("generates a 32-byte piece of data") {
+                let random = self.subject.random32()!
+                expect(random.count).to(equal(32))
+            }
+
+            it("does not generate the same string over multiple calls") {
+                // note: randomness is tricky to test...
+                expect(self.subject.random32()!).notTo(equal(self.subject.random32()!))
             }
         }
     }
