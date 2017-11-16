@@ -7,16 +7,21 @@ import WebKit
 import RxSwift
 
 enum DataStoreError: Error {
-    case NoIDPassed, Locked, NotInitialized, Unknown
+    case NoIDPassed, Locked, NotInitialized, UnexpectedType, Unknown
 }
 
 class DataStore: NSObject, WKNavigationDelegate {
     var webView: (WKWebView & TypedJavaScriptWebView)!
     private let dataStoreName: String!
+    private let parser:ItemParser!
+    private let disposeBag = DisposeBag()
 
-    init<T:WKWebView>(webview: T, dataStoreName: String = "ds") where T: TypedJavaScriptWebView {
+    init<T:WKWebView>(webview: T,
+                      dataStoreName: String? = "ds",
+                      parser:ItemParser? = Parser()) where T: TypedJavaScriptWebView {
         self.webView = webview
         self.dataStoreName = dataStoreName
+        self.parser = parser
         super.init()
 
         self.webView.navigationDelegate = self
@@ -28,7 +33,7 @@ class DataStore: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let _ = self.open().subscribe()
+        let _ = self.open().subscribe().disposed(by: disposeBag)
     }
 
     func open() -> Single<Any> {
@@ -55,9 +60,18 @@ class DataStore: NSObject, WKNavigationDelegate {
         return self.webView.evaluateJavaScript("\(self.dataStoreName!).lock()")
     }
 
-    func list() -> Single<[Any]> {
+    func list() -> Single<[Item]> {
         return checkState().flatMap { _ in
             return self.webView.evaluateJavaScriptMapToArray("\(self.dataStoreName!).list()")
+                    .map { anyList -> [Item] in
+                        return try anyList.map { value -> Item in
+                            guard let itemDictionary = value as? [String: Any] else {
+                                throw DataStoreError.UnexpectedType
+                            }
+
+                            return try self.parser.itemFromDictionary(itemDictionary)
+                        }
+                    }
         }
     }
 
@@ -65,20 +79,22 @@ class DataStore: NSObject, WKNavigationDelegate {
         return checkState().flatMap { _ in
             return self.webView.evaluateJavaScript("\(self.dataStoreName!).get(\"\(id)\")")
         }.map { value -> Item in
-            return try Parser.itemFromDictionary(value as! [String:Any])
+            guard let itemDictionary = value as? [String: Any] else {
+                throw DataStoreError.UnexpectedType
+            }
+
+            return try self.parser.itemFromDictionary(itemDictionary)
         }
     }
 
     func addItem(_ item: Item) -> Single<Any> {
         do {
-            let jsonItem = try Parser.jsonStringFromItem(item)
+            let jsonItem = try self.parser.jsonStringFromItem(item)
             return checkState().flatMap { _ in
                 return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
             }
-        } catch ParserError.InvalidItem {
-            return Single.error(ParserError.InvalidItem)
         } catch {
-            return Single.error(DataStoreError.Unknown)
+            return Single.error(error)
         }
     }
 
@@ -98,15 +114,13 @@ class DataStore: NSObject, WKNavigationDelegate {
         }
 
         do {
-            let jsonItem = try Parser.jsonStringFromItem(item)
+            let jsonItem = try self.parser.jsonStringFromItem(item)
 
             return checkState().flatMap { _ in
                 return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
             }
-        } catch ParserError.InvalidItem {
-            return Single.error(ParserError.InvalidItem)
         } catch {
-            return Single.error(DataStoreError.Unknown)
+            return Single.error(error)
         }
     }
 
