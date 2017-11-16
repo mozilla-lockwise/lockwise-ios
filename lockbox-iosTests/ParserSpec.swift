@@ -8,21 +8,44 @@ import Nimble
 @testable import lockbox_ios
 
 class ParserSpec : QuickSpec {
+    enum FakeEncoderError: Error {
+        case FoundAProblem
+    }
+    class FakeEncoder:JSONEncoder {
+        var shouldThrow = false
+
+        override func encode<T>(_ value: T) throws -> Data where T: Encodable {
+            if (shouldThrow) {
+                throw FakeEncoderError.FoundAProblem
+            }
+
+            return try super.encode(value)
+        }
+    }
+
+    var subject:Parser!
+    var encoder:FakeEncoder!
+
     override func spec() {
+        beforeEach {
+            self.encoder = FakeEncoder()
+            self.subject = Parser(encoder: self.encoder)
+        }
+
         describe(".itemFromDictionary()") {
             it("throws invaliddictionary when provided an empty dictionary") {
-                expect { try Parser.itemFromDictionary([:]) }.to(throwError(ParserError.InvalidDictionary))
+                expect { try self.subject.itemFromDictionary([:]) }.to(throwError(ParserError.InvalidDictionary))
             }
-            
+
             it("throws invaliddictionary when provided a dictionary with only unexpected parameters") {
-                expect { try Parser.itemFromDictionary(["bogus":"foo", "bar": false]) }.to(throwError())
+                expect { try self.subject.itemFromDictionary(["bogus":"foo", "bar": false]) }.to(throwError(ParserError.InvalidDictionary))
             }
-            
-            it("returns ItemNotFound when provided a dictionary without all required parameters") {
+
+            it("throws invaliddictionary when provided a dictionary without all required parameters") {
                 let type = "cat"
                 let title = "butt"
                 let username = "me"
-                expect{ try Parser.itemFromDictionary(
+                expect{ try self.subject.itemFromDictionary(
                     [
                         "entry":[
                             "type":type,
@@ -30,14 +53,14 @@ class ParserSpec : QuickSpec {
                         ],
                         "title":title
                     ])
-                }.to(throwError())
+                }.to(throwError(ParserError.InvalidDictionary))
             }
-            
+
             it("populates item correctly when provided a dictionary with some unexpected parameters") {
                 let type = "cat"
                 let id = "fdkjsfdhkjfds"
                 let origins = ["www.maps.com"]
-                let item = try! Parser.itemFromDictionary(
+                let item = try! self.subject.itemFromDictionary(
                     ["bogus":"foo",
                      "bar": false,
                      "id":id,
@@ -55,18 +78,18 @@ class ParserSpec : QuickSpec {
                     .origins(origins)
                     .entry(expectedEntry)
                     .build()
-                
+
                 expect(item).to(equal(expectedItem))
                 expect(item.entry).to(equal(expectedEntry))
             }
-            
+
             it("populates item correctly when provided a dictionary with expected parameters") {
                 let type = "cat"
                 let id = "fdkjsfdhkjfds"
                 let origins = ["www.maps.com"]
                 let title = "butt"
                 let username = "me"
-                let item = try! Parser.itemFromDictionary(
+                let item = try! self.subject.itemFromDictionary(
                     [
                         "id":id,
                         "origins":origins,
@@ -76,7 +99,7 @@ class ParserSpec : QuickSpec {
                         ],
                         "title":title
                     ])
-                
+
                 let expectedEntry = ItemEntry.Builder()
                     .type(type)
                     .username(username)
@@ -87,21 +110,44 @@ class ParserSpec : QuickSpec {
                     .entry(expectedEntry)
                     .title(title)
                     .build()
-                
+
                 expect(item).to(equal(expectedItem))
             }
         }
-    
+
         describe("jsonStringFromItem()") {
-            it("forms a valid json string") {
-                let item = Item.Builder()
-                    .id("dfgljkfsdlead")
-                    .entry(ItemEntry.Builder().type("login").build())
-                    .origins(["www.neopets.com"])
-                    .build()
-                
-                let json = try! Parser.jsonStringFromItem(item)
-                expect(json).to(equal("{\"id\":\"dfgljkfsdlead\",\"origins\":[\"www.neopets.com\"],\"entry\":{\"type\":\"login\"}}"))
+            describe("when json encoding fails") {
+                beforeEach {
+                    self.encoder.shouldThrow = true
+                }
+
+                it("throws the InvalidItem error") {
+                    let item = Item.Builder()
+                            .id("dfgljkfsdlead")
+                            .entry(ItemEntry.Builder().type("login").build())
+                            .origins(["www.neopets.com"])
+                            .build()
+
+                    expect { try self.subject.jsonStringFromItem(item) }.to(throwError(ParserError.InvalidItem))
+                }
+            }
+
+            describe("when json encoding succeeds") {
+                beforeEach {
+                    self.encoder.shouldThrow = false
+                }
+
+                it("forms a valid json string") {
+                    let item = Item.Builder()
+                            .id("dfgljkfsdlead")
+                            .entry(ItemEntry.Builder().type("login").build())
+                            .origins(["www.neopets.com"])
+                            .build()
+
+                    let json = try! self.subject.jsonStringFromItem(item)
+                    expect(json).to(equal("{\"id\":\"dfgljkfsdlead\",\"origins\":[\"www.neopets.com\"],\"entry\":{\"type\":\"login\"}}"))
+                }
+
             }
         }
     }

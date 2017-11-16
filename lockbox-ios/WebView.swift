@@ -18,7 +18,7 @@ protocol TypedJavaScriptWebView {
 }
 
 class WebView: WKWebView, TypedJavaScriptWebView {
-    func evaluateJavaScriptToBool(_ javaScriptString: String) -> Single<Bool> {
+    public func evaluateJavaScriptToBool(_ javaScriptString: String) -> Single<Bool> {
         return self.evaluateJavaScript(javaScriptString)
                 .map { value -> Bool in
                     if let boolValue = value as? Bool {
@@ -29,7 +29,7 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                 }
     }
 
-    func evaluateJavaScriptToString(_ javaScriptString: String) -> Single<String> {
+    public func evaluateJavaScriptToString(_ javaScriptString: String) -> Single<String> {
         return self.evaluateJavaScript(javaScriptString)
                 .map { value -> String in
                     if let stringValue = value as? String {
@@ -40,7 +40,7 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                 }
     }
 
-    func evaluateJavaScriptMapToArray(_ javaScriptString: String) -> Single<[Any]> {
+    public func evaluateJavaScriptMapToArray(_ javaScriptString: String) -> Single<[Any]> {
         let arrayName = "arrayVal"
 
         return self.evaluateJavaScriptWithoutCatchingInvalidType("var \(arrayName);\(javaScriptString).then(function (listVal) {\(arrayName) = Array.from(listVal);});")
@@ -67,7 +67,7 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                 }
     }
 
-    func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
+    public func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
         return Single<Any>.create() { single in
 
             super.evaluateJavaScript(javaScriptString) { any, error in

@@ -5,25 +5,31 @@
 import Foundation
 
 protocol ItemParser {
-    static func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item
-    static func jsonStringFromItem(_ item:Item) -> String
+    func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item
+    func jsonStringFromItem(_ item:Item) throws -> String
 }
 
 enum ParserError : Error {
     case InvalidDictionary, InvalidItem
 }
 
-class Parser : NSObject {
+class Parser : NSObject, ItemParser {
+    private let encoder:JSONEncoder
     
-    private static var itemProperties:[String] {
+    private var itemProperties:[String] {
         get {
             return Mirror(reflecting: Item.Builder().build()).children.flatMap { $0.label }
         }
     }
+
+    init(encoder:JSONEncoder? = JSONEncoder()) {
+        self.encoder = encoder!
+        super.init()
+    }
     
-    static func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item {
+    func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item {
         let sanitizedDictionary = dictionary.filter { pair -> Bool in
-            return Parser.itemProperties.contains(pair.key)
+            return self.itemProperties.contains(pair.key)
         }
         
         do {
@@ -37,11 +43,9 @@ class Parser : NSObject {
         }
     }
     
-    static func jsonStringFromItem(_ item:Item) throws -> String {
-        let jsonEncoder = JSONEncoder()
-        
+    func jsonStringFromItem(_ item:Item) throws -> String {
         do {
-            let jsonData = try jsonEncoder.encode(item)
+            let jsonData = try self.encoder.encode(item)
             let jsonString = String(data: jsonData, encoding: .utf8)
             return jsonString!
         } catch {

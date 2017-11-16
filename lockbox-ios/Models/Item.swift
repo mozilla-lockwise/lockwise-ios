@@ -82,14 +82,4 @@ class Item : Codable, Equatable {
             return self
         }
     }
-    
-    class ItemNotFound : Item {
-        init() {
-            super.init(origins: [], entry: ItemEntry(type:""))
-        }
-        
-        required init(from decoder: Decoder) throws {
-            try super.init(from: decoder)
-        }
-    }
 }

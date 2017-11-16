@@ -11,6 +11,42 @@ class ItemSpec : QuickSpec {
     override func spec() {
         var lhs:Item?
         var rhs:Item?
+
+        describe("builder") {
+            it("builds the item with all provided parameters") {
+                let id = "fdgsfdsfds"
+                let disabled = false
+                let title = "titlevalue"
+                let origins = ["meow", "woof"]
+                let tags = ["cats", "dogs"]
+                let created = "fsdfdsfdsd"
+                let modified = "432jkh3429f3"
+                let lastUsed = "34jkdfsjkl32"
+                let entry = ItemEntry.Builder().type("fdssdflksdf").build()
+
+                let item = Item.Builder()
+                    .id(id)
+                    .disabled(disabled)
+                    .title(title)
+                    .origins(origins)
+                    .tags(tags)
+                    .created(created)
+                    .modified(modified)
+                    .lastUsed(lastUsed)
+                    .entry(entry)
+                    .build()
+
+                expect(item.id).to(equal(id))
+                expect(item.disabled).to(equal(disabled))
+                expect(item.title).to(equal(title))
+                expect(item.origins).to(equal(origins))
+                expect(item.tags).to(equal(tags))
+                expect(item.created).to(equal(created))
+                expect(item.modified).to(equal(modified))
+                expect(item.lastUsed).to(equal(lastUsed))
+                expect(item.entry).to(equal(entry))
+            }
+        }
         
         describe("equality") {
             it("returns false when the ids are different", closure: {
