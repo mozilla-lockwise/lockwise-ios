@@ -1,2 +1,2 @@
-lockbox-ios/lockbox-datastore/* linguist-vendored=false
+*.js linguist-vendored=false
 
