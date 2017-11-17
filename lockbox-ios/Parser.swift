@@ -31,25 +31,29 @@ class Parser : NSObject, ItemParser {
         let sanitizedDictionary = dictionary.filter { pair -> Bool in
             return self.itemProperties.contains(pair.key)
         }
-        
+
+        var item:Item
         do {
             let json = try JSONSerialization.data(withJSONObject: sanitizedDictionary, options: [])
             
-            let item = try JSONDecoder().decode(Item.self, from: json)
-            
-            return item
+            item = try JSONDecoder().decode(Item.self, from: json)
         } catch {
             throw ParserError.InvalidDictionary
         }
+
+        return item
     }
     
     func jsonStringFromItem(_ item:Item) throws -> String {
+        var jsonString = ""
+
         do {
             let jsonData = try self.encoder.encode(item)
-            let jsonString = String(data: jsonData, encoding: .utf8)
-            return jsonString!
+            jsonString = String(data: jsonData, encoding: .utf8)!
         } catch {
             throw ParserError.InvalidItem
         }
+
+        return jsonString
     }
 }

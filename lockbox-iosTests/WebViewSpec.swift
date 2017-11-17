@@ -12,22 +12,30 @@ import RxBlocking
 @testable import lockbox_ios
 
 class WebViewSpec: QuickSpec {
-    class StubbedEvaluateJSSingleWebView: WebView {
-        var evaluateJSCalled: Bool = false
-        var evaluateJSArgument: String?
-        var firstObservable: Single<Any>?
-        var secondObservable: Single<Any>?
-        private var called = 0
+    class StubbedEvaluateJSWebView: WebView {
+        var evaluateJSArguments:[String] = []
+        var evaluateJSCompletion: ((Any?, Error?) -> Void)?
+
+        override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)?) {
+            evaluateJSArguments.append(javaScriptString)
+            evaluateJSCompletion = completionHandler
+        }
+    }
+
+    class StubbedEvaluateJSSingleWebView: StubbedEvaluateJSWebView {
+        var evaluateJSSingleCalled: Bool = false
+        var evaluateJSSingleArgument: String?
+        var observable: Single<Any>?
 
         override func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
-            self.evaluateJSCalled = true
-            self.evaluateJSArgument = javaScriptString
-            called += 1
-            return (called == 1) ? firstObservable! : secondObservable!
+            self.evaluateJSSingleCalled = true
+            self.evaluateJSSingleArgument = javaScriptString
+            return observable!
         }
     }
 
     var stubbedJSSingleSuper: StubbedEvaluateJSSingleWebView!
+    var stubbedJSSuper: StubbedEvaluateJSWebView!
     var subject: WebView!
     var scheduler = TestScheduler(initialClock: 0)
     let disposeBag = DisposeBag()
@@ -36,8 +44,92 @@ class WebViewSpec: QuickSpec {
         describe("WebView") {
             let javaScriptString = "console.log(butts)"
 
+            describe(".evaluateJavaScript(javaScriptString:)") {
+                var anyObserver: TestableObserver<Any>!
+
+                beforeEach {
+                    self.stubbedJSSuper = StubbedEvaluateJSWebView()
+                    self.subject = self.stubbedJSSuper
+                    anyObserver = self.scheduler.createObserver(Any.self)
+
+                    self.subject.evaluateJavaScript(javaScriptString)
+                            .asObservable()
+                            .subscribe(anyObserver)
+                            .disposed(by: self.disposeBag)
+                }
+
+                it("evaluates the javascript using the wkwebview method") {
+                    expect(self.stubbedJSSuper.evaluateJSArguments.last).to(equal(javaScriptString))
+                }
+
+                describe("when provided an unsupported type webkit error") {
+                    let wkError = WKError(_nsError: NSError(domain: "WKErrorDomain", code: 5))
+                    beforeEach {
+                        self.stubbedJSSuper.evaluateJSCompletion!(nil, wkError)
+                    }
+
+                    it("pushes a dummy single to the observer") {
+                        let value = anyObserver.events.first!.value
+                        expect(value.element as? String).to(equal(""))
+                        expect(value.error).to(beNil())
+                    }
+                }
+
+                describe("when provided any other webkit error") {
+                    let wkError = WKError(_nsError: NSError(domain: "WKErrorDomain", code: 3))
+                    beforeEach {
+                        self.stubbedJSSuper.evaluateJSCompletion!(nil, wkError)
+                    }
+
+                    it("pushes the error to the observer") {
+                        let value = anyObserver.events.first!.value
+                        expect(value.element).to(beNil())
+                        expect(value.error).to(matchError(wkError))
+                    }
+                }
+
+                describe("when provided a non-webkit error") {
+                    let error = NSError(domain: "something", code: -1)
+                    beforeEach {
+                        self.stubbedJSSuper.evaluateJSCompletion!(nil, error)
+                    }
+
+                    it("pushes the error to the observer") {
+                        let value = anyObserver.events.first!.value
+                        expect(value.element).to(beNil())
+                        expect(value.error).to(matchError(error))
+                    }
+                }
+
+                describe("when provided a value and no error") {
+                    let completionValue = ["I am a valid js thingy"]
+                    beforeEach {
+                        self.stubbedJSSuper.evaluateJSCompletion!(completionValue, nil)
+                    }
+
+                    it("pushes the value to the observer") {
+                        let value = anyObserver.events.first!.value
+                        expect(value.element as? [String]).to(equal(completionValue))
+                        expect(value.error).to(beNil())
+                    }
+                }
+
+                describe("when provided no value and no error") {
+                    beforeEach {
+                        self.stubbedJSSuper.evaluateJSCompletion!(nil, nil)
+                    }
+
+                    it("pushes an unknown error to the observer") {
+                        let value = anyObserver.events.first!.value
+                        expect(value.element).to(beNil())
+                        expect(value.error).to(matchError(WebViewError.Unknown))
+                    }
+
+                }
+            }
+
             describe(".evaluateJavaScriptToBool(javaScriptString:)") {
-                var boolObserver = self.scheduler.createObserver(Bool.self)
+                var boolObserver: TestableObserver<Bool>!
 
                 beforeEach {
                     self.stubbedJSSingleSuper = StubbedEvaluateJSSingleWebView()
@@ -47,7 +139,7 @@ class WebViewSpec: QuickSpec {
 
                 describe("when provided a bool value") {
                     beforeEach {
-                        self.stubbedJSSingleSuper.firstObservable = self.scheduler.createHotObservable([next(50, true)])
+                        self.stubbedJSSingleSuper.observable = self.scheduler.createHotObservable([next(50, true)])
                                 .take(1)
                                 .asSingle()
 
@@ -59,8 +151,8 @@ class WebViewSpec: QuickSpec {
                     }
 
                     it("passes the javascript to regular evaluation") {
-                        expect(self.stubbedJSSingleSuper.evaluateJSCalled).to(beTrue())
-                        expect(self.stubbedJSSingleSuper.evaluateJSArgument).to(equal(javaScriptString))
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleCalled).to(beTrue())
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleArgument).to(equal(javaScriptString))
                     }
 
                     it("pushes the boolean value out to the single with no error") {
@@ -72,7 +164,7 @@ class WebViewSpec: QuickSpec {
 
                 describe("when provided a non-bool value") {
                     beforeEach {
-                        self.stubbedJSSingleSuper.firstObservable = self.scheduler.createHotObservable([next(100, "blarg")])
+                        self.stubbedJSSingleSuper.observable = self.scheduler.createHotObservable([next(100, "blarg")])
                                 .take(1)
                                 .asSingle()
                         self.subject.evaluateJavaScriptToBool(javaScriptString)
@@ -83,8 +175,8 @@ class WebViewSpec: QuickSpec {
                     }
 
                     it("passes the javascript to regular evaluation") {
-                        expect(self.stubbedJSSingleSuper.evaluateJSCalled).to(beTrue())
-                        expect(self.stubbedJSSingleSuper.evaluateJSArgument).to(equal(javaScriptString))
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleCalled).to(beTrue())
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleArgument).to(equal(javaScriptString))
                     }
 
                     it("pushes the a no bool error out to the single with no value") {
@@ -96,7 +188,7 @@ class WebViewSpec: QuickSpec {
             }
 
             describe(".evaluateJavaScriptToString(javaScriptString:)") {
-                var stringObserver = self.scheduler.createObserver(String.self)
+                var stringObserver: TestableObserver<String>!
 
                 beforeEach {
                     self.stubbedJSSingleSuper = StubbedEvaluateJSSingleWebView()
@@ -106,7 +198,7 @@ class WebViewSpec: QuickSpec {
 
                 describe("when provided a string value") {
                     beforeEach {
-                        self.stubbedJSSingleSuper.firstObservable = self.scheduler.createHotObservable([next(50, "purple")])
+                        self.stubbedJSSingleSuper.observable = self.scheduler.createHotObservable([next(50, "purple")])
                                 .take(1)
                                 .asSingle()
 
@@ -118,8 +210,8 @@ class WebViewSpec: QuickSpec {
                     }
 
                     it("passes the javascript to regular evaluation") {
-                        expect(self.stubbedJSSingleSuper.evaluateJSCalled).to(beTrue())
-                        expect(self.stubbedJSSingleSuper.evaluateJSArgument).to(equal(javaScriptString))
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleCalled).to(beTrue())
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleArgument).to(equal(javaScriptString))
                     }
 
                     it("pushes the string value out to the single with no error") {
@@ -131,7 +223,7 @@ class WebViewSpec: QuickSpec {
 
                 describe("when provided a non-string value") {
                     beforeEach {
-                        self.stubbedJSSingleSuper.firstObservable = self.scheduler.createHotObservable([next(100, false)])
+                        self.stubbedJSSingleSuper.observable = self.scheduler.createHotObservable([next(100, false)])
                                 .take(1)
                                 .asSingle()
                         self.subject.evaluateJavaScriptToString(javaScriptString)
@@ -142,11 +234,11 @@ class WebViewSpec: QuickSpec {
                     }
 
                     it("passes the javascript to regular evaluation") {
-                        expect(self.stubbedJSSingleSuper.evaluateJSCalled).to(beTrue())
-                        expect(self.stubbedJSSingleSuper.evaluateJSArgument).to(equal(javaScriptString))
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleCalled).to(beTrue())
+                        expect(self.stubbedJSSingleSuper.evaluateJSSingleArgument).to(equal(javaScriptString))
                     }
 
-                    it("pushes the no bool error out to the single with no value") {
+                    it("pushes the no string error out to the single with no value") {
                         let value = stringObserver.events.first!.value
                         expect(value.element).to(beNil())
                         expect(value.error).to(matchError(WebViewError.ValueNotString))
@@ -154,62 +246,91 @@ class WebViewSpec: QuickSpec {
                 }
             }
 
-            xdescribe(".evaluateJavaScriptMapToArray()") {
+            describe(".evaluateJavaScriptMapToArray()") {
                 var arrayObserver: TestableObserver<[Any]>!
 
                 beforeEach {
                     arrayObserver = self.scheduler.createObserver([Any].self)
                     self.stubbedJSSingleSuper = StubbedEvaluateJSSingleWebView()
                     self.subject = self.stubbedJSSingleSuper
+
+                    self.subject.evaluateJavaScriptMapToArray(javaScriptString)
+                            .asObservable()
+                            .subscribe(arrayObserver)
+                            .disposed(by: self.disposeBag)
+                }
+
+                it("evaluates the expanded js string with the passed parameter") {
+                    expect(self.stubbedJSSingleSuper.evaluateJSArguments.last).to(equal("var arrayVal;\(javaScriptString).then(function (listVal) {arrayVal = Array.from(listVal);});"))
                 }
 
                 describe("when a .javaScriptResultTypeIsUnsupported error comes from the webview") {
+                    let wkError = WKError(_nsError: NSError(domain: "WKErrorDomain", code: 5))
+
+                    describe("when provided a non-array value") {
+                        beforeEach {
+                            self.stubbedJSSingleSuper.observable = self.scheduler.createColdObservable([next(50, "purple")])
+                                    .take(1)
+                                    .asSingle()
+
+                            self.stubbedJSSingleSuper.evaluateJSCompletion!(nil, wkError)
+                            self.scheduler.start()
+                        }
+
+                        it("evaluates arrayval against the webview") {
+                            expect(self.stubbedJSSingleSuper.evaluateJSSingleArgument).to(equal("arrayVal"))
+                        }
+
+                        it("pushes a valuenotarray error to the observer") {
+                            let value = arrayObserver.events.first!.value
+                            expect(value.error).to(matchError(WebViewError.ValueNotArray))
+                            expect(value.element).to(beNil())
+                        }
+                    }
+
+                    describe("when provided an array value") {
+                        beforeEach {
+                            self.stubbedJSSingleSuper.observable = self.scheduler.createColdObservable([next(50, ["purple"])])
+                                    .take(1)
+                                    .asSingle()
+
+                            self.stubbedJSSingleSuper.evaluateJSCompletion!(nil, wkError)
+                            self.scheduler.start()
+                        }
+
+                        it("evaluates arrayval against the webview") {
+                            expect(self.stubbedJSSingleSuper.evaluateJSSingleArgument).to(equal("arrayVal"))
+                        }
+
+                        it("pushes the array to the observer") {
+                            let value = arrayObserver.events.first!.value
+                            expect(value.error).to(beNil())
+                            expect(value.element as? [String]).to(equal(["purple"]))
+                        }
+                    }
+                }
+
+                describe("when a different wkerror error comes from the webview") {
+                    let error = WKError(_nsError: NSError(domain: "WKErrorDomain", code: 3))
                     beforeEach {
-                        // on hold until the scheduler can handle sending errors down the pipe
-//                        self.stubbedJSSingleSuper.firstObservable = self.scheduler.createHotObservable([
-//                                    next(100, WKError(_nsError: NSError(domain: "wkerror", code: 5)))
-//                                ])
-//                                .take(1)
-//                                .asSingle()
-                        self.subject.evaluateJavaScriptMapToArray(javaScriptString)
-                                .asObservable()
-                                .subscribe(arrayObserver)
-                                .disposed(by: self.disposeBag)
+                        self.stubbedJSSingleSuper.evaluateJSCompletion!(nil, error)
                     }
 
-                    it("evaluates the expanded js string with the passed parameter") {
-                        expect(self.stubbedJSSingleSuper.evaluateJSCalled).to(beTrue())
-                        expect(self.stubbedJSSingleSuper.evaluateJSArgument).to(equal("var arrayVal;\(javaScriptString).then(function (listVal) {arrayVal = Array.from(listVal);});"))
+                    it("pushes the error to the observer") {
+                        expect(arrayObserver.events.first!.value.error).to(matchError(error))
+                        expect(arrayObserver.events.first!.value.element).to(beNil())
+                    }
+                }
+
+                describe("when a non-wkerror error comes from the webview") {
+                    let error = NSError(domain: "something", code: -1)
+                    beforeEach {
+                        self.stubbedJSSingleSuper.evaluateJSCompletion!(nil, error)
                     }
 
-                    describe("when the arrayName evaluation yields an array") {
-                        beforeEach {
-                            self.stubbedJSSingleSuper.secondObservable = self.scheduler.createHotObservable([next(300, ["bumps"])])
-                                    .take(1)
-                                    .asSingle()
-                            self.scheduler.start()
-                        }
-
-                        it("pushes the array to the observer with no error") {
-                            let array = arrayObserver.events.first!.value.element as? [String]
-                            expect(array).to(equal(["bumps"]))
-                            expect(arrayObserver.events.first!.value.error).to(beNil())
-                        }
-                    }
-
-                    describe("when the arrayName evaluation yields a different object") {
-                        beforeEach {
-                            self.stubbedJSSingleSuper.secondObservable = self.scheduler.createHotObservable([next(300, false)])
-                                    .take(1)
-                                    .asSingle()
-                            self.scheduler.start()
-                        }
-
-                        it("pushes the array to the observer with no error") {
-                            expect(arrayObserver.events.first!.value.element).to(beNil())
-                            expect(arrayObserver.events.first!.value.error).to(matchError(WebViewError.ValueNotArray))
-                        }
-
+                    it("pushes the error to the observer") {
+                        expect(arrayObserver.events.first!.value.error).to(matchError(error))
+                        expect(arrayObserver.events.first!.value.element).to(beNil())
                     }
                 }
             }
