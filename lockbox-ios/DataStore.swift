@@ -88,13 +88,15 @@ class DataStore: NSObject, WKNavigationDelegate {
     }
 
     func addItem(_ item: Item) -> Single<Any> {
+        var jsonItem = ""
         do {
-            let jsonItem = try self.parser.jsonStringFromItem(item)
-            return checkState().flatMap { _ in
-                return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
-            }
+            jsonItem = try self.parser.jsonStringFromItem(item)
         } catch {
             return Single.error(error)
+        }
+
+        return checkState().flatMap { _ in
+            return self.webView.evaluateJavaScript("\(self.dataStoreName!).add(\(jsonItem))")
         }
     }
 
@@ -113,14 +115,15 @@ class DataStore: NSObject, WKNavigationDelegate {
             return Single.error(DataStoreError.NoIDPassed)
         }
 
+        var jsonItem = ""
         do {
-            let jsonItem = try self.parser.jsonStringFromItem(item)
-
-            return checkState().flatMap { _ in
-                return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
-            }
+            jsonItem = try self.parser.jsonStringFromItem(item)
         } catch {
             return Single.error(error)
+        }
+        
+        return checkState().flatMap { _ in
+            return self.webView.evaluateJavaScript("\(self.dataStoreName!).update(\(jsonItem))")
         }
     }
 

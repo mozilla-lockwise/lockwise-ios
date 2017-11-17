@@ -1,0 +1,2 @@
+ignore:
+    - "lockbox-ios/ViewController.swift"
