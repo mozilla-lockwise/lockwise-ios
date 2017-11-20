@@ -1,4 +1,7 @@
 Carthage/
 lockbox-ios.xcodeproj/project.xcworkspace/xcuserdata/sheinen.xcuserdatad/UserInterfaceState.xcuserstate
 .idea/
-
+xcuserdata
+.DS_Store
+lockbox-ios/binaries/
+site/

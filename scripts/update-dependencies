@@ -1,0 +1,75 @@
+#!/bin/sh
+
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+set -e
+
+BINARY_DIR="../lockbox-ios/binaries"
+
+JANSSON_VERSION=2.10
+JANSSON_SRC="http://www.digip.org/jansson/releases/jansson-${JANSSON_VERSION}.tar.gz"
+CJOSE_SRC="https://github.com/cisco/cjose/archive/latest.tar.gz"
+SCRIPT_DIR="$(pwd)"
+
+export MINVERSION=9.0
+
+# download & cross-compile openssl (most of the heavy lifting done by iconfigure-openssl)
+OPENSSLDIR="openssl"
+cd "${OPENSSLDIR}"
+source "iconfigure-openssl" --archs="x86_64 i386 arm64 armv7s armv7"
+cd ..
+
+# download & cross-compile jansson
+JANSSON_FILE="jansson-${JANSSON_VERSION}"
+JANSSON_ARCHIVE_FILE="${JANSSON_FILE}.tar.gz"
+curl -O "${JANSSON_SRC}"
+tar zxf "${JANSSON_ARCHIVE_FILE}"
+cp iconfigure "${JANSSON_FILE}"
+cp autoframework "${JANSSON_FILE}"
+
+cd "${JANSSON_FILE}"
+source "autoframework" Jansson libjansson.a
+
+# put cross-compiled libraries in a format cjose expects
+mkdir Frameworks/include
+mkdir Frameworks/lib
+mv "Frameworks/libjansson.a" "Frameworks/lib/"
+cp -r "Frameworks/Jansson.framework/Headers/" "Frameworks/include/"
+cd ..
+
+# download & cross-compile cjose
+CJOSE_FILE="cjose-latest"
+curl -L "${CJOSE_SRC}" | tar xvzf -
+cp iconfigure "${CJOSE_FILE}"
+cp autoframework "${CJOSE_FILE}"
+
+cd "${CJOSE_FILE}"
+source "autoframework" CJose libcjose.a \
+ --with-openssl="${SCRIPT_DIR}/openssl/" \
+ --with-jansson="${SCRIPT_DIR}/${JANSSON_FILE}/Frameworks/"
+
+cd ..
+
+echo "Copying dependencies..."
+
+cp "openssl/lib/libcrypto.a" "${BINARY_DIR}"
+cp "openssl/lib/libssl.a" "${BINARY_DIR}"
+cp "${JANSSON_FILE}/Frameworks/lib/libjansson.a" "${BINARY_DIR}"
+cp "${CJOSE_FILE}/Frameworks/libcjose.a" "${BINARY_DIR}"
+
+echo "Cleaning up build directory..."
+
+rm -rf "${CJOSE_FILE}"
+rm -rf jansson*
+
+cp "openssl/include/opensslconf-template.h" "openssl/"
+rm -rf "openssl/include"
+rm -rf "openssl/bin"
+rm -rf "openssl/src"
+rm -rf "openssl/lib"
+rm -rf openssl/openssl-*
+mkdir "openssl/include" && mv "openssl/opensslconf-template.h" "openssl/include/"
+
+echo "Done."

@@ -1,0 +1,12 @@
+site_name: Lockbox iOS
+site_description: Documentation for Lockbox's iOS application
+theme: readthedocs
+repo_name: GitHub
+repo_url: https://github.com/mozilla-lockbox/lockbox-ios
+
+pages:
+- 'Introduction': 'index.md'
+- 'Installing': 'install.md'
+- 'Dependencies': 'updating_libraries.md'
+- 'Contributing': 'contributing.md'
+- 'Code of Conduct': 'code_of_conduct.md'
