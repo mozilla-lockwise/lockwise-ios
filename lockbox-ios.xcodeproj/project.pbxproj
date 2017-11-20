@@ -81,6 +81,7 @@
 
 /* Begin PBXFileReference section */
 		7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = bootstrap.sh; sourceTree = "<group>"; };
+		7AA546C7687189844E3E3BBF /* mkdocs.yml */ = {isa = PBXFileReference; lastKnownFileType = file.yml; path = mkdocs.yml; sourceTree = "<group>"; };
 		7AA546D5DCD090D9C9B24421 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		7AA5475A1F158FE6B93208B2 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		7AA547E5549B49D4E0D0368D /* ItemEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEntry.swift; sourceTree = "<group>"; };
@@ -206,6 +207,7 @@
 				7D1B1A8A1F98F86400C1F5FF /* Frameworks */,
 				7AA54E9846C5A9F801A7FE1C /* README.md */,
 				7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */,
+				7AA546C7687189844E3E3BBF /* mkdocs.yml */,
 			);
 			sourceTree = "<group>";
 		};
