@@ -398,7 +398,6 @@
 				7AA54DC38FF49F029CDE96B3 /* Item.swift in Sources */,
 				D8FD414F1FAD333E0080D183 /* AppInfo.swift in Sources */,
 				7D93F7641FB1275C00354F03 /* KeyManager.swift in Sources */,
-				7D5DF8771F87F2600039B23E /* AppDelegate.swift in Sources */,
 				7AA5427F6298C0C9107E6A10 /* String+.swift in Sources */,
 
 			);
