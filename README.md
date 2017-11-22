@@ -1,4 +1,4 @@
-[![BuddyBuild][buddybuild-image][buddybuild-link]
+[![BuddyBuild][buddybuild-image]][buddybuild-link]
 [![Coverage Status][codecov-image]][codecov-link]
 [![Waffle Board][waffle-image]][waffle-link]
 
