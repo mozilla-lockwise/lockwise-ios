@@ -5,3 +5,4 @@ xcuserdata
 .DS_Store
 lockbox-ios/binaries/
 site/
+lockbox-ios/lockbox-datastore/bundle.js
