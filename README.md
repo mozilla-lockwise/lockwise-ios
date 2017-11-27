@@ -2,9 +2,9 @@
 [![Coverage Status][codecov-image]][codecov-link]
 [![Waffle Board][waffle-image]][waffle-link]
 
-# Lockbox DataStore
+# Lockbox iOS
 
-The iOS application repository for lockbox.
+The iOS application repository for [Lockbox][org-website].
 
 ## [Documentation][docs-link]
 
