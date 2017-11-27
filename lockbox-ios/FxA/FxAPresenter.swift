@@ -46,7 +46,7 @@ class FxAPresenter {
                 URLQueryItem(name: "access_type", value: "offline"),
                 URLQueryItem(name: "client_id", value: clientID),
                 URLQueryItem(name: "redirect_uri", value: redirectURI),
-                URLQueryItem(name: "scope", value:"profile openid https://identity.mozilla.org/apps/lockbox"),
+                URLQueryItem(name: "scope", value:"profile openid https://identity.mozilla.com/apps/lockbox"),
                 URLQueryItem(name: "keys_jwk", value: jwkKey),
                 URLQueryItem(name: "state", value: state),
                 URLQueryItem(name: "code_challenge", value: codeChallenge),
