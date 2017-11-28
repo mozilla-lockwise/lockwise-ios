@@ -12,8 +12,8 @@ class KeyManagerSpec : QuickSpec {
     let subject = KeyManager()
     
     override func spec() {
-        describe(".generateRandomECDH()") {
-            let key = subject.generateRandomECDH()
+        describe(".getEphemeralPublicECDH()") {
+            let key = subject.getEphemeralPublicECDH()
             
             it("generates an ECDH public-key JSON string with correct parameters & data sizes") {
                 if let data = key.data(using: .utf8) {
@@ -31,7 +31,7 @@ class KeyManagerSpec : QuickSpec {
             }
 
             it("caches the ECDH key and returns the same one on subsequent requests") {
-                let secondKey = self.subject.generateRandomECDH()
+                let secondKey = self.subject.getEphemeralPublicECDH()
 
                 if let keyOneData = key.data(using: .utf8), let keyTwoData = secondKey.data(using: .utf8) {
                     do {
@@ -54,7 +54,7 @@ class KeyManagerSpec : QuickSpec {
             let payload:String = "I've got some data!"
 
             it("decrypts a provided JWE payload") {
-                let ecdh = self.subject.generateRandomECDH()
+                let ecdh = self.subject.getEphemeralPublicECDH()
                 let jwkFromJSON = cjose_jwk_import(ecdh, ecdh.count, nil)
 
                 let header:OpaquePointer = cjose_header_new(nil)

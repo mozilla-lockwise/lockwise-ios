@@ -8,7 +8,7 @@ import Foundation
 class KeyManager {
     private var jwk:OpaquePointer?
 
-    func generateRandomECDH() -> String {
+    func getEphemeralPublicECDH() -> String {
         if self.jwk == nil {
             self.jwk = cjose_jwk_create_EC_random(CJOSE_JWK_EC_P_256, nil)
         }
