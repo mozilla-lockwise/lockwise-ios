@@ -25,7 +25,7 @@ class FxAPresenterSpec : QuickSpec {
         var fakeDecryptedJWE:String?
         var jweArgument:String?
 
-        override func generateRandomECDH() -> String {
+        override func getEphemeralPublicECDH() -> String {
             return fakeECDH
         }
 

@@ -28,7 +28,7 @@ class FxAPresenter {
 
     private var jwkKey:String {
         get {
-            return keyManager.generateRandomECDH().base64URL()
+            return keyManager.getEphemeralPublicECDH().base64URL()
         }
     }
     private var codeChallenge:String { get { return codeVerifier.sha256withBase64URL()! } }
