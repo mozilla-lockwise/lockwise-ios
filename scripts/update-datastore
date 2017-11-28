@@ -20,10 +20,10 @@ git clone git@github.com:mozilla-lockbox/lockbox-datastore.git
 cd lockbox-datastore
 
 npm install
-npm install browserify
+npm install -g browserify
 browserify lib/index.js -s DataStoreModule -o bundle.js
 
 mv bundle.js ../lockbox-ios/lockbox-datastore/bundle.js
 
 cd ..
-rm -rf lockbox-datastore
+rm -rf lockbox-datastore/
