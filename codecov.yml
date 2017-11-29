@@ -1,2 +1,3 @@
 ignore:
     - "lockbox-ios/ViewController.swift"
+    - "lockbox-iosTests/*"
