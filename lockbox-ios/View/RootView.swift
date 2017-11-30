@@ -71,7 +71,11 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func pushMainView(view: MainRouteAction) {
-
+        switch view {
+            case .list:
+                self.currentViewController?.popToRootViewController(animated: true)
+            default: break
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

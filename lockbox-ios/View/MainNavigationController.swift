@@ -4,4 +4,10 @@
 
 import UIKit
 
-class MainNavigationController : UINavigationController {}
+class MainNavigationController : UINavigationController {
+    convenience init() {
+        let listView = UIStoryboard(name: "ItemList", bundle: .main)
+                .instantiateViewController(withIdentifier: "itemlist")
+        self.init(rootViewController: listView)
+    }
+}

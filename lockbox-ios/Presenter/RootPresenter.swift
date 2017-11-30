@@ -15,7 +15,7 @@ protocol RootViewProtocol: class {
 
     var mainStackDisplayed:Bool { get }
     func startMainStack()
-//    func pushMainView(view: MainRouteAction)
+    func pushMainView(view: MainRouteAction)
 }
 
 struct InfoKeyInit {
@@ -133,9 +133,18 @@ class RootPresenter {
 
     lazy fileprivate var showList:AnyObserver<MainRouteAction> = { [unowned self] in
         return Binder(self) { target, mainAction in
+            guard let view = self.view else { return }
+
+            if !view.mainStackDisplayed {
+                view.startMainStack()
+            }
+
             switch mainAction {
-                // placeholder for future view work
-            case .list, .detail(_): break
+                case .list:
+                    if !view.topViewIs(ItemListView.self) {
+                        view.pushMainView(view: .list)
+                    }
+                case .detail(_): break
             }
         }.asObserver()
     }()
