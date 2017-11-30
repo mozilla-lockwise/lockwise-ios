@@ -106,7 +106,19 @@ class RootViewSpec : QuickSpec {
                     expect(self.subject.mainStackDisplayed).to(beTrue())
                 }
             }
+
+            describe("pushing main views") {
+                describe("list") {
+                    beforeEach {
+                        self.subject.startMainStack()
+                        self.subject.pushMainView(view: .list)
+                    }
+
+                    it("makes a loginview the top view") {
+                        expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
+                    }
+                }
+            }
         }
     }
 }
-

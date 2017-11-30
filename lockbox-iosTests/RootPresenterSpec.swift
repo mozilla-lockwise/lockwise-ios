@@ -402,6 +402,84 @@ class RootPresenterSpec : QuickSpec {
                         }
                     }
                 }
+
+                describe("MainRouteActions") {
+                    describe("if the main stack is already displayed") {
+                        beforeEach {
+                            self.view.mainStackDisplayedStub = true
+                        }
+
+                        describe(".list") {
+                            describe("if the top view is not already the list view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                                }
+
+                                it("does not start the login stack") {
+                                    expect(self.view.startMainStackCalled).to(beFalse())
+                                }
+
+                                it("tells the view to show the loginview") {
+                                    expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.list))
+                                }
+                            }
+
+                            describe("if the top view is already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                                }
+
+                                it("does not start the login stack") {
+                                    expect(self.view.startMainStackCalled).to(beFalse())
+                                }
+
+                                it("nothing happens") {
+                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+                            }
+                        }
+                    }
+
+                    describe("if the main stack is not already displayed") {
+                        beforeEach {
+                            self.view.mainStackDisplayedStub = false
+                        }
+
+                        describe(".list") {
+                            describe("if the top view is not already the list view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                                }
+
+                                it("starts the fxa stack") {
+                                    expect(self.view.startMainStackCalled).to(beTrue())
+                                }
+
+                                it("tells the view to show the fxaview") {
+                                    expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.list))
+                                }
+                            }
+
+                            describe("if the top view is already the list view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.startMainStackCalled).to(beTrue())
+                                }
+
+                                it("nothing happens") {
+                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -21,3 +21,9 @@ extension UIViewController : ErrorView {
         }
     }
 }
+
+extension UIViewController {
+    func preloadView() -> Void {
+        _ = self.view
+    }
+}
