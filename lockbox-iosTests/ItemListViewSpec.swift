@@ -1,0 +1,80 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import UIKit
+import Quick
+import Nimble
+
+@testable import lockbox_ios
+
+class ItemListViewSpec : QuickSpec {
+
+    class FakeCoder : NSCoder {
+        func decodeObjectForKey(key:String) -> Any {
+            return false
+        }
+    }
+
+    class FakeItemListPresenter : ItemListPresenter {
+        var onViewReadyCalled = false
+
+        override func onViewReady() {
+            onViewReadyCalled = true
+        }
+    }
+
+    var presenter:FakeItemListPresenter!
+    var subject:ItemListView!
+
+    override func spec() {
+        describe("ItemListView") {
+            beforeEach {
+                self.presenter = FakeItemListPresenter()
+
+                let storyboard = UIStoryboard(name: "ItemList", bundle: Bundle.main)
+                self.subject = storyboard.instantiateInitialViewController() as! ItemListView
+                self.subject.presenter = self.presenter
+
+                self.subject.preloadView()
+            }
+
+            it("calls onviewready after loading the view") {
+                expect(self.presenter.onViewReadyCalled).to(beTrue())
+            }
+
+            it("only has one section") {
+                expect(self.subject.numberOfSections(in: self.subject.tableView)).to(equal(1))
+            }
+
+            describe(".displayItems()") {
+                let items = [
+                    Item.Builder()
+                            .title("my fave item")
+                            .entry(
+                                    ItemEntry.Builder()
+                                            .username("me")
+                                            .build())
+                            .build(),
+                    Item.Builder().build()
+                ]
+
+                beforeEach {
+                    self.subject.displayItems(items)
+                }
+
+                it("configures the number of rows correctly") {
+                    expect(self.subject.tableView(self.subject.tableView, numberOfRowsInSection: 0)).to(equal(items.count))
+                }
+
+                it("configures cells correctly") {
+                    let cell = self.subject.tableView(self.subject.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as! ItemListCell
+
+                    expect(cell.titleLabel!.text).to(equal(items[0].title))
+                    expect(cell.detailLabel!.text).to(equal(items[0].entry.username))
+                }
+            }
+        }
+    }
+}
+
