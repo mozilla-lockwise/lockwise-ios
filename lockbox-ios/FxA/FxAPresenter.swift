@@ -21,6 +21,7 @@ class FxAPresenter {
     private var scopedKeySubject = PublishSubject<OAuthInfo>()
 
     internal let oauthHost = "oauth-scoped-keys-oct10.dev.lcip.org"
+    internal let profileHost = "latest-keys.dev.lcip.org"
     internal let redirectURI = "lockbox://redirect.ios"
     internal let clientID = "98adfa37698f255b"
     internal var state:String
@@ -46,7 +47,7 @@ class FxAPresenter {
                 URLQueryItem(name: "access_type", value: "offline"),
                 URLQueryItem(name: "client_id", value: clientID),
                 URLQueryItem(name: "redirect_uri", value: redirectURI),
-                URLQueryItem(name: "scope", value:"profile openid https://identity.mozilla.com/apps/lockbox"),
+                URLQueryItem(name: "scope", value:"profile:email openid https://identity.mozilla.com/apps/lockbox"),
                 URLQueryItem(name: "keys_jwk", value: jwkKey),
                 URLQueryItem(name: "state", value: state),
                 URLQueryItem(name: "code_challenge", value: codeChallenge),
@@ -64,6 +65,17 @@ class FxAPresenter {
             components.scheme = "https"
             components.host = oauthHost
             components.path = "/v1/token"
+
+            return components.url!
+        }
+    }
+
+    private var profileInfoURL:URL {
+        get {
+            var components = URLComponents()
+            components.scheme = "https"
+            components.host = profileHost
+            components.path = "/v1/profile"
 
             return components.url!
         }
@@ -158,6 +170,18 @@ class FxAPresenter {
             }
 
             self.scopedKeySubject.onNext(oauthInfo)
+        }
+
+        task.resume()
+    }
+
+    private func postProfileInfoRequest(code: String) {
+        var request = URLRequest(url: profileInfoURL)
+        request.httpMethod = "GET"
+        request.addValue("Bearer", forHTTPHeaderField: "Authorization \(code)")
+
+        let task = session.dataTask(with: request) { data, response, error in
+
         }
 
         task.resume()

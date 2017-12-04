@@ -48,21 +48,17 @@ class FxAPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeDataTask : URLSessionDataTask {
-        var resumeCalled:Bool = false
-        override func resume() {
-            resumeCalled = true
-        }
-    }
+    class FakeDataTask : URLSessionDataTask { }
 
     class FakeURLSession : URLSession {
         let dataTask = FakeDataTask()
-        var dataTaskRequest:URLRequest?
-        var dataTaskCompletion:((Data?, URLResponse?, Error?) -> Swift.Void)?
+        var dataTaskRequests:[String:URLRequest] = [:]
+        var dataTaskCompletion:[String:((Data?, URLResponse?, Error?) -> Swift.Void)?] = [:]
 
         override func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTask {
-            self.dataTaskRequest = request
-            self.dataTaskCompletion = completionHandler
+            let dictionaryKeyForRequest = request.url!.path
+            self.dataTaskRequests[dictionaryKeyForRequest] = request
+            self.dataTaskCompletion[dictionaryKeyForRequest] = completionHandler
             return dataTask
         }
     }
@@ -203,106 +199,208 @@ class FxAPresenterSpec : QuickSpec {
                                 self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
                             }
 
-                            it("publishes a POST request for the token") {
-                                expect(self.session.dataTaskRequest).toNot(beNil())
-                                let urlComponents = URLComponents(url: self.session.dataTaskRequest!.url!, resolvingAgainstBaseURL: true)!
-                                
-                                expect(self.session.dataTaskRequest!.httpBody).notTo(beNil())
-                                let jsonData = try? JSONSerialization.jsonObject(with: self.session.dataTaskRequest!.httpBody!) as? [String:String]
-                                expect(jsonData).notTo(beNil())
+                            describe("the token request") {
+                                let tokenPath = "/v1/token"
 
-                                expect(urlComponents.host).to(equal(self.subject.oauthHost))
-                                expect(jsonData!!["client_id"]).to(equal(self.subject.clientID))
-                                expect(jsonData!!["code"]).to(equal(code))
-                                expect(jsonData!!["code_verifier"]).to(equal(self.subject.codeVerifier))
+                                it("publishes a POST request for the token") {
+                                    expect(self.session.dataTaskRequests).toNot(beNil())
+                                    let urlComponents = URLComponents(url: self.session.dataTaskRequests[tokenPath]!.url!, resolvingAgainstBaseURL: true)!
 
-                                expect(self.session.dataTask.resumeCalled).to(beTrue())
-                            }
+                                    let jsonData = try? JSONSerialization.jsonObject(with: self.session.dataTaskRequests[tokenPath]!.httpBody!) as? [String:String]
+                                    expect(jsonData).notTo(beNil())
 
-                            describe("when receiving an error in the data task callback") {
-                                let error = NSError(domain: "fxa-error", code: -1)
-
-                                beforeEach {
-                                    self.session.dataTaskCompletion!(nil, nil, error)
+                                    expect(urlComponents.host).to(equal(self.subject.oauthHost))
+                                    expect(jsonData!!["client_id"]).to(equal(self.subject.clientID))
+                                    expect(jsonData!!["code"]).to(equal(code))
+                                    expect(jsonData!!["code_verifier"]).to(equal(self.subject.codeVerifier))
                                 }
 
-                                it("pushes the error to the observer") {
-                                    expect(oauthObserver.events.first!.value.error).to(matchError(error))
-                                    expect(oauthObserver.events.first!.value.element).to(beNil())
-                                }
-                            }
+                                describe("when receiving an error in the token data task callback") {
+                                    let error = NSError(domain: "fxa-error", code: -1)
 
-                            describe("when receiving no error but an empty data value in the data task callback") {
-                                beforeEach {
-                                    self.session.dataTaskCompletion!(nil, nil, nil)
-                                }
-
-                                it("pushes the EmptyOAuthDatta error to the observer") {
-                                    expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.EmptyOAuthData))
-                                    expect(oauthObserver.events.first!.value.element).to(beNil())
-                                }
-                            }
-
-                            describe("when receiving a data value in the data task callback") {
-                                describe("when the data value does not serialize to a dictionary") {
                                     beforeEach {
-                                        let data = try! JSONSerialization.data(withJSONObject: ["smurf"])
-                                        self.session.dataTaskCompletion!(data, nil, nil)
+                                        self.session.dataTaskCompletion[tokenPath]!!(nil, nil, error)
                                     }
 
-                                    it("pushes the EmptyOAuthDatta error to the observer") {
-                                        expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
+                                    it("pushes the error to the observer") {
+                                        expect(oauthObserver.events.first!.value.error).to(matchError(error))
                                         expect(oauthObserver.events.first!.value.element).to(beNil())
                                     }
                                 }
 
-                                describe("when the data value serializes to a dictionary but does not have the keys_jwe key") {
+                                describe("when receiving no error but an empty data value in the data task callback") {
+                                    beforeEach {
+                                        self.session.dataTaskCompletion[tokenPath]!!(nil, nil, nil)
+                                    }
 
-                                    describe("when the dictionary does not have the keys_jwe key") {
+                                    it("pushes the EmptyOAuthDatta error to the observer") {
+                                        expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.EmptyOAuthData))
+                                        expect(oauthObserver.events.first!.value.element).to(beNil())
+                                    }
+                                }
+
+                                describe("when receiving a data value in the data task callback") {
+                                    describe("when the data value does not serialize to a dictionary") {
                                         beforeEach {
-                                            let data = try! JSONSerialization.data(withJSONObject: ["blah":"yes"])
-                                            self.session.dataTaskCompletion!(data, nil, nil)
+                                            let data = try! JSONSerialization.data(withJSONObject: ["smurf"])
+                                            self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
                                         }
 
-                                        it("pushes the EmptyOAuthData error to the observer") {
+                                        it("pushes the EmptyOAuthDatta error to the observer") {
                                             expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
                                             expect(oauthObserver.events.first!.value.element).to(beNil())
                                         }
                                     }
 
-                                    describe("when the dictionary has the keys_jwe key") {
-                                        let keysJWEValue = "[{\"somelongencodedstringhere\":\"murf\"}]"
-                                        let data = try! JSONSerialization.data(withJSONObject: ["keys_jwe":keysJWEValue])
+                                    describe("when the data value serializes to a dictionary but does not have the keys_jwe key") {
 
-                                        // note: populate values when server is testable
-                                        xdescribe("when the decrypted value does not correspnd with the oauthinfo object") {
+                                        describe("when the dictionary does not have the keys_jwe key") {
                                             beforeEach {
-                                                self.keyManager.fakeDecryptedJWE = "bogus"
-                                                self.session.dataTaskCompletion!(data, nil, nil)
+                                                let data = try! JSONSerialization.data(withJSONObject: ["blah":"yes"])
+                                                self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
                                             }
 
-                                            it("passes the keys_jwe value to the key manager") {
-                                                expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
-                                            }
-
-                                            it("pushes the decoder error to the observer") {
-                                                expect(oauthObserver.events.first!.value.error).to(beNil())
+                                            it("pushes the EmptyOAuthData error to the observer") {
+                                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
                                                 expect(oauthObserver.events.first!.value.element).to(beNil())
                                             }
                                         }
 
-                                        xdescribe("when the decrypted value corresponds with the oauthinfo object") {
+                                        describe("when the dictionary has the keys_jwe key") {
+                                            let keysJWEValue = "[{\"somelongencodedstringhere\":\"murf\"}]"
+                                            let data = try! JSONSerialization.data(withJSONObject: ["keys_jwe":keysJWEValue])
+
+                                            // note: populate values when server is testable
+                                            xdescribe("when the decrypted value does not correspnd with the oauthinfo object") {
+                                                beforeEach {
+                                                    self.keyManager.fakeDecryptedJWE = "bogus"
+                                                    self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
+                                                }
+
+                                                it("passes the keys_jwe value to the key manager") {
+                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                                }
+
+                                                it("pushes the decoder error to the observer") {
+                                                    expect(oauthObserver.events.first!.value.error).to(beNil())
+                                                    expect(oauthObserver.events.first!.value.element).to(beNil())
+                                                }
+                                            }
+
+                                            xdescribe("when the decrypted value corresponds with the oauthinfo object") {
+                                                beforeEach {
+                                                    self.keyManager.fakeDecryptedJWE = "real"
+                                                    self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
+                                                }
+
+                                                it("passes the keys_jwe value to the key manager") {
+                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                                }
+
+                                                it("pushes the oauthinfo value to the observer") {
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            describe("the profile info request") {
+                                let profilePath = "/v1/profile"
+
+                                it("publishes a GET request for the profile info") {
+                                    expect(self.session.dataTaskRequests).toNot(beNil())
+                                    let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
+
+                                    expect(urlComponents.host).to(equal(self.subject.profileHost))
+                                }
+
+                                describe("when receiving an error in the token data task callback") {
+                                    let error = NSError(domain: "fxa-error", code: -1)
+
+                                    beforeEach {
+                                        self.session.dataTaskCompletion[profilePath]!!(nil, nil, error)
+                                    }
+
+                                    it("pushes the error to the observer") {
+                                        expect(oauthObserver.events.first!.value.error).to(matchError(error))
+                                        expect(oauthObserver.events.first!.value.element).to(beNil())
+                                    }
+                                }
+
+                                describe("when receiving no error but an empty data value in the data task callback") {
+                                    beforeEach {
+                                        self.session.dataTaskCompletion[profilePath]!!(nil, nil, nil)
+                                    }
+
+                                    it("pushes the EmptyOAuthData error to the observer") {
+                                        expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.EmptyOAuthData))
+                                        expect(oauthObserver.events.first!.value.element).to(beNil())
+                                    }
+                                }
+
+                                describe("when receiving a data value in the data task callback") {
+                                    describe("when the data value does not serialize to a dictionary") {
+                                        beforeEach {
+                                            let data = try! JSONSerialization.data(withJSONObject: ["smurf"])
+                                            self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
+                                        }
+
+                                        it("pushes the EmptyOAuthDatta error to the observer") {
+                                            expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
+                                            expect(oauthObserver.events.first!.value.element).to(beNil())
+                                        }
+                                    }
+
+                                    describe("when the data value serializes to a dictionary but does not have the keys_jwe key") {
+
+                                        describe("when the dictionary does not have the keys_jwe key") {
                                             beforeEach {
-                                                self.keyManager.fakeDecryptedJWE = "real"
-                                                self.session.dataTaskCompletion!(data, nil, nil)
+                                                let data = try! JSONSerialization.data(withJSONObject: ["blah":"yes"])
+                                                self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
                                             }
 
-                                            it("passes the keys_jwe value to the key manager") {
-                                                expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                            it("pushes the EmptyOAuthData error to the observer") {
+                                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
+                                                expect(oauthObserver.events.first!.value.element).to(beNil())
+                                            }
+                                        }
+
+                                        describe("when the dictionary has the keys_jwe key") {
+                                            let keysJWEValue = "[{\"somelongencodedstringhere\":\"murf\"}]"
+                                            let data = try! JSONSerialization.data(withJSONObject: ["keys_jwe":keysJWEValue])
+
+                                            // note: populate values when server is testable
+                                            xdescribe("when the decrypted value does not correspnd with the oauthinfo object") {
+                                                beforeEach {
+                                                    self.keyManager.fakeDecryptedJWE = "bogus"
+                                                    self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
+                                                }
+
+                                                it("passes the keys_jwe value to the key manager") {
+                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                                }
+
+                                                it("pushes the decoder error to the observer") {
+                                                    expect(oauthObserver.events.first!.value.error).to(beNil())
+                                                    expect(oauthObserver.events.first!.value.element).to(beNil())
+                                                }
                                             }
 
-                                            it("pushes the oauthinfo value to the observer") {
+                                            xdescribe("when the decrypted value corresponds with the oauthinfo object") {
+                                                beforeEach {
+                                                    self.keyManager.fakeDecryptedJWE = "real"
+                                                    self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
+                                                }
 
+                                                it("passes the keys_jwe value to the key manager") {
+                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                                }
+
+                                                it("pushes the oauthinfo value to the observer") {
+
+                                                }
                                             }
                                         }
                                     }
