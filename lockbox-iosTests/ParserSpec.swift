@@ -57,7 +57,7 @@ class ParserSpec : QuickSpec {
             }
 
             it("populates item correctly when provided a dictionary with some unexpected parameters") {
-                let type = "cat"
+                let kind = "cat"
                 let id = "fdkjsfdhkjfds"
                 let origins = ["www.maps.com"]
                 let item = try! self.subject.itemFromDictionary(
@@ -66,12 +66,12 @@ class ParserSpec : QuickSpec {
                      "id":id,
                      "origins":origins,
                      "entry":[
-                        "type":type,
+                        "kind": kind,
                         "farts":"mcgee"
                         ]
                     ])
                 let expectedEntry = ItemEntry.Builder()
-                    .type(type)
+                    .kind(kind)
                     .build()
                 let expectedItem = Item.Builder()
                     .id(id)
@@ -84,7 +84,7 @@ class ParserSpec : QuickSpec {
             }
 
             it("populates item correctly when provided a dictionary with expected parameters") {
-                let type = "cat"
+                let kind = "cat"
                 let id = "fdkjsfdhkjfds"
                 let origins = ["www.maps.com"]
                 let title = "butt"
@@ -94,14 +94,14 @@ class ParserSpec : QuickSpec {
                         "id":id,
                         "origins":origins,
                         "entry":[
-                            "type":type,
+                            "kind":kind,
                             "username":username
                         ],
                         "title":title
                     ])
 
                 let expectedEntry = ItemEntry.Builder()
-                    .type(type)
+                    .kind(kind)
                     .username(username)
                     .build()
                 let expectedItem = Item.Builder()
@@ -124,7 +124,7 @@ class ParserSpec : QuickSpec {
                 it("throws the InvalidItem error") {
                     let item = Item.Builder()
                             .id("dfgljkfsdlead")
-                            .entry(ItemEntry.Builder().type("login").build())
+                            .entry(ItemEntry.Builder().kind("login").build())
                             .origins(["www.neopets.com"])
                             .build()
 
@@ -140,12 +140,12 @@ class ParserSpec : QuickSpec {
                 it("forms a valid json string") {
                     let item = Item.Builder()
                             .id("dfgljkfsdlead")
-                            .entry(ItemEntry.Builder().type("login").build())
+                            .entry(ItemEntry.Builder().kind("login").build())
                             .origins(["www.neopets.com"])
                             .build()
 
                     let json = try! self.subject.jsonStringFromItem(item)
-                    expect(json).to(equal("{\"id\":\"dfgljkfsdlead\",\"origins\":[\"www.neopets.com\"],\"entry\":{\"type\":\"login\"}}"))
+                    expect(json).to(equal("{\"id\":\"dfgljkfsdlead\",\"origins\":[\"www.neopets.com\"],\"entry\":{\"kind\":\"login\"}}"))
                 }
 
             }

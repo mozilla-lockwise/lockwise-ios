@@ -15,25 +15,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let contentController = WKUserContentController()
-        let webConfig = WKWebViewConfiguration()
+//        let webConfig = WKWebViewConfiguration()
+//
+//        var webView:WebView = WebView(frame: .zero, configuration: webConfig)
+//        self.dataStore = DataStore(webView: &webView)
+//        self.webView = webView
 
-        webConfig.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-        webConfig.preferences.javaScriptEnabled = true
-        webConfig.userContentController = contentController
-
-        self.webView = WebView(frame: .zero, configuration: webConfig)
-
-        self.view.addSubview(self.webView)
-
-        self.dataStore = DataStore(webview: self.webView)
+//        self.view.addSubview(self.webView)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
     @IBAction func initClicked(_ sender: Any) {
         self.dataStore.initialize(password: "password")

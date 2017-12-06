@@ -12,8 +12,6 @@ enum WebViewError: Error {
 
 protocol TypedJavaScriptWebView {
     func evaluateJavaScriptToBool(_ javaScriptString: String) -> Single<Bool>
-    func evaluateJavaScriptToString(_ javaScriptString: String) -> Single<String>
-    func evaluateJavaScriptMapToArray(_ javaScriptString: String) -> Single<[Any]>
     func evaluateJavaScript(_ javaScriptString: String) -> Single<Any>
 }
 
@@ -29,41 +27,6 @@ class WebView: WKWebView, TypedJavaScriptWebView {
                 }
 
         return boolSingle
-    }
-
-    public func evaluateJavaScriptToString(_ javaScriptString: String) -> Single<String> {
-        let stringSingle = self.evaluateJavaScript(javaScriptString)
-                .map { value -> String in
-                    guard let stringValue = value as? String else {
-                        throw WebViewError.ValueNotString
-                    }
-
-                    return stringValue
-                }
-
-        return stringSingle
-    }
-
-    public func evaluateJavaScriptMapToArray(_ javaScriptString: String) -> Single<[Any]> {
-        let arrayName = "arrayVal"
-
-        let arraySingle = self.evaluateJavaScriptWithoutCatchingInvalidType("var \(arrayName);\(javaScriptString).then(function (listVal) {\(arrayName) = Array.from(listVal);});")
-                .catchError { error in
-                    guard let wkError = error as? WKError, wkError.code.rawValue == WKError.javaScriptResultTypeIsUnsupported.rawValue else {
-                        throw error
-                    }
-
-                    return self.evaluateJavaScript("\(arrayName)")
-                }
-                .map { any -> [Any] in
-                    guard let arrayVal = any as? [Any] else {
-                        throw WebViewError.ValueNotArray
-                    }
-
-                    return arrayVal
-                }
-
-        return arraySingle
     }
 
     public func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {

@@ -22,7 +22,7 @@ class ItemSpec : QuickSpec {
                 let created = "fsdfdsfdsd"
                 let modified = "432jkh3429f3"
                 let lastUsed = "34jkdfsjkl32"
-                let entry = ItemEntry.Builder().type("fdssdflksdf").build()
+                let entry = ItemEntry.Builder().kind("fdssdflksdf").build()
 
                 let item = Item.Builder()
                     .id(id)
@@ -51,12 +51,12 @@ class ItemSpec : QuickSpec {
         describe("equality") {
             it("returns false when the ids are different", closure: {
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().type("blah").build())
+                    .entry(ItemEntry.Builder().kind("blah").build())
                     .id("murp")
                     .origins([])
                     .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().type("yuck").build())
+                    .entry(ItemEntry.Builder().kind("yuck").build())
                     .id("snark")
                     .origins([])
                     .build()
@@ -67,12 +67,12 @@ class ItemSpec : QuickSpec {
             it("returns true when the ids are the same but other parameters are different") {
                 let id = "murp"
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().type("blah").build())
+                    .entry(ItemEntry.Builder().kind("blah").build())
                     .id(id)
                     .origins([])
                     .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().type("farts").build())
+                    .entry(ItemEntry.Builder().kind("farts").build())
                     .id(id)
                     .origins([])
                     .build()
@@ -84,12 +84,12 @@ class ItemSpec : QuickSpec {
                 let id = "murp"
                 let type = "fart"
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().type(type).build())
+                    .entry(ItemEntry.Builder().kind(type).build())
                     .id(id)
                     .origins([])
                     .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().type(type).build())
+                    .entry(ItemEntry.Builder().kind(type).build())
                     .id(id)
                     .origins([])
                     .build()

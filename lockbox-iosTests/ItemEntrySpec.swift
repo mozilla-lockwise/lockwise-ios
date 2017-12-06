@@ -16,12 +16,12 @@ class ItemEntrySpec : QuickSpec {
             it("when the type is the same but the username and password are different, the entries are not equal") {
                 let type = "butt"
                 lhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username("jlkfd")
                     .password("marple")
                     .build()
                 rhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username("waugh")
                     .password("very secure")
                     .build()
@@ -33,12 +33,12 @@ class ItemEntrySpec : QuickSpec {
                 let type = "butt"
                 let username = "ellen ripley"
                 lhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username(username)
                     .password("marple")
                     .build()
                 rhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username(username)
                     .password("very secure")
                     .build()
@@ -50,12 +50,12 @@ class ItemEntrySpec : QuickSpec {
                 let type = "butt"
                 let password = "fart"
                 lhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username("username")
                     .password(password)
                     .build()
                 rhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username("dogs")
                     .password(password)
                     .build()
@@ -67,12 +67,12 @@ class ItemEntrySpec : QuickSpec {
                 let username = "ellen ripley"
                 let password = "fart"
                 lhs = ItemEntry.Builder()
-                    .type("bbbbbbb")
+                    .kind("bbbbbbb")
                     .username(username)
                     .password(password)
                     .build()
                 rhs = ItemEntry.Builder()
-                    .type("ccccccc")
+                    .kind("ccccccc")
                     .username(username)
                     .password(password)
                     .build()
@@ -85,12 +85,12 @@ class ItemEntrySpec : QuickSpec {
                 let username = "ellen ripley"
                 let password = "fart"
                 lhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username(username)
                     .password(password)
                     .build()
                 rhs = ItemEntry.Builder()
-                    .type(type)
+                    .kind(type)
                     .username(username)
                     .password(password)
                     .build()

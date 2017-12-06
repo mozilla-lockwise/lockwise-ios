@@ -5,17 +5,17 @@
 import Foundation
 
 struct ItemEntry : Codable, Equatable {
-    var type:String
+    var kind:String
     var username:String?
     var password:String?
     
     init(type:String) {
-        self.type = type
+        self.kind = type
     }
     
     static func ==(lhs: ItemEntry, rhs: ItemEntry) -> Bool {
         return
-            lhs.type == rhs.type &&
+            lhs.kind == rhs.kind &&
                 lhs.password == rhs.password &&
                 lhs.username == rhs.username
     }
@@ -31,8 +31,8 @@ struct ItemEntry : Codable, Equatable {
             return self.itemEntry
         }
         
-        func type(_ type:String) -> Builder {
-            self.itemEntry.type = type
+        func kind(_ kind:String) -> Builder {
+            self.itemEntry.kind = kind
             return self
         }
         
