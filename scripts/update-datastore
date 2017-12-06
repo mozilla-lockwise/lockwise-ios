@@ -15,7 +15,7 @@ fi
 
 rm -rf lockbox-ios/lockbox-datastore/bundle.js
 
-git clone git@github.com:mozilla-lockbox/lockbox-datastore.git
+git clone git@github.com:mozilla-lockbox/lockbox-datastore.git -b ios-swift
 
 cd lockbox-datastore
 
