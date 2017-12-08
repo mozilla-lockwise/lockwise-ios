@@ -4,19 +4,25 @@
 
 import Quick
 import Nimble
-import RxSwift
-import RxTest
 import WebKit
 
 @testable import lockbox_ios
 
+enum FxAPresenterSpecSharedExample : String {
+    case PostProfileButDisplayError, DisplayDecodingError
+}
+
 class FxAPresenterSpec : QuickSpec {
     class FakeFxAView : FxAViewProtocol {
-        var loadRequestCalled = false
         var loadRequestArgument:URLRequest?
+        var displayErrorArgument:Error?
+
         func loadRequest(_ urlRequest: URLRequest) {
-            self.loadRequestCalled = true
             self.loadRequestArgument = urlRequest
+        }
+
+        func displayError(_ error:Error) -> Void {
+            self.displayErrorArgument = error
         }
     }
 
@@ -35,6 +41,23 @@ class FxAPresenterSpec : QuickSpec {
         }
     }
 
+    class FakeKeychainManager : KeychainManager {
+        var userEmailArgument:String?
+        var scopedKeyArgument:String?
+
+        @discardableResult
+        override func saveUserEmail(_ email: String, service:KeychainManagerService) -> Bool {
+            userEmailArgument = email
+            return true
+        }
+
+        @discardableResult
+        override func saveScopedKey(_ key: String, service:KeychainManagerService) -> Bool {
+            scopedKeyArgument = key
+            return true
+        }
+    }
+
     class FakeNavigationAction : WKNavigationAction {
         private var fakeRequest:URLRequest
         override var request:URLRequest {
@@ -48,7 +71,12 @@ class FxAPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeDataTask : URLSessionDataTask { }
+    class FakeDataTask : URLSessionDataTask {
+        var resumeCalled = false
+        override func resume() {
+            resumeCalled = true
+        }
+    }
 
     class FakeURLSession : URLSession {
         let dataTask = FakeDataTask()
@@ -67,33 +95,33 @@ class FxAPresenterSpec : QuickSpec {
     var view:FakeFxAView!
     var session:FakeURLSession!
     var keyManager:FakeKeyManager!
-
-    private let scheduler = TestScheduler(initialClock: 0)
-    private let disposeBag = DisposeBag()
+    var keychainManager:FakeKeychainManager!
 
     override func spec() {
+        sharedExamples(FxAPresenterSpecSharedExample.DisplayDecodingError.rawValue) {
+            it("tells the view to display the error") {
+                expect(self.view.displayErrorArgument).notTo(beNil())
+                expect(self.view.displayErrorArgument).to(beAKindOf(DecodingError.self))
+            }
+        }
+
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
                 self.session = FakeURLSession()
                 self.keyManager = FakeKeyManager()
-                self.subject = FxAPresenter(session: self.session, keyManager: self.keyManager)
+                self.keychainManager = FakeKeychainManager()
+                self.subject = FxAPresenter(session: self.session, keyManager: self.keyManager, keychainManager: self.keychainManager)
                 self.subject.view = self.view
             }
 
-            describe(".authenticateAndRetrieveScopedKey") {
-                var oauthObserver = self.scheduler.createObserver(OAuthInfo.self)
-
+            describe(".onViewReady()") {
                 beforeEach {
-                    oauthObserver = self.scheduler.createObserver(OAuthInfo.self)
-                    self.subject.authenticateAndRetrieveScopedKey()
-                            .asObservable()
-                            .subscribe(oauthObserver)
-                            .disposed(by: self.disposeBag)
+                    self.subject.onViewReady()
                 }
-
+                
                 it("asks the view to load the initial oauth request with the appropriate parameters") {
-                    expect(self.view.loadRequestCalled).to(beTrue())
+                    expect(self.view.loadRequestArgument).notTo(beNil())
 
                     let components = URLComponents(url: self.view.loadRequestArgument!.url!, resolvingAgainstBaseURL: true)!
                     let queryItems = components.queryItems
@@ -147,9 +175,9 @@ class FxAPresenterSpec : QuickSpec {
                                 self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
                             }
 
-                            it("pushes the no state error to the observable") {
-                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.RedirectNoState))
-                                expect(oauthObserver.events.first!.value.element).to(beNil())
+                            it("tells the view to display the no state error") {
+                                expect(self.view.displayErrorArgument).notTo(beNil())
+                                expect(self.view.displayErrorArgument).to(matchError(FxAError.RedirectNoState))
                             }
                         }
 
@@ -163,9 +191,9 @@ class FxAPresenterSpec : QuickSpec {
                                 self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
                             }
 
-                            it("pushes the no code error to the observable") {
-                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.RedirectNoCode))
-                                expect(oauthObserver.events.first!.value.element).to(beNil())
+                            it("tells the view to display the no code error") {
+                                expect(self.view.displayErrorArgument).notTo(beNil())
+                                expect(self.view.displayErrorArgument).to(matchError(FxAError.RedirectNoCode))
                             }
                         }
 
@@ -180,9 +208,9 @@ class FxAPresenterSpec : QuickSpec {
                                 self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
                             }
 
-                            it("pushes the bad state error to the observable") {
-                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.RedirectBadState))
-                                expect(oauthObserver.events.first!.value.element).to(beNil())
+                            it("tells the view to display the bad state error") {
+                                expect(self.view.displayErrorArgument).notTo(beNil())
+                                expect(self.view.displayErrorArgument).to(matchError(FxAError.RedirectBadState))
                             }
                         }
 
@@ -203,7 +231,7 @@ class FxAPresenterSpec : QuickSpec {
                                 let tokenPath = "/v1/token"
 
                                 it("publishes a POST request for the token") {
-                                    expect(self.session.dataTaskRequests).toNot(beNil())
+                                    expect(self.session.dataTaskRequests[tokenPath]).toNot(beNil())
                                     let urlComponents = URLComponents(url: self.session.dataTaskRequests[tokenPath]!.url!, resolvingAgainstBaseURL: true)!
 
                                     let jsonData = try? JSONSerialization.jsonObject(with: self.session.dataTaskRequests[tokenPath]!.httpBody!) as? [String:String]
@@ -222,9 +250,9 @@ class FxAPresenterSpec : QuickSpec {
                                         self.session.dataTaskCompletion[tokenPath]!!(nil, nil, error)
                                     }
 
-                                    it("pushes the error to the observer") {
-                                        expect(oauthObserver.events.first!.value.error).to(matchError(error))
-                                        expect(oauthObserver.events.first!.value.element).to(beNil())
+                                    it("tells the view to display the error") {
+                                        expect(self.view.displayErrorArgument).notTo(beNil())
+                                        expect(self.view.displayErrorArgument).to(matchError(error))
                                     }
                                 }
 
@@ -233,173 +261,153 @@ class FxAPresenterSpec : QuickSpec {
                                         self.session.dataTaskCompletion[tokenPath]!!(nil, nil, nil)
                                     }
 
-                                    it("pushes the EmptyOAuthDatta error to the observer") {
-                                        expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.EmptyOAuthData))
-                                        expect(oauthObserver.events.first!.value.element).to(beNil())
+                                    it("tells the view to display the EmptyOAuthData error") {
+                                        expect(self.view.displayErrorArgument).notTo(beNil())
+                                        expect(self.view.displayErrorArgument).to(matchError(FxAError.EmptyOAuthData))
                                     }
                                 }
 
                                 describe("when receiving a data value in the data task callback") {
-                                    describe("when the data value does not serialize to a dictionary") {
+                                    describe("when the data value cannot be decoded to an OAuthInfo object") {
+                                        let data = try! JSONSerialization.data(withJSONObject: ["meow": "something that doesn't look right"])
+
                                         beforeEach {
-                                            let data = try! JSONSerialization.data(withJSONObject: ["smurf"])
                                             self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
                                         }
 
-                                        it("pushes the EmptyOAuthDatta error to the observer") {
-                                            expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
-                                            expect(oauthObserver.events.first!.value.element).to(beNil())
-                                        }
+                                        itBehavesLike(FxAPresenterSpecSharedExample.DisplayDecodingError.rawValue)
                                     }
 
-                                    describe("when the data value serializes to a dictionary but does not have the keys_jwe key") {
+                                    describe("when the data value can be decoded to an OAuthInfo object") {
+                                        let keysJWE = "somekeyvaluehere"
+                                        let accessToken = "beareraccesstoken"
+                                        let oauthInfo = OAuthInfo.Builder()
+                                                .keysJWE(keysJWE)
+                                                .accessToken(accessToken)
+                                                .build()
+                                        let oauthData = try! JSONEncoder().encode(oauthInfo)
+                                        let profilePath = "/v1/profile"
 
-                                        describe("when the dictionary does not have the keys_jwe key") {
+                                        sharedExamples(FxAPresenterSpecSharedExample.PostProfileButDisplayError.rawValue) {
+                                            it("posts the bearer access token to the profiles endpoint") {
+                                                expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
+                                                let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
+
+                                                expect(urlComponents.host).to(equal(self.subject.profileHost))
+                                            }
+
+                                            it("tells the view to display the UnexpectedDataFormat error") {
+                                                expect(self.view.displayErrorArgument).notTo(beNil())
+                                                expect(self.view.displayErrorArgument).to(matchError(FxAError.UnexpectedDataFormat))
+                                            }
+                                        }
+
+                                        describe("when the keysJWE value cannot be deserialized to the expected dictionary format") {
                                             beforeEach {
-                                                let data = try! JSONSerialization.data(withJSONObject: ["blah":"yes"])
-                                                self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
+                                                self.keyManager.fakeDecryptedJWE = "[\"bogus\"]"
+                                                self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                             }
 
-                                            it("pushes the EmptyOAuthData error to the observer") {
-                                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
-                                                expect(oauthObserver.events.first!.value.element).to(beNil())
-                                            }
+                                            itBehavesLike(FxAPresenterSpecSharedExample.PostProfileButDisplayError.rawValue)
                                         }
 
-                                        describe("when the dictionary has the keys_jwe key") {
-                                            let keysJWEValue = "[{\"somelongencodedstringhere\":\"murf\"}]"
-                                            let data = try! JSONSerialization.data(withJSONObject: ["keys_jwe":keysJWEValue])
-
-                                            // note: populate values when server is testable
-                                            xdescribe("when the decrypted value does not correspnd with the oauthinfo object") {
+                                        describe("when the keysJWE value can be deserialized to the expected dictionary format") {
+                                            describe("when the decrypted & deserialized keysJWE value does not have a key for the scope") {
                                                 beforeEach {
-                                                    self.keyManager.fakeDecryptedJWE = "bogus"
-                                                    self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
+                                                    self.keyManager.fakeDecryptedJWE = "{\"somenonesensekey\":{\"wrongthingsinhere\":\"yep\"}}"
+                                                    self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                                 }
 
-                                                it("passes the keys_jwe value to the key manager") {
-                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                                itBehavesLike(FxAPresenterSpecSharedExample.PostProfileButDisplayError.rawValue)
+                                            }
+
+                                            describe("when the decrypted & deserialized keysJWE value has a key for the scope") {
+                                                describe("when the value for the scope does not have a key 'k'") {
+                                                    beforeEach {
+                                                        self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"incomplete\":\"sorry\"}}"
+                                                        self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
+                                                    }
+
+                                                    itBehavesLike(FxAPresenterSpecSharedExample.PostProfileButDisplayError.rawValue)
                                                 }
 
-                                                it("pushes the decoder error to the observer") {
-                                                    expect(oauthObserver.events.first!.value.error).to(beNil())
-                                                    expect(oauthObserver.events.first!.value.element).to(beNil())
+                                                describe("when the value for the scope has a key 'k'") {
+                                                    let scopedKey = "allwecareaboutanyway"
+                                                    beforeEach {
+                                                        self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"k\":\"\(scopedKey)\"}}"
+                                                        self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
+                                                    }
+
+                                                    it("posts the bearer access token to the profiles endpoint") {
+                                                        expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
+                                                        let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
+
+                                                        expect(urlComponents.host).to(equal(self.subject.profileHost))
+                                                    }
+
+                                                    it("saves the key to the keychain") {
+                                                        expect(self.keychainManager.scopedKeyArgument).notTo(beNil())
+                                                        expect(self.keychainManager.scopedKeyArgument).to(equal(scopedKey))
+                                                    }
                                                 }
                                             }
 
-                                            xdescribe("when the decrypted value corresponds with the oauthinfo object") {
+                                            describe("the profile request") {
                                                 beforeEach {
-                                                    self.keyManager.fakeDecryptedJWE = "real"
-                                                    self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
+                                                    self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"k\":\"fakekeyvalue\"}}"
+                                                    self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                                 }
 
-                                                it("passes the keys_jwe value to the key manager") {
-                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
+                                                describe("when receiving an error in the profile data task callback") {
+                                                    let error = NSError(domain: "fxa-error", code: -1)
+
+                                                    beforeEach {
+                                                        self.session.dataTaskCompletion[profilePath]!!(nil, nil, error)
+                                                    }
+
+                                                    it("tells the view to display the error") {
+                                                        expect(self.view.displayErrorArgument).notTo(beNil())
+                                                        expect(self.view.displayErrorArgument).to(matchError(error))
+                                                    }
                                                 }
 
-                                                it("pushes the oauthinfo value to the observer") {
+                                                describe("when receiving no error but an empty data value in the data task callback") {
+                                                    beforeEach {
+                                                        self.session.dataTaskCompletion[profilePath]!!(nil, nil, nil)
+                                                    }
 
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            describe("the profile info request") {
-                                let profilePath = "/v1/profile"
-
-                                it("publishes a GET request for the profile info") {
-                                    expect(self.session.dataTaskRequests).toNot(beNil())
-                                    let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
-
-                                    expect(urlComponents.host).to(equal(self.subject.profileHost))
-                                }
-
-                                describe("when receiving an error in the token data task callback") {
-                                    let error = NSError(domain: "fxa-error", code: -1)
-
-                                    beforeEach {
-                                        self.session.dataTaskCompletion[profilePath]!!(nil, nil, error)
-                                    }
-
-                                    it("pushes the error to the observer") {
-                                        expect(oauthObserver.events.first!.value.error).to(matchError(error))
-                                        expect(oauthObserver.events.first!.value.element).to(beNil())
-                                    }
-                                }
-
-                                describe("when receiving no error but an empty data value in the data task callback") {
-                                    beforeEach {
-                                        self.session.dataTaskCompletion[profilePath]!!(nil, nil, nil)
-                                    }
-
-                                    it("pushes the EmptyOAuthData error to the observer") {
-                                        expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.EmptyOAuthData))
-                                        expect(oauthObserver.events.first!.value.element).to(beNil())
-                                    }
-                                }
-
-                                describe("when receiving a data value in the data task callback") {
-                                    describe("when the data value does not serialize to a dictionary") {
-                                        beforeEach {
-                                            let data = try! JSONSerialization.data(withJSONObject: ["smurf"])
-                                            self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
-                                        }
-
-                                        it("pushes the EmptyOAuthDatta error to the observer") {
-                                            expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
-                                            expect(oauthObserver.events.first!.value.element).to(beNil())
-                                        }
-                                    }
-
-                                    describe("when the data value serializes to a dictionary but does not have the keys_jwe key") {
-
-                                        describe("when the dictionary does not have the keys_jwe key") {
-                                            beforeEach {
-                                                let data = try! JSONSerialization.data(withJSONObject: ["blah":"yes"])
-                                                self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
-                                            }
-
-                                            it("pushes the EmptyOAuthData error to the observer") {
-                                                expect(oauthObserver.events.first!.value.error).to(matchError(FxAError.UnexpectedDataFormat))
-                                                expect(oauthObserver.events.first!.value.element).to(beNil())
-                                            }
-                                        }
-
-                                        describe("when the dictionary has the keys_jwe key") {
-                                            let keysJWEValue = "[{\"somelongencodedstringhere\":\"murf\"}]"
-                                            let data = try! JSONSerialization.data(withJSONObject: ["keys_jwe":keysJWEValue])
-
-                                            // note: populate values when server is testable
-                                            xdescribe("when the decrypted value does not correspnd with the oauthinfo object") {
-                                                beforeEach {
-                                                    self.keyManager.fakeDecryptedJWE = "bogus"
-                                                    self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
+                                                    it("tells the view to display the EmptyOAuthData error") {
+                                                        expect(self.view.displayErrorArgument).notTo(beNil())
+                                                        expect(self.view.displayErrorArgument).to(matchError(FxAError.EmptyProfileInfoData))
+                                                    }
                                                 }
 
-                                                it("passes the keys_jwe value to the key manager") {
-                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
-                                                }
+                                                describe("when receiving data in the data task callback") {
+                                                    describe("when receiving an invalid ProfileInfo encoding") {
+                                                        let profileData = try! JSONSerialization.data(withJSONObject: ["meow": "something that doesn't look right"])
+                                                        beforeEach {
+                                                            self.session.dataTaskCompletion[profilePath]!!(profileData, nil, nil)
+                                                        }
 
-                                                it("pushes the decoder error to the observer") {
-                                                    expect(oauthObserver.events.first!.value.error).to(beNil())
-                                                    expect(oauthObserver.events.first!.value.element).to(beNil())
-                                                }
-                                            }
+                                                        itBehavesLike(FxAPresenterSpecSharedExample.DisplayDecodingError.rawValue)
+                                                    }
 
-                                            xdescribe("when the decrypted value corresponds with the oauthinfo object") {
-                                                beforeEach {
-                                                    self.keyManager.fakeDecryptedJWE = "real"
-                                                    self.session.dataTaskCompletion[profilePath]!!(data, nil, nil)
-                                                }
+                                                    describe("when receiving a valid ProfileInfo encoding") {
+                                                        let email = "butts@butts.com"
+                                                        let profileInfo = ProfileInfo.Builder()
+                                                                .email(email)
+                                                                .build()
+                                                        let profileData = try! JSONEncoder().encode(profileInfo)
 
-                                                it("passes the keys_jwe value to the key manager") {
-                                                    expect(self.keyManager.jweArgument).to(equal(keysJWEValue))
-                                                }
+                                                        beforeEach {
+                                                            self.session.dataTaskCompletion[profilePath]!!(profileData, nil, nil)
+                                                        }
 
-                                                it("pushes the oauthinfo value to the observer") {
-
+                                                        it("saves the email to the keychain") {
+                                                            expect(self.keychainManager.userEmailArgument).notTo(beNil())
+                                                            expect(self.keychainManager.userEmailArgument).to(equal(email))
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

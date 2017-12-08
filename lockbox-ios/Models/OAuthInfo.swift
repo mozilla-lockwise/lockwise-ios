@@ -5,55 +5,38 @@
 import Foundation
 
 class OAuthInfo: Codable {
-    var uid:String
-    var email:String
     var accessToken:String
     var expiresAt:Date
     var refreshToken:String
     var idToken:String
-    var scopedKey:String
+    var keysJWE:String
 
-    init(uid:String,
-         email:String,
-         accessToken:String,
+    init(accessToken:String,
          expiresAt:Date,
          refreshToken:String,
          idToken:String,
-         scopedKey:String) {
-        self.uid = uid
-        self.email = email
+         keysJWE:String) {
         self.accessToken = accessToken
         self.expiresAt = expiresAt
         self.refreshToken = refreshToken
         self.idToken = idToken
-        self.scopedKey = scopedKey
+        self.keysJWE = keysJWE
     }
 
     class Builder {
         private var info:OAuthInfo!
 
         init() {
-            self.info = OAuthInfo(uid:"",
-                    email:"",
+            self.info = OAuthInfo(
                     accessToken:"",
                     expiresAt:Date(),
                     refreshToken:"",
                     idToken:"",
-                    scopedKey:"")
+                    keysJWE:"")
         }
 
         func build() -> OAuthInfo {
             return self.info
-        }
-
-        func uid(_ uid:String) -> Builder {
-            self.info.uid = uid
-            return self
-        }
-
-        func email(_ email:String) -> Builder {
-            self.info.email = email
-            return self
         }
 
         func accessToken(_ accessToken:String) -> Builder {
@@ -76,8 +59,8 @@ class OAuthInfo: Codable {
             return self
         }
 
-        func scopedKey(_ scopedKey:String) -> Builder {
-            self.info.scopedKey = scopedKey
+        func keysJWE(_ keysJWE:String) -> Builder {
+            self.info.keysJWE = keysJWE
             return self
         }
     }
