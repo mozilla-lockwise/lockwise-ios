@@ -14,15 +14,15 @@ class FxAViewSpec : QuickSpec {
     class FakeFxAPresenter : FxAPresenter {
         var webViewRequestCalled = false
         var webViewNavigationAction:WKNavigationAction?
+        var onViewReadyCalled = false
 
         override func webViewRequest(decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             self.webViewRequestCalled = true
             self.webViewNavigationAction = navigationAction
         }
 
-        override func authenticateAndRetrieveScopedKey() -> Single<OAuthInfo> {
-            let fakeOAuthInfo = OAuthInfo.Builder().build()
-            return Single.just(fakeOAuthInfo)
+        override func onViewReady() {
+            onViewReadyCalled = true
         }
     }
 
@@ -59,9 +59,15 @@ class FxAViewSpec : QuickSpec {
         beforeEach {
             self.webView = FakeWebView()
             self.presenter = FakeFxAPresenter()
-            self.subject = FxAView(webView: self.webView, presenter: self.presenter)
+
+            self.subject = FxAView(webView: self.webView)
+            self.subject.presenter = self.presenter
 
             self.subject.viewDidLoad()
+        }
+
+        it("informs the presenter when the view is ready") {
+
         }
 
         describe(".loadRequest()") {

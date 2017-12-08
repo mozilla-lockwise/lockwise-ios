@@ -6,24 +6,26 @@ import Foundation
 import WebKit
 import RxSwift
 
-protocol FxAViewProtocol: class {
+protocol FxAViewProtocol: class, ErrorView {
     func loadRequest(_ urlRequest:URLRequest)
 }
 
 enum FxAError : Error {
-    case RedirectNoState, RedirectNoCode, RedirectBadState, EmptyOAuthData, UnexpectedDataFormat, Unknown
+    case RedirectNoState, RedirectNoCode, RedirectBadState, EmptyOAuthData, EmptyProfileInfoData, UnexpectedDataFormat, Unknown
 }
 
 class FxAPresenter {
-    weak var view:FxAViewProtocol?
+    weak var view:FxAViewProtocol!
     private var keyManager:KeyManager
+    private var keychainManager:KeychainManager
     private var session:URLSession
-    private var scopedKeySubject = PublishSubject<OAuthInfo>()
+    private var disposeBag = DisposeBag()
 
     internal let oauthHost = "oauth-scoped-keys-oct10.dev.lcip.org"
     internal let profileHost = "latest-keys.dev.lcip.org"
     internal let redirectURI = "lockbox://redirect.ios"
     internal let clientID = "98adfa37698f255b"
+    internal let scope = "https://identity.mozilla.com/apps/lockbox"
     internal var state:String
     internal var codeVerifier:String
 
@@ -47,7 +49,7 @@ class FxAPresenter {
                 URLQueryItem(name: "access_type", value: "offline"),
                 URLQueryItem(name: "client_id", value: clientID),
                 URLQueryItem(name: "redirect_uri", value: redirectURI),
-                URLQueryItem(name: "scope", value:"profile:email openid https://identity.mozilla.com/apps/lockbox"),
+                URLQueryItem(name: "scope", value:"profile:email openid \(scope)"),
                 URLQueryItem(name: "keys_jwk", value: jwkKey),
                 URLQueryItem(name: "state", value: state),
                 URLQueryItem(name: "code_challenge", value: codeChallenge),
@@ -81,18 +83,17 @@ class FxAPresenter {
         }
     }
 
-    init(session: URLSession = URLSession.shared, keyManager:KeyManager = KeyManager()) {
+    init(session: URLSession = URLSession.shared, keyManager:KeyManager = KeyManager(), keychainManager:KeychainManager = KeychainManager()) {
         self.keyManager = keyManager
+        self.keychainManager = keychainManager
         self.state = self.keyManager.random32()!.base64URLEncodedString()
         self.codeVerifier = self.keyManager.random32()!.base64URLEncodedString()
         self.session = session
     }
 
-    func authenticateAndRetrieveScopedKey() -> Single<OAuthInfo> {
+    func onViewReady() {
         let urlRequest = URLRequest(url: self.authURL)
-        self.view!.loadRequest(urlRequest)
-
-        return scopedKeySubject.asSingle()
+        self.view.loadRequest(urlRequest)
     }
 
     func webViewRequest(decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -102,37 +103,51 @@ class FxAPresenter {
         }
 
         if ("\(navigationURL.scheme!)://\(navigationURL.host!)" == redirectURI) {
-            let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true)!
-            if let code = validateQueryParamsForAuthCode(components.queryItems!) {
-                postTokenRequest(code: code)
-            }
             decisionHandler(.cancel)
+            let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true)!
+
+            var code:String
+            do {
+                code = try validateQueryParamsForAuthCode(components.queryItems!)
+            } catch {
+                self.view.displayError(error)
+                return
+            }
+
+            authenticateAndRetrieveUserInformation(code: code)
             return
         }
 
         decisionHandler(.allow)
     }
 
-    private func validateQueryParamsForAuthCode(_ redirectParams: [URLQueryItem]) -> String? {
-        guard let state = redirectParams.first(where: { $0.name == "state"}) else {
-            self.scopedKeySubject.onError(FxAError.RedirectNoState)
-            return nil
-        }
-
-        guard let code = redirectParams.first(where: { $0.name == "code"}) else {
-            self.scopedKeySubject.onError(FxAError.RedirectNoCode)
-            return nil
-        }
-
-        if state.value == self.state {
-            return code.value
-        } else {
-            self.scopedKeySubject.onError(FxAError.RedirectBadState)
-            return nil
-        }
+    private func authenticateAndRetrieveUserInformation(code: String) {
+        self.postTokenRequest(code: code)
+                .do(onNext: { info in
+                    self.retrieveProfileInfo(accessToken: info.accessToken)
+                }, onError: nil, onSubscribe: nil, onSubscribed: nil, onDispose: nil)
+                .map { info -> String in
+                    return try self.deriveScopedKeyFromJWE(info.keysJWE)
+                }
+                .subscribe(onSuccess: { scopedKey in
+                    self.keychainManager.saveScopedKey(scopedKey, service: .FxA)
+                }, onError: { error in
+                    self.view.displayError(error)
+                })
+                .disposed(by: self.disposeBag)
     }
 
-    private func postTokenRequest(code: String) {
+    private func retrieveProfileInfo(accessToken: String) {
+        postProfileInfoRequest(accessToken: accessToken)
+                .subscribe(onSuccess: { info in
+                    self.keychainManager.saveUserEmail(info.email, service: .FxA)
+                }, onError:{ error in
+                    self.view.displayError(error)
+                })
+                .disposed(by: self.disposeBag)
+    }
+
+    private func postTokenRequest(code: String) -> Single<OAuthInfo> {
         var request = URLRequest(url: tokenURL)
         let requestParams = [
             "grant_type": "authorization_code",
@@ -141,62 +156,113 @@ class FxAPresenter {
             "code_verifier": codeVerifier
         ]
 
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: requestParams)
-        } catch {
-            self.scopedKeySubject.onError(error)
-            return
-        }
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        let oauthSingle = Single<OAuthInfo>.create() { single in
+            let disposable = Disposables.create()
 
-        let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
-                self.scopedKeySubject.onError(error!)
-                return
-            }
-
-            guard let data = data else {
-                self.scopedKeySubject.onError(FxAError.EmptyOAuthData)
-                return
-            }
-
-            var oauthInfo:OAuthInfo
             do {
-                oauthInfo = try self.convertDataToOAuthInfo(data: data)
+                request.httpBody = try JSONSerialization.data(withJSONObject: requestParams)
             } catch {
-                self.scopedKeySubject.onError(error)
-                return
+                single(.error(error))
+                return disposable
             }
 
-            self.scopedKeySubject.onNext(oauthInfo)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            let task = self.session.dataTask(with: request) { data, response, error in
+                if error != nil {
+                    single(.error(error!))
+                    return
+                }
+
+                guard let data = data else {
+                    single(.error(FxAError.EmptyOAuthData))
+                    return
+                }
+
+                var oauthInfo:OAuthInfo
+                do {
+                    oauthInfo = try JSONDecoder().decode(OAuthInfo.self, from: data)
+                } catch {
+                    single(.error(error))
+                    return
+                }
+
+                single(.success(oauthInfo))
+            }
+
+            task.resume()
+
+            return disposable
         }
 
-        task.resume()
+        return oauthSingle
     }
 
-    private func postProfileInfoRequest(code: String) {
+    private func postProfileInfoRequest(accessToken: String) -> Single<ProfileInfo> {
         var request = URLRequest(url: profileInfoURL)
         request.httpMethod = "GET"
-        request.addValue("Bearer", forHTTPHeaderField: "Authorization \(code)")
+        request.addValue("Bearer", forHTTPHeaderField: "Authorization \(accessToken)")
 
-        let task = session.dataTask(with: request) { data, response, error in
+        let profileInfoSingle = Single<ProfileInfo>.create() { single in
+            let disposable = Disposables.create()
 
+            let task = self.session.dataTask(with: request) { data, response, error in
+                if error != nil {
+                    single(.error(error!))
+                    return
+                }
+
+                guard let data = data else {
+                    single(.error(FxAError.EmptyProfileInfoData))
+                    return
+                }
+
+                var profileInfo: ProfileInfo
+                do {
+                    profileInfo = try JSONDecoder().decode(ProfileInfo.self, from: data)
+                } catch {
+                    single(.error(error))
+                    return
+                }
+
+                single(.success(profileInfo))
+            }
+
+            task.resume()
+
+            return disposable
         }
 
-        task.resume()
+        return profileInfoSingle
     }
 
-    private func convertDataToOAuthInfo(data: Data) throws -> OAuthInfo {
-        let jsonData = try JSONSerialization.jsonObject(with: data)
+    private func deriveScopedKeyFromJWE(_ jwe: String) throws -> String {
+        let jweString = self.keyManager.decryptJWE(jwe)
 
-        guard let jsonDict = jsonData as? [String:Any],
-              let keysJWE = jsonDict["keys_jwe"] else {
-            throw(FxAError.UnexpectedDataFormat)
+        guard let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String:Any],
+              let jweJSON = jsonValue[scope] as? [String:Any],
+              let key = jweJSON["k"] as? String else {
+            throw FxAError.UnexpectedDataFormat
         }
 
-        let jweString = self.keyManager.decryptJWE(String(describing: keysJWE))
-        let oauthInfo = try JSONDecoder().decode(OAuthInfo.self, from: Data(jweString.utf8))
-        return oauthInfo
+        return key
+    }
+
+    private func validateQueryParamsForAuthCode(_ redirectParams: [URLQueryItem]) throws -> String {
+        guard let state = redirectParams.first(where: { $0.name == "state"}) else {
+            throw FxAError.RedirectNoState
+        }
+
+        guard let code = redirectParams.first(where: { $0.name == "code"}),
+              let codeValue = code.value else {
+            throw FxAError.RedirectNoCode
+        }
+
+        guard state.value == self.state else {
+            throw FxAError.RedirectBadState
+        }
+
+        return codeValue
     }
 }

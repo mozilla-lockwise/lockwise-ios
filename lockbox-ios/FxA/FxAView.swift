@@ -7,36 +7,28 @@ import UIKit
 import RxSwift
 
 class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
-    var webView: WKWebView
-    private var presenter: FxAPresenter
+    internal var presenter: FxAPresenter!
+    private var webView: WKWebView
     private var disposeBag = DisposeBag()
 
-    init(webView: WKWebView? = WKWebView(), presenter: FxAPresenter? = FxAPresenter()) {
+    init(webView: WKWebView? = WKWebView()) {
         self.webView = webView!
-        self.presenter = presenter!
-
         super.init(nibName: nil, bundle:nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         self.webView = WKWebView()
-        self.presenter = FxAPresenter()
-
         super.init(coder: aDecoder)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.presenter.view = self
         self.webView.navigationDelegate = self
-
         self.view = self.webView
-
-        self.presenter.authenticateAndRetrieveScopedKey()
-            .subscribe(onSuccess: { info in print(info) },
-                    onError: {error in print(error)})
-            .disposed(by: self.disposeBag)
+        
+        if (self.presenter != nil) {
+            self.presenter.onViewReady()
+        }
     }
 
     func loadRequest(_ urlRequest:URLRequest) {
