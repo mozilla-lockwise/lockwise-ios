@@ -130,7 +130,7 @@ class FxAPresenter {
                     return try self.deriveScopedKeyFromJWE(info.keysJWE)
                 }
                 .subscribe(onSuccess: { scopedKey in
-                    self.keychainManager.saveScopedKey(scopedKey, service: .FxA)
+                    self.keychainManager.saveScopedKey(scopedKey)
                 }, onError: { error in
                     self.view.displayError(error)
                 })
@@ -140,7 +140,7 @@ class FxAPresenter {
     private func retrieveProfileInfo(accessToken: String) {
         postProfileInfoRequest(accessToken: accessToken)
                 .subscribe(onSuccess: { info in
-                    self.keychainManager.saveUserEmail(info.email, service: .FxA)
+                    self.keychainManager.saveUserEmail(info.email)
                 }, onError:{ error in
                     self.view.displayError(error)
                 })

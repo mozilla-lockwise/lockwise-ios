@@ -5,22 +5,18 @@
 import Foundation
 import Security
 
-enum KeychainManagerService: String {
-    case FxA
-}
-
 enum KeychainManagerKey: String {
     case email, scopedKey
 }
 
 class KeychainManager {
     @discardableResult
-    func saveUserEmail(_ email: String, service:KeychainManagerService) -> Bool {
+    func saveUserEmail(_ email: String) -> Bool {
         let emailData = Data(email.utf8)
 
         let attributes:[String:Any] = [
-            kSecAttrAccount as String: prefixedKey(.email),
-            kSecAttrService as String: service.rawValue,
+            kSecAttrAccount as String: KeychainManagerKey.email.rawValue,
+            kSecAttrService as String: Bundle.main.bundleIdentifier!,
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrSynchronizable as String: kCFBooleanFalse,
             kSecValueData as String: emailData,
@@ -32,12 +28,12 @@ class KeychainManager {
     }
 
     @discardableResult
-    func saveScopedKey(_ key:String, service:KeychainManagerService) -> Bool {
+    func saveScopedKey(_ key:String) -> Bool {
         let keyData = Data(key.utf8)
 
         let attributes:[String:Any] = [
-            kSecAttrAccount as String: prefixedKey(.scopedKey),
-            kSecAttrService as String: service.rawValue,
+            kSecAttrAccount as String: KeychainManagerKey.scopedKey.rawValue,
+            kSecAttrService as String: Bundle.main.bundleIdentifier!,
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrSynchronizable as String: kCFBooleanFalse,
             kSecValueData as String: keyData,
@@ -46,9 +42,5 @@ class KeychainManager {
         let success = SecItemAdd(attributes as CFDictionary, nil)
 
         return success == noErr
-    }
-
-    private func prefixedKey(_ key:KeychainManagerKey) -> String {
-        return Bundle.main.bundleIdentifier! + key.rawValue
     }
 }
