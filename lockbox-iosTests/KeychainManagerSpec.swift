@@ -21,13 +21,13 @@ class KeychainManagerSpec : QuickSpec {
             describe("saving an email") {
                 let email = "doggo@mozilla.com"
                 beforeEach {
-                    self.subject.saveUserEmail(email, service: .FxA)
+                    self.subject.saveUserEmail(email)
                 }
 
                 it("saves the email to the keychain") {
                     let query:[String:Any] = [
-                        kSecAttrService as String: KeychainManagerService.FxA.rawValue,
-                        kSecAttrAccount as String: "\(Bundle.main.bundleIdentifier!)email",
+                        kSecAttrService as String: Bundle.main.bundleIdentifier!,
+                        kSecAttrAccount as String: "email",
                         kSecClass as String: kSecClassGenericPassword,
                         kSecAttrSynchronizable as String: kCFBooleanFalse,
                         kSecMatchLimit as String: kSecMatchLimitOne,
@@ -52,14 +52,14 @@ class KeychainManagerSpec : QuickSpec {
             describe("saving a scoped key") {
                 let key = "sdfkljafsdlkhjfdsahjksdfjkladfsmn,basdfhjklzxdjkldsa"
                 beforeEach {
-                    self.subject.saveScopedKey(key, service: .FxA)
+                    self.subject.saveScopedKey(key)
                 }
 
                 it("saves the key to the keychain") {
 
                     let query:[String:Any] = [
-                        kSecAttrService as String: KeychainManagerService.FxA.rawValue,
-                        kSecAttrAccount as String: "\(Bundle.main.bundleIdentifier!)scopedKey",
+                        kSecAttrService as String: Bundle.main.bundleIdentifier!,
+                        kSecAttrAccount as String: "scopedKey",
                         kSecClass as String: kSecClassGenericPassword,
                         kSecAttrSynchronizable as String: kCFBooleanFalse,
                         kSecMatchLimit as String: kSecMatchLimitOne,

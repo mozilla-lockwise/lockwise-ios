@@ -46,13 +46,13 @@ class FxAPresenterSpec : QuickSpec {
         var scopedKeyArgument:String?
 
         @discardableResult
-        override func saveUserEmail(_ email: String, service:KeychainManagerService) -> Bool {
+        override func saveUserEmail(_ email: String) -> Bool {
             userEmailArgument = email
             return true
         }
 
         @discardableResult
-        override func saveScopedKey(_ key: String, service:KeychainManagerService) -> Bool {
+        override func saveScopedKey(_ key: String) -> Bool {
             scopedKeyArgument = key
             return true
         }
