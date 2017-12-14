@@ -17,7 +17,7 @@ class Router {
 
         view.presenter = presenter
         presenter.view = view
-        presenter.dataStore = DataStore(webview: view.webView)
+        presenter.dataStore = DataStore(webView: &view.webView)
 
         window.rootViewController = navController
     }
