@@ -20,7 +20,7 @@ Be sure to include as much information including screenshots, text output, and b
 
 ## How to Request Enhancements
 
-First, please refer to the applicable [GitHub project](https://github.com/orgs/mozilla-lockbox/projects) and search [the repository's GitHub issues](https://github.com/mozilla-lockbox/lockbox-ios/issues) to make sure your idea has not been (or is not still) considered.
+First, please refer to the applicable [GitHub repository](https://github.com/orgs/mozilla-lockbox/) and search [the repository's GitHub issues](https://github.com/mozilla-lockbox/lockbox-ios/issues) to make sure your idea has not been (or is not still) considered.
 
 Then, please [create a new issue in the GitHub repository](https://github.com/mozilla-lockbox/lockbox-ios/issues/new) describing your enhancement.
 
