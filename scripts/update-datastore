@@ -20,8 +20,8 @@ git clone git@github.com:mozilla-lockbox/lockbox-datastore.git -b ios-swift
 cd lockbox-datastore
 
 npm install
-npm install -g browserify
-browserify lib/index.js -s DataStoreModule -o bundle.js
+npm install browserify
+./node_modules/.bin/browserify lib/index.js -s DataStoreModule -o bundle.js
 
 mv bundle.js ../lockbox-ios/lockbox-datastore/bundle.js
 
