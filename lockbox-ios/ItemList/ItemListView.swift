@@ -12,13 +12,7 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
     private var items:[Item] = []
 
     required init?(coder aDecoder: NSCoder) {
-        let webConfig = WKWebViewConfiguration()
-
-        webConfig.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-        webConfig.preferences.javaScriptEnabled = true
-
-        self.webView = WebView(frame: .zero, configuration: webConfig)
-
+        self.webView = WebView(frame: .zero, configuration: WKWebViewConfiguration())
         super.init(coder: aDecoder)
     }
 
@@ -30,10 +24,7 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.webView)
-
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: nil, action: nil)
-        self.navigationItem.rightBarButtonItem?.tintColor = .black
-        self.navigationItem.title = "Your Lockbox"
+        styleNavigationBar()
 
         self.presenter.onViewReady()
     }
@@ -52,7 +43,22 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
 
         cell!.titleLabel.text = item.title
         cell!.detailLabel.text = item.entry.username
+        cell!.kebabButton.tintColor = UIColor.kebabBlue
 
         return cell!
+    }
+
+    private func styleNavigationBar() {
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: nil, action: nil)
+        self.navigationItem.rightBarButtonItem?.tintColor = .white
+        self.navigationItem.title = "Your Lockbox"
+
+        self.navigationController!.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 20, weight: .regular)
+        ]
+
+        self.navigationController!.navigationBar.addLockboxGradient()
+        self.navigationController!.navigationBar.layoutIfNeeded()
     }
 }

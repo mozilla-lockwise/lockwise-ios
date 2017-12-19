@@ -16,7 +16,16 @@ class ItemListPresenter  {
     private var disposeBag = DisposeBag()
 
     func onViewReady() {
-        self.dataStore.list()
+        self.dataStore.dataStoreLoaded()
+                .flatMap { _ in
+                    return self.dataStore.open()
+                }.flatMap { _ in
+                    return self.dataStore.unlock(password: "password")
+                }.flatMap { _ in
+                    return self.dataStore.list()
+                }
+                .take(1)
+                .asSingle()
                 .subscribe(onSuccess: { items in
                     self.view!.displayItems(items)
                 }, onError: { error in
