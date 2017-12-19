@@ -42,20 +42,24 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         let item = items[indexPath.row]
 
         cell!.titleLabel.text = item.title
-        cell!.detailLabel.text = item.entry.username
+        cell!.detailLabel.text = (item.entry.username == "" || item.entry.username == nil) ? "(no username)" : item.entry.username
         cell!.kebabButton.tintColor = UIColor.kebabBlue
 
         return cell!
     }
 
     private func styleNavigationBar() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: nil, action: nil)
-        self.navigationItem.rightBarButtonItem?.tintColor = .white
+        let prefButton = UIButton()
+        let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
+        prefButton.setImage(prefImage, for: .normal)
+        prefButton.tintColor = .white
+
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
         self.navigationItem.title = "Your Lockbox"
 
         self.navigationController!.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 20, weight: .regular)
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
 
         self.navigationController!.navigationBar.addLockboxGradient()

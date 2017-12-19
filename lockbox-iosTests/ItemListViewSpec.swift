@@ -36,6 +36,7 @@ class ItemListViewSpec : QuickSpec {
                 self.subject = storyboard.instantiateInitialViewController() as! ItemListView
                 self.subject.presenter = self.presenter
 
+                _ = UINavigationController(rootViewController: self.subject)
                 self.subject.preloadView()
             }
 
@@ -56,7 +57,12 @@ class ItemListViewSpec : QuickSpec {
                                             .username("me")
                                             .build())
                             .build(),
-                    Item.Builder().build()
+                    Item.Builder()
+                            .title("sum item")
+                            .entry(
+                                    ItemEntry.Builder()
+                                            .build())
+                            .build(),
                 ]
 
                 beforeEach {
@@ -67,11 +73,18 @@ class ItemListViewSpec : QuickSpec {
                     expect(self.subject.tableView(self.subject.tableView, numberOfRowsInSection: 0)).to(equal(items.count))
                 }
 
-                it("configures cells correctly") {
+                it("configures cells correctly when the item has a username and a title") {
                     let cell = self.subject.tableView(self.subject.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as! ItemListCell
 
                     expect(cell.titleLabel!.text).to(equal(items[0].title))
                     expect(cell.detailLabel!.text).to(equal(items[0].entry.username))
+                }
+
+                it("configures cells correctly when the item has no username and a title") {
+                    let cell = self.subject.tableView(self.subject.tableView, cellForRowAt: IndexPath(row: 1, section: 0)) as! ItemListCell
+
+                    expect(cell.titleLabel!.text).to(equal(items[1].title))
+                    expect(cell.detailLabel!.text).to(equal("(no username)"))
                 }
             }
         }
