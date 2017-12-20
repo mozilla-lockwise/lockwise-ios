@@ -6,7 +6,7 @@ import Foundation
 import Security
 
 enum KeychainManagerKey: String {
-    case email, scopedKey
+    case email, scopedKey, uid
 }
 
 class KeychainManager {
@@ -33,6 +33,23 @@ class KeychainManager {
 
         let attributes:[String:Any] = [
             kSecAttrAccount as String: KeychainManagerKey.scopedKey.rawValue,
+            kSecAttrService as String: Bundle.main.bundleIdentifier!,
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrSynchronizable as String: kCFBooleanFalse,
+            kSecValueData as String: keyData,
+        ]
+
+        let success = SecItemAdd(attributes as CFDictionary, nil)
+
+        return success == noErr
+    }
+
+    @discardableResult
+    func saveFxAUID(_ uid:String) -> Bool {
+        let keyData = Data(uid.utf8)
+
+        let attributes:[String:Any] = [
+            kSecAttrAccount as String: KeychainManagerKey.uid.rawValue,
             kSecAttrService as String: Bundle.main.bundleIdentifier!,
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrSynchronizable as String: kCFBooleanFalse,
