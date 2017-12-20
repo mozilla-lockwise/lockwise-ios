@@ -212,7 +212,7 @@ class DataStoreSpec: QuickSpec {
 
                 it("evaluates javascript to initialize the webview datastore") {
                     expect(self.webView.evaluateJSCalled).to(beTrue())
-                    expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"scopedKey\":\(scopedKey)})"))
+                    expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey)})"))
                 }
 
                 describe("getting an initializecomplete callback from javascript") {
