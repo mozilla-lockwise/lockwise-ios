@@ -13,7 +13,7 @@ import RxBlocking
 class DataStoreIntegrationSpec : QuickSpec {
 
     var subject:DataStore!
-    private let password = "password"
+    private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"L9-eBkDrYHdPdXV_ymuzy_u9n3drkQcSw5pskrNl4pg\",\"k\":\"WsTdZ2tjji2W36JN9vk9s2AYsvp8eYy1pBbKPgcSLL4\"}"
 
     override func spec() {
         beforeSuite {
@@ -42,7 +42,7 @@ class DataStoreIntegrationSpec : QuickSpec {
                     initializeValue = try! self.subject.open().flatMap { _ in
                         let initialized = try! self.subject.initialized().toBlocking().first()!
                         if !initialized {
-                            return self.subject.initialize(password: self.password)
+                            return self.subject.initialize(scopedKey: self.scopedKey)
                         }
 
                         return Single.just("")
@@ -50,7 +50,7 @@ class DataStoreIntegrationSpec : QuickSpec {
                 }
 
                 if (try! self.subject.locked().toBlocking().first()!) {
-                    _ = try! self.subject.unlock(password: self.password).toBlocking().first()
+                    _ = try! self.subject.unlock(scopedKey: self.scopedKey).toBlocking().first()
                 }
             }
 
@@ -105,7 +105,7 @@ class DataStoreIntegrationSpec : QuickSpec {
                 let lockValue = try! self.subject.lock().toBlocking().first()
                 expect(lockValue).notTo(beNil())
 
-                let unlockValue = try! self.subject.unlock(password: self.password).toBlocking().first()
+                let unlockValue = try! self.subject.unlock(scopedKey: self.scopedKey).toBlocking().first()
                 expect(unlockValue).notTo(beNil())
             }
     }

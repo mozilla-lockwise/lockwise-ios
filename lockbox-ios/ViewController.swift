@@ -25,13 +25,13 @@ class ViewController: UIViewController {
     }
 
     @IBAction func initClicked(_ sender: Any) {
-        self.dataStore.initialize(password: "password")
+        self.dataStore.initialize(scopedKey: "password")
                 .subscribe(onSuccess: { any in print("initialized!") }, onError: { error in print("error") })
                 .disposed(by: self.disposeBag)
     }
 
     @IBAction func unlockClicked(_ sender: Any) {
-        self.dataStore.unlock(password: "password")
+        self.dataStore.unlock(scopedKey: "password")
                 .subscribe(onSuccess: { any in print("unlocked!") }, onError: { error in print("error") })
                 .disposed(by: self.disposeBag)
     }

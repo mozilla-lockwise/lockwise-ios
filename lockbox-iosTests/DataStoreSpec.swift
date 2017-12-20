@@ -193,9 +193,9 @@ class DataStoreSpec: QuickSpec {
                 }
             }
 
-            describe(".initialize(password:)") {
+            describe(".initialize(scopedKey:)") {
                 var initializeObserver = self.scheduler.createObserver(Any.self)
-                let password = "someLongPasswordStringWithQuote"
+                let scopedKey = "someLongJWKStringWithQuote"
 
                 beforeEach {
                     initializeObserver = self.scheduler.createObserver(Any.self)
@@ -203,7 +203,7 @@ class DataStoreSpec: QuickSpec {
                     self.webView.anySingle = self.scheduler.createHotObservable([next(100, true)])
                             .take(1)
                             .asSingle()
-                    self.subject.initialize(password: password)
+                    self.subject.initialize(scopedKey: scopedKey)
                             .asObservable()
                             .subscribe(initializeObserver)
                             .disposed(by: self.disposeBag)
@@ -212,7 +212,7 @@ class DataStoreSpec: QuickSpec {
 
                 it("evaluates javascript to initialize the webview datastore") {
                     expect(self.webView.evaluateJSCalled).to(beTrue())
-                    expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"password\":\"\(password)\"})"))
+                    expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"scopedKey\":\(scopedKey)})"))
                 }
 
                 describe("getting an initializecomplete callback from javascript") {
@@ -268,9 +268,9 @@ class DataStoreSpec: QuickSpec {
                 }
             }
 
-            describe(".unlock(password:)") {
+            describe(".unlock(scopedKey:)") {
                 var unlockObserver = self.scheduler.createObserver(Any.self)
-                let password = "somePasswordString"
+                let scopedKey = "{\"kty\":\"oct\",\"kid\":\"L9-eBkDrYHdPdXV_ymuzy_u9n3drkQcSw5pskrNl4pg\",\"k\":\"WsTdZ2tjji2W36JN9vk9s2AYsvp8eYy1pBbKPgcSLL4\"}"
 
                 beforeEach {
                     unlockObserver = self.scheduler.createObserver(Any.self)
@@ -278,7 +278,7 @@ class DataStoreSpec: QuickSpec {
                     self.webView.anySingle = self.scheduler.createHotObservable([next(100, true)])
                             .take(1)
                             .asSingle()
-                    self.subject.unlock(password: password)
+                    self.subject.unlock(scopedKey: scopedKey)
                             .asObservable()
                             .subscribe(unlockObserver)
                             .disposed(by: self.disposeBag)
@@ -287,7 +287,7 @@ class DataStoreSpec: QuickSpec {
 
                 it("evaluates .unlock on the webview datastore") {
                     expect(self.webView.evaluateJSCalled).to(beTrue())
-                    expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).unlock(\"\(password)\")"))
+                    expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).unlock(\(scopedKey))"))
                 }
 
                 describe("getting an unlockcomplete callback from javascript") {
