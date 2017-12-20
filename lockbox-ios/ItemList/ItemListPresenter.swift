@@ -20,7 +20,7 @@ class ItemListPresenter  {
                 .flatMap { _ in
                     return self.dataStore.open()
                 }.flatMap { _ in
-                    return self.dataStore.unlock(password: "password")
+                    return self.dataStore.unlock(scopedKey: "password")
                 }.flatMap { _ in
                     return self.dataStore.list()
                 }

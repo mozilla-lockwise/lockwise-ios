@@ -38,7 +38,7 @@ class ItemListPresenterSpec : QuickSpec {
             return subject.take(1).asSingle()
         }
 
-        override func unlock(password: String) -> Single<Any> {
+        override func unlock(scopedKey: String) -> Single<Any> {
             let subject = ReplaySubject<Any>.create(bufferSize: 1)
             subject.onNext("yep")
             return subject.take(1).asSingle()
