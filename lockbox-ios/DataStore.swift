@@ -157,8 +157,8 @@ class DataStore: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).initialized")
     }
 
-    func initialize(password: String) -> Single<Any> {
-        return self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({\"password\":\"\(password)\"})")
+    func initialize(scopedKey: String) -> Single<Any> {
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).initialize({\"appKey\":\(scopedKey)})")
                 .flatMap { _ in
                     return self.initializeSubject.take(1).asSingle()
                 }
@@ -168,8 +168,8 @@ class DataStore: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         return self.webView.evaluateJavaScriptToBool("\(self.dataStoreName!).locked")
     }
 
-    func unlock(password: String) -> Single<Any> {
-        return self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\"\(password)\")")
+    func unlock(scopedKey: String) -> Single<Any> {
+        return self.webView.evaluateJavaScript("\(self.dataStoreName!).unlock(\(scopedKey))")
                 .flatMap { _ in
                     return self.unlockSubject.take(1).asSingle()
                 }
