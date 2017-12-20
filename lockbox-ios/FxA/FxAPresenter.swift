@@ -141,6 +141,7 @@ class FxAPresenter {
         postProfileInfoRequest(accessToken: accessToken)
                 .subscribe(onSuccess: { info in
                     self.keychainManager.saveUserEmail(info.email)
+                    self.keychainManager.saveFxAUID(info.uid)
                 }, onError:{ error in
                     self.view.displayError(error)
                 })

@@ -44,6 +44,7 @@ class FxAPresenterSpec : QuickSpec {
     class FakeKeychainManager : KeychainManager {
         var userEmailArgument:String?
         var scopedKeyArgument:String?
+        var uidArgument:String?
 
         @discardableResult
         override func saveUserEmail(_ email: String) -> Bool {
@@ -54,6 +55,12 @@ class FxAPresenterSpec : QuickSpec {
         @discardableResult
         override func saveScopedKey(_ key: String) -> Bool {
             scopedKeyArgument = key
+            return true
+        }
+
+        @discardableResult
+        override func saveFxAUID(_ uid: String) -> Bool {
+            uidArgument = uid
             return true
         }
     }
@@ -394,8 +401,10 @@ class FxAPresenterSpec : QuickSpec {
 
                                                     describe("when receiving a valid ProfileInfo encoding") {
                                                         let email = "butts@butts.com"
+                                                        let uid = "534785348945089"
                                                         let profileInfo = ProfileInfo.Builder()
                                                                 .email(email)
+                                                                .uid(uid)
                                                                 .build()
                                                         let profileData = try! JSONEncoder().encode(profileInfo)
 
@@ -406,6 +415,11 @@ class FxAPresenterSpec : QuickSpec {
                                                         it("saves the email to the keychain") {
                                                             expect(self.keychainManager.userEmailArgument).notTo(beNil())
                                                             expect(self.keychainManager.userEmailArgument).to(equal(email))
+                                                        }
+
+                                                        it("saves the uid to the keychain") {
+                                                            expect(self.keychainManager.uidArgument).notTo(beNil())
+                                                            expect(self.keychainManager.uidArgument).to(equal(uid))
                                                         }
                                                     }
                                                 }

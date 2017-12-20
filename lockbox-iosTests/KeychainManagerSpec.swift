@@ -80,6 +80,37 @@ class KeychainManagerSpec : QuickSpec {
                     expect(storedKey).to(equal(key))
                 }
             }
+
+            describe("saving a uid") {
+                let uid = "54765973829"
+                beforeEach {
+                    self.subject.saveFxAUID(uid)
+                }
+
+                it("saves the uid to the keychain") {
+                    let query:[String:Any] = [
+                        kSecAttrService as String: Bundle.main.bundleIdentifier!,
+                        kSecAttrAccount as String: "uid",
+                        kSecClass as String: kSecClassGenericPassword,
+                        kSecAttrSynchronizable as String: kCFBooleanFalse,
+                        kSecMatchLimit as String: kSecMatchLimitOne,
+                        kSecReturnData as String: true,
+                    ]
+                    var item: AnyObject?
+                    let status = withUnsafeMutablePointer(to: &item) {
+                        SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+                    }
+
+                    guard status == noErr,
+                          let scopedKeyData = item as? Data,
+                          let storedKey = String(data: scopedKeyData, encoding: .utf8) else {
+                        fail("Item not found in correct format")
+                        abort()
+                    }
+
+                    expect(storedKey).to(equal(uid))
+                }
+            }
         }
     }
 }
