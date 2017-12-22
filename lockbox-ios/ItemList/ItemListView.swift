@@ -31,7 +31,7 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         super.viewDidLoad()
         self.view.addSubview(self.webView)
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: nil, action: nil)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: self, action: #selector(preferencesTapped))
         self.navigationItem.rightBarButtonItem?.tintColor = .black
         self.navigationItem.title = "Your Lockbox"
 
@@ -54,5 +54,9 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         cell!.detailLabel.text = item.entry.username
 
         return cell!
+    }
+    
+    @objc private func preferencesTapped() {
+        Router.shared.routeToSettings(window: UIApplication.shared.keyWindow!)
     }
 }

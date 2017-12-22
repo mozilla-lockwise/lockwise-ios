@@ -21,4 +21,13 @@ class Router {
 
         window.rootViewController = navController
     }
+    
+    func routeToSettings(window: UIWindow) {
+        let vc = SettingsViewController()
+        let navController = UINavigationController(rootViewController: vc)
+        
+        window.rootViewController?.present(navController, animated: true) {
+            
+        }
+    }
 }
