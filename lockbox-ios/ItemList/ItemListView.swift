@@ -30,8 +30,6 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         super.viewDidLoad()
         self.view.addSubview(self.webView)
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: self, action: #selector(preferencesTapped))
-        self.navigationItem.rightBarButtonItem?.tintColor = .black
         self.navigationItem.title = "Your Lockbox"
         styleNavigationBar()
 
@@ -60,7 +58,6 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
     
     @objc private func preferencesTapped() {
         Router.shared.routeToSettings(window: UIApplication.shared.keyWindow!)
-        return cell!
     }
 
     private func styleNavigationBar() {
@@ -68,8 +65,10 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         prefButton.setImage(prefImage, for: .normal)
         prefButton.tintColor = .white
+        prefButton.addTarget(self, action: #selector(ItemListView.preferencesTapped), for: .touchUpInside)
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
+        self.navigationItem.rightBarButtonItem?.action = #selector(ItemListView.preferencesTapped)
         self.navigationItem.title = "Your Lockbox"
 
         self.navigationController!.navigationBar.titleTextAttributes = [
@@ -79,6 +78,5 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
 
         self.navigationController!.navigationBar.addLockboxGradient()
         self.navigationController!.navigationBar.layoutIfNeeded()
->>>>>>> access
     }
 }

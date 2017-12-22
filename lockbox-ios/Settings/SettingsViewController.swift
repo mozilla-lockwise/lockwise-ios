@@ -21,6 +21,15 @@ class SettingsViewController: UITableViewController {
         
         navigationItem.title = UIConstants.strings.settingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.done, style: UIBarButtonItemStyle.done, target: self, action: #selector(SettingsViewController.doneTapped))
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ], for: .normal)
+        
+        navigationController!.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
         
         view.backgroundColor = UIConstants.colors.settingsBackground
         tableView.tableFooterView = UIView()
