@@ -25,6 +25,24 @@ class ItemListPresenterSpec : QuickSpec {
             listCalled = true
             return itemListObservable!.take(1).asSingle()
         }
+
+        override func dataStoreLoaded() -> Observable<Void> {
+            let subject = ReplaySubject<Void>.create(bufferSize: 1)
+            subject.onNext(())
+            return subject.asObservable()
+        }
+
+        override func open() -> Single<Any> {
+            let subject = ReplaySubject<Any>.create(bufferSize: 1)
+            subject.onNext("yep")
+            return subject.take(1).asSingle()
+        }
+
+        override func unlock(scopedKey: String) -> Single<Any> {
+            let subject = ReplaySubject<Any>.create(bufferSize: 1)
+            subject.onNext("yep")
+            return subject.take(1).asSingle()
+        }
     }
 
     class FakeWebView : WebView {}

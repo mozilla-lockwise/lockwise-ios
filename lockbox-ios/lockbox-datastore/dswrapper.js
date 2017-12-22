@@ -23,9 +23,7 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
 
   async initialize(opts) {
     return super.initialize(opts).then( function(result) {
-      console.log("successful initialization")
       try {
-        console.log("successful initialization")
         webkit.messageHandlers.InitializeComplete.postMessage("done")
       } catch (err) {
         console.log("callback function not available")
@@ -50,8 +48,8 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
     )
   }
 
-  async unlock(pwd) {
-      return super.unlock(pwd).then( () => {
+  async unlock(scopedKey) {
+      return super.unlock(scopedKey).then( () => {
         try {
           webkit.messageHandlers.UnlockComplete.postMessage("unlock success")
         } catch (err) {
@@ -83,7 +81,6 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
 
   async add(item) {
     return super.add(item).then( function(addedItem) {
-      console.log("adding completed successfully!")
       try {
         webkit.messageHandlers.AddComplete.postMessage(addedItem)
       } catch (err) {

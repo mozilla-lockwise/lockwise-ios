@@ -18,7 +18,6 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         webConfig.preferences.javaScriptEnabled = true
 
         self.webView = WebView(frame: .zero, configuration: webConfig)
-
         super.init(coder: aDecoder)
     }
 
@@ -34,6 +33,7 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "preferences"), style: .done, target: self, action: #selector(preferencesTapped))
         self.navigationItem.rightBarButtonItem?.tintColor = .black
         self.navigationItem.title = "Your Lockbox"
+        styleNavigationBar()
 
         self.presenter.onViewReady()
     }
@@ -52,11 +52,33 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
 
         cell!.titleLabel.text = item.title
         cell!.detailLabel.text = item.entry.username
+        cell!.detailLabel.text = (item.entry.username == "" || item.entry.username == nil) ? "(no username)" : item.entry.username
+        cell!.kebabButton.tintColor = UIColor.kebabBlue
 
         return cell!
     }
     
     @objc private func preferencesTapped() {
         Router.shared.routeToSettings(window: UIApplication.shared.keyWindow!)
+        return cell!
+    }
+
+    private func styleNavigationBar() {
+        let prefButton = UIButton()
+        let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
+        prefButton.setImage(prefImage, for: .normal)
+        prefButton.tintColor = .white
+
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
+        self.navigationItem.title = "Your Lockbox"
+
+        self.navigationController!.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
+
+        self.navigationController!.navigationBar.addLockboxGradient()
+        self.navigationController!.navigationBar.layoutIfNeeded()
+>>>>>>> access
     }
 }
