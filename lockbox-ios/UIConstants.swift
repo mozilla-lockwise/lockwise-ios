@@ -20,9 +20,4 @@ struct UIConstants {
         static let settingsConfigurationAutoLock = NSLocalizedString("Settings.configuration.autoLock", value: "Auto Lock", comment: "Auto Lock label in settings")
         static let done = NSLocalizedString("Done", value: "Done", comment: "Label do complete a section of the app")
     }
-    
-    struct colors {
-        static let settingsBackground = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1.0)
-        static let settingsHeader = UIColor(red: 115/255, green: 115/255, blue: 115/255, alpha: 1.0)
-    }
 }

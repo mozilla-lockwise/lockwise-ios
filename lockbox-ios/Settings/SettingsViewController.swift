@@ -23,15 +23,20 @@ class SettingsViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.done, style: UIBarButtonItemStyle.done, target: self, action: #selector(SettingsViewController.doneTapped))
         navigationItem.rightBarButtonItem?.setTitleTextAttributes([
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .light)
         ], for: .normal)
+        
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .light)
+            ], for: .highlighted)
         
         navigationController!.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
         
-        view.backgroundColor = UIConstants.colors.settingsBackground
+        view.backgroundColor = UIColor.settingsBackground
         tableView.tableFooterView = UIView()
     }
     
@@ -45,7 +50,7 @@ class SettingsViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
-        cell.textLabel?.textColor = UIConstants.colors.settingsHeader
+        cell.textLabel?.textColor = UIColor.settingsHeader
         cell.textLabel?.font = UIFont.systemFont(ofSize: 13.0, weight: UIFont.Weight.regular)
         
         cell.textLabel?.text = section == 0 ? UIConstants.strings.settingsHelpSectionHeader : UIConstants.strings.settingsConfigurationSectionHeader
@@ -60,6 +65,10 @@ class SettingsViewController: UITableViewController {
         cell.accessoryType = .disclosureIndicator
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     @objc func doneTapped() {
