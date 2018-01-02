@@ -59,6 +59,9 @@
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8E015751FE346F200CA3B9F /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E015741FE346F200CA3B9F /* SettingsViewController.swift */; };
+		D8E015771FE3477600CA3B9F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E015761FE3477600CA3B9F /* Settings.swift */; };
+		D8E015791FE5A57B00CA3B9F /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E015781FE5A57B00CA3B9F /* UIConstants.swift */; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
 		D8FD414F1FAD333E0080D183 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD414E1FAD333D0080D183 /* AppInfo.swift */; };
 /* End PBXBuildFile section */
@@ -154,6 +157,9 @@
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
+		D8E015741FE346F200CA3B9F /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		D8E015761FE3477600CA3B9F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		D8E015781FE5A57B00CA3B9F /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D8FD414E1FAD333D0080D183 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -289,6 +295,7 @@
 		7D5DF8751F87F2600039B23E /* lockbox-ios */ = {
 			isa = PBXGroup;
 			children = (
+				D8E015731FE346D900CA3B9F /* Settings */,
 				7D249DC21FB22F87007E603D /* module.modulemap */,
 				7D93F7651FB1276800354F03 /* FxA */,
 				7D5DF8761F87F2600039B23E /* AppDelegate.swift */,
@@ -303,6 +310,8 @@
 				7AA543B9C7BBDB7FFAAF4EAC /* ItemList */,
 				7AA540EC4E53AF8FC33018B7 /* WebView.swift */,
 				7AA54788E38EF49D9F45C241 /* Router.swift */,
+				D8E015761FE3477600CA3B9F /* Settings.swift */,
+				D8E015781FE5A57B00CA3B9F /* UIConstants.swift */,
 			);
 			path = "lockbox-ios";
 			sourceTree = "<group>";
@@ -313,6 +322,14 @@
 				7D93F7621FB1275B00354F03 /* KeyManager.swift */,
 			);
 			path = FxA;
+			sourceTree = "<group>";
+		};
+		D8E015731FE346D900CA3B9F /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D8E015741FE346F200CA3B9F /* SettingsViewController.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -446,8 +463,11 @@
 				7AA54DC38FF49F029CDE96B3 /* Item.swift in Sources */,
 				D8FD414F1FAD333E0080D183 /* AppInfo.swift in Sources */,
 				7DCBBD431FCF171300FAF5E9 /* ItemListCell.swift in Sources */,
+				D8E015751FE346F200CA3B9F /* SettingsViewController.swift in Sources */,
 				7D93F7641FB1275C00354F03 /* KeyManager.swift in Sources */,
+				D8E015771FE3477600CA3B9F /* Settings.swift in Sources */,
 				7AA5427F6298C0C9107E6A10 /* String+.swift in Sources */,
+				D8E015791FE5A57B00CA3B9F /* UIConstants.swift in Sources */,
 				7AA547BA9139708A7E3A6607 /* ItemListView.swift in Sources */,
 				7AA5421EF6C4FA28A813F4FF /* ItemListPresenter.swift in Sources */,
 				7AA5482342856FFA2230927C /* Parser.swift in Sources */,

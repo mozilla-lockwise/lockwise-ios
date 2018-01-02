@@ -12,7 +12,12 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
     private var items:[Item] = []
 
     required init?(coder aDecoder: NSCoder) {
-        self.webView = WebView(frame: .zero, configuration: WKWebViewConfiguration())
+        let webConfig = WKWebViewConfiguration()
+
+        webConfig.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+        webConfig.preferences.javaScriptEnabled = true
+
+        self.webView = WebView(frame: .zero, configuration: webConfig)
         super.init(coder: aDecoder)
     }
 
@@ -24,6 +29,8 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(self.webView)
+
+        self.navigationItem.title = "Your Lockbox"
         styleNavigationBar()
 
         self.presenter.onViewReady()
@@ -42,10 +49,15 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         let item = items[indexPath.row]
 
         cell!.titleLabel.text = item.title
+        cell!.detailLabel.text = item.entry.username
         cell!.detailLabel.text = (item.entry.username == "" || item.entry.username == nil) ? "(no username)" : item.entry.username
         cell!.kebabButton.tintColor = UIColor.kebabBlue
 
         return cell!
+    }
+    
+    @objc private func preferencesTapped() {
+        Router.shared.routeToSettings(window: UIApplication.shared.keyWindow!)
     }
 
     private func styleNavigationBar() {
@@ -53,8 +65,10 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         prefButton.setImage(prefImage, for: .normal)
         prefButton.tintColor = .white
+        prefButton.addTarget(self, action: #selector(ItemListView.preferencesTapped), for: .touchUpInside)
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
+        self.navigationItem.rightBarButtonItem?.action = #selector(ItemListView.preferencesTapped)
         self.navigationItem.title = "Your Lockbox"
 
         self.navigationController!.navigationBar.titleTextAttributes = [

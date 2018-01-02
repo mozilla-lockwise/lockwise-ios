@@ -57,7 +57,7 @@ class ItemListViewSpec : QuickSpec {
                                             .username("me")
                                             .build())
                             .build(),
-                    Item.Builder()
+                    Item.Builder().build()
                             .title("sum item")
                             .entry(
                                     ItemEntry.Builder()
@@ -73,7 +73,7 @@ class ItemListViewSpec : QuickSpec {
                     expect(self.subject.tableView(self.subject.tableView, numberOfRowsInSection: 0)).to(equal(items.count))
                 }
 
-                it("configures cells correctly when the item has a username and a title") {
+                it("configures cells correctly") {
                     let cell = self.subject.tableView(self.subject.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as! ItemListCell
 
                     expect(cell.titleLabel!.text).to(equal(items[0].title))

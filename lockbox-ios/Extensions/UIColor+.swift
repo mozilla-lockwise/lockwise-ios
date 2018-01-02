@@ -8,6 +8,8 @@ extension UIColor {
     static let lockBoxTeal = UIColor(hex: 0x00BAD6)
     static let lockBoxBlue = UIColor(hex: 0x0088D9)
     static let kebabBlue = UIColor(hex: 0x003EAA)
+    static let settingsBackground = UIColor(red: 239, green: 239, blue: 244)
+    static let settingsHeader = UIColor(red: 115, green: 115, blue: 115)
 
     convenience init(red: Int, green: Int, blue: Int) {
         assert(red >= 0 && red <= 255, "Invalid red component")
