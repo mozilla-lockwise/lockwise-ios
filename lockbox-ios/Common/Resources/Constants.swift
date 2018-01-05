@@ -5,5 +5,8 @@
 import Foundation
 
 struct Constant {
+    static let clientID = "1b024772203a0849"
+    static let oauthHost = "oauth.accounts.firefox.com"
+    static let profileHost = "profile.accounts.firefox.com"
     static let redirectURI = "lockbox://redirect.ios"
 }

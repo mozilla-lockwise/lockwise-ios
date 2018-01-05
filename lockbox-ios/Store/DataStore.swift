@@ -10,9 +10,9 @@ class DataStore {
     public static let shared = DataStore()
 
     fileprivate let disposeBag = DisposeBag()
-    fileprivate var itemList = Variable<[Item]>([])
-    fileprivate var initialized = Variable<Bool>(false)
-    fileprivate var locked = Variable<Bool>(true)
+    fileprivate var itemList = ReplaySubject<[Item]>.create(bufferSize: 1)
+    fileprivate var initialized = ReplaySubject<Bool>.create(bufferSize: 1)
+    fileprivate var locked = ReplaySubject<Bool>.create(bufferSize: 1)
 
     public var onItemList:Observable<[Item]> {
         return self.itemList.asObservable()
@@ -35,13 +35,13 @@ class DataStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .list(let list):
-                        self.itemList.value = list
+                        self.itemList.onNext(list)
                         break
                     case .locked(let locked):
-                        self.locked.value = locked
+                        self.locked.onNext(locked)
                         break
                     case .initialized(let initialized):
-                        self.initialized.value = initialized
+                        self.initialized.onNext(initialized)
                         break
                     }
                  })

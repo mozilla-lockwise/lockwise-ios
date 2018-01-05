@@ -19,48 +19,24 @@ class RouteActionSpec : QuickSpec {
     }
 
     private var dispatcher:FakeDispatcher!
+    var subject:RouteActionHandler!
 
     override func spec() {
         describe("RouteActionHandler") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
+                self.subject = RouteActionHandler(dispatcher: self.dispatcher)
             }
 
-            describe("LoginRouteActionHandler") {
-                var subject:LoginRouteActionHandler!
+            describe("invoke") {
                 beforeEach {
-                    subject = LoginRouteActionHandler(dispatcher: self.dispatcher)
+                    self.subject.invoke(LoginRouteAction.fxa)
                 }
 
-                describe("invoke") {
-                    beforeEach {
-                        subject.invoke(LoginRouteAction.fxa)
-                    }
-
-                    it("dispatches actions to the dispatcher") {
-                        expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                        let argument = self.dispatcher.actionTypeArgument as! LoginRouteAction
-                        expect(argument).to(equal(LoginRouteAction.fxa))
-                    }
-                }
-            }
-
-            describe("MainRouteActionHandler") {
-                var subject:MainRouteActionHandler!
-                beforeEach {
-                    subject = MainRouteActionHandler(dispatcher: self.dispatcher)
-                }
-
-                describe("invoke") {
-                    beforeEach {
-                        subject.invoke(MainRouteAction.list)
-                    }
-
-                    it("dispatches actions to the dispatcher") {
-                        expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                        let argument = self.dispatcher.actionTypeArgument as! MainRouteAction
-                        expect(argument).to(equal(MainRouteAction.list))
-                    }
+                it("dispatches actions to the dispatcher") {
+                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
+                    let argument = self.dispatcher.actionTypeArgument as! LoginRouteAction
+                    expect(argument).to(equal(LoginRouteAction.fxa))
                 }
             }
         }

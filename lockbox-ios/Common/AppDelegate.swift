@@ -11,7 +11,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+
+        self.window?.rootViewController = RootView()
+        self.window?.makeKeyAndVisible()
+
+        let navBarImage = UIImage.createGradientImage(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 64), colors: [UIColor.lockBoxTeal, UIColor.lockBoxBlue])
+        UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
+        UINavigationBar.appearance().isTranslucent = false
         setupTelemetry()
         return true
     }

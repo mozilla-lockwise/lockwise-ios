@@ -11,7 +11,7 @@ import RxBlocking
 @testable import Lockbox
 
 class DataStoreHandlerIntegrationSpec : QuickSpec {
-    private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"L9-eBkDrYHdPdXV_ymuzy_u9n3drkQcSw5pskrNl4pg\",\"k\":\"WsTdZ2tjji2W36JN9vk9s2AYsvp8eYy1pBbKPgcSLL4\"}"
+    private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA\",\"alg\":\"A256GCM\",\"k\":\"_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8\"}"
     private let uid = "333333333"
 
     override func spec() {
@@ -21,7 +21,9 @@ class DataStoreHandlerIntegrationSpec : QuickSpec {
 
             initializeValue = try! Dispatcher.shared.register
                     .filterByType(class: DataStoreAction.self)
-                    .toBlocking().first()
+                    .take(3)
+                    .toBlocking()
+                    .last()
         }
 
         it("updates initialize value after initializing successfully") {

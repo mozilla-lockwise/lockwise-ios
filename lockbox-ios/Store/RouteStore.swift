@@ -10,7 +10,7 @@ class RouteStore {
     public static let shared = RouteStore()
 
     fileprivate let disposeBag = DisposeBag()
-    fileprivate var routeState = Variable<RouteAction>(LoginRouteAction.login)
+    fileprivate var routeState = ReplaySubject<RouteAction>.create(bufferSize: 1)
 
     public var onRoute:Observable<RouteAction> {
         return routeState.asObservable()

@@ -79,13 +79,13 @@ class FxAActionSpec : QuickSpec {
                     var components = URLComponents()
 
                     components.scheme = "https"
-                    components.host = self.subject.oauthHost
+                    components.host = Constant.oauthHost
                     components.path = "/v1/authorization"
 
                     components.queryItems = [
                         URLQueryItem(name: "response_type", value: "code"),
                         URLQueryItem(name: "access_type", value: "offline"),
-                        URLQueryItem(name: "client_id", value: self.subject.clientID),
+                        URLQueryItem(name: "client_id", value: Constant.clientID),
                         URLQueryItem(name: "redirect_uri", value: Constant.redirectURI),
                         URLQueryItem(name: "scope", value: "profile:email openid \(self.subject.scope)"),
                         URLQueryItem(name: "keys_jwk", value: self.subject.jwkKey),
@@ -186,8 +186,8 @@ class FxAActionSpec : QuickSpec {
                             let jsonData = try? JSONSerialization.jsonObject(with: self.session.dataTaskRequests[tokenPath]!.httpBody!) as? [String:String]
                             expect(jsonData).notTo(beNil())
 
-                            expect(urlComponents.host).to(equal(self.subject.oauthHost))
-                            expect(jsonData!!["client_id"]).to(equal(self.subject.clientID))
+                            expect(urlComponents.host).to(equal(Constant.oauthHost))
+                            expect(jsonData!!["client_id"]).to(equal(Constant.clientID))
                             expect(jsonData!!["code"]).to(equal(code))
                             expect(jsonData!!["code_verifier"]).to(equal(self.subject.codeVerifier))
                         }
@@ -242,8 +242,8 @@ class FxAActionSpec : QuickSpec {
                                         let errorArgument = self.dispatcher.actionArguments.popLast() as! ErrorAction
                                         expect(errorArgument).to(matchErrorAction(ErrorAction(error: FxAError.UnexpectedDataFormat)))
 
-                                        let argument = self.dispatcher.actionArguments.popLast() as! FxAInformationAction
-                                        expect(argument).to(equal(FxAInformationAction.oauthInfo(info: oauthInfo)))
+                                        let argument = self.dispatcher.actionArguments.popLast() as! UserInfoAction
+                                        expect(argument).to(equal(UserInfoAction.oauthInfo(info: oauthInfo)))
                                     }
                                 }
 
@@ -287,12 +287,12 @@ class FxAActionSpec : QuickSpec {
                                                 expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
                                                 let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
 
-                                                expect(urlComponents.host).to(equal(self.subject.profileHost))
+                                                expect(urlComponents.host).to(equal(Constant.profileHost))
                                             }
 
                                             it("dispatches the scoped key to the dispatcher") {
-                                                let argument = self.dispatcher.actionArguments.last as! FxAInformationAction
-                                                expect(argument).to(equal(FxAInformationAction.scopedKey(key: scopedKey)))
+                                                let argument = self.dispatcher.actionArguments.last as! UserInfoAction
+                                                expect(argument).to(equal(UserInfoAction.scopedKey(key: scopedKey)))
                                             }
                                         }
                                     }
@@ -354,8 +354,8 @@ class FxAActionSpec : QuickSpec {
                                                     let displayArgument = self.dispatcher.actionArguments.popLast() as! FxADisplayAction
                                                     expect(displayArgument).to(equal(FxADisplayAction.finishedFetchingUserInformation))
 
-                                                    let infoArgument = self.dispatcher.actionArguments.popLast() as! FxAInformationAction
-                                                    expect(infoArgument).to(equal(FxAInformationAction.profileInfo(info: profileInfo)))
+                                                    let infoArgument = self.dispatcher.actionArguments.popLast() as! UserInfoAction
+                                                    expect(infoArgument).to(equal(UserInfoAction.profileInfo(info: profileInfo)))
                                                 }
                                             }
                                         }
@@ -372,39 +372,39 @@ class FxAActionSpec : QuickSpec {
             describe("equality") {
                 it("profileInfo is equal when the infos are equal") {
                     let profileInfo = ProfileInfo.Builder().build()
-                    expect(FxAInformationAction.profileInfo(info: profileInfo)).to(equal(FxAInformationAction.profileInfo(info: profileInfo)))
+                    expect(UserInfoAction.profileInfo(info: profileInfo)).to(equal(UserInfoAction.profileInfo(info: profileInfo)))
                 }
 
                 it("profileInfo is not equal when the infos are not equal") {
                     let profileInfo = ProfileInfo.Builder().build()
                     let secondProfileInfo = ProfileInfo.Builder().uid("jafdslkjfsdlj").build()
-                    expect(FxAInformationAction.profileInfo(info: profileInfo)).notTo(equal(FxAInformationAction.profileInfo(info: secondProfileInfo)))
+                    expect(UserInfoAction.profileInfo(info: profileInfo)).notTo(equal(UserInfoAction.profileInfo(info: secondProfileInfo)))
                 }
 
                 it("oauthInfo is equal when the infos are equal") {
                     let oauthInfo = OAuthInfo.Builder().build()
-                    expect(FxAInformationAction.oauthInfo(info: oauthInfo)).to(equal(FxAInformationAction.oauthInfo(info: oauthInfo)))
+                    expect(UserInfoAction.oauthInfo(info: oauthInfo)).to(equal(UserInfoAction.oauthInfo(info: oauthInfo)))
                 }
 
                 it("oauthInfo is not equal when the infos are not equal") {
                     let oauthInfo = OAuthInfo.Builder().build()
                     let secondOauthInfo = OAuthInfo.Builder().idToken("fsdjksfdljkds").build()
-                    expect(FxAInformationAction.oauthInfo(info: oauthInfo)).notTo(equal(FxAInformationAction.oauthInfo(info: secondOauthInfo)))
+                    expect(UserInfoAction.oauthInfo(info: oauthInfo)).notTo(equal(UserInfoAction.oauthInfo(info: secondOauthInfo)))
                 }
 
                 it("scopedKey is equal when the infos are equal") {
                     let key = "a key!"
-                    expect(FxAInformationAction.scopedKey(key: key)).to(equal(FxAInformationAction.scopedKey(key: key)))
+                    expect(UserInfoAction.scopedKey(key: key)).to(equal(UserInfoAction.scopedKey(key: key)))
                 }
 
                 it("scopedKey is not equal when the infos are not equal") {
-                    expect(FxAInformationAction.scopedKey(key: "woof")).notTo(equal(FxAInformationAction.scopedKey(key: "meow")))
+                    expect(UserInfoAction.scopedKey(key: "woof")).notTo(equal(UserInfoAction.scopedKey(key: "meow")))
 
                 }
                 it("different enum values are never equal") {
-                    expect(FxAInformationAction.oauthInfo(info: OAuthInfo.Builder().build())).notTo(equal(FxAInformationAction.profileInfo(info: ProfileInfo.Builder().build())))
-                    expect(FxAInformationAction.scopedKey(key: "blah")).notTo(equal(FxAInformationAction.profileInfo(info: ProfileInfo.Builder().build())))
-                    expect(FxAInformationAction.oauthInfo(info: OAuthInfo.Builder().build())).notTo(equal(FxAInformationAction.scopedKey(key: "a key here!")))
+                    expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().build())).notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().build())))
+                    expect(UserInfoAction.scopedKey(key: "blah")).notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().build())))
+                    expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().build())).notTo(equal(UserInfoAction.scopedKey(key: "a key here!")))
                 }
             }
         }

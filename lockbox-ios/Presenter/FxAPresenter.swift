@@ -5,26 +5,29 @@
 import Foundation
 import WebKit
 import RxSwift
+import RxCocoa
 
 protocol FxAViewProtocol: class, ErrorView {
     func loadRequest(_ urlRequest:URLRequest)
 }
 
-enum FxAError : Error {
-    case RedirectNoState, RedirectNoCode, RedirectBadState, EmptyOAuthData, EmptyProfileInfoData, UnexpectedDataFormat, Unknown
-}
-
 class FxAPresenter {
     private weak var view:FxAViewProtocol!
-    private let fxAActionHandler:FxAActionHandler
-    private let routeActionHandler:MainRouteActionHandler
-    private let store:FxAStore
+    fileprivate let fxAActionHandler:FxAActionHandler
+    fileprivate let routeActionHandler:RouteActionHandler
+    fileprivate let store:FxAStore
 
     private var disposeBag = DisposeBag()
 
+    public var onCancel:AnyObserver<Void> {
+        return Binder(self) { target, mainAction in
+            self.routeActionHandler.invoke(LoginRouteAction.welcome)
+        }.asObserver()
+    }
+
     init(view:FxAViewProtocol,
          fxAActionHandler:FxAActionHandler = FxAActionHandler.shared,
-         routeActionHandler:MainRouteActionHandler = MainRouteActionHandler.shared,
+         routeActionHandler:RouteActionHandler = RouteActionHandler.shared,
          store:FxAStore = FxAStore.shared) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
@@ -39,7 +42,7 @@ class FxAPresenter {
                         case .loadInitialURL(let url):
                             self.view.loadRequest(URLRequest(url: url))
                         case .finishedFetchingUserInformation:
-                            self.routeActionHandler.invoke(.list)
+                            self.routeActionHandler.invoke(MainRouteAction.list)
                         default:
                             break
                     }

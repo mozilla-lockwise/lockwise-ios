@@ -5,26 +5,23 @@
 import Foundation
 
 class RouteActionHandler : ActionHandler {
+    static let shared = RouteActionHandler()
     fileprivate var dispatcher:Dispatcher
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
+    }
+
+    func invoke(_ action: RouteAction) {
+        self.dispatcher.dispatch(action: action)
     }
 }
 
 protocol RouteAction: Action { }
 
 enum LoginRouteAction: RouteAction {
-    case login
+    case welcome
     case fxa
-}
-
-class LoginRouteActionHandler: RouteActionHandler {
-    static let shared = LoginRouteActionHandler()
-
-    func invoke(_ action: LoginRouteAction) {
-        self.dispatcher.dispatch(action: action)
-    }
 }
 
 enum MainRouteAction: RouteAction {
@@ -42,13 +39,5 @@ extension MainRouteAction: Equatable {
             default:
                 return false
         }
-    }
-}
-
-class MainRouteActionHandler : RouteActionHandler {
-    static let shared = MainRouteActionHandler()
-
-    func invoke(_ action: MainRouteAction) {
-        self.dispatcher.dispatch(action: action)
     }
 }
