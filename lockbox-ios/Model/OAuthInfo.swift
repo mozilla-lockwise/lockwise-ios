@@ -23,6 +23,14 @@ class OAuthInfo: Codable {
         self.keysJWE = keysJWE
     }
 
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case expiresAt = "expires_in"
+        case refreshToken = "refresh_token"
+        case idToken = "id_token"
+        case keysJWE = "keys_jwe"
+    }
+
     class Builder {
         private var info:OAuthInfo!
 

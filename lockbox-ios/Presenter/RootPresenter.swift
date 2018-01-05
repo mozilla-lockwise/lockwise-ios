@@ -7,50 +7,136 @@ import RxSwift
 import RxCocoa
 
 protocol RootViewProtocol: class {
-    func showWelcomeView()
-    func showFxA()
+    func topViewIs<T>(_ class: T.Type) -> Bool
 
-    func showItemList()
-    func showItemDetail(itemId:String)
+    var loginStackDisplayed:Bool { get }
+    func startLoginStack()
+    func pushLoginView(view: LoginRouteAction)
+
+    var mainStackDisplayed:Bool { get }
+    func startMainStack()
+//    func pushMainView(view: MainRouteAction)
 }
 
-class RoutePresenter {
+struct InfoKeyInit {
+    let profileInfo:ProfileInfo?
+    let scopedKey:String?
+    let initialized:Bool
+}
+
+struct KeyLock {
+    let scopedKey:String?
+    let locked:Bool
+}
+
+class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
 
-    init(view: RootViewProtocol) {
-        self.view = view
+    fileprivate let routeStore:RouteStore
+    fileprivate let userInfoStore:UserInfoStore
+    fileprivate let dataStore:DataStore
+    fileprivate let routeActionHandler:RouteActionHandler
+    fileprivate let dataStoreActionHandler:DataStoreActionHandler
 
-        RouteStore.shared.onRoute
+    init(view:RootViewProtocol,
+         routeStore:RouteStore = RouteStore.shared,
+         userInfoStore:UserInfoStore = UserInfoStore.shared,
+         dataStore:DataStore = DataStore.shared,
+         routeActionHandler:RouteActionHandler = RouteActionHandler.shared,
+         dataStoreActionHandler:DataStoreActionHandler = DataStoreActionHandler.shared
+    ) {
+        self.view = view
+        self.routeStore = routeStore
+        self.userInfoStore = userInfoStore
+        self.dataStore = dataStore
+        self.routeActionHandler = routeActionHandler
+        self.dataStoreActionHandler = dataStoreActionHandler
+
+        // request init & lock status update on app launch
+        self.dataStoreActionHandler.updateInitialized()
+        self.dataStoreActionHandler.updateLocked()
+
+        // initialize if not initialized
+        Observable.combineLatest(self.userInfoStore.profileInfo, self.userInfoStore.scopedKey, self.dataStore.onInitialized)
+                .map { (element: (ProfileInfo?, String?, Bool)) -> InfoKeyInit in
+                    return InfoKeyInit(profileInfo: element.0, scopedKey: element.1, initialized: element.2)
+                 }
+                .filter { (latest: InfoKeyInit) in
+                    return (latest.profileInfo != nil) == (latest.scopedKey != nil)
+                }
+                .subscribe(onNext: { (latest: InfoKeyInit) in
+                    guard let info = latest.profileInfo,
+                          let scopedKey = latest.scopedKey else {
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                        return
+                    }
+
+                    if !latest.initialized {
+                        self.dataStoreActionHandler.initialize(scopedKey: scopedKey, uid: info.uid)
+                    }
+                })
+                .disposed(by: self.disposeBag)
+
+        // blindly unlock for now
+        Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onLocked)
+                .map { (element: (String?, Bool)) -> KeyLock in
+                    return KeyLock(scopedKey: element.0, locked: element.1)
+                 }
+                .filter { (latest: KeyLock) in
+                    return latest.scopedKey != nil && latest.locked
+                }
+                .subscribe(onNext: { (latest: KeyLock) in
+                    guard let scopedKey = latest.scopedKey else { return }
+
+                    if latest.locked {
+                        self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
+                    }
+                })
+                .disposed(by: self.disposeBag)
+    }
+
+    func onViewReady() {
+        self.routeStore.onRoute
                 .filterByType(class: LoginRouteAction.self)
-                .bind(to: showLogin)
+                .asDriver(onErrorJustReturn: .welcome)
+                .drive(showLogin)
                 .disposed(by: disposeBag)
 
-        RouteStore.shared.onRoute
+        self.routeStore.onRoute
                 .filterByType(class: MainRouteAction.self)
-                .bind(to: showList)
+                .asDriver(onErrorJustReturn: .list)
+                .drive(showList)
                 .disposed(by: disposeBag)
     }
 
-    fileprivate var showLogin:AnyObserver<LoginRouteAction> {
+    lazy fileprivate var showLogin:AnyObserver<LoginRouteAction> = { [unowned self] in
         return Binder(self) { target, loginAction in
+            guard let view = self.view else { return }
+
+            if !view.loginStackDisplayed {
+                view.startLoginStack()
+            }
+
             switch loginAction {
-                case .login:
-                    self.view!.showWelcomeView()
+                case .welcome:
+                    if !view.topViewIs(WelcomeView.self) {
+                        view.pushLoginView(view: .welcome)
+                    }
                 case .fxa:
-                    self.view!.showFxA()
+                    if !view.topViewIs(FxAView.self) {
+                        view.pushLoginView(view: .fxa)
+                    }
             }
         }.asObserver()
-    }
+    }()
 
-    fileprivate var showList:AnyObserver<MainRouteAction> {
+    lazy fileprivate var showList:AnyObserver<MainRouteAction> = { [unowned self] in
         return Binder(self) { target, mainAction in
             switch mainAction {
-            case .list:
-                self.view!.showItemList()
-            case .detail(let itemId):
-                self.view!.showItemDetail(itemId: itemId)
+                // placeholder for future view work
+            case .list, .detail(_): break
             }
         }.asObserver()
-    }
+    }()
 }

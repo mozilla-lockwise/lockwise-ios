@@ -13,6 +13,10 @@ import RxTest
 
 class FxAPresenterSpec : QuickSpec {
     class FakeFxAView : FxAViewProtocol {
+        func dismiss() {
+
+        }
+
         var loadRequestArgument:URLRequest?
 
         func loadRequest(_ urlRequest: URLRequest) {
@@ -56,11 +60,11 @@ class FxAPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: MainRouteActionHandler {
-        var invokeArgument:MainRouteAction?
+    class FakeRouteActionHandler: RouteActionHandler {
+        var invokeArgument:RouteAction?
 
-        override func invoke(_ actionType: MainRouteAction) {
-            self.invokeArgument = actionType
+        override func invoke(_ action: RouteAction) {
+            self.invokeArgument = action
         }
     }
 
@@ -118,49 +122,62 @@ class FxAPresenterSpec : QuickSpec {
 
                     it("tells routing action handler to show the listview") {
                         expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        expect(self.routeActionHandler.invokeArgument).to(equal(MainRouteAction.list))
+                        let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(argument).to(equal(MainRouteAction.list))
+                    }
+                }
+            }
+
+            describe(".webViewRequest") {
+                var decisionHandler:((WKNavigationActionPolicy) -> Void)!
+                var returnedPolicy:WKNavigationActionPolicy?
+
+                beforeEach {
+                    decisionHandler = { policy in
+                        returnedPolicy = policy
                     }
                 }
 
-                describe(".webViewRequest") {
-                    var decisionHandler:((WKNavigationActionPolicy) -> Void)!
-                    var returnedPolicy:WKNavigationActionPolicy?
+                describe("when called with a request URL that doesn't match the redirect URI") {
+                    beforeEach {
+                        let request = URLRequest(url: URL(string:"http://wwww.somefakewebsite.com")!)
+                        self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request:request), decisionHandler: decisionHandler)
+                    }
+
+                    it("allows the navigation action") {
+                        expect(returnedPolicy!).to(equal(WKNavigationActionPolicy.allow))
+                    }
+                }
+
+                describe("when called with a request URL matching the redirect URI") {
+                    var urlComponents = URLComponents()
 
                     beforeEach {
-                        decisionHandler = { policy in
-                            returnedPolicy = policy
-                        }
+                        urlComponents.scheme = "lockbox"
+                        urlComponents.host = "redirect.ios"
+                        urlComponents.path = "/"
+
+                        let request = URLRequest(url: urlComponents.url!)
+                        self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
                     }
 
-                    describe("when called with a request URL that doesn't match the redirect URI") {
-                        beforeEach {
-                            let request = URLRequest(url: URL(string:"http://wwww.somefakewebsite.com")!)
-                            self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request:request), decisionHandler: decisionHandler)
-                        }
-
-                        it("allows the navigation action") {
-                            expect(returnedPolicy!).to(equal(WKNavigationActionPolicy.allow))
-                        }
+                    it("cancels the navigation action & tells the fxaactionhandler") {
+                        expect(returnedPolicy!).to(equal(WKNavigationActionPolicy.cancel))
+                        expect(self.fxAActionHandler.matchingRedirectURLComponentsArgument).notTo(beNil())
+                        expect(self.fxAActionHandler.matchingRedirectURLComponentsArgument).to(equal(urlComponents))
                     }
+                }
+            }
 
-                    describe("when called with a request URL matching the redirect URI") {
-                        var urlComponents = URLComponents()
+            describe("onCancel") {
+                beforeEach {
+                    self.subject.onCancel.onNext(())
+                }
 
-                        beforeEach {
-                            urlComponents.scheme = "lockbox"
-                            urlComponents.host = "redirect.ios"
-                            urlComponents.path = "/"
-
-                            let request = URLRequest(url: urlComponents.url!)
-                            self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
-                        }
-
-                        it("cancels the navigation action & tells the fxaactionhandler") {
-                            expect(returnedPolicy!).to(equal(WKNavigationActionPolicy.cancel))
-                            expect(self.fxAActionHandler.matchingRedirectURLComponentsArgument).notTo(beNil())
-                            expect(self.fxAActionHandler.matchingRedirectURLComponentsArgument).to(equal(urlComponents))
-                        }
-                    }
+                it("routes back to login") {
+                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                    let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(argument).to(equal(LoginRouteAction.welcome))
                 }
             }
         }

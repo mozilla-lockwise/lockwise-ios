@@ -5,20 +5,18 @@
 import WebKit
 import UIKit
 import RxSwift
+import RxCocoa
 
 class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
     internal var presenter: FxAPresenter!
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
 
-    init(webView: WKWebView? = WKWebView()) {
-        self.webView = webView!
-        super.init(nibName: nil, bundle:nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        self.webView = WKWebView()
-        super.init(coder: aDecoder)
+    override var preferredStatusBarStyle: UIStatusBarStyle { return UIStatusBarStyle.lightContent }
+    
+    init(webView: WKWebView = WKWebView()) {
+        self.webView = webView
+        super.init(nibName: nil, bundle: nil)
         self.presenter = FxAPresenter(view: self)
     }
 
@@ -26,10 +24,9 @@ class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
         super.viewDidLoad()
         self.webView.navigationDelegate = self
         self.view = self.webView
-        
-        if (self.presenter != nil) {
-            self.presenter.onViewReady()
-        }
+        styleNavigationBar()
+
+        self.presenter.onViewReady()
     }
 
     func loadRequest(_ urlRequest:URLRequest) {
@@ -38,5 +35,22 @@ class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         presenter.webViewRequest(decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
+    }
+
+    private func styleNavigationBar() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: nil, action: nil)
+        
+        self.navigationItem.leftBarButtonItem!.rx.tap
+                .bind(to: self.presenter.onCancel)
+                .disposed(by: self.disposeBag)
+
+        self.navigationItem.leftBarButtonItem!.setTitleTextAttributes([
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ], for: .normal)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("not implemented")
     }
 }

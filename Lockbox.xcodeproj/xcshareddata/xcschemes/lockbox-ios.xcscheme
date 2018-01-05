@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-               BuildableName = "lockbox-ios.app"
+               BuildableName = "Lockbox.app"
                BlueprintName = "Lockbox"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
@@ -49,7 +49,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "lockbox-ios.app"
+            BuildableName = "Lockbox.app"
             BlueprintName = "Lockbox"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
