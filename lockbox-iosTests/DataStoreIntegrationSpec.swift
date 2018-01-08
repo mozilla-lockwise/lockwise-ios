@@ -20,10 +20,7 @@ class DataStoreIntegrationSpec : QuickSpec {
             let vc = UIViewController(nibName: nil, bundle: nil)
             UIApplication.shared.delegate!.window!!.rootViewController = vc
 
-            var webView = WebView(frame: .zero, configuration: WKWebViewConfiguration())
-            self.subject = DataStore(webView: &webView)
-
-            vc.view.addSubview(webView)
+            self.subject = DataStore()
 
             _ = try! self.subject.dataStoreLoaded().toBlocking().first()
         }

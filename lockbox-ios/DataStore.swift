@@ -54,16 +54,14 @@ class DataStore: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         }
     }
 
-    init(webView: inout WebView,
-         dataStoreName: String? = "ds",
+    init(dataStoreName: String? = "ds",
          parser:ItemParser? = Parser()) {
         self.dataStoreName = dataStoreName
         self.parser = parser
         super.init()
 
-        webView = WebView(frame: .zero, configuration: self.webViewConfiguration)
-        webView.navigationDelegate = self
-        self.webView = webView
+        self.webView = WebView(frame: .zero, configuration: self.webViewConfiguration)
+        self.webView.navigationDelegate = self
 
         let baseUrl = URL(string: "file://\(Bundle.main.bundlePath)/lockbox-datastore/")!
         let path = "file://\(Bundle.main.bundlePath)/lockbox-datastore/index.html"

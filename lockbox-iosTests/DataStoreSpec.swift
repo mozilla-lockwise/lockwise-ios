@@ -104,8 +104,7 @@ class DataStoreSpec: QuickSpec {
             beforeEach {
                 self.webView = FakeWebView()
                 self.parser = FakeParser()
-                var webView = WebView(frame: .zero, configuration: WKWebViewConfiguration())
-                self.subject = DataStore(webView: &webView, dataStoreName: self.dataStoreName, parser:self.parser)
+                self.subject = DataStore(dataStoreName: self.dataStoreName, parser:self.parser)
 
                 self.subject.webView = self.webView
             }
