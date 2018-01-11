@@ -65,3 +65,11 @@ class OAuthInfo: Codable {
         }
     }
 }
+
+extension OAuthInfo: Equatable {
+    static func ==(lhs: OAuthInfo, rhs: OAuthInfo) -> Bool {
+        return lhs.accessToken == rhs.accessToken &&
+                lhs.refreshToken == rhs.refreshToken &&
+                lhs.idToken == rhs.idToken
+    }
+}
