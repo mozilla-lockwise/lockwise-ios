@@ -64,7 +64,7 @@ class ItemSpec : QuickSpec {
                 expect(lhs == rhs).to(beFalse())
             })
             
-            it("returns true when the ids are the same but other parameters are different") {
+            it("returns true when the ids are the same but the entry or origin parameters are different") {
                 let id = "murp"
                 lhs = Item.Builder()
                     .entry(ItemEntry.Builder().kind("blah").build())
@@ -77,7 +77,20 @@ class ItemSpec : QuickSpec {
                     .origins([])
                     .build()
                 
-                expect(lhs == rhs).to(beTrue())
+                expect(lhs == rhs).to(beFalse())
+
+                lhs = Item.Builder()
+                    .entry(ItemEntry.Builder().kind("blah").build())
+                    .id(id)
+                    .origins([])
+                    .build()
+                rhs = Item.Builder()
+                    .entry(ItemEntry.Builder().kind("blah").build())
+                    .id(id)
+                    .origins(["www.meow.com"])
+                    .build()
+
+                expect(lhs == rhs).to(beFalse())
             }
             
             it("returns true when the ids are the same and all other parameters are the same") {

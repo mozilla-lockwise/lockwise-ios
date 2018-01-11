@@ -18,13 +18,12 @@ class KeychainManagerSpec : QuickSpec {
                 self.subject = KeychainManager()
             }
 
-            describe("saving an email") {
+            describe("saving a string") {
                 let email = "doggo@mozilla.com"
-                beforeEach {
-                    self.subject.saveUserEmail(email)
-                }
 
-                it("saves the email to the keychain") {
+                it("saves the string to the keychain") {
+                    expect(self.subject.save(email, identifier: .email)).to(beTrue())
+
                     let query:[String:Any] = [
                         kSecAttrService as String: Bundle.main.bundleIdentifier!,
                         kSecAttrAccount as String: "email",
@@ -47,68 +46,78 @@ class KeychainManagerSpec : QuickSpec {
 
                     expect(storedEmail).to(equal(email))
                 }
+
+                describe("updating the string") {
+                    let newEmail = "dogzone@mozilla.com"
+
+                    it("updates the string in the keychain") {
+                        expect(self.subject.save(newEmail, identifier: .email)).to(beTrue())
+
+                        let query:[String:Any] = [
+                            kSecAttrService as String: Bundle.main.bundleIdentifier!,
+                            kSecAttrAccount as String: "email",
+                            kSecClass as String: kSecClassGenericPassword,
+                            kSecAttrSynchronizable as String: kCFBooleanFalse,
+                            kSecMatchLimit as String: kSecMatchLimitOne,
+                            kSecReturnData as String: true,
+                        ]
+                        var item: AnyObject?
+                        let status = withUnsafeMutablePointer(to: &item) {
+                            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+                        }
+
+                        guard status == noErr,
+                              let emailData = item as? Data,
+                              let storedEmail = String(data: emailData, encoding: .utf8) else {
+                            fail("Item not found in correct format")
+                            abort()
+                        }
+
+                        expect(storedEmail).to(equal(newEmail))
+                    }
+
+                    it("replaces the string in the keychain if the value is the same") {
+                        expect(self.subject.save(email, identifier: .email)).to(beTrue())
+
+                        let query:[String:Any] = [
+                            kSecAttrService as String: Bundle.main.bundleIdentifier!,
+                            kSecAttrAccount as String: "email",
+                            kSecClass as String: kSecClassGenericPassword,
+                            kSecAttrSynchronizable as String: kCFBooleanFalse,
+                            kSecMatchLimit as String: kSecMatchLimitOne,
+                            kSecReturnData as String: true,
+                        ]
+                        var item: AnyObject?
+                        let status = withUnsafeMutablePointer(to: &item) {
+                            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+                        }
+
+                        guard status == noErr,
+                              let emailData = item as? Data,
+                              let storedEmail = String(data: emailData, encoding: .utf8) else {
+                            fail("Item not found in correct format")
+                            abort()
+                        }
+
+                        expect(storedEmail).to(equal(email))
+                    }
+                }
             }
 
-            describe("saving a scoped key") {
-                let key = "sdfkljafsdlkhjfdsahjksdfjkladfsmn,basdfhjklzxdjkldsa"
-                beforeEach {
-                    self.subject.saveScopedKey(key)
+            describe("retrieving a string") {
+                describe("when the string has not previously been saved") {
+                    it("returns nil") {
+                        expect(self.subject.retrieve(.scopedKey)).to(beNil())
+                    }
                 }
 
-                it("saves the key to the keychain") {
+                describe("when the string has previously been saved") {
+                    let email = "doggo@mozilla.com"
 
-                    let query:[String:Any] = [
-                        kSecAttrService as String: Bundle.main.bundleIdentifier!,
-                        kSecAttrAccount as String: "scopedKey",
-                        kSecClass as String: kSecClassGenericPassword,
-                        kSecAttrSynchronizable as String: kCFBooleanFalse,
-                        kSecMatchLimit as String: kSecMatchLimitOne,
-                        kSecReturnData as String: true,
-                    ]
-                    var item: AnyObject?
-                    let status = withUnsafeMutablePointer(to: &item) {
-                        SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+                    it("retrieves the saved value successfully") {
+                        expect(self.subject.save(email, identifier: .email)).to(beTrue())
+                        expect(self.subject.retrieve(.email)).to(equal(email))
                     }
-
-                    guard status == noErr,
-                          let scopedKeyData = item as? Data,
-                          let storedKey = String(data: scopedKeyData, encoding: .utf8) else {
-                        fail("Item not found in correct format")
-                        abort()
-                    }
-
-                    expect(storedKey).to(equal(key))
-                }
-            }
-
-            describe("saving a uid") {
-                let uid = "54765973829"
-                beforeEach {
-                    self.subject.saveFxAUID(uid)
-                }
-
-                it("saves the uid to the keychain") {
-                    let query:[String:Any] = [
-                        kSecAttrService as String: Bundle.main.bundleIdentifier!,
-                        kSecAttrAccount as String: "uid",
-                        kSecClass as String: kSecClassGenericPassword,
-                        kSecAttrSynchronizable as String: kCFBooleanFalse,
-                        kSecMatchLimit as String: kSecMatchLimitOne,
-                        kSecReturnData as String: true,
-                    ]
-                    var item: AnyObject?
-                    let status = withUnsafeMutablePointer(to: &item) {
-                        SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
-                    }
-
-                    guard status == noErr,
-                          let scopedKeyData = item as? Data,
-                          let storedKey = String(data: scopedKeyData, encoding: .utf8) else {
-                        fail("Item not found in correct format")
-                        abort()
-                    }
-
-                    expect(storedKey).to(equal(uid))
                 }
             }
         }

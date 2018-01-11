@@ -35,3 +35,10 @@ class ProfileInfo: Codable {
         }
     }
 }
+
+extension ProfileInfo: Equatable {
+    static func ==(lhs: ProfileInfo, rhs: ProfileInfo) -> Bool {
+        return lhs.uid == rhs.uid &&
+                lhs.email == rhs.email
+    }
+}

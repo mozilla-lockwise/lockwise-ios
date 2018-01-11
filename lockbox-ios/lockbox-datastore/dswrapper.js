@@ -68,45 +68,4 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
       }
     })
   }
-
-  async get(id) {
-    return super.get(id).then( function(entry) {
-      try {
-        webkit.messageHandlers.GetComplete.postMessage(entry)
-      } catch (err) {
-        console.log("callback function not available")
-      }
-    })
-  }
-
-  async add(item) {
-    return super.add(item).then( function(addedItem) {
-      try {
-        webkit.messageHandlers.AddComplete.postMessage(addedItem)
-      } catch (err) {
-        console.log("callback function not available")
-      }
-    })
-  }
-
-  async update(item) {
-    return super.update(item).then( function(updatedItem) {
-      try {
-        webkit.messageHandlers.UpdateComplete.postMessage(updatedItem)
-      } catch (err){
-        console.log("callback function not available")
-      }
-    })
-  }
-
-  async remove(id) {
-    return super.remove(id).then( () => {
-        try {
-          webkit.messageHandlers.DeleteComplete.postMessage("delete completed")
-        } catch (err) {
-          console.log("callback function not available")
-        }
-      }
-    )
-  }
 }

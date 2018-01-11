@@ -21,8 +21,10 @@ class Item : Codable, Equatable {
     }
     
     static func ==(lhs: Item, rhs: Item) -> Bool {
-        return
-            lhs.id == rhs.id
+        return lhs.id == rhs.id &&
+                lhs.entry == rhs.entry &&
+                lhs.origins.elementsEqual(rhs.origins)
+
     }
     
     class Builder {

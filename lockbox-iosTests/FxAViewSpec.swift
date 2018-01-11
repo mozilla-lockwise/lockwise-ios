@@ -58,16 +58,16 @@ class FxAViewSpec : QuickSpec {
     override func spec() {
         beforeEach {
             self.webView = FakeWebView()
-            self.presenter = FakeFxAPresenter()
 
             self.subject = FxAView(webView: self.webView)
+            self.presenter = FakeFxAPresenter(view: self.subject)
             self.subject.presenter = self.presenter
 
             self.subject.viewDidLoad()
         }
 
         it("informs the presenter when the view is ready") {
-
+            expect(self.presenter.onViewReadyCalled).to(beTrue())
         }
 
         describe(".loadRequest()") {

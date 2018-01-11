@@ -19,6 +19,7 @@ class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
     required init?(coder aDecoder: NSCoder) {
         self.webView = WKWebView()
         super.init(coder: aDecoder)
+        self.presenter = FxAPresenter(view: self)
     }
 
     override func viewDidLoad() {
