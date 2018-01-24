@@ -11,7 +11,6 @@
 		7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54D4E439D76B910034E2A /* ErrorAction.swift */; };
 		7AA541B3BC9C4F5E6A725222 /* FxAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C12A1BC616CA2344584 /* FxAView.swift */; };
 		7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547CE3404CC8123CA455D /* Observable+Spec.swift */; };
-		7AA54220F0D9F34BBDB47A80 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA548BC842A3F888476A65F /* KeychainManager.swift */; };
 		7AA5435895EE131D6B5BD4ED /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5450E45A4DB17626F4684 /* WebView.swift */; };
 		7AA54387AFB9EEAE3C019A71 /* LoginNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54AE296DD347DE3CF5200 /* LoginNavigationController.swift */; };
 		7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5439EEDE4AB222842E7C8 /* DataStoreSpec.swift */; };
@@ -42,6 +41,7 @@
 		7AA54C6D0A4BEB2C3900424F /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542F5012A5D2E954E030A /* Data+.swift */; };
 		7AA54C8928B257655856C516 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA549BD9AE6A6DD82FDA434 /* AppDelegate.swift */; };
 		7AA54CB0835678A0038E5424 /* RouteAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E38ACC2FDBBF700D5E1 /* RouteAction.swift */; };
+		7AA54D1ED03AB249CAAB75EC /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54ECD9692A1A74FC877A4 /* KeychainManager.swift */; };
 		7AA54D2B9BA6B3140A7EE905 /* DataStoreActionIntegrationSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5437C9484207EEC3C6B2E /* DataStoreActionIntegrationSpec.swift */; };
 		7AA54D41D654320B1C2F9753 /* FxAViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FA1C4E24F4DDBA39D1B /* FxAViewSpec.swift */; };
 		7AA54DC38FF49F029CDE96B3 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA546D5DCD090D9C9B24421 /* Item.swift */; };
@@ -161,7 +161,6 @@
 		7AA547418F6E716AEEE385F6 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7AA547CE3404CC8123CA455D /* Observable+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Spec.swift"; sourceTree = "<group>"; };
 		7AA547E5549B49D4E0D0368D /* ItemEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEntry.swift; sourceTree = "<group>"; };
-		7AA548BC842A3F888476A65F /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		7AA548CFC3319394489DD10E /* FxAPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPresenter.swift; sourceTree = "<group>"; };
 		7AA54915F5D12D1929527EDE /* FxAAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAAction.swift; sourceTree = "<group>"; };
 		7AA549BD9AE6A6DD82FDA434 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -179,6 +178,7 @@
 		7AA54E9846C5A9F801A7FE1C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7AA54EA2449ADA0942EECA02 /* FxAStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAStoreSpec.swift; sourceTree = "<group>"; };
 		7AA54EAE6E8D8E78F37BEA82 /* DataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
+		7AA54ECD9692A1A74FC877A4 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		7AA54F13767439D644B91C5E /* lockbox-ios-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lockbox-ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		7AA54FA1C4E24F4DDBA39D1B /* FxAViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAViewSpec.swift; sourceTree = "<group>"; };
 		7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+.swift"; sourceTree = "<group>"; };
@@ -278,7 +278,6 @@
 				7AA546D5DCD090D9C9B24421 /* Item.swift */,
 				7AA5455D02519DBA3D3711A9 /* OAuthInfo.swift */,
 				7AA540BD2A5F50B02F1FE714 /* ProfileInfo.swift */,
-				7AA548BC842A3F888476A65F /* KeychainManager.swift */,
 				7AA54A76AB52465AE5AE41E2 /* AppInfo.swift */,
 			);
 			path = Model;
@@ -299,6 +298,7 @@
 			children = (
 				7AA5445C1077C84873E7CB1C /* Parser.swift */,
 				7AA5429D9DF4FAE7E3290C8E /* KeyManager.swift */,
+				7AA54ECD9692A1A74FC877A4 /* KeychainManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -578,7 +578,6 @@
 				7AA54DC38FF49F029CDE96B3 /* Item.swift in Sources */,
 				7AA549A0A09C07E547A5D0F0 /* OAuthInfo.swift in Sources */,
 				7AA547F600FA69AF18A9D55C /* ProfileInfo.swift in Sources */,
-				7AA54220F0D9F34BBDB47A80 /* KeychainManager.swift in Sources */,
 				7AA54C8928B257655856C516 /* AppDelegate.swift in Sources */,
 				7AA540D7395F48BD6983CC3E /* Dispatcher.swift in Sources */,
 				7AA54E03B01B57D89DE9CF6B /* Action.swift in Sources */,
@@ -604,6 +603,7 @@
 				7AA5449807A6E898C9BEAE23 /* FxAAction.swift in Sources */,
 				7AA54DDC2527A59C773FAC3D /* Constants.swift in Sources */,
 				7AA545F780DE680A5B0380D3 /* FxAStore.swift in Sources */,
+				7AA54D1ED03AB249CAAB75EC /* KeychainManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
