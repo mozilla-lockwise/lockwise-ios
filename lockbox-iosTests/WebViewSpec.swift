@@ -9,7 +9,7 @@ import RxTest
 import RxSwift
 import RxBlocking
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class WebViewSpec: QuickSpec {
     class StubbedEvaluateJSWebView: WebView {

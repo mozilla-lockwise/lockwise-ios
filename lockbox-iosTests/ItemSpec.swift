@@ -5,7 +5,7 @@
 import Quick
 import Nimble
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class ItemSpec : QuickSpec {
     override func spec() {

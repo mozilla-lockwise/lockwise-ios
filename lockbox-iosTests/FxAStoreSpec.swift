@@ -7,7 +7,7 @@ import Nimble
 import RxSwift
 import RxTest
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 enum FxAStoreSharedExamples: String {
     case SaveScopedKeyToKeychain, SaveProfileInfoToKeychain

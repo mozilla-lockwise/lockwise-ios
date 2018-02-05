@@ -82,7 +82,6 @@
 		7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D83C9FBE1FAD3D5800D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
@@ -187,7 +186,7 @@
 		7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		7D1B1A8D1F98F86600C1F5FF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		7D1B1A991F98FC0600C1F5FF /* lockbox-datastore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "lockbox-datastore"; path = "lockbox-ios/lockbox-datastore"; sourceTree = "<group>"; };
-		7D1B1AC41F99028D00C1F5FF /* lockbox-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "lockbox-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockboxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1B1AC81F99028D00C1F5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D1B1AD31F9902C600C1F5FF /* DataStoreActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreActionSpec.swift; sourceTree = "<group>"; };
 		7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewSpec.swift; sourceTree = "<group>"; };
@@ -197,7 +196,7 @@
 		7D3920251FB131FB00709575 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = "lockbox-ios/binaries/libjansson.a"; sourceTree = "<group>"; };
 		7D3920261FB131FB00709575 /* libcjose.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcjose.a; path = "lockbox-ios/binaries/libcjose.a"; sourceTree = "<group>"; };
 		7D39202B1FB215EB00709575 /* KeyManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManagerSpec.swift; sourceTree = "<group>"; };
-		7D5DF8731F87F2600039B23E /* lockbox-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "lockbox-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D5DF8731F87F2600039B23E /* Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lockbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D88BD451F9A6F5B0082A838 /* ItemEntrySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEntrySpec.swift; sourceTree = "<group>"; };
 		7D9D64921F9F8EE300279C39 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
@@ -230,7 +229,6 @@
 				7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */,
 				7D302BEA1FD7283600D2FD4B /* RxCocoa.framework in Frameworks */,
 				D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */,
-				D83C9FBE1FAD3D5800D08AAE /* Telemetry.framework in Frameworks */,
 				7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */,
 				7D3920281FB131FB00709575 /* libssl.a in Frameworks */,
 				7D3920291FB131FB00709575 /* libjansson.a in Frameworks */,
@@ -417,8 +415,8 @@
 		7D5DF8741F87F2600039B23E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7D5DF8731F87F2600039B23E /* lockbox-ios.app */,
-				7D1B1AC41F99028D00C1F5FF /* lockbox-iosTests.xctest */,
+				7D5DF8731F87F2600039B23E /* Lockbox.app */,
+				7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -440,9 +438,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7D1B1AC31F99028D00C1F5FF /* lockbox-iosTests */ = {
+		7D1B1AC31F99028D00C1F5FF /* LockboxTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D1B1ACB1F99028D00C1F5FF /* Build configuration list for PBXNativeTarget "lockbox-iosTests" */;
+			buildConfigurationList = 7D1B1ACB1F99028D00C1F5FF /* Build configuration list for PBXNativeTarget "LockboxTests" */;
 			buildPhases = (
 				7D1B1AC01F99028D00C1F5FF /* Sources */,
 				7D1B1AC11F99028D00C1F5FF /* Frameworks */,
@@ -454,14 +452,14 @@
 			dependencies = (
 				7D1B1ACA1F99028D00C1F5FF /* PBXTargetDependency */,
 			);
-			name = "lockbox-iosTests";
+			name = LockboxTests;
 			productName = "lockbox-iosTests";
-			productReference = 7D1B1AC41F99028D00C1F5FF /* lockbox-iosTests.xctest */;
+			productReference = 7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7D5DF8721F87F2600039B23E /* lockbox-ios */ = {
+		7D5DF8721F87F2600039B23E /* Lockbox */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "lockbox-ios" */;
+			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Lockbox" */;
 			buildPhases = (
 				7D5DF86F1F87F2600039B23E /* Sources */,
 				7D5DF8701F87F2600039B23E /* Frameworks */,
@@ -472,9 +470,9 @@
 			);
 			dependencies = (
 			);
-			name = "lockbox-ios";
+			name = Lockbox;
 			productName = "lockbox-exploration";
-			productReference = 7D5DF8731F87F2600039B23E /* lockbox-ios.app */;
+			productReference = 7D5DF8731F87F2600039B23E /* Lockbox.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -484,7 +482,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "Sasha Heinen";
 				TargetAttributes = {
 					7D1B1AC31F99028D00C1F5FF = {
@@ -500,7 +498,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7D5DF86E1F87F2600039B23E /* Build configuration list for PBXProject "lockbox-ios" */;
+			buildConfigurationList = 7D5DF86E1F87F2600039B23E /* Build configuration list for PBXProject "Lockbox" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -513,8 +511,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7D5DF8721F87F2600039B23E /* lockbox-ios */,
-				7D1B1AC31F99028D00C1F5FF /* lockbox-iosTests */,
+				7D5DF8721F87F2600039B23E /* Lockbox */,
+				7D1B1AC31F99028D00C1F5FF /* LockboxTests */,
 			);
 		};
 /* End PBXProject section */
@@ -612,7 +610,7 @@
 /* Begin PBXTargetDependency section */
 		7D1B1ACA1F99028D00C1F5FF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7D5DF8721F87F2600039B23E /* lockbox-ios */;
+			target = 7D5DF8721F87F2600039B23E /* Lockbox */;
 			targetProxy = 7D1B1AC91F99028D00C1F5FF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -652,7 +650,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/lockbox-ios.app/lockbox-ios";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lockbox.app/Lockbox";
 			};
 			name = Debug;
 		};
@@ -678,7 +676,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/lockbox-ios.app/lockbox-ios";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lockbox.app/Lockbox";
 			};
 			name = Release;
 		};
@@ -813,7 +811,7 @@
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox;
-				PRODUCT_NAME = "lockbox-ios";
+				PRODUCT_NAME = Lockbox;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
@@ -847,7 +845,7 @@
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox;
-				PRODUCT_NAME = "lockbox-ios";
+				PRODUCT_NAME = Lockbox;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
@@ -859,7 +857,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7D1B1ACB1F99028D00C1F5FF /* Build configuration list for PBXNativeTarget "lockbox-iosTests" */ = {
+		7D1B1ACB1F99028D00C1F5FF /* Build configuration list for PBXNativeTarget "LockboxTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D1B1ACC1F99028D00C1F5FF /* Debug */,
@@ -868,7 +866,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D5DF86E1F87F2600039B23E /* Build configuration list for PBXProject "lockbox-ios" */ = {
+		7D5DF86E1F87F2600039B23E /* Build configuration list for PBXProject "Lockbox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D5DF88E1F87F2600039B23E /* Debug */,
@@ -877,7 +875,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "lockbox-ios" */ = {
+		7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Lockbox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D5DF8911F87F2600039B23E /* Debug */,

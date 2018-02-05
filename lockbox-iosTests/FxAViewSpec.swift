@@ -8,7 +8,7 @@ import UIKit
 import WebKit
 import RxSwift
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class FxAViewSpec : QuickSpec {
     class FakeFxAPresenter : FxAPresenter {
