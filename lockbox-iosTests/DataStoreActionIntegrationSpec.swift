@@ -8,7 +8,7 @@ import WebKit
 import RxSwift
 import RxBlocking
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class DataStoreHandlerIntegrationSpec : QuickSpec {
     private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"L9-eBkDrYHdPdXV_ymuzy_u9n3drkQcSw5pskrNl4pg\",\"k\":\"WsTdZ2tjji2W36JN9vk9s2AYsvp8eYy1pBbKPgcSLL4\"}"

@@ -8,7 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class RouteStoreSpec : QuickSpec {
     class FakeDispatcher : Dispatcher {

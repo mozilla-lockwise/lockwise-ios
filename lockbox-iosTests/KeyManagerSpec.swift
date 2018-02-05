@@ -6,7 +6,7 @@ import Quick
 import Nimble
 import CJose
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class KeyManagerSpec : QuickSpec {
     let subject = KeyManager()

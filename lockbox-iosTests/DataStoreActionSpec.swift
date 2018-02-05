@@ -8,7 +8,7 @@ import WebKit
 import RxTest
 import RxSwift
 
-@testable import lockbox_ios
+@testable import Lockbox
 
 class DataStoreActionSpec: QuickSpec {
     class FakeWebView: WKWebView, TypedJavaScriptWebView {
