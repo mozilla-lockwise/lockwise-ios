@@ -10,7 +10,8 @@ BINARY_DIR="../lockbox-ios/binaries"
 
 JANSSON_VERSION=2.10
 JANSSON_SRC="http://www.digip.org/jansson/releases/jansson-${JANSSON_VERSION}.tar.gz"
-CJOSE_SRC="https://github.com/cisco/cjose/archive/latest.tar.gz"
+CJOSE_VERSION=0.6.0
+CJOSE_SRC="https://github.com/cisco/cjose/archive/${CJOSE_VERSION}.tar.gz"
 SCRIPT_DIR="$(pwd)"
 
 export MINVERSION=9.0
@@ -33,14 +34,14 @@ cd "${JANSSON_FILE}"
 source "autoframework" Jansson libjansson.a
 
 # put cross-compiled libraries in a format cjose expects
-mkdir Frameworks/include
-mkdir Frameworks/lib
+mkdir -p Frameworks/include
+mkdir -p Frameworks/lib
 mv "Frameworks/libjansson.a" "Frameworks/lib/"
 cp -r "Frameworks/Jansson.framework/Headers/" "Frameworks/include/"
 cd ..
 
 # download & cross-compile cjose
-CJOSE_FILE="cjose-latest"
+CJOSE_FILE="cjose-${CJOSE_VERSION}"
 curl -L "${CJOSE_SRC}" | tar xvzf -
 cp iconfigure "${CJOSE_FILE}"
 cp autoframework "${CJOSE_FILE}"
@@ -58,6 +59,8 @@ cp "openssl/lib/libcrypto.a" "${BINARY_DIR}"
 cp "openssl/lib/libssl.a" "${BINARY_DIR}"
 cp "${JANSSON_FILE}/Frameworks/lib/libjansson.a" "${BINARY_DIR}"
 cp "${CJOSE_FILE}/Frameworks/libcjose.a" "${BINARY_DIR}"
+rm -rf "${BINARY_DIR}/include/cjose"
+cp -r "${CJOSE_FILE}/Frameworks/CJose.framework/Headers/cjose" "${BINARY_DIR}/include/cjose"
 
 echo "Cleaning up build directory..."
 
@@ -70,6 +73,6 @@ rm -rf "openssl/bin"
 rm -rf "openssl/src"
 rm -rf "openssl/lib"
 rm -rf openssl/openssl-*
-mkdir "openssl/include" && mv "openssl/opensslconf-template.h" "openssl/include/"
+mkdir -p "openssl/include" && mv "openssl/opensslconf-template.h" "openssl/include/"
 
 echo "Done."
