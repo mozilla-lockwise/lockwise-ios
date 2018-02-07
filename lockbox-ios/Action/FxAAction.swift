@@ -219,7 +219,7 @@ extension FxAActionHandler {
     fileprivate func postProfileInfoRequest(accessToken: String) -> Single<ProfileInfo> {
         var request = URLRequest(url: self.profileInfoURL)
         request.httpMethod = "GET"
-        request.addValue("Bearer", forHTTPHeaderField: "Authorization \(accessToken)")
+        request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
         let profileInfoSingle = Single<ProfileInfo>.create() { single in
             let disposable = Disposables.create()

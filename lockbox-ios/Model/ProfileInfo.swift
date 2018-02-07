@@ -13,6 +13,11 @@ class ProfileInfo: Codable {
         self.email = email
     }
 
+    enum CodingKeys: String, CodingKey {
+        case uid = "sub"
+        case email = "email"
+    }
+
     class Builder {
         private var info:ProfileInfo!
 
