@@ -45,13 +45,15 @@ class WebView: WKWebView, TypedJavaScriptWebView {
     internal func evaluateJavaScriptWithoutCatchingInvalidType(_ javaScriptString: String) -> Single<Any> {
         let anySingle = Single<Any>.create() { single in
 
-            self.evaluateJavaScript(javaScriptString) { any, error in
-                if error != nil {
-                    single(.error(error!))
-                } else if any != nil {
-                    single(.success(any!))
-                } else {
-                    single(.error(WebViewError.Unknown))
+            DispatchQueue.main.async {
+                self.evaluateJavaScript(javaScriptString) { any, error in
+                    if error != nil {
+                        single(.error(error!))
+                    } else if any != nil {
+                        single(.success(any!))
+                    } else {
+                        single(.error(WebViewError.Unknown))
+                    }
                 }
             }
 

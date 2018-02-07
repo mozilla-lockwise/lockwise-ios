@@ -58,13 +58,10 @@ class WebViewSpec: QuickSpec {
                             .disposed(by: self.disposeBag)
                 }
 
-                it("evaluates the javascript using the wkwebview method") {
-                    expect(self.stubbedJSSuper.evaluateJSArguments.last).to(equal(javaScriptString))
-                }
-
                 describe("when provided an unsupported type webkit error") {
                     let wkError = WKError(_nsError: NSError(domain: "WKErrorDomain", code: 5))
                     beforeEach {
+                        expect(self.stubbedJSSuper.evaluateJSArguments.last).toEventually(equal(javaScriptString))
                         self.stubbedJSSuper.evaluateJSCompletion!(nil, wkError)
                     }
 
@@ -78,6 +75,7 @@ class WebViewSpec: QuickSpec {
                 describe("when provided any other webkit error") {
                     let wkError = WKError(_nsError: NSError(domain: "WKErrorDomain", code: 3))
                     beforeEach {
+                        expect(self.stubbedJSSuper.evaluateJSArguments.last).toEventually(equal(javaScriptString))
                         self.stubbedJSSuper.evaluateJSCompletion!(nil, wkError)
                     }
 
@@ -91,6 +89,7 @@ class WebViewSpec: QuickSpec {
                 describe("when provided a non-webkit error") {
                     let error = NSError(domain: "something", code: -1)
                     beforeEach {
+                        expect(self.stubbedJSSuper.evaluateJSArguments.last).toEventually(equal(javaScriptString))
                         self.stubbedJSSuper.evaluateJSCompletion!(nil, error)
                     }
 
@@ -104,6 +103,7 @@ class WebViewSpec: QuickSpec {
                 describe("when provided a value and no error") {
                     let completionValue = ["I am a valid js thingy"]
                     beforeEach {
+                        expect(self.stubbedJSSuper.evaluateJSArguments.last).toEventually(equal(javaScriptString))
                         self.stubbedJSSuper.evaluateJSCompletion!(completionValue, nil)
                     }
 
@@ -116,6 +116,7 @@ class WebViewSpec: QuickSpec {
 
                 describe("when provided no value and no error") {
                     beforeEach {
+                        expect(self.stubbedJSSuper.evaluateJSArguments.last).toEventually(equal(javaScriptString))
                         self.stubbedJSSuper.evaluateJSCompletion!(nil, nil)
                     }
 
@@ -124,7 +125,6 @@ class WebViewSpec: QuickSpec {
                         expect(value.element).to(beNil())
                         expect(value.error).to(matchError(WebViewError.Unknown))
                     }
-
                 }
             }
 
