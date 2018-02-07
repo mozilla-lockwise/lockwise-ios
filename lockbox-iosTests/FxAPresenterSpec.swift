@@ -153,8 +153,8 @@ class FxAPresenterSpec : QuickSpec {
                     var urlComponents = URLComponents()
 
                     beforeEach {
-                        urlComponents.scheme = "lockbox"
-                        urlComponents.host = "redirect.ios"
+                        urlComponents.scheme = "https"
+                        urlComponents.host = "2aa95473a5115d5f3deb36bb6875cf76f05e4c4d.extensions.allizom.org"
                         urlComponents.path = "/"
 
                         let request = URLRequest(url: urlComponents.url!)
