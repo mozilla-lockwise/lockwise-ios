@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
 
         let barHeight = 44 + UIApplication.shared.statusBarFrame.height
-        let navBarImage = UIImage.createGradientImage(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: barHeight), colors: [UIColor.lockBoxTeal, UIColor.lockBoxBlue])
+        let navBarImage = UIImage.createGradientImage(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: barHeight), colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue])
         UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
         UINavigationBar.appearance().isTranslucent = false
         setupTelemetry()

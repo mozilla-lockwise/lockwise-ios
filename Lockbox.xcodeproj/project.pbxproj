@@ -72,6 +72,7 @@
 		7D302BE91FD7108300D2FD4B /* RxBlocking.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7D302BEA1FD7283600D2FD4B /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
 		7D302BEB1FD7284600D2FD4B /* RxCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7D30DBB32033651600613B69 /* EmptyList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D30DBB52033651600613B69 /* EmptyList.xib */; };
 		7D38849B1F992A0B0058DAFF /* WebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */; };
 		7D38849C1F99374F0058DAFF /* lockbox-datastore in Resources */ = {isa = PBXBuildFile; fileRef = 7D1B1A991F98FC0600C1F5FF /* lockbox-datastore */; };
 		7D3884A21F9A54D90058DAFF /* ParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3884A11F9A54D90058DAFF /* ParserSpec.swift */; };
@@ -95,7 +96,6 @@
 		7DA4C68E2028F99500B61DD8 /* ItemListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6892028F86E00B61DD8 /* ItemListPresenterSpec.swift */; };
 		7DA4C68F2028F99800B61DD8 /* UIViewController+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6882028F86E00B61DD8 /* UIViewController+Spec.swift */; };
 		7DA4C6932028FB0900B61DD8 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6902028FB0900B61DD8 /* UIColor+.swift */; };
-		7DA4C6952028FB0900B61DD8 /* UINavigationBar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6922028FB0900B61DD8 /* UINavigationBar+.swift */; };
 		7DBF9B2D1FB22EB000A53364 /* libcjose.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920261FB131FB00709575 /* libcjose.a */; };
 		7DBF9B2E1FB22EB000A53364 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920231FB131FB00709575 /* libcrypto.a */; };
 		7DBF9B2F1FB22EB000A53364 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920251FB131FB00709575 /* libjansson.a */; };
@@ -217,6 +217,10 @@
 		7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockboxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1B1AC81F99028D00C1F5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D1B1AD31F9902C600C1F5FF /* DataStoreActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreActionSpec.swift; sourceTree = "<group>"; };
+		7D30DBB42033651600613B69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/EmptyList.xib; sourceTree = "<group>"; };
+		7D30DBB72033651900613B69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/EmptyList.strings; sourceTree = "<group>"; };
+		7D30DBB92033651A00613B69 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/EmptyList.strings; sourceTree = "<group>"; };
+		7D30DBBB2033651B00613B69 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/EmptyList.strings; sourceTree = "<group>"; };
 		7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewSpec.swift; sourceTree = "<group>"; };
 		7D3884A11F9A54D90058DAFF /* ParserSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserSpec.swift; sourceTree = "<group>"; };
 		7D3920231FB131FB00709575 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "lockbox-ios/binaries/libcrypto.a"; sourceTree = "<group>"; };
@@ -245,7 +249,6 @@
 		7DA4C6882028F86E00B61DD8 /* UIViewController+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Spec.swift"; sourceTree = "<group>"; };
 		7DA4C6892028F86E00B61DD8 /* ItemListPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListPresenterSpec.swift; sourceTree = "<group>"; };
 		7DA4C6902028FB0900B61DD8 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
-		7DA4C6922028FB0900B61DD8 /* UINavigationBar+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+.swift"; sourceTree = "<group>"; };
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
@@ -380,6 +383,7 @@
 			children = (
 				7D522E9D20334B8600295FF8 /* Welcome.storyboard */,
 				7AA546858F5DFB6C017A3DD1 /* ItemList.storyboard */,
+				7D30DBB52033651600613B69 /* EmptyList.xib */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -388,7 +392,6 @@
 			isa = PBXGroup;
 			children = (
 				7DA4C6902028FB0900B61DD8 /* UIColor+.swift */,
-				7DA4C6922028FB0900B61DD8 /* UINavigationBar+.swift */,
 				7AA5444E03C80B7A8A0E4EE5 /* String+.swift */,
 				7AA542F5012A5D2E954E030A /* Data+.swift */,
 				7AA542656FC3BE06479C929A /* UIViewController+.swift */,
@@ -618,6 +621,7 @@
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				7D522E9B20334B8600295FF8 /* Welcome.storyboard in Resources */,
 				7D38849C1F99374F0058DAFF /* lockbox-datastore in Resources */,
+				7D30DBB32033651600613B69 /* EmptyList.xib in Resources */,
 				7AA547E098053DFF64A3C0F9 /* Assets.xcassets in Resources */,
 				7AA54FAC19214AA303FF3AE1 /* ItemList.storyboard in Resources */,
 			);
@@ -699,7 +703,6 @@
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
 				7AA546A2A19976883EB9CFE4 /* DataStore.swift in Sources */,
-				7DA4C6952028FB0900B61DD8 /* UINavigationBar+.swift in Sources */,
 				7AA5449807A6E898C9BEAE23 /* FxAAction.swift in Sources */,
 				7AA54DDC2527A59C773FAC3D /* Constants.swift in Sources */,
 				7D440889201786E4001873F6 /* WelcomeView.swift in Sources */,
@@ -723,6 +726,17 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		7D30DBB52033651600613B69 /* EmptyList.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7D30DBB42033651600613B69 /* Base */,
+				7D30DBB72033651900613B69 /* en */,
+				7D30DBB92033651A00613B69 /* es */,
+				7D30DBBB2033651B00613B69 /* de */,
+			);
+			name = EmptyList.xib;
+			sourceTree = "<group>";
+		};
 		7D522E9D20334B8600295FF8 /* Welcome.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

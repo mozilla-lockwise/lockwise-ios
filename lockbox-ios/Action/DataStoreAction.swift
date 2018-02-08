@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 import RxSwift
+import RxCocoa
 
 enum DataStoreError: Error {
     case NoIDPassed, Locked, NotInitialized, UnexpectedType, UnexpectedJavaScriptMethod, Unknown

@@ -16,21 +16,30 @@ class ItemListPresenterSpec : QuickSpec {
         var itemListObservable:TestableObservable<[Item]>?
 
         override var onItemList: Observable<[Item]> {
-            return itemListObservable!.asObservable()
+            return self.itemListObservable!.asObservable()
         }
     }
 
     class FakeItemListView: ItemListViewProtocol {
         var displayItemsArgument:[Item]?
-        
         var displayErrorArgument:Error?
+        var displayEmptyStateMessagingCalled = false
+        var hideEmptyStateMessagingCalled = false
 
         func displayItems(_ items: [Item]) {
-            displayItemsArgument = items
+            self.displayItemsArgument = items
         }
 
         func displayError(_ error: Error) {
-            displayErrorArgument = error
+            self.displayErrorArgument = error
+        }
+
+        func displayEmptyStateMessaging() {
+            self.displayEmptyStateMessagingCalled = true
+        }
+
+        func hideEmptyStateMessaging() {
+            self.hideEmptyStateMessagingCalled = true
         }
     }
 
@@ -50,21 +59,25 @@ class ItemListPresenterSpec : QuickSpec {
             }
 
             describe(".onViewReady()") {
+                describe("when the datastore pushes an empty list of items") {
+                    let items = [
+                        Item.Builder().build(),
+                        Item.Builder().build()
+                    ]
 
-                describe("when the datastore pushes an error") {
                     beforeEach {
-                        self.dataStore.itemListObservable = self.scheduler.createHotObservable([error(100, DataStoreError.Locked)])
+                        self.dataStore.itemListObservable = self.scheduler.createHotObservable([next(100, items)])
                         self.subject.onViewReady()
                         self.scheduler.start()
                     }
 
-                    it("tells the view to display the error") {
-                        expect(self.view.displayErrorArgument).notTo(beNil())
-                        expect(self.view.displayErrorArgument).to(matchError(DataStoreError.Locked))
+                    it("tells the view to display the empty lockbox message") {
+                        expect(self.view.displayItemsArgument).notTo(beNil())
+                        expect(self.view.displayItemsArgument).to(equal(items))
                     }
                 }
 
-                describe("when the datastore pushes a list of items") {
+                describe("when the datastore pushes a populated list of items") {
                     let items = [
                         Item.Builder().build(),
                         Item.Builder().build()
@@ -79,6 +92,10 @@ class ItemListPresenterSpec : QuickSpec {
                     it("tells the view to display the items") {
                         expect(self.view.displayItemsArgument).notTo(beNil())
                         expect(self.view.displayItemsArgument).to(equal(items))
+                    }
+
+                    it("tells the view to hide the empty state messaging") {
+                        expect(self.view.hideEmptyStateMessagingCalled).to(beTrue())
                     }
                 }
             }

@@ -49,7 +49,7 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
   }
 
   async unlock(scopedKey) {
-      return super.unlock(scopedKey).then( () => {
+      return super.unlock(scopedKey).then( function(result) {
         try {
           webkit.messageHandlers.UnlockComplete.postMessage("unlock success")
         } catch (err) {

@@ -32,7 +32,7 @@ class WelcomeView: UIViewController, WelcomeViewProtocol {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.oceanView.image = UIImage.createGradientImage(frame: self.oceanView.frame, colors: [UIColor.lockBoxTeal, UIColor.lockBoxBlue])
+        self.oceanView.image = UIImage.createGradientImage(frame: self.oceanView.frame, colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue])
     }
 
     override func viewWillAppear(_ animated: Bool) {
