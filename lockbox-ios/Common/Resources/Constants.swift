@@ -3,10 +3,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import UIKit
 
 struct Constant {
     struct app {
         static let redirectURI = "https://2aa95473a5115d5f3deb36bb6875cf76f05e4c4d.extensions.allizom.org"
+    }
+
+    struct color {
+        static let lightGrey = UIColor(hex: 0xEFEFEF)
+        static let lockBoxBlue = UIColor(hex: 0x0088D9)
+        static let lockBoxTeal = UIColor(hex: 0x00BAD6)
+        static let kebabBlue = UIColor(hex: 0x003EAA)
     }
 
     struct fxa {

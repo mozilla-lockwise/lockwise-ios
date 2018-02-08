@@ -5,8 +5,10 @@
 import Foundation
 import RxSwift
 
-protocol ItemListViewProtocol: class, ErrorView {
+protocol ItemListViewProtocol: class {
     func displayItems(_ items: [Item]) -> Void
+    func displayEmptyStateMessaging()
+    func hideEmptyStateMessaging()
 }
 
 class ItemListPresenter  {
@@ -26,9 +28,12 @@ class ItemListPresenter  {
     func onViewReady() {
         self.dataStore.onItemList
                 .subscribe(onNext: { items in
-                    self.view?.displayItems(items)
-                }, onError: { error in
-                    self.view?.displayError(error)
+                    if items.isEmpty {
+                        self.view?.displayEmptyStateMessaging()
+                    } else {
+                        self.view?.hideEmptyStateMessaging()
+                        self.view?.displayItems(items)
+                    }
                 })
                 .disposed(by: self.disposeBag)
     }

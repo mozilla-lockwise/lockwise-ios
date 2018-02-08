@@ -5,10 +5,6 @@
 import UIKit
 
 extension UIColor {
-    static let lockBoxTeal = UIColor(hex: 0x00BAD6)
-    static let lockBoxBlue = UIColor(hex: 0x0088D9)
-    static let kebabBlue = UIColor(hex: 0x003EAA)
-
     convenience init(red: Int, green: Int, blue: Int) {
         assert(red >= 0 && red <= 255, "Invalid red component")
         assert(green >= 0 && green <= 255, "Invalid green component")

@@ -87,6 +87,26 @@ class ItemListViewSpec : QuickSpec {
                     expect(cell.detailLabel!.text).to(equal("(no username)"))
                 }
             }
+
+            describe("displayEmptyStateMessaging") {
+                beforeEach {
+                    self.subject.displayEmptyStateMessaging()
+                }
+
+                it("adds the empty list view to the background view") {
+                    expect(self.subject.tableView.backgroundView?.subviews.count).to(equal(1))
+                }
+            }
+
+            describe("hideEmptyStateMessaging") {
+                beforeEach {
+                    self.subject.hideEmptyStateMessaging()
+                }
+
+                it("removes the empty list view from the background view") {
+                    expect(self.subject.tableView.backgroundView?.subviews.count).to(equal(0))
+                }
+            }
         }
     }
 }
