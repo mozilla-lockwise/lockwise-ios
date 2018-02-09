@@ -427,6 +427,7 @@ class DataStoreActionSpec: QuickSpec {
                     }
                 }
             }
+
             describe(".unlock(scopedKey:)") {
                 let scopedKey = "{\"kty\":\"oct\",\"kid\":\"L9-eBkDrYHdPdXV_ymuzy_u9n3drkQcSw5pskrNl4pg\",\"k\":\"WsTdZ2tjji2W36JN9vk9s2AYsvp8eYy1pBbKPgcSLL4\"}"
                 describe("when the datastore has not been opened yet") {
@@ -439,6 +440,12 @@ class DataStoreActionSpec: QuickSpec {
 
                 describe("when the datastore has been opened") {
                     beforeEach {
+                        self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                .take(1)
+                                .asSingle()
+                        self.webView.secondBoolSingle = self.scheduler.createColdObservable([next(100, false)])
+                                .take(1)
+                                .asSingle()
                         let message = FakeWKScriptMessage(name: JSCallbackFunction.OpenComplete.rawValue, body: "opened")
                         self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
                     }

@@ -15,6 +15,10 @@ class Dispatcher {
     }
 
     open func dispatch(action: Action) {
+        if let err = action as? ErrorAction {
+            print(err.error)
+        }
+
         self.storeDispatchSubject.onNext(action)
     }
 }

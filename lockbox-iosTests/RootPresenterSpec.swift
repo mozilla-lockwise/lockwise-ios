@@ -221,7 +221,7 @@ class RootPresenterSpec : QuickSpec {
                         let initialized = context()[RootPresenterSharedExampleVar.initialized.rawValue] as! Bool
                         self.advance(scopedKey: scopedKey, initialized: initialized)
 
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+//                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                         expect(self.dataStoreActionHandler.openUID).to(beNil())
                         expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
                     }
@@ -257,6 +257,7 @@ class RootPresenterSpec : QuickSpec {
             describe("when getting a populated scoped key object & a locked datastore") {
                 let scopedKey = "fsdljksdfjklfsdljksd"
                 beforeEach {
+                    self.dataStore.initSubject.onNext(true)
                     self.advance(scopedKey: scopedKey, locked: true)
                 }
 

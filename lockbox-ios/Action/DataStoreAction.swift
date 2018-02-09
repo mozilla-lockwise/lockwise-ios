@@ -326,3 +326,62 @@ extension DataStoreActionHandler: WKScriptMessageHandler, WKNavigationDelegate {
         }
     }
 }
+
+// Test data generator
+extension DataStoreActionHandler {
+    public func populateTestData() {
+        let items = [
+            Item.Builder()
+                    .title("Amazon")
+                    .origins(["www.amazon.com"])
+                    .entry(ItemEntry.Builder()
+                            .kind("login")
+                            .username("tjacobson@yahoo.com")
+                            .build())
+                    .build(),
+            Item.Builder()
+                    .title("Facebook")
+                    .origins(["www.facebook.com"])
+                    .entry(ItemEntry.Builder()
+                            .kind("login")
+                            .username("tanya.jacobson")
+                            .build())
+                    .build(),
+            Item.Builder()
+                    .title("Reddit")
+                    .origins(["www.reddit.com"])
+                    .entry(ItemEntry.Builder()
+                            .kind("login")
+                            .username("tjacobson@yahoo.com")
+                            .build())
+                    .build(),
+            Item.Builder()
+                    .title("Twitter")
+                    .origins(["www.twitter.com"])
+                    .entry(ItemEntry.Builder()
+                            .kind("login")
+                            .username("tjacobson@yahoo.com")
+                            .build())
+                    .build(),
+            Item.Builder()
+                    .title("Wordpress")
+                    .entry(ItemEntry.Builder()
+                            .kind("login")
+                            .username("tjacobson@yahoo.com")
+                            .build())
+                    .build()
+        ]
+
+        let encoder = JSONEncoder()
+        for item in items {
+            guard let encodedItem = try? encoder.encode(item),
+                  let jsonString = String(data: encodedItem, encoding: .utf8) else { continue }
+
+            self.webView.evaluateJavaScript("\(self.dataStoreName).add(\(jsonString))").subscribe().disposed(by:self.disposeBag)
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 30, execute: {
+            self.list()
+        })
+    }
+}

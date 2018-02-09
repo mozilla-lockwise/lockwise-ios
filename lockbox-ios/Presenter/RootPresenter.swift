@@ -30,6 +30,7 @@ struct InfoOpen {
 
 struct KeyLock {
     let scopedKey:String?
+    let initialized:Bool
     let locked:Bool
 }
 
@@ -64,7 +65,8 @@ class RootPresenter {
         Observable.combineLatest(self.userInfoStore.profileInfo, self.dataStore.onOpened)
                 .map { (latest: (ProfileInfo?, Bool)) -> InfoOpen in
                     return InfoOpen(profileInfo: latest.0, opened:latest.1)
-                }.subscribe(onNext: {(latest: InfoOpen) in
+                }
+                .subscribe(onNext: {(latest: InfoOpen) in
                     guard let uid = latest.profileInfo?.uid else {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                         return
@@ -87,23 +89,29 @@ class RootPresenter {
 
                     if !latest.initialized {
                         self.dataStoreActionHandler.initialize(scopedKey: scopedKey)
+                        return
                     }
+
+                    self.routeActionHandler.invoke(MainRouteAction.list)
                 })
                 .disposed(by: self.disposeBag)
 
         // blindly unlock for now
-        Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onLocked)
-                .map { (element: (String?, Bool)) -> KeyLock in
-                    return KeyLock(scopedKey: element.0, locked: element.1)
+        Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onInitialized, self.dataStore.onLocked)
+                .map { (element: (String?, Bool, Bool)) -> KeyLock in
+                    return KeyLock(scopedKey: element.0, initialized:element.1, locked: element.2)
                  }
                 .filter { (latest: KeyLock) in
-                    return latest.scopedKey != nil && latest.locked
+                    return latest.scopedKey != nil && latest.initialized
                 }
                 .subscribe(onNext: { (latest: KeyLock) in
                     guard let scopedKey = latest.scopedKey else { return }
 
                     if latest.locked {
                         self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
+                    } else {
+                        self.dataStoreActionHandler.populateTestData()
+//                        self.dataStoreActionHandler.list()
                     }
                 })
                 .disposed(by: self.disposeBag)

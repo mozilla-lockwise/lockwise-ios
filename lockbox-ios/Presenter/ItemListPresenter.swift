@@ -12,17 +12,21 @@ protocol ItemListViewProtocol: class, ErrorView {
 
 class ItemListPresenter  {
     private weak var view:ItemListViewProtocol?
-    private var dataStore:DataStore!
+    private var dataStoreActionHandler:DataStoreActionHandler
+    private var dataStore:DataStore
     private var disposeBag = DisposeBag()
 
     init(view:ItemListViewProtocol,
+         dataStoreActionHandler:DataStoreActionHandler = DataStoreActionHandler.shared,
          dataStore:DataStore = DataStore.shared) {
         self.view = view
+        self.dataStoreActionHandler = dataStoreActionHandler
         self.dataStore = dataStore
     }
 
     func onViewReady() {
         self.dataStore.onItemList
+                .debug()
                 .subscribe(onNext: { items in
                     self.view?.displayItems(items)
                 }, onError: { error in
