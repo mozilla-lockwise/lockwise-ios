@@ -247,7 +247,7 @@ class FxAActionSpec : QuickSpec {
                                     }
                                 }
 
-                                xdescribe("when the keysJWE value cannot be deserialized to the expected dictionary format") {
+                                describe("when the keysJWE value cannot be deserialized to the expected dictionary format") {
                                     beforeEach {
                                         self.keyManager.fakeDecryptedJWE = "[\"bogus\"]"
                                         self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
@@ -257,7 +257,7 @@ class FxAActionSpec : QuickSpec {
                                 }
 
                                 describe("when the keysJWE value can be deserialized to the expected dictionary format") {
-                                    xdescribe("when the decrypted & deserialized keysJWE value does not have a key for the scope") {
+                                    describe("when the decrypted & deserialized keysJWE value does not have a key for the scope") {
                                         beforeEach {
                                             self.keyManager.fakeDecryptedJWE = "{\"somenonesensekey\":{\"wrongthingsinhere\":\"yep\"}}"
                                             self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
@@ -267,32 +267,33 @@ class FxAActionSpec : QuickSpec {
                                     }
 
                                     describe("when the decrypted & deserialized keysJWE value has a key for the scope") {
-                                        xdescribe("when the value for the scope does not have a key 'k'") {
-                                            beforeEach {
-                                                self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"incomplete\":\"sorry\"}}"
-                                                self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
-                                            }
+                                        let kty = "oct"
+                                        let kid = "kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA"
+                                        let alg = "A256GCM"
+                                        let k = "_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8"
+                                        let scopedKey = "{\"kty\":\"\(kty)\",\"kid\":\"\(kid)\",\"alg\":\"\(alg)\",\"k\":\"\(k)\"}"
 
-                                            itBehavesLike(FxAActionSpecSharedExample.PostOAuthInfoButDispatchError.rawValue)
+                                        beforeEach {
+                                            self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":\(scopedKey)}"
+                                            self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                         }
 
-                                        describe("when the value for the scope has a key 'k'") {
-                                            let scopedKey = "allwecareaboutanyway"
-                                            beforeEach {
-                                                self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"k\":\"\(scopedKey)\"}}"
-                                                self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
-                                            }
+                                        it("posts the bearer access token to the profiles endpoint") {
+                                            expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
+                                            let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
 
-                                            it("posts the bearer access token to the profiles endpoint") {
-                                                expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
-                                                let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
+                                            expect(urlComponents.host).to(equal(Constant.profileHost))
+                                        }
 
-                                                expect(urlComponents.host).to(equal(Constant.profileHost))
-                                            }
-
-                                            xit("dispatches the scoped key to the dispatcher") {
-                                                let argument = self.dispatcher.actionArguments.last as! UserInfoAction
-                                                expect(argument).to(equal(UserInfoAction.scopedKey(key: scopedKey)))
+                                        it("dispatches the scoped key to the dispatcher") {
+                                            let argument = self.dispatcher.actionArguments.last as! UserInfoAction
+                                            if case let .scopedKey(key) = argument {
+                                                expect(key).to(contain("\"k\":\"\(k)\""))
+                                                expect(key).to(contain("\"kid\":\"\(kid)\""))
+                                                expect(key).to(contain("\"alg\":\"\(alg)\""))
+                                                expect(key).to(contain("\"kty\":\"\(kty)\""))
+                                            } else {
+                                                fail("Wrong action type")
                                             }
                                         }
                                     }

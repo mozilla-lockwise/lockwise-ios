@@ -116,8 +116,7 @@ extension FxAActionHandler {
         self.postTokenRequest(code: code)
                 .do(onNext: { info in
                     self.dispatcher.dispatch(action: UserInfoAction.oauthInfo(info: info))
-//                    let scopedKey: String = try self.deriveScopedKeyFromJWE(info.keysJWE)
-                    let scopedKey = "{\"kty\":\"oct\",\"kid\":\"kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA\",\"alg\":\"A256GCM\",\"k\":\"_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8\"}"
+                    let scopedKey: String = try self.deriveScopedKeyFromJWE(info.keysJWE)
                     self.dispatcher.dispatch(action: UserInfoAction.scopedKey(key: scopedKey))
                 })
                 .flatMap { info -> Single<ProfileInfo> in
@@ -136,8 +135,12 @@ extension FxAActionHandler {
         let jweString = self.keyManager.decryptJWE(jwe)
 
         guard let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String:Any],
-              let jweJSON = jsonValue[scope] as? [String:Any],
-              let key = jweJSON["k"] as? String else {
+              let jweJSON = jsonValue[scope] as? [String:Any]  else {
+            throw FxAError.UnexpectedDataFormat
+        }
+
+        let jsonEncoding = try JSONSerialization.data(withJSONObject: jweJSON)
+        guard let key = String(data: jsonEncoding, encoding: .utf8) else {
             throw FxAError.UnexpectedDataFormat
         }
 
