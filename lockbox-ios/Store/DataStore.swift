@@ -12,6 +12,7 @@ class DataStore {
     fileprivate let disposeBag = DisposeBag()
     fileprivate var itemList = ReplaySubject<[Item]>.create(bufferSize: 1)
     fileprivate var initialized = ReplaySubject<Bool>.create(bufferSize: 1)
+    fileprivate var opened = ReplaySubject<Bool>.create(bufferSize: 1)
     fileprivate var locked = ReplaySubject<Bool>.create(bufferSize: 1)
 
     public var onItemList:Observable<[Item]> {
@@ -25,6 +26,10 @@ class DataStore {
         return self.initialized.asObservable().distinctUntilChanged()
     }
 
+    public var onOpened:Observable<Bool> {
+        return self.opened.asObservable().distinctUntilChanged()
+    }
+
     public var onLocked:Observable<Bool> {
         return self.locked.asObservable().distinctUntilChanged()
     }
@@ -36,13 +41,12 @@ class DataStore {
                     switch action {
                     case .list(let list):
                         self.itemList.onNext(list)
-                        break
                     case .locked(let locked):
                         self.locked.onNext(locked)
-                        break
                     case .initialized(let initialized):
                         self.initialized.onNext(initialized)
-                        break
+                    case .opened(let opened):
+                        self.opened.onNext(opened)
                     }
                  })
                 .disposed(by: self.disposeBag)

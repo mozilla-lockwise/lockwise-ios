@@ -164,6 +164,41 @@ class DataStoreSpec : QuickSpec {
                 }
             }
 
+            describe("onOpened") {
+                var boolObserver = self.scheduler.createObserver(Bool.self)
+
+                beforeEach {
+                    boolObserver = self.scheduler.createObserver(Bool.self)
+
+                    self.subject.onOpened
+                            .subscribe(boolObserver)
+                            .disposed(by: self.disposeBag)
+
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.opened(opened: true))
+                }
+
+                it("pushes dispatched opened value to observers") {
+                    expect(boolObserver.events.last).notTo(beNil())
+                    expect(boolObserver.events.last!.value.element).to(equal(true))
+                }
+
+                it("doesn't push the same value twice in a row") {
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.opened(opened: true))
+                    expect(boolObserver.events.count).to(equal(1))
+                }
+
+                it("pushes subsequent different values") {
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.opened(opened: false))
+
+                    expect(boolObserver.events.count).to(equal(2))
+                }
+
+                it("does not do anything with non-datastore actions") {
+                    self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
+                    expect(boolObserver.events.count).to(equal(1))
+                }
+            }
+
             describe("onLocked") {
                 var boolObserver = self.scheduler.createObserver(Bool.self)
 

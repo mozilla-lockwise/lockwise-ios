@@ -12,10 +12,8 @@ import RxSwift
 
 class DataStoreActionSpec: QuickSpec {
     class FakeWebView: WKWebView, TypedJavaScriptWebView {
-        var evaluateJSToBoolCalled: Bool = false
-        var evaluateJSCalled: Bool = false
-
-        var evaluateJSArgument = ""
+        var evaluateJSArgument: String?
+        var evaluateJStoBoolArgument: String?
 
         var loadFileUrlArgument = URL(string: "")
         var loadFileBaseUrlArgument = URL(string: "")
@@ -27,15 +25,13 @@ class DataStoreActionSpec: QuickSpec {
         private var boolCallCount = 0
 
         func evaluateJavaScriptToBool(_ javaScriptString: String) -> Single<Bool> {
-            evaluateJSToBoolCalled = true
-            evaluateJSArgument = javaScriptString
+            evaluateJStoBoolArgument = javaScriptString
 
             boolCallCount += 1
             return boolCallCount == 1 ? firstBoolSingle! : secondBoolSingle!
         }
 
         func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
-            evaluateJSCalled = true
             evaluateJSArgument = javaScriptString
 
             return anySingle
@@ -50,7 +46,8 @@ class DataStoreActionSpec: QuickSpec {
     }
 
     class FakeWKNavigation: WKNavigation {
-        private var somethingToHoldOnTo:Bool
+        private var somethingToHoldOnTo: Bool
+
         override init() {
             somethingToHoldOnTo = true
         }
@@ -59,10 +56,10 @@ class DataStoreActionSpec: QuickSpec {
     class FakeParser: ItemParser {
         var itemFromDictionaryShouldThrow = false
         var jsonStringFromItemShouldThrow = false
-        var item:Item!
-        var jsonString:String!
+        var item: Item!
+        var jsonString: String!
 
-        func itemFromDictionary(_ dictionary:[String:Any]) throws -> Item {
+        func itemFromDictionary(_ dictionary: [String: Any]) throws -> Item {
             if itemFromDictionaryShouldThrow {
                 throw ParserError.InvalidDictionary
             } else {
@@ -70,7 +67,7 @@ class DataStoreActionSpec: QuickSpec {
             }
         }
 
-        func jsonStringFromItem(_ item:Item) throws -> String {
+        func jsonStringFromItem(_ item: Item) throws -> String {
             if jsonStringFromItemShouldThrow {
                 throw ParserError.InvalidItem
             } else {
@@ -80,29 +77,50 @@ class DataStoreActionSpec: QuickSpec {
     }
 
     class FakeWKScriptMessage: WKScriptMessage {
-        private var providedBody:Any
-        private var providedName:String
-        override var name:String { get { return providedName } }
-        override var body:Any { get { return providedBody } }
+        private var providedBody: Any
+        private var providedName: String
+        override var name: String {
+            get {
+                return providedName
+            }
+        }
+        override var body: Any {
+            get {
+                return providedBody
+            }
+        }
 
-        init(name:String, body:Any) {
+        init(name: String, body: Any) {
             self.providedName = name
             self.providedBody = body
         }
     }
 
-    class FakeDispatcher : Dispatcher {
-        var actionTypeArgument: Action?
+    class FakeDispatcher: Dispatcher {
+        var actionTypeArguments: [Action] = []
 
         override func dispatch(action: Action) {
-            self.actionTypeArgument = action
+            self.actionTypeArguments.append(action)
         }
     }
 
-    var subject: DataStoreActionHandler!
+    class StubbedLoadDataStoreActionHandler: DataStoreActionHandler {
+        var loadedStub = ReplaySubject<Void>.create(bufferSize: 1)
+
+        override var loadedSubject: ReplaySubject<Void> {
+            get {
+                return loadedStub
+            }
+            set {
+                super.loadedSubject = newValue
+            }
+        }
+    }
+
+    var subject: StubbedLoadDataStoreActionHandler!
     var webView: FakeWebView!
-    var parser:FakeParser!
-    var dispatcher:FakeDispatcher!
+    var parser: FakeParser!
+    var dispatcher: FakeDispatcher!
     private let dataStoreName: String = "dstore"
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
@@ -113,18 +131,95 @@ class DataStoreActionSpec: QuickSpec {
                 self.webView = FakeWebView()
                 self.parser = FakeParser()
                 self.dispatcher = FakeDispatcher()
-                self.subject = DataStoreActionHandler(dataStoreName: self.dataStoreName, parser:self.parser, dispatcher:self.dispatcher)
+                self.subject = StubbedLoadDataStoreActionHandler(dataStoreName: self.dataStoreName, parser: self.parser, dispatcher: self.dispatcher)
 
                 self.subject.webView = self.webView
             }
 
-            xdescribe(".webView(_:didFinish:") {
-                // pended because of weird crash when deallocating wknavigation
-                it("evaluates open() on the webview datastore") {
-                    let fakeNav = FakeWKNavigation()
-                    (self.subject as WKNavigationDelegate).webView!(self.webView, didFinish: fakeNav)
-                    expect(self.webView.evaluateJSCalled).to(beTrue())
-                    expect(self.webView.evaluateJSArgument).to(equal("var \(self.dataStoreName);swiftOpen().then(function (datastore) {\(self.dataStoreName) = datastore;});"))
+            it("dispatches false initialized & opened values to start") {
+                let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                expect(arguments).to(contain(DataStoreAction.initialized(initialized: false)))
+                expect(arguments).to(contain(DataStoreAction.opened(opened: false)))
+            }
+
+            describe(".open(uid:)") {
+                describe("when the datastore code has not been loaded yet") {
+                    it("does nothing") {
+                        self.subject.open(uid: "dfsfdssdf")
+                        expect(self.webView.evaluateJSArgument).to(beNil())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
+                    }
+                }
+
+                describe("when the datastore has been loaded") {
+                    let uid = "fsdsdfsdfsdfsdf"
+                    beforeEach {
+                        self.subject.loadedStub.onNext(())
+                    }
+
+                    describe("when the javascript call results in an error") {
+                        let err = NSError(domain: "badness", code: -1)
+
+                        beforeEach {
+                            self.webView.anySingle = self.scheduler.createColdObservable([error(100, err)])
+                                    .take(1)
+                                    .asSingle()
+                            self.subject.open(uid: uid)
+                            self.scheduler.start()
+                        }
+
+                        it("evaluates javascript to open the webview datastore") {
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
+                            expect(self.webView.evaluateJSArgument).to(equal("var \(self.dataStoreName);swiftOpen({\"salt\":\"\(uid)\"}).then(function (datastore) {\(self.dataStoreName) = datastore;});"))
+                        }
+
+                        it("dispatches the error") {
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                            expect(argument).to(matchErrorAction(ErrorAction(error: err)))
+                        }
+                    }
+
+                    describe("when the javascript call proceeds normally") {
+                        beforeEach {
+                            self.webView.anySingle = self.scheduler.createColdObservable([next(100, true)])
+                                    .take(1)
+                                    .asSingle()
+                            self.subject.open(uid: uid)
+                            self.scheduler.start()
+                        }
+
+                        it("evaluates javascript to initialize the webview datastore") {
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
+                            expect(self.webView.evaluateJSArgument).to(equal("var \(self.dataStoreName);swiftOpen({\"salt\":\"\(uid)\"}).then(function (datastore) {\(self.dataStoreName) = datastore;});"))
+                        }
+
+                        describe("getting an opencomplete callback from javascript") {
+                            beforeEach {
+                                let message = FakeWKScriptMessage(name: JSCallbackFunction.OpenComplete.rawValue, body: "open")
+                                self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                            }
+
+                            it("pushes the opened result to the dispatcher") {
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                expect(arguments).to(contain(DataStoreAction.opened(opened: true)))
+                            }
+                        }
+
+                        describe("getting an unknown callback from javascript") {
+                            beforeEach {
+                                let message = FakeWKScriptMessage(name: "gibberish", body: "something")
+                                self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                            }
+
+                            it("pushes the UnexpectedJavaScriptMethod to the dispatcher") {
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedJavaScriptMethod)))
+                            }
+                        }
+                    }
                 }
             }
 
@@ -132,8 +227,8 @@ class DataStoreActionSpec: QuickSpec {
                 describe("when the datastore has not been opened yet") {
                     it("does nothing") {
                         self.subject.updateInitialized()
-                        expect(self.webView.evaluateJSCalled).to(beFalse())
-                        expect(self.dispatcher.actionTypeArgument).to(beNil())
+                        expect(self.webView.evaluateJStoBoolArgument).to(beNil())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
                     }
                 }
 
@@ -150,14 +245,14 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates a bool from .initialized on the webview") {
-                            expect(self.webView.evaluateJSToBoolCalled).to(beTrue())
-                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialized"))
+                            expect(self.webView.evaluateJStoBoolArgument).notTo(beNil())
+                            expect(self.webView.evaluateJStoBoolArgument).to(equal("\(self.dataStoreName).initialized"))
                         }
 
                         it("pushes the value from the webview to the returned single") {
-                            expect(self.dispatcher.actionTypeArgument).toNot(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                            expect(argument).to(equal(DataStoreAction.initialized(initialized: true)))
+                            expect(self.dispatcher.actionTypeArguments).toNot(beNil())
+                            let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                            expect(arguments).to(contain(DataStoreAction.initialized(initialized: true)))
                         }
                     }
 
@@ -175,13 +270,13 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates a bool from .initialized on the webview") {
-                            expect(self.webView.evaluateJSToBoolCalled).to(beTrue())
-                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialized"))
+                            expect(self.webView.evaluateJStoBoolArgument).notTo(beNil())
+                            expect(self.webView.evaluateJStoBoolArgument).to(equal("\(self.dataStoreName).initialized"))
                         }
 
                         it("pushes the error from the webview to the dispatcher") {
-                            expect(self.dispatcher.actionTypeArgument).toEventuallyNot(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).toEventuallyNot(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: err)))
                         }
                     }
@@ -190,16 +285,15 @@ class DataStoreActionSpec: QuickSpec {
 
             describe(".initialize(scopedKey:)") {
                 let scopedKey = "someLongJWKStringWithQuote"
-                let uid = "jfdsjkjewnmadsflsdf"
 
                 describe("when the datastore has not been opened yet") {
                     beforeEach {
-                        self.subject.initialize(scopedKey: scopedKey, uid: uid)
+                        self.subject.initialize(scopedKey: scopedKey)
                     }
 
                     it("does nothing") {
-                        expect(self.webView.evaluateJSCalled).to(beFalse())
-                        expect(self.dispatcher.actionTypeArgument).to(beNil())
+                        expect(self.webView.evaluateJSArgument).to(beNil())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
                     }
                 }
 
@@ -216,18 +310,18 @@ class DataStoreActionSpec: QuickSpec {
                             self.webView.anySingle = self.scheduler.createColdObservable([error(100, err)])
                                     .take(1)
                                     .asSingle()
-                            self.subject.initialize(scopedKey: scopedKey, uid: uid)
+                            self.subject.initialize(scopedKey: scopedKey)
                             self.scheduler.start()
                         }
 
                         it("evaluates javascript to initialize the webview datastore") {
-                            expect(self.webView.evaluateJSCalled).to(beTrue())
-                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey), \"salt\":\"\(uid)\"})"))
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
+                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey)})"))
                         }
 
                         it("dispatches the error") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: err)))
                         }
                     }
@@ -237,13 +331,13 @@ class DataStoreActionSpec: QuickSpec {
                             self.webView.anySingle = self.scheduler.createColdObservable([next(100, true)])
                                     .take(1)
                                     .asSingle()
-                            self.subject.initialize(scopedKey: scopedKey, uid: uid)
+                            self.subject.initialize(scopedKey: scopedKey)
                             self.scheduler.start()
                         }
 
                         it("evaluates javascript to initialize the webview datastore") {
-                            expect(self.webView.evaluateJSCalled).to(beTrue())
-                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey), \"salt\":\"\(uid)\"})"))
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
+                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey)})"))
                         }
 
                         describe("getting an initializecomplete callback from javascript") {
@@ -253,9 +347,9 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("pushes the initialized result to the dispatcher") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                                expect(argument).to(equal(DataStoreAction.initialized(initialized: true)))
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                expect(arguments).to(contain(DataStoreAction.initialized(initialized: true)))
                             }
                         }
 
@@ -266,8 +360,8 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("pushes the UnexpectedJavaScriptMethod to the dispatcher") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                                expect(self.dispatcher.actionTypeArguments).notTo(beEmpty())
+                                let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                                 expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedJavaScriptMethod)))
                             }
                         }
@@ -279,8 +373,8 @@ class DataStoreActionSpec: QuickSpec {
                 describe("when the datastore has not been opened yet") {
                     it("does nothing") {
                         self.subject.updateLocked()
-                        expect(self.webView.evaluateJSCalled).to(beFalse())
-                        expect(self.dispatcher.actionTypeArgument).to(beNil())
+                        expect(self.webView.evaluateJStoBoolArgument).to(beNil())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
                     }
                 }
 
@@ -297,14 +391,14 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates a bool from .locked on the webview") {
-                            expect(self.webView.evaluateJSToBoolCalled).to(beTrue())
-                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).locked"))
+                            expect(self.webView.evaluateJStoBoolArgument).notTo(beNil())
+                            expect(self.webView.evaluateJStoBoolArgument).to(equal("\(self.dataStoreName).locked"))
                         }
 
                         it("pushes the value from the webview to the returned single") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                            expect(argument).to(equal(DataStoreAction.locked(locked: true)))
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                            expect(arguments).to(contain(DataStoreAction.locked(locked: true)))
                         }
                     }
 
@@ -322,13 +416,13 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates a bool from .initialized on the webview") {
-                            expect(self.webView.evaluateJSToBoolCalled).to(beTrue())
-                            expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).locked"))
+                            expect(self.webView.evaluateJStoBoolArgument).notTo(beNil())
+                            expect(self.webView.evaluateJStoBoolArgument).to(equal("\(self.dataStoreName).locked"))
                         }
 
                         it("pushes the error from the webview to the dispatcher") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: err)))
                         }
                     }
@@ -339,8 +433,8 @@ class DataStoreActionSpec: QuickSpec {
                 describe("when the datastore has not been opened yet") {
                     it("does nothing") {
                         self.subject.unlock(scopedKey: scopedKey)
-                        expect(self.webView.evaluateJSCalled).to(beFalse())
-                        expect(self.dispatcher.actionTypeArgument).to(beNil())
+                        expect(self.webView.evaluateJSArgument).to(beNil())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
                     }
                 }
 
@@ -362,13 +456,13 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates .unlock on the webview datastore") {
-                            expect(self.webView.evaluateJSCalled).to(beTrue())
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
                             expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).unlock(\(scopedKey))"))
                         }
 
                         it("dispatches the error") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: err)))
                         }
                     }
@@ -383,7 +477,7 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates .unlock on the webview datastore") {
-                            expect(self.webView.evaluateJSCalled).to(beTrue())
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
                             expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).unlock(\(scopedKey))"))
                         }
 
@@ -396,9 +490,9 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("pushes the value to the dispatcher") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                                expect(argument).to(equal(DataStoreAction.locked(locked: false)))
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                expect(arguments).to(contain(DataStoreAction.locked(locked: false)))
                             }
                         }
 
@@ -409,8 +503,8 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("pushes the UnexpectedJavaScriptMethod to the dispatcher") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                                 expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedJavaScriptMethod)))
                             }
                         }
@@ -421,8 +515,8 @@ class DataStoreActionSpec: QuickSpec {
             describe(".lock()") {
                 describe("when the datastore has not been opened yet") {
                     it("does nothing") {
-                        expect(self.webView.evaluateJSCalled).to(beFalse())
-                        expect(self.dispatcher.actionTypeArgument).to(beNil())
+                        expect(self.webView.evaluateJSArgument).to(beNil())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
                     }
                 }
 
@@ -444,13 +538,13 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates .lock on the webview datastore") {
-                            expect(self.webView.evaluateJSCalled).to(beTrue())
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
                             expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).lock()"))
                         }
 
                         it("dispatches the error") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: err)))
                         }
                     }
@@ -465,7 +559,7 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("evaluates .lock on the webview datastore") {
-                            expect(self.webView.evaluateJSCalled).to(beTrue())
+                            expect(self.webView.evaluateJSArgument).notTo(beNil())
                             expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).lock()"))
                         }
 
@@ -478,9 +572,9 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("pushes the updated lock value to the dispatcher") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                                expect(argument).to(equal(DataStoreAction.locked(locked: true)))
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                expect(arguments).to(contain(DataStoreAction.locked(locked: true)))
                             }
                         }
 
@@ -491,8 +585,8 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("pushes the UnexpectedJavaScriptMethod to the dispatcher") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                                 expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedJavaScriptMethod)))
                             }
                         }
@@ -504,8 +598,8 @@ class DataStoreActionSpec: QuickSpec {
                 describe("when the datastore is not open") {
                     it("does nothing") {
                         self.subject.list()
-                        expect(self.dispatcher.actionTypeArgument).to(beNil())
-                        expect(self.webView.evaluateJSCalled).to(beFalse())
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
+                        expect(self.webView.evaluateJSArgument).to(beNil())
                     }
                 }
 
@@ -525,8 +619,8 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("pushes the DataStoreNotInitialized error") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.NotInitialized)))
                         }
                     }
@@ -544,8 +638,8 @@ class DataStoreActionSpec: QuickSpec {
                         }
 
                         it("pushes the DataStoreLocked error") {
-                            expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                            let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                             expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.Locked)))
                         }
                     }
@@ -573,13 +667,13 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("evaluates .list() on the webview datastore") {
-                                expect(self.webView.evaluateJSCalled).to(beTrue())
+                                expect(self.webView.evaluateJSArgument).notTo(beNil())
                                 expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).list()"))
                             }
 
                             it("dispatches the error") {
-                                expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                                 expect(argument).to(matchErrorAction(ErrorAction(error: err)))
                             }
                         }
@@ -594,7 +688,7 @@ class DataStoreActionSpec: QuickSpec {
                             }
 
                             it("evaluates .list() on the webview datastore") {
-                                expect(self.webView.evaluateJSCalled).to(beTrue())
+                                expect(self.webView.evaluateJSArgument).notTo(beNil())
                                 expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).list()"))
                             }
 
@@ -605,21 +699,21 @@ class DataStoreActionSpec: QuickSpec {
                                 }
 
                                 it("pushes the UnexpectedJavaScriptMethod to the dispatcher") {
-                                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                    let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                                    expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                    let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                                     expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedJavaScriptMethod)))
                                 }
                             }
 
                             describe("when the webview calls back with a list that does not contain lists") {
                                 beforeEach {
-                                    let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [1,2,3])
+                                    let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [1, 2, 3])
                                     self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
                                 }
 
                                 it("pushes the UnexpectedType error") {
-                                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                    let argument = self.dispatcher.actionTypeArgument as! ErrorAction
+                                    expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                    let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
                                     expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedType)))
                                 }
                             }
@@ -627,14 +721,14 @@ class DataStoreActionSpec: QuickSpec {
 
                             describe("when the webview calls back with a list of lists without the dictionary as the second value") {
                                 beforeEach {
-                                    let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [[1,2,3]])
+                                    let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [[1, 2, 3]])
                                     self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
                                 }
 
                                 it("pushes an empty list") {
-                                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                    let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                                    expect(argument).to(equal(DataStoreAction.list(list: [])))
+                                    expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                    let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                    expect(arguments).to(contain(DataStoreAction.list(list: [])))
                                 }
                             }
 
@@ -642,15 +736,15 @@ class DataStoreActionSpec: QuickSpec {
                                 describe("when the parser is unable to parse an item from the dictionary") {
                                     beforeEach() {
                                         self.parser.itemFromDictionaryShouldThrow = true
-                                        let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue",["foo":5,"bar":1]],["idvalue1",["foo":3,"bar":7]]])
+                                        let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue", ["foo": 5, "bar": 1]], ["idvalue1", ["foo": 3, "bar": 7]]])
 
                                         self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
                                     }
 
                                     it("pushes a list with the valid items") {
-                                        expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                        let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                                        expect(argument).to(equal(DataStoreAction.list(list: [])))
+                                        expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                        let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                        expect(arguments).to(contain(DataStoreAction.list(list: [])))
                                     }
                                 }
 
@@ -663,14 +757,14 @@ class DataStoreActionSpec: QuickSpec {
                                                 .entry(ItemEntry.Builder().kind("login").build())
                                                 .build()
 
-                                        let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue",["foo":5,"bar":1]],["idvalue1",["foo":3,"bar":7]]])
+                                        let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue", ["foo": 5, "bar": 1]], ["idvalue1", ["foo": 3, "bar": 7]]])
                                         self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
                                     }
 
                                     it("pushes the items") {
-                                        expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                                        let argument = self.dispatcher.actionTypeArgument as! DataStoreAction
-                                        expect(argument).to(equal(DataStoreAction.list(list: [self.parser.item, self.parser.item])))
+                                        expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                        let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                        expect(arguments).to(contain(DataStoreAction.list(list: [self.parser.item, self.parser.item])))
                                     }
                                 }
                             }
@@ -678,30 +772,30 @@ class DataStoreActionSpec: QuickSpec {
                     }
                 }
             }
-        }
 
-        describe("Action equality") {
-            let itemA = Item.Builder().id("something").build()
-            let itemB = Item.Builder().id("something else").build()
+            describe("Action equality") {
+                let itemA = Item.Builder().id("something").build()
+                let itemB = Item.Builder().id("something else").build()
 
-            it("updateList is equal based on the contained list") {
-                expect(DataStoreAction.list(list: [itemA])).to(equal(DataStoreAction.list(list: [itemA])))
-                expect(DataStoreAction.list(list: [itemA])).notTo(equal(DataStoreAction.list(list: [itemA, itemA])))
-                expect(DataStoreAction.list(list: [itemA])).notTo(equal(DataStoreAction.list(list: [itemB])))
-            }
+                it("updateList is equal based on the contained list") {
+                    expect(DataStoreAction.list(list: [itemA])).to(equal(DataStoreAction.list(list: [itemA])))
+                    expect(DataStoreAction.list(list: [itemA])).notTo(equal(DataStoreAction.list(list: [itemA, itemA])))
+                    expect(DataStoreAction.list(list: [itemA])).notTo(equal(DataStoreAction.list(list: [itemB])))
+                }
 
-            it("initialize is equal based on the contained boolean") {
-                expect(DataStoreAction.initialized(initialized: true)).to(equal(DataStoreAction.initialized(initialized: true)))
-                expect(DataStoreAction.initialized(initialized: true)).notTo(equal(DataStoreAction.initialized(initialized: false)))
-            }
+                it("initialize is equal based on the contained boolean") {
+                    expect(DataStoreAction.initialized(initialized: true)).to(equal(DataStoreAction.initialized(initialized: true)))
+                    expect(DataStoreAction.initialized(initialized: true)).notTo(equal(DataStoreAction.initialized(initialized: false)))
+                }
 
-            it("initialize is equal based on the contained boolean") {
-                expect(DataStoreAction.locked(locked: true)).to(equal(DataStoreAction.locked(locked: true)))
-                expect(DataStoreAction.locked(locked: true)).notTo(equal(DataStoreAction.locked(locked: false)))
-            }
+                it("initialize is equal based on the contained boolean") {
+                    expect(DataStoreAction.locked(locked: true)).to(equal(DataStoreAction.locked(locked: true)))
+                    expect(DataStoreAction.locked(locked: true)).notTo(equal(DataStoreAction.locked(locked: false)))
+                }
 
-            it("different enum values are not equal") {
-                expect(DataStoreAction.locked(locked: false)).notTo(equal(DataStoreAction.initialized(initialized: false)))
+                it("different enum values are not equal") {
+                    expect(DataStoreAction.locked(locked: false)).notTo(equal(DataStoreAction.initialized(initialized: false)))
+                }
             }
         }
     }
