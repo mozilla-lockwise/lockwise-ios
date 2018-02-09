@@ -15,20 +15,31 @@ class DataStoreHandlerIntegrationSpec : QuickSpec {
     private let uid = "333333333"
 
     override func spec() {
-        var initializeValue: DataStoreAction?
+        var initializeValue: [DataStoreAction]?
+        var openedValue: DataStoreAction?
         beforeSuite {
-            DataStoreActionHandler.shared.initialize(scopedKey: self.scopedKey, uid: self.uid)
+            DataStoreActionHandler.shared.open(uid: self.uid)
+
+            openedValue = try! Dispatcher.shared.register
+                    .filterByType(class: DataStoreAction.self)
+                    .take(3)
+                    .toBlocking()
+                    .first()
+
+            DataStoreActionHandler.shared.initialize(scopedKey: self.scopedKey)
 
             initializeValue = try! Dispatcher.shared.register
                     .filterByType(class: DataStoreAction.self)
                     .take(3)
                     .toBlocking()
-                    .last()
+                    .toArray()
         }
 
-        it("updates initialize value after initializing successfully") {
+        it("updates initialize & open value after opening & initializing successfully") {
+            expect(openedValue).notTo(beNil())
+            expect(openedValue).to(equal(DataStoreAction.opened(opened: true)))
             expect(initializeValue).notTo(beNil())
-            expect(initializeValue).to(equal(DataStoreAction.initialized(initialized: true)))
+            expect(initializeValue).to(contain(DataStoreAction.initialized(initialized: true)))
         }
 
         describe("DataStore with JavaScript integration") {

@@ -49,22 +49,24 @@ class KeyManagerSpec : QuickSpec {
             }
         }
 
-        xdescribe(".decryptJWE()") {
-            // note: pending until the format of JWE returned from FxA is established
-            let payload:String = "I've got some data!"
+        describe(".decryptJWE()") {
+            let payload = "some data I put in here"
 
             it("decrypts a provided JWE payload") {
                 let ecdh = self.subject.getEphemeralPublicECDH()
-                let jwkFromJSON = cjose_jwk_import(ecdh, ecdh.count, nil)
+                let count = ecdh.data(using: .utf8)!.count as size_t
+                let jwkFromJSON = cjose_jwk_import(ecdh, count, nil)
 
+                let cjoseError = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
                 let header:OpaquePointer = cjose_header_new(nil)
-                cjose_header_set(header, CJOSE_HDR_ALG, CJOSE_HDR_ALG_PS256, nil)
+                cjose_header_set(header, CJOSE_HDR_ALG, CJOSE_HDR_ALG_ECDH_ES, nil)
+                cjose_header_set(header, CJOSE_HDR_ENC, CJOSE_HDR_ENC_A256GCM, nil)
 
                 let jwe = cjose_jwe_encrypt(jwkFromJSON,
                         header,
                         payload,
                         payload.count,
-                        nil)
+                        cjoseError)
                 let serializedJWE = String(cString: cjose_jwe_export(jwe, nil))
 
                 expect(self.subject.decryptJWE(serializedJWE)).to(equal(payload))

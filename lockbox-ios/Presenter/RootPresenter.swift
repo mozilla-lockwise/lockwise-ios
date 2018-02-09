@@ -18,10 +18,11 @@ protocol RootViewProtocol: class {
     func pushMainView(view: MainRouteAction)
 }
 
-struct InfoKeyInit {
+struct InfoKeyInitOpen {
     let profileInfo:ProfileInfo?
     let scopedKey:String?
     let initialized:Bool
+    let opened:Bool
 }
 
 struct KeyLock {
@@ -58,22 +59,27 @@ class RootPresenter {
         self.dataStoreActionHandler.updateLocked()
 
         // initialize if not initialized
-        Observable.combineLatest(self.userInfoStore.profileInfo, self.userInfoStore.scopedKey, self.dataStore.onInitialized)
-                .map { (element: (ProfileInfo?, String?, Bool)) -> InfoKeyInit in
-                    return InfoKeyInit(profileInfo: element.0, scopedKey: element.1, initialized: element.2)
+        Observable.combineLatest(self.userInfoStore.profileInfo, self.userInfoStore.scopedKey, self.dataStore.onInitialized, self.dataStore.onOpened)
+                .map { (latest: (ProfileInfo?, String?, Bool, Bool)) -> InfoKeyInitOpen in
+                    return InfoKeyInitOpen(profileInfo: latest.0, scopedKey: latest.1, initialized: latest.2, opened: latest.3)
                  }
-                .filter { (latest: InfoKeyInit) in
+                .filter { (latest: InfoKeyInitOpen) in
                     return (latest.profileInfo != nil) == (latest.scopedKey != nil)
                 }
-                .subscribe(onNext: { (latest: InfoKeyInit) in
+                .subscribe(onNext: { (latest: InfoKeyInitOpen) in
                     guard let info = latest.profileInfo,
                           let scopedKey = latest.scopedKey else {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                         return
                     }
 
+                    if !latest.opened {
+                        self.dataStoreActionHandler.open(uid: info.uid)
+                        return
+                    }
+
                     if !latest.initialized {
-                        self.dataStoreActionHandler.initialize(scopedKey: scopedKey, uid: info.uid)
+                        self.dataStoreActionHandler.initialize(scopedKey: scopedKey)
                     }
                 })
                 .disposed(by: self.disposeBag)

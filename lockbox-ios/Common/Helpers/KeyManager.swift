@@ -20,11 +20,11 @@ class KeyManager {
 
     func decryptJWE(_ jwe: String) -> String {
         let count = jwe.data(using: .utf8)!.count as size_t
+        let contentLen = UnsafeMutablePointer<size_t>.allocate(capacity:count)
+        let err = UnsafeMutablePointer<cjose_err>.allocate(capacity:count)
 
-        let cjoseError = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
-
-        let cJoseJWE = cjose_jwe_import(jwe, count, cjoseError)
-        let decryptedPayload = cjose_jwe_decrypt(cJoseJWE, self.jwk, nil, nil)
+        let cJoseJWE = cjose_jwe_import(jwe, count, nil)
+        let decryptedPayload = cjose_jwe_decrypt(cJoseJWE, self.jwk, contentLen, err)
 
         return String(cString: decryptedPayload!)
     }

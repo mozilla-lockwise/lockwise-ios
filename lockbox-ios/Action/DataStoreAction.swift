@@ -20,6 +20,7 @@ enum DataStoreAction: Action {
     case list(list: [Item])
     case locked(locked: Bool)
     case initialized(initialized: Bool)
+    case opened(opened: Bool)
 }
 
 extension DataStoreAction: Equatable {
@@ -31,6 +32,8 @@ extension DataStoreAction: Equatable {
             return lhLocked == rhLocked
         case (.initialized(let lhInitialized), .initialized(let rhInitialized)):
             return lhInitialized == rhInitialized
+        case (.opened(let lhOpened), .opened(let rhOpened)):
+            return lhOpened == rhOpened
         default:
             return false
         }
@@ -43,10 +46,11 @@ class DataStoreActionHandler: NSObject, ActionHandler {
 
     internal var webView: (WKWebView & TypedJavaScriptWebView)!
     private let dataStoreName: String
-    private let parser:ItemParser!
+    private let parser:ItemParser
     private let disposeBag = DisposeBag()
 
     // Subject references for .js calls
+    internal var loadedSubject = ReplaySubject<Void>.create(bufferSize: 1)
     private var openSubject = ReplaySubject<Void>.create(bufferSize: 1)
     private var initializeSubject = PublishSubject<Void>()
     private var unlockSubject = PublishSubject<Void>()
@@ -85,10 +89,26 @@ class DataStoreActionHandler: NSObject, ActionHandler {
             return
         }
 
+        self.dispatcher.dispatch(action: DataStoreAction.opened(opened: false))
+        self.dispatcher.dispatch(action: DataStoreAction.initialized(initialized: false))
         self.webView.loadFileURL(path, allowingReadAccessTo: baseUrl)
     }
 
-    public func initialize(scopedKey: String, uid: String) {
+    public func open(uid: String) {
+        self.openSubject
+                .take(1)
+                .subscribe(onNext: { [weak self] _ in
+                    self?.dispatcher.dispatch(action: DataStoreAction.opened(opened: true))
+                }, onError: { [weak self] error in
+                    self?.dispatcher.dispatch(action: ErrorAction(error: error))
+                    self?.openSubject = ReplaySubject<Void>.create(bufferSize: 1)
+                 })
+                .disposed(by: self.disposeBag)
+
+        self._open(uid: uid)
+    }
+
+    public func initialize(scopedKey: String) {
         self.initializeSubject
                 .take(1)
                 .subscribe(onNext: { [weak self] _ in
@@ -99,7 +119,7 @@ class DataStoreActionHandler: NSObject, ActionHandler {
                 })
                 .disposed(by: self.disposeBag)
 
-        self._initialize(scopedKey: scopedKey, uid: uid)
+        self._initialize(scopedKey: scopedKey)
     }
 
     public func updateInitialized() {
@@ -167,12 +187,16 @@ class DataStoreActionHandler: NSObject, ActionHandler {
 
 // javascript interaction
 extension DataStoreActionHandler {
-    private func _open() -> Observable<Void> {
-        return self.webView.evaluateJavaScript("var \(self.dataStoreName);swiftOpen().then(function (datastore) {\(self.dataStoreName) = datastore;});")
-                .asObservable()
-                .flatMap { _ in
-                    self.openSubject.asObservable()
+    private func _open(uid: String) {
+        self.loadedSubject
+                .take(1)
+                .flatMap {
+                    self.webView.evaluateJavaScript("var \(self.dataStoreName);swiftOpen({\"salt\":\"\(uid)\"}).then(function (datastore) {\(self.dataStoreName) = datastore;});")
                 }
+                .subscribe(onError: { error in
+                    self.openSubject.onError(error)
+                })
+                .disposed(by: self.disposeBag)
     }
 
     private func _initialized() -> Single<Bool> {
@@ -184,11 +208,11 @@ extension DataStoreActionHandler {
                 }
     }
 
-    private func _initialize(scopedKey: String, uid: String) {
+    private func _initialize(scopedKey: String) {
         self.openSubject
                 .take(1)
                 .flatMap { _ in
-                    self.webView.evaluateJavaScript("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey), \"salt\":\"\(uid)\"})")
+                    self.webView.evaluateJavaScript("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey)})")
                 }
                 .subscribe(onError:{ error in
                     self.initializeSubject.onError(error)
@@ -266,13 +290,7 @@ extension DataStoreActionHandler {
 
 extension DataStoreActionHandler: WKScriptMessageHandler, WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self._open()
-                .take(1)
-                .subscribe(onError: { error in
-                    self.dispatcher.dispatch(action: ErrorAction(error: error))
-                    self.openSubject = ReplaySubject<Void>.create(bufferSize: 1)
-                 })
-                .disposed(by: self.disposeBag)
+        self.loadedSubject.onNext(())
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
