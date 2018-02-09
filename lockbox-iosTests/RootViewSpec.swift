@@ -90,7 +90,7 @@ class RootViewSpec : QuickSpec {
                     }
 
                     it("makes an fxaview the top view") {
-                        expect(self.subject.topViewIs(FxAView.self)).toEventually(beTrue())
+                        expect(self.subject.topViewIs(FxAView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
             }
