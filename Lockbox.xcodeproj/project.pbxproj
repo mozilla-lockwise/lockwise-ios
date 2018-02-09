@@ -95,8 +95,6 @@
 		7DA4C68F2028F99800B61DD8 /* UIViewController+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6882028F86E00B61DD8 /* UIViewController+Spec.swift */; };
 		7DA4C6932028FB0900B61DD8 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6902028FB0900B61DD8 /* UIColor+.swift */; };
 		7DA4C6952028FB0900B61DD8 /* UINavigationBar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6922028FB0900B61DD8 /* UINavigationBar+.swift */; };
-		7DB923B82018F22100927F2F /* RootViewSpec.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DB923B72018F22100927F2F /* RootViewSpec.storyboard */; };
-		7DB923BA2018F24E00927F2F /* FxAViewSpec.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DB923B92018F24E00927F2F /* FxAViewSpec.storyboard */; };
 		7DBF9B2D1FB22EB000A53364 /* libcjose.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920261FB131FB00709575 /* libcjose.a */; };
 		7DBF9B2E1FB22EB000A53364 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920231FB131FB00709575 /* libcrypto.a */; };
 		7DBF9B2F1FB22EB000A53364 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920251FB131FB00709575 /* libjansson.a */; };
@@ -242,8 +240,6 @@
 		7DA4C6892028F86E00B61DD8 /* ItemListPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListPresenterSpec.swift; sourceTree = "<group>"; };
 		7DA4C6902028FB0900B61DD8 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		7DA4C6922028FB0900B61DD8 /* UINavigationBar+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+.swift"; sourceTree = "<group>"; };
-		7DB923B72018F22100927F2F /* RootViewSpec.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RootViewSpec.storyboard; sourceTree = "<group>"; };
-		7DB923B92018F24E00927F2F /* FxAViewSpec.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FxAViewSpec.storyboard; sourceTree = "<group>"; };
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
@@ -464,8 +460,6 @@
 				7AA54C72B63B2B4C8200F3F8 /* RootPresenterSpec.swift */,
 				7AA54C0FE8643E1EBE3D35B8 /* RootViewSpec.swift */,
 				7AA54204B5AFD9672649ACF0 /* LoginNavigationControllerSpec.swift */,
-				7DB923B72018F22100927F2F /* RootViewSpec.storyboard */,
-				7DB923B92018F24E00927F2F /* FxAViewSpec.storyboard */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -598,8 +592,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DB923BA2018F24E00927F2F /* FxAViewSpec.storyboard in Resources */,
-				7DB923B82018F22100927F2F /* RootViewSpec.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
