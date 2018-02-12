@@ -10,7 +10,7 @@ import RxSwift
 @testable import Lockbox
 
 enum RootPresenterSharedExample:String {
-    case NoLoginOrInitialize, NoUnlockOrList
+    case NoLoginOrInitialize, NoUnlockOrList, EmptyProfileInfo, EmptyScopedKey
 }
 
 enum RootPresenterSharedExampleVar:String {
@@ -157,150 +157,97 @@ class RootPresenterSpec : QuickSpec {
                 )
             }
 
-            it("updates initialized & locked values immediately") {
+            it("requests update for initialized & locked values immediately") {
                 expect(self.dataStoreActionHandler.updateInitializedCalled).to(beTrue())
                 expect(self.dataStoreActionHandler.updateLockedCalled).to(beTrue())
             }
 
-            describe("when getting empty profile info & scoped key objects") {
+            describe("when getting an empty profile info object, regardless of opened value") {
+                sharedExamples(RootPresenterSharedExample.EmptyProfileInfo.rawValue) { context in
+                    it("starts the login flow") {
+                        let info = context()[RootPresenterSharedExampleVar.profileInfo.rawValue] as? ProfileInfo
+                        let opened = context()[RootPresenterSharedExampleVar.opened.rawValue] as! Bool
+                        self.advance(profileInfo: info, opened: opened)
+
+                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                        let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                        expect(argument).to(equal(LoginRouteAction.welcome))
+                        expect(self.dataStoreActionHandler.openUID).to(beNil())
+                        expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                    }
+                }
+
+                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {[
+                    RootPresenterSharedExampleVar.opened.rawValue:true
+                ]}
+
+                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {[
+                    RootPresenterSharedExampleVar.opened.rawValue:false
+                ]}
+            }
+
+            describe("getting a populated profile info object and the datastore is opened") {
+                let uid = "fsdsfdfsd"
+
                 beforeEach {
-                    self.advance(profileInfo: nil, scopedKey: nil, initialized: false, opened: false)
+                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: true)
                 }
 
-                it("starts the login flow") {
-                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                    let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(argument).to(equal(LoginRouteAction.welcome))
-                    expect(self.dataStoreActionHandler.openUID).to(beNil())
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                it("does nothing") {
+
                 }
             }
 
-            describe("when getting populated profile info & scoped key objects but the datastore is not opened, regardless of initialized value") {
+            describe("getting an empty profile info object and the datastore is not opened") {
                 let uid = "fsdsfdfsd"
-                let scopedKey = "ggggggggg"
 
-                it("starts the datastore opening process & does not initialize") {
-                    self.advance(
-                            profileInfo: ProfileInfo.Builder().uid(uid).build(),
-                            scopedKey: scopedKey,
-                            initialized: true,
-                            opened: false)
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    expect(self.dataStoreActionHandler.openUID).to(equal(uid))
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                beforeEach {
+                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: false)
                 }
 
-                it("starts the datastore opening process & does not initialize") {
-                    self.advance(
-                    profileInfo: ProfileInfo.Builder().uid(uid).build(),
-                    scopedKey: scopedKey,
-                    initialized: false,
-                    opened: false)
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    expect(self.dataStoreActionHandler.openUID).to(equal(uid))
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                it("dispatches the open action") {
+
                 }
             }
 
-            describe("when getting populated profile info & scoped key objects with an open datastore & false initialized value") {
-                let uid = "fsdsfdfsd"
-                let scopedKey = "ggggggggg"
+            describe("when getting an empty scoped key object, regardless of initialized value OR populated scoped key & a positive initialized value") {
+                sharedExamples(RootPresenterSharedExample.EmptyScopedKey.rawValue) { context in
+                    it("does nothing") {
+                        let scopedKey = context()[RootPresenterSharedExampleVar.scopedKey.rawValue] as? String
+                        let initialized = context()[RootPresenterSharedExampleVar.initialized.rawValue] as! Bool
+                        self.advance(scopedKey: scopedKey, initialized: initialized)
 
-                it("starts the datastore opening process & does not initialize") {
-                    self.advance(
-                            profileInfo: ProfileInfo.Builder().uid(uid).build(),
-                            scopedKey: scopedKey,
-                            initialized: false,
-                            opened: true)
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        expect(self.dataStoreActionHandler.openUID).to(beNil())
+                        expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                    }
+                }
+
+                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {[
+                    RootPresenterSharedExampleVar.initialized.rawValue:true
+                ]}
+
+                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {[
+                    RootPresenterSharedExampleVar.initialized.rawValue:false
+                ]}
+
+                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {[
+                    RootPresenterSharedExampleVar.initialized.rawValue:true,
+                    RootPresenterSharedExampleVar.scopedKey.rawValue:"sdflkjsdfhjksdfkjhsdfhjksdf"
+                ]}
+            }
+
+            describe("when getting a populated scoped key object & the datastore is not initialized") {
+                let scopedKey = "bljlkadsfljkafdsljk"
+                beforeEach {
+                    self.advance(scopedKey: scopedKey, initialized: false)
+                }
+
+                it("dispatches the initialized() action") {
                     expect(self.routeActionHandler.invokeArgument).to(beNil())
                     expect(self.dataStoreActionHandler.openUID).to(beNil())
                     expect(self.dataStoreActionHandler.initializeScopedKey).to(equal(scopedKey))
                 }
-            }
-
-            describe("when getting populated profile info & scoped key objects with an open & initialized datastore") {
-                let uid = "fsdsfdfsd"
-                let scopedKey = "ggggggggg"
-
-                it("does nothing") {
-                    self.advance(
-                            profileInfo: ProfileInfo.Builder().uid(uid).build(),
-                            scopedKey: scopedKey,
-                            initialized: true,
-                            opened: true)
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    expect(self.dataStoreActionHandler.openUID).to(beNil())
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
-                }
-            }
-
-            describe("when getting either populated profileInfo or scoped key, regardless of initialized or opened value") {
-                sharedExamples(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) { context in
-                    it("does nothing") {
-                        let info = context()[RootPresenterSharedExampleVar.profileInfo.rawValue] as? ProfileInfo
-                        let scopedKey = context()[RootPresenterSharedExampleVar.scopedKey.rawValue] as? String
-                        let initialized = context()[RootPresenterSharedExampleVar.initialized.rawValue] as! Bool
-                        let opened = context()[RootPresenterSharedExampleVar.opened.rawValue] as! Bool
-                        self.advance(
-                                profileInfo: info,
-                                scopedKey: scopedKey,
-                                initialized: initialized,
-                                opened: opened
-                        )
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                        expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
-                        expect(self.dataStoreActionHandler.openUID).to(beNil())
-                    }
-                 }
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.scopedKey.rawValue:"something",
-                    RootPresenterSharedExampleVar.initialized.rawValue:true,
-                    RootPresenterSharedExampleVar.opened.rawValue:true
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.profileInfo.rawValue:ProfileInfo.Builder().uid("meow").build(),
-                    RootPresenterSharedExampleVar.initialized.rawValue:true,
-                    RootPresenterSharedExampleVar.opened.rawValue:true
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.scopedKey.rawValue:"something",
-                    RootPresenterSharedExampleVar.initialized.rawValue:false,
-                    RootPresenterSharedExampleVar.opened.rawValue:true
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.profileInfo.rawValue:ProfileInfo.Builder().uid("meow").build(),
-                    RootPresenterSharedExampleVar.initialized.rawValue:false,
-                    RootPresenterSharedExampleVar.opened.rawValue:true
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.scopedKey.rawValue:"something",
-                    RootPresenterSharedExampleVar.initialized.rawValue:true,
-                    RootPresenterSharedExampleVar.opened.rawValue:false
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.profileInfo.rawValue:ProfileInfo.Builder().uid("meow").build(),
-                    RootPresenterSharedExampleVar.initialized.rawValue:true,
-                    RootPresenterSharedExampleVar.opened.rawValue:false
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.scopedKey.rawValue:"something",
-                    RootPresenterSharedExampleVar.initialized.rawValue:false,
-                    RootPresenterSharedExampleVar.opened.rawValue:false
-                ]}
-
-                itBehavesLike(RootPresenterSharedExample.NoLoginOrInitialize.rawValue) {[
-                    RootPresenterSharedExampleVar.profileInfo.rawValue:ProfileInfo.Builder().uid("meow").build(),
-                    RootPresenterSharedExampleVar.initialized.rawValue:false,
-                    RootPresenterSharedExampleVar.opened.rawValue:false
-                ]}
             }
 
             describe("when getting a populated scoped key object & a locked datastore") {
@@ -568,11 +515,14 @@ class RootPresenterSpec : QuickSpec {
         }
     }
 
-    private func advance(profileInfo:ProfileInfo?,  scopedKey:String?, initialized:Bool, opened:Bool) {
+    private func advance(profileInfo:ProfileInfo?, opened:Bool) {
         self.userInfoStore.profileInfoSubject.onNext(profileInfo)
+        self.dataStore.openedSubject.onNext(opened)
+    }
+
+    private func advance(scopedKey:String?, initialized:Bool) {
         self.userInfoStore.scopedKeySubject.onNext(scopedKey)
         self.dataStore.initSubject.onNext(initialized)
-        self.dataStore.openedSubject.onNext(opened)
     }
 
     private func advance(scopedKey:String?, locked:Bool) {

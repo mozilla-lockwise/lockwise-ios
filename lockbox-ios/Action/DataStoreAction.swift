@@ -90,7 +90,6 @@ class DataStoreActionHandler: NSObject, ActionHandler {
         }
 
         self.dispatcher.dispatch(action: DataStoreAction.opened(opened: false))
-        self.dispatcher.dispatch(action: DataStoreAction.initialized(initialized: false))
         self.webView.loadFileURL(path, allowingReadAccessTo: baseUrl)
     }
 

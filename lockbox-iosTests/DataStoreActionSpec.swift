@@ -136,9 +136,8 @@ class DataStoreActionSpec: QuickSpec {
                 self.subject.webView = self.webView
             }
 
-            it("dispatches false initialized & opened values to start") {
+            it("dispatches opened status to start") {
                 let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
-                expect(arguments).to(contain(DataStoreAction.initialized(initialized: false)))
                 expect(arguments).to(contain(DataStoreAction.opened(opened: false)))
             }
 

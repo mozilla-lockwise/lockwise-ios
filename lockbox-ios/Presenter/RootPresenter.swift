@@ -18,10 +18,13 @@ protocol RootViewProtocol: class {
     func pushMainView(view: MainRouteAction)
 }
 
-struct InfoKeyInitOpen {
-    let profileInfo:ProfileInfo?
+struct KeyInit {
     let scopedKey:String?
     let initialized:Bool
+}
+
+struct InfoOpen {
+    let profileInfo:ProfileInfo?
     let opened:Bool
 }
 
@@ -58,25 +61,29 @@ class RootPresenter {
         self.dataStoreActionHandler.updateInitialized()
         self.dataStoreActionHandler.updateLocked()
 
-        // initialize if not initialized
-        Observable.combineLatest(self.userInfoStore.profileInfo, self.userInfoStore.scopedKey, self.dataStore.onInitialized, self.dataStore.onOpened)
-                .map { (latest: (ProfileInfo?, String?, Bool, Bool)) -> InfoKeyInitOpen in
-                    return InfoKeyInitOpen(profileInfo: latest.0, scopedKey: latest.1, initialized: latest.2, opened: latest.3)
-                 }
-                .filter { (latest: InfoKeyInitOpen) in
-                    return (latest.profileInfo != nil) == (latest.scopedKey != nil)
-                }
-                .subscribe(onNext: { (latest: InfoKeyInitOpen) in
-                    guard let info = latest.profileInfo,
-                          let scopedKey = latest.scopedKey else {
+        Observable.combineLatest(self.userInfoStore.profileInfo, self.dataStore.onOpened)
+                .map { (latest: (ProfileInfo?, Bool)) -> InfoOpen in
+                    return InfoOpen(profileInfo: latest.0, opened:latest.1)
+                }.subscribe(onNext: {(latest: InfoOpen) in
+                    guard let uid = latest.profileInfo?.uid else {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                         return
                     }
 
                     if !latest.opened {
-                        self.dataStoreActionHandler.open(uid: info.uid)
-                        return
+                        self.dataStoreActionHandler.open(uid: uid)
                     }
+                 }).disposed(by: self.disposeBag)
+
+        Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onInitialized)
+                .map { (latest: (String?, Bool)) -> KeyInit in
+                    return KeyInit(scopedKey: latest.0, initialized: latest.1)
+                 }
+                .filter { latest in
+                    return (latest.scopedKey != nil)
+                }
+                .subscribe(onNext: { (latest: KeyInit) in
+                    guard let scopedKey = latest.scopedKey else { return }
 
                     if !latest.initialized {
                         self.dataStoreActionHandler.initialize(scopedKey: scopedKey)
