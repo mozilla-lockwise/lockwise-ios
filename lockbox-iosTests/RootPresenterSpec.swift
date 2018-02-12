@@ -194,7 +194,9 @@ class RootPresenterSpec : QuickSpec {
                 }
 
                 it("does nothing") {
-
+                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                    expect(self.dataStoreActionHandler.openUID).to(beNil())
+                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
                 }
             }
 
@@ -206,7 +208,9 @@ class RootPresenterSpec : QuickSpec {
                 }
 
                 it("dispatches the open action") {
-
+                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                    expect(self.dataStoreActionHandler.openUID).to(equal(uid))
+                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
                 }
             }
 
