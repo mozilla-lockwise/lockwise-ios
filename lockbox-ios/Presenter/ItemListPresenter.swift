@@ -26,7 +26,6 @@ class ItemListPresenter  {
 
     func onViewReady() {
         self.dataStore.onItemList
-                .debug()
                 .subscribe(onNext: { items in
                     self.view?.displayItems(items)
                 }, onError: { error in
