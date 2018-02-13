@@ -7,12 +7,10 @@ import WebKit
 
 class ItemListView : UITableViewController, ItemListViewProtocol {
     var presenter:ItemListPresenter?
-    internal(set) var webView: WebView
 
     private var items:[Item] = []
 
     required init?(coder aDecoder: NSCoder) {
-        self.webView = WebView(frame: .zero, configuration: WKWebViewConfiguration())
         super.init(coder: aDecoder)
         self.presenter = ItemListPresenter(view: self)
     }
@@ -24,7 +22,6 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(self.webView)
         self.styleNavigationBar()
 
         self.presenter?.onViewReady()

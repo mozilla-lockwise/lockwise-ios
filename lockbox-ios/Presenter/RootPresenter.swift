@@ -30,7 +30,6 @@ struct InfoOpen {
 
 struct KeyLock {
     let scopedKey:String?
-    let initialized:Bool
     let locked:Bool
 }
 
@@ -90,6 +89,8 @@ class RootPresenter {
                     if !latest.initialized {
                         self.dataStoreActionHandler.initialize(scopedKey: scopedKey)
                         return
+                    } else {
+                        self.dataStoreActionHandler.populateTestData()
                     }
 
                     self.routeActionHandler.invoke(MainRouteAction.list)
@@ -97,12 +98,12 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         // blindly unlock for now
-        Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onInitialized, self.dataStore.onLocked)
-                .map { (element: (String?, Bool, Bool)) -> KeyLock in
-                    return KeyLock(scopedKey: element.0, initialized:element.1, locked: element.2)
-                 }
-                .filter { (latest: KeyLock) in
-                    return latest.scopedKey != nil && latest.initialized
+        Observable.combineLatest(self.dataStore.onInitialized, self.userInfoStore.scopedKey, self.dataStore.onLocked)
+                .filter { (latest: (Bool, String?, Bool)) -> Bool in
+                    return latest.0
+                }
+                .map { (latest: (Bool, String?, Bool)) -> KeyLock in
+                    return KeyLock(scopedKey: latest.1, locked: latest.2)
                 }
                 .subscribe(onNext: { (latest: KeyLock) in
                     guard let scopedKey = latest.scopedKey else { return }
@@ -110,8 +111,7 @@ class RootPresenter {
                     if latest.locked {
                         self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
                     } else {
-                        self.dataStoreActionHandler.populateTestData()
-//                        self.dataStoreActionHandler.list()
+                        self.dataStoreActionHandler.list()
                     }
                 })
                 .disposed(by: self.disposeBag)

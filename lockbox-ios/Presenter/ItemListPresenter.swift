@@ -6,7 +6,6 @@ import Foundation
 import RxSwift
 
 protocol ItemListViewProtocol: class, ErrorView {
-    var webView: WebView { get }
     func displayItems(_ items: [Item]) -> Void
 }
 

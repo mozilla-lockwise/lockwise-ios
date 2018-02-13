@@ -20,10 +20,7 @@ class ItemListPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeWebView : WebView {}
-
     class FakeItemListView: ItemListViewProtocol {
-        private(set) var webView: WebView = FakeWebView()
         var displayItemsArgument:[Item]?
         
         var displayErrorArgument:Error?
