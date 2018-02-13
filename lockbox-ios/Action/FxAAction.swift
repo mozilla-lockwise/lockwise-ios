@@ -48,14 +48,14 @@ class FxAActionHandler: ActionHandler {
         var components = URLComponents()
 
         components.scheme = "https"
-        components.host = Constant.oauthHost
+        components.host = Constant.fxa.oauthHost
         components.path = "/v1/authorization"
 
         components.queryItems = [
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "access_type", value: "offline"),
-            URLQueryItem(name: "client_id", value: Constant.clientID),
-            URLQueryItem(name: "redirect_uri", value: Constant.redirectURI),
+            URLQueryItem(name: "client_id", value: Constant.fxa.clientID),
+            URLQueryItem(name: "redirect_uri", value: Constant.app.redirectURI),
             URLQueryItem(name: "scope", value: "profile:email openid \(self?.scope ?? "")"),
             URLQueryItem(name: "keys_jwk", value: self?.jwkKey),
             URLQueryItem(name: "state", value: self?.state),
@@ -70,7 +70,7 @@ class FxAActionHandler: ActionHandler {
         var components = URLComponents()
 
         components.scheme = "https"
-        components.host = Constant.oauthHost
+        components.host = Constant.fxa.oauthHost
         components.path = "/v1/token"
 
         return components.url!
@@ -79,7 +79,7 @@ class FxAActionHandler: ActionHandler {
     lazy private var profileInfoURL: URL = { [weak self] in
         var components = URLComponents()
         components.scheme = "https"
-        components.host = Constant.profileHost
+        components.host = Constant.fxa.profileHost
         components.path = "/v1/profile"
 
         return components.url!
@@ -171,7 +171,7 @@ extension FxAActionHandler {
         var request = URLRequest(url: self.tokenURL)
         let requestParams = [
             "grant_type": "authorization_code",
-            "client_id": Constant.clientID,
+            "client_id": Constant.fxa.clientID,
             "code": code,
             "code_verifier": self.codeVerifier
         ]

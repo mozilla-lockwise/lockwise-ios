@@ -24,7 +24,7 @@ class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
         super.viewDidLoad()
         self.webView.navigationDelegate = self
         self.view = self.webView
-        styleNavigationBar()
+        self.styleNavigationBar()
 
         self.presenter.onViewReady()
     }
@@ -38,7 +38,7 @@ class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
     }
 
     private func styleNavigationBar() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: nil, action: nil)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Constant.string.cancel, style: .plain, target: nil, action: nil)
         
         self.navigationItem.leftBarButtonItem!.rx.tap
                 .bind(to: self.presenter.onCancel)

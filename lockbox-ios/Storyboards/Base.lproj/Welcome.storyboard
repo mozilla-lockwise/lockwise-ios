@@ -27,10 +27,10 @@
                                 <rect key="frame" x="0.0" y="174" width="375" height="493"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
-                                <rect key="frame" x="-51" y="0.0" width="476" height="194"/>
+                                <rect key="frame" x="-50.5" y="0.0" width="476" height="194"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lockbox" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ctm-Z1-jcM">
-                                <rect key="frame" x="124" y="262" width="128" height="38.5"/>
+                                <rect key="frame" x="123.5" y="262" width="128" height="38.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="38.5" id="4PL-3e-Kqa"/>
                                 </constraints>
@@ -39,7 +39,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Access your Lockbox account that you manage online from your iOS device!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="37" y="499.5" width="300" height="40"/>
+                                <rect key="frame" x="37.5" y="499.5" width="300" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="1Z8-yX-Sl3"/>
                                     <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
@@ -49,7 +49,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="the simple way to store, retrieve, and manage website login info" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4">
-                                <rect key="frame" x="57" y="305" width="260" height="36"/>
+                                <rect key="frame" x="57.5" y="305" width="260" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="260" id="IYN-CR-Y5B"/>
                                     <constraint firstAttribute="height" constant="36" id="kYE-ff-ndG"/>
