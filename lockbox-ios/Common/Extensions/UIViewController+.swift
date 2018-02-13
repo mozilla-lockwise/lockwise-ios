@@ -12,8 +12,7 @@ extension UIViewController : ErrorView {
     func displayError(_ error:Error) -> Void {
         let alertController = UIAlertController(title: error.localizedDescription, message: nil, preferredStyle: .alert)
 
-        // todo: localization!
-        let cancelAction = UIAlertAction(title: "OK", style: .cancel)
+        let cancelAction = UIAlertAction(title: Constant.string.ok, style: .cancel)
         alertController.addAction(cancelAction)
 
         DispatchQueue.main.async {

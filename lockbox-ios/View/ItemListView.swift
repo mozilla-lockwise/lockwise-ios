@@ -45,7 +45,7 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         let item = items[indexPath.row]
 
         cell.titleLabel.text = item.title
-        cell.detailLabel.text = (item.entry.username == "" || item.entry.username == nil) ? "(no username)" : item.entry.username
+        cell.detailLabel.text = (item.entry.username == "" || item.entry.username == nil) ? Constant.string.noUsername : item.entry.username
         cell.kebabButton.tintColor = UIColor.kebabBlue
 
         return cell
@@ -58,7 +58,7 @@ class ItemListView : UITableViewController, ItemListViewProtocol {
         prefButton.tintColor = .white
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
-        self.navigationItem.title = "Your Lockbox"
+        self.navigationItem.title = Constant.string.yourLockbox
 
         self.navigationController!.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,

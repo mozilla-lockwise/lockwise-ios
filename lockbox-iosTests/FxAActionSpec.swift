@@ -79,14 +79,14 @@ class FxAActionSpec : QuickSpec {
                     var components = URLComponents()
 
                     components.scheme = "https"
-                    components.host = Constant.oauthHost
+                    components.host = Constant.fxa.oauthHost
                     components.path = "/v1/authorization"
 
                     components.queryItems = [
                         URLQueryItem(name: "response_type", value: "code"),
                         URLQueryItem(name: "access_type", value: "offline"),
-                        URLQueryItem(name: "client_id", value: Constant.clientID),
-                        URLQueryItem(name: "redirect_uri", value: Constant.redirectURI),
+                        URLQueryItem(name: "client_id", value: Constant.fxa.clientID),
+                        URLQueryItem(name: "redirect_uri", value: Constant.app.redirectURI),
                         URLQueryItem(name: "scope", value: "profile:email openid \(self.subject.scope)"),
                         URLQueryItem(name: "keys_jwk", value: self.subject.jwkKey),
                         URLQueryItem(name: "state", value: self.subject.state),
@@ -186,8 +186,8 @@ class FxAActionSpec : QuickSpec {
                             let jsonData = try? JSONSerialization.jsonObject(with: self.session.dataTaskRequests[tokenPath]!.httpBody!) as? [String:String]
                             expect(jsonData).notTo(beNil())
 
-                            expect(urlComponents.host).to(equal(Constant.oauthHost))
-                            expect(jsonData!!["client_id"]).to(equal(Constant.clientID))
+                            expect(urlComponents.host).to(equal(Constant.fxa.oauthHost))
+                            expect(jsonData!!["client_id"]).to(equal(Constant.fxa.clientID))
                             expect(jsonData!!["code"]).to(equal(code))
                             expect(jsonData!!["code_verifier"]).to(equal(self.subject.codeVerifier))
                         }
@@ -282,7 +282,7 @@ class FxAActionSpec : QuickSpec {
                                             expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
                                             let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
 
-                                            expect(urlComponents.host).to(equal(Constant.profileHost))
+                                            expect(urlComponents.host).to(equal(Constant.fxa.profileHost))
                                         }
 
                                         it("dispatches the scoped key to the dispatcher") {
