@@ -5,6 +5,8 @@
 import UIKit
 import Quick
 import Nimble
+import RxTest
+import RxSwift
 
 @testable import Lockbox
 
@@ -18,13 +20,19 @@ class ItemListViewSpec: QuickSpec {
 
     class FakeItemListPresenter: ItemListPresenter {
         var onViewReadyCalled = false
+        var fakeItemSelectedObserver: TestableObserver<Item>!
 
         override func onViewReady() {
             onViewReadyCalled = true
         }
+
+        override var itemSelectedObserver: AnyObserver<Item> {
+            return self.fakeItemSelectedObserver.asObserver()
+        }
     }
 
-    var presenter: FakeItemListPresenter!
+    private var presenter: FakeItemListPresenter!
+    private var scheduler = TestScheduler(initialClock: 0)
     var subject: ItemListView!
 
     override func spec() {
@@ -34,6 +42,7 @@ class ItemListViewSpec: QuickSpec {
                 self.subject = storyboard.instantiateInitialViewController() as! ItemListView
 
                 self.presenter = FakeItemListPresenter(view: self.subject)
+                self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(Item.self)
                 self.subject.presenter = self.presenter
 
                 _ = UINavigationController(rootViewController: self.subject)
@@ -112,6 +121,27 @@ class ItemListViewSpec: QuickSpec {
 
                 it("removes the empty list view from the background view") {
                     expect(self.subject.tableView.backgroundView?.subviews.count).to(equal(0))
+                }
+            }
+
+            describe("tapping a row") {
+                let items = [
+                    Item.Builder()
+                            .title("my fave item")
+                            .entry(
+                                    ItemEntry.Builder()
+                                            .username("me")
+                                            .build())
+                            .build()
+                ]
+
+                beforeEach {
+                    self.subject.displayItems(items)
+                    (self.subject.tableView.delegate!).tableView!(self.subject.tableView, didSelectRowAt: [0, 0])
+                }
+
+                it("tells the presenter") {
+                    expect(self.presenter.fakeItemSelectedObserver.events.first!.value.element).to(equal(items.first))
                 }
             }
         }

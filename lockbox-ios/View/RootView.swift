@@ -5,7 +5,7 @@
 import UIKit
 
 class RootView: UIViewController, RootViewProtocol {
-    internal var presenter: RootPresenter!
+    internal var presenter: RootPresenter?
 
     private var currentViewController: UINavigationController? {
         didSet {
@@ -48,7 +48,7 @@ class RootView: UIViewController, RootViewProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.presenter.onViewReady()
+        self.presenter?.onViewReady()
     }
 
     func topViewIs<T>(_ class: T.Type) -> Bool {
@@ -76,7 +76,13 @@ class RootView: UIViewController, RootViewProtocol {
         switch view {
         case .list:
             self.currentViewController?.popToRootViewController(animated: true)
-        default: break
+        case .detail(let id):
+            guard let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView else { // swiftlint:disable:this line_length
+                return
+            }
+
+            itemDetailView.itemId = id
+            self.currentViewController?.pushViewController(itemDetailView, animated: true)
         }
     }
 

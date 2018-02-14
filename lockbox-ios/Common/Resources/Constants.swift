@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 // swiftlint:disable line_length
+
 import Foundation
 import UIKit
 
@@ -24,9 +25,19 @@ struct Constant {
     }
 
     struct string {
+        static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
-        static let noUsername = NSLocalizedString("no_username", value: "(no username)", comment: "placeholder text when there is no username")
-        static let ok = NSLocalizedString("ok", value: "OK", comment: "ok")
-        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "item list title")
+        static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
+        static let usernamePlaceholder = NSLocalizedString("usernamePlaceholder", value: "(no username)", comment: "Placeholder text when there is no username")
+        static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
+        static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
+        static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
+        static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
+        static let webAddress = NSLocalizedString("web_address", value: "Web Address", comment: "Section title text for the web address on the item detail screen")
+        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
+    }
+
+    struct number {
+        static let passwordTextSize = CGFloat(16)
     }
 }

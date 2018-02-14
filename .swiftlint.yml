@@ -5,6 +5,7 @@ disabled_rules:
   - identifier_name
   - operator_whitespace
   - type_name
+  - large_tuple
 opt_in_rules:
   - opening_brace
   - trailing_semicolon

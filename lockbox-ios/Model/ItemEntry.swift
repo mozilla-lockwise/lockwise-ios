@@ -8,6 +8,7 @@ struct ItemEntry: Codable, Equatable {
     var kind: String
     var username: String?
     var password: String?
+    var notes: String?
 
     init(type: String) {
         self.kind = type
@@ -42,6 +43,11 @@ struct ItemEntry: Codable, Equatable {
 
         func password(_ password: String) -> Builder {
             self.itemEntry.password = password
+            return self
+        }
+
+        func notes(_ notes: String) -> Builder {
+            self.itemEntry.notes = notes
             return self
         }
     }

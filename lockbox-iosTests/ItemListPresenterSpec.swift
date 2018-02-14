@@ -11,15 +11,6 @@ import RxTest
 @testable import Lockbox
 
 class ItemListPresenterSpec: QuickSpec {
-
-    class FakeDataStore: DataStore {
-        var itemListObservable: TestableObservable<[Item]>?
-
-        override var onItemList: Observable<[Item]> {
-            return self.itemListObservable!.asObservable()
-        }
-    }
-
     class FakeItemListView: ItemListViewProtocol {
         var displayItemsArgument: [Item]?
         var displayErrorArgument: Error?
@@ -43,37 +34,53 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
-    var view: FakeItemListView!
-    var dataStore: FakeDataStore!
-    var subject: ItemListPresenter!
+    class FakeRouteActionHandler: RouteActionHandler {
+        var invokeActionArgument: RouteAction?
+
+        override func invoke(_ action: RouteAction) {
+            self.invokeActionArgument = action
+        }
+    }
+
+    class FakeDataStore: DataStore {
+        var itemListObservable: TestableObservable<[Item]>?
+
+        override var onItemList: Observable<[Item]> {
+            return self.itemListObservable!.asObservable()
+        }
+    }
+
+    private var view: FakeItemListView!
+    private var routeActionHandler: FakeRouteActionHandler!
+    private var dataStore: FakeDataStore!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
+    var subject: ItemListPresenter!
 
     override func spec() {
         describe("ItemListPresenter") {
             beforeEach {
                 self.view = FakeItemListView()
                 self.dataStore = FakeDataStore()
+                self.routeActionHandler = FakeRouteActionHandler()
 
-                self.subject = ItemListPresenter(view: self.view, dataStore: self.dataStore)
+                self.subject = ItemListPresenter(
+                        view: self.view,
+                        routeActionHandler: self.routeActionHandler,
+                        dataStore: self.dataStore
+                )
             }
 
             describe(".onViewReady()") {
                 describe("when the datastore pushes an empty list of items") {
-                    let items = [
-                        Item.Builder().build(),
-                        Item.Builder().build()
-                    ]
-
                     beforeEach {
-                        self.dataStore.itemListObservable = self.scheduler.createHotObservable([next(100, items)])
+                        self.dataStore.itemListObservable = self.scheduler.createHotObservable([next(100, [])])
                         self.subject.onViewReady()
                         self.scheduler.start()
                     }
 
                     it("tells the view to display the empty lockbox message") {
-                        expect(self.view.displayItemsArgument).notTo(beNil())
-                        expect(self.view.displayItemsArgument).to(equal(items))
+                        expect(self.view.displayEmptyStateMessagingCalled).to(beTrue())
                     }
                 }
 
@@ -96,6 +103,46 @@ class ItemListPresenterSpec: QuickSpec {
 
                     it("tells the view to hide the empty state messaging") {
                         expect(self.view.hideEmptyStateMessagingCalled).to(beTrue())
+                    }
+                }
+            }
+
+            describe("itemSelected") {
+                describe("when the item has an id") {
+                    let id = "fsjksdfjklsdfjlkdsf"
+
+                    beforeEach {
+                        let itemObservable = self.scheduler.createColdObservable([
+                            next(100, Item.Builder().id(id).build())
+                        ])
+
+                        itemObservable
+                                .bind(to: self.subject.itemSelectedObserver)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("tells the route action handler to display the detail view for the relevant item") {
+                        expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
+                        let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
+                        expect(argument).to(equal(MainRouteAction.detail(itemId: id)))
+                    }
+                }
+
+                describe("when the item does not have an id") {
+                    beforeEach {
+                        let itemObservable = self.scheduler.createColdObservable([next(100, Item.Builder().build())])
+
+                        itemObservable
+                                .bind(to: self.subject.itemSelectedObserver)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("does nothing") {
+                        expect(self.routeActionHandler.invokeActionArgument).to(beNil())
                     }
                 }
             }
