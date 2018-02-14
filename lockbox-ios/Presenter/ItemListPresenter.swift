@@ -4,6 +4,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 protocol ItemListViewProtocol: class {
     func displayItems(_ items: [Item])
@@ -13,15 +14,23 @@ protocol ItemListViewProtocol: class {
 
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
-    private var dataStoreActionHandler: DataStoreActionHandler
+    private var routeActionHandler: RouteActionHandler
     private var dataStore: DataStore
     private var disposeBag = DisposeBag()
 
+    lazy private(set) var itemSelectedObserver: AnyObserver<Item> = {
+        return Binder(self) { target, item in
+            guard let id = item.id else { return }
+
+            target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
+        }.asObserver()
+    }()
+
     init(view: ItemListViewProtocol,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStore: DataStore = DataStore.shared) {
         self.view = view
-        self.dataStoreActionHandler = dataStoreActionHandler
+        self.routeActionHandler = routeActionHandler
         self.dataStore = dataStore
     }
 

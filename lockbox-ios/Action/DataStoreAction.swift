@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// swiftlint:disable file_length
 
 import Foundation
 import WebKit
@@ -343,6 +344,7 @@ extension DataStoreActionHandler {
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@yahoo.com")
+                            .password("iLUVdawgz")
                             .build())
                     .build(),
             Item.Builder()
@@ -351,6 +353,8 @@ extension DataStoreActionHandler {
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tanya.jacobson")
+                            .password("iLUVdawgz")
+                            .notes("I just have so much anxiety about using this website that I'm going to write about it in the notes section of my password manager wow") // swiftlint:disable:this line_length
                             .build())
                     .build(),
             Item.Builder()
@@ -359,6 +363,7 @@ extension DataStoreActionHandler {
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@yahoo.com")
+                            .password("iLUVdawgz")
                             .build())
                     .build(),
             Item.Builder()
@@ -367,6 +372,7 @@ extension DataStoreActionHandler {
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@yahoo.com")
+                            .password("iLUVdawgz")
                             .build())
                     .build(),
             Item.Builder()
@@ -374,6 +380,7 @@ extension DataStoreActionHandler {
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@yahoo.com")
+                            .password("iLUVdawgz")
                             .build())
                     .build()
         ]
@@ -397,3 +404,4 @@ extension DataStoreActionHandler {
 }
 
 // swiftlint:enable function_body_length
+// swiftlint:enable file_length

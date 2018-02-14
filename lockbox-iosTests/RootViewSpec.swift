@@ -118,6 +118,17 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
                     }
                 }
+
+                describe("detail") {
+                    beforeEach {
+                        self.subject.startMainStack()
+                        self.subject.pushMainView(view: .detail(itemId: "dffsdfs"))
+                    }
+
+                    it("makes a detailview the top view") {
+                        expect(self.subject.topViewIs(ItemDetailView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
             }
         }
     }

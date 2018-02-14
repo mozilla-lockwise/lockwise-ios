@@ -19,11 +19,13 @@ class ItemEntrySpec: QuickSpec {
                         .kind(type)
                         .username("jlkfd")
                         .password("marple")
+                        .notes("something")
                         .build()
                 rhs = ItemEntry.Builder()
                         .kind(type)
                         .username("waugh")
                         .password("very secure")
+                        .notes("something")
                         .build()
 
                 expect(lhs == rhs).to(beFalse())

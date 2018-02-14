@@ -154,7 +154,10 @@ class RootPresenter {
                 if !view.topViewIs(ItemListView.self) {
                     view.pushMainView(view: .list)
                 }
-            case .detail(_): break
+            case .detail(let id):
+                if !view.topViewIs(ItemDetailView.self) {
+                    view.pushMainView(view: .detail(itemId: id))
+                }
             }
         }.asObserver()
     }()
@@ -163,10 +166,10 @@ class RootPresenter {
 extension RootPresenter {
     private func unlockBlindly() {
         Observable.combineLatest(self.dataStore.onInitialized, self.userInfoStore.scopedKey, self.dataStore.onLocked)
-                .filter { (latest: (Bool, String?, Bool)) -> Bool in // swiftlint:disable:this large_tuple
+                .filter { (latest: (Bool, String?, Bool)) -> Bool in
                     return latest.0
                 }
-                .map { (latest: (Bool, String?, Bool)) -> KeyLock in // swiftlint:disable:this large_tuple
+                .map { (latest: (Bool, String?, Bool)) -> KeyLock in
                     return KeyLock(scopedKey: latest.1, locked: latest.2)
                 }
                 .subscribe(onNext: { (latest: KeyLock) in
