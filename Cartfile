@@ -1,4 +1,4 @@
 github "Quick/Quick"
 github "Quick/Nimble"
-github "ReactiveX/RxSwift" ~> 4.0
+github "ReactiveX/RxSwift"
 github "mozilla-mobile/telemetry-ios" "v1.0.4"
