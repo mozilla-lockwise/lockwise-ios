@@ -114,7 +114,7 @@ class FxAActionHandler: ActionHandler {
 extension FxAActionHandler {
     private func authenticateAndRetrieveUserInformation(code: String) {
         self.postTokenRequest(code: code)
-                .do(onNext: { info in
+                .do(onSuccess: { info in
                     self.dispatcher.dispatch(action: UserInfoAction.oauthInfo(info: info))
                     let scopedKey: String = try self.deriveScopedKeyFromJWE(info.keysJWE)
                     self.dispatcher.dispatch(action: UserInfoAction.scopedKey(key: scopedKey))
