@@ -58,7 +58,7 @@ class FxAPresenter {
             return
         }
 
-        if ("\(navigationURL.scheme!)://\(navigationURL.host!)" == Constant.app.redirectURI) {
+        if ("\(navigationURL.scheme!)://\(navigationURL.host!)\(navigationURL.path)" == Constant.app.redirectURI) {
             self.fxAActionHandler.matchingRedirectURLReceived(components: URLComponents(url: navigationURL, resolvingAgainstBaseURL: true)!)
             decisionHandler(.cancel)
             return

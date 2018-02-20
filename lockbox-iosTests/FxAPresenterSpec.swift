@@ -154,8 +154,8 @@ class FxAPresenterSpec : QuickSpec {
 
                     beforeEach {
                         urlComponents.scheme = "https"
-                        urlComponents.host = "2aa95473a5115d5f3deb36bb6875cf76f05e4c4d.extensions.allizom.org"
-                        urlComponents.path = "/"
+                        urlComponents.host = "mozilla-lockbox.github.io"
+                        urlComponents.path = "/fxa/ios-redirect.html"
 
                         let request = URLRequest(url: urlComponents.url!)
                         self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
