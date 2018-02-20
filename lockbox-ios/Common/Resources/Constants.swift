@@ -7,7 +7,7 @@ import UIKit
 
 struct Constant {
     struct app {
-        static let redirectURI = "https://2aa95473a5115d5f3deb36bb6875cf76f05e4c4d.extensions.allizom.org"
+        static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
     }
 
     struct color {
@@ -18,7 +18,7 @@ struct Constant {
     }
 
     struct fxa {
-        static let clientID = "1b024772203a0849"
+        static let clientID = "98adfa37698f255b"
         static let oauthHost = "oauth.accounts.firefox.com"
         static let profileHost = "profile.accounts.firefox.com"
     }
