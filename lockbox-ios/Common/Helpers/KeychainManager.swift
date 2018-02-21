@@ -10,24 +10,26 @@ enum KeychainManagerIdentifier: String {
 }
 
 class KeychainManager {
-    func save(_ data:String, identifier:KeychainManagerIdentifier) -> Bool {
+    func save(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {
         guard let savedItem = self.retrieve(identifier) else {
             return self.saveByAdding(data, identifier: identifier)
         }
 
-        if savedItem == data { return true }
+        if savedItem == data {
+            return true
+        }
 
         return self.saveByUpdating(data, identifier: identifier)
     }
 
-    func retrieve(_ identifier:KeychainManagerIdentifier) -> String? {
-        let query:[String:Any] = [
+    func retrieve(_ identifier: KeychainManagerIdentifier) -> String? {
+        let query: [String: Any] = [
             kSecAttrService as String: Bundle.main.bundleIdentifier!,
             kSecAttrAccount as String: identifier.rawValue,
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrSynchronizable as String: kCFBooleanFalse,
             kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecReturnData as String: true,
+            kSecReturnData as String: true
         ]
 
         var item: AnyObject?
@@ -44,28 +46,28 @@ class KeychainManager {
         return storedString
     }
 
-    private func saveByAdding(_ data:String, identifier:KeychainManagerIdentifier) -> Bool {
-        let attributes:[String:Any] = [
+    private func saveByAdding(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {
+        let attributes: [String: Any] = [
             kSecAttrAccount as String: identifier.rawValue,
             kSecAttrService as String: Bundle.main.bundleIdentifier!,
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrSynchronizable as String: kCFBooleanFalse,
-            kSecValueData as String: Data(data.utf8),
+            kSecValueData as String: Data(data.utf8)
         ]
 
         let success = SecItemAdd(attributes as CFDictionary, nil)
         return success == noErr
     }
 
-    private func saveByUpdating(_ data:String, identifier:KeychainManagerIdentifier) -> Bool {
-        let query:[String:Any] = [
+    private func saveByUpdating(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {
+        let query: [String: Any] = [
             kSecAttrService as String: Bundle.main.bundleIdentifier!,
             kSecAttrAccount as String: identifier.rawValue,
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrSynchronizable as String: kCFBooleanFalse,
+            kSecAttrSynchronizable as String: kCFBooleanFalse
         ]
 
-        let update:[String:Any] = [
+        let update: [String: Any] = [
             kSecValueData as String: Data(data.utf8)
         ]
 

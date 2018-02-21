@@ -13,8 +13,8 @@ enum UserInfoStoreSharedExamples: String {
     case SaveScopedKeyToKeychain, SaveProfileInfoToKeychain
 }
 
-class UserInfoStoreSpec : QuickSpec {
-    class FakeDispatcher : Dispatcher {
+class UserInfoStoreSpec: QuickSpec {
+    class FakeDispatcher: Dispatcher {
         let fakeRegistration = PublishSubject<Action>()
 
         override var register: Observable<Action> {
@@ -22,11 +22,11 @@ class UserInfoStoreSpec : QuickSpec {
         }
     }
 
-    class FakeKeychainManager : KeychainManager {
-        var saveArguments:[KeychainManagerIdentifier:String] = [:]
-        var saveSuccess:Bool!
-        var retrieveArguments:[KeychainManagerIdentifier] = []
-        var retrieveResult:[KeychainManagerIdentifier:String] = [:]
+    class FakeKeychainManager: KeychainManager {
+        var saveArguments: [KeychainManagerIdentifier: String] = [:]
+        var saveSuccess: Bool!
+        var retrieveArguments: [KeychainManagerIdentifier] = []
+        var retrieveResult: [KeychainManagerIdentifier: String] = [:]
 
         override func save(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {
             self.saveArguments[identifier] = data
@@ -39,11 +39,11 @@ class UserInfoStoreSpec : QuickSpec {
         }
     }
 
-    private var dispatcher:FakeDispatcher!
-    private var keychainManager:FakeKeychainManager!
+    private var dispatcher: FakeDispatcher!
+    private var keychainManager: FakeKeychainManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
-    var subject:UserInfoStore!
+    var subject: UserInfoStore!
 
     override func spec() {
         describe("UserInfoStore") {
@@ -210,7 +210,10 @@ class UserInfoStoreSpec : QuickSpec {
                             self.keychainManager.retrieveResult[.email] = email
                             self.keychainManager.retrieveResult[.uid] = uid
 
-                            self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                            self.subject = UserInfoStore(
+                                    dispatcher: self.dispatcher,
+                                    keychainManager: self.keychainManager
+                            )
 
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
@@ -218,7 +221,8 @@ class UserInfoStoreSpec : QuickSpec {
                         }
 
                         it("passes the resulting profileinfo object to subscribers") {
-                            expect(profileInfoObserver.events.first!.value.element!).to(equal(ProfileInfo.Builder().uid(uid).email(email).build()))
+                            expect(profileInfoObserver.events.first!.value.element!)
+                                    .to(equal(ProfileInfo.Builder().uid(uid).email(email).build()))
                         }
                     }
 
@@ -227,7 +231,10 @@ class UserInfoStoreSpec : QuickSpec {
                         beforeEach {
                             self.keychainManager.retrieveResult[.uid] = uid
 
-                            self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                            self.subject = UserInfoStore(
+                                    dispatcher: self.dispatcher,
+                                    keychainManager: self.keychainManager
+                            )
 
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
@@ -244,7 +251,10 @@ class UserInfoStoreSpec : QuickSpec {
                         beforeEach {
                             self.keychainManager.retrieveResult[.email] = email
 
-                            self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                            self.subject = UserInfoStore(
+                                    dispatcher: self.dispatcher,
+                                    keychainManager: self.keychainManager
+                            )
 
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
@@ -280,7 +290,10 @@ class UserInfoStoreSpec : QuickSpec {
                     describe("when the scopedKey has previously been saved to the keychain") {
                         beforeEach {
                             self.keychainManager.retrieveResult[.scopedKey] = key
-                            self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                            self.subject = UserInfoStore(
+                                    dispatcher: self.dispatcher,
+                                    keychainManager: self.keychainManager
+                            )
 
                             self.subject.scopedKey
                                     .bind(to: keyObserver)
@@ -322,7 +335,10 @@ class UserInfoStoreSpec : QuickSpec {
                             self.keychainManager.retrieveResult[.idToken] = idToken
                             self.keychainManager.retrieveResult[.refreshToken] = refreshToken
 
-                            self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                            self.subject = UserInfoStore(
+                                    dispatcher: self.dispatcher,
+                                    keychainManager: self.keychainManager
+                            )
 
                             self.subject.oauthInfo
                                     .bind(to: oAuthInfoObserver)
@@ -347,7 +363,10 @@ class UserInfoStoreSpec : QuickSpec {
                             self.keychainManager.retrieveResult[.accessToken] = accessToken
                             self.keychainManager.retrieveResult[.refreshToken] = refreshToken
 
-                            self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                            self.subject = UserInfoStore(
+                                    dispatcher: self.dispatcher,
+                                    keychainManager: self.keychainManager
+                            )
 
                             self.subject.oauthInfo
                                     .bind(to: oAuthInfoObserver)

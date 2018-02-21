@@ -8,8 +8,8 @@ import Nimble
 
 @testable import Lockbox
 
-class RootViewSpec : QuickSpec {
-    class FakeRootPresenter:RootPresenter {
+class RootViewSpec: QuickSpec {
+    class FakeRootPresenter: RootPresenter {
         var onViewReadyCalled = false
 
         override func onViewReady() {
@@ -17,8 +17,8 @@ class RootViewSpec : QuickSpec {
         }
     }
 
-    private var presenter:FakeRootPresenter!
-    var subject:RootView!
+    private var presenter: FakeRootPresenter!
+    var subject: RootView!
 
     override func spec() {
         describe("RootView") {
@@ -27,7 +27,7 @@ class RootViewSpec : QuickSpec {
                 self.presenter = FakeRootPresenter(view: self.subject)
 
                 self.subject.presenter = self.presenter
-                
+
                 self.subject.viewDidLoad()
             }
 

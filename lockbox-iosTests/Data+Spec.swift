@@ -8,7 +8,7 @@ import Foundation
 
 @testable import Lockbox
 
-class DataSpec : QuickSpec {
+class DataSpec: QuickSpec {
 
     override func spec() {
         let subject = Data("a pretty long string that we're going to encode yep yep yep".utf8)
@@ -19,7 +19,7 @@ class DataSpec : QuickSpec {
 
             it("replaces the relevant characters from the provided base64Encoding method") {
                 expect(base64Encoded).notTo(equal(base64URLEncoded))
-                expect(base64URLEncoded).to(equal("YSBwcmV0dHkgbG9uZyBzdHJpbmcgdGhhdCB3ZSdyZSBnb2luZyB0byBlbmNvZGUgeWVwIHllcCB5ZXA"))
+                expect(base64URLEncoded).to(equal("YSBwcmV0dHkgbG9uZyBzdHJpbmcgdGhhdCB3ZSdyZSBnb2luZyB0byBlbmNvZGUgeWVwIHllcCB5ZXA")) // swiftlint:disable:this line_length
             }
         }
     }

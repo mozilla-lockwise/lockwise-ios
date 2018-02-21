@@ -31,8 +31,9 @@ class WebView: WKWebView, TypedJavaScriptWebView {
 
     public func evaluateJavaScript(_ javaScriptString: String) -> Single<Any> {
         let anySingle = self.evaluateJavaScriptWithoutCatchingInvalidType(javaScriptString)
-                .catchError { error  in
-                    guard let wkError = error as? WKError, wkError.code.rawValue == WKError.javaScriptResultTypeIsUnsupported.rawValue else {
+                .catchError { error in
+                    guard let wkError = error as? WKError,
+                          wkError.code.rawValue == WKError.javaScriptResultTypeIsUnsupported.rawValue else {
                         throw error
                     }
 
@@ -43,7 +44,7 @@ class WebView: WKWebView, TypedJavaScriptWebView {
     }
 
     internal func evaluateJavaScriptWithoutCatchingInvalidType(_ javaScriptString: String) -> Single<Any> {
-        let anySingle = Single<Any>.create() { single in
+        let anySingle = Single<Any>.create { single in
 
             DispatchQueue.main.async {
                 self.evaluateJavaScript(javaScriptString) { any, error in

@@ -7,13 +7,15 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
+class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     internal var presenter: FxAPresenter!
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
 
-    override var preferredStatusBarStyle: UIStatusBarStyle { return UIStatusBarStyle.lightContent }
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+
     init(webView: WKWebView = WKWebView()) {
         self.webView = webView
         super.init(nibName: nil, bundle: nil)
@@ -29,17 +31,24 @@ class FxAView : UIViewController, FxAViewProtocol, WKNavigationDelegate {
         self.presenter.onViewReady()
     }
 
-    func loadRequest(_ urlRequest:URLRequest) {
+    func loadRequest(_ urlRequest: URLRequest) {
         self.webView.load(urlRequest)
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         presenter.webViewRequest(decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
     }
 
     private func styleNavigationBar() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Constant.string.cancel, style: .plain, target: nil, action: nil)
-        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: Constant.string.cancel,
+                style: .plain,
+                target: nil,
+                action: nil
+        )
+
         self.navigationItem.leftBarButtonItem!.rx.tap
                 .bind(to: self.presenter.onCancel)
                 .disposed(by: self.disposeBag)

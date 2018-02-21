@@ -6,28 +6,36 @@ import Foundation
 import RxSwift
 
 enum FxADisplayAction: Action {
-    case loadInitialURL(url:URL)
+    case loadInitialURL(url: URL)
     case fetchingUserInformation
     case finishedFetchingUserInformation
 }
 
 extension FxADisplayAction: Equatable {
-    static func ==(lhs:FxADisplayAction, rhs:FxADisplayAction) -> Bool {
+
+    static func ==(lhs: FxADisplayAction, rhs: FxADisplayAction) -> Bool {
         switch (lhs, rhs) {
-            case (.loadInitialURL(let lhURL), .loadInitialURL(let rhURL)):
-                return lhURL == rhURL
-            case (.fetchingUserInformation, .fetchingUserInformation):
-                return true
-            case (.finishedFetchingUserInformation, .finishedFetchingUserInformation):
-                return true
-            default:
-                return false
+        case (.loadInitialURL(let lhURL), .loadInitialURL(let rhURL)):
+            return lhURL == rhURL
+        case (.fetchingUserInformation, .fetchingUserInformation):
+            return true
+        case (.finishedFetchingUserInformation, .finishedFetchingUserInformation):
+            return true
+        default:
+            return false
         }
     }
+
 }
 
-enum FxAError : Error {
-    case RedirectNoState, RedirectNoCode, RedirectBadState, EmptyOAuthData, EmptyProfileInfoData, UnexpectedDataFormat, Unknown
+enum FxAError: Error {
+    case RedirectNoState
+    case RedirectNoCode
+    case RedirectBadState
+    case EmptyOAuthData
+    case EmptyProfileInfoData
+    case UnexpectedDataFormat
+    case Unknown
 }
 
 class FxAActionHandler: ActionHandler {
@@ -98,7 +106,7 @@ class FxAActionHandler: ActionHandler {
     }
 
     public func matchingRedirectURLReceived(components: URLComponents) {
-        var code:String
+        var code: String
         do {
             code = try validateQueryParamsForAuthCode(components.queryItems!)
         } catch {
@@ -134,8 +142,8 @@ extension FxAActionHandler {
     private func deriveScopedKeyFromJWE(_ jwe: String) throws -> String {
         let jweString = self.keyManager.decryptJWE(jwe)
 
-        guard let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String:Any],
-              let jweJSON = jsonValue[scope] as? [String:Any]  else {
+        guard let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String: Any],
+              let jweJSON = jsonValue[scope] as? [String: Any] else {
             throw FxAError.UnexpectedDataFormat
         }
 
@@ -148,11 +156,11 @@ extension FxAActionHandler {
     }
 
     private func validateQueryParamsForAuthCode(_ redirectParams: [URLQueryItem]) throws -> String {
-        guard let state = redirectParams.first(where: { $0.name == "state"}) else {
+        guard let state = redirectParams.first(where: { $0.name == "state" }) else {
             throw FxAError.RedirectNoState
         }
 
-        guard let code = redirectParams.first(where: { $0.name == "code"}),
+        guard let code = redirectParams.first(where: { $0.name == "code" }),
               let codeValue = code.value else {
             throw FxAError.RedirectNoCode
         }
@@ -176,7 +184,7 @@ extension FxAActionHandler {
             "code_verifier": self.codeVerifier
         ]
 
-        let oauthSingle = Single<OAuthInfo>.create() { single in
+        let oauthSingle = Single<OAuthInfo>.create { single in
             let disposable = Disposables.create()
 
             do {
@@ -189,7 +197,7 @@ extension FxAActionHandler {
             request.httpMethod = "POST"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-            let task = self.session.dataTask(with: request) { data, response, error in
+            let task = self.session.dataTask(with: request) { data, _, error in
                 if error != nil {
                     single(.error(error!))
                     return
@@ -200,7 +208,7 @@ extension FxAActionHandler {
                     return
                 }
 
-                var oauthInfo:OAuthInfo
+                var oauthInfo: OAuthInfo
                 do {
                     oauthInfo = try JSONDecoder().decode(OAuthInfo.self, from: data)
                 } catch {
@@ -224,10 +232,10 @@ extension FxAActionHandler {
         request.httpMethod = "GET"
         request.addValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
 
-        let profileInfoSingle = Single<ProfileInfo>.create() { single in
+        let profileInfoSingle = Single<ProfileInfo>.create { single in
             let disposable = Disposables.create()
 
-            let task = self.session.dataTask(with: request) { data, response, error in
+            let task = self.session.dataTask(with: request) { data, _, error in
                 if error != nil {
                     single(.error(error!))
                     return

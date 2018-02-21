@@ -4,9 +4,9 @@
 
 import Foundation
 
-class RouteActionHandler : ActionHandler {
+class RouteActionHandler: ActionHandler {
     static let shared = RouteActionHandler()
-    fileprivate var dispatcher:Dispatcher
+    fileprivate var dispatcher: Dispatcher
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
@@ -26,18 +26,18 @@ enum LoginRouteAction: RouteAction {
 
 enum MainRouteAction: RouteAction {
     case list
-    case detail(itemId:String)
+    case detail(itemId: String)
 }
 
 extension MainRouteAction: Equatable {
     static func ==(lhs: MainRouteAction, rhs: MainRouteAction) -> Bool {
         switch (lhs, rhs) {
-            case (.list, .list):
-                return true
-            case (.detail(let lhId), .detail(let rhId)):
-                return lhId == rhId
-            default:
-                return false
+        case (.list, .list):
+            return true
+        case (.detail(let lhId), .detail(let rhId)):
+            return lhId == rhId
+        default:
+            return false
         }
     }
 }

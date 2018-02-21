@@ -5,7 +5,7 @@
 import UIKit
 
 class RootView: UIViewController, RootViewProtocol {
-    internal var presenter:RootPresenter!
+    internal var presenter: RootPresenter!
 
     private var currentViewController: UINavigationController? {
         didSet {
@@ -20,7 +20,9 @@ class RootView: UIViewController, RootViewProtocol {
                 }
             }
 
-            guard let oldViewController = oldValue else { return }
+            guard let oldViewController = oldValue else {
+                return
+            }
             oldViewController.willMove(toParentViewController: nil)
             oldViewController.view.removeFromSuperview()
             oldViewController.removeFromParentViewController()
@@ -59,10 +61,10 @@ class RootView: UIViewController, RootViewProtocol {
 
     func pushLoginView(view: LoginRouteAction) {
         switch view {
-            case .welcome:
-                self.currentViewController?.popToRootViewController(animated: true)
-            case .fxa:
-                self.currentViewController?.pushViewController(FxAView(), animated: true)
+        case .welcome:
+            self.currentViewController?.popToRootViewController(animated: true)
+        case .fxa:
+            self.currentViewController?.pushViewController(FxAView(), animated: true)
         }
     }
 
@@ -72,9 +74,9 @@ class RootView: UIViewController, RootViewProtocol {
 
     func pushMainView(view: MainRouteAction) {
         switch view {
-            case .list:
-                self.currentViewController?.popToRootViewController(animated: true)
-            default: break
+        case .list:
+            self.currentViewController?.popToRootViewController(animated: true)
+        default: break
         }
     }
 

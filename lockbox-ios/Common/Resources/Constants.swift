@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
+// swiftlint:disable line_length
 import Foundation
 import UIKit
 
@@ -24,9 +24,9 @@ struct Constant {
     }
 
     struct string {
-        static let cancel = NSLocalizedString("cancel", value:"Cancel", comment: "Cancel button title")
-        static let noUsername = NSLocalizedString("no_username", value:"(no username)", comment: "placeholder text when there is no username")
-        static let ok = NSLocalizedString("ok", value:"OK", comment: "ok")
-        static let yourLockbox = NSLocalizedString("your_lockbox", value:"Your Lockbox", comment: "item list title")
+        static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
+        static let noUsername = NSLocalizedString("no_username", value: "(no username)", comment: "placeholder text when there is no username")
+        static let ok = NSLocalizedString("ok", value: "OK", comment: "ok")
+        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "item list title")
     }
 }

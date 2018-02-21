@@ -7,12 +7,12 @@ import Nimble
 
 @testable import Lockbox
 
-enum FxAActionSpecSharedExample : String {
+enum FxAActionSpecSharedExample: String {
     case DispatchDecodingError, PostOAuthInfoButDispatchError
 }
 
-class FxAActionSpec : QuickSpec {
-    class FakeDispatcher : Dispatcher {
+class FxAActionSpec: QuickSpec {
+    class FakeDispatcher: Dispatcher {
         var actionArguments: [Action] = []
 
         override func dispatch(action: Action) {
@@ -20,10 +20,10 @@ class FxAActionSpec : QuickSpec {
         }
     }
 
-    class FakeKeyManager : KeyManager {
+    class FakeKeyManager: KeyManager {
         let fakeECDH = "fakeecdhissomuchstringyeshellohereweare"
-        var fakeDecryptedJWE:String?
-        var jweArgument:String?
+        var fakeDecryptedJWE: String?
+        var jweArgument: String?
 
         override func getEphemeralPublicECDH() -> String {
             return fakeECDH
@@ -35,19 +35,22 @@ class FxAActionSpec : QuickSpec {
         }
     }
 
-    class FakeDataTask : URLSessionDataTask {
+    class FakeDataTask: URLSessionDataTask {
         var resumeCalled = false
+
         override func resume() {
             resumeCalled = true
         }
     }
 
-    class FakeURLSession : URLSession {
+    class FakeURLSession: URLSession {
         let dataTask = FakeDataTask()
-        var dataTaskRequests:[String:URLRequest] = [:]
-        var dataTaskCompletion:[String:((Data?, URLResponse?, Error?) -> Swift.Void)?] = [:]
+        var dataTaskRequests: [String: URLRequest] = [:]
+        var dataTaskCompletion: [String: ((Data?, URLResponse?, Error?) -> Swift.Void)?] = [:]
 
-        override func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTask {
+        override func dataTask(
+                with request: URLRequest,
+                completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTask {
             let dictionaryKeyForRequest = request.url!.path
             self.dataTaskRequests[dictionaryKeyForRequest] = request
             self.dataTaskCompletion[dictionaryKeyForRequest] = completionHandler
@@ -55,10 +58,10 @@ class FxAActionSpec : QuickSpec {
         }
     }
 
-    private var keyManager:FakeKeyManager!
-    private var session:FakeURLSession!
-    private var dispatcher:FakeDispatcher!
-    var subject:FxAActionHandler!
+    private var keyManager: FakeKeyManager!
+    private var session: FakeURLSession!
+    private var dispatcher: FakeDispatcher!
+    var subject: FxAActionHandler!
 
     override func spec() {
         describe("FxAActionHandler") {
@@ -67,7 +70,11 @@ class FxAActionSpec : QuickSpec {
                 self.keyManager = FakeKeyManager()
                 self.session = FakeURLSession()
 
-                self.subject = FxAActionHandler(dispatcher: self.dispatcher, session: self.session, keyManager: self.keyManager)
+                self.subject = FxAActionHandler(
+                        dispatcher: self.dispatcher,
+                        session: self.session,
+                        keyManager: self.keyManager
+                )
             }
 
             describe(".initiateFxAAuthentication") {
@@ -100,7 +107,7 @@ class FxAActionSpec : QuickSpec {
             }
 
             describe(".matchingRedirectURLReceived()") {
-                var urlComponents:URLComponents!
+                var urlComponents: URLComponents!
 
                 beforeEach {
                     urlComponents = URLComponents()
@@ -147,7 +154,7 @@ class FxAActionSpec : QuickSpec {
                     }
                 }
 
-                describe("when the redirect query items include the state parameter, but it doesn't match the passed state parameter") {
+                describe("when the redirect query items include the state parameter, but it doesn't match the passed state parameter") { // swiftlint:disable:this line_length
                     beforeEach {
                         urlComponents.queryItems = [
                             URLQueryItem(name: "code", value: "somecodevalueyep"),
@@ -164,7 +171,7 @@ class FxAActionSpec : QuickSpec {
                     }
                 }
 
-                describe("when the redirect query items are in order & the state parameter matches the local state param") {
+                describe("when the redirect query items are in order & the state parameter matches the local state param") { // swiftlint:disable:this line_length
                     let code = "somethingthatfxawantsustohaverighthere"
 
                     beforeEach {
@@ -181,9 +188,13 @@ class FxAActionSpec : QuickSpec {
 
                         it("publishes a POST request for the token") {
                             expect(self.session.dataTaskRequests[tokenPath]).toNot(beNil())
-                            let urlComponents = URLComponents(url: self.session.dataTaskRequests[tokenPath]!.url!, resolvingAgainstBaseURL: true)!
+                            let urlComponents = URLComponents(
+                                    url: self.session.dataTaskRequests[tokenPath]!.url!,
+                                    resolvingAgainstBaseURL: true
+                            )!
 
-                            let jsonData = try? JSONSerialization.jsonObject(with: self.session.dataTaskRequests[tokenPath]!.httpBody!) as? [String:String]
+                            let jsonData = try? JSONSerialization.jsonObject(
+                                    with: self.session.dataTaskRequests[tokenPath]!.httpBody!) as? [String: String]
                             expect(jsonData).notTo(beNil())
 
                             expect(urlComponents.host).to(equal(Constant.fxa.oauthHost))
@@ -218,7 +229,9 @@ class FxAActionSpec : QuickSpec {
 
                         describe("when receiving a data value in the data task callback") {
                             describe("when the data value cannot be decoded to an OAuthInfo object") {
-                                let data = try! JSONSerialization.data(withJSONObject: ["meow": "something that doesn't look right"])
+                                let data = try! JSONSerialization.data(
+                                        withJSONObject: ["meow": "something that doesn't look right"]
+                                )
 
                                 beforeEach {
                                     self.session.dataTaskCompletion[tokenPath]!!(data, nil, nil)
@@ -240,14 +253,15 @@ class FxAActionSpec : QuickSpec {
                                 sharedExamples(FxAActionSpecSharedExample.PostOAuthInfoButDispatchError.rawValue) {
                                     it("posts the oauthInfo to the dispatcher & dispatches an error") {
                                         let errorArgument = self.dispatcher.actionArguments.popLast() as? ErrorAction
-                                        expect(errorArgument).to(matchErrorAction(ErrorAction(error: FxAError.UnexpectedDataFormat)))
-                                        
+                                        expect(errorArgument)
+                                                .to(matchErrorAction(ErrorAction(error: FxAError.UnexpectedDataFormat)))
+
                                         let argument = self.dispatcher.actionArguments.popLast() as? UserInfoAction
                                         expect(argument).to(equal(UserInfoAction.oauthInfo(info: oauthInfo)))
                                     }
                                 }
 
-                                describe("when the keysJWE value cannot be deserialized to the expected dictionary format") {
+                                describe("when the keysJWE value cannot be deserialized to the expected dictionary format") { // swiftlint:disable:this line_length
                                     beforeEach {
                                         self.keyManager.fakeDecryptedJWE = "[\"bogus\"]"
                                         self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
@@ -256,31 +270,33 @@ class FxAActionSpec : QuickSpec {
                                     itBehavesLike(FxAActionSpecSharedExample.PostOAuthInfoButDispatchError.rawValue)
                                 }
 
-                                describe("when the keysJWE value can be deserialized to the expected dictionary format") {
-                                    describe("when the decrypted & deserialized keysJWE value does not have a key for the scope") {
+                                describe("when the keysJWE value can be deserialized to the expected dictionary format") { // swiftlint:disable:this line_length
+                                    describe("when the decrypted & deserialized keysJWE value does not have a key for the scope") { // swiftlint:disable:this line_length
                                         beforeEach {
-                                            self.keyManager.fakeDecryptedJWE = "{\"somenonesensekey\":{\"wrongthingsinhere\":\"yep\"}}"
+                                            self.keyManager.fakeDecryptedJWE = "{\"somenonesensekey\":{\"wrongthingsinhere\":\"yep\"}}" // swiftlint:disable:this line_length
                                             self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                         }
 
                                         itBehavesLike(FxAActionSpecSharedExample.PostOAuthInfoButDispatchError.rawValue)
                                     }
 
-                                    describe("when the decrypted & deserialized keysJWE value has a key for the scope") {
+                                    describe("when the decrypted & deserialized keysJWE value has a key for the scope") { // swiftlint:disable:this line_length
                                         let kty = "oct"
                                         let kid = "kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA"
                                         let alg = "A256GCM"
                                         let k = "_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8"
-                                        let scopedKey = "{\"kty\":\"\(kty)\",\"kid\":\"\(kid)\",\"alg\":\"\(alg)\",\"k\":\"\(k)\"}"
+                                        let scopedKey = "{\"kty\":\"\(kty)\",\"kid\":\"\(kid)\",\"alg\":\"\(alg)\",\"k\":\"\(k)\"}" // swiftlint:disable:this line_length
 
                                         beforeEach {
-                                            self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":\(scopedKey)}"
+                                            self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":\(scopedKey)}" // swiftlint:disable:this line_length
                                             self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                         }
 
                                         it("posts the bearer access token to the profiles endpoint") {
                                             expect(self.session.dataTaskRequests[profilePath]).notTo(beNil())
-                                            let urlComponents = URLComponents(url: self.session.dataTaskRequests[profilePath]!.url!, resolvingAgainstBaseURL: true)!
+                                            let urlComponents = URLComponents(
+                                                    url: self.session.dataTaskRequests[profilePath]!.url!,
+                                                    resolvingAgainstBaseURL: true)!
 
                                             expect(urlComponents.host).to(equal(Constant.fxa.profileHost))
                                         }
@@ -300,7 +316,7 @@ class FxAActionSpec : QuickSpec {
 
                                     describe("the profile request") {
                                         beforeEach {
-                                            self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"k\":\"fakekeyvalue\"}}"
+                                            self.keyManager.fakeDecryptedJWE = "{\"\(self.subject.scope)\":{\"k\":\"fakekeyvalue\"}}" // swiftlint:disable:this line_length
                                             self.session.dataTaskCompletion[tokenPath]!!(oauthData, nil, nil)
                                         }
 
@@ -317,22 +333,25 @@ class FxAActionSpec : QuickSpec {
                                             }
                                         }
 
-                                        describe("when receiving no error but an empty data value in the data task callback") {
+                                        describe("when receiving no error but an empty data value in the data task callback") { // swiftlint:disable:this line_length
                                             beforeEach {
                                                 self.session.dataTaskCompletion[profilePath]!!(nil, nil, nil)
                                             }
 
                                             it("dispatches the EmptyOAuthData error") {
                                                 let argument = self.dispatcher.actionArguments.last as! ErrorAction
-                                                expect(argument).to(matchErrorAction(ErrorAction(error: FxAError.EmptyProfileInfoData)))
+                                                expect(argument).to(matchErrorAction(ErrorAction(error: FxAError.EmptyProfileInfoData))) // swiftlint:disable:this line_length
                                             }
                                         }
 
                                         describe("when receiving data in the data task callback") {
                                             describe("when receiving an invalid ProfileInfo encoding") {
-                                                let profileData = try! JSONSerialization.data(withJSONObject: ["meow": "something that doesn't look right"])
+                                                let profileData = try! JSONSerialization.data(
+                                                        withJSONObject: ["meow": "something that doesn't look right"]
+                                                )
+
                                                 beforeEach {
-                                                    self.session.dataTaskCompletion[profilePath]!!(profileData, nil, nil)
+                                                    self.session.dataTaskCompletion[profilePath]!!(profileData, nil, nil) // swiftlint:disable:this line_length
                                                 }
 
                                                 itBehavesLike(FxAActionSpecSharedExample.DispatchDecodingError.rawValue)
@@ -348,15 +367,22 @@ class FxAActionSpec : QuickSpec {
                                                 let profileData = try! JSONEncoder().encode(profileInfo)
 
                                                 beforeEach {
-                                                    self.session.dataTaskCompletion[profilePath]!!(profileData, nil, nil)
+                                                    self.session.dataTaskCompletion[profilePath]!!(profileData, nil, nil) // swiftlint:disable:this line_length
                                                 }
 
                                                 it("dispatches the profileinfo object & updates the request status") {
-                                                    let displayArgument = self.dispatcher.actionArguments.popLast() as! FxADisplayAction
-                                                    expect(displayArgument).to(equal(FxADisplayAction.finishedFetchingUserInformation))
+                                                    let displayArgument = self.dispatcher
+                                                            .actionArguments
+                                                            .popLast() as! FxADisplayAction
 
-                                                    let infoArgument = self.dispatcher.actionArguments.popLast() as! UserInfoAction
-                                                    expect(infoArgument).to(equal(UserInfoAction.profileInfo(info: profileInfo)))
+                                                    expect(displayArgument)
+                                                            .to(equal(FxADisplayAction.finishedFetchingUserInformation))
+
+                                                    let infoArgument = self.dispatcher
+                                                            .actionArguments
+                                                            .popLast() as! UserInfoAction
+                                                    expect(infoArgument)
+                                                            .to(equal(UserInfoAction.profileInfo(info: profileInfo)))
                                                 }
                                             }
                                         }
@@ -373,24 +399,28 @@ class FxAActionSpec : QuickSpec {
             describe("equality") {
                 it("profileInfo is equal when the infos are equal") {
                     let profileInfo = ProfileInfo.Builder().build()
-                    expect(UserInfoAction.profileInfo(info: profileInfo)).to(equal(UserInfoAction.profileInfo(info: profileInfo)))
+                    expect(UserInfoAction.profileInfo(info: profileInfo))
+                            .to(equal(UserInfoAction.profileInfo(info: profileInfo)))
                 }
 
                 it("profileInfo is not equal when the infos are not equal") {
                     let profileInfo = ProfileInfo.Builder().build()
                     let secondProfileInfo = ProfileInfo.Builder().uid("jafdslkjfsdlj").build()
-                    expect(UserInfoAction.profileInfo(info: profileInfo)).notTo(equal(UserInfoAction.profileInfo(info: secondProfileInfo)))
+                    expect(UserInfoAction.profileInfo(info: profileInfo))
+                            .notTo(equal(UserInfoAction.profileInfo(info: secondProfileInfo)))
                 }
 
                 it("oauthInfo is equal when the infos are equal") {
                     let oauthInfo = OAuthInfo.Builder().build()
-                    expect(UserInfoAction.oauthInfo(info: oauthInfo)).to(equal(UserInfoAction.oauthInfo(info: oauthInfo)))
+                    expect(UserInfoAction.oauthInfo(info: oauthInfo))
+                            .to(equal(UserInfoAction.oauthInfo(info: oauthInfo)))
                 }
 
                 it("oauthInfo is not equal when the infos are not equal") {
                     let oauthInfo = OAuthInfo.Builder().build()
                     let secondOauthInfo = OAuthInfo.Builder().idToken("fsdjksfdljkds").build()
-                    expect(UserInfoAction.oauthInfo(info: oauthInfo)).notTo(equal(UserInfoAction.oauthInfo(info: secondOauthInfo)))
+                    expect(UserInfoAction.oauthInfo(info: oauthInfo))
+                            .notTo(equal(UserInfoAction.oauthInfo(info: secondOauthInfo)))
                 }
 
                 it("scopedKey is equal when the infos are equal") {
@@ -403,9 +433,12 @@ class FxAActionSpec : QuickSpec {
 
                 }
                 it("different enum values are never equal") {
-                    expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().build())).notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().build())))
-                    expect(UserInfoAction.scopedKey(key: "blah")).notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().build())))
-                    expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().build())).notTo(equal(UserInfoAction.scopedKey(key: "a key here!")))
+                    expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().build()))
+                            .notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().build())))
+                    expect(UserInfoAction.scopedKey(key: "blah"))
+                            .notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().build())))
+                    expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().build()))
+                            .notTo(equal(UserInfoAction.scopedKey(key: "a key here!")))
                 }
             }
         }
@@ -414,26 +447,32 @@ class FxAActionSpec : QuickSpec {
             describe("equality") {
                 it("loadInitialURL is equal when the urls are equal") {
                     let someURL = URL(string: "www.butts.com")!
-                    expect(FxADisplayAction.loadInitialURL(url: someURL)).to(equal(FxADisplayAction.loadInitialURL(url: someURL)))
+                    expect(FxADisplayAction.loadInitialURL(url: someURL))
+                            .to(equal(FxADisplayAction.loadInitialURL(url: someURL)))
                 }
 
                 it("loadInitialURL is not equal when the urls are not equal") {
                     let someURL = URL(string: "www.butts.com")!
                     let someOtherURL = URL(string: "www.mozilla.org")!
-                    expect(FxADisplayAction.loadInitialURL(url: someURL)).notTo(equal(FxADisplayAction.loadInitialURL(url: someOtherURL)))
+                    expect(FxADisplayAction.loadInitialURL(url: someURL))
+                            .notTo(equal(FxADisplayAction.loadInitialURL(url: someOtherURL)))
                 }
 
                 it("fetchingUserInformation is always equal") {
-                    expect(FxADisplayAction.fetchingUserInformation).to(equal(FxADisplayAction.fetchingUserInformation))
+                    expect(FxADisplayAction.fetchingUserInformation)
+                            .to(equal(FxADisplayAction.fetchingUserInformation))
                 }
 
                 it("loadInitialURL is always equal") {
-                    expect(FxADisplayAction.finishedFetchingUserInformation).to(equal(FxADisplayAction.finishedFetchingUserInformation))
+                    expect(FxADisplayAction.finishedFetchingUserInformation)
+                            .to(equal(FxADisplayAction.finishedFetchingUserInformation))
                 }
 
                 it("different enum values are never equal") {
-                    expect(FxADisplayAction.fetchingUserInformation).notTo(equal(FxADisplayAction.finishedFetchingUserInformation))
-                    expect(FxADisplayAction.finishedFetchingUserInformation).notTo(equal(FxADisplayAction.loadInitialURL(url: URL(string: "www.butts.com")!)))
+                    expect(FxADisplayAction.fetchingUserInformation)
+                            .notTo(equal(FxADisplayAction.finishedFetchingUserInformation))
+                    expect(FxADisplayAction.finishedFetchingUserInformation)
+                            .notTo(equal(FxADisplayAction.loadInitialURL(url: URL(string: "www.butts.com")!)))
                 }
             }
         }

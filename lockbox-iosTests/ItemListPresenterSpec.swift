@@ -10,10 +10,10 @@ import RxTest
 
 @testable import Lockbox
 
-class ItemListPresenterSpec : QuickSpec {
+class ItemListPresenterSpec: QuickSpec {
 
-    class FakeDataStore : DataStore {
-        var itemListObservable:TestableObservable<[Item]>?
+    class FakeDataStore: DataStore {
+        var itemListObservable: TestableObservable<[Item]>?
 
         override var onItemList: Observable<[Item]> {
             return self.itemListObservable!.asObservable()
@@ -21,8 +21,8 @@ class ItemListPresenterSpec : QuickSpec {
     }
 
     class FakeItemListView: ItemListViewProtocol {
-        var displayItemsArgument:[Item]?
-        var displayErrorArgument:Error?
+        var displayItemsArgument: [Item]?
+        var displayErrorArgument: Error?
         var displayEmptyStateMessagingCalled = false
         var hideEmptyStateMessagingCalled = false
 
@@ -43,9 +43,9 @@ class ItemListPresenterSpec : QuickSpec {
         }
     }
 
-    var view:FakeItemListView!
-    var dataStore:FakeDataStore!
-    var subject:ItemListPresenter!
+    var view: FakeItemListView!
+    var dataStore: FakeDataStore!
+    var subject: ItemListPresenter!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
 

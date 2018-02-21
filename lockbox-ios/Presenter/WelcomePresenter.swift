@@ -7,17 +7,17 @@ import RxSwift
 import RxCocoa
 
 protocol WelcomeViewProtocol: class {
-    var loginButtonPressed:ControlEvent<Void> { get }
+    var loginButtonPressed: ControlEvent<Void> { get }
 }
 
 class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
-    private let routeActionHandler:RouteActionHandler
+    private let routeActionHandler: RouteActionHandler
     private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
-         routeActionHandler:RouteActionHandler = RouteActionHandler.shared) {
+         routeActionHandler: RouteActionHandler = RouteActionHandler.shared) {
         self.view = view
         self.routeActionHandler = routeActionHandler
     }

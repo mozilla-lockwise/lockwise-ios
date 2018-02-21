@@ -9,28 +9,28 @@ import RxCocoa
 class UserInfoStore {
     static let shared = UserInfoStore()
 
-    private var dispatcher:Dispatcher
-    private var keychainManager:KeychainManager
+    private var dispatcher: Dispatcher
+    private var keychainManager: KeychainManager
     private let disposeBag = DisposeBag()
 
     private var _scopedKey = ReplaySubject<String?>.create(bufferSize: 1)
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
 
-    public var scopedKey:Observable<String?> {
+    public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
     }
 
-    public var profileInfo:Observable<ProfileInfo?> {
+    public var profileInfo: Observable<ProfileInfo?> {
         return _profileInfo.asObservable()
     }
 
-    public var oauthInfo:Observable<OAuthInfo?> {
+    public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
     }
 
-    init(dispatcher:Dispatcher = Dispatcher.shared,
-         keychainManager:KeychainManager = KeychainManager()) {
+    init(dispatcher: Dispatcher = Dispatcher.shared,
+         keychainManager: KeychainManager = KeychainManager()) {
         self.dispatcher = dispatcher
         self.keychainManager = keychainManager
 

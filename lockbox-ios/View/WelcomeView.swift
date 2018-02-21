@@ -7,15 +7,17 @@ import RxCocoa
 
 class WelcomeView: UIViewController, WelcomeViewProtocol {
     internal var presenter: WelcomePresenter!
-    
+
     @IBOutlet internal weak var fxASigninButton: UIButton!
     @IBOutlet private weak var oceanView: UIImageView!
-    
+
     public var loginButtonPressed: ControlEvent<Void> {
         return self.fxASigninButton.rx.tap
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle { return UIStatusBarStyle.default }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.default
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -32,7 +34,10 @@ class WelcomeView: UIViewController, WelcomeViewProtocol {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.oceanView.image = UIImage.createGradientImage(frame: self.oceanView.frame, colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue])
+        self.oceanView.image = UIImage.createGradientImage(
+                frame: self.oceanView.frame,
+                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue]
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {

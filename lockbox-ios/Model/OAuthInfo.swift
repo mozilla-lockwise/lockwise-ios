@@ -5,17 +5,17 @@
 import Foundation
 
 class OAuthInfo: Codable {
-    var accessToken:String
-    var expiresAt:Date
-    var refreshToken:String
-    var idToken:String
-    var keysJWE:String
+    var accessToken: String
+    var expiresAt: Date
+    var refreshToken: String
+    var idToken: String
+    var keysJWE: String
 
-    init(accessToken:String,
-         expiresAt:Date,
-         refreshToken:String,
-         idToken:String,
-         keysJWE:String) {
+    init(accessToken: String,
+         expiresAt: Date,
+         refreshToken: String,
+         idToken: String,
+         keysJWE: String) {
         self.accessToken = accessToken
         self.expiresAt = expiresAt
         self.refreshToken = refreshToken
@@ -32,42 +32,42 @@ class OAuthInfo: Codable {
     }
 
     class Builder {
-        private var info:OAuthInfo!
+        private var info: OAuthInfo!
 
         init() {
             self.info = OAuthInfo(
-                    accessToken:"",
-                    expiresAt:Date(),
-                    refreshToken:"",
-                    idToken:"",
-                    keysJWE:"")
+                    accessToken: "",
+                    expiresAt: Date(),
+                    refreshToken: "",
+                    idToken: "",
+                    keysJWE: "")
         }
 
         func build() -> OAuthInfo {
             return self.info
         }
 
-        func accessToken(_ accessToken:String) -> Builder {
+        func accessToken(_ accessToken: String) -> Builder {
             self.info.accessToken = accessToken
             return self
         }
 
-        func expiresAt(_ expiresAt:Date) -> Builder {
+        func expiresAt(_ expiresAt: Date) -> Builder {
             self.info.expiresAt = expiresAt
             return self
         }
 
-        func refreshToken(_ refreshToken:String) -> Builder {
+        func refreshToken(_ refreshToken: String) -> Builder {
             self.info.refreshToken = refreshToken
             return self
         }
 
-        func idToken(_ idToken:String) -> Builder {
+        func idToken(_ idToken: String) -> Builder {
             self.info.idToken = idToken
             return self
         }
 
-        func keysJWE(_ keysJWE:String) -> Builder {
+        func keysJWE(_ keysJWE: String) -> Builder {
             self.info.keysJWE = keysJWE
             return self
         }

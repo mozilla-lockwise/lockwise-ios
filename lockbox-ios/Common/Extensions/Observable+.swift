@@ -7,6 +7,10 @@ import RxSwift
 
 extension ObservableType {
     public func filterByType<T>(class: T.Type) -> Observable<T> {
-        return self.filter { $0 is T }.map { $0 as! T }
+        return self.filter {
+            $0 is T
+        }.map {
+            $0 as! T // swiftlint:disable:this force_cast
+        }
     }
 }

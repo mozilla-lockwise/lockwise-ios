@@ -8,9 +8,10 @@ import Nimble
 
 @testable import Lockbox
 
-class ViewControllerSpec : QuickSpec {
+class ViewControllerSpec: QuickSpec {
 
-    var subject:(UIViewController & ErrorView)!
+    var subject: (UIViewController & ErrorView)!
+
     override func spec() {
         beforeEach {
             self.subject = UIViewController(nibName: nil, bundle: nil)

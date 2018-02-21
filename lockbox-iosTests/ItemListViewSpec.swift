@@ -8,15 +8,15 @@ import Nimble
 
 @testable import Lockbox
 
-class ItemListViewSpec : QuickSpec {
+class ItemListViewSpec: QuickSpec {
 
-    class FakeCoder : NSCoder {
-        func decodeObjectForKey(key:String) -> Any {
+    class FakeCoder: NSCoder {
+        func decodeObjectForKey(key: String) -> Any {
             return false
         }
     }
 
-    class FakeItemListPresenter : ItemListPresenter {
+    class FakeItemListPresenter: ItemListPresenter {
         var onViewReadyCalled = false
 
         override func onViewReady() {
@@ -24,8 +24,8 @@ class ItemListViewSpec : QuickSpec {
         }
     }
 
-    var presenter:FakeItemListPresenter!
-    var subject:ItemListView!
+    var presenter: FakeItemListPresenter!
+    var subject: ItemListView!
 
     override func spec() {
         describe("ItemListView") {
@@ -62,7 +62,7 @@ class ItemListViewSpec : QuickSpec {
                             .entry(
                                     ItemEntry.Builder()
                                             .build())
-                            .build(),
+                            .build()
                 ]
 
                 beforeEach {
@@ -70,18 +70,25 @@ class ItemListViewSpec : QuickSpec {
                 }
 
                 it("configures the number of rows correctly") {
-                    expect(self.subject.tableView(self.subject.tableView, numberOfRowsInSection: 0)).to(equal(items.count))
+                    expect(self.subject.tableView(self.subject.tableView, numberOfRowsInSection: 0))
+                            .to(equal(items.count))
                 }
 
                 it("configures cells correctly when the item has a username and a title") {
-                    let cell = self.subject.tableView(self.subject.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as! ItemListCell
+                    let cell = self.subject.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 0, section: 0)
+                    ) as! ItemListCell
 
                     expect(cell.titleLabel!.text).to(equal(items[0].title))
                     expect(cell.detailLabel!.text).to(equal(items[0].entry.username))
                 }
 
                 it("configures cells correctly when the item has no username and a title") {
-                    let cell = self.subject.tableView(self.subject.tableView, cellForRowAt: IndexPath(row: 1, section: 0)) as! ItemListCell
+                    let cell = self.subject.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 1, section: 0)
+                    ) as! ItemListCell
 
                     expect(cell.titleLabel!.text).to(equal(items[1].title))
                     expect(cell.detailLabel!.text).to(equal("(no username)"))
@@ -110,4 +117,3 @@ class ItemListViewSpec : QuickSpec {
         }
     }
 }
-

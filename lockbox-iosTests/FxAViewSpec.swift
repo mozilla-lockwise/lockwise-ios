@@ -10,13 +10,15 @@ import RxSwift
 
 @testable import Lockbox
 
-class FxAViewSpec : QuickSpec {
-    class FakeFxAPresenter : FxAPresenter {
+class FxAViewSpec: QuickSpec {
+    class FakeFxAPresenter: FxAPresenter {
         var webViewRequestCalled = false
-        var webViewNavigationAction:WKNavigationAction?
+        var webViewNavigationAction: WKNavigationAction?
         var onViewReadyCalled = false
 
-        override func webViewRequest(decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        override func webViewRequest(
+                decidePolicyFor navigationAction: WKNavigationAction,
+                decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
             self.webViewRequestCalled = true
             self.webViewNavigationAction = navigationAction
         }
@@ -26,9 +28,9 @@ class FxAViewSpec : QuickSpec {
         }
     }
 
-    class FakeWebView : WKWebView {
+    class FakeWebView: WKWebView {
         var loadCalled = false
-        var loadArgument:URLRequest?
+        var loadArgument: URLRequest?
 
         override func load(_ request: URLRequest) -> WKNavigation? {
             self.loadCalled = true
@@ -38,22 +40,20 @@ class FxAViewSpec : QuickSpec {
         }
     }
 
-    class FakeNavigationAction : WKNavigationAction {
-        private var fakeRequest:URLRequest
-        override var request:URLRequest {
-            get {
-                return self.fakeRequest
-            }
+    class FakeNavigationAction: WKNavigationAction {
+        private var fakeRequest: URLRequest
+        override var request: URLRequest {
+            return self.fakeRequest
         }
 
-        init(request:URLRequest) {
+        init(request: URLRequest) {
             self.fakeRequest = request
         }
     }
 
-    var webView:FakeWebView!
-    var presenter:FakeFxAPresenter!
-    var subject:FxAView!
+    var webView: FakeWebView!
+    var presenter: FakeFxAPresenter!
+    var subject: FxAView!
 
     override func spec() {
         beforeEach {
@@ -85,10 +85,15 @@ class FxAViewSpec : QuickSpec {
         describe(".webView(decidePolicy:decisionHandler:") {
             let request = URLRequest(url: URL(string: "www.mozilla.com")!)
             let action = FakeNavigationAction(request: request)
-            let handler:((WKNavigationActionPolicy) -> Void) = { policy in }
+            let handler: ((WKNavigationActionPolicy) -> Void) = { policy in
+            }
 
             beforeEach {
-                self.webView.navigationDelegate!.webView!(self.webView, decidePolicyFor: action, decisionHandler: handler)
+                self.webView.navigationDelegate!.webView!(
+                        self.webView,
+                        decidePolicyFor: action,
+                        decisionHandler: handler
+                )
             }
 
             it("passes the relevant information to the presenter to make a decision") {
@@ -98,4 +103,3 @@ class FxAViewSpec : QuickSpec {
         }
     }
 }
-

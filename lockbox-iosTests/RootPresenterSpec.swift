@@ -9,52 +9,55 @@ import RxSwift
 
 @testable import Lockbox
 
-enum RootPresenterSharedExample:String {
+enum RootPresenterSharedExample: String {
     case NoLoginOrInitialize, NoUnlockOrList, EmptyProfileInfo, EmptyScopedKey
 }
 
-enum RootPresenterSharedExampleVar:String {
+enum RootPresenterSharedExampleVar: String {
     case scopedKey, profileInfo, initialized, locked, opened
 }
 
-class RootPresenterSpec : QuickSpec {
-    class FakeRootView:RootViewProtocol {
-        var topViewIsVar:Bool!
-        var loginStackDisplayedStub:Bool!
+class RootPresenterSpec: QuickSpec {
+    class FakeRootView: RootViewProtocol {
+        var topViewIsVar: Bool!
+        var loginStackDisplayedStub: Bool!
         var startLoginStackCalled = false
-        var pushLoginViewArgument:LoginRouteAction?
+        var pushLoginViewArgument: LoginRouteAction?
 
-        var mainStackDisplayedStub:Bool!
+        var mainStackDisplayedStub: Bool!
         var startMainStackCalled = false
-        var pushMainViewArgument:MainRouteAction?
+        var pushMainViewArgument: MainRouteAction?
 
         func topViewIs<T>(_ class: T.Type) -> Bool {
             return topViewIsVar
         }
 
-        var loginStackDisplayed:Bool {
+        var loginStackDisplayed: Bool {
             return loginStackDisplayedStub
         }
 
         func startLoginStack() {
             self.startLoginStackCalled = true
         }
+
         func pushLoginView(view: LoginRouteAction) {
             self.pushLoginViewArgument = view
         }
 
-        var mainStackDisplayed:Bool {
+        var mainStackDisplayed: Bool {
             return mainStackDisplayedStub
         }
+
         func startMainStack() {
             self.startMainStackCalled = true
         }
+
         func pushMainView(view: MainRouteAction) {
             self.pushMainViewArgument = view
         }
     }
 
-    class FakeRouteStore:RouteStore {
+    class FakeRouteStore: RouteStore {
         let onRouteSubject = PublishSubject<RouteAction>()
 
         override var onRoute: Observable<RouteAction> {
@@ -62,7 +65,7 @@ class RootPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeUserInfoStore:UserInfoStore {
+    class FakeUserInfoStore: UserInfoStore {
         let profileInfoSubject = PublishSubject<ProfileInfo?>()
         let oauthInfoSubject = PublishSubject<OAuthInfo?>()
         let scopedKeySubject = PublishSubject<String?>()
@@ -78,7 +81,7 @@ class RootPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeDataStore:DataStore {
+    class FakeDataStore: DataStore {
         let initSubject = PublishSubject<Bool>()
         let lockedSubject = PublishSubject<Bool>()
         let openedSubject = PublishSubject<Bool>()
@@ -94,20 +97,20 @@ class RootPresenterSpec : QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler:RouteActionHandler {
-        var invokeArgument:RouteAction?
+    class FakeRouteActionHandler: RouteActionHandler {
+        var invokeArgument: RouteAction?
 
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
         }
     }
 
-    class FakeDataStoreActionHandler:DataStoreActionHandler {
+    class FakeDataStoreActionHandler: DataStoreActionHandler {
         var updateInitializedCalled = false
         var updateLockedCalled = false
-        var initializeScopedKey:String?
-        var openUID:String?
-        var unlockScopedKey:String?
+        var initializeScopedKey: String?
+        var openUID: String?
+        var unlockScopedKey: String?
 
         override func updateInitialized() {
             self.updateInitializedCalled = true
@@ -130,13 +133,13 @@ class RootPresenterSpec : QuickSpec {
         }
     }
 
-    private var view:FakeRootView!
-    private var routeStore:FakeRouteStore!
-    private var userInfoStore:FakeUserInfoStore!
-    private var dataStore:FakeDataStore!
-    private var routeActionHandler:FakeRouteActionHandler!
-    private var dataStoreActionHandler:FakeDataStoreActionHandler!
-    var subject:RootPresenter!
+    private var view: FakeRootView!
+    private var routeStore: FakeRouteStore!
+    private var userInfoStore: FakeUserInfoStore!
+    private var dataStore: FakeDataStore!
+    private var routeActionHandler: FakeRouteActionHandler!
+    private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    var subject: RootPresenter!
 
     override func spec() {
         describe("RootPresenter") {
@@ -149,7 +152,7 @@ class RootPresenterSpec : QuickSpec {
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.subject = RootPresenter(
                         view: self.view,
-                        routeStore:self.routeStore,
+                        routeStore: self.routeStore,
                         userInfoStore: self.userInfoStore,
                         dataStore: self.dataStore,
                         routeActionHandler: self.routeActionHandler,
@@ -177,13 +180,17 @@ class RootPresenterSpec : QuickSpec {
                     }
                 }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {[
-                    RootPresenterSharedExampleVar.opened.rawValue:true
-                ]}
+                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.opened.rawValue: true
+                    ]
+                }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {[
-                    RootPresenterSharedExampleVar.opened.rawValue:false
-                ]}
+                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.opened.rawValue: false
+                    ]
+                }
             }
 
             describe("getting a populated profile info object and the datastore is opened") {
@@ -214,7 +221,7 @@ class RootPresenterSpec : QuickSpec {
                 }
             }
 
-            describe("when getting an empty scoped key object, regardless of initialized value OR populated scoped key & a positive initialized value") {
+            describe("when getting an empty scoped key object, regardless of initialized value OR populated scoped key & a positive initialized value") { // swiftlint:disable:this line_length
                 sharedExamples(RootPresenterSharedExample.EmptyScopedKey.rawValue) { context in
                     it("does nothing") {
                         let scopedKey = context()[RootPresenterSharedExampleVar.scopedKey.rawValue] as? String
@@ -227,18 +234,24 @@ class RootPresenterSpec : QuickSpec {
                     }
                 }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {[
-                    RootPresenterSharedExampleVar.initialized.rawValue:true
-                ]}
+                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.initialized.rawValue: true
+                    ]
+                }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {[
-                    RootPresenterSharedExampleVar.initialized.rawValue:false
-                ]}
+                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.initialized.rawValue: false
+                    ]
+                }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {[
-                    RootPresenterSharedExampleVar.initialized.rawValue:true,
-                    RootPresenterSharedExampleVar.scopedKey.rawValue:"sdflkjsdfhjksdfkjhsdfhjksdf"
-                ]}
+                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.initialized.rawValue: true,
+                        RootPresenterSharedExampleVar.scopedKey.rawValue: "sdflkjsdfhjksdfkjhsdfhjksdf"
+                    ]
+                }
             }
 
             describe("when getting a populated scoped key object & the datastore is not initialized") {
@@ -278,18 +291,24 @@ class RootPresenterSpec : QuickSpec {
                     }
                 }
 
-                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {[
-                    RootPresenterSharedExampleVar.locked.rawValue: false
-                ]}
+                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.locked.rawValue: false
+                    ]
+                }
 
-                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {[
-                    RootPresenterSharedExampleVar.scopedKey.rawValue: "meow",
-                    RootPresenterSharedExampleVar.locked.rawValue: false
-                ]}
+                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.scopedKey.rawValue: "meow",
+                        RootPresenterSharedExampleVar.locked.rawValue: false
+                    ]
+                }
 
-                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {[
-                    RootPresenterSharedExampleVar.locked.rawValue: true
-                ]}
+                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.locked.rawValue: true
+                    ]
+                }
             }
 
             describe("onViewReady") {
@@ -520,17 +539,17 @@ class RootPresenterSpec : QuickSpec {
         }
     }
 
-    private func advance(profileInfo:ProfileInfo?, opened:Bool) {
+    private func advance(profileInfo: ProfileInfo?, opened: Bool) {
         self.userInfoStore.profileInfoSubject.onNext(profileInfo)
         self.dataStore.openedSubject.onNext(opened)
     }
 
-    private func advance(scopedKey:String?, initialized:Bool) {
+    private func advance(scopedKey: String?, initialized: Bool) {
         self.userInfoStore.scopedKeySubject.onNext(scopedKey)
         self.dataStore.initSubject.onNext(initialized)
     }
 
-    private func advance(scopedKey:String?, locked:Bool) {
+    private func advance(scopedKey: String?, locked: Bool) {
         self.userInfoStore.scopedKeySubject.onNext(scopedKey)
         self.dataStore.lockedSubject.onNext(locked)
     }

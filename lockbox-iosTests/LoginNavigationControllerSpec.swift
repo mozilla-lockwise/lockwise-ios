@@ -8,8 +8,8 @@ import Nimble
 
 @testable import Lockbox
 
-class LoginNavigationControllerSpec : QuickSpec {
-    var subject:LoginNavigationController!
+class LoginNavigationControllerSpec: QuickSpec {
+    var subject: LoginNavigationController!
 
     override func spec() {
         describe("LoginNavigationController") {

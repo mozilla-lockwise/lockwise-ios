@@ -10,14 +10,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
         self.window?.rootViewController = RootView()
         self.window?.makeKeyAndVisible()
 
         let barHeight = 44 + UIApplication.shared.statusBarFrame.height
-        let navBarImage = UIImage.createGradientImage(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: barHeight), colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue])
+        let navBarImage = UIImage.createGradientImage(
+                frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: barHeight),
+                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue]
+        )
         UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
         UINavigationBar.appearance().isTranslucent = false
         setupTelemetry()
@@ -25,10 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
-            TelemetryEventObject.app)
+        Telemetry.default.recordEvent(
+                category: TelemetryEventCategory.action,
+                method: TelemetryEventMethod.background,
+                object: TelemetryEventObject.app
+        )
         Telemetry.default.recordSessionEnd()
 
         // Add the CorePing and FocusEventPing to the queue and schedule them for upload in the
@@ -40,8 +45,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+        Telemetry.default.recordEvent(
+                category: TelemetryEventCategory.action,
+                method: TelemetryEventMethod.foreground,
+                object: TelemetryEventObject.app
+        )
     }
 
     private func setupTelemetry() {
@@ -50,21 +58,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.appVersion = AppInfo.shortVersion
 
-        #if DEBUG
-            telemetryConfig.isCollectionEnabled = false
-            telemetryConfig.isUploadEnabled = false
-            telemetryConfig.updateChannel = "debug"
-        #else
-            telemetryConfig.isCollectionEnabled = true
-            telemetryConfig.isUploadEnabled = true
-            telemetryConfig.updateChannel = "release"
-        #endif
+#if DEBUG
+        telemetryConfig.isCollectionEnabled = false
+        telemetryConfig.isUploadEnabled = false
+        telemetryConfig.updateChannel = "debug"
+#else
+        telemetryConfig.isCollectionEnabled = true
+        telemetryConfig.isUploadEnabled = true
+        telemetryConfig.updateChannel = "release"
+#endif
 
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
 
         Telemetry.default.recordSessionStart()
-        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+        Telemetry.default.recordEvent(
+                category: TelemetryEventCategory.action,
+                method: TelemetryEventMethod.foreground,
+                object: TelemetryEventObject.app
+        )
     }
 }
-

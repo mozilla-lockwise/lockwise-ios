@@ -10,8 +10,8 @@ import RxTest
 
 @testable import Lockbox
 
-class RouteStoreSpec : QuickSpec {
-    class FakeDispatcher : Dispatcher {
+class RouteStoreSpec: QuickSpec {
+    class FakeDispatcher: Dispatcher {
         let fakeRegistration = PublishSubject<Action>()
 
         override var register: Observable<Action> {
@@ -19,11 +19,11 @@ class RouteStoreSpec : QuickSpec {
         }
     }
 
-    private var scheduler:TestScheduler = TestScheduler(initialClock: 1)
+    private var scheduler: TestScheduler = TestScheduler(initialClock: 1)
     private var disposeBag = DisposeBag()
 
-    private var dispatcher:FakeDispatcher!
-    var subject:RouteStore!
+    private var dispatcher: FakeDispatcher!
+    var subject: RouteStore!
 
     override func spec() {
         describe("RouteStore") {

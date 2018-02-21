@@ -9,7 +9,7 @@ import RxSwift
 
 @testable import Lockbox
 
-class RouteActionSpec : QuickSpec {
+class RouteActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {
         var actionTypeArgument: Action?
 
@@ -18,8 +18,8 @@ class RouteActionSpec : QuickSpec {
         }
     }
 
-    private var dispatcher:FakeDispatcher!
-    var subject:RouteActionHandler!
+    private var dispatcher: FakeDispatcher!
+    var subject: RouteActionHandler!
 
     override func spec() {
         describe("RouteActionHandler") {
@@ -53,7 +53,8 @@ class RouteActionSpec : QuickSpec {
                 }
 
                 it("detail view action is not equal when the itemId is different") {
-                    expect(MainRouteAction.detail(itemId: "dfsljkfsd")).notTo(equal(MainRouteAction.detail(itemId: "fsdsdf")))
+                    expect(MainRouteAction.detail(itemId: "dfsljkfsd"))
+                            .notTo(equal(MainRouteAction.detail(itemId: "fsdsdf")))
                 }
 
                 it("detail action and list action are never equal") {

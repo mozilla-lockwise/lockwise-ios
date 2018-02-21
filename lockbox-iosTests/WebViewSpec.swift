@@ -13,7 +13,7 @@ import RxBlocking
 
 class WebViewSpec: QuickSpec {
     class StubbedEvaluateJSWebView: WebView {
-        var evaluateJSArguments:[String] = []
+        var evaluateJSArguments: [String] = []
         var evaluateJSCompletion: ((Any?, Error?) -> Void)?
 
         override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)?) {

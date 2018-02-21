@@ -5,11 +5,11 @@
 import UIKit
 
 protocol ErrorView {
-    func displayError(_ error:Error) -> Void
+    func displayError(_ error: Error)
 }
 
-extension UIViewController : ErrorView {
-    func displayError(_ error:Error) -> Void {
+extension UIViewController: ErrorView {
+    func displayError(_ error: Error) {
         let alertController = UIAlertController(title: error.localizedDescription, message: nil, preferredStyle: .alert)
 
         let cancelAction = UIAlertAction(title: Constant.string.ok, style: .cancel)
@@ -22,7 +22,7 @@ extension UIViewController : ErrorView {
 }
 
 extension UIViewController {
-    func preloadView() -> Void {
+    func preloadView() {
         _ = self.view
     }
 }

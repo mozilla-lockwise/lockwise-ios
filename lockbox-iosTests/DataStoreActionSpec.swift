@@ -1,6 +1,8 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+// swiftlint:disable line_length
+// swiftlint:disable force_cast
 
 import Quick
 import Nimble
@@ -80,14 +82,11 @@ class DataStoreActionSpec: QuickSpec {
         private var providedBody: Any
         private var providedName: String
         override var name: String {
-            get {
-                return providedName
-            }
+            return providedName
         }
+
         override var body: Any {
-            get {
-                return providedBody
-            }
+            return providedBody
         }
 
         init(name: String, body: Any) {
@@ -724,7 +723,6 @@ class DataStoreActionSpec: QuickSpec {
                                 }
                             }
 
-
                             describe("when the webview calls back with a list of lists without the dictionary as the second value") {
                                 beforeEach {
                                     let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [[1, 2, 3]])
@@ -740,7 +738,7 @@ class DataStoreActionSpec: QuickSpec {
 
                             describe("when the webview calls back with a list that contains only dictionaries") {
                                 describe("when the parser is unable to parse an item from the dictionary") {
-                                    beforeEach() {
+                                    beforeEach {
                                         self.parser.itemFromDictionaryShouldThrow = true
                                         let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue", ["foo": 5, "bar": 1]], ["idvalue1", ["foo": 3, "bar": 7]]])
 
@@ -755,7 +753,7 @@ class DataStoreActionSpec: QuickSpec {
                                 }
 
                                 describe("when the parser is able to parse items from the dictionary") {
-                                    beforeEach() {
+                                    beforeEach {
                                         self.parser.itemFromDictionaryShouldThrow = false
                                         self.parser.item = Item.Builder()
                                                 .origins(["www.blah.com"])
