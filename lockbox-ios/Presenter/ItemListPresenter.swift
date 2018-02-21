@@ -6,20 +6,20 @@ import Foundation
 import RxSwift
 
 protocol ItemListViewProtocol: class {
-    func displayItems(_ items: [Item]) -> Void
+    func displayItems(_ items: [Item])
     func displayEmptyStateMessaging()
     func hideEmptyStateMessaging()
 }
 
-class ItemListPresenter  {
-    private weak var view:ItemListViewProtocol?
-    private var dataStoreActionHandler:DataStoreActionHandler
-    private var dataStore:DataStore
+class ItemListPresenter {
+    private weak var view: ItemListViewProtocol?
+    private var dataStoreActionHandler: DataStoreActionHandler
+    private var dataStore: DataStore
     private var disposeBag = DisposeBag()
 
-    init(view:ItemListViewProtocol,
-         dataStoreActionHandler:DataStoreActionHandler = DataStoreActionHandler.shared,
-         dataStore:DataStore = DataStore.shared) {
+    init(view: ItemListViewProtocol,
+         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         dataStore: DataStore = DataStore.shared) {
         self.view = view
         self.dataStoreActionHandler = dataStoreActionHandler
         self.dataStore = dataStore

@@ -6,9 +6,9 @@ import UIKit
 import WebKit
 
 class ItemListView: UITableViewController {
-    var presenter:ItemListPresenter?
+    var presenter: ItemListPresenter?
 
-    private var items:[Item] = []
+    private var items: [Item] = []
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -53,7 +53,8 @@ class ItemListView: UITableViewController {
         let item = items[indexPath.row]
 
         cell.titleLabel.text = item.title
-        cell.detailLabel.text = (item.entry.username == "" || item.entry.username == nil) ? Constant.string.noUsername : item.entry.username
+        let usernameEmpty = item.entry.username == "" || item.entry.username == nil
+        cell.detailLabel.text = usernameEmpty ? Constant.string.noUsername : item.entry.username
         cell.kebabButton.tintColor = Constant.color.kebabBlue
 
         return cell
@@ -67,7 +68,9 @@ extension ItemListView: ItemListViewProtocol {
     }
 
     func displayEmptyStateMessaging() {
-        guard let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView else { return }
+        guard let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView else {
+            return
+        }
         self.tableView.backgroundView?.addSubview(emptyStateView)
     }
 

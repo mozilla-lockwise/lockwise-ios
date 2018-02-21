@@ -5,9 +5,9 @@
 import Foundation
 
 enum UserInfoAction: Action {
-    case profileInfo(info:ProfileInfo)
-    case oauthInfo(info:OAuthInfo)
-    case scopedKey(key:String)
+    case profileInfo(info: ProfileInfo)
+    case oauthInfo(info: OAuthInfo)
+    case scopedKey(key: String)
 }
 
 extension UserInfoAction: Equatable {

@@ -5,10 +5,10 @@
 import Foundation
 
 class ProfileInfo: Codable {
-    var uid:String
-    var email:String
+    var uid: String
+    var email: String
 
-    init(uid:String, email:String) {
+    init(uid: String, email: String) {
         self.uid = uid
         self.email = email
     }
@@ -19,7 +19,7 @@ class ProfileInfo: Codable {
     }
 
     class Builder {
-        private var info:ProfileInfo!
+        private var info: ProfileInfo!
 
         init() {
             self.info = ProfileInfo(uid: "", email: "")
@@ -29,12 +29,12 @@ class ProfileInfo: Codable {
             return self.info
         }
 
-        func uid(_ uid:String) -> Builder {
+        func uid(_ uid: String) -> Builder {
             self.info.uid = uid
             return self
         }
 
-        func email(_ email:String) -> Builder {
+        func email(_ email: String) -> Builder {
             self.info.email = email
             return self
         }

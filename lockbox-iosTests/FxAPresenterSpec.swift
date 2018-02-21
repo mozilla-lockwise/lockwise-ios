@@ -11,30 +11,29 @@ import RxTest
 
 @testable import Lockbox
 
-class FxAPresenterSpec : QuickSpec {
-    class FakeFxAView : FxAViewProtocol {
+class FxAPresenterSpec: QuickSpec {
+    class FakeFxAView: FxAViewProtocol {
         func dismiss() {
 
         }
 
-        var loadRequestArgument:URLRequest?
+        var loadRequestArgument: URLRequest?
 
         func loadRequest(_ urlRequest: URLRequest) {
             self.loadRequestArgument = urlRequest
         }
 
-        func displayError(_ error: Error) {}
+        func displayError(_ error: Error) {
+        }
     }
 
-    class FakeNavigationAction : WKNavigationAction {
-        private var fakeRequest:URLRequest
-        override var request:URLRequest {
-            get {
-                return self.fakeRequest
-            }
+    class FakeNavigationAction: WKNavigationAction {
+        private var fakeRequest: URLRequest
+        override var request: URLRequest {
+            return self.fakeRequest
         }
 
-        init(request:URLRequest) {
+        init(request: URLRequest) {
             self.fakeRequest = request
         }
     }
@@ -49,7 +48,7 @@ class FxAPresenterSpec : QuickSpec {
 
     class FakeFxAActionHandler: FxAActionHandler {
         var initiateFxAAuthenticationReceived = false
-        var matchingRedirectURLComponentsArgument:URLComponents?
+        var matchingRedirectURLComponentsArgument: URLComponents?
 
         override func initiateFxAAuthentication() {
             self.initiateFxAAuthenticationReceived = true
@@ -61,18 +60,18 @@ class FxAPresenterSpec : QuickSpec {
     }
 
     class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument:RouteAction?
+        var invokeArgument: RouteAction?
 
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
         }
     }
 
-    private var view:FakeFxAView!
-    private var store:FakeFxAStore!
-    private var fxAActionHandler:FakeFxAActionHandler!
-    private var routeActionHandler:FakeRouteActionHandler!
-    var subject:FxAPresenter!
+    private var view: FakeFxAView!
+    private var store: FakeFxAStore!
+    private var fxAActionHandler: FakeFxAActionHandler!
+    private var routeActionHandler: FakeRouteActionHandler!
+    var subject: FxAPresenter!
 
     override func spec() {
 
@@ -129,8 +128,8 @@ class FxAPresenterSpec : QuickSpec {
             }
 
             describe(".webViewRequest") {
-                var decisionHandler:((WKNavigationActionPolicy) -> Void)!
-                var returnedPolicy:WKNavigationActionPolicy?
+                var decisionHandler: ((WKNavigationActionPolicy) -> Void)!
+                var returnedPolicy: WKNavigationActionPolicy?
 
                 beforeEach {
                     decisionHandler = { policy in
@@ -140,8 +139,11 @@ class FxAPresenterSpec : QuickSpec {
 
                 describe("when called with a request URL that doesn't match the redirect URI") {
                     beforeEach {
-                        let request = URLRequest(url: URL(string:"http://wwww.somefakewebsite.com")!)
-                        self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request:request), decisionHandler: decisionHandler)
+                        let request = URLRequest(url: URL(string: "http://wwww.somefakewebsite.com")!)
+                        self.subject.webViewRequest(
+                                decidePolicyFor: FakeNavigationAction(request: request),
+                                decisionHandler: decisionHandler
+                        )
                     }
 
                     it("allows the navigation action") {
@@ -158,7 +160,10 @@ class FxAPresenterSpec : QuickSpec {
                         urlComponents.path = "/fxa/ios-redirect.html"
 
                         let request = URLRequest(url: urlComponents.url!)
-                        self.subject.webViewRequest(decidePolicyFor: FakeNavigationAction(request: request), decisionHandler: decisionHandler)
+                        self.subject.webViewRequest(
+                                decidePolicyFor: FakeNavigationAction(request: request),
+                                decisionHandler: decisionHandler
+                        )
                     }
 
                     it("cancels the navigation action & tells the fxaactionhandler") {

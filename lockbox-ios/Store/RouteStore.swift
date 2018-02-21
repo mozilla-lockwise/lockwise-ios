@@ -12,20 +12,24 @@ class RouteStore {
     fileprivate let disposeBag = DisposeBag()
     fileprivate var routeState = ReplaySubject<RouteAction>.create(bufferSize: 1)
 
-    public var onRoute:Observable<RouteAction> {
+    public var onRoute: Observable<RouteAction> {
         return routeState.asObservable()
                 .distinctUntilChanged { lhAction, rhAction in
                     switch (lhAction, rhAction) {
-                        case (is LoginRouteAction, is LoginRouteAction):
-                            guard let lhAction = lhAction as? LoginRouteAction,
-                                  let rhAction = rhAction as? LoginRouteAction else { return false }
-                            return lhAction == rhAction
-                        case (is MainRouteAction, is MainRouteAction):
-                            guard let lhAction = lhAction as? MainRouteAction,
-                                  let rhAction = rhAction as? MainRouteAction else { return false }
-                            return lhAction == rhAction
-                        default:
+                    case (is LoginRouteAction, is LoginRouteAction):
+                        guard let lhAction = lhAction as? LoginRouteAction,
+                              let rhAction = rhAction as? LoginRouteAction else {
                             return false
+                        }
+                        return lhAction == rhAction
+                    case (is MainRouteAction, is MainRouteAction):
+                        guard let lhAction = lhAction as? MainRouteAction,
+                              let rhAction = rhAction as? MainRouteAction else {
+                            return false
+                        }
+                        return lhAction == rhAction
+                    default:
+                        return false
                     }
                 }
     }

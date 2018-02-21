@@ -8,13 +8,13 @@ import Foundation
 
 @testable import Lockbox
 
-class StringSpec : QuickSpec {
+class StringSpec: QuickSpec {
     override func spec() {
         let subject = "a pretty long string that we're going to encode yep yep yep!"
 
         describe(".base64URL") {
             it("encodes the string in base64URL") {
-                expect(subject.base64URL()).to(equal("YSBwcmV0dHkgbG9uZyBzdHJpbmcgdGhhdCB3ZSdyZSBnb2luZyB0byBlbmNvZGUgeWVwIHllcCB5ZXAh"))
+                expect(subject.base64URL()).to(equal("YSBwcmV0dHkgbG9uZyBzdHJpbmcgdGhhdCB3ZSdyZSBnb2luZyB0byBlbmNvZGUgeWVwIHllcCB5ZXAh")) // swiftlint:disable:this line_length
             }
         }
 

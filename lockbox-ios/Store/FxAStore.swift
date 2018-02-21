@@ -9,16 +9,16 @@ import RxCocoa
 class FxAStore {
     static let shared = FxAStore()
 
-    private var dispatcher:Dispatcher
+    private var dispatcher: Dispatcher
     private let disposeBag = DisposeBag()
 
     private var _fxADisplay = ReplaySubject<FxADisplayAction>.create(bufferSize: 1)
 
-    public var fxADisplay:Driver<FxADisplayAction>{
+    public var fxADisplay: Driver<FxADisplayAction> {
         return _fxADisplay.distinctUntilChanged().asDriver(onErrorJustReturn: .fetchingUserInformation)
     }
 
-    init(dispatcher:Dispatcher = Dispatcher.shared) {
+    init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
 
         self.dispatcher.register

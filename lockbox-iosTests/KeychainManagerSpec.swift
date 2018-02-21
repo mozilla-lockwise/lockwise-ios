@@ -8,9 +8,9 @@ import Nimble
 
 @testable import Lockbox
 
-class KeychainManagerSpec : QuickSpec {
+class KeychainManagerSpec: QuickSpec {
 
-    var subject:KeychainManager!
+    var subject: KeychainManager!
 
     override func spec() {
         describe("KeychainManager") {
@@ -24,13 +24,13 @@ class KeychainManagerSpec : QuickSpec {
                 it("saves the string to the keychain") {
                     expect(self.subject.save(email, identifier: .email)).to(beTrue())
 
-                    let query:[String:Any] = [
+                    let query: [String: Any] = [
                         kSecAttrService as String: Bundle.main.bundleIdentifier!,
                         kSecAttrAccount as String: "email",
                         kSecClass as String: kSecClassGenericPassword,
                         kSecAttrSynchronizable as String: kCFBooleanFalse,
                         kSecMatchLimit as String: kSecMatchLimitOne,
-                        kSecReturnData as String: true,
+                        kSecReturnData as String: true
                     ]
                     var item: AnyObject?
                     let status = withUnsafeMutablePointer(to: &item) {
@@ -38,8 +38,8 @@ class KeychainManagerSpec : QuickSpec {
                     }
 
                     guard status == noErr,
-                        let emailData = item as? Data,
-                        let storedEmail = String(data: emailData, encoding: .utf8) else {
+                          let emailData = item as? Data,
+                          let storedEmail = String(data: emailData, encoding: .utf8) else {
                         fail("Item not found in correct format")
                         abort()
                     }
@@ -53,13 +53,13 @@ class KeychainManagerSpec : QuickSpec {
                     it("updates the string in the keychain") {
                         expect(self.subject.save(newEmail, identifier: .email)).to(beTrue())
 
-                        let query:[String:Any] = [
+                        let query: [String: Any] = [
                             kSecAttrService as String: Bundle.main.bundleIdentifier!,
                             kSecAttrAccount as String: "email",
                             kSecClass as String: kSecClassGenericPassword,
                             kSecAttrSynchronizable as String: kCFBooleanFalse,
                             kSecMatchLimit as String: kSecMatchLimitOne,
-                            kSecReturnData as String: true,
+                            kSecReturnData as String: true
                         ]
                         var item: AnyObject?
                         let status = withUnsafeMutablePointer(to: &item) {
@@ -79,13 +79,13 @@ class KeychainManagerSpec : QuickSpec {
                     it("replaces the string in the keychain if the value is the same") {
                         expect(self.subject.save(email, identifier: .email)).to(beTrue())
 
-                        let query:[String:Any] = [
+                        let query: [String: Any] = [
                             kSecAttrService as String: Bundle.main.bundleIdentifier!,
                             kSecAttrAccount as String: "email",
                             kSecClass as String: kSecClassGenericPassword,
                             kSecAttrSynchronizable as String: kCFBooleanFalse,
                             kSecMatchLimit as String: kSecMatchLimitOne,
-                            kSecReturnData as String: true,
+                            kSecReturnData as String: true
                         ]
                         var item: AnyObject?
                         let status = withUnsafeMutablePointer(to: &item) {

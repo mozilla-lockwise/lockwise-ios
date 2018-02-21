@@ -8,7 +8,7 @@ open class AppInfo {
     static var sharedContainerIdentifier: String {
         return "group." + AppInfo.baseBundleIdentifier
     }
-    
+
     /// Return the base bundle identifier.
     ///
     /// This function is smart enough to find out if it is being called from an extension or the main application. In
@@ -16,22 +16,22 @@ open class AppInfo {
     /// of the *base* bundle identifier.
     static var baseBundleIdentifier: String {
         let bundle = Bundle.main
-        let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as! NSString
+        let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as? NSString ?? ""
         let baseBundleIdentifier = bundle.bundleIdentifier!
-        
+
         if packageType == "XPC!" {
             let components = baseBundleIdentifier.components(separatedBy: ".")
-            return components[0..<components.count-1].joined(separator: ".")
+            return components[0..<components.count - 1].joined(separator: ".")
         }
-        
+
         return baseBundleIdentifier
     }
-    
+
     static var productName: String {
-        return Bundle.main.infoDictionary!["CFBundleName"] as! String
+        return Bundle.main.infoDictionary?["CFBundleName"] as? String ?? ""
     }
-    
+
     static var shortVersion: String {
-        return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
 }

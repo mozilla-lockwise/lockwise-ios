@@ -15,22 +15,22 @@ class DataStore {
     fileprivate var opened = ReplaySubject<Bool>.create(bufferSize: 1)
     fileprivate var locked = ReplaySubject<Bool>.create(bufferSize: 1)
 
-    public var onItemList:Observable<[Item]> {
+    public var onItemList: Observable<[Item]> {
         return self.itemList.asObservable()
                 .distinctUntilChanged { lhList, rhList in
                     return lhList.elementsEqual(rhList)
                 }
     }
 
-    public var onInitialized:Observable<Bool> {
+    public var onInitialized: Observable<Bool> {
         return self.initialized.asObservable().distinctUntilChanged()
     }
 
-    public var onOpened:Observable<Bool> {
+    public var onOpened: Observable<Bool> {
         return self.opened.asObservable().distinctUntilChanged()
     }
 
-    public var onLocked:Observable<Bool> {
+    public var onLocked: Observable<Bool> {
         return self.locked.asObservable().distinctUntilChanged()
     }
 
@@ -48,11 +48,11 @@ class DataStore {
                     case .opened(let opened):
                         self.opened.onNext(opened)
                     }
-                 })
+                })
                 .disposed(by: self.disposeBag)
     }
 
-    public func onItem(_ itemId:String) -> Observable<Item> {
+    public func onItem(_ itemId: String) -> Observable<Item> {
         return self.itemList.asObservable()
                 .flatMap { list in
                     Observable.from(list)

@@ -8,13 +8,13 @@ import CJose
 
 @testable import Lockbox
 
-class KeyManagerSpec : QuickSpec {
+class KeyManagerSpec: QuickSpec {
     let subject = KeyManager()
-    
+
     override func spec() {
         describe(".getEphemeralPublicECDH()") {
             let key = subject.getEphemeralPublicECDH()
-            
+
             it("generates an ECDH public-key JSON string with correct parameters & data sizes") {
                 if let data = key.data(using: .utf8) {
                     do {
@@ -35,8 +35,12 @@ class KeyManagerSpec : QuickSpec {
 
                 if let keyOneData = key.data(using: .utf8), let keyTwoData = secondKey.data(using: .utf8) {
                     do {
-                        let keyOneJSONDict = try JSONSerialization.jsonObject(with: keyOneData, options: []) as? [String: String]
-                        let keyTwoJSONDict = try JSONSerialization.jsonObject(with: keyTwoData, options: []) as? [String: String]
+                        let keyOneJSONDict = try JSONSerialization.jsonObject(
+                                with: keyOneData, options: []
+                        ) as? [String: String]
+                        let keyTwoJSONDict = try JSONSerialization.jsonObject(
+                                with: keyTwoData, options: []
+                        ) as? [String: String]
 
                         expect(keyOneJSONDict!["kty"]).to(equal(keyTwoJSONDict!["kty"]))
                         expect(keyOneJSONDict!["crv"]).to(equal(keyTwoJSONDict!["crv"]))
@@ -58,7 +62,7 @@ class KeyManagerSpec : QuickSpec {
                 let jwkFromJSON = cjose_jwk_import(ecdh, count, nil)
 
                 let cjoseError = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
-                let header:OpaquePointer = cjose_header_new(nil)
+                let header: OpaquePointer = cjose_header_new(nil)
                 cjose_header_set(header, CJOSE_HDR_ALG, CJOSE_HDR_ALG_ECDH_ES, nil)
                 cjose_header_set(header, CJOSE_HDR_ENC, CJOSE_HDR_ENC_A256GCM, nil)
 

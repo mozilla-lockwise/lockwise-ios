@@ -9,12 +9,12 @@ import Nimble
 
 @testable import Lockbox
 
-class ObservableSpec : QuickSpec {
+class ObservableSpec: QuickSpec {
     class Common {}
-    class A : Common {}
-    class B : Common {}
+    class A: Common {}
+    class B: Common {}
 
-    var subject:Observable<Common>!
+    var subject: Observable<Common>!
 
     override func spec() {
         describe("filtering by type") {

@@ -11,20 +11,20 @@ import RxBlocking
 
 @testable import Lockbox
 
-class DataStoreSpec : QuickSpec {
-    class FakeDispatcher : Dispatcher {
+class DataStoreSpec: QuickSpec {
+    class FakeDispatcher: Dispatcher {
         let fakeRegistration = PublishSubject<Action>()
-        
+
         override var register: Observable<Action> {
             return self.fakeRegistration.asObservable()
         }
     }
 
-    private var scheduler:TestScheduler = TestScheduler(initialClock: 1)
+    private var scheduler: TestScheduler = TestScheduler(initialClock: 1)
     private var disposeBag = DisposeBag()
 
-    private var dispatcher:FakeDispatcher!
-    var subject:DataStore!
+    private var dispatcher: FakeDispatcher!
+    var subject: DataStore!
 
     override func spec() {
         describe("DataStore") {

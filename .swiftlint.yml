@@ -1,0 +1,11 @@
+included:
+  - lockbox-ios
+  - lockbox-iosTests
+disabled_rules:
+  - identifier_name
+  - operator_whitespace
+  - type_name
+opt_in_rules:
+  - opening_brace
+  - trailing_semicolon
+  - file_header

@@ -4,7 +4,7 @@
 
 import UIKit
 
-class LoginNavigationController : UINavigationController {
+class LoginNavigationController: UINavigationController {
     convenience init() {
         let welcomeView = UIStoryboard(name: "Welcome", bundle: .main)
                 .instantiateViewController(withIdentifier: "welcome")

@@ -10,7 +10,7 @@ import RxSwift
 
 @testable import Lockbox
 
-class DispatcherSpec : QuickSpec {
+class DispatcherSpec: QuickSpec {
     private let scheduler = TestScheduler.init(initialClock: 0)
     private let disposeBag = DisposeBag()
 

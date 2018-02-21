@@ -9,8 +9,8 @@ import RxTest
 
 @testable import Lockbox
 
-class FxAStoreSpec : QuickSpec {
-    class FakeDispatcher : Dispatcher {
+class FxAStoreSpec: QuickSpec {
+    class FakeDispatcher: Dispatcher {
         let fakeRegistration = PublishSubject<Action>()
 
         override var register: Observable<Action> {
@@ -18,10 +18,10 @@ class FxAStoreSpec : QuickSpec {
         }
     }
 
-    private var dispatcher:FakeDispatcher!
+    private var dispatcher: FakeDispatcher!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
-    var subject:FxAStore!
+    var subject: FxAStore!
 
     override func spec() {
         describe("FxAStore") {
@@ -44,7 +44,8 @@ class FxAStoreSpec : QuickSpec {
 
                 it("pushes unique FxADisplay actions to observers") {
                     expect(displayObserver.events.count).to(be(1))
-                    expect(displayObserver.events.first!.value.element).to(equal(FxADisplayAction.fetchingUserInformation))
+                    expect(displayObserver.events.first!.value.element)
+                            .to(equal(FxADisplayAction.fetchingUserInformation))
                 }
 
                 it("only pushes unique FxADisplay actions to observers") {

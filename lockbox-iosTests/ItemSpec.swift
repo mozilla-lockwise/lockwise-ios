@@ -7,10 +7,10 @@ import Nimble
 
 @testable import Lockbox
 
-class ItemSpec : QuickSpec {
+class ItemSpec: QuickSpec {
     override func spec() {
-        var lhs:Item?
-        var rhs:Item?
+        var lhs: Item?
+        var rhs: Item?
 
         describe("builder") {
             it("builds the item with all provided parameters") {
@@ -25,16 +25,16 @@ class ItemSpec : QuickSpec {
                 let entry = ItemEntry.Builder().kind("fdssdflksdf").build()
 
                 let item = Item.Builder()
-                    .id(id)
-                    .disabled(disabled)
-                    .title(title)
-                    .origins(origins)
-                    .tags(tags)
-                    .created(created)
-                    .modified(modified)
-                    .lastUsed(lastUsed)
-                    .entry(entry)
-                    .build()
+                        .id(id)
+                        .disabled(disabled)
+                        .title(title)
+                        .origins(origins)
+                        .tags(tags)
+                        .created(created)
+                        .modified(modified)
+                        .lastUsed(lastUsed)
+                        .entry(entry)
+                        .build()
 
                 expect(item.id).to(equal(id))
                 expect(item.disabled).to(equal(disabled))
@@ -47,66 +47,66 @@ class ItemSpec : QuickSpec {
                 expect(item.entry).to(equal(entry))
             }
         }
-        
+
         describe("equality") {
             it("returns false when the ids are different", closure: {
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind("blah").build())
-                    .id("murp")
-                    .origins([])
-                    .build()
+                        .entry(ItemEntry.Builder().kind("blah").build())
+                        .id("murp")
+                        .origins([])
+                        .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind("yuck").build())
-                    .id("snark")
-                    .origins([])
-                    .build()
-                
+                        .entry(ItemEntry.Builder().kind("yuck").build())
+                        .id("snark")
+                        .origins([])
+                        .build()
+
                 expect(lhs == rhs).to(beFalse())
             })
-            
+
             it("returns true when the ids are the same but the entry or origin parameters are different") {
                 let id = "murp"
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind("blah").build())
-                    .id(id)
-                    .origins([])
-                    .build()
+                        .entry(ItemEntry.Builder().kind("blah").build())
+                        .id(id)
+                        .origins([])
+                        .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind("farts").build())
-                    .id(id)
-                    .origins([])
-                    .build()
-                
+                        .entry(ItemEntry.Builder().kind("farts").build())
+                        .id(id)
+                        .origins([])
+                        .build()
+
                 expect(lhs == rhs).to(beFalse())
 
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind("blah").build())
-                    .id(id)
-                    .origins([])
-                    .build()
+                        .entry(ItemEntry.Builder().kind("blah").build())
+                        .id(id)
+                        .origins([])
+                        .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind("blah").build())
-                    .id(id)
-                    .origins(["www.meow.com"])
-                    .build()
+                        .entry(ItemEntry.Builder().kind("blah").build())
+                        .id(id)
+                        .origins(["www.meow.com"])
+                        .build()
 
                 expect(lhs == rhs).to(beFalse())
             }
-            
+
             it("returns true when the ids are the same and all other parameters are the same") {
                 let id = "murp"
                 let type = "fart"
                 lhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind(type).build())
-                    .id(id)
-                    .origins([])
-                    .build()
+                        .entry(ItemEntry.Builder().kind(type).build())
+                        .id(id)
+                        .origins([])
+                        .build()
                 rhs = Item.Builder()
-                    .entry(ItemEntry.Builder().kind(type).build())
-                    .id(id)
-                    .origins([])
-                    .build()
-                
+                        .entry(ItemEntry.Builder().kind(type).build())
+                        .id(id)
+                        .origins([])
+                        .build()
+
                 expect(lhs == rhs).to(beTrue())
             }
         }

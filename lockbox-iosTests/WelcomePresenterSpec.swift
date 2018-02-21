@@ -10,7 +10,7 @@ import RxCocoa
 
 @testable import Lockbox
 
-class WelcomePresenterSpec : QuickSpec {
+class WelcomePresenterSpec: QuickSpec {
     class FakeWelcomeView: WelcomeViewProtocol {
         var fakeButtonPress = PublishSubject<Void>()
         var loginButtonPressed: ControlEvent<Void> {
@@ -19,7 +19,7 @@ class WelcomePresenterSpec : QuickSpec {
     }
 
     class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument:RouteAction?
+        var invokeArgument: RouteAction?
 
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
@@ -27,8 +27,9 @@ class WelcomePresenterSpec : QuickSpec {
     }
 
     private var view: FakeWelcomeView!
-    private var routeActionHandler:FakeRouteActionHandler!
+    private var routeActionHandler: FakeRouteActionHandler!
     var subject: WelcomePresenter!
+
     override func spec() {
 
         describe("LoginPresenter") {

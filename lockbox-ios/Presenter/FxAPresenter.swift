@@ -8,27 +8,27 @@ import RxSwift
 import RxCocoa
 
 protocol FxAViewProtocol: class, ErrorView {
-    func loadRequest(_ urlRequest:URLRequest)
+    func loadRequest(_ urlRequest: URLRequest)
 }
 
 class FxAPresenter {
-    private weak var view:FxAViewProtocol!
-    fileprivate let fxAActionHandler:FxAActionHandler
-    fileprivate let routeActionHandler:RouteActionHandler
-    fileprivate let store:FxAStore
+    private weak var view: FxAViewProtocol!
+    fileprivate let fxAActionHandler: FxAActionHandler
+    fileprivate let routeActionHandler: RouteActionHandler
+    fileprivate let store: FxAStore
 
     private var disposeBag = DisposeBag()
 
-    public var onCancel:AnyObserver<Void> {
-        return Binder(self) { target, mainAction in
-            self.routeActionHandler.invoke(LoginRouteAction.welcome)
+    public var onCancel: AnyObserver<Void> {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(LoginRouteAction.welcome)
         }.asObserver()
     }
 
-    init(view:FxAViewProtocol,
-         fxAActionHandler:FxAActionHandler = FxAActionHandler.shared,
-         routeActionHandler:RouteActionHandler = RouteActionHandler.shared,
-         store:FxAStore = FxAStore.shared) {
+    init(view: FxAViewProtocol,
+         fxAActionHandler: FxAActionHandler = FxAActionHandler.shared,
+         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
+         store: FxAStore = FxAStore.shared) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
         self.routeActionHandler = routeActionHandler
@@ -39,12 +39,12 @@ class FxAPresenter {
         self.store.fxADisplay
                 .drive(onNext: { action in
                     switch action {
-                        case .loadInitialURL(let url):
-                            self.view.loadRequest(URLRequest(url: url))
-                        case .finishedFetchingUserInformation:
-                            self.routeActionHandler.invoke(MainRouteAction.list)
-                        default:
-                            break
+                    case .loadInitialURL(let url):
+                        self.view.loadRequest(URLRequest(url: url))
+                    case .finishedFetchingUserInformation:
+                        self.routeActionHandler.invoke(MainRouteAction.list)
+                    default:
+                        break
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -52,14 +52,16 @@ class FxAPresenter {
         self.fxAActionHandler.initiateFxAAuthentication()
     }
 
-    func webViewRequest(decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webViewRequest(decidePolicyFor navigationAction: WKNavigationAction,
+                        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         guard let navigationURL = navigationAction.request.url else {
             decisionHandler(.allow)
             return
         }
 
-        if ("\(navigationURL.scheme!)://\(navigationURL.host!)\(navigationURL.path)" == Constant.app.redirectURI) {
-            self.fxAActionHandler.matchingRedirectURLReceived(components: URLComponents(url: navigationURL, resolvingAgainstBaseURL: true)!)
+        if "\(navigationURL.scheme!)://\(navigationURL.host!)\(navigationURL.path)" == Constant.app.redirectURI,
+           let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true) {
+            self.fxAActionHandler.matchingRedirectURLReceived(components: components)
             decisionHandler(.cancel)
             return
         }

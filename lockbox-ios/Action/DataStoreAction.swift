@@ -14,7 +14,13 @@ enum DataStoreError: Error {
 enum JSCallbackFunction: String {
     case OpenComplete, InitializeComplete, UnlockComplete, LockComplete, ListComplete
 
-    static let allValues:[JSCallbackFunction] = [.OpenComplete, .InitializeComplete, .UnlockComplete, .LockComplete, .ListComplete]
+    static let allValues: [JSCallbackFunction] = [
+        .OpenComplete,
+        .InitializeComplete,
+        .UnlockComplete,
+        .LockComplete,
+        .ListComplete
+    ]
 }
 
 enum DataStoreAction: Action {
@@ -43,11 +49,11 @@ extension DataStoreAction: Equatable {
 
 class DataStoreActionHandler: NSObject, ActionHandler {
     static let shared = DataStoreActionHandler()
-    private var dispatcher:Dispatcher
+    private var dispatcher: Dispatcher
 
     internal var webView: (WKWebView & TypedJavaScriptWebView)!
     private let dataStoreName: String
-    private let parser:ItemParser
+    private let parser: ItemParser
     private let disposeBag = DisposeBag()
 
     // Subject references for .js calls
@@ -58,19 +64,17 @@ class DataStoreActionHandler: NSObject, ActionHandler {
     private var lockSubject = PublishSubject<Void>()
     private var listSubject = PublishSubject<[Item]>()
 
-    internal var webViewConfiguration:WKWebViewConfiguration {
-        get {
-            let webConfig = WKWebViewConfiguration()
+    internal var webViewConfiguration: WKWebViewConfiguration {
+        let webConfig = WKWebViewConfiguration()
 
-            for f in JSCallbackFunction.allValues {
-                webConfig.userContentController.add(self, name: f.rawValue)
-            }
-
-            webConfig.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-            webConfig.preferences.javaScriptEnabled = true
-
-            return webConfig
+        for f in JSCallbackFunction.allValues {
+            webConfig.userContentController.add(self, name: f.rawValue)
         }
+
+        webConfig.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
+        webConfig.preferences.javaScriptEnabled = true
+
+        return webConfig
     }
 
     init(dataStoreName: String = "ds",
@@ -102,7 +106,7 @@ class DataStoreActionHandler: NSObject, ActionHandler {
                 }, onError: { [weak self] error in
                     self?.dispatcher.dispatch(action: ErrorAction(error: error))
                     self?.openSubject = ReplaySubject<Void>.create(bufferSize: 1)
-                 })
+                })
                 .disposed(by: self.disposeBag)
 
         self._open(uid: uid)
@@ -191,7 +195,7 @@ extension DataStoreActionHandler {
         self.loadedSubject
                 .take(1)
                 .flatMap {
-                    self.webView.evaluateJavaScript("var \(self.dataStoreName);swiftOpen({\"salt\":\"\(uid)\"}).then(function (datastore) {\(self.dataStoreName) = datastore;});")
+                    self.webView.evaluateJavaScript("var \(self.dataStoreName);swiftOpen({\"salt\":\"\(uid)\"}).then(function (datastore) {\(self.dataStoreName) = datastore;});") // swiftlint:disable:this line_length
                 }
                 .subscribe(onError: { error in
                     self.openSubject.onError(error)
@@ -214,7 +218,7 @@ extension DataStoreActionHandler {
                 .flatMap { _ in
                     self.webView.evaluateJavaScript("\(self.dataStoreName).initialize({\"appKey\":\(scopedKey)})")
                 }
-                .subscribe(onError:{ error in
+                .subscribe(onError: { error in
                     self.initializeSubject.onError(error)
                 })
                 .disposed(by: self.disposeBag)
@@ -235,7 +239,7 @@ extension DataStoreActionHandler {
                 .flatMap { _ in
                     self.webView.evaluateJavaScript("\(self.dataStoreName).unlock(\(scopedKey))")
                 }
-                .subscribe(onError:{ error in
+                .subscribe(onError: { error in
                     self.unlockSubject.onError(error)
                 })
                 .disposed(by: self.disposeBag)
@@ -247,7 +251,7 @@ extension DataStoreActionHandler {
                 .flatMap { _ in
                     self.webView.evaluateJavaScript("\(self.dataStoreName).lock()")
                 }
-                .subscribe(onError:{ error in
+                .subscribe(onError: { error in
                     self.lockSubject.onError(error)
                 })
                 .disposed(by: self.disposeBag)
@@ -262,7 +266,7 @@ extension DataStoreActionHandler {
                 .flatMap { _ in
                     self.webView.evaluateJavaScript("\(self.dataStoreName).list()")
                 }
-                .subscribe(onError:{ error in
+                .subscribe(onError: { error in
                     self.listSubject.onError(error)
                 })
                 .disposed(by: self.disposeBag)
@@ -328,6 +332,7 @@ extension DataStoreActionHandler: WKScriptMessageHandler, WKNavigationDelegate {
     }
 }
 
+// swiftlint:disable function_body_length
 // Test data generator
 extension DataStoreActionHandler {
     public func populateTestData() {
@@ -376,9 +381,13 @@ extension DataStoreActionHandler {
         let encoder = JSONEncoder()
         for item in items {
             guard let encodedItem = try? encoder.encode(item),
-                  let jsonString = String(data: encodedItem, encoding: .utf8) else { continue }
+                  let jsonString = String(data: encodedItem, encoding: .utf8) else {
+                continue
+            }
 
-            self.webView.evaluateJavaScript("\(self.dataStoreName).add(\(jsonString))").subscribe().disposed(by:self.disposeBag)
+            self.webView.evaluateJavaScript("\(self.dataStoreName).add(\(jsonString))")
+                    .subscribe()
+                    .disposed(by: self.disposeBag)
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 30, execute: {
@@ -386,3 +395,5 @@ extension DataStoreActionHandler {
         })
     }
 }
+
+// swiftlint:enable function_body_length

@@ -11,8 +11,8 @@ import RxCocoa
 
 @testable import Lockbox
 
-class WelcomeViewSpec : QuickSpec {
-    class FakeLoginPresenter : WelcomePresenter {
+class WelcomeViewSpec: QuickSpec {
+    class FakeLoginPresenter: WelcomePresenter {
         var onViewReadyCalled = false
 
         override func onViewReady() {
@@ -22,8 +22,9 @@ class WelcomeViewSpec : QuickSpec {
 
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
-    private var presenter:FakeLoginPresenter!
+    private var presenter: FakeLoginPresenter!
     var subject: WelcomeView!
+
     override func spec() {
         describe("WelcomeView") {
             beforeEach {

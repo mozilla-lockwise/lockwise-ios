@@ -9,7 +9,7 @@ import Nimble
 @testable import Lockbox
 
 public func matchErrorAction(_ expected: ErrorAction) -> Predicate<ErrorAction> {
-    return Predicate.fromDeprecatedClosure { actualExpression, failureMessage in
+    return Predicate.fromDeprecatedClosure { actualExpression, _ in
         let actualErrorType: ErrorAction? = try actualExpression.evaluate()
 
         var matches = false

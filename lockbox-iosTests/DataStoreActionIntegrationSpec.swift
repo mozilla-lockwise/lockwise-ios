@@ -10,8 +10,8 @@ import RxBlocking
 
 @testable import Lockbox
 
-class DataStoreHandlerIntegrationSpec : QuickSpec {
-    private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA\",\"alg\":\"A256GCM\",\"k\":\"_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8\"}"
+class DataStoreHandlerIntegrationSpec: QuickSpec {
+    private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA\",\"alg\":\"A256GCM\",\"k\":\"_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8\"}" // swiftlint:disable:this line_length
     private let uid = "333333333"
 
     override func spec() {
@@ -43,7 +43,7 @@ class DataStoreHandlerIntegrationSpec : QuickSpec {
         }
 
         xdescribe("DataStore with JavaScript integration") {
-            var unlockValue:DataStoreAction?
+            var unlockValue: DataStoreAction?
 
             beforeEach {
                 DataStoreActionHandler.shared.unlock(scopedKey: self.scopedKey)
@@ -85,8 +85,6 @@ class DataStoreHandlerIntegrationSpec : QuickSpec {
                 expect(reUnlockValue).notTo(beNil())
                 expect(reUnlockValue).to(equal(DataStoreAction.locked(locked: false)))
             }
-    }
+        }
     }
 }
-
-

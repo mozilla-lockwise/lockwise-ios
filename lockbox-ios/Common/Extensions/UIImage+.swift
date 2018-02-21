@@ -5,7 +5,7 @@
 import UIKit
 
 extension UIImage {
-    static func createGradientImage(frame:CGRect, colors: [UIColor]) -> UIImage? {
+    static func createGradientImage(frame: CGRect, colors: [UIColor]) -> UIImage? {
         let gradientLayer = CAGradientLayer()
 
         gradientLayer.colors = colors.map({ (color) -> CGColor in
@@ -16,7 +16,7 @@ extension UIImage {
         gradientLayer.startPoint = gradientStartPoint(frame: frame)
         gradientLayer.endPoint = gradientEndPoint(frame: frame)
 
-        var image:UIImage? = nil
+        var image: UIImage? = nil
         UIGraphicsBeginImageContext(frame.size)
         if let context = UIGraphicsGetCurrentContext() {
             gradientLayer.render(in: context)
@@ -28,10 +28,10 @@ extension UIImage {
     }
 }
 
-fileprivate func gradientStartPoint(frame:CGRect) -> CGPoint {
+private func gradientStartPoint(frame: CGRect) -> CGPoint {
     return CGPoint(x: 0.4196, y: 0)
 }
 
-fileprivate func gradientEndPoint(frame:CGRect) -> CGPoint {
+private func gradientEndPoint(frame: CGRect) -> CGPoint {
     return CGPoint(x: 0.43636, y: 1)
 }
