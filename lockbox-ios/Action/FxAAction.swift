@@ -140,9 +140,8 @@ extension FxAActionHandler {
     }
 
     private func deriveScopedKeyFromJWE(_ jwe: String) throws -> String {
-        let jweString = self.keyManager.decryptJWE(jwe)
-
-        guard let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String: Any],
+        guard let jweString = self.keyManager.decryptJWE(jwe),
+              let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String: Any],
               let jweJSON = jsonValue[scope] as? [String: Any] else {
             throw FxAError.UnexpectedDataFormat
         }

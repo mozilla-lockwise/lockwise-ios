@@ -18,15 +18,17 @@ class KeyManager {
         return String(cString: jsonValue!)
     }
 
-    func decryptJWE(_ jwe: String) -> String {
+    func decryptJWE(_ jwe: String) -> String? {
         let count = jwe.data(using: .utf8)!.count as size_t
         let contentLen = UnsafeMutablePointer<size_t>.allocate(capacity: count)
         let err = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
 
         let cJoseJWE = cjose_jwe_import(jwe, count, nil)
-        let decryptedPayload = cjose_jwe_decrypt(cJoseJWE, self.jwk, contentLen, err)
+        guard let decryptedPayload = cjose_jwe_decrypt(cJoseJWE, self.jwk, contentLen, err) else {
+            return nil
+        }
 
-        return String(cString: decryptedPayload!)
+        return String(bytesNoCopy: decryptedPayload, length: contentLen.pointee, encoding: .utf8, freeWhenDone: true)
     }
 
     func random32() -> Data? {
