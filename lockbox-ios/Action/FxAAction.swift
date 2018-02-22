@@ -49,8 +49,8 @@ class FxAActionHandler: ActionHandler {
     lazy internal var scope = "https://identity.mozilla.com/apps/lockbox"
     lazy internal var state: String = self.keyManager.random32()!.base64URLEncodedString()
     lazy internal var codeVerifier: String = self.keyManager.random32()!.base64URLEncodedString()
-    lazy internal var jwkKey: String = self.keyManager.getEphemeralPublicECDH().base64URL()
     lazy internal var codeChallenge: String = self.codeVerifier.sha256withBase64URL()!
+    internal var jwkKey: String?
 
     lazy private var authURL: URL = { [weak self] in
         var components = URLComponents()
@@ -65,7 +65,7 @@ class FxAActionHandler: ActionHandler {
             URLQueryItem(name: "client_id", value: Constant.fxa.clientID),
             URLQueryItem(name: "redirect_uri", value: Constant.app.redirectURI),
             URLQueryItem(name: "scope", value: "profile openid \(self?.scope ?? "")"),
-            URLQueryItem(name: "keys_jwk", value: self?.jwkKey),
+            URLQueryItem(name: "keys_jwk", value: self?.jwkKey ?? ""),
             URLQueryItem(name: "state", value: self?.state),
             URLQueryItem(name: "code_challenge", value: self?.codeChallenge),
             URLQueryItem(name: "code_challenge_method", value: "S256")
@@ -102,6 +102,13 @@ class FxAActionHandler: ActionHandler {
     }
 
     public func initiateFxAAuthentication() {
+        do {
+            self.jwkKey = try self.keyManager.getEphemeralPublicECDH().base64URL()
+        } catch {
+            self.dispatcher.dispatch(action: ErrorAction(error: error))
+            return
+        }
+
         self.dispatcher.dispatch(action: FxADisplayAction.loadInitialURL(url: self.authURL))
     }
 
@@ -140,8 +147,9 @@ extension FxAActionHandler {
     }
 
     private func deriveScopedKeyFromJWE(_ jwe: String) throws -> String {
-        guard let jweString = self.keyManager.decryptJWE(jwe),
-              let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String: Any],
+        let jweString = try self.keyManager.decryptJWE(jwe)
+
+        guard let jsonValue = try JSONSerialization.jsonObject(with: jweString.data(using: .utf8)!) as? [String: Any],
               let jweJSON = jsonValue[scope] as? [String: Any] else {
             throw FxAError.UnexpectedDataFormat
         }

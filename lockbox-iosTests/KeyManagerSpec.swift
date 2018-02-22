@@ -9,14 +9,18 @@ import CJose
 @testable import Lockbox
 
 class KeyManagerSpec: QuickSpec {
-    let subject = KeyManager()
+    var subject: KeyManager!
+    var key: String!
 
     override func spec() {
-        describe(".getEphemeralPublicECDH()") {
-            let key = subject.getEphemeralPublicECDH()
+        beforeEach {
+            self.subject = KeyManager()
+            self.key = try! self.subject.getEphemeralPublicECDH()
+        }
 
+        describe(".getEphemeralPublicECDH()") {
             it("generates an ECDH public-key JSON string with correct parameters & data sizes") {
-                if let data = key.data(using: .utf8) {
+                if let data = self.key.data(using: .utf8) {
                     do {
                         let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
 
@@ -31,9 +35,9 @@ class KeyManagerSpec: QuickSpec {
             }
 
             it("caches the ECDH key and returns the same one on subsequent requests") {
-                let secondKey = self.subject.getEphemeralPublicECDH()
+                let secondKey = try! self.subject.getEphemeralPublicECDH()
 
-                if let keyOneData = key.data(using: .utf8), let keyTwoData = secondKey.data(using: .utf8) {
+                if let keyOneData = self.key.data(using: .utf8), let keyTwoData = secondKey.data(using: .utf8) {
                     do {
                         let keyOneJSONDict = try JSONSerialization.jsonObject(
                                 with: keyOneData, options: []
@@ -54,26 +58,56 @@ class KeyManagerSpec: QuickSpec {
         }
 
         describe(".decryptJWE()") {
-            let payload = "some data I put in here"
+            describe("when the JWE is not formatted correctly") {
+                it("throws an error") {
+                    expect {
+                        try self.subject.decryptJWE("")
+                    }.to(throwError())
+                }
+            }
 
-            it("decrypts a provided JWE payload") {
-                let ecdh = self.subject.getEphemeralPublicECDH()
-                let count = ecdh.data(using: .utf8)!.count as size_t
-                let jwkFromJSON = cjose_jwk_import(ecdh, count, nil)
+            describe("when the JWE is formatted correctly") {
+                let payload = "some data I put in here"
+                var serializedJWE: String!
 
-                let cjoseError = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
-                let header: OpaquePointer = cjose_header_new(nil)
-                cjose_header_set(header, CJOSE_HDR_ALG, CJOSE_HDR_ALG_ECDH_ES, nil)
-                cjose_header_set(header, CJOSE_HDR_ENC, CJOSE_HDR_ENC_A256GCM, nil)
+                beforeEach {
+                    let count = self.key.data(using: .utf8)!.count as size_t
+                    let jwkFromJSON = cjose_jwk_import(self.key, count, nil)
 
-                let jwe = cjose_jwe_encrypt(jwkFromJSON,
-                        header,
-                        payload,
-                        payload.count,
-                        cjoseError)
-                let serializedJWE = String(cString: cjose_jwe_export(jwe, nil))
+                    let cjoseError = UnsafeMutablePointer<cjose_err>.allocate(capacity: count)
+                    let header: OpaquePointer = cjose_header_new(nil)
+                    cjose_header_set(header, CJOSE_HDR_ALG, CJOSE_HDR_ALG_ECDH_ES, nil)
+                    cjose_header_set(header, CJOSE_HDR_ENC, CJOSE_HDR_ENC_A256GCM, nil)
 
-                expect(self.subject.decryptJWE(serializedJWE)).to(equal(payload))
+                    let jwe = cjose_jwe_encrypt(jwkFromJSON,
+                            header,
+                            payload,
+                            payload.count,
+                            cjoseError)
+                    serializedJWE = String(cString: cjose_jwe_export(jwe, nil))
+                }
+
+                describe("when the payload cannot be decrypted") {
+                    beforeEach {
+                        // munge last three characters of JWE encoding
+                        serializedJWE = serializedJWE.substring(
+                                to: serializedJWE.index(serializedJWE.endIndex, offsetBy: -3)
+                        )
+                        serializedJWE.append("sss")
+                    }
+
+                    it("throws an error") {
+                        expect {
+                            try self.subject.decryptJWE(serializedJWE)
+                        }.to(throwError())
+                    }
+                }
+
+                describe("when the payload can be decrypted") {
+                    it("decrypts a provided JWE payload") {
+                        expect(try! self.subject.decryptJWE(serializedJWE)).to(equal(payload))
+                    }
+                }
             }
         }
 

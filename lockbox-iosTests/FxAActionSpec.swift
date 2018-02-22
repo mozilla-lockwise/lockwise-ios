@@ -22,14 +22,19 @@ class FxAActionSpec: QuickSpec {
 
     class FakeKeyManager: KeyManager {
         let fakeECDH = "fakeecdhissomuchstringyeshellohereweare"
+        var ecdhShouldThrow = false
         var fakeDecryptedJWE: String?
         var jweArgument: String?
 
-        override func getEphemeralPublicECDH() -> String {
-            return fakeECDH
+        override func getEphemeralPublicECDH() throws -> String {
+            if ecdhShouldThrow {
+                throw KeyManagerError(message: "WHOOPS")
+            } else {
+                return fakeECDH
+            }
         }
 
-        override func decryptJWE(_ jwe: String) -> String {
+        override func decryptJWE(_ jwe: String) throws -> String {
             jweArgument = jwe
             return fakeDecryptedJWE!
         }
@@ -78,31 +83,45 @@ class FxAActionSpec: QuickSpec {
             }
 
             describe(".initiateFxAAuthentication") {
-                beforeEach {
-                    self.subject.initiateFxAAuthentication()
+                describe("if the keymanager throws an error when getting the public ecdh") {
+                    beforeEach {
+                        self.keyManager.ecdhShouldThrow = true
+                        self.subject.initiateFxAAuthentication()
+                    }
+
+                    it("dispatches the error") {
+                        let errorAction = self.dispatcher.actionArguments.popLast() as! ErrorAction
+                        expect(errorAction.error).to(beAKindOf(KeyManagerError.self))
+                    }
                 }
 
-                it("dispatches the loadURL display action") {
-                    var components = URLComponents()
+                describe("if the keymanager does not throw an error when getting the public ecdh") {
+                    beforeEach {
+                        self.subject.initiateFxAAuthentication()
+                    }
 
-                    components.scheme = "https"
-                    components.host = Constant.fxa.oauthHost
-                    components.path = "/v1/authorization"
+                    it("dispatches the loadURL display action") {
+                        var components = URLComponents()
 
-                    components.queryItems = [
-                        URLQueryItem(name: "response_type", value: "code"),
-                        URLQueryItem(name: "access_type", value: "offline"),
-                        URLQueryItem(name: "client_id", value: Constant.fxa.clientID),
-                        URLQueryItem(name: "redirect_uri", value: Constant.app.redirectURI),
-                        URLQueryItem(name: "scope", value: "profile openid \(self.subject.scope)"),
-                        URLQueryItem(name: "keys_jwk", value: self.subject.jwkKey),
-                        URLQueryItem(name: "state", value: self.subject.state),
-                        URLQueryItem(name: "code_challenge", value: self.subject.codeChallenge),
-                        URLQueryItem(name: "code_challenge_method", value: "S256")
-                    ]
+                        components.scheme = "https"
+                        components.host = Constant.fxa.oauthHost
+                        components.path = "/v1/authorization"
 
-                    let displayAction = self.dispatcher.actionArguments.popLast() as! FxADisplayAction
-                    expect(displayAction).to(equal(FxADisplayAction.loadInitialURL(url: components.url!)))
+                        components.queryItems = [
+                            URLQueryItem(name: "response_type", value: "code"),
+                            URLQueryItem(name: "access_type", value: "offline"),
+                            URLQueryItem(name: "client_id", value: Constant.fxa.clientID),
+                            URLQueryItem(name: "redirect_uri", value: Constant.app.redirectURI),
+                            URLQueryItem(name: "scope", value: "profile openid \(self.subject.scope)"),
+                            URLQueryItem(name: "keys_jwk", value: self.subject.jwkKey),
+                            URLQueryItem(name: "state", value: self.subject.state),
+                            URLQueryItem(name: "code_challenge", value: self.subject.codeChallenge),
+                            URLQueryItem(name: "code_challenge_method", value: "S256")
+                        ]
+
+                        let displayAction = self.dispatcher.actionArguments.popLast() as! FxADisplayAction
+                        expect(displayAction).to(equal(FxADisplayAction.loadInitialURL(url: components.url!)))
+                    }
                 }
             }
 
