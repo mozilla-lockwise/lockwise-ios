@@ -36,5 +36,23 @@ class ViewControllerSpec: QuickSpec {
                 expect(alertController.actions[0].style).to(equal(UIAlertActionStyle.cancel))
             }
         }
+
+        describe(".displayTemporaryAlert") {
+            let message = "Something copied to clipboard"
+
+            beforeEach {
+                self.subject.displayTemporaryAlert(message, timeout: 5)
+            }
+
+            it("displays a UIView temporarily") {
+                expect(self.subject.view.subviews.first).toEventually(beAnInstanceOf(StatusAlert.self))
+
+                let alert = self.subject.view.subviews.first as! StatusAlert
+
+                expect(alert.messageLabel.text).to(equal(message))
+
+                expect(self.subject.view.subviews.first).toEventually(beNil(), timeout: 6)
+            }
+        }
     }
 }

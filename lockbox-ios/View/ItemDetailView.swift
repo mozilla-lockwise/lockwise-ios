@@ -27,10 +27,11 @@ extension ItemDetailCellConfiguration: Equatable {
     }
 }
 
-class ItemDetailView: UITableViewController {
+class ItemDetailView: UIViewController {
     internal var presenter: ItemDetailPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
+    @IBOutlet weak var tableView: UITableView!
     var itemId: String = ""
 
     private var passwordCell: ItemDetailCell? {
@@ -63,6 +64,7 @@ class ItemDetailView: UITableViewController {
         self.styleNavigationBar()
         self.styleTableBackground()
         self.setupDataSource()
+        self.setupDelegate()
         self.presenter?.onViewReady()
     }
 }
@@ -106,6 +108,7 @@ extension ItemDetailView {
         guard let presenter = self.presenter else {
             return
         }
+
         leftButton.rx.tap
                 .bind(to: presenter.onCancel)
                 .disposed(by: self.disposeBag)
@@ -140,5 +143,20 @@ extension ItemDetailView {
 
                     return cell
                 })
+    }
+
+    fileprivate func setupDelegate() {
+        guard let presenter = self.presenter else { return }
+
+        self.tableView.rx.itemSelected
+                .map { path -> String? in
+                    guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
+                        return nil
+                    }
+
+                    return selectedCell.titleLabel.text
+                }
+                .bind(to: presenter.onCellTapped)
+                .disposed(by: self.disposeBag)
     }
 }

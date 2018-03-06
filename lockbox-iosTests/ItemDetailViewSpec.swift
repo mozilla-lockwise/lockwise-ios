@@ -17,6 +17,7 @@ class ItemDetailViewSpec: QuickSpec {
         var onViewReadyCalled = false
         var onPasswordToggleActionDispatched = false
         var onCancelActionDispatched = false
+        var onCellTappedValue: String?
 
         override func onViewReady() {
             self.onViewReadyCalled = true
@@ -31,6 +32,12 @@ class ItemDetailViewSpec: QuickSpec {
         override var onCancel: AnyObserver<Void> {
             return Binder(self) { target, _ in
                 target.onCancelActionDispatched = true
+            }.asObserver()
+        }
+
+        override var onCellTapped: AnyObserver<String?> {
+            return Binder(self) { target, value in
+                target.onCellTappedValue = value
             }.asObserver()
         }
     }
@@ -66,7 +73,7 @@ class ItemDetailViewSpec: QuickSpec {
                 }
             }
 
-            describe("tableview configuration") {
+            describe("tableview datasource configuration") {
                 let configDriver = PublishSubject<[ItemDetailSectionModel]>()
                 let sectionModels = [
                     ItemDetailSectionModel(model: 0, items: [
@@ -108,6 +115,16 @@ class ItemDetailViewSpec: QuickSpec {
                     cell.revealButton.sendActions(for: .touchUpInside)
 
                     expect(self.presenter.onPasswordToggleActionDispatched).to(beTrue())
+                }
+
+                describe("tapping cells") {
+                    beforeEach {
+                        self.subject.tableView.delegate!.tableView!(self.subject.tableView, didSelectRowAt: [1, 0])
+                    }
+
+                    it("extracts the titlelabel text and tells the presenter") {
+                        expect(self.presenter.onCellTappedValue).to(equal(Constant.string.username))
+                    }
                 }
             }
 
