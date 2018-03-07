@@ -84,7 +84,6 @@
 		7D302BEA1FD7283600D2FD4B /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
 		7D302BEB1FD7284600D2FD4B /* RxCocoa.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7D30DBB32033651600613B69 /* EmptyList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D30DBB52033651600613B69 /* EmptyList.xib */; };
-		7D320B3520360F9000891F73 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D320B3420360F9000891F73 /* RxDataSources.framework */; };
 		7D38849B1F992A0B0058DAFF /* WebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D38849A1F992A0B0058DAFF /* WebViewSpec.swift */; };
 		7D38849C1F99374F0058DAFF /* lockbox-datastore in Resources */ = {isa = PBXBuildFile; fileRef = 7D1B1A991F98FC0600C1F5FF /* lockbox-datastore */; };
 		7D3884A21F9A54D90058DAFF /* ParserSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3884A11F9A54D90058DAFF /* ParserSpec.swift */; };
@@ -113,7 +112,6 @@
 		7DBF9B2E1FB22EB000A53364 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920231FB131FB00709575 /* libcrypto.a */; };
 		7DBF9B2F1FB22EB000A53364 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920251FB131FB00709575 /* libjansson.a */; };
 		7DBF9B301FB22EB000A53364 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920241FB131FB00709575 /* libssl.a */; };
-		7DEA1C4220362E0A008AD7C4 /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
 		7DEA1C4320362E18008AD7C4 /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
 		7DEA1C4420362E18008AD7C4 /* Differentiator.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DEF297E203E3A2100ABC4AC /* EntryEditDisclaimer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7DEF2980203E3A2100ABC4AC /* EntryEditDisclaimer.xib */; };
@@ -315,8 +313,6 @@
 				7DEA1C4320362E18008AD7C4 /* Differentiator.framework in Frameworks */,
 				7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */,
 				7D302BEA1FD7283600D2FD4B /* RxCocoa.framework in Frameworks */,
-				7D320B3520360F9000891F73 /* RxDataSources.framework in Frameworks */,
-				7DEA1C4220362E0A008AD7C4 /* Differentiator.framework in Frameworks */,
 				D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */,
 				7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */,
 				7D3920281FB131FB00709575 /* libssl.a in Frameworks */,
@@ -930,6 +926,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -989,6 +986,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
