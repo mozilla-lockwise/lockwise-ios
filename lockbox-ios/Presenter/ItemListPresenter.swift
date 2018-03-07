@@ -5,9 +5,10 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RxDataSources
 
 protocol ItemListViewProtocol: class {
-    func displayItems(_ items: [Item])
+    func bind(items: Driver<[ItemSectionModel]>)
     func displayEmptyStateMessaging()
     func hideEmptyStateMessaging()
 }
@@ -18,9 +19,11 @@ class ItemListPresenter {
     private var dataStore: DataStore
     private var disposeBag = DisposeBag()
 
-    lazy private(set) var itemSelectedObserver: AnyObserver<Item> = {
-        return Binder(self) { target, item in
-            guard let id = item.id else { return }
+    lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
+        return Binder(self) { target, itemId in
+            guard let id = itemId else {
+                return
+            }
 
             target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
         }.asObserver()
@@ -35,15 +38,36 @@ class ItemListPresenter {
     }
 
     func onViewReady() {
-        self.dataStore.onItemList
-                .subscribe(onNext: { items in
+        let listDriver = self.dataStore.onItemList
+                .do(onNext: { items in
                     if items.isEmpty {
                         self.view?.displayEmptyStateMessaging()
                     } else {
                         self.view?.hideEmptyStateMessaging()
-                        self.view?.displayItems(items)
                     }
                 })
-                .disposed(by: self.disposeBag)
+                .filter { items in
+                    return !items.isEmpty
+                }
+                .map { items -> [ItemSectionModel] in
+                    return [ItemSectionModel(model: 0, items: self.configurationsFromItems(items))]
+                }
+                .asDriver(onErrorJustReturn: [])
+
+        self.view?.bind(items: listDriver)
+    }
+}
+
+extension ItemListPresenter {
+    // The typecasting and force-cast in this function are due to a bug in the Swift compiler that will be fixed in
+    // the Swift 4.1 release.
+    fileprivate func configurationsFromItems<T: IdentifiableType & Equatable>(_ items: [Item]) -> [T] {
+        return items.map { item -> ItemCellConfiguration in
+            let titleText = item.title ?? ""
+            let usernameEmpty = item.entry.username == "" || item.entry.username == nil
+            let usernameText = usernameEmpty ? Constant.string.usernamePlaceholder : item.entry.username!
+
+            return ItemCellConfiguration(title: titleText, username: usernameText, id: item.id)
+        } as! [T] // swiftlint:disable:this force_cast
     }
 }
