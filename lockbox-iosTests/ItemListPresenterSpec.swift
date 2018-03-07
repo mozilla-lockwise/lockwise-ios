@@ -6,23 +6,19 @@ import Foundation
 import Quick
 import Nimble
 import RxSwift
+import RxCocoa
 import RxTest
 
 @testable import Lockbox
 
 class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
-        var displayItemsArgument: [Item]?
-        var displayErrorArgument: Error?
+        var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var displayEmptyStateMessagingCalled = false
         var hideEmptyStateMessagingCalled = false
 
-        func displayItems(_ items: [Item]) {
-            self.displayItemsArgument = items
-        }
-
-        func displayError(_ error: Error) {
-            self.displayErrorArgument = error
+        func bind(items: Driver<[ItemSectionModel]>) {
+            items.drive(itemsObserver)
         }
 
         func displayEmptyStateMessaging() {
@@ -64,6 +60,8 @@ class ItemListPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.routeActionHandler = FakeRouteActionHandler()
 
+                self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
+
                 self.subject = ItemListPresenter(
                         view: self.view,
                         routeActionHandler: self.routeActionHandler,
@@ -85,9 +83,21 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 describe("when the datastore pushes a populated list of items") {
+                    let title1 = "meow"
+                    let username = "cats@cats.com"
+
+                    let id1 = "fdsdfsfdsfds"
+                    let id2 = "ghfhghgff"
                     let items = [
-                        Item.Builder().build(),
-                        Item.Builder().build()
+                        Item.Builder()
+                                .title(title1).entry(
+                                        ItemEntry.Builder()
+                                                .username(username)
+                                                .build()
+                                )
+                                .id(id1)
+                                .build(),
+                        Item.Builder().id(id2).build()
                     ]
 
                     beforeEach {
@@ -97,8 +107,13 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("tells the view to display the items") {
-                        expect(self.view.displayItemsArgument).notTo(beNil())
-                        expect(self.view.displayItemsArgument).to(equal(items))
+                        let expectedItemConfigurations = [
+                            ItemCellConfiguration(title: title1, username: username, id: id1),
+                            ItemCellConfiguration(title: "", username: Constant.string.usernamePlaceholder, id: id2)
+                        ]
+                        expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
+                        let configuration = self.view.itemsObserver.events.first!.value.element!
+                        expect(configuration.first!.items).to(equal(expectedItemConfigurations))
                     }
 
                     it("tells the view to hide the empty state messaging") {
@@ -113,7 +128,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                     beforeEach {
                         let itemObservable = self.scheduler.createColdObservable([
-                            next(100, Item.Builder().id(id).build())
+                            next(50, id)
                         ])
 
                         itemObservable
@@ -132,7 +147,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                 describe("when the item does not have an id") {
                     beforeEach {
-                        let itemObservable = self.scheduler.createColdObservable([next(100, Item.Builder().build())])
+                        let itemObservable: TestableObservable<String?> = self.scheduler.createColdObservable([next(50, nil)])
 
                         itemObservable
                                 .bind(to: self.subject.itemSelectedObserver)

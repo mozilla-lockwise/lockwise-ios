@@ -5,7 +5,6 @@
 import UIKit
 
 class ItemListCell: UITableViewCell {
-    @IBOutlet weak var kebabButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
 }

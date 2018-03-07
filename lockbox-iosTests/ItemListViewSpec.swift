@@ -6,6 +6,7 @@ import UIKit
 import Quick
 import Nimble
 import RxTest
+import RxCocoa
 import RxSwift
 
 @testable import Lockbox
@@ -20,13 +21,13 @@ class ItemListViewSpec: QuickSpec {
 
     class FakeItemListPresenter: ItemListPresenter {
         var onViewReadyCalled = false
-        var fakeItemSelectedObserver: TestableObserver<Item>!
+        var fakeItemSelectedObserver: TestableObserver<String?>!
 
         override func onViewReady() {
             onViewReadyCalled = true
         }
 
-        override var itemSelectedObserver: AnyObserver<Item> {
+        override var itemSelectedObserver: AnyObserver<String?> {
             return self.fakeItemSelectedObserver.asObserver()
         }
     }
@@ -39,10 +40,10 @@ class ItemListViewSpec: QuickSpec {
         describe("ItemListView") {
             beforeEach {
                 let storyboard = UIStoryboard(name: "ItemList", bundle: Bundle.main)
-                self.subject = storyboard.instantiateInitialViewController() as! ItemListView
+                self.subject = storyboard.instantiateViewController(withIdentifier: "itemlist") as! ItemListView
 
                 self.presenter = FakeItemListPresenter(view: self.subject)
-                self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(Item.self)
+                self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(String?.self)
                 self.subject.presenter = self.presenter
 
                 _ = UINavigationController(rootViewController: self.subject)
@@ -53,54 +54,39 @@ class ItemListViewSpec: QuickSpec {
                 expect(self.presenter.onViewReadyCalled).to(beTrue())
             }
 
-            it("only has one section") {
-                expect(self.subject.numberOfSections(in: self.subject.tableView)).to(equal(1))
-            }
-
             describe(".displayItems()") {
                 let items = [
-                    Item.Builder()
-                            .title("my fave item")
-                            .entry(
-                                    ItemEntry.Builder()
-                                            .username("me")
-                                            .build())
-                            .build(),
-                    Item.Builder()
-                            .title("sum item")
-                            .entry(
-                                    ItemEntry.Builder()
-                                            .build())
-                            .build()
+                    ItemCellConfiguration(title: "item1", username: "bleh", id: "fdssdfdfs"),
+                    ItemCellConfiguration(title: "sum item", username: "meh", id: "sdfsdads")
                 ]
 
                 beforeEach {
-                    self.subject.displayItems(items)
+                    self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: items)]))
                 }
 
                 it("configures the number of rows correctly") {
-                    expect(self.subject.tableView(self.subject.tableView, numberOfRowsInSection: 0))
+                    expect(self.subject.tableView.dataSource!.tableView(self.subject.tableView, numberOfRowsInSection: 0))
                             .to(equal(items.count))
                 }
 
                 it("configures cells correctly when the item has a username and a title") {
-                    let cell = self.subject.tableView(
+                    let cell = self.subject.tableView.dataSource!.tableView(
                             self.subject.tableView,
                             cellForRowAt: IndexPath(row: 0, section: 0)
                     ) as! ItemListCell
 
                     expect(cell.titleLabel!.text).to(equal(items[0].title))
-                    expect(cell.detailLabel!.text).to(equal(items[0].entry.username))
+                    expect(cell.detailLabel!.text).to(equal(items[0].username))
                 }
 
                 it("configures cells correctly when the item has no username and a title") {
-                    let cell = self.subject.tableView(
+                    let cell = self.subject.tableView.dataSource!.tableView(
                             self.subject.tableView,
                             cellForRowAt: IndexPath(row: 1, section: 0)
                     ) as! ItemListCell
 
                     expect(cell.titleLabel!.text).to(equal(items[1].title))
-                    expect(cell.detailLabel!.text).to(equal("(no username)"))
+                    expect(cell.detailLabel!.text).to(equal(items[1].username))
                 }
             }
 
@@ -126,22 +112,16 @@ class ItemListViewSpec: QuickSpec {
 
             describe("tapping a row") {
                 let items = [
-                    Item.Builder()
-                            .title("my fave item")
-                            .entry(
-                                    ItemEntry.Builder()
-                                            .username("me")
-                                            .build())
-                            .build()
+                    ItemCellConfiguration(title: "item1", username: "bleh", id: "fdssdfdfs")
                 ]
 
                 beforeEach {
-                    self.subject.displayItems(items)
+                    self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: items)]))
                     (self.subject.tableView.delegate!).tableView!(self.subject.tableView, didSelectRowAt: [0, 0])
                 }
 
                 it("tells the presenter") {
-                    expect(self.presenter.fakeItemSelectedObserver.events.first!.value.element).to(equal(items.first))
+                    expect(self.presenter.fakeItemSelectedObserver.events.first!.value.element!).to(equal(items.first!.id))
                 }
             }
         }
