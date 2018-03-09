@@ -20,7 +20,7 @@ class ItemDetailPresenter {
     weak var view: ItemDetailViewProtocol?
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
-    private var copyDisplayStore: CopyDisplayStore
+    private var copyDisplayStore: CopyConfirmationDisplayStore
     private var routeActionHandler: RouteActionHandler
     private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
@@ -66,7 +66,7 @@ class ItemDetailPresenter {
     init(view: ItemDetailViewProtocol,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
-         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared,
+         copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
          itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared) {

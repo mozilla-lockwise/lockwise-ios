@@ -62,8 +62,8 @@ class CopyActionSpec: QuickSpec {
 
                 it("dispatches the copied action") {
                     expect(self.dispatcher.dispatchedAction).notTo(beNil())
-                    let copiedAction = self.dispatcher.dispatchedAction as! CopyDisplayAction
-                    expect(copiedAction).to(equal(CopyDisplayAction(fieldName: fieldName)))
+                    let copiedAction = self.dispatcher.dispatchedAction as! CopyConfirmationDisplayAction
+                    expect(copiedAction).to(equal(CopyConfirmationDisplayAction(fieldName: fieldName)))
                 }
             }
         }
@@ -71,8 +71,8 @@ class CopyActionSpec: QuickSpec {
         describe("CopyDisplayAction") {
             describe("equality") {
                 it("CopyDisplayActions are equal when fieldnames are equal") {
-                    expect(CopyDisplayAction(fieldName: "something")).to(equal(CopyDisplayAction(fieldName: "something")))
-                    expect(CopyDisplayAction(fieldName: "something")).notTo(equal(CopyDisplayAction(fieldName: "not")))
+                    expect(CopyConfirmationDisplayAction(fieldName: "something")).to(equal(CopyConfirmationDisplayAction(fieldName: "something")))
+                    expect(CopyConfirmationDisplayAction(fieldName: "something")).notTo(equal(CopyConfirmationDisplayAction(fieldName: "not")))
                 }
             }
         }

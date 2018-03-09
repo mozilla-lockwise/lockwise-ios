@@ -6,22 +6,22 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class CopyDisplayStore {
-    static let shared = CopyDisplayStore()
+class CopyConfirmationDisplayStore {
+    static let shared = CopyConfirmationDisplayStore()
     private let disposeBag = DisposeBag()
 
     private let dispatcher: Dispatcher
-    private let _copyDisplay = PublishSubject<CopyDisplayAction>()
+    private let _copyDisplay = PublishSubject<CopyConfirmationDisplayAction>()
 
-    public var copyDisplay: Driver<CopyDisplayAction> {
-        return _copyDisplay.asDriver(onErrorJustReturn: CopyDisplayAction(fieldName: ""))
+    public var copyDisplay: Driver<CopyConfirmationDisplayAction> {
+        return _copyDisplay.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(fieldName: ""))
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
 
         self.dispatcher.register
-                .filterByType(class: CopyDisplayAction.self)
+                .filterByType(class: CopyConfirmationDisplayAction.self)
                 .bind(to: self._copyDisplay)
                 .disposed(by: self.disposeBag)
     }
