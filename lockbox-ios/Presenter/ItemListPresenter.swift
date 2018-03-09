@@ -13,11 +13,23 @@ protocol ItemListViewProtocol: class {
     func hideEmptyStateMessaging()
 }
 
+struct ItemsText {
+    let items: [Item]
+    let text: String
+}
+
+extension ItemsText: Equatable {
+    static func ==(lhs: ItemsText, rhs: ItemsText) -> Bool {
+        return lhs.items == rhs.items && lhs.text == rhs.text
+    }
+}
+
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
     private var routeActionHandler: RouteActionHandler
     private var dataStore: DataStore
     private var disposeBag = DisposeBag()
+    private let filterTextSubject = BehaviorSubject<String>(value: "")
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
         return Binder(self) { target, itemId in
@@ -29,6 +41,10 @@ class ItemListPresenter {
         }.asObserver()
     }()
 
+    lazy private(set) var filterTextObserver: AnyObserver<String> = {
+        return self.filterTextSubject.asObserver()
+    }()
+
     init(view: ItemListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStore: DataStore = DataStore.shared) {
@@ -38,17 +54,33 @@ class ItemListPresenter {
     }
 
     func onViewReady() {
-        let listDriver = self.dataStore.onItemList
-                .do(onNext: { items in
-                    if items.isEmpty {
+        let listDriver = Observable.combineLatest(self.dataStore.onItemList, self.filterTextSubject.asObservable())
+                .map { (latest: ([Item], String)) -> ItemsText in
+                    return ItemsText(items: latest.0, text: latest.1)
+                }
+                .distinctUntilChanged()
+                .do(onNext: { latest in
+                    if latest.items.isEmpty {
                         self.view?.displayEmptyStateMessaging()
                     } else {
                         self.view?.hideEmptyStateMessaging()
                     }
                 })
-                .filter { items in
-                    return !items.isEmpty
+                .filter { latest in
+                    return !latest.items.isEmpty
                 }
+                .map { (latest: ItemsText) -> [Item] in
+                    if latest.text.isEmpty {
+                        return latest.items
+                    }
+
+                    let latestText = latest.text.lowercased()
+                    return latest.items.filter { item -> Bool in
+                        return item.entry.username?.lowercased().contains(latestText) ?? false
+                                || item.origins.first?.lowercased().contains(latestText) ?? false
+                                || item.title?.lowercased().contains(latestText) ?? false
+                    }
+                 }
                 .map { items -> [ItemSectionModel] in
                     return [ItemSectionModel(model: 0, items: self.configurationsFromItems(items))]
                 }
@@ -62,12 +94,16 @@ extension ItemListPresenter {
     // The typecasting and force-cast in this function are due to a bug in the Swift compiler that will be fixed in
     // the Swift 4.1 release.
     fileprivate func configurationsFromItems<T: IdentifiableType & Equatable>(_ items: [Item]) -> [T] {
-        return items.map { item -> ItemCellConfiguration in
+        let searchCell = [ItemListCellConfiguration.Search]
+
+        let itemCells = items.map { item -> ItemListCellConfiguration in
             let titleText = item.title ?? ""
             let usernameEmpty = item.entry.username == "" || item.entry.username == nil
             let usernameText = usernameEmpty ? Constant.string.usernamePlaceholder : item.entry.username!
 
-            return ItemCellConfiguration(title: titleText, username: usernameText, id: item.id)
-        } as! [T] // swiftlint:disable:this force_cast
+            return ItemListCellConfiguration.Item(title: titleText, username: usernameText, id: item.id)
+        }
+
+        return searchCell + itemCells as! [T] // swiftlint:disable:this force_cast
     }
 }

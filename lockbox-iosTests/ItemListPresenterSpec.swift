@@ -98,7 +98,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 )
                                 .id(id1)
                                 .build(),
-                        Item.Builder().id(id2).build()
+                        Item.Builder().origins(["www.dogs.com"]).id(id2).build()
                     ]
 
                     beforeEach {
@@ -109,8 +109,9 @@ class ItemListPresenterSpec: QuickSpec {
 
                     it("tells the view to display the items") {
                         let expectedItemConfigurations = [
-                            ItemCellConfiguration(title: title1, username: username, id: id1),
-                            ItemCellConfiguration(title: "", username: Constant.string.usernamePlaceholder, id: id2)
+                            ItemListCellConfiguration.Search,
+                            ItemListCellConfiguration.Item(title: title1, username: username, id: id1),
+                            ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2)
                         ]
                         expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
                         let configuration = self.view.itemsObserver.events.first!.value.element!
@@ -119,6 +120,67 @@ class ItemListPresenterSpec: QuickSpec {
 
                     it("tells the view to hide the empty state messaging") {
                         expect(self.view.hideEmptyStateMessagingCalled).to(beTrue())
+                    }
+
+                    describe("when text is entered into the search bar") {
+                        let textSubject = PublishSubject<String>()
+
+                        beforeEach {
+                            textSubject
+                                    .bind(to: self.subject.filterTextObserver)
+                                    .disposed(by: self.disposeBag)
+                        }
+
+                        describe("when the text matches an item's username") {
+                            beforeEach {
+                                textSubject.onNext("cat")
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let expectedItemConfigurations = [
+                                    ItemListCellConfiguration.Search,
+                                    ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
+
+                        describe("when the text matches an item's origins") {
+                            beforeEach {
+                                textSubject.onNext("dog")
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let expectedItemConfigurations = [
+                                    ItemListCellConfiguration.Search,
+                                    ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
+
+                        describe("when the text matches an item's title") {
+                            beforeEach {
+                                textSubject.onNext("me")
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let expectedItemConfigurations = [
+                                    ItemListCellConfiguration.Search,
+                                    ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
                     }
                 }
             }
