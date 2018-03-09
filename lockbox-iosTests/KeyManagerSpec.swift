@@ -90,9 +90,7 @@ class KeyManagerSpec: QuickSpec {
                 describe("when the payload cannot be decrypted") {
                     beforeEach {
                         // munge last three characters of JWE encoding
-                        serializedJWE = serializedJWE.substring(
-                                to: serializedJWE.index(serializedJWE.endIndex, offsetBy: -3)
-                        )
+                        serializedJWE = "\(serializedJWE[..<serializedJWE.index(serializedJWE.endIndex, offsetBy: -3)])"
                         serializedJWE.append("sss")
                     }
 

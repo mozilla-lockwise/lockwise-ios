@@ -16,9 +16,10 @@ class ItemListPresenterSpec: QuickSpec {
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var displayEmptyStateMessagingCalled = false
         var hideEmptyStateMessagingCalled = false
+        let disposeBag = DisposeBag()
 
         func bind(items: Driver<[ItemSectionModel]>) {
-            items.drive(itemsObserver)
+            items.drive(itemsObserver).disposed(by: self.disposeBag)
         }
 
         func displayEmptyStateMessaging() {
