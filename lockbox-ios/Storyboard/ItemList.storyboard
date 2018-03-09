@@ -54,7 +54,6 @@
                                                 <constraint firstItem="n2T-XM-ua9" firstAttribute="leading" secondItem="3A5-nI-aV6" secondAttribute="leading" id="uPu-vg-Qfd"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="detailLabel" destination="n2T-XM-ua9" id="8MK-XX-xsf"/>
                                             <outlet property="titleLabel" destination="3A5-nI-aV6" id="3cP-ft-p8T"/>
