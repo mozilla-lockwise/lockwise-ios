@@ -50,11 +50,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeCopyDisplayStore: CopyDisplayStore {
-        var copyDisplayStub = PublishSubject<CopyDisplayAction>()
+    class FakeCopyDisplayStore: CopyConfirmationDisplayStore {
+        var copyDisplayStub = PublishSubject<CopyConfirmationDisplayAction>()
 
-        override var copyDisplay: Driver<CopyDisplayAction> {
-            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyDisplayAction(fieldName: ""))
+        override var copyDisplay: Driver<CopyConfirmationDisplayAction> {
+            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(fieldName: ""))
         }
     }
 
@@ -458,7 +458,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     let fieldName = "schmield"
 
                     beforeEach {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyDisplayAction(fieldName: fieldName))
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(fieldName: fieldName))
                     }
 
                     it("tells the view to display a temporary alert") {

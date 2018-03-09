@@ -10,7 +10,7 @@ import RxSwift
 
 @testable import Lockbox
 
-class CopyStoreSpec: QuickSpec {
+class CopyConfirmationDisplayStoreSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {
         let fakeRegistration = PublishSubject<Action>()
 
@@ -22,20 +22,20 @@ class CopyStoreSpec: QuickSpec {
     private var dispatcher: FakeDispatcher!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
-    var subject: CopyDisplayStore!
+    var subject: CopyConfirmationDisplayStore!
 
     override func spec() {
         describe("CopyDisplayStore") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
-                self.subject = CopyDisplayStore(dispatcher: self.dispatcher)
+                self.subject = CopyConfirmationDisplayStore(dispatcher: self.dispatcher)
             }
 
             describe("copyDisplay") {
-                var displayObserver = self.scheduler.createObserver(CopyDisplayAction.self)
+                var displayObserver = self.scheduler.createObserver(CopyConfirmationDisplayAction.self)
 
                 beforeEach {
-                    displayObserver = self.scheduler.createObserver(CopyDisplayAction.self)
+                    displayObserver = self.scheduler.createObserver(CopyConfirmationDisplayAction.self)
 
                     self.subject.copyDisplay
                             .drive(displayObserver)
@@ -43,10 +43,10 @@ class CopyStoreSpec: QuickSpec {
                 }
 
                 it("passes through CopyDisplayActions from the dispatcher") {
-                    self.dispatcher.fakeRegistration.onNext(CopyDisplayAction(fieldName: "something"))
+                    self.dispatcher.fakeRegistration.onNext(CopyConfirmationDisplayAction(fieldName: "something"))
 
                     expect(displayObserver.events.count).to(equal(1))
-                    expect(displayObserver.events.first!.value.element!).to(equal(CopyDisplayAction(fieldName: "something")))
+                    expect(displayObserver.events.first!.value.element!).to(equal(CopyConfirmationDisplayAction(fieldName: "something")))
                 }
 
                 it("does not pass through non-ItemDetailDisplayActions") {

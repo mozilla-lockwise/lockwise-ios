@@ -17,12 +17,12 @@ extension CopyAction: Equatable {
     }
 }
 
-struct CopyDisplayAction: Action {
+struct CopyConfirmationDisplayAction: Action {
     let fieldName: String
 }
 
-extension CopyDisplayAction: Equatable {
-    static func ==(lhs: CopyDisplayAction, rhs: CopyDisplayAction) -> Bool {
+extension CopyConfirmationDisplayAction: Equatable {
+    static func ==(lhs: CopyConfirmationDisplayAction, rhs: CopyConfirmationDisplayAction) -> Bool {
         return lhs.fieldName == rhs.fieldName
     }
 }
@@ -41,6 +41,6 @@ class CopyActionHandler: ActionHandler {
 
     func invoke(_ action: CopyAction) {
         self.pasteboard.string = action.text
-        self.dispatcher.dispatch(action: CopyDisplayAction(fieldName: action.fieldName))
+        self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: action.fieldName))
     }
 }
