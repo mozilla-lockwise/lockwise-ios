@@ -143,8 +143,8 @@ class ItemDetailViewSpec: QuickSpec {
 
             describe("tapping cancel button") {
                 beforeEach {
-                    let button = self.subject.navigationItem.leftBarButtonItem!
-                    _ = button.target?.perform(button.action, with: nil)
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+                    _ = button.sendActions(for: .touchUpInside)
                 }
 
                 it("informs the presenter") {
@@ -197,6 +197,31 @@ class ItemDetailViewSpec: QuickSpec {
                     cell.prepareForReuse()
 
                     expect(cell.disposeBag === disposeBag).notTo(beTrue())
+                }
+            }
+
+            describe("ItemDetailCell") {
+                let sectionModel = [
+                    ItemDetailSectionModel(model: 1, items: [
+                        ItemDetailCellConfiguration(
+                                title: Constant.string.password,
+                                value: "••••••••••",
+                                password: true)
+                    ])
+                ]
+
+                beforeEach {
+                    self.subject.bind(itemDetail: Driver.just(sectionModel))
+                }
+
+                it("highlighting the cell changes the background color") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+
+                    cell.setHighlighted(true, animated: false)
+                    expect(cell.backgroundColor).to(equal(Constant.color.tableViewCellHighlighted))
+
+                    cell.setHighlighted(false, animated: false)
+                    expect(cell.backgroundColor).to(equal(UIColor.white))
                 }
             }
         }

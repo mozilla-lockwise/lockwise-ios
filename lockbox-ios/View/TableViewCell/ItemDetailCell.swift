@@ -17,4 +17,10 @@ class ItemDetailCell: UITableViewCell {
 
         self.disposeBag = DisposeBag()
     }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+
+        self.backgroundColor = highlighted ? Constant.color.tableViewCellHighlighted : .white
+    }
 }

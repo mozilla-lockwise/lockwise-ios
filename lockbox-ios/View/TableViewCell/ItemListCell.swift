@@ -7,4 +7,10 @@ import UIKit
 class ItemListCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var detailLabel: UILabel!
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+
+        self.backgroundColor = highlighted ? Constant.color.tableViewCellHighlighted : .white
+    }
 }

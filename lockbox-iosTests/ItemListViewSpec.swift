@@ -124,6 +124,29 @@ class ItemListViewSpec: QuickSpec {
                     expect(self.presenter.fakeItemSelectedObserver.events.first!.value.element!).to(equal(items.first!.id))
                 }
             }
+
+            describe("ItemListCell") {
+                let items = [
+                    ItemCellConfiguration(title: "item1", username: "bleh", id: "fdssdfdfs")
+                ]
+
+                beforeEach {
+                    self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: items)]))
+                }
+
+                it("tells the presenter") {
+                    let cell = self.subject.tableView.dataSource!.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 0, section: 0)
+                    ) as! ItemListCell
+
+                    cell.setHighlighted(true, animated: false)
+                    expect(cell.backgroundColor).to(equal(Constant.color.tableViewCellHighlighted))
+
+                    cell.setHighlighted(false, animated: false)
+                    expect(cell.backgroundColor).to(equal(UIColor.white))
+                }
+            }
         }
     }
 }

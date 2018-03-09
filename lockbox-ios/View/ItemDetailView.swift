@@ -74,13 +74,15 @@ extension ItemDetailView: ItemDetailViewProtocol {
 // view styling
 extension ItemDetailView {
     fileprivate func styleNavigationBar() {
-        let leftButton = UIBarButtonItem(title: Constant.string.back, style: .plain, target: nil, action: nil)
-        self.navigationItem.leftBarButtonItem = leftButton
+        let leftButton = UIButton()
+        leftButton.setTitle(Constant.string.back, for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
 
-        leftButton.setTitleTextAttributes([
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .regular)
-        ], for: .normal)
-        self.navigationController?.navigationBar.tintColor = .white
+        leftButton.setTitleColor(.white, for: .normal)
+        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
+        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
+
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         guard let presenter = self.presenter else {
             return
@@ -132,7 +134,9 @@ extension ItemDetailView {
     }
 
     fileprivate func setupDelegate() {
-        guard let presenter = self.presenter else { return }
+        guard let presenter = self.presenter else {
+            return
+        }
 
         self.tableView.rx.itemSelected
                 .map { path -> String? in
