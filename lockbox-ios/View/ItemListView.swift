@@ -7,24 +7,33 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-typealias ItemSectionModel = AnimatableSectionModel<Int, ItemCellConfiguration>
+typealias ItemSectionModel = AnimatableSectionModel<Int, ItemListCellConfiguration>
 
-struct ItemCellConfiguration {
-    let title: String
-    let username: String
-    let id: String?
+enum ItemListCellConfiguration {
+    case Search
+    case Item(title: String, username: String, id: String?)
 }
 
-extension ItemCellConfiguration: IdentifiableType {
+extension ItemListCellConfiguration: IdentifiableType {
     var identity: String {
-        return self.title
+        switch self {
+        case .Search:
+            return "search"
+        case .Item(let title, _, _):
+            return title
+        }
     }
 }
 
-extension ItemCellConfiguration: Equatable {
-    static func ==(lhs: ItemCellConfiguration, rhs: ItemCellConfiguration) -> Bool {
-        return lhs.username == rhs.username &&
-                lhs.title == rhs.title
+extension ItemListCellConfiguration: Equatable {
+    static func ==(lhs: ItemListCellConfiguration, rhs: ItemListCellConfiguration) -> Bool {
+        switch (lhs, rhs) {
+        case (.Search, .Search): return true
+        case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
+            return lhTitle == rhTitle && lhUsername == rhUsername
+        default:
+            return false
+        }
     }
 }
 
@@ -32,7 +41,7 @@ class ItemListView: UIViewController {
     var presenter: ItemListPresenter?
     @IBOutlet weak var tableView: UITableView!
     private var disposeBag = DisposeBag()
-    private var dataSource: RxTableViewSectionedReloadDataSource<ItemSectionModel>?
+    private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -76,17 +85,44 @@ extension ItemListView: ItemListViewProtocol {
 
 extension ItemListView {
     fileprivate func setupDataSource() {
-        self.dataSource = RxTableViewSectionedReloadDataSource<ItemSectionModel>(
-                configureCell: { _, tableView, _, item in
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else { // swiftlint:disable:this line_length
-                        fatalError("couldn't find the right cell!")
+        self.dataSource = RxTableViewSectionedAnimatedDataSource<ItemSectionModel>(
+                configureCell: { dataSource, tableView, path, _ in
+                    let cellConfiguration = dataSource[path]
+
+                    var retCell: UITableViewCell
+                    switch cellConfiguration {
+                    case .Search:
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
+                                let presenter = self.presenter else {
+                            fatalError("couldn't find the right cell or presenter!")
+                        }
+
+                        cell.filterTextField.rx.text
+                                .orEmpty
+                                .asObservable()
+                                .bind(to: presenter.filterTextObserver)
+                                .disposed(by: cell.disposeBag)
+
+                        retCell = cell
+                    case .Item(let title, let username, _):
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else { // swiftlint:disable:this line_length
+                            fatalError("couldn't find the right cell!")
+                        }
+
+                        cell.titleLabel.text = title
+                        cell.detailLabel.text = username
+
+                        retCell = cell
                     }
 
-                    cell.titleLabel.text = item.title
-                    cell.detailLabel.text = item.username
-
-                    return cell
+                    return retCell
                 })
+
+        self.dataSource?.animationConfiguration = AnimationConfiguration(
+                insertAnimation: .fade,
+                reloadAnimation: .automatic,
+                deleteAnimation: .fade
+        )
     }
 
     fileprivate func setupDelegate() {
@@ -96,7 +132,16 @@ extension ItemListView {
 
         self.tableView.rx.itemSelected
                 .map { (path: IndexPath) -> String? in
-                    return self.dataSource?[path].id
+                    guard let config = self.dataSource?[path] else {
+                        return nil
+                    }
+
+                    switch config {
+                    case .Item(_, _, let id):
+                        return id
+                    default:
+                        return nil
+                    }
                 }
                 .bind(to: presenter.itemSelectedObserver)
                 .disposed(by: self.disposeBag)

@@ -24,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
         UINavigationBar.appearance().isTranslucent = false
+
+        UITextField.appearance().tintColor = .black
+
         setupTelemetry()
         return true
     }
