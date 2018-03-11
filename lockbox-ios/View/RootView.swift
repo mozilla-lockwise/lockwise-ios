@@ -83,9 +83,18 @@ class RootView: UIViewController, RootViewProtocol {
 
             itemDetailView.itemId = id
             self.currentViewController?.pushViewController(itemDetailView, animated: true)
+        case .settings:
+            let settingsView = SettingsView()
+            let navController = UINavigationController()
+            navController.pushViewController(settingsView, animated: false)
+            currentViewController?.present(navController, animated: true, completion: nil)
+        case .dismissSettings:
+            if let vc = currentViewController?.presentedViewController {
+                vc.dismiss(animated: true, completion: nil)
+            }
         }
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
     }

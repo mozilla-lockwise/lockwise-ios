@@ -16,6 +16,7 @@ class UserInfoStore {
     private var _scopedKey = ReplaySubject<String?>.create(bufferSize: 1)
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
+    private var _biometricLoginEnabled = ReplaySubject<Bool?>.create(bufferSize: 1)
 
     public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
@@ -27,6 +28,10 @@ class UserInfoStore {
 
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
+    }
+    
+    public var biometricLoginEnabled: Observable<Bool?> {
+        return _biometricLoginEnabled.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -52,6 +57,10 @@ class UserInfoStore {
                     case .scopedKey(let scopedKey):
                         if self.keychainManager.save(scopedKey, identifier: .scopedKey) {
                             self._scopedKey.onNext(scopedKey)
+                        }
+                    case .biometricLogin(let enabled):
+                        if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
+                            self._biometricLoginEnabled.onNext(enabled)
                         }
                     }
                 })
@@ -87,6 +96,10 @@ class UserInfoStore {
             )
         } else {
             self._oauthInfo.onNext(nil)
+        }
+        
+        if let enabled = self.keychainManager.retrieve(.biometricLoginEnabled) {
+            self._biometricLoginEnabled.onNext(enabled == "true")
         }
     }
 }

@@ -27,6 +27,16 @@ enum LoginRouteAction: RouteAction {
 enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
+    case settings
+    case dismissSettings
+}
+
+enum SettingsRouteAction: RouteAction {
+    case provideFeedback
+    case faq
+    case enableInBrowser
+    case account
+    case autoLock
 }
 
 extension MainRouteAction: Equatable {

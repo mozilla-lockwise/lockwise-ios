@@ -46,4 +46,8 @@ class ItemListPresenter {
                 })
                 .disposed(by: self.disposeBag)
     }
+    
+    func settingsTapped() {
+        routeActionHandler.invoke(MainRouteAction.settings)
+    }
 }

@@ -6,7 +6,7 @@ import Foundation
 import Security
 
 enum KeychainManagerIdentifier: String {
-    case email, scopedKey, uid, refreshToken, accessToken, idToken, avatarURL
+    case email, scopedKey, uid, refreshToken, accessToken, idToken, avatarURL, biometricLoginEnabled
 }
 
 class KeychainManager {

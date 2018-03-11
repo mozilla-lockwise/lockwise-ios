@@ -158,6 +158,10 @@ class RootPresenter {
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
                 }
+            case .settings:
+                view.pushMainView(view: .settings)
+            case .dismissSettings:
+                view.pushMainView(view: .dismissSettings)
             }
         }.asObserver()
     }()

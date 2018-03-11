@@ -26,6 +26,10 @@ class FxAViewSpec: QuickSpec {
         override func onViewReady() {
             onViewReadyCalled = true
         }
+        
+        func settingsTapped() {
+            
+        }
     }
 
     class FakeWebView: WKWebView {

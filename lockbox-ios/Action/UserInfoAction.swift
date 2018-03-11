@@ -8,6 +8,7 @@ enum UserInfoAction: Action {
     case profileInfo(info: ProfileInfo)
     case oauthInfo(info: OAuthInfo)
     case scopedKey(key: String)
+    case biometricLogin(enabled: Bool)
 }
 
 extension UserInfoAction: Equatable {
@@ -19,8 +20,23 @@ extension UserInfoAction: Equatable {
             return lhInfo == rhInfo
         case (.oauthInfo(let lhInfo), .oauthInfo(let rhInfo)):
             return lhInfo == rhInfo
+        case (.biometricLogin(let lhInfo), .biometricLogin(let rhInfo)):
+            return lhInfo == rhInfo
         default:
             return false
         }
+    }
+}
+
+class UserInfoActionHandler: ActionHandler {
+    static let shared = UserInfoActionHandler()
+    fileprivate var dispatcher: Dispatcher
+    
+    init(dispatcher: Dispatcher = Dispatcher.shared) {
+        self.dispatcher = dispatcher
+    }
+    
+    func invoke(_ action: UserInfoAction) {
+        self.dispatcher.dispatch(action: action)
     }
 }

@@ -16,6 +16,8 @@ struct Constant {
         static let lockBoxBlue = UIColor(hex: 0x0088D9)
         static let lockBoxTeal = UIColor(hex: 0x00BAD6)
         static let kebabBlue = UIColor(hex: 0x003EAA)
+        static let settingsHeader = UIColor(hex: 0x737373)
+        static let settingsBackground = UIColor(hex: 0xEFEFEF)
     }
 
     struct fxa {
@@ -35,6 +37,8 @@ struct Constant {
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
         static let webAddress = NSLocalizedString("web_address", value: "Web Address", comment: "Section title text for the web address on the item detail screen")
         static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
+        static let settingsHelpSectionHeader = NSLocalizedString("settings.help.header", value: "HELP", comment: "Help section label in settings")
+        static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
     }
 
     struct number {
