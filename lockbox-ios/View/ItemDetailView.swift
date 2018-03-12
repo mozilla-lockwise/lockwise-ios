@@ -45,7 +45,7 @@ class ItemDetailView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.styleNavigationBar()
+        self.setupNavigation()
         self.styleTableBackground()
         self.setupDataSource()
         self.setupDelegate()
@@ -72,8 +72,8 @@ extension ItemDetailView: ItemDetailViewProtocol {
 }
 
 // view styling
-extension ItemDetailView {
-    fileprivate func styleNavigationBar() {
+extension ItemDetailView: UIGestureRecognizerDelegate {
+    fileprivate func setupNavigation() {
         let leftButton = UIButton()
         leftButton.setTitle(Constant.string.back, for: .normal)
         leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
@@ -89,6 +89,14 @@ extension ItemDetailView {
         }
 
         leftButton.rx.tap
+                .bind(to: presenter.onCancel)
+                .disposed(by: self.disposeBag)
+
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                .map { _ -> Void in
+                    return ()
+                }
                 .bind(to: presenter.onCancel)
                 .disposed(by: self.disposeBag)
     }

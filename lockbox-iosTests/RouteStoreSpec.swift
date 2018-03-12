@@ -51,17 +51,6 @@ class RouteStoreSpec: QuickSpec {
                     expect(element).to(equal(LoginRouteAction.fxa))
                 }
 
-                it("does not push the same LoginRoute action twice") {
-                    self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
-                    expect(routeObserver.events.count).to(equal(1))
-                }
-
-                it("does not push the same MainRoute action twice") {
-                    self.dispatcher.fakeRegistration.onNext(MainRouteAction.list)
-                    self.dispatcher.fakeRegistration.onNext(MainRouteAction.list)
-                    expect(routeObserver.events.count).to(equal(2))
-                }
-
                 it("pushes new actions to observers") {
                     self.dispatcher.fakeRegistration.onNext(MainRouteAction.list)
                     expect(routeObserver.events.count).to(equal(2))
