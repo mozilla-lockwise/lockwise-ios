@@ -29,8 +29,8 @@ version 2.0][license-link].
 [buddybuild-link]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85/build/latest?branch=master
 [codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockbox/lockbox-ios.svg
 [codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-ios
-[waffle-image]: https://badge.waffle.io/mozilla-lockbox/lockbox-ios.svg?columns=In%20Progress
-[waffle-link]: https://waffle.io/mozilla-lockbox/lockbox-ios
+[waffle-image]: https://badge.waffle.io/mozilla-lockbox/lockbox-extension.svg?columns=In%20Progress
+[waffle-link]: https://waffle.io/mozilla-lockbox/lockbox-extension
 [docs-link]: docs/
 [org-website]: https://mozilla-lockbox.github.io/
 [contributing-link]: docs/contributing.md
