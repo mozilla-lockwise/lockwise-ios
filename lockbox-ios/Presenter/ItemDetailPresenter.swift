@@ -9,7 +9,6 @@ import RxDataSources
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
     var itemId: String { get }
-    var passwordRevealed: Bool { get }
     func bind(titleText: Driver<String>)
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
 }
@@ -26,10 +25,9 @@ class ItemDetailPresenter {
     private var itemDetailActionHandler: ItemDetailActionHandler
     private var disposeBag = DisposeBag()
 
-    lazy private(set) var onPasswordToggle: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            let updatedPasswordReveal = target.view?.passwordRevealed ?? false
-            target.itemDetailActionHandler.invoke(.togglePassword(displayed: updatedPasswordReveal))
+    lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
+        return Binder(self) { target, revealed in
+            target.itemDetailActionHandler.invoke(.togglePassword(displayed: revealed))
         }.asObserver()
     }()
 

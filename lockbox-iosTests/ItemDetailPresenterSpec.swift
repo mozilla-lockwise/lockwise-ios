@@ -13,7 +13,6 @@ import RxCocoa
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
-        fileprivate(set) var passwordRevealed = false
         fileprivate(set) var itemId: String = "somefakeitemidinhere"
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
@@ -130,38 +129,21 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             describe("onPasswordToggle") {
+                let passwordRevealSelected = true
                 beforeEach {
-                    let tapObservable = self.scheduler.createColdObservable([next(50, ())])
+                    let tapObservable = self.scheduler.createColdObservable([next(50, passwordRevealSelected)])
 
                     tapObservable
                             .bind(to: self.subject.onPasswordToggle)
                             .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
                 }
 
-                describe("when the password is revealed") {
-                    beforeEach {
-                        self.view.passwordRevealed = true
-                        self.scheduler.start()
-                    }
-
-                    it("dispatches the shown password action") {
-                        expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                        expect(self.itemDetailActionHandler.displayActionArgument)
-                                .to(equal(ItemDetailDisplayAction.togglePassword(displayed: true)))
-                    }
-                }
-
-                describe("when the password is not revealed") {
-                    beforeEach {
-                        self.view.passwordRevealed = false
-                        self.scheduler.start()
-                    }
-
-                    it("dispatches the hidden password action") {
-                        expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                        expect(self.itemDetailActionHandler.displayActionArgument)
-                                .to(equal(ItemDetailDisplayAction.togglePassword(displayed: false)))
-                    }
+                it("dispatches the password action with the value") {
+                    expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
+                    expect(self.itemDetailActionHandler.displayActionArgument)
+                            .to(equal(ItemDetailDisplayAction.togglePassword(displayed: passwordRevealSelected)))
                 }
             }
 
