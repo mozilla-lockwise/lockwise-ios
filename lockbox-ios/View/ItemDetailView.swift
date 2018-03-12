@@ -34,22 +34,6 @@ class ItemDetailView: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var itemId: String = ""
 
-    private var passwordCell: ItemDetailCell? {
-        didSet {
-            guard let presenter = self.presenter,
-                  let cell = self.passwordCell else {
-                return
-            }
-
-            cell.revealButton.rx.tap
-                    .do(onNext: { _ in
-                        cell.revealButton.isSelected = !cell.revealButton.isSelected
-                    })
-                    .bind(to: presenter.onPasswordToggle)
-                    .disposed(by: self.disposeBag)
-        }
-    }
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
@@ -70,13 +54,6 @@ class ItemDetailView: UIViewController {
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
-    var passwordRevealed: Bool {
-        guard let cell = self.passwordCell else {
-            return false
-        }
-        return cell.revealButton.isSelected
-    }
-
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
         guard let dataSource = self.dataSource else {
             fatalError("datasource not set!")
@@ -133,12 +110,21 @@ extension ItemDetailView {
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
-                    if cellConfiguration.password && self.passwordCell == nil {
-                        self.passwordCell = cell
-                    }
-
-                    if cellConfiguration.password {
+                    passwordConfig:if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
+
+                        guard let presenter = self.presenter else {
+                            break passwordConfig
+                        }
+
+                        cell.revealButton.rx.tap
+                                .map { _ -> Bool in
+                                    cell.revealButton.isSelected = !cell.revealButton.isSelected
+
+                                    return cell.revealButton.isSelected
+                                }
+                                .bind(to: presenter.onPasswordToggle)
+                                .disposed(by: cell.disposeBag)
                     }
 
                     return cell
