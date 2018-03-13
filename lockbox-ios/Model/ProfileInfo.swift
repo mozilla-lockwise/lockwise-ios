@@ -7,15 +7,21 @@ import Foundation
 class ProfileInfo: Codable {
     var uid: String
     var email: String
+    var displayName: String?
+    var avatar: String?
 
-    init(uid: String, email: String) {
+    init(uid: String, email: String, displayName: String? = nil, avatar: String? = nil) {
         self.uid = uid
         self.email = email
+        self.displayName = displayName
+        self.avatar = avatar
     }
 
     enum CodingKeys: String, CodingKey {
         case uid = "sub"
+        case displayName = "displayName"
         case email = "email"
+        case avatar = "avatar"
     }
 
     class Builder {
@@ -36,6 +42,16 @@ class ProfileInfo: Codable {
 
         func email(_ email: String) -> Builder {
             self.info.email = email
+            return self
+        }
+
+        func displayName(_ displayName: String) -> Builder {
+            self.info.displayName = displayName
+            return self
+        }
+
+        func avatar(_ avatar: String) -> Builder {
+            self.info.avatar = avatar
             return self
         }
     }
