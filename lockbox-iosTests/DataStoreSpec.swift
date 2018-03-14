@@ -35,13 +35,15 @@ class DataStoreSpec: QuickSpec {
 
             describe("onItemList") {
                 var itemListObserver = self.scheduler.createObserver([Item].self)
+                let itemAid = "kljsdflkjsd"
+                let itemBid = "dqwkldsfkj"
                 let itemList = [
-                    Item.Builder()
-                            .id("kljsdflkjsd")
+                    itemAid: Item.Builder()
+                            .id(itemAid)
                             .origins(["bowl.com"])
                             .build(),
-                    Item.Builder()
-                            .id("dqwkldsfkj")
+                    itemBid: Item.Builder()
+                            .id(itemBid)
                             .origins(["plate.com"])
                             .build()
                 ]
@@ -58,7 +60,7 @@ class DataStoreSpec: QuickSpec {
 
                 it("pushes dispatched lists to observers") {
                     expect(itemListObserver.events.last).notTo(beNil())
-                    expect(itemListObserver.events.last!.value.element).to(equal(itemList))
+                    expect(itemListObserver.events.last!.value.element).to(equal(Array(itemList.values)))
                 }
 
                 it("doesn't push the same list twice in a row") {
@@ -67,7 +69,8 @@ class DataStoreSpec: QuickSpec {
                 }
 
                 it("pushes subsequent different lists") {
-                    let newItemList = [Item.Builder().id("wwkjlkjm").build()] + itemList
+                    var newItemList = itemList
+                    newItemList["wwkjlkjm"] = Item.Builder().id("wwkjlkjm").build()
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: newItemList))
 
                     expect(itemListObserver.events.count).to(equal(2))
@@ -87,8 +90,8 @@ class DataStoreSpec: QuickSpec {
                         .origins(["bowl.com"])
                         .build()
                 let itemList = [
-                    item,
-                    Item.Builder()
+                    itemId: item,
+                    "dqwkldsfkj": Item.Builder()
                             .id("dqwkldsfkj")
                             .origins(["plate.com"])
                             .build()
@@ -110,14 +113,14 @@ class DataStoreSpec: QuickSpec {
                 }
 
                 it("doesn't push the item if it is unchanged") {
-                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: [item]))
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: [itemId: item]))
                     expect(itemObserver.events.count).to(equal(1))
                 }
 
                 it("pushes the item again if it is changed") {
                     let changedItem = Item.Builder().id(itemId)
                             .origins(["cat.com"]).build()
-                    let newItemList = [changedItem, Item.Builder().id("fdssdf").build()]
+                    let newItemList = [itemId: changedItem, "fdssdf": Item.Builder().id("fdssdf").build()]
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: newItemList))
 
                     expect(itemObserver.events.count).to(equal(2))

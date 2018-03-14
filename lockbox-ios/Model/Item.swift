@@ -10,10 +10,22 @@ class Item: Codable, Equatable {
     var title: String?
     var origins: [String]
     var tags: [String]?
-    var created: String?
-    var modified: String?
-    var lastUsed: String?
+    var created: Date?
+    var modified: Date?
+    var lastUsed: Date?
     var entry: ItemEntry
+
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case disabled = "disabled"
+        case title = "title"
+        case origins = "origins"
+        case tags = "tags"
+        case created = "created"
+        case modified = "modified"
+        case lastUsed = "last_used"
+        case entry = "entry"
+    }
 
     init(origins: [String], entry: ItemEntry) {
         self.origins = origins
@@ -23,7 +35,8 @@ class Item: Codable, Equatable {
     static func ==(lhs: Item, rhs: Item) -> Bool {
         return lhs.id == rhs.id &&
                 lhs.entry == rhs.entry &&
-                lhs.origins.elementsEqual(rhs.origins)
+                lhs.origins.elementsEqual(rhs.origins) &&
+                lhs.modified == rhs.modified
 
     }
 
@@ -69,17 +82,17 @@ class Item: Codable, Equatable {
             return self
         }
 
-        func created(_ created: String) -> Builder {
+        func created(_ created: Date) -> Builder {
             self.item.created = created
             return self
         }
 
-        func modified(_ modified: String) -> Builder {
+        func modified(_ modified: Date) -> Builder {
             self.item.modified = modified
             return self
         }
 
-        func lastUsed(_ lastUsed: String) -> Builder {
+        func lastUsed(_ lastUsed: Date) -> Builder {
             self.item.lastUsed = lastUsed
             return self
         }

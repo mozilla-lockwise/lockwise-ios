@@ -68,4 +68,14 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
       }
     })
   }
+
+  async touch(item) {
+    return super.touch(item).then( function(updatedItem) {
+      try {
+        webkit.messageHandlers.UpdateComplete.postMessage(updatedItem)
+      } catch (err) {
+        console.log("callback function not available")
+      }
+    })
+  }
 }
