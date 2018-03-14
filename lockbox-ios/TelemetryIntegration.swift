@@ -9,9 +9,11 @@ class TelemetryEventCategory {
 }
 
 class TelemetryEventMethod {
+    public static let startup = "startup"
     public static let background = "background"
     public static let foreground = "foreground"
-    public static let click = "click"
+    public static let tap = "tap"
+    public static let signin = "signin"
 }
 
 class TelemetryEventObject {
@@ -19,4 +21,17 @@ class TelemetryEventObject {
     public static let initStoreButton = "init_store_button"
     public static let unlockStoreButton = "unlock_store_button"
     public static let listStoreContentsButton = "list_store_contents_button"
+    public static let entryList = "entry_list"
+    public static let settingsButton = "settings_button"
+    public static let feedbackButton = "feedback_button"
+    public static let faqButton = "faq_button"
+    public static let copyUsernameButton = "copy_username_button"
+    public static let copyPasswordButton = "copy_password_button"
+    public static let viewPasswordButton = "view_password_button"
+    public static let viewEntryButton = "view_entry_button"
+    public static let entryCancelButton = "entry_cancel_button"
+    public static let entryCopyUsernameButton = "entry_copy_username_button"
+    public static let entryCopyPasswordButton = "entry_copy_password_button"
+    public static let entryShowPasswordButton = "entry_view_password_button"
+
 }
