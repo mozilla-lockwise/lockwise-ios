@@ -13,13 +13,13 @@ protocol ItemListViewProtocol: class {
     func hideEmptyStateMessaging()
 }
 
-struct ItemsText {
+struct ItemListText {
     let items: [Item]
     let text: String
 }
 
-extension ItemsText: Equatable {
-    static func ==(lhs: ItemsText, rhs: ItemsText) -> Bool {
+extension ItemListText: Equatable {
+    static func ==(lhs: ItemListText, rhs: ItemListText) -> Bool {
         return lhs.items == rhs.items && lhs.text == rhs.text
     }
 }
@@ -55,8 +55,8 @@ class ItemListPresenter {
 
     func onViewReady() {
         let listDriver = Observable.combineLatest(self.dataStore.onItemList, self.filterTextSubject.asObservable())
-                .map { (latest: ([Item], String)) -> ItemsText in
-                    return ItemsText(items: latest.0, text: latest.1)
+                .map { (latest: ([Item], String)) -> ItemListText in
+                    return ItemListText(items: latest.0, text: latest.1)
                 }
                 .distinctUntilChanged()
                 .do(onNext: { latest in
@@ -69,7 +69,7 @@ class ItemListPresenter {
                 .filter { latest in
                     return !latest.items.isEmpty
                 }
-                .map { (latest: ItemsText) -> [Item] in
+                .map { (latest: ItemListText) -> [Item] in
                     if latest.text.isEmpty {
                         return latest.items
                     }
