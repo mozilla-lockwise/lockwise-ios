@@ -88,11 +88,17 @@ class RootView: UIViewController, RootViewProtocol {
             let navController = UINavigationController()
             navController.pushViewController(settingsView, animated: false)
             currentViewController?.present(navController, animated: true, completion: nil)
-        case .dismissSettings:
-            if let vc = currentViewController?.presentedViewController {
-                vc.dismiss(animated: true, completion: nil)
-            }
         }
+    }
+    
+    var isPresentingModal: Bool {
+        get {
+            return currentViewController?.presentedViewController != nil
+        }
+    }
+    
+    func dismissModal() {
+        currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {

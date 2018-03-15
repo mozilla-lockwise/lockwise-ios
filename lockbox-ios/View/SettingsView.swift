@@ -60,10 +60,6 @@ class SettingsView: UITableViewController {
         setupDataSource()
         presenter?.onViewReady()
     }
-    
-    @objc private func doneTapped() {
-        presenter?.dismiss()
-    }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()

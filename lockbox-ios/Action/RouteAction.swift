@@ -28,7 +28,6 @@ enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
     case settings
-    case dismissSettings
 }
 
 enum SettingsRouteAction: RouteAction {

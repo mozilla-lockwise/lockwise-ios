@@ -16,7 +16,7 @@ class SettingsPresenter {
     
     lazy private(set) var onDone: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.dismissSettings)
+            target.routeActionHandler.invoke(MainRouteAction.list)
             }.asObserver()
     }()
     
@@ -62,10 +62,6 @@ class SettingsPresenter {
         userInfoStore.biometricLoginEnabled.subscribe(onNext: { enabled in
             biometricSetting.isOn = enabled ?? false
         })
-    }
-    
-    func dismiss() {
-        routeActionHandler.invoke(MainRouteAction.dismissSettings)
     }
     
     func switchChanged(row: Int, isOn: Bool) {
