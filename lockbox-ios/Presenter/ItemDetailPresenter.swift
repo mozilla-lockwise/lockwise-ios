@@ -7,25 +7,27 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol ItemDetailViewProtocol: class {
+protocol ItemDetailViewProtocol: class, StatusAlertView {
     var itemId: String { get }
-    var passwordRevealed: Bool { get }
     func bind(titleText: Driver<String>)
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
 }
+
+let copyableFields = [Constant.string.username, Constant.string.password]
 
 class ItemDetailPresenter {
     weak var view: ItemDetailViewProtocol?
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
+    private var copyDisplayStore: CopyConfirmationDisplayStore
     private var routeActionHandler: RouteActionHandler
+    private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
     private var disposeBag = DisposeBag()
 
-    lazy private(set) var onPasswordToggle: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            let updatedPasswordReveal = target.view?.passwordRevealed ?? false
-            self.itemDetailActionHandler.invoke(.togglePassword(displayed: updatedPasswordReveal))
+    lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
+        return Binder(self) { target, revealed in
+            target.itemDetailActionHandler.invoke(.togglePassword(displayed: revealed))
         }.asObserver()
     }()
 
@@ -35,15 +37,43 @@ class ItemDetailPresenter {
         }.asObserver()
     }()
 
+    lazy private(set) var onCellTapped: AnyObserver<String?> = {
+        return Binder(self) { target, value in
+            guard let value = value,
+                  copyableFields.contains(value) else {
+                return
+            }
+
+            target.dataStore.onItem(self.view?.itemId ?? "")
+                    .take(1)
+                    .subscribe(onNext: { item in
+                        var text = ""
+                        if value == Constant.string.username {
+                            text = item.entry.username ?? ""
+                        } else if value == Constant.string.password {
+                            text = item.entry.password ?? ""
+                        }
+
+                        target.copyActionHandler.invoke(CopyAction(text: text, fieldName: value))
+                    })
+                    .disposed(by: target.disposeBag)
+
+        }.asObserver()
+    }()
+
     init(view: ItemDetailViewProtocol,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
+         copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
+         copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
          itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared) {
         self.view = view
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
+        self.copyDisplayStore = copyDisplayStore
         self.routeActionHandler = routeActionHandler
+        self.copyActionHandler = copyActionHandler
         self.itemDetailActionHandler = itemDetailActionHandler
 
         self.itemDetailActionHandler.invoke(.togglePassword(displayed: false))
@@ -69,6 +99,13 @@ class ItemDetailPresenter {
 
         self.view?.bind(itemDetail: viewConfigDriver)
         self.view?.bind(titleText: titleDriver)
+
+        self.copyDisplayStore.copyDisplay
+                .drive(onNext: { action in
+                    let message = String(format: Constant.string.fieldNameCopied, action.fieldName)
+                    self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
+                })
+                .disposed(by: self.disposeBag)
     }
 }
 

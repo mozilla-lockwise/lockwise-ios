@@ -18,6 +18,7 @@ struct Constant {
         static let kebabBlue = UIColor(hex: 0x003EAA)
         static let settingsHeader = UIColor(hex: 0x737373)
         static let settingsBackground = UIColor(hex: 0xEFEFEF)
+        static let tableViewCellHighlighted = UIColor(hex: 0xe5eff9)
     }
 
     struct fxa {
@@ -30,8 +31,9 @@ struct Constant {
         static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
+        static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied to clipboard", comment: "Alert text when a field has been copied, with an interpolated field name value")
         static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
-        static let usernamePlaceholder = NSLocalizedString("usernamePlaceholder", value: "(no username)", comment: "Placeholder text when there is no username")
+        static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
         static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
@@ -51,6 +53,9 @@ struct Constant {
     }
 
     struct number {
-        static let passwordTextSize = CGFloat(16)
+        static let displayStatusAlertLength = TimeInterval(1.5)
+        static let displayStatusAlertFade = TimeInterval(0.3)
+        static let displayStatusAlertOpacity: CGFloat = 0.75
+        static let displayStatusAlertYPercentage: CGFloat = 0.4
     }
 }

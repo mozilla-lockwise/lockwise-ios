@@ -8,6 +8,10 @@ protocol ErrorView {
     func displayError(_ error: Error)
 }
 
+protocol StatusAlertView {
+    func displayTemporaryAlert(_ message: String, timeout: TimeInterval)
+}
+
 extension UIViewController: ErrorView {
     func displayError(_ error: Error) {
         let alertController = UIAlertController(title: error.localizedDescription, message: nil, preferredStyle: .alert)
@@ -18,6 +22,42 @@ extension UIViewController: ErrorView {
         DispatchQueue.main.async {
             self.present(alertController, animated: true, completion: nil)
         }
+    }
+}
+
+extension UIViewController: StatusAlertView {
+    func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+        guard let temporaryAlertView = Bundle.main.loadNibNamed("StatusAlert", owner: self)?.first as? StatusAlert else { // swiftlint:disable:this line_length
+            return
+        }
+
+        temporaryAlertView.messageLabel.text = message
+        temporaryAlertView.layer.cornerRadius = 10.0
+        temporaryAlertView.clipsToBounds = true
+        temporaryAlertView.center = CGPoint(
+                x: self.view.bounds.width * 0.5,
+                y: self.view.bounds.height * Constant.number.displayStatusAlertYPercentage
+        )
+        temporaryAlertView.alpha = 0.0
+
+        self.view.addSubview(temporaryAlertView)
+
+        UIView.animate(
+                withDuration: Constant.number.displayStatusAlertFade,
+                animations: {
+                    temporaryAlertView.alpha = Constant.number.displayStatusAlertOpacity
+                }, completion: { _ in
+            UIView.animate(
+                    withDuration: Constant.number.displayStatusAlertFade,
+                    delay: timeout,
+                    animations: {
+                        temporaryAlertView.alpha = 0.0
+                    },
+                    completion: { _ in
+                        temporaryAlertView.removeFromSuperview()
+                    })
+        })
+
     }
 }
 

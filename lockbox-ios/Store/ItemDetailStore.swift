@@ -12,10 +12,10 @@ class ItemDetailStore {
     private var dispatcher: Dispatcher
     private var disposeBag = DisposeBag()
 
-    private var _itemDetailDispay = ReplaySubject<ItemDetailDisplayAction>.create(bufferSize: 1)
+    private var _itemDetailDisplay = ReplaySubject<ItemDetailDisplayAction>.create(bufferSize: 1)
 
     lazy private(set) var itemDetailDisplay: Driver<ItemDetailDisplayAction> = {
-        return self._itemDetailDispay.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
+        return self._itemDetailDisplay.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
     }()
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
@@ -23,7 +23,7 @@ class ItemDetailStore {
 
         self.dispatcher.register
                 .filterByType(class: ItemDetailDisplayAction.self)
-                .bind(to: self._itemDetailDispay)
+                .bind(to: self._itemDetailDisplay)
                 .disposed(by: self.disposeBag)
     }
 }

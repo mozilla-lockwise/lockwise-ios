@@ -27,27 +27,12 @@ extension ItemDetailCellConfiguration: Equatable {
     }
 }
 
-class ItemDetailView: UITableViewController {
+class ItemDetailView: UIViewController {
     internal var presenter: ItemDetailPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
+    @IBOutlet weak var tableView: UITableView!
     var itemId: String = ""
-
-    private var passwordCell: ItemDetailCell? {
-        didSet {
-            guard let presenter = self.presenter,
-                  let cell = self.passwordCell else {
-                return
-            }
-
-            cell.revealButton.rx.tap
-                    .do(onNext: { _ in
-                        cell.revealButton.isSelected = !cell.revealButton.isSelected
-                    })
-                    .bind(to: presenter.onPasswordToggle)
-                    .disposed(by: self.disposeBag)
-        }
-    }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -60,21 +45,15 @@ class ItemDetailView: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.styleNavigationBar()
+        self.setupNavigation()
         self.styleTableBackground()
         self.setupDataSource()
+        self.setupDelegate()
         self.presenter?.onViewReady()
     }
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
-    var passwordRevealed: Bool {
-        guard let cell = self.passwordCell else {
-            return false
-        }
-        return cell.revealButton.isSelected
-    }
-
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
         guard let dataSource = self.dataSource else {
             fatalError("datasource not set!")
@@ -93,20 +72,31 @@ extension ItemDetailView: ItemDetailViewProtocol {
 }
 
 // view styling
-extension ItemDetailView {
-    fileprivate func styleNavigationBar() {
-        let leftButton = UIBarButtonItem(title: Constant.string.back, style: .plain, target: nil, action: nil)
-        self.navigationItem.leftBarButtonItem = leftButton
+extension ItemDetailView: UIGestureRecognizerDelegate {
+    fileprivate func setupNavigation() {
+        let leftButton = UIButton()
+        leftButton.setTitle(Constant.string.back, for: .normal)
+        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
 
-        leftButton.setTitleTextAttributes([
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .regular)
-        ], for: .normal)
-        self.navigationController?.navigationBar.tintColor = .white
+        leftButton.setTitleColor(.white, for: .normal)
+        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
+        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
+
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         guard let presenter = self.presenter else {
             return
         }
+
         leftButton.rx.tap
+                .bind(to: presenter.onCancel)
+                .disposed(by: self.disposeBag)
+
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                .map { _ -> Void in
+                    return ()
+                }
                 .bind(to: presenter.onCancel)
                 .disposed(by: self.disposeBag)
     }
@@ -130,15 +120,41 @@ extension ItemDetailView {
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
-                    if cellConfiguration.password && self.passwordCell == nil {
-                        self.passwordCell = cell
-                    }
-
-                    if cellConfiguration.password {
+                    passwordConfig:if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
+
+                        guard let presenter = self.presenter else {
+                            break passwordConfig
+                        }
+
+                        cell.revealButton.rx.tap
+                                .map { _ -> Bool in
+                                    cell.revealButton.isSelected = !cell.revealButton.isSelected
+
+                                    return cell.revealButton.isSelected
+                                }
+                                .bind(to: presenter.onPasswordToggle)
+                                .disposed(by: cell.disposeBag)
                     }
 
                     return cell
                 })
+    }
+
+    fileprivate func setupDelegate() {
+        guard let presenter = self.presenter else {
+            return
+        }
+
+        self.tableView.rx.itemSelected
+                .map { path -> String? in
+                    guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
+                        return nil
+                    }
+
+                    return selectedCell.titleLabel.text
+                }
+                .bind(to: presenter.onCellTapped)
+                .disposed(by: self.disposeBag)
     }
 }

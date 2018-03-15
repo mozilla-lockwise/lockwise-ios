@@ -15,22 +15,29 @@ class ItemDetailViewSpec: QuickSpec {
 
     class FakeItemDetailPresenter: ItemDetailPresenter {
         var onViewReadyCalled = false
-        var onPasswordToggleActionDispatched = false
+        var onPasswordToggleActionDispatched: Bool?
         var onCancelActionDispatched = false
+        var onCellTappedValue: String?
 
         override func onViewReady() {
             self.onViewReadyCalled = true
         }
 
-        override var onPasswordToggle: AnyObserver<Void> {
-            return Binder(self) { target, _ in
-                target.onPasswordToggleActionDispatched = true
+        override var onPasswordToggle: AnyObserver<Bool> {
+            return Binder(self) { target, argument in
+                target.onPasswordToggleActionDispatched = argument
             }.asObserver()
         }
 
         override var onCancel: AnyObserver<Void> {
             return Binder(self) { target, _ in
                 target.onCancelActionDispatched = true
+            }.asObserver()
+        }
+
+        override var onCellTapped: AnyObserver<String?> {
+            return Binder(self) { target, value in
+                target.onCellTappedValue = value
             }.asObserver()
         }
     }
@@ -66,7 +73,7 @@ class ItemDetailViewSpec: QuickSpec {
                 }
             }
 
-            describe("tableview configuration") {
+            describe("tableview datasource configuration") {
                 let configDriver = PublishSubject<[ItemDetailSectionModel]>()
                 let sectionModels = [
                     ItemDetailSectionModel(model: 0, items: [
@@ -109,6 +116,16 @@ class ItemDetailViewSpec: QuickSpec {
 
                     expect(self.presenter.onPasswordToggleActionDispatched).to(beTrue())
                 }
+
+                describe("tapping cells") {
+                    beforeEach {
+                        self.subject.tableView.delegate!.tableView!(self.subject.tableView, didSelectRowAt: [1, 0])
+                    }
+
+                    it("extracts the titlelabel text and tells the presenter") {
+                        expect(self.presenter.onCellTappedValue).to(equal(Constant.string.username))
+                    }
+                }
             }
 
             describe("title text") {
@@ -126,8 +143,8 @@ class ItemDetailViewSpec: QuickSpec {
 
             describe("tapping cancel button") {
                 beforeEach {
-                    let button = self.subject.navigationItem.leftBarButtonItem!
-                    _ = button.target?.perform(button.action, with: nil)
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+                    _ = button.sendActions(for: .touchUpInside)
                 }
 
                 it("informs the presenter") {
@@ -135,34 +152,76 @@ class ItemDetailViewSpec: QuickSpec {
                 }
             }
 
-            describe("passwordRevealed") {
-                describe("when the tableview hasn't been configured") {
-                    it("returns false") {
-                        expect(self.subject.passwordRevealed).to(beFalse())
-                    }
+            describe("tapping a password reveal button") {
+                let sectionModelWithJustPassword = [
+                    ItemDetailSectionModel(model: 1, items: [
+                        ItemDetailCellConfiguration(
+                                title: Constant.string.password,
+                                value: "••••••••••",
+                                password: true)
+                    ])
+                ]
+
+                beforeEach {
+                    self.subject.bind(itemDetail: Driver.just(sectionModelWithJustPassword))
                 }
 
-                describe("when the tableview has been configured") {
-                    let configDriver = PublishSubject<[ItemDetailSectionModel]>()
-                    let sectionModelWithJustPassword = [
-                        ItemDetailSectionModel(model: 1, items: [
-                            ItemDetailCellConfiguration(
-                                    title: Constant.string.password,
-                                    value: "••••••••••",
-                                    password: true)
-                        ])
-                    ]
+                it("returns the selected state of the password reveal button") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+                    cell.revealButton.sendActions(for: .touchUpInside)
 
-                    beforeEach {
-                        self.subject.bind(itemDetail: configDriver.asDriver(onErrorJustReturn: []))
+                    expect(self.presenter.onPasswordToggleActionDispatched).notTo(beNil())
+                    expect(self.presenter.onPasswordToggleActionDispatched).to(equal(cell.revealButton.isSelected))
+                }
+            }
 
-                        configDriver.onNext(sectionModelWithJustPassword)
-                    }
+            describe("ItemDetailCell") {
+                let sectionModelWithJustPassword = [
+                    ItemDetailSectionModel(model: 1, items: [
+                        ItemDetailCellConfiguration(
+                                title: Constant.string.password,
+                                value: "••••••••••",
+                                password: true)
+                    ])
+                ]
 
-                    it("returns the selected state of the password reveal button") {
-                        let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
-                        expect(self.subject.passwordRevealed).to(equal(cell.revealButton.isSelected))
-                    }
+                beforeEach {
+                    self.subject.bind(itemDetail: Driver.just(sectionModelWithJustPassword))
+                }
+
+                it("prepareForReuse disposes the cell's dispose bag") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+
+                    let disposeBag = cell.disposeBag
+
+                    cell.prepareForReuse()
+
+                    expect(cell.disposeBag === disposeBag).notTo(beTrue())
+                }
+            }
+
+            describe("ItemDetailCell") {
+                let sectionModel = [
+                    ItemDetailSectionModel(model: 1, items: [
+                        ItemDetailCellConfiguration(
+                                title: Constant.string.password,
+                                value: "••••••••••",
+                                password: true)
+                    ])
+                ]
+
+                beforeEach {
+                    self.subject.bind(itemDetail: Driver.just(sectionModel))
+                }
+
+                it("highlighting the cell changes the background color") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+
+                    cell.setHighlighted(true, animated: false)
+                    expect(cell.backgroundColor).to(equal(Constant.color.tableViewCellHighlighted))
+
+                    cell.setHighlighted(false, animated: false)
+                    expect(cell.backgroundColor).to(equal(UIColor.white))
                 }
             }
         }

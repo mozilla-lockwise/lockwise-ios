@@ -13,10 +13,11 @@ import RxCocoa
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
-        fileprivate(set) var passwordRevealed = false
         fileprivate(set) var itemId: String = "somefakeitemidinhere"
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
+        var tempAlertMessage: String?
+        var tempAlertTimeout: TimeInterval?
 
         private let disposeBag = DisposeBag()
 
@@ -31,6 +32,11 @@ class ItemDetailPresenterSpec: QuickSpec {
                     .drive(self.itemDetailObserver)
                     .disposed(by: self.disposeBag)
         }
+
+        func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+            self.tempAlertMessage = message
+            self.tempAlertTimeout = timeout
+        }
     }
 
     class FakeDataStore: DataStore {
@@ -40,6 +46,14 @@ class ItemDetailPresenterSpec: QuickSpec {
         override func onItem(_ itemId: String) -> Observable<Item> {
             self.itemIDArgument = itemId
             return onItemStub.asObservable()
+        }
+    }
+
+    class FakeCopyDisplayStore: CopyConfirmationDisplayStore {
+        var copyDisplayStub = PublishSubject<CopyConfirmationDisplayAction>()
+
+        override var copyDisplay: Driver<CopyConfirmationDisplayAction> {
+            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(fieldName: ""))
         }
     }
 
@@ -59,6 +73,14 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeCopyActionHandler: CopyActionHandler {
+        var invokedAction: CopyAction?
+
+        override func invoke(_ action: CopyAction) {
+            self.invokedAction = action
+        }
+    }
+
     class FakeItemDetailActionHandler: ItemDetailActionHandler {
         var displayActionArgument: ItemDetailDisplayAction?
 
@@ -69,8 +91,10 @@ class ItemDetailPresenterSpec: QuickSpec {
 
     private var view: FakeItemDetailView!
     private var dataStore: FakeDataStore!
+    private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
     private var routeActionHandler: FakeRouteActionHandler!
+    private var copyActionHandler: FakeCopyActionHandler!
     private var itemDetailActionHandler: FakeItemDetailActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -81,14 +105,19 @@ class ItemDetailPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeItemDetailView()
                 self.dataStore = FakeDataStore()
+                self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
                 self.routeActionHandler = FakeRouteActionHandler()
+                self.copyActionHandler = FakeCopyActionHandler()
                 self.itemDetailActionHandler = FakeItemDetailActionHandler()
+
                 self.subject = ItemDetailPresenter(
                         view: self.view,
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
+                        copyDisplayStore: self.copyDisplayStore,
                         routeActionHandler: self.routeActionHandler,
+                        copyActionHandler: self.copyActionHandler,
                         itemDetailActionHandler: self.itemDetailActionHandler
                 )
             }
@@ -100,38 +129,21 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             describe("onPasswordToggle") {
+                let passwordRevealSelected = true
                 beforeEach {
-                    let tapObservable = self.scheduler.createColdObservable([next(50, ())])
+                    let tapObservable = self.scheduler.createColdObservable([next(50, passwordRevealSelected)])
 
                     tapObservable
                             .bind(to: self.subject.onPasswordToggle)
                             .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
                 }
 
-                describe("when the password is revealed") {
-                    beforeEach {
-                        self.view.passwordRevealed = true
-                        self.scheduler.start()
-                    }
-
-                    it("dispatches the shown password action") {
-                        expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                        expect(self.itemDetailActionHandler.displayActionArgument)
-                                .to(equal(ItemDetailDisplayAction.togglePassword(displayed: true)))
-                    }
-                }
-
-                describe("when the password is not revealed") {
-                    beforeEach {
-                        self.view.passwordRevealed = false
-                        self.scheduler.start()
-                    }
-
-                    it("dispatches the hidden password action") {
-                        expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                        expect(self.itemDetailActionHandler.displayActionArgument)
-                                .to(equal(ItemDetailDisplayAction.togglePassword(displayed: false)))
-                    }
+                it("dispatches the password action with the value") {
+                    expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
+                    expect(self.itemDetailActionHandler.displayActionArgument)
+                            .to(equal(ItemDetailDisplayAction.togglePassword(displayed: passwordRevealSelected)))
                 }
             }
 
@@ -150,6 +162,131 @@ class ItemDetailPresenterSpec: QuickSpec {
                     expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
                     let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
                     expect(argument).to(equal(MainRouteAction.list))
+                }
+            }
+
+            describe("onCellTapped") {
+                describe("when the title of the tapped cell is the username constant") {
+                    beforeEach {
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.username)])
+
+                        cellTappedObservable
+                                .bind(to: self.subject.onCellTapped)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("requests the current item from the datastore") {
+                        expect(self.dataStore.itemIDArgument).notTo(beNil())
+                    }
+
+                    describe("getting the item") {
+                        describe("when the item has a username") {
+                            let username = "some username"
+
+                            beforeEach {
+                                let item = Item.Builder()
+                                        .entry(
+                                                ItemEntry.Builder()
+                                                        .username(username)
+                                                        .build())
+                                        .build()
+                                self.dataStore.onItemStub.onNext(item)
+                            }
+
+                            it("dispatches the copy action") {
+                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: username, fieldName: Constant.string.username)))
+                            }
+                        }
+
+                        describe("when the item does not have a username") {
+                            beforeEach {
+                                let item = Item.Builder()
+                                        .entry(
+                                                ItemEntry.Builder()
+                                                        .build())
+                                        .build()
+                                self.dataStore.onItemStub.onNext(item)
+                            }
+
+                            it("dispatches the copy action with no text") {
+                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", fieldName: Constant.string.username)))
+                            }
+                        }
+                    }
+                }
+
+                describe("when the title of the tapped cell is the password constant") {
+                    beforeEach {
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.password)])
+
+                        cellTappedObservable
+                                .bind(to: self.subject.onCellTapped)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("requests the current item from the datastore") {
+                        expect(self.dataStore.itemIDArgument).notTo(beNil())
+                    }
+
+                    describe("getting the item") {
+                        describe("when the item has a password") {
+                            let password = "some password"
+
+                            beforeEach {
+                                let item = Item.Builder()
+                                        .entry(
+                                                ItemEntry.Builder()
+                                                        .password(password)
+                                                        .build())
+                                        .build()
+                                self.dataStore.onItemStub.onNext(item)
+                            }
+
+                            it("dispatches the copy action") {
+                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: password, fieldName: Constant.string.password)))
+                            }
+                        }
+
+                        describe("when the item does not have a password") {
+                            beforeEach {
+                                let item = Item.Builder()
+                                        .entry(
+                                                ItemEntry.Builder()
+                                                        .build())
+                                        .build()
+                                self.dataStore.onItemStub.onNext(item)
+                            }
+
+                            it("dispatches the copy action with no text") {
+                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", fieldName: Constant.string.password)))
+                            }
+                        }
+                    }
+                }
+
+                describe("all other cells") {
+                    beforeEach {
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
+
+                        cellTappedObservable
+                                .bind(to: self.subject.onCellTapped)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("does nothing") {
+                        expect(self.dataStore.itemIDArgument).to(beNil())
+                        expect(self.copyActionHandler.invokedAction).to(beNil())
+                    }
                 }
             }
 
@@ -296,6 +433,19 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(passwordSection.title).to(equal(Constant.string.password))
                         expect(passwordSection.value).to(equal(""))
                         expect(passwordSection.password).to(beTrue())
+                    }
+                }
+
+                describe("getting a copy display action") {
+                    let fieldName = "schmield"
+
+                    beforeEach {
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(fieldName: fieldName))
+                    }
+
+                    it("tells the view to display a temporary alert") {
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, fieldName)))
+                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
                 }
             }

@@ -24,6 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
         UINavigationBar.appearance().isTranslucent = false
+
+        UITextField.appearance().tintColor = .black
+
         setupTelemetry()
         return true
     }
@@ -74,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Telemetry.default.recordSessionStart()
         Telemetry.default.recordEvent(
                 category: TelemetryEventCategory.action,
-                method: TelemetryEventMethod.foreground,
+                method: TelemetryEventMethod.startup,
                 object: TelemetryEventObject.app
         )
     }

@@ -6,23 +6,20 @@ import Foundation
 import Quick
 import Nimble
 import RxSwift
+import RxCocoa
 import RxTest
 
 @testable import Lockbox
 
 class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
-        var displayItemsArgument: [Item]?
-        var displayErrorArgument: Error?
+        var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var displayEmptyStateMessagingCalled = false
         var hideEmptyStateMessagingCalled = false
+        let disposeBag = DisposeBag()
 
-        func displayItems(_ items: [Item]) {
-            self.displayItemsArgument = items
-        }
-
-        func displayError(_ error: Error) {
-            self.displayErrorArgument = error
+        func bind(items: Driver<[ItemSectionModel]>) {
+            items.drive(itemsObserver).disposed(by: self.disposeBag)
         }
 
         func displayEmptyStateMessaging() {
@@ -64,6 +61,8 @@ class ItemListPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.routeActionHandler = FakeRouteActionHandler()
 
+                self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
+
                 self.subject = ItemListPresenter(
                         view: self.view,
                         routeActionHandler: self.routeActionHandler,
@@ -85,9 +84,21 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 describe("when the datastore pushes a populated list of items") {
+                    let title1 = "meow"
+                    let username = "cats@cats.com"
+
+                    let id1 = "fdsdfsfdsfds"
+                    let id2 = "ghfhghgff"
                     let items = [
-                        Item.Builder().build(),
-                        Item.Builder().build()
+                        Item.Builder()
+                                .title(title1).entry(
+                                        ItemEntry.Builder()
+                                                .username(username)
+                                                .build()
+                                )
+                                .id(id1)
+                                .build(),
+                        Item.Builder().origins(["www.dogs.com"]).id(id2).build()
                     ]
 
                     beforeEach {
@@ -97,12 +108,79 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("tells the view to display the items") {
-                        expect(self.view.displayItemsArgument).notTo(beNil())
-                        expect(self.view.displayItemsArgument).to(equal(items))
+                        let expectedItemConfigurations = [
+                            ItemListCellConfiguration.Search,
+                            ItemListCellConfiguration.Item(title: title1, username: username, id: id1),
+                            ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2)
+                        ]
+                        expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
+                        let configuration = self.view.itemsObserver.events.first!.value.element!
+                        expect(configuration.first!.items).to(equal(expectedItemConfigurations))
                     }
 
                     it("tells the view to hide the empty state messaging") {
                         expect(self.view.hideEmptyStateMessagingCalled).to(beTrue())
+                    }
+
+                    describe("when text is entered into the search bar") {
+                        let textSubject = PublishSubject<String>()
+
+                        beforeEach {
+                            textSubject
+                                    .bind(to: self.subject.filterTextObserver)
+                                    .disposed(by: self.disposeBag)
+                        }
+
+                        describe("when the text matches an item's username") {
+                            beforeEach {
+                                textSubject.onNext("cat")
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let expectedItemConfigurations = [
+                                    ItemListCellConfiguration.Search,
+                                    ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
+
+                        describe("when the text matches an item's origins") {
+                            beforeEach {
+                                textSubject.onNext("dog")
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let expectedItemConfigurations = [
+                                    ItemListCellConfiguration.Search,
+                                    ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
+
+                        describe("when the text matches an item's title") {
+                            beforeEach {
+                                textSubject.onNext("me")
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let expectedItemConfigurations = [
+                                    ItemListCellConfiguration.Search,
+                                    ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
                     }
                 }
             }
@@ -113,7 +191,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                     beforeEach {
                         let itemObservable = self.scheduler.createColdObservable([
-                            next(100, Item.Builder().id(id).build())
+                            next(50, id)
                         ])
 
                         itemObservable
@@ -132,7 +210,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                 describe("when the item does not have an id") {
                     beforeEach {
-                        let itemObservable = self.scheduler.createColdObservable([next(100, Item.Builder().build())])
+                        let itemObservable: TestableObservable<String?> = self.scheduler.createColdObservable([next(50, nil)])
 
                         itemObservable
                                 .bind(to: self.subject.itemSelectedObserver)

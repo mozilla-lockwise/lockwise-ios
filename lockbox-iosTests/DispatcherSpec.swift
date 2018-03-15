@@ -26,11 +26,11 @@ class DispatcherSpec: QuickSpec {
                 }
 
                 it("pushes actions to registered observers") {
-                    Dispatcher.shared.dispatch(action: LoginRouteAction.fxa)
+                    Dispatcher.shared.dispatch(action: ErrorAction(error: NSError(domain: "badness", code: -1)))
 
                     expect(testObserver.events.first).notTo(beNil())
-                    let event = testObserver.events.first!.value.element as! LoginRouteAction
-                    expect(event).to(equal(LoginRouteAction.fxa))
+                    let event = testObserver.events.first!.value.element as! ErrorAction
+                    expect(event).to(matchErrorAction(ErrorAction(error: NSError(domain: "badness", code: -1))))
                 }
             }
         }

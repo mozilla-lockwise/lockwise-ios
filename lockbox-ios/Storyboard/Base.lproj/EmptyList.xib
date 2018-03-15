@@ -12,14 +12,14 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="499"/>
+            <rect key="frame" x="0.0" y="0.0" width="312" height="499"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="chest" translatesAutoresizingMaskIntoConstraints="NO" id="LgC-kE-1Jd">
-                    <rect key="frame" x="86" y="248.5" width="202" height="180"/>
+                    <rect key="frame" x="55" y="248.5" width="202" height="180"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start adding login entries using our Firefox browser extension." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OPm-1E-4AR">
-                    <rect key="frame" x="48" y="172.5" width="280" height="36"/>
+                    <rect key="frame" x="16" y="172.5" width="280" height="36"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="280" id="N1N-Ze-8Ll"/>
                     </constraints>
@@ -28,7 +28,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Look at all this room in your lockbox!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HAm-je-RDU">
-                    <rect key="frame" x="48" y="100" width="280" height="57.5"/>
+                    <rect key="frame" x="16" y="100" width="280" height="57.5"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="280" id="UGR-fx-sQv"/>
                     </constraints>
@@ -46,7 +46,7 @@
                 <constraint firstItem="HAm-je-RDU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="100" id="xM8-ms-Jq2"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="45.5" y="25.5"/>
+            <point key="canvasLocation" x="5" y="25.5"/>
         </view>
     </objects>
     <resources>
