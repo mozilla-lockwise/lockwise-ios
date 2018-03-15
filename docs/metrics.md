@@ -63,13 +63,12 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 
 ## List of Proposed Events
 
-1. When the user starts up the app:
+1. When the app starts up:
 	* `category`: action
 	* `method`: startup
 	* `object`: app
 	* `value`: nil
-	* `extras`: ["fxauid" : uid or nil]
-		* Note: This might be able to replace the event that currently fires in `AppDelegate.swift`
+	* `extras`: nil
 
 2. When a user taps the fxa signin button:
 	* `category`: action
@@ -78,7 +77,7 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 	* `value`: nil
 	* `extras`: nil
 
-3. Whether a user successfully authorizes with FxA:
+2. Whether a user successfully authorizes with FxA:
 	* `category`: action
 	* `method`: signin
 	* `object`: app
@@ -86,39 +85,38 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 	* `extras`: ["fxauid" : uid or nil, "error" : nil or string]
 		* Note: If there is an authentication error, let's put it in the extra field here, if possible.
 
-4. When a user taps an item in the entry list:
+3. When a user taps an item in the entry list:
 	* `category`: action
 	* `method`: tap
 	* `object`: entryList
 	* `value`: nil
 	* `extras`: ["fxauid" : uid, "itemid" : itemid]
 
-5. When a user taps one of the buttons that are shown in the menu displayed after selecting an entry:
-	* `category`: action
-	* `method`: tap
-	* `object`: copyUsernameButton, copyPasswordButton, viewPasswordButton, viewItemButton, entryCancelButton
-	* `value`: nil
-	* `extras`: ["fxauid" : uid, "itemid" : itemid]
-
-6. When a user taps one of the buttons available after entering the entry view:
+4. When a user taps one of the buttons available after entering the entry view:
 	* `category`: action
 	* `method`: tap
 	* `object`: entryCopyUsernameButton, entryCopyPasswordButton, viewPasswordButton, entryShowPasswordButton
 	* `value`: nil
 	* `extras`: ["fxauid" : uid, "itemid" : itemid]
-		* Note: I might be OK with firing the same events as (4) here, if there is extra plumbing required to differentiate actions that happen in the overlay menu vs those that happen in the item view. However, it would be nice to know which of the two options users find most convenient, and to what extent.
 
-7. When a user taps the settings button:
+5. When a user taps the settings button:
 	* `category`: action
 	* `method`: tap
 	* `object`: settingsButton
 	* `value`: nil
 	* `extras`: ["fxauid" : uid]
 
-8. When a user taps the FAQ button:
+6. When a user taps the FAQ button:
 	* `category`: action
 	* `method`: tap
 	* `object`: faqButton
+	* `value`: nil
+	* `extras`: ["fxauid" : uid]
+
+7. When the app enters the background or foreground:
+	* `category`: action
+	* `method`: background, foreground
+	* `object`: app
 	* `value`: nil
 	* `extras`: ["fxauid" : uid]
 

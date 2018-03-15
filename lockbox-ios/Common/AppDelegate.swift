@@ -74,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Telemetry.default.recordSessionStart()
         Telemetry.default.recordEvent(
                 category: TelemetryEventCategory.action,
-                method: TelemetryEventMethod.foreground,
+                method: TelemetryEventMethod.startup,
                 object: TelemetryEventObject.app
         )
     }

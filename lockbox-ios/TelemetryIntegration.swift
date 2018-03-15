@@ -9,18 +9,15 @@ class TelemetryEventCategory {
 }
 
 class TelemetryEventMethod {
-    public static let startup = "startup"
-    public static let background = "background"
-    public static let foreground = "foreground"
     public static let tap = "tap"
     public static let signin = "signin"
+    public static let signin = "startup"
+    public static let foreground = "foreground"
+    public static let background = "background"
 }
 
 class TelemetryEventObject {
     public static let app = "app"
-    public static let initStoreButton = "init_store_button"
-    public static let unlockStoreButton = "unlock_store_button"
-    public static let listStoreContentsButton = "list_store_contents_button"
     public static let entryList = "entry_list"
     public static let settingsButton = "settings_button"
     public static let feedbackButton = "feedback_button"
