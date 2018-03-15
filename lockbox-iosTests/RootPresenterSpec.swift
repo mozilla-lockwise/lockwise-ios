@@ -27,6 +27,8 @@ class RootPresenterSpec: QuickSpec {
         var mainStackDisplayedStub: Bool!
         var startMainStackCalled = false
         var pushMainViewArgument: MainRouteAction?
+        
+        var isPresentingModal: Bool = false
 
         func topViewIs<T>(_ class: T.Type) -> Bool {
             return topViewIsVar
@@ -54,6 +56,10 @@ class RootPresenterSpec: QuickSpec {
 
         func pushMainView(view: MainRouteAction) {
             self.pushMainViewArgument = view
+        }
+        
+        func dismissModal() {
+            
         }
     }
 
