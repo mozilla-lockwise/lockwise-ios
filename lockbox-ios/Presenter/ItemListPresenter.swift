@@ -75,9 +75,9 @@ class ItemListPresenter {
                     }
 
                     return latest.items.filter { item -> Bool in
-                        return item.entry.username?.localizedCaseInsensitiveContains(latest.text) ?? false ||
-                                item.origins.first?.localizedCaseInsensitiveContains(latest.text) ?? false ||
-                                item.title?.localizedCaseInsensitiveContains(latest.text) ?? false
+                        return [item.entry.username, item.origins.first, item.title]
+                                .flatMap { $0?.localizedCaseInsensitiveContains(latest.text) ?? false }
+                                .reduce(false) { $0 || $1 }
                     }
                  }
                 .map { items -> [ItemSectionModel] in
