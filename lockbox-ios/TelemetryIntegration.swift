@@ -11,7 +11,7 @@ class TelemetryEventCategory {
 class TelemetryEventMethod {
     public static let tap = "tap"
     public static let signin = "signin"
-    public static let signin = "startup"
+    public static let startup = "startup"
     public static let foreground = "foreground"
     public static let background = "background"
 }
