@@ -74,14 +74,10 @@ class ItemListPresenter {
                         return latest.items
                     }
 
-                    var username = "", origin = "", title = "", itemText = ""
                     return latest.items.filter { item -> Bool in
-                        username = item.entry.username ?? ""
-                        origin = item.origins.first ?? ""
-                        title = item.title ?? ""
-                        itemText = username + origin + title
-
-                        return itemText.localizedCaseInsensitiveContains(latest.text)
+                        return item.entry.username?.localizedCaseInsensitiveContains(latest.text) ?? false ||
+                                item.origins.first?.localizedCaseInsensitiveContains(latest.text) ?? false ||
+                                item.title?.localizedCaseInsensitiveContains(latest.text) ?? false
                     }
                  }
                 .map { items -> [ItemSectionModel] in
