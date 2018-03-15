@@ -98,7 +98,10 @@ class UserInfoStore {
             self._oauthInfo.onNext(nil)
         }
         
-        if let enabled = self.keychainManager.retrieve(.biometricLoginEnabled) {
+        let enabled = self.keychainManager.retrieve(.biometricLoginEnabled)
+        if enabled == nil {
+            self._biometricLoginEnabled.onNext(nil)
+        } else {
             self._biometricLoginEnabled.onNext(enabled == "true")
         }
     }
