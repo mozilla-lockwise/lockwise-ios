@@ -5,14 +5,21 @@
 
 import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
+import RxDataSources
 
 protocol SettingsProtocol {
-    func setItems(items: [Setting])
+    func bind(items: Driver<[SettingSectionModel]>)
 }
+
+typealias SettingSectionModel = AnimatableSectionModel<Int, SettingCellConfiguration>
 
 class SettingsView: UITableViewController {
     var presenter: SettingsPresenter?
-    var settings: [Setting]?
+    var settings: [SettingCellConfiguration]?
+    private var disposeBag = DisposeBag()
+    private var dataSource: RxTableViewSectionedReloadDataSource<SettingSectionModel>?
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -26,20 +33,20 @@ class SettingsView: UITableViewController {
     }
     
     private func setupNavbar() {
-        navigationItem.title = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
-        
+        navigationItem.title = Constant.string.settingsTitle
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: NSLocalizedString("settings.done", value: "Done", comment: "Text on button to close settings"), style: .done, target: self, action: #selector(doneTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done, style: .done, target: nil, action: nil)
         navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-    }
-    
-    private func setupFooter() {
-        let footer = UIView()
-        tableView.tableFooterView = footer
+        
+        if let presenter = presenter {
+            navigationItem.rightBarButtonItem?.rx.tap
+                .bind(to: presenter.onDone)
+                .disposed(by: self.disposeBag)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,38 +56,15 @@ class SettingsView: UITableViewController {
     }
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        setupDataSource()
         presenter?.onViewReady()
     }
     
     @objc private func doneTapped() {
         presenter?.dismiss()
     }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return settings != nil ? 3 : 0
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let row = indexPath.section * 3 + indexPath.row
-        let cell = UITableViewCell()
-        cell.textLabel?.text = settings?[row].text
-        
-        if let setting = settings?[row] {
-            if setting.routeAction != nil {
-                cell.accessoryType = .disclosureIndicator
-            } else if let switchSetting = setting as? SwitchSetting {
-                let switchItem = UISwitch()
-                switchItem.onTintColor = Constant.color.lockBoxBlue
-                switchItem.addTarget(self, action: #selector(switchChanged), for: .valueChanged)
-                switchItem.tag = row
-                switchItem.isOn = switchSetting.isOn
-                cell.accessoryView = switchItem
-            }
-        }
-        
-        return cell
-    }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
@@ -89,24 +73,51 @@ class SettingsView: UITableViewController {
         return cell
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return settings != nil ? 2 : 0
-    }
-    
     @objc private func switchChanged(sender: UISwitch) {
         let rowChanged = sender.tag
         presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
     }
 }
 
-extension SettingsView: SettingsProtocol {
-    func setItems(items: [Setting]) {
-        settings = items
-        tableView.reloadData()
+extension SettingsView {
+    private func setupFooter() {
+        let footer = UIView()
+        tableView.tableFooterView = footer
+    }
+    
+    private func setupDataSource() {
+        self.dataSource = RxTableViewSectionedReloadDataSource(
+            configureCell: { _, tableView, indexPath, cellConfiguration in
+                let cell = UITableViewCell()
+                cell.textLabel?.text = cellConfiguration.text
+                
+                if cellConfiguration.routeAction != nil {
+                    cell.accessoryType = .disclosureIndicator
+                } else if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
+                    let switchItem = UISwitch()
+                    switchItem.onTintColor = Constant.color.lockBoxBlue
+                    switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
+                    switchItem.isOn = switchSetting.isOn
+                    cell.accessoryView = switchItem
+                }
+                return cell
+        })
     }
 }
 
-class Setting {
+extension SettingsView: SettingsProtocol {
+    func bind(items: Driver<[SettingSectionModel]>) {
+        guard let dataSource = self.dataSource else {
+            fatalError("datasource not set!")
+        }
+        
+        items
+            .drive(self.tableView.rx.items(dataSource: dataSource))
+            .disposed(by: self.disposeBag)
+    }
+}
+
+class SettingCellConfiguration {
     var text: String
     var routeAction: SettingsRouteAction?
     
@@ -116,7 +127,19 @@ class Setting {
     }
 }
 
-class SwitchSetting: Setting {
+extension SettingCellConfiguration: IdentifiableType {
+    var identity: String {
+        return self.text
+    }
+}
+
+extension SettingCellConfiguration: Equatable {
+    static func ==(lhs: SettingCellConfiguration, rhs: SettingCellConfiguration) -> Bool {
+        return lhs.text == rhs.text && lhs.routeAction == rhs.routeAction
+    }
+}
+
+class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
     
     init(text: String, routeAction: SettingsRouteAction?, isOn:Bool = false) {

@@ -25,6 +25,12 @@ class ItemListPresenter {
             target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
         }.asObserver()
     }()
+    
+    lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(MainRouteAction.settings)
+            }.asObserver()
+    }()
 
     init(view: ItemListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,

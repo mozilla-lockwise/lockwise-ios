@@ -14,16 +14,25 @@ class SettingsPresenter {
     private var routeActionHandler: RouteActionHandler
     private var userInfoActionHandler: UserInfoActionHandler
     
-    var settings = [
-        Setting(text: NSLocalizedString("settings.provideFeedback", value: "Provide Feedback", comment: "Provide feedback option in settings"), routeAction: SettingsRouteAction.provideFeedback),
-        Setting(text: NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings"), routeAction: SettingsRouteAction.faq),
-        Setting(text: NSLocalizedString("settings.enableInBrowser", value: "Enable In Browser", comment: "Enable In Browser option in settings"), routeAction: SettingsRouteAction.enableInBrowser),
-        Setting(text: NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings"), routeAction: SettingsRouteAction.account),
-        Setting(text: NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings"), routeAction: SettingsRouteAction.autoLock),
-    ]
+    lazy private(set) var onDone: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(MainRouteAction.dismissSettings)
+            }.asObserver()
+    }()
     
-    let touchIdSetting = SwitchSetting(text: NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings"), routeAction: nil)
-    let faceIdSetting = SwitchSetting(text: NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings"), routeAction: nil)
+    var settings = Variable([SettingSectionModel(model: 0, items: [
+        SettingCellConfiguration(text: Constant.string.settingsProvideFeedback, routeAction: SettingsRouteAction.provideFeedback),
+        SettingCellConfiguration(text: Constant.string.settingsFaq, routeAction: SettingsRouteAction.faq),
+        SettingCellConfiguration(text: Constant.string.settingsEnableInBrowser, routeAction: SettingsRouteAction.enableInBrowser),
+        ]),
+        SettingSectionModel(model: 1, items: [
+            SettingCellConfiguration(text: Constant.string.settingsAccount, routeAction: SettingsRouteAction.account),
+            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingsRouteAction.autoLock),
+        ])
+    ])
+
+    let touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
+    let faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
     
     private var usesFaceId: Bool {
         get {
@@ -48,11 +57,11 @@ class SettingsPresenter {
         self.userInfoActionHandler = userInfoActionHandler
         
         let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
+        settings.value[1].items.insert(biometricSetting, at: settings.value[1].items.endIndex-1)
+        
         userInfoStore.biometricLoginEnabled.subscribe(onNext: { enabled in
             biometricSetting.isOn = enabled ?? false
         })
-        
-        settings.insert(biometricSetting, at: settings.endIndex-1)
     }
     
     func dismiss() {
@@ -64,6 +73,7 @@ class SettingsPresenter {
     }
     
     func onViewReady() {
-        view.setItems(items: settings)
+        let driver  = settings.asDriver()
+        view.bind(items: driver)
     }
 }
