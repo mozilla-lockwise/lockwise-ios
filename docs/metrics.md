@@ -39,9 +39,7 @@ The ping types are defined in `lockbox-ios/Common/AppDelegate.swift`. Scheduling
 
 Every event must contain `category`, `method` and `object` fields, and may optionally contain `value` and `extra` fields as well. Possible values for the former three fields are defined in `lockbox-ios/TelemetryIntegration.swift`
 
-For all events, the `extra` field should contain the user's fxa uid, except for those that are recorded before the user authenticates with FxA.
-
-Events related to specific items should also have an item id in the extra field where possible.
+Events related to specific items should have an item id in the extra field where possible.
 
 Here's an example of (something like) the swift code needed to record the event that fires when an item in the entry list is tapped:
 
@@ -51,7 +49,7 @@ Telemetry.default.recordEvent(
 	method: TelemetryEventMethod.tap,
 	object: TelemetryEventObject.entryList,
 	value: nil,
-	extras: ["fxauid" : uid, "itemid" : itemid]
+	extras: ["itemid" : itemid]
 )
 ```
 
@@ -82,7 +80,7 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 	* `method`: signin
 	* `object`: app
 	* `value`: `true` or `false`
-	* `extras`: ["fxauid" : uid or nil, "error" : nil or string]
+	* `extras`: ["error" : nil or string]
 		* Note: If there is an authentication error, let's put it in the extra field here, if possible.
 
 3. When a user taps an item in the entry list:
@@ -90,35 +88,35 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 	* `method`: tap
 	* `object`: entryList
 	* `value`: nil
-	* `extras`: ["fxauid" : uid, "itemid" : itemid]
+	* `extras`: ["itemid" : itemid]
 
 4. When a user taps one of the buttons available after entering the entry view:
 	* `category`: action
 	* `method`: tap
 	* `object`: entryCopyUsernameButton, entryCopyPasswordButton, viewPasswordButton, entryShowPasswordButton
 	* `value`: nil
-	* `extras`: ["fxauid" : uid, "itemid" : itemid]
+	* `extras`: ["itemid" : itemid]
 
 5. When a user taps the settings button:
 	* `category`: action
 	* `method`: tap
 	* `object`: settingsButton
 	* `value`: nil
-	* `extras`: ["fxauid" : uid]
+	* `extras`: nil
 
 6. When a user taps the FAQ button:
 	* `category`: action
 	* `method`: tap
 	* `object`: faqButton
 	* `value`: nil
-	* `extras`: ["fxauid" : uid]
+	* `extras`: nil
 
 7. When the app enters the background or foreground:
 	* `category`: action
 	* `method`: background, foreground
 	* `object`: app
 	* `value`: nil
-	* `extras`: ["fxauid" : uid]
+	* `extras`: nil
 
 ## References
 
