@@ -18,9 +18,11 @@ class Item: Codable, Equatable {
     var createdDate: Date? {
         return Date(iso8601DateString: self.created ?? "")
     }
+
     var modifiedDate: Date? {
         return Date(iso8601DateString: self.modified ?? "")
     }
+
     var lastUsedDate: Date? {
         return Date(iso8601DateString: self.lastUsed ?? "")
     }
@@ -48,7 +50,8 @@ class Item: Codable, Equatable {
         return lhs.id == rhs.id &&
                 lhs.entry == rhs.entry &&
                 lhs.origins.elementsEqual(rhs.origins) &&
-                lhs.modified == rhs.modified
+                lhs.modified == rhs.modified &&
+                lhs.lastUsed == rhs.lastUsed
 
     }
 

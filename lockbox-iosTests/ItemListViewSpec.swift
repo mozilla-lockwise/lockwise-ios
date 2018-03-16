@@ -23,6 +23,7 @@ class ItemListViewSpec: QuickSpec {
         var onViewReadyCalled = false
         var fakeItemSelectedObserver: TestableObserver<String?>!
         var fakeFilterTextObserver: TestableObserver<String>!
+        var fakeSortingButtonObserver: TestableObserver<Void>!
 
         override func onViewReady() {
             onViewReadyCalled = true
@@ -34,6 +35,10 @@ class ItemListViewSpec: QuickSpec {
 
         override var filterTextObserver: AnyObserver<String> {
             return self.fakeFilterTextObserver.asObserver()
+        }
+
+        override var sortingButtonObserver: AnyObserver<Void> {
+            return self.fakeSortingButtonObserver.asObserver()
         }
     }
 
@@ -50,6 +55,7 @@ class ItemListViewSpec: QuickSpec {
                 self.presenter = FakeItemListPresenter(view: self.subject)
                 self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(String?.self)
                 self.presenter.fakeFilterTextObserver = self.scheduler.createObserver(String.self)
+                self.presenter.fakeSortingButtonObserver = self.scheduler.createObserver(Void.self)
                 self.subject.presenter = self.presenter
 
                 _ = UINavigationController(rootViewController: self.subject)
@@ -64,7 +70,7 @@ class ItemListViewSpec: QuickSpec {
                 expect(self.presenter.onViewReadyCalled).to(beTrue())
             }
 
-            describe(".displayItems()") {
+            describe(".bind(items:)") {
                 let item1Title = "item1"
                 let item1Username = "bleh"
                 let item2Title = "sum item"
@@ -118,6 +124,20 @@ class ItemListViewSpec: QuickSpec {
                 }
             }
 
+            describe("bind(sortingButtonTitle:)") {
+                let newTitle = "yum"
+
+                beforeEach {
+                    self.subject.bind(sortingButtonTitle: Driver.just(newTitle))
+                }
+
+                it("configures the sorting button title") {
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+
+                    expect(button.currentTitle).to(equal(newTitle))
+                }
+            }
+
             describe("displayEmptyStateMessaging") {
                 beforeEach {
                     self.subject.displayEmptyStateMessaging()
@@ -125,6 +145,10 @@ class ItemListViewSpec: QuickSpec {
 
                 it("adds the empty list view to the background view") {
                     expect(self.subject.tableView.backgroundView?.subviews.count).to(equal(1))
+                }
+
+                it("hides the left bar button item") {
+                    expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beTrue())
                 }
             }
 
@@ -136,6 +160,10 @@ class ItemListViewSpec: QuickSpec {
 
                 it("removes the empty list view from the background view") {
                     expect(self.subject.tableView.backgroundView?.subviews.count).toEventually(equal(0))
+                }
+
+                it("shows the left bar button item") {
+                    expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beFalse())
                 }
             }
 
@@ -169,6 +197,18 @@ class ItemListViewSpec: QuickSpec {
                     it("tells the presenter a nil item id") {
                         expect(self.presenter.fakeItemSelectedObserver.events.first!.value.element!).to(beNil())
                     }
+                }
+            }
+
+            describe("tapping the sorting button") {
+                beforeEach {
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+
+                    button.sendActions(for: .touchUpInside)
+                }
+
+                it("tells the presenter") {
+                    expect(self.presenter.fakeSortingButtonObserver.events.count).to(equal(1))
                 }
             }
 

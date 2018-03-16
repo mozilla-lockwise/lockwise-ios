@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import RxSwift
 
 protocol ErrorView {
     func displayError(_ error: Error)
@@ -10,6 +11,16 @@ protocol ErrorView {
 
 protocol StatusAlertView {
     func displayTemporaryAlert(_ message: String, timeout: TimeInterval)
+}
+
+struct OptionSheetButtonConfiguration {
+    let title: String
+    let tapObserver: AnyObserver<Void>?
+    let cancel: Bool
+}
+
+protocol OptionSheetView {
+    func displayOptionSheet(buttons: [OptionSheetButtonConfiguration], title: String?)
 }
 
 extension UIViewController: ErrorView {
@@ -58,6 +69,26 @@ extension UIViewController: StatusAlertView {
                     })
         })
 
+    }
+}
+
+extension UIViewController: OptionSheetView {
+    func displayOptionSheet(buttons: [OptionSheetButtonConfiguration], title: String?) {
+        let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+
+        for buttonConfig in buttons {
+            let style = buttonConfig.cancel ? UIAlertActionStyle.cancel : UIAlertActionStyle.default
+            let action = UIAlertAction(title: buttonConfig.title, style: style) { _ in
+                buttonConfig.tapObserver?.onNext(())
+                buttonConfig.tapObserver?.onCompleted()
+            }
+
+            alertController.addAction(action)
+        }
+
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true)
+        }
     }
 }
 

@@ -71,15 +71,37 @@ extension ItemListView: ItemListViewProtocol {
         items.drive(self.tableView.rx.items(dataSource: dataSource)).disposed(by: self.disposeBag)
     }
 
+    func bind(sortingButtonTitle: Driver<String>) {
+        guard let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton else {
+            fatalError("no sorting button!")
+        }
+
+        sortingButtonTitle
+                .drive(button.rx.title())
+                .disposed(by: self.disposeBag)
+    }
+
     func displayEmptyStateMessaging() {
         guard let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView else {
             return
         }
         self.tableView.backgroundView?.addSubview(emptyStateView)
+
+        guard let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton else {
+            fatalError("no sorting button!")
+        }
+
+        button.isHidden = true
     }
 
     func hideEmptyStateMessaging() {
         self.tableView.backgroundView?.subviews.forEach({ $0.removeFromSuperview() })
+
+        guard let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton else {
+            fatalError("no sorting button!")
+        }
+
+        button.isHidden = false
     }
 }
 
@@ -93,7 +115,7 @@ extension ItemListView {
                     switch cellConfiguration {
                     case .Search:
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
-                                let presenter = self.presenter else {
+                              let presenter = self.presenter else {
                             fatalError("couldn't find the right cell or presenter!")
                         }
 
@@ -157,6 +179,33 @@ extension ItemListView {
         prefButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
 
+        let sortingButton = UIButton(type: .custom)
+        sortingButton.adjustsImageWhenHighlighted = false
+
+        let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
+        sortingButton.setImage(sortingImage, for: .normal)
+        sortingButton.setTitle(Constant.string.aToZ, for: .normal)
+
+        sortingButton.contentHorizontalAlignment = .left
+        sortingButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        sortingButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
+        sortingButton.setTitleColor(.white, for: .normal)
+        sortingButton.setTitleColor(.lightGray, for: .highlighted)
+        sortingButton.setTitleColor(.lightGray, for: .selected)
+        sortingButton.tintColor = .white
+
+        sortingButton.addConstraint(NSLayoutConstraint(
+                item: sortingButton,
+                attribute: .width,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .notAnAttribute,
+                multiplier: 1.0,
+                constant: 100)
+        )
+
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sortingButton)
+
         self.navigationItem.title = Constant.string.yourLockbox
 
         self.navigationController?.navigationBar.titleTextAttributes = [
@@ -164,10 +213,17 @@ extension ItemListView {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
 
-        guard let presenter = presenter else { return }
+        guard let presenter = presenter else {
+            return
+        }
+
         prefButton.rx.tap
-            .bind(to: presenter.onSettingsTapped)
-            .disposed(by: self.disposeBag)
+                .bind(to: presenter.onSettingsTapped)
+                .disposed(by: self.disposeBag)
+
+        sortingButton.rx.tap
+                .bind(to: presenter.sortingButtonObserver)
+                .disposed(by: self.disposeBag)
     }
 
     fileprivate func styleTableViewBackground() {
