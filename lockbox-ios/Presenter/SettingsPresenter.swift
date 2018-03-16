@@ -13,6 +13,7 @@ class SettingsPresenter {
     private var userInfoStore: UserInfoStore
     private var routeActionHandler: RouteActionHandler
     private var userInfoActionHandler: UserInfoActionHandler
+    private var disposeBag = DisposeBag()
     
     lazy private(set) var onDone: AnyObserver<Void> = {
         return Binder(self) { target, _ in
@@ -61,7 +62,7 @@ class SettingsPresenter {
         
         userInfoStore.biometricLoginEnabled.subscribe(onNext: { enabled in
             biometricSetting.isOn = enabled ?? false
-        })
+        }).disposed(by: disposeBag)
     }
     
     func switchChanged(row: Int, isOn: Bool) {
