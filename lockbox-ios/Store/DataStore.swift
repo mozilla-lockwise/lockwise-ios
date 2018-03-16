@@ -5,18 +5,22 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import RxOptional
 
 class DataStore {
     public static let shared = DataStore()
 
     fileprivate let disposeBag = DisposeBag()
-    fileprivate var itemList = ReplaySubject<[Item]>.create(bufferSize: 1)
+    fileprivate var itemList = ReplaySubject<[String: Item]>.create(bufferSize: 1)
     fileprivate var initialized = ReplaySubject<Bool>.create(bufferSize: 1)
     fileprivate var opened = ReplaySubject<Bool>.create(bufferSize: 1)
     fileprivate var locked = ReplaySubject<Bool>.create(bufferSize: 1)
 
     public var onItemList: Observable<[Item]> {
         return self.itemList.asObservable()
+                .map { itemDictionary -> [Item] in
+                    return Array(itemDictionary.values)
+                }
                 .distinctUntilChanged { lhList, rhList in
                     return lhList.elementsEqual(rhList)
                 }
@@ -41,6 +45,19 @@ class DataStore {
                     switch action {
                     case .list(let list):
                         self.itemList.onNext(list)
+                    case .updated(let item):
+                        self.itemList.take(1)
+                                .map { items in
+                                    guard let id = item.id else {
+                                        return items
+                                    }
+
+                                    var updatedItems = items
+                                    updatedItems[id] = item
+                                    return updatedItems
+                                }
+                                .bind(to: self.itemList)
+                                .disposed(by: self.disposeBag)
                     case .locked(let locked):
                         self.locked.onNext(locked)
                     case .initialized(let initialized):
@@ -54,13 +71,10 @@ class DataStore {
 
     public func onItem(_ itemId: String) -> Observable<Item> {
         return self.itemList.asObservable()
-                .flatMap { list in
-                    Observable.from(list)
+                .map { items -> Item? in
+                    return items[itemId]
                 }
-                .filterByType(class: Item.self)
-                .filter { item in
-                    return item.id == itemId
-                }
+                .filterNil()
                 .distinctUntilChanged()
     }
 }

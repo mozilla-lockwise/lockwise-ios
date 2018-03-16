@@ -9,7 +9,7 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
   }
 
   async prepare() {
-    return super.prepare().then(function(result) {
+    return super.prepare().then( result => {
         try {
           webkit.messageHandlers.OpenComplete.postMessage("done")
         } catch (err) {
@@ -22,7 +22,7 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
   }
 
   async initialize(opts) {
-    return super.initialize(opts).then( function(result) {
+    return super.initialize(opts).then( result => {
       try {
         webkit.messageHandlers.InitializeComplete.postMessage("done")
       } catch (err) {
@@ -35,7 +35,7 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
   }
 
   async lock() {
-    return super.lock().then( function(result) {
+    return super.lock().then( result => {
       console.log("locked!!")
         try {
           webkit.messageHandlers.LockComplete.postMessage("lock success")
@@ -49,7 +49,7 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
   }
 
   async unlock(scopedKey) {
-      return super.unlock(scopedKey).then( function(result) {
+      return super.unlock(scopedKey).then( result => {
         try {
           webkit.messageHandlers.UnlockComplete.postMessage("unlock success")
         } catch (err) {
@@ -60,9 +60,19 @@ class SwiftInteropDataStore extends DataStoreModule.DataStore {
   }
 
   async list() {
-    return super.list().then( function(entryList) {
+    return super.list().then( entryList => {
       try {
         webkit.messageHandlers.ListComplete.postMessage(Array.from(entryList))
+      } catch (err) {
+        console.log("callback function not available")
+      }
+    })
+  }
+
+  async touch(item) {
+    return super.touch(item).then( updatedItem => {
+      try {
+        webkit.messageHandlers.UpdateComplete.postMessage(updatedItem)
       } catch (err) {
         console.log("callback function not available")
       }

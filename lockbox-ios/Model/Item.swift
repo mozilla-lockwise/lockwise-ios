@@ -15,6 +15,30 @@ class Item: Codable, Equatable {
     var lastUsed: String?
     var entry: ItemEntry
 
+    var createdDate: Date? {
+        return Date(iso8601DateString: self.created ?? "")
+    }
+    var modifiedDate: Date? {
+        return Date(iso8601DateString: self.modified ?? "")
+    }
+    var lastUsedDate: Date? {
+        return Date(iso8601DateString: self.lastUsed ?? "")
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case disabled = "disabled"
+        case title = "title"
+        case origins = "origins"
+        case tags = "tags"
+        case created = "created"
+        case modified = "modified"
+        case lastUsed = "last_used"
+        case entry = "entry"
+
+        static let allValues = [id, disabled, title, origins, tags, created, modified, lastUsed, entry]
+    }
+
     init(origins: [String], entry: ItemEntry) {
         self.origins = origins
         self.entry = entry
@@ -23,7 +47,8 @@ class Item: Codable, Equatable {
     static func ==(lhs: Item, rhs: Item) -> Bool {
         return lhs.id == rhs.id &&
                 lhs.entry == rhs.entry &&
-                lhs.origins.elementsEqual(rhs.origins)
+                lhs.origins.elementsEqual(rhs.origins) &&
+                lhs.modified == rhs.modified
 
     }
 

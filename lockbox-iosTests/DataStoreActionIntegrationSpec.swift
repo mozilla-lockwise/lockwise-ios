@@ -13,6 +13,7 @@ import RxBlocking
 class DataStoreHandlerIntegrationSpec: QuickSpec {
     private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA\",\"alg\":\"A256GCM\",\"k\":\"_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8\"}" // swiftlint:disable:this line_length
     private let uid = "333333333"
+    private let disposeBag = DisposeBag()
 
     override func spec() {
         var initializeValue: [DataStoreAction]?
@@ -42,7 +43,7 @@ class DataStoreHandlerIntegrationSpec: QuickSpec {
             expect(initializeValue).to(contain(DataStoreAction.initialized(initialized: true)))
         }
 
-        xdescribe("DataStore with JavaScript integration") {
+        describe("DataStore with JavaScript integration") {
             var unlockValue: DataStoreAction?
 
             beforeEach {
@@ -65,7 +66,39 @@ class DataStoreHandlerIntegrationSpec: QuickSpec {
                         .filterByType(class: DataStoreAction.self)
                         .toBlocking().first()
 
-                expect(listValue).to(equal(DataStoreAction.list(list: [])))
+                expect(listValue).to(equal(DataStoreAction.list(list: [:])))
+            }
+
+            it("pushes the updated value when touching an item") {
+                DataStoreActionHandler.shared.populateTestData()
+
+                let listValue = try! Dispatcher.shared.register
+                        .filterByType(class: DataStoreAction.self)
+                        .toBlocking()
+                        .first()
+
+                guard case let DataStoreAction.list(list: items) = listValue! else {
+                    fail("wrong action!")
+                    return
+                }
+
+                let addedItem = items.first!.value
+                let lastUsed = addedItem.lastUsed
+                expect(lastUsed).to(beNil())
+
+                DataStoreActionHandler.shared.touch(addedItem)
+
+                let updated = try! Dispatcher.shared.register
+                        .filterByType(class: DataStoreAction.self)
+                        .toBlocking().first()
+
+                guard case let DataStoreAction.updated(item: updatedItem) = updated! else {
+                    fail("wrong action!")
+                    return
+                }
+
+                expect(updatedItem.lastUsed).notTo(beNil())
+                expect(updatedItem.lastUsedDate).to(beCloseTo(Date(timeIntervalSinceNow: 0), within: 1.0))
             }
 
             it("calls back from javascript after locking & unlocking") {
