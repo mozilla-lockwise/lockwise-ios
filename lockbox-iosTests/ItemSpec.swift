@@ -19,9 +19,9 @@ class ItemSpec: QuickSpec {
                 let title = "titlevalue"
                 let origins = ["meow", "woof"]
                 let tags = ["cats", "dogs"]
-                let created = Date(timeIntervalSinceNow: 0)
-                let modified = Date(timeIntervalSinceNow: 0)
-                let lastUsed = Date(timeIntervalSinceNow: 0)
+                let created = "fsddsffdsfsd"
+                let modified = "fsddsffdsfsd"
+                let lastUsed = "fsddsffdsfsd"
                 let entry = ItemEntry.Builder().kind("fdssdflksdf").build()
 
                 let item = Item.Builder()

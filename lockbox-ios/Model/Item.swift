@@ -10,10 +10,20 @@ class Item: Codable, Equatable {
     var title: String?
     var origins: [String]
     var tags: [String]?
-    var created: Date?
-    var modified: Date?
-    var lastUsed: Date?
+    var created: String?
+    var modified: String?
+    var lastUsed: String?
     var entry: ItemEntry
+
+    var createdDate: Date? {
+        return Date(iso8601DateString: self.created ?? "")
+    }
+    var modifiedDate: Date? {
+        return Date(iso8601DateString: self.modified ?? "")
+    }
+    var lastUsedDate: Date? {
+        return Date(iso8601DateString: self.lastUsed ?? "")
+    }
 
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -25,6 +35,8 @@ class Item: Codable, Equatable {
         case modified = "modified"
         case lastUsed = "last_used"
         case entry = "entry"
+
+        static let allValues = [id, disabled, title, origins, tags, created, modified, lastUsed, entry]
     }
 
     init(origins: [String], entry: ItemEntry) {
@@ -82,17 +94,17 @@ class Item: Codable, Equatable {
             return self
         }
 
-        func created(_ created: Date) -> Builder {
+        func created(_ created: String) -> Builder {
             self.item.created = created
             return self
         }
 
-        func modified(_ modified: Date) -> Builder {
+        func modified(_ modified: String) -> Builder {
             self.item.modified = modified
             return self
         }
 
-        func lastUsed(_ lastUsed: Date) -> Builder {
+        func lastUsed(_ lastUsed: String) -> Builder {
             self.item.lastUsed = lastUsed
             return self
         }

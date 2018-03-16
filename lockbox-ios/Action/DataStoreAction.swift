@@ -379,8 +379,8 @@ extension DataStoreActionHandler: WKScriptMessageHandler, WKNavigationDelegate {
 
             let itemDictionary = listBody.reduce([:]) { dict, anyList -> [String: Item] in
                 guard let itemId = anyList[0] as? String,
-                      let itemDictionary = anyList[1] as? [String: Any],
-                      let item = try? self.parser.itemFromDictionary(itemDictionary) else {
+                      let itemJSON = anyList[1] as? [String: Any],
+                      let item = try? self.parser.itemFromDictionary(itemJSON) else {
                     return dict
                 }
 

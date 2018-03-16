@@ -15,6 +15,9 @@ enum ParserError: Error {
 
 class Parser: NSObject, ItemParser {
     private let encoder: JSONEncoder
+    private static let itemCodingKeys = Item.CodingKeys.allValues.map {
+        $0.stringValue
+    }
 
     init(encoder: JSONEncoder? = JSONEncoder()) {
         self.encoder = encoder!
@@ -22,9 +25,13 @@ class Parser: NSObject, ItemParser {
     }
 
     func itemFromDictionary(_ dictionary: [String: Any]) throws -> Item {
+        let sanitizedDictionary = dictionary.filter { pair -> Bool in
+            return Parser.itemCodingKeys.contains(pair.key)
+        }
+
         var item: Item
         do {
-            let json = try JSONSerialization.data(withJSONObject: dictionary, options: [])
+            let json = try JSONSerialization.data(withJSONObject: sanitizedDictionary, options: [])
 
             item = try JSONDecoder().decode(Item.self, from: json)
         } catch {

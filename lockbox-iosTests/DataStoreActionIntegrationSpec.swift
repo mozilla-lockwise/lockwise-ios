@@ -43,7 +43,7 @@ class DataStoreHandlerIntegrationSpec: QuickSpec {
             expect(initializeValue).to(contain(DataStoreAction.initialized(initialized: true)))
         }
 
-        xdescribe("DataStore with JavaScript integration") {
+        describe("DataStore with JavaScript integration") {
             var unlockValue: DataStoreAction?
 
             beforeEach {
@@ -98,8 +98,7 @@ class DataStoreHandlerIntegrationSpec: QuickSpec {
                 }
 
                 expect(updatedItem.lastUsed).notTo(beNil())
-
-                expect(updatedItem.lastUsed!).to(beCloseTo(Date(timeIntervalSinceNow: 0)))
+                expect(updatedItem.lastUsedDate).to(beCloseTo(Date(timeIntervalSinceNow: 0), within: 1.0))
             }
 
             it("calls back from javascript after locking & unlocking") {
