@@ -29,6 +29,7 @@ class RootPresenterSpec: QuickSpec {
         var pushMainViewArgument: MainRouteAction?
         
         var isPresentingModal: Bool = false
+        var dismissModalCalled: Bool = false
 
         func topViewIs<T>(_ class: T.Type) -> Bool {
             return topViewIsVar
@@ -59,7 +60,7 @@ class RootPresenterSpec: QuickSpec {
         }
         
         func dismissModal() {
-            
+            self.dismissModalCalled = true
         }
     }
 
@@ -500,6 +501,18 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }
+                            
+                            describe("if the settings modal is being displayed") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.view.isPresentingModal = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                                }
+                                
+                                it("dismisss settings modal") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+                            }
                         }
 
                         describe(".detail") {
@@ -531,6 +544,33 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("nothing happens") {
+                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+                            }
+                            
+
+                        }
+                        
+                        describe(".settings") {
+                            describe("if the settings screen is not displayed") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.settings)
+                                }
+                                
+                                it("tells the view to show the settings view") {
+                                    expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.settings))
+                                }
+                            }
+                            
+                            describe("if the settings screen is already displayed") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.view.isPresentingModal = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.settings)
+                                }
+                                
+                                it("does not tell the view to show the settings view") {
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }

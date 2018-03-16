@@ -164,7 +164,9 @@ class RootPresenter {
                     view.pushMainView(view: .detail(itemId: id))
                 }
             case .settings:
-                view.pushMainView(view: .settings)
+                if !view.isPresentingModal {
+                    view.pushMainView(view: .settings)
+                }
             }
         }.asObserver()
     }()

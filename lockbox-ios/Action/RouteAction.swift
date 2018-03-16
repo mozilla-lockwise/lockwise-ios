@@ -45,6 +45,8 @@ extension MainRouteAction: Equatable {
             return true
         case (.detail(let lhId), .detail(let rhId)):
             return lhId == rhId
+        case (.settings, .settings):
+            return true
         default:
             return false
         }
