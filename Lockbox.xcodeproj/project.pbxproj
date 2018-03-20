@@ -128,6 +128,7 @@
 		D831FEDE204C925100EAE19A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingsView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingsPresenter.swift */; };
 		D831FEE5205C522200EAE19A /* SettingsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */; };
+		D831FEE7205F3D5100EAE19A /* SettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */; };
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
@@ -308,6 +309,7 @@
 		D831FEDD204C925100EAE19A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
 		D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenterSpec.swift; sourceTree = "<group>"; };
+		D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewSpec.swift; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -566,6 +568,7 @@
 				7AA54B7943446ED2E302C470 /* CopyActionSpec.swift */,
 				7AA543307459610B170AFBD5 /* CopyConfirmationDisplayStoreSpec.swift */,
 				D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */,
+				D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -774,6 +777,7 @@
 				7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */,
 				7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */,
 				7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */,
+				D831FEE7205F3D5100EAE19A /* SettingsViewSpec.swift in Sources */,
 				7AA54B255317D07347416493 /* RouteStoreSpec.swift in Sources */,
 				7AA54DD6E3A60AC511C4D53A /* RouteActionSpec.swift in Sources */,
 				7AA54852A3EF5EBAB04AAD42 /* FxAStoreSpec.swift in Sources */,
