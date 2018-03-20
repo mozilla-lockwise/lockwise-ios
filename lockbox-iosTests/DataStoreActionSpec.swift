@@ -732,7 +732,7 @@ class DataStoreActionSpec: QuickSpec {
                                 it("pushes an empty list") {
                                     expect(self.dispatcher.actionTypeArguments).notTo(beNil())
                                     let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
-                                    expect(arguments).to(contain(DataStoreAction.list(list: [])))
+                                    expect(arguments).to(contain(DataStoreAction.list(list: [:])))
                                 }
                             }
 
@@ -748,7 +748,7 @@ class DataStoreActionSpec: QuickSpec {
                                     it("pushes a list with the valid items") {
                                         expect(self.dispatcher.actionTypeArguments).notTo(beNil())
                                         let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
-                                        expect(arguments).to(contain(DataStoreAction.list(list: [])))
+                                        expect(arguments).to(contain(DataStoreAction.list(list: [:])))
                                     }
                                 }
 
@@ -761,14 +761,220 @@ class DataStoreActionSpec: QuickSpec {
                                                 .entry(ItemEntry.Builder().kind("login").build())
                                                 .build()
 
-                                        let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue", ["foo": 5, "bar": 1]], ["idvalue1", ["foo": 3, "bar": 7]]])
+                                        let message = FakeWKScriptMessage(name: JSCallbackFunction.ListComplete.rawValue, body: [["idvalue1", ["foo": 3, "bar": 7]]])
                                         self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
                                     }
 
                                     it("pushes the items") {
                                         expect(self.dispatcher.actionTypeArguments).notTo(beNil())
                                         let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
-                                        expect(arguments).to(contain(DataStoreAction.list(list: [self.parser.item, self.parser.item])))
+                                        expect(arguments).to(contain(DataStoreAction.list(list: [self.parser.item.id!: self.parser.item])))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            describe(".touch()") {
+                let item = Item.Builder().id("jlkfsdlkjsfd").build()
+                let encodedItem = try! JSONEncoder().encode(item)
+                let itemJSONString = String(data: encodedItem, encoding: .utf8)
+
+                describe("when the datastore is not open") {
+                    it("does nothing") {
+                        self.subject.touch(item)
+                        expect(self.dispatcher.actionTypeArguments.count).to(beLessThanOrEqualTo(2))
+                        expect(self.webView.evaluateJSArgument).to(beNil())
+                    }
+                }
+
+                describe("when the datastore is open") {
+                    beforeEach {
+                        let message = FakeWKScriptMessage(name: JSCallbackFunction.OpenComplete.rawValue, body: "opened")
+                        self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                    }
+
+                    describe("when the datastore is not initialized") {
+                        beforeEach {
+                            self.webView.firstBoolSingle = self.scheduler.createHotObservable([next(100, false)])
+                                    .take(1)
+                                    .asSingle()
+                            self.subject.touch(item)
+                            self.scheduler.start()
+                        }
+
+                        it("pushes the DataStoreNotInitialized error") {
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                            expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.NotInitialized)))
+                        }
+                    }
+
+                    describe("when the datastore is initialized but locked") {
+                        beforeEach {
+                            self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                    .take(1)
+                                    .asSingle()
+                            self.webView.secondBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                    .take(1)
+                                    .asSingle()
+                            self.subject.touch(item)
+                            self.scheduler.start()
+                        }
+
+                        it("pushes the DataStoreLocked error") {
+                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                            expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.Locked)))
+                        }
+                    }
+
+                    describe("when the datastore is initialized & unlocked") {
+                        beforeEach {
+                            self.webView.firstBoolSingle = self.scheduler.createColdObservable([next(100, true)])
+                                    .take(1)
+                                    .asSingle()
+                            self.webView.secondBoolSingle = self.scheduler.createColdObservable([next(100, false)])
+                                    .take(1)
+                                    .asSingle()
+                        }
+
+                        describe("when the item does not have an ID") {
+                            beforeEach {
+                                self.subject.touch(Item.Builder().build())
+                                self.scheduler.start()
+                            }
+
+                            it("dispatches the NoIDPassed error") {
+                                expect(self.webView.evaluateJSArgument).to(beNil())
+                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.NoIDPassed)))
+                            }
+                        }
+
+                        describe("when the item has an ID") {
+                            describe("when the parser cannot parse a json string from the item") {
+                                beforeEach {
+                                    self.parser.jsonStringFromItemShouldThrow = true
+                                    self.subject.touch(item)
+                                    self.scheduler.start()
+                                }
+
+                                it("passes up the InvalidItem error") {
+                                    expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                    let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                    expect(argument).to(matchErrorAction(ErrorAction(error: ParserError.InvalidItem)))
+                                }
+                            }
+
+                            describe("when the parser can parse a json string from the item") {
+                                beforeEach {
+                                    self.parser.jsonString = itemJSONString
+                                }
+
+                                describe("when the javascript call results in an error") {
+                                    let err = NSError(domain: "badness", code: -1)
+
+                                    beforeEach {
+                                        self.webView.anySingle = self.scheduler.createColdObservable([error(100, err)])
+                                                .take(1)
+                                                .asSingle()
+
+                                        self.subject.touch(item)
+                                        self.scheduler.start()
+                                    }
+
+                                    it("evaluates .touch() on the webview datastore") {
+                                        expect(self.webView.evaluateJSArgument).notTo(beNil())
+                                        expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).touch(\(itemJSONString!))"))
+                                    }
+
+                                    it("dispatches the error") {
+                                        expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                        let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                        expect(argument).to(matchErrorAction(ErrorAction(error: err)))
+                                    }
+                                }
+
+                                describe("when the javascript call proceeds normally") {
+                                    beforeEach {
+                                        self.webView.anySingle = self.scheduler.createColdObservable([next(200, "initial success")])
+                                                .take(1)
+                                                .asSingle()
+
+                                        self.subject.touch(item)
+                                        self.scheduler.start()
+                                    }
+
+                                    it("evaluates .touch() on the webview datastore") {
+                                        expect(self.webView.evaluateJSArgument).notTo(beNil())
+                                        expect(self.webView.evaluateJSArgument).to(equal("\(self.dataStoreName).touch(\(itemJSONString!))"))
+                                    }
+
+                                    describe("getting an unknown callback from javascript") {
+                                        beforeEach {
+                                            let message = FakeWKScriptMessage(name: "gibberish", body: "something")
+                                            self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                                        }
+
+                                        it("pushes the UnexpectedJavaScriptMethod to the dispatcher") {
+                                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                            expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedJavaScriptMethod)))
+                                        }
+                                    }
+
+                                    describe("when the webview does not call back with a dictionary") {
+                                        beforeEach {
+                                            let message = FakeWKScriptMessage(name: JSCallbackFunction.UpdateComplete.rawValue, body: [1, 2, 3])
+                                            self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                                        }
+
+                                        it("pushes the UnexpectedType error") {
+                                            expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                            let argument = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                            expect(argument).to(matchErrorAction(ErrorAction(error: DataStoreError.UnexpectedType)))
+                                        }
+                                    }
+
+                                    describe("when the webview calls back with a dictionary") {
+                                        describe("when the parser is unable to parse an item from the dictionary") {
+                                            beforeEach {
+                                                self.parser.itemFromDictionaryShouldThrow = true
+                                                let message = FakeWKScriptMessage(name: JSCallbackFunction.UpdateComplete.rawValue, body: ["foo": 5, "bar": 1])
+
+                                                self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                                            }
+
+                                            it("pushes a the error") {
+                                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                                let arguments = self.dispatcher.actionTypeArguments.last as! ErrorAction
+                                                expect(arguments).to(matchErrorAction(ErrorAction(error: ParserError.InvalidDictionary)))
+                                            }
+                                        }
+
+                                        describe("when the parser is able to parse an item from the dictionary") {
+                                            beforeEach {
+                                                self.parser.itemFromDictionaryShouldThrow = false
+                                                self.parser.item = Item.Builder()
+                                                        .origins(["www.blah.com"])
+                                                        .id("kdkjdsfsdf")
+                                                        .entry(ItemEntry.Builder().kind("login").build())
+                                                        .build()
+
+                                                let message = FakeWKScriptMessage(name: JSCallbackFunction.UpdateComplete.rawValue, body: ["foo": 5, "bar": 1])
+                                                self.subject.userContentController(self.webView.configuration.userContentController, didReceive: message)
+                                            }
+
+                                            it("pushes the item") {
+                                                expect(self.dispatcher.actionTypeArguments).notTo(beNil())
+                                                let arguments = self.dispatcher.actionTypeArguments as! [DataStoreAction]
+                                                expect(arguments).to(contain(DataStoreAction.updated(item: self.parser.item)))
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -781,10 +987,15 @@ class DataStoreActionSpec: QuickSpec {
                 let itemA = Item.Builder().id("something").build()
                 let itemB = Item.Builder().id("something else").build()
 
-                it("updateList is equal based on the contained list") {
-                    expect(DataStoreAction.list(list: [itemA])).to(equal(DataStoreAction.list(list: [itemA])))
-                    expect(DataStoreAction.list(list: [itemA])).notTo(equal(DataStoreAction.list(list: [itemA, itemA])))
-                    expect(DataStoreAction.list(list: [itemA])).notTo(equal(DataStoreAction.list(list: [itemB])))
+                it("updateList is always equal") {
+                    expect(DataStoreAction.list(list: [itemA.id!: itemA])).to(equal(DataStoreAction.list(list: [itemA.id!: itemA])))
+                    expect(DataStoreAction.list(list: [itemA.id!: itemA])).to(equal(DataStoreAction.list(list: [itemA.id!: itemA, itemB.id!: itemA])))
+                    expect(DataStoreAction.list(list: [itemA.id!: itemA])).to(equal(DataStoreAction.list(list: [itemB.id!: itemB])))
+                }
+
+                it("update is equal based on the contained item") {
+                    expect(DataStoreAction.updated(item: itemA)).to(equal(DataStoreAction.updated(item: itemA)))
+                    expect(DataStoreAction.updated(item: itemA)).notTo(equal(DataStoreAction.updated(item: itemB)))
                 }
 
                 it("initialize is equal based on the contained boolean") {

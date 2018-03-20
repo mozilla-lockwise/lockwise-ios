@@ -13,19 +13,21 @@ enum DataStoreError: Error {
 }
 
 enum JSCallbackFunction: String {
-    case OpenComplete, InitializeComplete, UnlockComplete, LockComplete, ListComplete
+    case OpenComplete, InitializeComplete, UnlockComplete, LockComplete, ListComplete, UpdateComplete
 
     static let allValues: [JSCallbackFunction] = [
         .OpenComplete,
         .InitializeComplete,
         .UnlockComplete,
         .LockComplete,
-        .ListComplete
+        .ListComplete,
+        .UpdateComplete
     ]
 }
 
 enum DataStoreAction: Action {
-    case list(list: [Item])
+    case list(list: [String: Item])
+    case updated(item: Item)
     case locked(locked: Bool)
     case initialized(initialized: Bool)
     case opened(opened: Bool)
@@ -34,8 +36,10 @@ enum DataStoreAction: Action {
 extension DataStoreAction: Equatable {
     static func ==(lhs: DataStoreAction, rhs: DataStoreAction) -> Bool {
         switch (lhs, rhs) {
-        case (.list(let lhList), .list(let rhList)):
-            return lhList.elementsEqual(rhList)
+        case (.list, .list):
+            return true
+        case (.updated(let lhItem), .updated(let rhItem)):
+            return lhItem == rhItem
         case (.locked(let lhLocked), .locked(let rhLocked)):
             return lhLocked == rhLocked
         case (.initialized(let lhInitialized), .initialized(let rhInitialized)):
@@ -63,7 +67,8 @@ class DataStoreActionHandler: NSObject, ActionHandler {
     private var initializeSubject = PublishSubject<Void>()
     private var unlockSubject = PublishSubject<Void>()
     private var lockSubject = PublishSubject<Void>()
-    private var listSubject = PublishSubject<[Item]>()
+    private var listSubject = PublishSubject<[String: Item]>()
+    private var updateSubject = PublishSubject<Item>()
 
     internal var webViewConfiguration: WKWebViewConfiguration {
         let webConfig = WKWebViewConfiguration()
@@ -182,11 +187,25 @@ class DataStoreActionHandler: NSObject, ActionHandler {
                     self?.dispatcher.dispatch(action: DataStoreAction.list(list: itemList))
                 }, onError: { [weak self] error in
                     self?.dispatcher.dispatch(action: ErrorAction(error: error))
-                    self?.listSubject = PublishSubject<[Item]>()
+                    self?.listSubject = PublishSubject<[String: Item]>()
                 })
                 .disposed(by: self.disposeBag)
 
         self._list()
+    }
+
+    public func touch(_ item: Item) {
+        self.updateSubject
+                .take(1)
+                .subscribe(onNext: { [weak self] item in
+                    self?.dispatcher.dispatch(action: DataStoreAction.updated(item: item))
+                }, onError: { [weak self] error in
+                    self?.dispatcher.dispatch(action: ErrorAction(error: error))
+                    self?.updateSubject = PublishSubject<Item>()
+                })
+                .disposed(by: self.disposeBag)
+
+        self._touch(item)
     }
 }
 
@@ -273,6 +292,26 @@ extension DataStoreActionHandler {
                 .disposed(by: self.disposeBag)
     }
 
+    private func _touch(_ item: Item) {
+        self.openSubject.take(1)
+                .flatMap { _ in
+                    self.checkState()
+                }
+                .flatMap { _ -> Single<Any> in
+                    if item.id == nil {
+                        throw DataStoreError.NoIDPassed
+                    }
+
+                    let jsonItem = try self.parser.jsonStringFromItem(item)
+
+                    return self.webView.evaluateJavaScript("\(self.dataStoreName).touch(\(jsonItem))")
+                }
+                .subscribe(onError: { error in
+                    self.updateSubject.onError(error)
+                })
+                .disposed(by: self.disposeBag)
+    }
+
     private func checkState() -> Single<Bool> {
         return _initialized().asObservable()
                 .flatMap { initialized -> Observable<Bool> in
@@ -290,6 +329,23 @@ extension DataStoreActionHandler {
                     return locked
                 }
                 .asSingle()
+    }
+
+    private func completeSubjectWithBody(messageBody: Any, subject: PublishSubject<Item>) {
+        guard let itemDictionary = messageBody as? [String: Any] else {
+            subject.onError(DataStoreError.UnexpectedType)
+            return
+        }
+
+        var item: Item
+        do {
+            item = try self.parser.itemFromDictionary(itemDictionary)
+        } catch {
+            subject.onError(error)
+            return
+        }
+
+        subject.onNext(item)
     }
 }
 
@@ -313,22 +369,28 @@ extension DataStoreActionHandler: WKScriptMessageHandler, WKNavigationDelegate {
             self.unlockSubject.onNext(())
         case .LockComplete:
             self.lockSubject.onNext(())
+        case .UpdateComplete:
+            self.completeSubjectWithBody(messageBody: message.body, subject: self.updateSubject)
         case .ListComplete:
             guard let listBody = message.body as? [[Any]] else {
                 self.dispatcher.dispatch(action: ErrorAction(error: DataStoreError.UnexpectedType))
                 break
             }
 
-            let itemList = listBody.flatMap { (anyList: [Any]) -> Item? in
-                guard let itemDictionary = anyList[1] as? [String: Any],
-                      let item = try? self.parser.itemFromDictionary(itemDictionary) else {
-                    return nil
+            let itemDictionary = listBody.reduce([:]) { dict, anyList -> [String: Item] in
+                guard let itemId = anyList[0] as? String,
+                      let itemJSON = anyList[1] as? [String: Any],
+                      let item = try? self.parser.itemFromDictionary(itemJSON) else {
+                    return dict
                 }
 
-                return item
+                var updatedDict = dict
+                updatedDict[itemId] = item
+
+                return updatedDict
             }
 
-            self.listSubject.onNext(itemList)
+            self.listSubject.onNext(itemDictionary)
         }
     }
 }

@@ -21,6 +21,7 @@ class ItemDetailPresenter {
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyConfirmationDisplayStore
     private var routeActionHandler: RouteActionHandler
+    private var dataStoreActionHandler: DataStoreActionHandler
     private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
     private var disposeBag = DisposeBag()
@@ -54,6 +55,7 @@ class ItemDetailPresenter {
                             text = item.entry.password ?? ""
                         }
 
+                        target.dataStoreActionHandler.touch(item)
                         target.copyActionHandler.invoke(CopyAction(text: text, fieldName: value))
                     })
                     .disposed(by: target.disposeBag)
@@ -66,6 +68,7 @@ class ItemDetailPresenter {
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
          copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
+         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
          itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared) {
         self.view = view
@@ -73,6 +76,7 @@ class ItemDetailPresenter {
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
         self.routeActionHandler = routeActionHandler
+        self.dataStoreActionHandler = dataStoreActionHandler
         self.copyActionHandler = copyActionHandler
         self.itemDetailActionHandler = itemDetailActionHandler
 

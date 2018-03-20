@@ -57,7 +57,7 @@ class FxAStoreSpec: QuickSpec {
                 }
 
                 it("does not push non-FxADisplayAction actions") {
-                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: []))
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: [:]))
                     expect(displayObserver.events.count).to(be(1))
                 }
             }
