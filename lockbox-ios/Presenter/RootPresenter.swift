@@ -16,7 +16,7 @@ protocol RootViewProtocol: class {
     var mainStackDisplayed: Bool { get }
     func startMainStack()
     func pushMainView(view: MainRouteAction)
-    
+
     var isPresentingModal: Bool { get }
     func dismissModal()
 }

@@ -29,7 +29,7 @@ class UserInfoStore {
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
     }
-    
+
     public var biometricLoginEnabled: Observable<Bool?> {
         return _biometricLoginEnabled.asObservable()
     }
@@ -97,7 +97,7 @@ class UserInfoStore {
         } else {
             self._oauthInfo.onNext(nil)
         }
-        
+
         let enabled = self.keychainManager.retrieve(.biometricLoginEnabled)
         if enabled == nil {
             self._biometricLoginEnabled.onNext(nil)

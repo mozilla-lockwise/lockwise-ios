@@ -15,25 +15,25 @@ class SettingsViewSpec: QuickSpec {
     class FakeSettingsPresenter: SettingsPresenter {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
-        
+
         override func onViewReady() {
             onViewReadyCalled = true
         }
-        
+
         override func switchChanged(row: Int, isOn: Bool) {
-            
+
         }
-        
+
         override var onDone: AnyObserver<Void> {
             return Binder(self) { target, _ in
                 target.onDoneActionDispatched = true
                 }.asObserver()
         }
     }
-    
+
     var subject: SettingsView!
     var presenter: FakeSettingsPresenter!
-    
+
     override func spec() {
         describe("SettingsView") {
             beforeEach {
@@ -43,28 +43,28 @@ class SettingsViewSpec: QuickSpec {
                 self.subject.viewWillAppear(false)
                 self.subject.viewDidLoad()
             }
-            
+
             it("informs the presenter") {
                 expect(self.presenter.onViewReadyCalled).to(beTrue())
             }
-            
+
             describe("tableview datasource configuration") {
                 let configDriver = PublishSubject<[SettingSectionModel]>()
                 let sectionModels = [
                     SettingSectionModel(model: 0, items: [
                         SettingCellConfiguration(text: "Account", routeAction: SettingsRouteAction.account),
-                        SettingCellConfiguration(text: "FAQ", routeAction: SettingsRouteAction.faq),
+                        SettingCellConfiguration(text: "FAQ", routeAction: SettingsRouteAction.faq)
                     ]),
                     SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: SettingsRouteAction.enableInBrowser, isOn: true),
-                    ]),
+                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: SettingsRouteAction.enableInBrowser, isOn: true)
+                    ])
                 ]
-                
+
                 beforeEach {
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
                 }
-                
+
                 it("configures table view based on model") {
                     expect(self.subject.tableView.numberOfSections).to(equal(2))
                     expect(self.subject.tableView.numberOfRows(inSection: 0)).to(equal(2))

@@ -14,40 +14,40 @@ class SettingsPresenter {
     private var routeActionHandler: RouteActionHandler
     private var userInfoActionHandler: UserInfoActionHandler
     private var disposeBag = DisposeBag()
-    
+
     lazy private(set) var onDone: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.routeActionHandler.invoke(MainRouteAction.list)
             }.asObserver()
     }()
-    
+
     var settings = Variable([SettingSectionModel(model: 0, items: [
-        SettingCellConfiguration(text: Constant.string.settingsProvideFeedback, routeAction: SettingsRouteAction.provideFeedback),
+        SettingCellConfiguration(text: Constant.string.settingsProvideFeedback,
+                                 routeAction: SettingsRouteAction.provideFeedback),
         SettingCellConfiguration(text: Constant.string.settingsFaq, routeAction: SettingsRouteAction.faq),
-        SettingCellConfiguration(text: Constant.string.settingsEnableInBrowser, routeAction: SettingsRouteAction.enableInBrowser),
+        SettingCellConfiguration(text: Constant.string.settingsEnableInBrowser,
+                                 routeAction: SettingsRouteAction.enableInBrowser)
         ]),
         SettingSectionModel(model: 1, items: [
             SettingCellConfiguration(text: Constant.string.settingsAccount, routeAction: SettingsRouteAction.account),
-            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingsRouteAction.autoLock),
+            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingsRouteAction.autoLock)
         ])
     ])
 
     let touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
     let faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
-    
+
     private var usesFaceId: Bool {
-        get {
-            let authContext = LAContext()
-            var error: NSError?
-            if authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-                if #available(iOS 11.0, *) {
-                    return authContext.biometryType == .faceID 
-                }
+        let authContext = LAContext()
+        var error: NSError?
+        if authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            if #available(iOS 11.0, *) {
+                return authContext.biometryType == .faceID
             }
-            return false
         }
+        return false
     }
-    
+
     init(view: SettingsProtocol,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
@@ -56,19 +56,19 @@ class SettingsPresenter {
         self.userInfoStore = userInfoStore
         self.routeActionHandler = routeActionHandler
         self.userInfoActionHandler = userInfoActionHandler
-        
+
         let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
         settings.value[1].items.insert(biometricSetting, at: settings.value[1].items.endIndex-1)
-        
+
         userInfoStore.biometricLoginEnabled.subscribe(onNext: { enabled in
             biometricSetting.isOn = enabled ?? false
         }).disposed(by: disposeBag)
     }
-    
+
     func switchChanged(row: Int, isOn: Bool) {
         userInfoActionHandler.invoke(.biometricLogin(enabled: isOn))
     }
-    
+
     func onViewReady() {
         let driver  = settings.asDriver()
         view.bind(items: driver)

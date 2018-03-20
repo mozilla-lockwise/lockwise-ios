@@ -15,43 +15,43 @@ class SettingsPresenterSpec: QuickSpec {
     class FakeSettingsView: SettingsProtocol {
         var itemsObserver: TestableObserver<[SettingSectionModel]>!
         private let disposeBag = DisposeBag()
-        
+
         func bind(items: SharedSequence<DriverSharingStrategy, [SettingSectionModel]>) {
             items.drive(itemsObserver).disposed(by: disposeBag)
         }
     }
-    
+
     class FakeUserInfoStore: UserInfoStore {
         let biometricsEnabledSubject = PublishSubject<Bool?>()
-        
+
         override var biometricLoginEnabled: Observable<Bool?> {
             return biometricsEnabledSubject.asObservable()
         }
     }
-    
+
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
-        
+
         override func invoke(_ action: RouteAction) {
             self.routeActionArgument = action
         }
     }
-    
+
     class FakeUserInfoActionHandler: UserInfoActionHandler {
         var actionArgument: UserInfoAction?
         override func invoke(_ action: UserInfoAction) {
             actionArgument = action
         }
     }
-    
+
     private var view: FakeSettingsView!
     private var userInfoStore: FakeUserInfoStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var userInfoActionHandler: FakeUserInfoActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
-    
+
     var subject: SettingsPresenter!
-    
+
     override func spec() {
         describe("SettingsPresenter") {
             beforeEach {
@@ -59,18 +59,18 @@ class SettingsPresenterSpec: QuickSpec {
                 self.userInfoStore = FakeUserInfoStore()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.userInfoActionHandler = FakeUserInfoActionHandler()
-                
+
                 self.subject = SettingsPresenter(view: self.view,
                                             userInfoStore: self.userInfoStore,
                                             routeActionHandler: self.routeActionHandler,
                                             userInfoActionHandler: self.userInfoActionHandler)
             }
-            
+
             describe("biometrics field") {
                 it("requests biometricsEnabled field on init") {
                     expect(self.userInfoStore.biometricsEnabledSubject.hasObservers).to(beTrue())
                 }
-                
+
                 it("respects biometricsEnabled stored value") {
                     self.userInfoStore.biometricsEnabledSubject.onNext(true)
                     if let cellConfig = self.subject.settings.value[1].items[1] as? SwitchSettingCellConfiguration {
@@ -80,7 +80,7 @@ class SettingsPresenterSpec: QuickSpec {
                     }
                 }
             }
-            
+
             it("delivers driver onViewReady") {
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
                 self.subject.onViewReady()
@@ -92,7 +92,7 @@ class SettingsPresenterSpec: QuickSpec {
                     fail("settings not set in onViewReady")
                 }
             }
-            
+
             it("calls handler when switch changes") {
                 self.subject.switchChanged(row: 4, isOn: true)
                 expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.biometricLogin(enabled: true)))

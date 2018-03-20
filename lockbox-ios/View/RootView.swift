@@ -90,17 +90,15 @@ class RootView: UIViewController, RootViewProtocol {
             currentViewController?.present(navController, animated: true, completion: nil)
         }
     }
-    
+
     var isPresentingModal: Bool {
-        get {
-            return currentViewController?.presentedViewController != nil
-        }
+        return currentViewController?.presentedViewController != nil
     }
-    
+
     func dismissModal() {
         currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
     }

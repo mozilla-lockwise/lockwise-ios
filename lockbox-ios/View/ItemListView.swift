@@ -163,7 +163,7 @@ extension ItemListView {
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
-        
+
         guard let presenter = presenter else { return }
         prefButton.rx.tap
             .bind(to: presenter.onSettingsTapped)

@@ -31,11 +31,11 @@ extension UserInfoAction: Equatable {
 class UserInfoActionHandler: ActionHandler {
     static let shared = UserInfoActionHandler()
     fileprivate var dispatcher: Dispatcher
-    
+
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
     }
-    
+
     func invoke(_ action: UserInfoAction) {
         self.dispatcher.dispatch(action: action)
     }
