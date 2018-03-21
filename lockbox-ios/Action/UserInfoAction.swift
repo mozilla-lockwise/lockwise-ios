@@ -9,6 +9,8 @@ enum UserInfoAction: Action {
     case oauthInfo(info: OAuthInfo)
     case scopedKey(key: String)
     case biometricLogin(enabled: Bool)
+    case load
+    case clear
 }
 
 extension UserInfoAction: Equatable {
@@ -20,8 +22,12 @@ extension UserInfoAction: Equatable {
             return lhInfo == rhInfo
         case (.oauthInfo(let lhInfo), .oauthInfo(let rhInfo)):
             return lhInfo == rhInfo
-        case (.biometricLogin(let lhInfo), .biometricLogin(let rhInfo)):
-            return lhInfo == rhInfo
+        case (.biometricLogin(let lhEnabled), .biometricLogin(let rhEnabled)):
+            return lhEnabled == rhEnabled
+        case (.load, .load):
+            return true
+        case (.clear, .clear):
+            return true
         default:
             return false
         }

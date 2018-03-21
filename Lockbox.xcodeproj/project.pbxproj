@@ -39,6 +39,7 @@
 		7AA547F600FA69AF18A9D55C /* ProfileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA540BD2A5F50B02F1FE714 /* ProfileInfo.swift */; };
 		7AA548263012DE1D03950DE0 /* RouteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C369D0BF64704C8D5FB /* RouteStore.swift */; };
 		7AA54843ADAB6552EDA77C81 /* ProfileInfoSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA546BF73E7AFEB663E5DA8 /* ProfileInfoSpec.swift */; };
+		7AA54850D6DE1CD66D8C43AE /* UserInfoActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FC2201512347C683533 /* UserInfoActionSpec.swift */; };
 		7AA54852A3EF5EBAB04AAD42 /* FxAStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54EA2449ADA0942EECA02 /* FxAStoreSpec.swift */; };
 		7AA54869D92433B631B6560B /* MainNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C7A277D5D7C03F4F453 /* MainNavigationController.swift */; };
 		7AA54896CA92B9048C531179 /* LoginNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54204B5AFD9672649ACF0 /* LoginNavigationControllerSpec.swift */; };
@@ -255,6 +256,7 @@
 		7AA54ECD9692A1A74FC877A4 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		7AA54F13767439D644B91C5E /* lockbox-ios-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lockbox-ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		7AA54FA1C4E24F4DDBA39D1B /* FxAViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAViewSpec.swift; sourceTree = "<group>"; };
+		7AA54FC2201512347C683533 /* UserInfoActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoActionSpec.swift; sourceTree = "<group>"; };
 		7AA54FCD6855E89F3B156F15 /* ItemDetailStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailStoreSpec.swift; sourceTree = "<group>"; };
 		7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+.swift"; sourceTree = "<group>"; };
 		7AA54FFBEBCACA7A506F5C16 /* DispatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatcherSpec.swift; sourceTree = "<group>"; };
@@ -583,6 +585,7 @@
 				D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */,
 				D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */,
 				7AA545A802C0592A820AD230 /* Date+Spec.swift */,
+				7AA54FC2201512347C683533 /* UserInfoActionSpec.swift */,
 				D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
 			);
 			path = "lockbox-iosTests";
@@ -810,6 +813,7 @@
 				7AA54E698CA72C6C83804EAC /* CopyActionSpec.swift in Sources */,
 				7AA54EEAB64EF8D9A7F48739 /* CopyConfirmationDisplayStoreSpec.swift in Sources */,
 				7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */,
+				7AA54850D6DE1CD66D8C43AE /* UserInfoActionSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
