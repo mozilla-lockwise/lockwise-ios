@@ -135,6 +135,7 @@
 		D831FEE7205F3D5100EAE19A /* SettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */; };
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
 /* End PBXBuildFile section */
 
@@ -319,6 +320,7 @@
 		D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenterSpec.swift; sourceTree = "<group>"; };
 		D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewSpec.swift; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
+		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -581,6 +583,7 @@
 				D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */,
 				D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */,
 				7AA545A802C0592A820AD230 /* Date+Spec.swift */,
+				D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -798,6 +801,7 @@
 				7AA541388E228B6281F2A2E8 /* UserInfoStoreSpec.swift in Sources */,
 				7AA54B2587BDE8D88215802C /* RootPresenterSpec.swift in Sources */,
 				7AA546E44E75EC392E1AF728 /* RootViewSpec.swift in Sources */,
+				D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */,
 				7AA54896CA92B9048C531179 /* LoginNavigationControllerSpec.swift in Sources */,
 				7AA545ADA952B5C4ECF6D313 /* ItemDetailPresenterSpec.swift in Sources */,
 				7AA54B381C4053C210A6B8F2 /* ItemDetailViewSpec.swift in Sources */,
