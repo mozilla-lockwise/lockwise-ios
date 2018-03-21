@@ -15,13 +15,14 @@ class SettingsViewSpec: QuickSpec {
     class FakeSettingsPresenter: SettingsPresenter {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
+        var switchChangedCalled = false
 
         override func onViewReady() {
             onViewReadyCalled = true
         }
 
         override func switchChanged(row: Int, isOn: Bool) {
-
+            switchChangedCalled = true
         }
 
         override var onDone: AnyObserver<Void> {
@@ -56,19 +57,27 @@ class SettingsViewSpec: QuickSpec {
                         SettingCellConfiguration(text: "FAQ", routeAction: SettingsRouteAction.faq)
                     ]),
                     SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: SettingsRouteAction.enableInBrowser, isOn: true)
+                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
                     ])
                 ]
 
                 beforeEach {
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
+
+                    let cell = self.subject.tableView.cellForRow(at: IndexPath(item: 0, section: 1))
+                    let switchControl = cell?.accessoryView as? UISwitch
+                    switchControl?.sendActions(for: .valueChanged)
                 }
 
                 it("configures table view based on model") {
                     expect(self.subject.tableView.numberOfSections).to(equal(2))
                     expect(self.subject.tableView.numberOfRows(inSection: 0)).to(equal(2))
                     expect(self.subject.tableView.numberOfRows(inSection: 1)).to(equal(1))
+                }
+
+                it("calls presenter when switch is flipped") {
+                    expect(self.presenter.switchChangedCalled).to(beTrue())
                 }
             }
         }
