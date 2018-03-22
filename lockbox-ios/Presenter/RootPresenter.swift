@@ -16,6 +16,9 @@ protocol RootViewProtocol: class {
     var mainStackDisplayed: Bool { get }
     func startMainStack()
     func pushMainView(view: MainRouteAction)
+
+    var isPresentingModal: Bool { get }
+    func dismissModal()
 }
 
 struct KeyInit {
@@ -153,10 +156,16 @@ class RootPresenter {
             case .list:
                 if !view.topViewIs(ItemListView.self) {
                     view.pushMainView(view: .list)
+                } else if view.isPresentingModal {
+                    view.dismissModal()
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
+                }
+            case .settings:
+                if !view.isPresentingModal {
+                    view.pushMainView(view: .settings)
                 }
             }
         }.asObserver()

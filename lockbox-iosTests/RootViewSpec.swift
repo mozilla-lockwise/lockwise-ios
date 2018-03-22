@@ -129,6 +129,21 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(ItemDetailView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
+
+                describe("settings") {
+                    beforeEach {
+                        let window = UIWindow()
+                        window.rootViewController = self.subject
+                        window.makeKeyAndVisible()
+
+                        self.subject.startMainStack()
+                        self.subject.pushMainView(view: .settings)
+                    }
+
+                    it("presents a modal") {
+                        expect(self.subject.isPresentingModal).toEventually(beTrue(), timeout: 20)
+                    }
+                }
             }
         }
     }

@@ -11,3 +11,10 @@ class MainNavigationController: UINavigationController {
         self.init(rootViewController: listView)
     }
 }
+
+extension UINavigationController {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        // Allow the view controller to set the preferredStatusBarStyle
+        return topViewController?.preferredStatusBarStyle ?? .default
+    }
+}

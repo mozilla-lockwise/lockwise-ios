@@ -15,6 +15,9 @@ struct Constant {
         static let lightGrey = UIColor(hex: 0xEFEFEF)
         static let lockBoxBlue = UIColor(hex: 0x0088D9)
         static let lockBoxTeal = UIColor(hex: 0x00BAD6)
+        static let kebabBlue = UIColor(hex: 0x003EAA)
+        static let settingsHeader = UIColor(hex: 0x737373)
+        static let settingsBackground = UIColor(hex: 0xEFEFEF)
         static let tableViewCellHighlighted = UIColor(hex: 0xe5eff9)
     }
 
@@ -27,6 +30,7 @@ struct Constant {
     struct string {
         static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
+        static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
         static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied to clipboard", comment: "Alert text when a field has been copied, with an interpolated field name value")
         static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
@@ -36,6 +40,16 @@ struct Constant {
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
         static let webAddress = NSLocalizedString("web_address", value: "Web Address", comment: "Section title text for the web address on the item detail screen")
         static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
+        static let settingsHelpSectionHeader = NSLocalizedString("settings.help.header", value: "HELP", comment: "Help section label in settings")
+        static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
+        static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
+        static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Provide Feedback", comment: "Provide feedback option in settings")
+        static let settingsFaq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
+        static let settingsEnableInBrowser = NSLocalizedString("settings.enableInBrowser", value: "Enable In Browser", comment: "Enable In Browser option in settings")
+        static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
+        static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
+        static let settingsTouchId = NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings")
+        static let settingsFaceId = NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings")
     }
 
     struct number {

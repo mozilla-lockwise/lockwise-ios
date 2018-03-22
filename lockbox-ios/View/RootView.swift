@@ -83,7 +83,20 @@ class RootView: UIViewController, RootViewProtocol {
 
             itemDetailView.itemId = id
             self.currentViewController?.pushViewController(itemDetailView, animated: true)
+        case .settings:
+            let settingsView = SettingsView()
+            let navController = UINavigationController()
+            navController.pushViewController(settingsView, animated: false)
+            currentViewController?.present(navController, animated: true, completion: nil)
         }
+    }
+
+    var isPresentingModal: Bool {
+        return currentViewController?.presentedViewController != nil
+    }
+
+    func dismissModal() {
+        currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {

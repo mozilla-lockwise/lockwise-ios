@@ -155,14 +155,19 @@ extension ItemListView {
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         prefButton.setImage(prefImage, for: .normal)
         prefButton.tintColor = .white
-
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
+
         self.navigationItem.title = Constant.string.yourLockbox
 
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
+
+        guard let presenter = presenter else { return }
+        prefButton.rx.tap
+            .bind(to: presenter.onSettingsTapped)
+            .disposed(by: self.disposeBag)
     }
 
     fileprivate func styleTableViewBackground() {

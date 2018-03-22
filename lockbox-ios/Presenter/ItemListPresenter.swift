@@ -41,6 +41,12 @@ class ItemListPresenter {
         }.asObserver()
     }()
 
+    lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(MainRouteAction.settings)
+            }.asObserver()
+    }()
+
     lazy private(set) var filterTextObserver: AnyObserver<String> = {
         return self.filterTextSubject.asObserver()
     }()
@@ -104,5 +110,9 @@ extension ItemListPresenter {
         }
 
         return searchCell + itemCells as! [T] // swiftlint:disable:this force_cast
+    }
+
+    func settingsTapped() {
+        routeActionHandler.invoke(MainRouteAction.settings)
     }
 }
