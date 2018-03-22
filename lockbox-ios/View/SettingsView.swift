@@ -36,6 +36,7 @@ class SettingsView: UITableViewController {
 
     private func setupNavbar() {
         navigationItem.title = Constant.string.settingsTitle
+        navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
@@ -63,6 +64,7 @@ class SettingsView: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDataSource()
+        setupDelegate()
         presenter?.onViewReady()
     }
 
@@ -101,9 +103,23 @@ extension SettingsView {
                     switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
+                    cell.selectionStyle = UITableViewCellSelectionStyle.none
                 }
                 return cell
         })
+    }
+
+    private func setupDelegate() {
+        guard let presenter = presenter else { return }
+        tableView.rx.modelSelected(SettingCellConfiguration.self)
+            .subscribe({ evt in
+                if let indexPath = self.tableView.indexPathForSelectedRow {
+                    self.tableView.deselectRow(at: indexPath, animated: true)
+                }
+
+                guard let setting = evt.element else { return }
+                presenter.onItemSelected(setting: setting)
+            }).disposed(by: disposeBag)
     }
 }
 

@@ -69,6 +69,11 @@ class SettingsPresenter {
         userInfoActionHandler.invoke(.biometricLogin(enabled: isOn))
     }
 
+    func onItemSelected(setting: SettingCellConfiguration) {
+        guard let routeAction = setting.routeAction else { return }
+        routeActionHandler.invoke(routeAction)
+    }
+
     func onViewReady() {
         let driver  = settings.asDriver()
         view.bind(items: driver)

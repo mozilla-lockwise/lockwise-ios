@@ -91,6 +91,18 @@ class RootView: UIViewController, RootViewProtocol {
         }
     }
 
+    func pushSettingsView(view: SettingsRouteAction) {
+        guard let settingsNavController = currentViewController?.presentedViewController
+            as? UINavigationController else { return }
+
+        switch view {
+        case.autoLock:
+            settingsNavController.pushViewController(AutoLockSettingsView(), animated: true)
+        default:
+            break
+        }
+    }
+
     var isPresentingModal: Bool {
         return currentViewController?.presentedViewController != nil
     }

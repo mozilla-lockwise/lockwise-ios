@@ -16,6 +16,7 @@ protocol RootViewProtocol: class {
     var mainStackDisplayed: Bool { get }
     func startMainStack()
     func pushMainView(view: MainRouteAction)
+    func pushSettingsView(view: SettingsRouteAction)
 
     var isPresentingModal: Bool { get }
     func dismissModal()
@@ -117,6 +118,12 @@ class RootPresenter {
                 .asDriver(onErrorJustReturn: .list)
                 .drive(showList)
                 .disposed(by: disposeBag)
+
+        self.routeStore.onRoute
+                .filterByType(class: SettingsRouteAction.self)
+                .asDriver(onErrorJustReturn: .account)
+                .drive(showSetting)
+                .disposed(by: disposeBag)
     }
 
     lazy private var showLogin: AnyObserver<LoginRouteAction> = { [unowned self] in
@@ -168,6 +175,24 @@ class RootPresenter {
                     view.pushMainView(view: .settings)
                 }
             }
+        }.asObserver()
+    }()
+
+    lazy private var showSetting: AnyObserver<SettingsRouteAction> = { [unowned self] in
+        return Binder(self) { target, settingsAction in
+            guard let view = target.view else {
+                return
+            }
+
+            if !view.mainStackDisplayed {
+                view.startMainStack()
+            }
+
+            if !view.isPresentingModal {
+                view.pushMainView(view: .settings)
+            }
+
+            view.pushSettingsView(view: settingsAction)
         }.asObserver()
     }()
 }
