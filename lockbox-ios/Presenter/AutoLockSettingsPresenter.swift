@@ -55,7 +55,6 @@ class AutoLockSettingsPresenter {
     }
 
     private func updateAutoLockValue(_ setting: AutoLockSetting?) {
-
         let sectionModel = settings.value[0]
         let newItems = sectionModel.items.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
             cellConfiguration.isChecked = (cellConfiguration.value as? AutoLockSetting) == setting ? true : false

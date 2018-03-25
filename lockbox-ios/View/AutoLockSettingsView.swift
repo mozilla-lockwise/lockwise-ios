@@ -18,7 +18,7 @@ class AutoLockSettingsView: UITableViewController {
     var presenter: AutoLockSettingsPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<AutoLockSettingSectionModel>?
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
         self.presenter = AutoLockSettingsPresenter(view: self)
@@ -61,11 +61,13 @@ extension AutoLockSettingsView {
     }
 
     private func setupDataSource() {
-        dataSource = RxTableViewSectionedReloadDataSource(configureCell: { (_, tableView, indexPath, cellConfiguration) -> UITableViewCell in
+        dataSource = RxTableViewSectionedReloadDataSource(
+            configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
             let cell = UITableViewCell()
             cell.textLabel?.text = cellConfiguration.text
 
-            cell.accessoryType = cellConfiguration.isChecked ? UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+            cell.accessoryType = cellConfiguration.isChecked ?
+                UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
 
             return cell
         })
