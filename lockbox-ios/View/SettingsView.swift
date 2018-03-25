@@ -16,7 +16,6 @@ typealias SettingSectionModel = AnimatableSectionModel<Int, SettingCellConfigura
 
 class SettingsView: UITableViewController {
     var presenter: SettingsPresenter?
-    var settings: [SettingCellConfiguration]?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<SettingSectionModel>?
 
@@ -163,5 +162,16 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
     init(text: String, routeAction: SettingsRouteAction?, isOn: Bool = false) {
         super.init(text: text, routeAction: routeAction)
         self.isOn = isOn
+    }
+}
+
+class CheckmarkSettingCellConfiguration: SettingCellConfiguration {
+    var isChecked: Bool = false
+    var value: Any?
+
+    init(text: String, isChecked: Bool = false, value: Any?) {
+        super.init(text: text, routeAction: nil)
+        self.isChecked = isChecked
+        self.value = value
     }
 }

@@ -17,6 +17,7 @@ class UserInfoStore {
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
     private var _biometricLoginEnabled = ReplaySubject<Bool?>.create(bufferSize: 1)
+    private var _autoLock = ReplaySubject<AutoLockSetting?>.create(bufferSize: 1)
 
     public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
@@ -32,6 +33,10 @@ class UserInfoStore {
 
     public var biometricLoginEnabled: Observable<Bool?> {
         return _biometricLoginEnabled.asObservable()
+    }
+
+    public var autoLock: Observable<AutoLockSetting?> {
+        return _autoLock.asObserver()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -61,6 +66,10 @@ class UserInfoStore {
                     case .biometricLogin(let enabled):
                         if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
                             self._biometricLoginEnabled.onNext(enabled)
+                        }
+                    case.autoLock(let value):
+                        if self.keychainManager.save(value.rawValue, identifier: .autoLock) {
+                            self._autoLock.onNext(value)
                         }
                     }
                 })
@@ -104,5 +113,22 @@ class UserInfoStore {
         } else {
             self._biometricLoginEnabled.onNext(enabled == "true")
         }
+
+        let autoLock = self.keychainManager.retrieve(.autoLock)
+        if let autoLock = autoLock {
+            self._autoLock.onNext(AutoLockSetting(rawValue: autoLock))
+        } else {
+            self._autoLock.onNext(AutoLockSetting.Never)
+        }
     }
+}
+
+enum AutoLockSetting: String {
+    case OnAppExit
+    case OneMinute
+    case FiveMinutes
+    case OneHour
+    case TwelveHours
+    case TwentyFourHours
+    case Never
 }
