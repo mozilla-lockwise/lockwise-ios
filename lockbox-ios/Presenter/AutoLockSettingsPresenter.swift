@@ -50,6 +50,10 @@ class AutoLockSettingsPresenter {
         view.bind(items: driver)
     }
 
+    func itemSelected(_ newValue: AutoLockSetting) {
+        userInfoActionHandler.invoke(.autoLock(value: newValue))
+    }
+
     private func updateAutoLockValue(_ setting: AutoLockSetting?) {
 
         let sectionModel = settings.value[0]

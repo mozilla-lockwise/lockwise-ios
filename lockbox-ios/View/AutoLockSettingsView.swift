@@ -41,6 +41,7 @@ class AutoLockSettingsView: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupDataSource()
+        setupDelegate()
         presenter?.onViewReady()
     }
 
@@ -68,6 +69,20 @@ extension AutoLockSettingsView {
 
             return cell
         })
+    }
+
+    private func setupDelegate() {
+        tableView.rx.modelSelected(CheckmarkSettingCellConfiguration.self)
+            .subscribe(onNext: { model in
+                guard let val = model.value as? AutoLockSetting,
+                      let presenter = self.presenter else { return }
+
+                if let indexPath = self.tableView.indexPathForSelectedRow {
+                    self.tableView.deselectRow(at: indexPath, animated: true)
+                }
+
+                presenter.itemSelected(val)
+            }).disposed(by: self.disposeBag)
     }
 }
 
