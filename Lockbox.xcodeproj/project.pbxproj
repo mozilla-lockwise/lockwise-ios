@@ -138,6 +138,7 @@
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
 		D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */; };
 		D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */; };
+		D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
 /* End PBXBuildFile section */
 
@@ -325,6 +326,7 @@
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
 		D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenter.swift; sourceTree = "<group>"; };
+		D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenterSpec.swift; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -590,6 +592,7 @@
 				D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */,
 				7AA545A802C0592A820AD230 /* Date+Spec.swift */,
 				D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
+				D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -793,6 +796,7 @@
 				7AA54843ADAB6552EDA77C81 /* ProfileInfoSpec.swift in Sources */,
 				7AA5456C114B68E64CB540AD /* KeychainManagerSpec.swift in Sources */,
 				7AA54D2B9BA6B3140A7EE905 /* DataStoreActionIntegrationSpec.swift in Sources */,
+				D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */,
 				7AA54DF06588E3B35E010980 /* DispatcherSpec.swift in Sources */,
 				7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */,
 				7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */,
