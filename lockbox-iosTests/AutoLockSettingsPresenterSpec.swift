@@ -69,6 +69,17 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
             it("is requested on init") {
                 expect(self.userInfoStore.autoLockEnabledSubject.hasObservers).to(beTrue())
             }
+
+            it("updates settings based on stored value") {
+                self.userInfoStore.autoLockEnabledSubject.onNext(AutoLockSetting.OneHour)
+                for item in self.subject.settings.value[0].items {
+                    if item.value as? AutoLockSetting  == AutoLockSetting.OneHour {
+                        expect(item.isChecked).to(beTrue())
+                    } else {
+                        expect(item.isChecked).to(beFalse())
+                    }
+                }
+            }
         }
 
         it("delivers driver onViewReady") {

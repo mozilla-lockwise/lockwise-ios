@@ -31,9 +31,11 @@ class SettingsPresenterSpec: QuickSpec {
 
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
+        var invokeWasCalled = false
 
         override func invoke(_ action: RouteAction) {
             self.routeActionArgument = action
+            self.invokeWasCalled = true
         }
     }
 
@@ -96,6 +98,16 @@ class SettingsPresenterSpec: QuickSpec {
             it("calls handler when switch changes") {
                 self.subject.switchChanged(row: 4, isOn: true)
                 expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.biometricLogin(enabled: true)))
+            }
+
+            it("handles action when item is selected") {
+                self.subject.onItemSelected(setting: SettingCellConfiguration(text: "Auto Lock", routeAction: SettingsRouteAction.autoLock))
+                expect(self.routeActionHandler.routeActionArgument as? SettingsRouteAction).to(equal(SettingsRouteAction.autoLock))
+            }
+
+            it("does not call action handler when there is no action") {
+                self.subject.onItemSelected(setting: SettingCellConfiguration(text: "Fake Item", routeAction: nil))
+                expect(self.routeActionHandler.invokeWasCalled).to(beFalse())
             }
         }
     }
