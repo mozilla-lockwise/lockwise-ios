@@ -30,6 +30,7 @@ class RootPresenterSpec: QuickSpec {
 
         var isPresentingModal: Bool = false
         var dismissModalCalled: Bool = false
+        var pushSettingsViewArgument: SettingsRouteAction?
 
         func topViewIs<T>(_ class: T.Type) -> Bool {
             return topViewIsVar
@@ -61,6 +62,10 @@ class RootPresenterSpec: QuickSpec {
 
         func dismissModal() {
             self.dismissModalCalled = true
+        }
+
+        func pushSettingsView(view: SettingsRouteAction) {
+            self.pushSettingsViewArgument = view
         }
     }
 
@@ -570,6 +575,16 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("does not tell the view to show the settings view") {
                                     expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+
+                                describe("settings views") {
+                                    beforeEach {
+                                        self.routeStore.onRouteSubject.onNext(SettingsRouteAction.autoLock)
+                                    }
+
+                                    it("pushes additional settings views") {
+                                        expect(self.view.pushSettingsViewArgument).to(equal(SettingsRouteAction.autoLock))
+                                    }
                                 }
                             }
                         }
