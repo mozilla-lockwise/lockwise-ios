@@ -36,7 +36,7 @@ class UserInfoStore {
     }
 
     public var autoLock: Observable<AutoLockSetting?> {
-        return _autoLock.asObserver()
+        return _autoLock.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,

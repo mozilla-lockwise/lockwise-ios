@@ -8,10 +8,6 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol AutoLockSettingsProtocol {
-    func bind(items: Driver<[AutoLockSettingSectionModel]>)
-}
-
 typealias AutoLockSettingSectionModel = AnimatableSectionModel<Int, CheckmarkSettingCellConfiguration>
 
 class AutoLockSettingsView: UITableViewController {
@@ -35,14 +31,15 @@ class AutoLockSettingsView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavbar()
+        self.setupNavbar()
+        self.setupFooter()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupDataSource()
-        setupDelegate()
-        presenter?.onViewReady()
+        self.setupDataSource()
+        self.setupDelegate()
+        self.presenter?.onViewReady()
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -60,8 +57,12 @@ extension AutoLockSettingsView {
         navigationItem.title = Constant.string.settingsAutoLock
     }
 
+    private func setupFooter() {
+        self.tableView.tableFooterView = UIView()
+    }
+
     private func setupDataSource() {
-        dataSource = RxTableViewSectionedReloadDataSource(
+        self.dataSource = RxTableViewSectionedReloadDataSource(
             configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
             let cell = UITableViewCell()
             cell.textLabel?.text = cellConfiguration.text
@@ -74,21 +75,17 @@ extension AutoLockSettingsView {
     }
 
     private func setupDelegate() {
-        tableView.rx.modelSelected(CheckmarkSettingCellConfiguration.self)
-            .subscribe(onNext: { model in
-                guard let val = model.value as? AutoLockSetting,
-                      let presenter = self.presenter else { return }
-
-                if let indexPath = self.tableView.indexPathForSelectedRow {
-                    self.tableView.deselectRow(at: indexPath, animated: true)
-                }
-
-                presenter.itemSelected(val)
-            }).disposed(by: self.disposeBag)
+        guard let presenter = self.presenter else { return }
+        self.tableView.rx.itemSelected
+            .map { (indexPath) -> AutoLockSetting? in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                return self.dataSource?[indexPath].valueWhenChecked as? AutoLockSetting
+            }.bind(to: presenter.itemSelectedObserver)
+            .disposed(by: self.disposeBag)
     }
 }
 
-extension AutoLockSettingsView: AutoLockSettingsProtocol {
+extension AutoLockSettingsView: AutoLockSettingsViewProtocol {
     func bind(items: SharedSequence<DriverSharingStrategy, [AutoLockSettingSectionModel]>) {
         guard let dataSource = self.dataSource else {
             fatalError("datasource not set!")

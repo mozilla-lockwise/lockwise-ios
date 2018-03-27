@@ -56,15 +56,15 @@ class SettingsView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavbar()
-        setupFooter()
+        self.setupNavbar()
+        self.setupFooter()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupDataSource()
-        setupDelegate()
-        presenter?.onViewReady()
+        self.setupDataSource()
+        self.setupDelegate()
+        self.presenter?.onViewReady()
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -110,15 +110,12 @@ extension SettingsView {
 
     private func setupDelegate() {
         guard let presenter = presenter else { return }
-        tableView.rx.modelSelected(SettingCellConfiguration.self)
-            .subscribe({ evt in
-                if let indexPath = self.tableView.indexPathForSelectedRow {
-                    self.tableView.deselectRow(at: indexPath, animated: true)
-                }
-
-                guard let setting = evt.element else { return }
-                presenter.onItemSelected(setting: setting)
-            }).disposed(by: disposeBag)
+        self.tableView.rx.itemSelected
+            .map { (indexPath) -> SettingCellConfiguration? in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                return self.dataSource?[indexPath]
+            }.bind(to: presenter.itemSelectedObserver)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -167,11 +164,11 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
 
 class CheckmarkSettingCellConfiguration: SettingCellConfiguration {
     var isChecked: Bool = false
-    var value: Any?
+    var valueWhenChecked: Any?
 
-    init(text: String, isChecked: Bool = false, value: Any?) {
+    init(text: String, isChecked: Bool = false, valueWhenChecked: Any?) {
         super.init(text: text, routeAction: nil)
         self.isChecked = isChecked
-        self.value = value
+        self.valueWhenChecked = valueWhenChecked
     }
 }

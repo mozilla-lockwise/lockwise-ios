@@ -21,6 +21,13 @@ class SettingsPresenter {
             }.asObserver()
     }()
 
+    lazy private(set) var itemSelectedObserver: AnyObserver<SettingCellConfiguration?> = {
+        return Binder(self) { target, setting in
+            guard let routeAction = setting?.routeAction else { return }
+            target.routeActionHandler.invoke(routeAction)
+            }.asObserver()
+    }()
+
     var settings = Variable([SettingSectionModel(model: 0, items: [
         SettingCellConfiguration(text: Constant.string.settingsProvideFeedback,
                                  routeAction: SettingsRouteAction.provideFeedback),
@@ -67,11 +74,6 @@ class SettingsPresenter {
 
     func switchChanged(row: Int, isOn: Bool) {
         userInfoActionHandler.invoke(.biometricLogin(enabled: isOn))
-    }
-
-    func onItemSelected(setting: SettingCellConfiguration) {
-        guard let routeAction = setting.routeAction else { return }
-        routeActionHandler.invoke(routeAction)
     }
 
     func onViewReady() {
