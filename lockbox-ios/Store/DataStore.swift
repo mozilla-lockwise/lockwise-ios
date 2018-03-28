@@ -11,10 +11,10 @@ class DataStore {
     public static let shared = DataStore()
 
     fileprivate let disposeBag = DisposeBag()
-    fileprivate var itemList = ReplaySubject<[String: Item]>.create(bufferSize: 1)
-    fileprivate var initialized = ReplaySubject<Bool>.create(bufferSize: 1)
-    fileprivate var opened = ReplaySubject<Bool>.create(bufferSize: 1)
-    fileprivate var locked = ReplaySubject<Bool>.create(bufferSize: 1)
+    fileprivate var itemList = BehaviorRelay<[String: Item]>(value: [:])
+    fileprivate var initialized = BehaviorRelay<Bool>(value: false)
+    fileprivate var opened = BehaviorRelay<Bool>(value: false)
+    fileprivate var locked = BehaviorRelay<Bool>(value: true)
 
     public var onItemList: Observable<[Item]> {
         return self.itemList.asObservable()
@@ -22,7 +22,7 @@ class DataStore {
                     return Array(itemDictionary.values)
                 }
                 .distinctUntilChanged { lhList, rhList in
-                    return lhList.elementsEqual(rhList)
+                    return lhList == rhList
                 }
     }
 
@@ -44,7 +44,7 @@ class DataStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .list(let list):
-                        self.itemList.onNext(list)
+                        self.itemList.accept(list)
                     case .updated(let item):
                         self.itemList.take(1)
                                 .map { items in
@@ -59,11 +59,11 @@ class DataStore {
                                 .bind(to: self.itemList)
                                 .disposed(by: self.disposeBag)
                     case .locked(let locked):
-                        self.locked.onNext(locked)
+                        self.locked.accept(locked)
                     case .initialized(let initialized):
-                        self.initialized.onNext(initialized)
+                        self.initialized.accept(initialized)
                     case .opened(let opened):
-                        self.opened.onNext(opened)
+                        self.opened.accept(opened)
                     }
                 })
                 .disposed(by: self.disposeBag)

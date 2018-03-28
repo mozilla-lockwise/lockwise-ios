@@ -52,7 +52,6 @@ class Item: Codable, Equatable {
                 lhs.origins.elementsEqual(rhs.origins) &&
                 lhs.modified == rhs.modified &&
                 lhs.lastUsed == rhs.lastUsed
-
     }
 
     class Builder {
