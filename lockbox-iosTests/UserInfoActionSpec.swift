@@ -53,7 +53,7 @@ class UserInfoActionSpec: QuickSpec {
                     expect(UserInfoAction.profileInfo(info: ProfileInfo.Builder().uid("blah").build())).notTo(equal(UserInfoAction.profileInfo(info: ProfileInfo.Builder().uid("meh").build())))
                 }
 
-                it("profileInfo actions are equal when the infos are equal") {
+                it("oauthInfo actions are equal when the infos are equal") {
                     expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().accessToken("meh").build())).to(equal(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().accessToken("meh").build())))
                     expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().accessToken("blah").build())).notTo(equal(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().accessToken("meh").build())))
                 }
