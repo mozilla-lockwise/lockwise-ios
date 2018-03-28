@@ -65,6 +65,7 @@ class FxAActionHandler: ActionHandler {
             URLQueryItem(name: "client_id", value: Constant.fxa.clientID),
             URLQueryItem(name: "redirect_uri", value: Constant.app.redirectURI),
             URLQueryItem(name: "scope", value: "profile openid \(self?.scope ?? "")"),
+            URLQueryItem(name: "action", value: "signin"),
             URLQueryItem(name: "keys_jwk", value: self?.jwkKey ?? ""),
             URLQueryItem(name: "state", value: self?.state),
             URLQueryItem(name: "code_challenge", value: self?.codeChallenge),
