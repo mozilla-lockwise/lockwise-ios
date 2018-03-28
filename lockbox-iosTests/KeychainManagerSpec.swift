@@ -102,6 +102,29 @@ class KeychainManagerSpec: QuickSpec {
                         expect(storedEmail).to(equal(email))
                     }
                 }
+
+                describe("deleting the string") {
+                    it("removes the string from the keychain") {
+                        expect(self.subject.save(email, identifier: .email)).to(beTrue())
+
+                        expect(self.subject.delete(.email)).to(beTrue())
+
+                        let query: [String: Any] = [
+                            kSecAttrService as String: Bundle.main.bundleIdentifier!,
+                            kSecAttrAccount as String: "email",
+                            kSecClass as String: kSecClassGenericPassword,
+                            kSecAttrSynchronizable as String: kCFBooleanFalse,
+                            kSecMatchLimit as String: kSecMatchLimitOne,
+                            kSecReturnData as String: true
+                        ]
+                        var item: AnyObject?
+                        let status = withUnsafeMutablePointer(to: &item) {
+                            SecItemCopyMatching(query as CFDictionary, UnsafeMutablePointer($0))
+                        }
+
+                        expect(status).notTo(equal(noErr))
+                    }
+                }
             }
 
             describe("retrieving a string") {

@@ -25,7 +25,6 @@ class UserInfoStoreSpec: QuickSpec {
     class FakeKeychainManager: KeychainManager {
         var saveArguments: [KeychainManagerIdentifier: String] = [:]
         var saveSuccess: Bool!
-        var retrieveArguments: [KeychainManagerIdentifier] = []
         var retrieveResult: [KeychainManagerIdentifier: String] = [:]
 
         override func save(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {
@@ -34,7 +33,6 @@ class UserInfoStoreSpec: QuickSpec {
         }
 
         override func retrieve(_ identifier: KeychainManagerIdentifier) -> String? {
-            self.retrieveArguments.append(identifier)
             return retrieveResult[identifier]
         }
     }
@@ -50,7 +48,10 @@ class UserInfoStoreSpec: QuickSpec {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.keychainManager = FakeKeychainManager()
-                self.subject = UserInfoStore(dispatcher: self.dispatcher, keychainManager: self.keychainManager)
+                self.subject = UserInfoStore(
+                        dispatcher: self.dispatcher,
+                        keychainManager: self.keychainManager
+                )
             }
 
             describe("scopedKey") {
@@ -94,7 +95,7 @@ class UserInfoStoreSpec: QuickSpec {
                     itBehavesLike(UserInfoStoreSharedExamples.SaveScopedKeyToKeychain.rawValue)
 
                     it("does not push the scopedKey to the observers") {
-                        expect(keyObserver.events.count).to(be(1))
+                        expect(keyObserver.events.count).to(be(0))
                     }
                 }
             }
@@ -141,7 +142,7 @@ class UserInfoStoreSpec: QuickSpec {
                     }
 
                     it("pushes nothing to the observer") {
-                        expect(profileInfoObserver.events.count).to(be(1))
+                        expect(profileInfoObserver.events.count).to(be(0))
                     }
                 }
             }
@@ -190,7 +191,7 @@ class UserInfoStoreSpec: QuickSpec {
                     }
 
                     it("pushes nothing to the observer") {
-                        expect(oAuthInfoObserver.events.count).to(be(1))
+                        expect(oAuthInfoObserver.events.count).to(equal(0))
                     }
                 }
             }
@@ -210,14 +211,11 @@ class UserInfoStoreSpec: QuickSpec {
                             self.keychainManager.retrieveResult[.email] = email
                             self.keychainManager.retrieveResult[.uid] = uid
 
-                            self.subject = UserInfoStore(
-                                    dispatcher: self.dispatcher,
-                                    keychainManager: self.keychainManager
-                            )
-
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes the resulting profileinfo object to subscribers") {
@@ -231,14 +229,11 @@ class UserInfoStoreSpec: QuickSpec {
                         beforeEach {
                             self.keychainManager.retrieveResult[.uid] = uid
 
-                            self.subject = UserInfoStore(
-                                    dispatcher: self.dispatcher,
-                                    keychainManager: self.keychainManager
-                            )
-
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes a nil profileinfo to subscribers") {
@@ -251,14 +246,11 @@ class UserInfoStoreSpec: QuickSpec {
                         beforeEach {
                             self.keychainManager.retrieveResult[.email] = email
 
-                            self.subject = UserInfoStore(
-                                    dispatcher: self.dispatcher,
-                                    keychainManager: self.keychainManager
-                            )
-
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes a nil profileinfo to subscribers") {
@@ -271,6 +263,8 @@ class UserInfoStoreSpec: QuickSpec {
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes a nil profileinfo to subscribers") {
@@ -290,14 +284,12 @@ class UserInfoStoreSpec: QuickSpec {
                     describe("when the scopedKey has previously been saved to the keychain") {
                         beforeEach {
                             self.keychainManager.retrieveResult[.scopedKey] = key
-                            self.subject = UserInfoStore(
-                                    dispatcher: self.dispatcher,
-                                    keychainManager: self.keychainManager
-                            )
 
                             self.subject.scopedKey
                                     .bind(to: keyObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("stores the key for subsequent observers") {
@@ -310,6 +302,8 @@ class UserInfoStoreSpec: QuickSpec {
                             self.subject.scopedKey
                                     .bind(to: keyObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("pushes an nil key to key observers") {
@@ -335,14 +329,11 @@ class UserInfoStoreSpec: QuickSpec {
                             self.keychainManager.retrieveResult[.idToken] = idToken
                             self.keychainManager.retrieveResult[.refreshToken] = refreshToken
 
-                            self.subject = UserInfoStore(
-                                    dispatcher: self.dispatcher,
-                                    keychainManager: self.keychainManager
-                            )
-
                             self.subject.oauthInfo
                                     .bind(to: oAuthInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes the resulting oauthInfo object to subscribers") {
@@ -363,14 +354,11 @@ class UserInfoStoreSpec: QuickSpec {
                             self.keychainManager.retrieveResult[.accessToken] = accessToken
                             self.keychainManager.retrieveResult[.refreshToken] = refreshToken
 
-                            self.subject = UserInfoStore(
-                                    dispatcher: self.dispatcher,
-                                    keychainManager: self.keychainManager
-                            )
-
                             self.subject.oauthInfo
                                     .bind(to: oAuthInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes a nil OAuthInfo to subscribers") {
@@ -383,6 +371,8 @@ class UserInfoStoreSpec: QuickSpec {
                             self.subject.oauthInfo
                                     .bind(to: oAuthInfoObserver)
                                     .disposed(by: self.disposeBag)
+
+                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
                         }
 
                         it("passes an empty OAuthInfo to subscribers") {
