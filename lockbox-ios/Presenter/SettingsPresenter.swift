@@ -23,14 +23,14 @@ class SettingsPresenter {
 
     var settings = Variable([SettingSectionModel(model: 0, items: [
         SettingCellConfiguration(text: Constant.string.settingsProvideFeedback,
-                                 routeAction: SettingsRouteAction.provideFeedback),
-        SettingCellConfiguration(text: Constant.string.settingsFaq, routeAction: SettingsRouteAction.faq),
+                                 routeAction: SettingRouteAction.provideFeedback),
+        SettingCellConfiguration(text: Constant.string.settingsFaq, routeAction: SettingRouteAction.faq),
         SettingCellConfiguration(text: Constant.string.settingsEnableInBrowser,
-                                 routeAction: SettingsRouteAction.enableInBrowser)
+                                 routeAction: SettingRouteAction.enableInBrowser)
         ]),
         SettingSectionModel(model: 1, items: [
-            SettingCellConfiguration(text: Constant.string.settingsAccount, routeAction: SettingsRouteAction.account),
-            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingsRouteAction.autoLock)
+            SettingCellConfiguration(text: Constant.string.settingsAccount, routeAction: SettingRouteAction.account),
+            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingRouteAction.autoLock)
         ])
     ])
 

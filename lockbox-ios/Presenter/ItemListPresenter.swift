@@ -48,7 +48,7 @@ class ItemListPresenter {
 
     lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.settings)
+            target.routeActionHandler.invoke(SettingRouteAction.list)
             }.asObserver()
     }()
 
@@ -204,9 +204,5 @@ extension ItemListPresenter {
                         $0 || $1
                     }
         }
-    }
-
-    func settingsTapped() {
-        routeActionHandler.invoke(MainRouteAction.settings)
     }
 }

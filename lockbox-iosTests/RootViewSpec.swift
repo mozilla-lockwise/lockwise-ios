@@ -25,10 +25,11 @@ class RootViewSpec: QuickSpec {
             beforeEach {
                 self.subject = RootView()
                 self.presenter = FakeRootPresenter(view: self.subject)
-
                 self.subject.presenter = self.presenter
 
-                self.subject.viewDidLoad()
+                let window = UIWindow()
+                window.rootViewController = self.subject
+                window.makeKeyAndVisible()
             }
 
             it("informs the presenter on view load") {
@@ -67,6 +68,25 @@ class RootViewSpec: QuickSpec {
 
                     it("returns true") {
                         expect(self.subject.mainStackDisplayed).to(beTrue())
+                    }
+                }
+            }
+
+            describe("settingStackDisplayed") {
+                describe("without displaying the setting stack") {
+                    it("returns false") {
+                        expect(self.subject.settingStackDisplayed).to(beFalse())
+                    }
+                }
+
+                describe("displaying the setting stack") {
+                    beforeEach {
+                        self.subject.startMainStack()
+                        self.subject.startSettingStack(false)
+                    }
+
+                    it("returns true") {
+                        expect(self.subject.settingStackDisplayed).to(beTrue())
                     }
                 }
             }
@@ -129,19 +149,18 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(ItemDetailView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
+            }
 
-                describe("settings") {
+            describe("pushing settings views") {
+                describe("list") {
                     beforeEach {
-                        let window = UIWindow()
-                        window.rootViewController = self.subject
-                        window.makeKeyAndVisible()
-
                         self.subject.startMainStack()
-                        self.subject.pushMainView(view: .settings)
+                        self.subject.startSettingStack(false)
+                        self.subject.pushSettingView(view: .list)
                     }
 
-                    it("presents a modal") {
-                        expect(self.subject.isPresentingModal).toEventually(beTrue(), timeout: 20)
+                    it("makes the list view the top view of the modal stack") {
+                        expect(self.subject.modalViewIs(SettingsView.self)).to(beTrue())
                     }
                 }
             }

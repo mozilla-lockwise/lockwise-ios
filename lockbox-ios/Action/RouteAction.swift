@@ -27,10 +27,10 @@ enum LoginRouteAction: RouteAction {
 enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
-    case settings
 }
 
-enum SettingsRouteAction: RouteAction {
+enum SettingRouteAction: RouteAction {
+    case list
     case provideFeedback
     case faq
     case enableInBrowser
@@ -45,8 +45,6 @@ extension MainRouteAction: Equatable {
             return true
         case (.detail(let lhId), .detail(let rhId)):
             return lhId == rhId
-        case (.settings, .settings):
-            return true
         default:
             return false
         }
