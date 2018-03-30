@@ -121,9 +121,9 @@ extension SettingsView: SettingsProtocol {
 
 class SettingCellConfiguration {
     var text: String
-    var routeAction: SettingsRouteAction?
+    var routeAction: SettingRouteAction?
 
-    init(text: String, routeAction: SettingsRouteAction?) {
+    init(text: String, routeAction: SettingRouteAction?) {
         self.text = text
         self.routeAction = routeAction
     }
@@ -144,7 +144,7 @@ extension SettingCellConfiguration: Equatable {
 class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
 
-    init(text: String, routeAction: SettingsRouteAction?, isOn: Bool = false) {
+    init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false) {
         super.init(text: text, routeAction: routeAction)
         self.isOn = isOn
     }

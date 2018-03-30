@@ -43,7 +43,7 @@ class DataStoreHandlerIntegrationSpec: QuickSpec {
             expect(initializeValue).to(contain(DataStoreAction.initialized(initialized: true)))
         }
 
-        describe("DataStore with JavaScript integration") {
+        xdescribe("DataStore with JavaScript integration") {
             var unlockValue: DataStoreAction?
 
             beforeEach {
