@@ -168,6 +168,18 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.modalViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
+
+                describe("account") {
+                    beforeEach {
+                        self.subject.startMainStack()
+                        self.subject.startSettingStack(false)
+                        self.subject.pushSettingView(view: .account)
+                    }
+
+                    it("makes the list view the top view of the modal stack") {
+                        expect(self.subject.modalViewIs(AccountSettingView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
             }
         }
     }

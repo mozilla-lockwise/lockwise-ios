@@ -108,6 +108,12 @@ class RootView: UIViewController, RootViewProtocol {
         switch view {
         case .list:
             settingNavController?.popToRootViewController(animated: true)
+        case .account:
+            guard let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView else { // swiftlint:disable:this line_length
+                return
+            }
+
+            settingNavController?.pushViewController(accountSettingView, animated: true)
         case .autoLock:
             settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
         default: break

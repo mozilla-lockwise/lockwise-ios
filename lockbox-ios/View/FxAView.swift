@@ -8,7 +8,7 @@ import RxSwift
 import RxCocoa
 
 class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
-    internal var presenter: FxAPresenter!
+    internal var presenter: FxAPresenter?
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
 
@@ -28,7 +28,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
         self.view = self.webView
         self.styleNavigationBar()
 
-        self.presenter.onViewReady()
+        self.presenter?.onViewReady()
     }
 
     func loadRequest(_ urlRequest: URLRequest) {
@@ -38,7 +38,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        presenter.webViewRequest(decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
+        presenter?.webViewRequest(decidePolicyFor: navigationAction, decisionHandler: decisionHandler)
     }
 
     private func styleNavigationBar() {
@@ -49,14 +49,18 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
                 action: nil
         )
 
-        self.navigationItem.leftBarButtonItem!.rx.tap
-                .bind(to: self.presenter.onCancel)
-                .disposed(by: self.disposeBag)
-
         self.navigationItem.leftBarButtonItem!.setTitleTextAttributes([
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ], for: .normal)
+
+        guard let presenter = self.presenter else {
+            return
+        }
+
+        self.navigationItem.leftBarButtonItem!.rx.tap
+                .bind(to: presenter.onCancel)
+                .disposed(by: self.disposeBag)
     }
 
     required init?(coder aDecoder: NSCoder) {

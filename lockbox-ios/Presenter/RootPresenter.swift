@@ -193,6 +193,10 @@ class RootPresenter {
                 if !view.modalViewIs(SettingsView.self) {
                     view.pushSettingView(view: .list)
                 }
+            case .account:
+                if !view.modalViewIs(AccountSettingView.self) {
+                    view.pushSettingView(view: .account)
+                }
             case .autoLock:
                 if !view.modalViewIs(AutoLockSettingView.self) {
                     view.pushSettingView(view: .autoLock)

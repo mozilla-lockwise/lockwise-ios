@@ -45,12 +45,12 @@ class ProfileInfo: Codable {
             return self
         }
 
-        func displayName(_ displayName: String) -> Builder {
+        func displayName(_ displayName: String?) -> Builder {
             self.info.displayName = displayName
             return self
         }
 
-        func avatar(_ avatar: String) -> Builder {
+        func avatar(_ avatar: String?) -> Builder {
             self.info.avatar = avatar
             return self
         }

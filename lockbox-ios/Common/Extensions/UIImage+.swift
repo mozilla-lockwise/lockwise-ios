@@ -26,6 +26,24 @@ extension UIImage {
 
         return image
     }
+
+    func circleCrop(borderColor: UIColor) -> UIImage? {
+        let imageView: UIImageView = UIImageView(image: self)
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = imageView.bounds.width / 2
+        imageView.layer.borderWidth = 0.5
+        imageView.layer.borderColor = borderColor.cgColor
+
+        UIGraphicsBeginImageContext(imageView.bounds.size)
+        if let context = UIGraphicsGetCurrentContext() {
+            imageView.layer.render(in: context)
+        }
+
+        let roundedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return roundedImage
+    }
 }
 
 private func gradientStartPoint(frame: CGRect) -> CGPoint {

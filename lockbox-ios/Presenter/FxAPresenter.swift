@@ -12,7 +12,7 @@ protocol FxAViewProtocol: class, ErrorView {
 }
 
 class FxAPresenter {
-    private weak var view: FxAViewProtocol!
+    private weak var view: FxAViewProtocol?
     fileprivate let fxAActionHandler: FxAActionHandler
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let store: FxAStore
@@ -40,7 +40,7 @@ class FxAPresenter {
                 .drive(onNext: { action in
                     switch action {
                     case .loadInitialURL(let url):
-                        self.view.loadRequest(URLRequest(url: url))
+                        self.view?.loadRequest(URLRequest(url: url))
                     case .finishedFetchingUserInformation:
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:

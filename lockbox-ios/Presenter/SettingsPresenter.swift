@@ -18,31 +18,21 @@ class SettingsPresenter {
     lazy private(set) var onDone: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.routeActionHandler.invoke(MainRouteAction.list)
-            }.asObserver()
+        }.asObserver()
     }()
 
-    lazy private(set) var itemSelectedObserver: AnyObserver<SettingCellConfiguration?> = {
-        return Binder(self) { target, setting in
-            guard let routeAction = setting?.routeAction else { return }
+    lazy private(set) var onSettingCellTapped: AnyObserver<SettingRouteAction?> = {
+        return Binder(self) { target, action in
+            guard let routeAction = action else {
+                return
+            }
+
             target.routeActionHandler.invoke(routeAction)
-            }.asObserver()
+        }.asObserver()
     }()
 
-    var settings = Variable([SettingSectionModel(model: 0, items: [
-        SettingCellConfiguration(text: Constant.string.settingsProvideFeedback,
-                                 routeAction: SettingRouteAction.provideFeedback),
-        SettingCellConfiguration(text: Constant.string.settingsFaq, routeAction: SettingRouteAction.faq),
-        SettingCellConfiguration(text: Constant.string.settingsEnableInBrowser,
-                                 routeAction: SettingRouteAction.enableInBrowser)
-        ]),
-        SettingSectionModel(model: 1, items: [
-            SettingCellConfiguration(text: Constant.string.settingsAccount, routeAction: SettingRouteAction.account),
-            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingRouteAction.autoLock)
-        ])
-    ])
-
-    let touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
-    let faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
+    lazy var touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
+    lazy var faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
 
     private var usesFaceId: Bool {
         let authContext = LAContext()
@@ -63,14 +53,6 @@ class SettingsPresenter {
         self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.settingActionHandler = settingActionHandler
-
-        let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
-        settings.value[1].items.insert(biometricSetting, at: settings.value[1].items.endIndex-1)
-
-        self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
-                .subscribe(onNext: { enabled in
-                    biometricSetting.isOn = enabled ?? false
-                }).disposed(by: disposeBag)
     }
 
     func switchChanged(row: Int, isOn: Bool) {
@@ -78,7 +60,42 @@ class SettingsPresenter {
     }
 
     func onViewReady() {
-        let driver = settings.asDriver()
-        view.bind(items: driver)
+        let settingsConfigDriver = self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
+                .map { enabled -> [SettingSectionModel] in
+                    return self.settingsWithBiometricLoginEnabled(enabled ?? false)
+                }
+                .asDriver(onErrorJustReturn: [])
+
+        view.bind(items: settingsConfigDriver)
+    }
+}
+
+extension SettingsPresenter {
+    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool) -> [SettingSectionModel] {
+        let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
+        biometricSetting.isOn = enabled
+
+        return [
+            SettingSectionModel(model: 0, items: [
+                SettingCellConfiguration(
+                        text: Constant.string.settingsProvideFeedback,
+                        routeAction: SettingRouteAction.provideFeedback),
+                SettingCellConfiguration(
+                        text: Constant.string.settingsFaq,
+                        routeAction: SettingRouteAction.faq),
+                SettingCellConfiguration(
+                        text: Constant.string.settingsEnableInBrowser,
+                        routeAction: SettingRouteAction.enableInBrowser)
+            ]),
+            SettingSectionModel(model: 1, items: [
+                SettingCellConfiguration(
+                        text: Constant.string.settingsAccount,
+                        routeAction: SettingRouteAction.account),
+                biometricSetting,
+                SettingCellConfiguration(
+                        text: Constant.string.settingsAutoLock,
+                        routeAction: SettingRouteAction.autoLock)
+            ])
+        ]
     }
 }

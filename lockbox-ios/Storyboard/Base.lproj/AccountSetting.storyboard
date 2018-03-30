@@ -6,14 +6,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Account Setting View-->
         <scene sceneID="5PY-vn-ROx">
             <objects>
-                <viewController id="UPp-Js-xvK" customClass="AccountSettingView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="accountsetting" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UPp-Js-xvK" customClass="AccountSettingView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9B0-EH-D9l">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -24,9 +23,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="avatar-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="4vb-FQ-Trv">
-                                <rect key="frame" x="146.5" y="30" width="82" height="82"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
                                 <rect key="frame" x="0.0" y="533" width="375" height="44"/>
                                 <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -44,9 +40,12 @@
                                 <color key="textColor" red="0.42766761779785156" green="0.42717477679252625" blue="0.44713732600212097" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="avatar-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="meC-vW-3bR">
-                                <rect key="frame" x="146" y="32" width="82" height="82"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" image="avatar-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="meC-vW-3bR">
+                                <rect key="frame" x="146" y="30" width="82" height="82"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="82" id="09u-j0-1Ew"/>
+                                    <constraint firstAttribute="height" constant="82" id="44S-4F-zOU"/>
+                                </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username@domain.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f32-KR-4Nm">
                                 <rect key="frame" x="120" y="122" width="136" height="14.5"/>
@@ -57,21 +56,20 @@
                         </subviews>
                         <color key="backgroundColor" red="0.93740665912628174" green="0.93690252304077148" blue="0.95687246322631836" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9B0-EH-D9l" secondAttribute="top" constant="30" id="0tC-Tq-dmb"/>
                             <constraint firstItem="dKb-ji-8VE" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="15" id="0tG-IM-h0B"/>
                             <constraint firstItem="htf-cl-VXU" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" id="6W4-Fs-nDO"/>
                             <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="48" id="7bq-qv-41L"/>
-                            <constraint firstItem="4vb-FQ-Trv" firstAttribute="top" secondItem="9B0-EH-D9l" secondAttribute="top" constant="30" id="9YR-jQ-vch"/>
                             <constraint firstAttribute="bottom" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="90" id="OOO-8n-6MF"/>
                             <constraint firstAttribute="trailing" secondItem="htf-cl-VXU" secondAttribute="trailing" id="Rk4-d2-iOq"/>
                             <constraint firstItem="f32-KR-4Nm" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="bSG-y6-P71"/>
                             <constraint firstItem="6A6-i9-hvw" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="g2N-6t-uHz"/>
+                            <constraint firstItem="f32-KR-4Nm" firstAttribute="top" secondItem="meC-vW-3bR" secondAttribute="bottom" constant="10" id="jUe-ph-ux4"/>
+                            <constraint firstItem="meC-vW-3bR" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="sBd-U0-dtZ"/>
                             <constraint firstAttribute="bottom" secondItem="dKb-ji-8VE" secondAttribute="bottom" constant="50" id="tEA-Ex-Vaa"/>
-                            <constraint firstItem="4vb-FQ-Trv" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="uDX-5I-DbU"/>
                             <constraint firstItem="6A6-i9-hvw" firstAttribute="top" secondItem="f32-KR-4Nm" secondAttribute="bottom" constant="30" id="wWu-hi-qyR"/>
-                            <constraint firstItem="f32-KR-4Nm" firstAttribute="top" secondItem="4vb-FQ-Trv" secondAttribute="bottom" constant="10" id="ykj-7J-o4R"/>
                             <constraint firstItem="dKb-ji-8VE" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="ztw-Hb-70m"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="umA-6p-89F"/>
                     </view>
                     <connections>
                         <outlet property="avatarImageView" destination="meC-vW-3bR" id="aRQ-Ve-ZQb"/>
