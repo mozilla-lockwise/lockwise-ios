@@ -7,9 +7,10 @@ import Foundation
 extension Date {
     public init?(iso8601DateString: String) {
         let trimmedIsoString = iso8601DateString.replacingOccurrences(
-            of: "\\.\\d+",
-            with: "",
-            options: .regularExpression)
+                of: "\\.\\d+",
+                with: "",
+                options: .regularExpression
+        )
         if let date = ISO8601DateFormatter().date(from: trimmedIsoString) {
             self = date
         } else {

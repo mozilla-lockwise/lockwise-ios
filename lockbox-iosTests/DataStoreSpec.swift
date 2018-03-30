@@ -65,7 +65,7 @@ class DataStoreSpec: QuickSpec {
 
                 it("doesn't push the same list twice in a row") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: itemList))
-                    expect(itemListObserver.events.count).to(equal(1))
+                    expect(itemListObserver.events.count).to(equal(2))
                 }
 
                 it("pushes subsequent different lists") {
@@ -73,12 +73,12 @@ class DataStoreSpec: QuickSpec {
                     newItemList["wwkjlkjm"] = Item.Builder().id("wwkjlkjm").build()
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.list(list: newItemList))
 
-                    expect(itemListObserver.events.count).to(equal(2))
+                    expect(itemListObserver.events.count).to(equal(3))
                 }
 
                 it("does do anything with non-datastore actions") {
                     self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
-                    expect(itemListObserver.events.count).to(equal(1))
+                    expect(itemListObserver.events.count).to(equal(2))
                 }
             }
 
@@ -152,18 +152,18 @@ class DataStoreSpec: QuickSpec {
 
                 it("doesn't push the same value twice in a row") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.initialized(initialized: true))
-                    expect(boolObserver.events.count).to(equal(1))
+                    expect(boolObserver.events.count).to(equal(2))
                 }
 
                 it("pushes subsequent different values") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.initialized(initialized: false))
 
-                    expect(boolObserver.events.count).to(equal(2))
+                    expect(boolObserver.events.count).to(equal(3))
                 }
 
                 it("does not do anything with non-datastore actions") {
                     self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
-                    expect(boolObserver.events.count).to(equal(1))
+                    expect(boolObserver.events.count).to(equal(2))
                 }
             }
 
@@ -187,18 +187,18 @@ class DataStoreSpec: QuickSpec {
 
                 it("doesn't push the same value twice in a row") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.opened(opened: true))
-                    expect(boolObserver.events.count).to(equal(1))
+                    expect(boolObserver.events.count).to(equal(2))
                 }
 
                 it("pushes subsequent different values") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.opened(opened: false))
 
-                    expect(boolObserver.events.count).to(equal(2))
+                    expect(boolObserver.events.count).to(equal(3))
                 }
 
                 it("does not do anything with non-datastore actions") {
                     self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
-                    expect(boolObserver.events.count).to(equal(1))
+                    expect(boolObserver.events.count).to(equal(2))
                 }
             }
 
@@ -222,18 +222,18 @@ class DataStoreSpec: QuickSpec {
 
                 it("doesn't push the same value twice in a row") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.locked(locked: false))
-                    expect(boolObserver.events.count).to(equal(1))
+                    expect(boolObserver.events.count).to(equal(2))
                 }
 
                 it("pushes subsequent different values") {
                     self.dispatcher.fakeRegistration.onNext(DataStoreAction.locked(locked: true))
 
-                    expect(boolObserver.events.count).to(equal(2))
+                    expect(boolObserver.events.count).to(equal(3))
                 }
 
                 it("does not do anything with non-datastore actions") {
                     self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
-                    expect(boolObserver.events.count).to(equal(1))
+                    expect(boolObserver.events.count).to(equal(2))
                 }
             }
         }
