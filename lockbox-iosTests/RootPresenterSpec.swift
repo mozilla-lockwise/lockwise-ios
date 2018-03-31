@@ -20,6 +20,9 @@ enum RootPresenterSharedExampleVar: String {
 class RootPresenterSpec: QuickSpec {
     class FakeRootView: RootViewProtocol {
         var topViewIsVar: Bool!
+        var modalViewIsVar: Bool!
+        var dismissModalCalled: Bool = false
+
         var loginStackDisplayedStub: Bool!
         var startLoginStackCalled = false
         var pushLoginViewArgument: LoginRouteAction?
@@ -28,12 +31,21 @@ class RootPresenterSpec: QuickSpec {
         var startMainStackCalled = false
         var pushMainViewArgument: MainRouteAction?
 
-        var isPresentingModal: Bool = false
-        var dismissModalCalled: Bool = false
-        var pushSettingsViewArgument: SettingsRouteAction?
+
+        var settingStackDisplayedStub: Bool!
+        var startSettingStackCalled = false
+        var pushSettingViewArgument: SettingRouteAction?
 
         func topViewIs<T>(_ class: T.Type) -> Bool {
             return topViewIsVar
+        }
+
+        func modalViewIs<T>(_ class: T.Type) -> Bool {
+            return modalViewIsVar
+        }
+
+        func dismissModals() {
+            self.dismissModalCalled = true
         }
 
         var loginStackDisplayed: Bool {
@@ -60,12 +72,16 @@ class RootPresenterSpec: QuickSpec {
             self.pushMainViewArgument = view
         }
 
-        func dismissModal() {
-            self.dismissModalCalled = true
+        var settingStackDisplayed: Bool {
+            return settingStackDisplayedStub
         }
 
-        func pushSettingsView(view: SettingsRouteAction) {
-            self.pushSettingsViewArgument = view
+        func startSettingStack(_ animated: Bool = true) {
+            self.startSettingStackCalled = true
+        }
+
+        func pushSettingView(view: SettingRouteAction) {
+            self.pushSettingViewArgument = view
         }
     }
 
@@ -341,6 +357,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.welcome)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startLoginStackCalled).to(beFalse())
                                 }
@@ -354,6 +374,10 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.welcome)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the login stack") {
@@ -373,6 +397,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.welcome)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startLoginStackCalled).to(beFalse())
                                 }
@@ -386,6 +414,10 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.welcome)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the login stack") {
@@ -411,6 +443,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.fxa)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("starts the fxa stack") {
                                     expect(self.view.startLoginStackCalled).to(beTrue())
                                 }
@@ -424,6 +460,10 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.welcome)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the login stack") {
@@ -443,6 +483,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.fxa)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("starts the login stack") {
                                     expect(self.view.startLoginStackCalled).to(beTrue())
                                 }
@@ -456,6 +500,10 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(LoginRouteAction.fxa)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the login stack") {
@@ -483,6 +531,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startMainStackCalled).to(beFalse())
                                 }
@@ -498,24 +550,16 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startMainStackCalled).to(beFalse())
                                 }
 
                                 it("nothing happens") {
                                     expect(self.view.pushMainViewArgument).to(beNil())
-                                }
-                            }
-
-                            describe("if the settings modal is being displayed") {
-                                beforeEach {
-                                    self.view.topViewIsVar = true
-                                    self.view.isPresentingModal = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
-                                }
-
-                                it("dismisss settings modal") {
-                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
                             }
                         }
@@ -526,6 +570,10 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the login stack") {
@@ -544,47 +592,16 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startMainStackCalled).to(beFalse())
                                 }
 
                                 it("nothing happens") {
                                     expect(self.view.pushMainViewArgument).to(beNil())
-                                }
-                            }
-                        }
-
-                        describe(".settings") {
-                            describe("if the settings screen is not displayed") {
-                                beforeEach {
-                                    self.view.topViewIsVar = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.settings)
-                                }
-
-                                it("tells the view to show the settings view") {
-                                    expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.settings))
-                                }
-                            }
-
-                            describe("if the settings screen is already displayed") {
-                                beforeEach {
-                                    self.view.topViewIsVar = true
-                                    self.view.isPresentingModal = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.settings)
-                                }
-
-                                it("does not tell the view to show the settings view") {
-                                    expect(self.view.pushMainViewArgument).to(beNil())
-                                }
-
-                                describe("settings views") {
-                                    beforeEach {
-                                        self.routeStore.onRouteSubject.onNext(SettingsRouteAction.autoLock)
-                                    }
-
-                                    it("pushes additional settings views") {
-                                        expect(self.view.pushSettingsViewArgument).to(equal(SettingsRouteAction.autoLock))
-                                    }
                                 }
                             }
                         }
@@ -602,6 +619,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("starts the fxa stack") {
                                     expect(self.view.startMainStackCalled).to(beTrue())
                                 }
@@ -615,6 +636,10 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the login stack") {
@@ -635,6 +660,10 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startMainStackCalled).to(beTrue())
                                 }
@@ -651,12 +680,110 @@ class RootPresenterSpec: QuickSpec {
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
                                 }
 
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
                                 it("does not start the login stack") {
                                     expect(self.view.startMainStackCalled).to(beTrue())
                                 }
 
                                 it("nothing happens") {
                                     expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+                            }
+                        }
+                    }
+                }
+
+                describe("SettingRouteActions") {
+                    describe("if the setting stack is already displayed") {
+                        beforeEach {
+                            self.view.settingStackDisplayedStub = true
+                        }
+
+                        describe(".list") {
+                            describe("when the top view is the list view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("does not start the setting stack") {
+                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                }
+
+                                it("does not push a new setting view argument") {
+                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                }
+                            }
+
+                            describe("when the top view is not the list view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("does not start the setting stack") {
+                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                }
+
+                                it("pushes a new setting view argument") {
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
+                                }
+                            }
+                        }
+                    }
+
+                    describe("if the setting stack is not already displayed") {
+                        beforeEach {
+                            self.view.settingStackDisplayedStub = false
+                        }
+
+                        describe(".list") {
+                            describe("when the top view is the list view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("starts the setting stack") {
+                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                }
+
+                                it("does not push a new setting view argument") {
+                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                }
+                            }
+
+                            describe("when the top view is not the list view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("starts the setting stack") {
+                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                }
+
+                                it("pushes a new setting view argument") {
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
                         }

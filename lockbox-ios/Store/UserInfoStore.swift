@@ -63,6 +63,10 @@ class UserInfoStore {
                         if self.keychainManager.save(scopedKey, identifier: .scopedKey) {
                             self._scopedKey.onNext(scopedKey)
                         }
+                    case .load:
+                        self.populateInitialValues()
+                    case .clear:
+                        self.clear()
                     case .biometricLogin(let enabled):
                         if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
                             self._biometricLoginEnabled.onNext(enabled)
@@ -75,7 +79,6 @@ class UserInfoStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        self.populateInitialValues()
     }
 
     private func populateInitialValues() {
@@ -120,6 +123,16 @@ class UserInfoStore {
         } else {
             self._autoLock.onNext(AutoLockSetting.Never)
         }
+    }
+
+    private func clear() {
+        for identifier in KeychainManagerIdentifier.allValues {
+            _ = self.keychainManager.delete(identifier)
+        }
+
+        self._profileInfo.onNext(nil)
+        self._oauthInfo.onNext(nil)
+        self._profileInfo.onNext(nil)
     }
 }
 

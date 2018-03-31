@@ -5,6 +5,8 @@
 import UIKit
 import Telemetry
 
+let PostFirstRunKey = "firstrun"
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,6 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         self.window?.rootViewController = RootView()
         self.window?.makeKeyAndVisible()
+
+        // This key will not be set on the first run of the application, only on subsequent runs.
+        if UserDefaults.standard.string(forKey: PostFirstRunKey) == nil {
+            UserInfoActionHandler.shared.invoke(.clear)
+            UserDefaults.standard.set(false, forKey: PostFirstRunKey)
+        } else {
+            UserInfoActionHandler.shared.invoke(.load)
+        }
 
         let barHeight = 44 + UIApplication.shared.statusBarFrame.height
         let navBarImage = UIImage.createGradientImage(

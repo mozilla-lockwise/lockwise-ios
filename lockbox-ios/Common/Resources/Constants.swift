@@ -28,16 +28,21 @@ struct Constant {
     }
 
     struct string {
+        static let alphabetically = NSLocalizedString("alphabetically", value: "Alphabetically", comment: "Label for the option sheet action allowing users to sort an entry list alphabetically")
+        static let aToZ = NSLocalizedString("a_to_z", value: "A-Z", comment: "Label for the button allowing users to sort an entry list alphabetically")
         static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
         static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied to clipboard", comment: "Alert text when a field has been copied, with an interpolated field name value")
         static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
-        static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
+        static let recent = NSLocalizedString("recent", value: "Recent", comment: "Button title when entries list is sorted by most recently used entry")
+        static let recentlyUsed = NSLocalizedString("recently_used", value: "Recently Used", comment: "Label for the option sheet action allowing users to sort an entry list by the most recently used entries")
+        static let sortEntries = NSLocalizedString("sort_entries", value: "Sort Entries", comment: "Title for the option sheet allowing users to sort entries")
         static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
+        static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
         static let webAddress = NSLocalizedString("web_address", value: "Web Address", comment: "Section title text for the web address on the item detail screen")
         static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
         static let settingsHelpSectionHeader = NSLocalizedString("settings.help.header", value: "HELP", comment: "Help section label in settings")

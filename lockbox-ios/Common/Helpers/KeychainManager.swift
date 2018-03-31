@@ -7,6 +7,18 @@ import Security
 
 enum KeychainManagerIdentifier: String {
     case email, scopedKey, uid, refreshToken, accessToken, idToken, avatarURL, biometricLoginEnabled, autoLock
+
+    static let allValues: [KeychainManagerIdentifier] = [
+        .email,
+        .scopedKey,
+        .uid,
+        .refreshToken,
+        .accessToken,
+        .idToken,
+        .avatarURL,
+        .biometricLoginEnabled,
+        .autoLock
+    ]
 }
 
 class KeychainManager {
@@ -44,6 +56,19 @@ class KeychainManager {
         }
 
         return storedString
+    }
+
+    func delete(_ identifier: KeychainManagerIdentifier) -> Bool {
+        let query: [String: Any] = [
+            kSecAttrService as String: Bundle.main.bundleIdentifier!,
+            kSecAttrAccount as String: identifier.rawValue,
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrSynchronizable as String: kCFBooleanFalse
+        ]
+
+        let status = SecItemDelete(query as CFDictionary)
+
+        return status == errSecSuccess
     }
 
     private func saveByAdding(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {

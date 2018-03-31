@@ -8,6 +8,8 @@ import RxCocoa
 
 protocol RootViewProtocol: class {
     func topViewIs<T>(_ class: T.Type) -> Bool
+    func modalViewIs<T>(_ class: T.Type) -> Bool
+    func dismissModals()
 
     var loginStackDisplayed: Bool { get }
     func startLoginStack()
@@ -16,10 +18,10 @@ protocol RootViewProtocol: class {
     var mainStackDisplayed: Bool { get }
     func startMainStack()
     func pushMainView(view: MainRouteAction)
-    func pushSettingsView(view: SettingsRouteAction)
 
-    var isPresentingModal: Bool { get }
-    func dismissModal()
+    var settingStackDisplayed: Bool { get }
+    func startSettingStack(_ animated: Bool)
+    func pushSettingView(view: SettingRouteAction)
 }
 
 struct KeyInit {
@@ -120,10 +122,10 @@ class RootPresenter {
                 .disposed(by: disposeBag)
 
         self.routeStore.onRoute
-                .filterByType(class: SettingsRouteAction.self)
-                .asDriver(onErrorJustReturn: .account)
-                .drive(showSetting)
-                .disposed(by: disposeBag)
+                .filterByType(class: SettingRouteAction.self)
+                .asDriver(onErrorJustReturn: .list)
+                .drive(self.showSetting)
+                .disposed(by: self.disposeBag)
     }
 
     lazy private var showLogin: AnyObserver<LoginRouteAction> = { [unowned self] in
@@ -131,6 +133,8 @@ class RootPresenter {
             guard let view = target.view else {
                 return
             }
+
+            view.dismissModals()
 
             if !view.loginStackDisplayed {
                 view.startLoginStack()
@@ -155,6 +159,8 @@ class RootPresenter {
                 return
             }
 
+            view.dismissModals()
+
             if !view.mainStackDisplayed {
                 view.startMainStack()
             }
@@ -163,36 +169,33 @@ class RootPresenter {
             case .list:
                 if !view.topViewIs(ItemListView.self) {
                     view.pushMainView(view: .list)
-                } else if view.isPresentingModal {
-                    view.dismissModal()
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
                 }
-            case .settings:
-                if !view.isPresentingModal {
-                    view.pushMainView(view: .settings)
-                }
             }
         }.asObserver()
     }()
 
-    lazy private var showSetting: AnyObserver<SettingsRouteAction> = { [unowned self] in
-        return Binder(self) { target, settingsAction in
+    lazy private var showSetting: AnyObserver<SettingRouteAction> = { [unowned self] in
+        return Binder(self) { target, settingAction in
             guard let view = target.view else {
                 return
             }
 
-            if !view.mainStackDisplayed {
-                view.startMainStack()
+            if !view.settingStackDisplayed {
+                view.startSettingStack(true)
             }
 
-            if !view.isPresentingModal {
-                view.pushMainView(view: .settings)
+            switch settingAction {
+            case .list:
+                if !view.modalViewIs(SettingsView.self) {
+                    view.pushSettingView(view: .list)
+                }
+            default: break
             }
 
-            view.pushSettingsView(view: settingsAction)
         }.asObserver()
     }()
 }

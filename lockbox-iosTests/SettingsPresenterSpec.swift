@@ -101,8 +101,8 @@ class SettingsPresenterSpec: QuickSpec {
             }
 
             it("handles action when item is selected") {
-                self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Auto Lock", routeAction: SettingsRouteAction.autoLock))
-                expect(self.routeActionHandler.routeActionArgument as? SettingsRouteAction).to(equal(SettingsRouteAction.autoLock))
+                self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Auto Lock", routeAction: SettingRouteAction.autoLock))
+                expect(self.routeActionHandler.routeActionArgument as? SettingRouteAction).to(equal(SettingRouteAction.autoLock))
             }
 
             it("does not call action handler when there is no action") {

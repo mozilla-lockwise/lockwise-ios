@@ -48,6 +48,28 @@ class ItemSpec: QuickSpec {
             }
         }
 
+        describe("usedDates") {
+            it("computes the date from the given string") {
+                let item = Item.Builder()
+                        .created("1970-01-01T00:03:20.4500Z")
+                        .modified("1970-01-01T00:05:20.4500Z")
+                        .lastUsed("1970-01-01T00:05:20.4500Z")
+                        .build()
+
+                expect(item.createdDate).to(equal(Date.init(timeIntervalSince1970: 200)))
+                expect(item.modifiedDate).to(equal(Date.init(timeIntervalSince1970: 320)))
+                expect(item.lastUsedDate).to(equal(Date.init(timeIntervalSince1970: 320)))
+            }
+
+            it("returns nil when there is a no date") {
+                let item = Item.Builder().build()
+
+                expect(item.createdDate).to(beNil())
+                expect(item.modifiedDate).to(beNil())
+                expect(item.lastUsedDate).to(beNil())
+            }
+        }
+
         describe("equality") {
             it("returns false when the ids are different", closure: {
                 lhs = Item.Builder()

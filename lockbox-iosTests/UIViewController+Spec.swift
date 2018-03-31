@@ -5,12 +5,14 @@
 import UIKit
 import Quick
 import Nimble
+import RxSwift
+import RxTest
 
 @testable import Lockbox
 
 class ViewControllerSpec: QuickSpec {
 
-    var subject: (UIViewController & ErrorView)!
+    var subject: (UIViewController & ErrorView & StatusAlertView & OptionSheetView)!
 
     override func spec() {
         beforeEach {
@@ -53,6 +55,34 @@ class ViewControllerSpec: QuickSpec {
 
                 expect(self.subject.view.subviews.first).toEventually(beNil(), timeout: 6)
             }
+        }
+
+        describe(".displayOptionSheet") {
+            let title = "title!"
+            let buttons = [
+                OptionSheetButtonConfiguration(title: "something", tapObserver: nil, cancel: false),
+                OptionSheetButtonConfiguration(title: "blah", tapObserver: nil, cancel: true)
+            ]
+
+            beforeEach {
+                self.subject.displayOptionSheet(buttons: buttons, title: title)
+            }
+
+            it("displays an optionsheet alert controller") {
+                expect(self.subject.presentedViewController).toEventually(beAnInstanceOf(UIAlertController.self))
+
+                let alertController = self.subject.presentedViewController as! UIAlertController
+
+                expect(alertController.preferredStyle).to(equal(UIAlertControllerStyle.actionSheet))
+
+                expect(alertController.actions.first!.title).to(equal(buttons[0].title))
+                expect(alertController.actions.first!.style).to(equal(UIAlertActionStyle.default))
+
+                expect(alertController.actions[1].title).to(equal(buttons[1].title))
+                expect(alertController.actions[1].style).to(equal(UIAlertActionStyle.cancel))
+            }
+
+            // testing note: UIAlertAction handlers _not_ tested here because it's heinous to do so in Swift.
         }
     }
 }

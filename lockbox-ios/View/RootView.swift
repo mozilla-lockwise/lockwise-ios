@@ -37,6 +37,10 @@ class RootView: UIViewController, RootViewProtocol {
         return (self.currentViewController as? MainNavigationController) != nil
     }
 
+    var settingStackDisplayed: Bool {
+        return (self.currentViewController?.presentedViewController as? SettingNavigationController) != nil
+    }
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
     }
@@ -55,8 +59,13 @@ class RootView: UIViewController, RootViewProtocol {
         return self.currentViewController?.topViewController is T
     }
 
-    func topModalViewIs<T>(_ class: T.Type) -> Bool {
+
+    func modalViewIs<T>(_ class: T.Type) -> Bool {
         return (self.currentViewController?.presentedViewController as? UINavigationController)?.topViewController is T
+    }
+
+    func dismissModals() {
+        self.currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
     }
 
     func startLoginStack() {
@@ -87,23 +96,6 @@ class RootView: UIViewController, RootViewProtocol {
 
             itemDetailView.itemId = id
             self.currentViewController?.pushViewController(itemDetailView, animated: true)
-        case .settings:
-            let settingsView = SettingsView()
-            let navController = UINavigationController()
-            navController.pushViewController(settingsView, animated: false)
-            currentViewController?.present(navController, animated: true, completion: nil)
-        }
-    }
-
-    func pushSettingsView(view: SettingsRouteAction) {
-        guard let settingsNavController = currentViewController?.presentedViewController
-            as? UINavigationController else { return }
-
-        switch view {
-        case.autoLock:
-            settingsNavController.pushViewController(AutoLockSettingsView(), animated: true)
-        default:
-            break
         }
     }
 
@@ -111,8 +103,18 @@ class RootView: UIViewController, RootViewProtocol {
         return currentViewController?.presentedViewController != nil
     }
 
-    func dismissModal() {
-        currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
+    func startSettingStack(_ animated: Bool = true) {
+        self.currentViewController?.present(SettingNavigationController(), animated: animated)
+    }
+
+    func pushSettingView(view: SettingRouteAction) {
+        let settingNavController = (self.currentViewController?.presentedViewController as? UINavigationController)
+
+        switch view {
+        case .list:
+            settingNavController?.popToRootViewController(animated: true)
+        default: break
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
