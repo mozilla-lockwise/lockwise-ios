@@ -143,6 +143,16 @@ class RootViewSpec: QuickSpec {
                     it("presents a modal") {
                         expect(self.subject.isPresentingModal).toEventually(beTrue(), timeout: 20)
                     }
+
+                    it("push autolock view") {
+                        self.subject.pushSettingsView(view: .autoLock)
+                        expect(self.subject.topModalViewIs(AutoLockSettingsView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+
+                    it("dismisses modal") {
+                        self.subject.dismissModal()
+                        expect(self.subject.isPresentingModal).toEventually(beFalse(), timeout: 20)
+                    }
                 }
             }
         }

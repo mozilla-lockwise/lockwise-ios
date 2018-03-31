@@ -12,7 +12,7 @@ import RxCocoa
 @testable import Lockbox
 
 class AutoLockSettingsPresenterSpec: QuickSpec {
-    class FakeAutoLockSettingsView: AutoLockSettingsProtocol {
+    class FakeAutoLockSettingsView: AutoLockSettingsViewProtocol {
         var itemsObserver: TestableObserver<[AutoLockSettingSectionModel]>!
         private let disposeBag = DisposeBag()
 
@@ -65,28 +65,18 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
                                              userInfoActionHandler: self.userInfoActionHandler)
         }
 
-        describe("autoLock stored value") {
-            it("is requested on init") {
-                expect(self.userInfoStore.autoLockEnabledSubject.hasObservers).to(beTrue())
-            }
-
-            it("updates settings based on stored value") {
-                self.userInfoStore.autoLockEnabledSubject.onNext(AutoLockSetting.OneHour)
-                for item in self.subject.settings.value[0].items {
-                    if item.value as? AutoLockSetting  == AutoLockSetting.OneHour {
+        it("delivers updated values when autoLock setting changes") {
+            self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
+            self.subject.onViewReady()
+            self.userInfoStore.autoLockEnabledSubject.onNext(AutoLockSetting.FiveMinutes)
+            if let settings = self.view.itemsObserver.events.last?.value.element {
+                for item in settings[0].items {
+                    if item.valueWhenChecked as? AutoLockSetting == AutoLockSetting.FiveMinutes {
                         expect(item.isChecked).to(beTrue())
                     } else {
                         expect(item.isChecked).to(beFalse())
                     }
                 }
-            }
-        }
-
-        it("delivers driver onViewReady") {
-            self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
-            self.subject.onViewReady()
-
-            if let settings = self.view.itemsObserver.events.last?.value.element {
                 expect(settings.count).to(be(1))
                 expect(settings[0].items.count).to(be(7))
             } else {
@@ -95,7 +85,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
 
         it("calls handler when item is selected") {
-            self.subject.itemSelected(AutoLockSetting.OneHour)
+            self.subject.itemSelectedObserver.onNext(AutoLockSetting.OneHour)
             expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.autoLock(value: AutoLockSetting.OneHour)))
         }
     }
