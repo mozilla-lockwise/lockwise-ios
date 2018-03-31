@@ -59,7 +59,6 @@ class RootView: UIViewController, RootViewProtocol {
         return self.currentViewController?.topViewController is T
     }
 
-
     func modalViewIs<T>(_ class: T.Type) -> Bool {
         return (self.currentViewController?.presentedViewController as? UINavigationController)?.topViewController is T
     }

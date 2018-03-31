@@ -31,7 +31,6 @@ class RootPresenterSpec: QuickSpec {
         var startMainStackCalled = false
         var pushMainViewArgument: MainRouteAction?
 
-
         var settingStackDisplayedStub: Bool!
         var startSettingStackCalled = false
         var pushSettingViewArgument: SettingRouteAction?

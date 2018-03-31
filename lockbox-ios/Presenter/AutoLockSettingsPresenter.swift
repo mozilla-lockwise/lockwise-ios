@@ -56,9 +56,10 @@ class AutoLockSettingsPresenter {
     }
 
     func onViewReady() {
-        let driver = self.userInfoStore.autoLock.asObservable().map({ (setting) -> [CheckmarkSettingCellConfiguration] in
+        let driver = self.userInfoStore.autoLock.map({ (setting) -> [CheckmarkSettingCellConfiguration] in
             return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
-                cellConfiguration.isChecked = (cellConfiguration.valueWhenChecked as? AutoLockSetting) == setting ? true : false
+                cellConfiguration.isChecked =
+                    (cellConfiguration.valueWhenChecked as? AutoLockSetting) == setting ? true : false
                 return cellConfiguration
             }
         }).map { (cellConfigurations) -> [AutoLockSettingSectionModel] in
