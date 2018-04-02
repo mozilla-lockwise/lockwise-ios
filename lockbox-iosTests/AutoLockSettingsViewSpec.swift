@@ -44,6 +44,10 @@ class AutoLockSettingsViewSpec: QuickSpec {
             expect(self.presenter.onViewReadyCalled).to(beTrue())
         }
 
+        it("labels the header") {
+            expect((self.subject.tableView(self.subject.tableView, viewForHeaderInSection: 0) as? UITableViewCell)?.textLabel?.text).to(equal(Constant.string.autoLockHeader))
+        }
+
         describe("tableview datasource configuration") {
             let configDriver = PublishSubject<[AutoLockSettingSectionModel]>()
 
