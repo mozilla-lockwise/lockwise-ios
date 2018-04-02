@@ -76,6 +76,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
         let leftButton = UIButton()
+        leftButton.adjustsImageWhenHighlighted = false
 
         let leftImage = UIImage(named: "back-button")?.withRenderingMode(.alwaysTemplate)
         leftButton.setImage(leftImage, for: .normal)
@@ -85,8 +86,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         leftButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
         leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(.lightGray, for: .selected)
-        leftButton.setTitleColor(.lightGray, for: .highlighted)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
         leftButton.tintColor = .white
 
         leftButton.addConstraint(NSLayoutConstraint(
