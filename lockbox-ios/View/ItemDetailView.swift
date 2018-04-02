@@ -13,6 +13,7 @@ struct ItemDetailCellConfiguration {
     let title: String
     let value: String
     let password: Bool
+    let size: CGFloat
 }
 
 extension ItemDetailCellConfiguration: IdentifiableType {
@@ -118,10 +119,12 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.titleLabel.text = cellConfiguration.title
                     cell.valueLabel.text = cellConfiguration.value
 
+                    cell.valueLabel.font = cell.valueLabel.font.withSize(cellConfiguration.size)
+
                     cell.revealButton.isHidden = !cellConfiguration.password
 
                     passwordConfig:if cellConfiguration.password {
-                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
+                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
 
                         guard let presenter = self.presenter else {
                             break passwordConfig
