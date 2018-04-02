@@ -7,18 +7,18 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol AutoLockSettingsViewProtocol {
+protocol AutoLockSettingViewProtocol {
     func bind(items: Driver<[AutoLockSettingSectionModel]>)
 }
 
-class AutoLockSettingsPresenter {
-    private var view: AutoLockSettingsViewProtocol
+class AutoLockSettingPresenter {
+    private var view: AutoLockSettingViewProtocol
     private var userInfoStore: UserInfoStore
     private var routeActionHandler: RouteActionHandler
     private var userInfoActionHandler: UserInfoActionHandler
     private var disposeBag = DisposeBag()
 
-    var initialSettings = [
+    lazy var initialSettings = [
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOnAppExit, isChecked: false,
                                           valueWhenChecked: AutoLockSetting.OnAppExit),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOneMinute, isChecked: false,
@@ -45,7 +45,7 @@ class AutoLockSettingsPresenter {
             }.asObserver()
     }()
 
-    init(view: AutoLockSettingsViewProtocol,
+    init(view: AutoLockSettingViewProtocol,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared) {

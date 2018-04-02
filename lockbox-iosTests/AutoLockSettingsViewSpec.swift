@@ -13,7 +13,7 @@ import RxCocoa
 
 class AutoLockSettingsViewSpec: QuickSpec {
 
-    class FakeAutoLockSettingsPresenter: AutoLockSettingsPresenter {
+    class FakeAutoLockSettingPresenter: AutoLockSettingPresenter {
         var onViewReadyCalled = false
         var onItemSelectedActionDispatched = false
 
@@ -28,13 +28,13 @@ class AutoLockSettingsViewSpec: QuickSpec {
         }
     }
 
-    var subject: AutoLockSettingsView!
-    var presenter: FakeAutoLockSettingsPresenter!
+    var subject: AutoLockSettingView!
+    var presenter: FakeAutoLockSettingPresenter!
 
     override func spec() {
         beforeEach {
-            self.subject = AutoLockSettingsView()
-            self.presenter = FakeAutoLockSettingsPresenter(view: self.subject)
+            self.subject = AutoLockSettingView()
+            self.presenter = FakeAutoLockSettingPresenter(view: self.subject)
             self.subject.presenter = self.presenter
             self.subject.viewWillAppear(false)
             self.subject.viewDidLoad()

@@ -98,10 +98,6 @@ class RootView: UIViewController, RootViewProtocol {
         }
     }
 
-    var isPresentingModal: Bool {
-        return currentViewController?.presentedViewController != nil
-    }
-
     func startSettingStack(_ animated: Bool = true) {
         self.currentViewController?.present(SettingNavigationController(), animated: animated)
     }
@@ -112,6 +108,8 @@ class RootView: UIViewController, RootViewProtocol {
         switch view {
         case .list:
             settingNavController?.popToRootViewController(animated: true)
+        case .autoLock:
+            settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
         default: break
         }
     }

@@ -12,7 +12,7 @@ import RxCocoa
 @testable import Lockbox
 
 class AutoLockSettingsPresenterSpec: QuickSpec {
-    class FakeAutoLockSettingsView: AutoLockSettingsViewProtocol {
+    class FakeAutoLockSettingsView: AutoLockSettingViewProtocol {
         var itemsObserver: TestableObserver<[AutoLockSettingSectionModel]>!
         private let disposeBag = DisposeBag()
 
@@ -50,7 +50,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
     private var userInfoActionHandler: FakeUserInfoActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
 
-    var subject: AutoLockSettingsPresenter!
+    var subject: AutoLockSettingPresenter!
 
     override func spec() {
         beforeEach {
@@ -59,7 +59,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
             self.routeActionHandler = FakeRouteActionHandler()
             self.userInfoActionHandler = FakeUserInfoActionHandler()
 
-            self.subject = AutoLockSettingsPresenter(view: self.view,
+            self.subject = AutoLockSettingPresenter(view: self.view,
                                              userInfoStore: self.userInfoStore,
                                              routeActionHandler: self.routeActionHandler,
                                              userInfoActionHandler: self.userInfoActionHandler)

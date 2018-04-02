@@ -10,14 +10,14 @@ import RxDataSources
 
 typealias AutoLockSettingSectionModel = AnimatableSectionModel<Int, CheckmarkSettingCellConfiguration>
 
-class AutoLockSettingsView: UITableViewController {
-    var presenter: AutoLockSettingsPresenter?
+class AutoLockSettingView: UITableViewController {
+    var presenter: AutoLockSettingPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<AutoLockSettingSectionModel>?
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        self.presenter = AutoLockSettingsPresenter(view: self)
+        self.presenter = AutoLockSettingPresenter(view: self)
         view.backgroundColor = Constant.color.settingsBackground
     }
 
@@ -52,7 +52,7 @@ class AutoLockSettingsView: UITableViewController {
     }
 }
 
-extension AutoLockSettingsView {
+extension AutoLockSettingView {
     private func setupNavbar() {
         navigationItem.title = Constant.string.settingsAutoLock
     }
@@ -85,7 +85,7 @@ extension AutoLockSettingsView {
     }
 }
 
-extension AutoLockSettingsView: AutoLockSettingsViewProtocol {
+extension AutoLockSettingView: AutoLockSettingViewProtocol {
     func bind(items: SharedSequence<DriverSharingStrategy, [AutoLockSettingSectionModel]>) {
         guard let dataSource = self.dataSource else {
             fatalError("datasource not set!")

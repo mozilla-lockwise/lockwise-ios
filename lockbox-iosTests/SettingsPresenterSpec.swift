@@ -31,11 +31,9 @@ class SettingsPresenterSpec: QuickSpec {
 
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
-        var invokeWasCalled = false
 
         override func invoke(_ action: RouteAction) {
             self.routeActionArgument = action
-            self.invokeWasCalled = true
         }
     }
 
@@ -107,7 +105,7 @@ class SettingsPresenterSpec: QuickSpec {
 
             it("does not call action handler when there is no action") {
                 self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Fake Item", routeAction: nil))
-                expect(self.routeActionHandler.invokeWasCalled).to(beFalse())
+                expect(self.routeActionHandler.routeActionArgument).to(beNil())
             }
         }
     }
