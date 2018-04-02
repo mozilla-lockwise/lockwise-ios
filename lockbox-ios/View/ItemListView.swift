@@ -179,8 +179,7 @@ extension ItemListView {
         prefButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
 
-        let sortingButton = UIButton(type: .custom)
-        sortingButton.adjustsImageWhenHighlighted = false
+        let sortingButton = UIButton()
 
         let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
         sortingButton.setImage(sortingImage, for: .normal)
