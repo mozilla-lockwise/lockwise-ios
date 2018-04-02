@@ -69,23 +69,23 @@
                                             <rect key="frame" x="0.0" y="0.0" width="342" height="59.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3A5-nI-aV6">
-                                                    <rect key="frame" x="15" y="15" width="38.5" height="18"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3A5-nI-aV6">
+                                                    <rect key="frame" x="14" y="15" width="38.5" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2T-XM-ua9">
-                                                    <rect key="frame" x="15" y="33" width="31" height="14.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2T-XM-ua9">
+                                                    <rect key="frame" x="14" y="33" width="31" height="14.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="3A5-nI-aV6" firstAttribute="top" secondItem="R1R-SD-Nxb" secondAttribute="top" constant="15" id="DpU-CY-xL3"/>
+                                                <constraint firstItem="3A5-nI-aV6" firstAttribute="top" secondItem="R1R-SD-Nxb" secondAttribute="top" constant="12" id="DpU-CY-xL3"/>
                                                 <constraint firstAttribute="bottom" secondItem="n2T-XM-ua9" secondAttribute="bottom" constant="12" id="KPF-YC-N74"/>
-                                                <constraint firstItem="3A5-nI-aV6" firstAttribute="leading" secondItem="R1R-SD-Nxb" secondAttribute="leading" constant="15" id="LPC-yz-3oA"/>
+                                                <constraint firstItem="3A5-nI-aV6" firstAttribute="leading" secondItem="R1R-SD-Nxb" secondAttribute="leading" constant="14" id="LPC-yz-3oA"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="n2T-XM-ua9" secondAttribute="trailing" constant="20" symbolic="YES" id="Woa-Nm-yRR"/>
                                                 <constraint firstItem="n2T-XM-ua9" firstAttribute="top" secondItem="3A5-nI-aV6" secondAttribute="bottom" id="Z8A-zF-5Zc"/>
                                                 <constraint firstItem="n2T-XM-ua9" firstAttribute="leading" secondItem="3A5-nI-aV6" secondAttribute="leading" id="uPu-vg-Qfd"/>
