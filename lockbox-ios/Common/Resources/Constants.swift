@@ -66,7 +66,7 @@ struct Constant {
         static let autoLockTwelveHours = NSLocalizedString("settings.autoLock.twelveHour", value: "12 hours", comment: "12 hours auto lock setting")
         static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
         static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
-        static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your lockbox.", comment: "Header displayed above auto lock settings")
+        static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your Lockbox.", comment: "Header displayed above auto lock settings")
     }
 
     struct number {

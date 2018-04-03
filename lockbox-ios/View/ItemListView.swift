@@ -179,7 +179,7 @@ extension ItemListView {
         prefButton.tintColor = .white
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
 
-        let sortingButton = UIButton(type: .custom)
+        let sortingButton = UIButton()
         sortingButton.adjustsImageWhenHighlighted = false
 
         let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
@@ -190,8 +190,8 @@ extension ItemListView {
         sortingButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         sortingButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
         sortingButton.setTitleColor(.white, for: .normal)
-        sortingButton.setTitleColor(.lightGray, for: .highlighted)
-        sortingButton.setTitleColor(.lightGray, for: .selected)
+        sortingButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        sortingButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
         sortingButton.tintColor = .white
 
         sortingButton.addConstraint(NSLayoutConstraint(
