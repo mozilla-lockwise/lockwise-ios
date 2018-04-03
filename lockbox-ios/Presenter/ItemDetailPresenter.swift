@@ -130,17 +130,20 @@ extension ItemDetailPresenter {
                 ItemDetailCellConfiguration(
                         title: Constant.string.webAddress,
                         value: item.origins.first ?? "",
-                        password: false)
+                        password: false,
+                        size: 16)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
                         title: Constant.string.username,
                         value: item.entry.username ?? "",
-                        password: false),
+                        password: false,
+                        size: 16),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
-                        password: true)
+                        password: true,
+                        size: 16)
             ])
         ]
 
@@ -149,7 +152,8 @@ extension ItemDetailPresenter {
                 ItemDetailCellConfiguration(
                         title: Constant.string.notes,
                         value: notes,
-                        password: false)
+                        password: false,
+                        size: 14)
             ])
 
             sectionModels.append(notesSectionModel)

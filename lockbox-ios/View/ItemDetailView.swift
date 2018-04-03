@@ -13,6 +13,7 @@ struct ItemDetailCellConfiguration {
     let title: String
     let value: String
     let password: Bool
+    let size: CGFloat
 }
 
 extension ItemDetailCellConfiguration: IdentifiableType {
@@ -75,12 +76,29 @@ extension ItemDetailView: ItemDetailViewProtocol {
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
         let leftButton = UIButton()
-        leftButton.setTitle(Constant.string.back, for: .normal)
-        leftButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        leftButton.adjustsImageWhenHighlighted = false
 
+        let leftImage = UIImage(named: "back-button")?.withRenderingMode(.alwaysTemplate)
+        leftButton.setImage(leftImage, for: .normal)
+        leftButton.setTitle(Constant.string.back, for: .normal)
+
+        leftButton.contentHorizontalAlignment = .left
+        leftButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
         leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        leftButton.tintColor = .white
+
+        leftButton.addConstraint(NSLayoutConstraint(
+            item: leftButton,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1.0,
+            constant: 100)
+        )
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
@@ -118,10 +136,12 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.titleLabel.text = cellConfiguration.title
                     cell.valueLabel.text = cellConfiguration.value
 
+                    cell.valueLabel.font = cell.valueLabel.font.withSize(cellConfiguration.size)
+
                     cell.revealButton.isHidden = !cellConfiguration.password
 
                     passwordConfig:if cellConfiguration.password {
-                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
+                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
 
                         guard let presenter = self.presenter else {
                             break passwordConfig
