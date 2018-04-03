@@ -7,6 +7,7 @@ import Foundation
 enum SettingAction: Action {
     case biometricLogin(enabled: Bool)
     case autoLock(timeout: AutoLockSetting)
+    case reset
 }
 
 extension SettingAction: Equatable {
@@ -16,6 +17,8 @@ extension SettingAction: Equatable {
             return lhEnabled == rhEnabled
         case (.autoLock(let lhTimeout), .autoLock(let rhTimeout)):
             return lhTimeout == rhTimeout
+        case (.reset, .reset):
+            return true
         default:
             return false
         }
@@ -43,6 +46,11 @@ class SettingActionHandler: ActionHandler {
             self.userDefaults.set(enabled, forKey: SettingKey.biometricLogin.rawValue)
         case .autoLock(let timeout):
             self.userDefaults.set(timeout.rawValue, forKey: SettingKey.autoLock.rawValue)
+        case .reset:
+            self.userDefaults.set(Constant.setting.defaultBiometricLockEnabled,
+                    forKey: SettingKey.biometricLogin.rawValue)
+            self.userDefaults.set(Constant.setting.defaultAutoLockTimeout.rawValue,
+                    forKey: SettingKey.autoLock.rawValue)
         }
 
         // purely for telemetry, no app functionality depends on this
