@@ -16,7 +16,6 @@ typealias SettingSectionModel = AnimatableSectionModel<Int, SettingCellConfigura
 
 class SettingsView: UITableViewController {
     var presenter: SettingsPresenter?
-    var settings: [SettingCellConfiguration]?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<SettingSectionModel>?
 
@@ -36,6 +35,7 @@ class SettingsView: UITableViewController {
 
     private func setupNavbar() {
         navigationItem.title = Constant.string.settingsTitle
+        navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
@@ -56,14 +56,15 @@ class SettingsView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavbar()
-        setupFooter()
+        self.setupNavbar()
+        self.setupFooter()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupDataSource()
-        presenter?.onViewReady()
+        self.setupDataSource()
+        self.setupDelegate()
+        self.presenter?.onViewReady()
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -101,9 +102,20 @@ extension SettingsView {
                     switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
+                    cell.selectionStyle = UITableViewCellSelectionStyle.none
                 }
                 return cell
         })
+    }
+
+    private func setupDelegate() {
+        guard let presenter = presenter else { return }
+        self.tableView.rx.itemSelected
+            .map { (indexPath) -> SettingCellConfiguration? in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                return self.dataSource?[indexPath]
+            }.bind(to: presenter.itemSelectedObserver)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -147,5 +159,16 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
     init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false) {
         super.init(text: text, routeAction: routeAction)
         self.isOn = isOn
+    }
+}
+
+class CheckmarkSettingCellConfiguration: SettingCellConfiguration {
+    var isChecked: Bool = false
+    var valueWhenChecked: Any?
+
+    init(text: String, isChecked: Bool = false, valueWhenChecked: Any?) {
+        super.init(text: text, routeAction: nil)
+        self.isChecked = isChecked
+        self.valueWhenChecked = valueWhenChecked
     }
 }

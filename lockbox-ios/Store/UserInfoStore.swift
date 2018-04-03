@@ -16,7 +16,6 @@ class UserInfoStore {
     private var _scopedKey = ReplaySubject<String?>.create(bufferSize: 1)
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
-    private var _biometricLoginEnabled = ReplaySubject<Bool?>.create(bufferSize: 1)
 
     public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
@@ -28,10 +27,6 @@ class UserInfoStore {
 
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
-    }
-
-    public var biometricLoginEnabled: Observable<Bool?> {
-        return _biometricLoginEnabled.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -62,10 +57,6 @@ class UserInfoStore {
                         self.populateInitialValues()
                     case .clear:
                         self.clear()
-                    case .biometricLogin(let enabled):
-                        if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
-                            self._biometricLoginEnabled.onNext(enabled)
-                        }
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -100,13 +91,6 @@ class UserInfoStore {
         } else {
             self._oauthInfo.onNext(nil)
         }
-
-        let enabled = self.keychainManager.retrieve(.biometricLoginEnabled)
-        if enabled == nil {
-            self._biometricLoginEnabled.onNext(nil)
-        } else {
-            self._biometricLoginEnabled.onNext(enabled == "true")
-        }
     }
 
     private func clear() {
@@ -118,4 +102,14 @@ class UserInfoStore {
         self._oauthInfo.onNext(nil)
         self._profileInfo.onNext(nil)
     }
+}
+
+enum AutoLockSetting: String {
+    case OnAppExit
+    case OneMinute
+    case FiveMinutes
+    case OneHour
+    case TwelveHours
+    case TwentyFourHours
+    case Never
 }

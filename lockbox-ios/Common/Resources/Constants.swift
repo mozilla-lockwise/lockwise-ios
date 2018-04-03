@@ -56,6 +56,15 @@ struct Constant {
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsTouchId = NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings")
         static let settingsFaceId = NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings")
+        static let autoLockOnAppExit = NSLocalizedString("settings.autoLock.onAppExit", value: "On app exit", comment: "On app exit auto lock setting")
+        static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
+        static let autoLockFiveMinutes = NSLocalizedString("settings.autoLock.fiveMinutes", value: "5 minutes", comment: "5 minutes auto lock setting")
+        static let autoLockThirtyMinutes = NSLocalizedString("settings.autoLock.thirtyMinutes", value: "30 minutes", comment: "30 minutes auto lock setting")
+        static let autoLockOneHour = NSLocalizedString("settings.autoLock.oneHour", value: "1 hour", comment: "1 hour auto lock setting")
+        static let autoLockTwelveHours = NSLocalizedString("settings.autoLock.twelveHour", value: "12 hours", comment: "12 hours auto lock setting")
+        static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
+        static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
+        static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your lockbox.", comment: "Header displayed above auto lock settings")
     }
 
     struct number {
@@ -63,5 +72,10 @@ struct Constant {
         static let displayStatusAlertFade = TimeInterval(0.3)
         static let displayStatusAlertOpacity: CGFloat = 0.75
         static let displayStatusAlertYPercentage: CGFloat = 0.4
+    }
+
+    struct setting {
+        static let defaultBiometricLockEnabled = true
+        static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
     }
 }
