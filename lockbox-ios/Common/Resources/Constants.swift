@@ -73,4 +73,9 @@ struct Constant {
         static let displayStatusAlertOpacity: CGFloat = 0.75
         static let displayStatusAlertYPercentage: CGFloat = 0.4
     }
+
+    struct setting {
+        static let defaultBiometricLockEnabled = true
+        static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
+    }
 }

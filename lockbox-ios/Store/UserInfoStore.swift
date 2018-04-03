@@ -16,8 +16,6 @@ class UserInfoStore {
     private var _scopedKey = ReplaySubject<String?>.create(bufferSize: 1)
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
-    private var _biometricLoginEnabled = ReplaySubject<Bool?>.create(bufferSize: 1)
-    private var _autoLock = ReplaySubject<AutoLockSetting?>.create(bufferSize: 1)
 
     public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
@@ -29,14 +27,6 @@ class UserInfoStore {
 
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
-    }
-
-    public var biometricLoginEnabled: Observable<Bool?> {
-        return _biometricLoginEnabled.asObservable()
-    }
-
-    public var autoLock: Observable<AutoLockSetting?> {
-        return _autoLock.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -67,14 +57,6 @@ class UserInfoStore {
                         self.populateInitialValues()
                     case .clear:
                         self.clear()
-                    case .biometricLogin(let enabled):
-                        if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
-                            self._biometricLoginEnabled.onNext(enabled)
-                        }
-                    case.autoLock(let value):
-                        if self.keychainManager.save(value.rawValue, identifier: .autoLock) {
-                            self._autoLock.onNext(value)
-                        }
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -108,20 +90,6 @@ class UserInfoStore {
             )
         } else {
             self._oauthInfo.onNext(nil)
-        }
-
-        let enabled = self.keychainManager.retrieve(.biometricLoginEnabled)
-        if enabled == nil {
-            self._biometricLoginEnabled.onNext(nil)
-        } else {
-            self._biometricLoginEnabled.onNext(enabled == "true")
-        }
-
-        let autoLock = self.keychainManager.retrieve(.autoLock)
-        if let autoLock = autoLock {
-            self._autoLock.onNext(AutoLockSetting(rawValue: autoLock))
-        } else {
-            self._autoLock.onNext(AutoLockSetting.Never)
         }
     }
 

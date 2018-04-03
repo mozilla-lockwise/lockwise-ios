@@ -21,14 +21,6 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoStore: UserInfoStore {
-        let autoLockEnabledSubject = PublishSubject<AutoLockSetting?>()
-
-        override var autoLock: Observable<AutoLockSetting?> {
-            return autoLockEnabledSubject.asObservable()
-        }
-    }
-
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
 
@@ -37,17 +29,16 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoActionHandler: UserInfoActionHandler {
-        var actionArgument: UserInfoAction?
-        override func invoke(_ action: UserInfoAction) {
+    class FakeSettingActionHandler: SettingActionHandler {
+        var actionArgument: SettingAction?
+        override func invoke(_ action: SettingAction) {
             actionArgument = action
         }
     }
 
     private var view: FakeAutoLockSettingsView!
-    private var userInfoStore: FakeUserInfoStore!
     private var routeActionHandler: FakeRouteActionHandler!
-    private var userInfoActionHandler: FakeUserInfoActionHandler!
+    private var settingActionHandler: FakeSettingActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
 
     var subject: AutoLockSettingPresenter!
@@ -55,20 +46,20 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
     override func spec() {
         beforeEach {
             self.view = FakeAutoLockSettingsView()
-            self.userInfoStore = FakeUserInfoStore()
             self.routeActionHandler = FakeRouteActionHandler()
-            self.userInfoActionHandler = FakeUserInfoActionHandler()
+            self.settingActionHandler = FakeSettingActionHandler()
 
             self.subject = AutoLockSettingPresenter(view: self.view,
-                                             userInfoStore: self.userInfoStore,
                                              routeActionHandler: self.routeActionHandler,
-                                             userInfoActionHandler: self.userInfoActionHandler)
+                                             settingActionHandler: self.settingActionHandler)
         }
 
         it("delivers updated values when autoLock setting changes") {
             self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
             self.subject.onViewReady()
-            self.userInfoStore.autoLockEnabledSubject.onNext(AutoLockSetting.FiveMinutes)
+
+            UserDefaults.standard.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLock.rawValue)
+
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 for item in settings[0].items {
                     if item.valueWhenChecked as? AutoLockSetting == AutoLockSetting.FiveMinutes {
@@ -86,7 +77,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
 
         it("calls handler when item is selected") {
             self.subject.itemSelectedObserver.onNext(AutoLockSetting.OneHour)
-            expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.autoLock(value: AutoLockSetting.OneHour)))
+            expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.autoLock(timeout: AutoLockSetting.OneHour)))
         }
     }
 }
