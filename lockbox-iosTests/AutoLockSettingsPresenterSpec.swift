@@ -68,10 +68,10 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         it("delivers updated values when autoLock setting changes") {
             self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
             self.subject.onViewReady()
-            self.userInfoStore.autoLockEnabledSubject.onNext(AutoLockSetting.FiveMinutes)
+            self.userInfoStore.autoLockEnabledSubject.onNext(AutoLockSetting.OneMinute)
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 for item in settings[0].items {
-                    if item.valueWhenChecked as? AutoLockSetting == AutoLockSetting.FiveMinutes {
+                    if item.valueWhenChecked as? AutoLockSetting == AutoLockSetting.OneMinute {
                         expect(item.isChecked).to(beTrue())
                     } else {
                         expect(item.isChecked).to(beFalse())
