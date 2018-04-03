@@ -22,9 +22,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="EJh-kX-2nu">
-                                    <rect key="frame" x="0.0" y="132" width="375" height="1"/>
+                                    <rect key="frame" x="0.0" y="132" width="375" height="0.3"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="filtercell" rowHeight="44" id="hEu-cd-CNd" customClass="FilterCell" customModule="Lockbox" customModuleProvider="target">
