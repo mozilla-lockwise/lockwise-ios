@@ -53,7 +53,7 @@ class AutoLockSettingsViewSpec: QuickSpec {
 
             let sectionModels = [AutoLockSettingSectionModel(model: 0, items: [
                 CheckmarkSettingCellConfiguration(text: "One Hour", isChecked: false, valueWhenChecked: AutoLockSetting.OneHour),
-                CheckmarkSettingCellConfiguration(text: "Never", isChecked: true, valueWhenChecked: AutoLockSetting.Never),
+                CheckmarkSettingCellConfiguration(text: "Five Minutes", isChecked: true, valueWhenChecked: AutoLockSetting.FiveMinutes),
                 CheckmarkSettingCellConfiguration(text: "One Minute", isChecked: false, valueWhenChecked: AutoLockSetting.OneMinute)
             ])]
 

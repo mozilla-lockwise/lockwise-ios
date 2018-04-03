@@ -121,7 +121,7 @@ class UserInfoStore {
         if let autoLock = autoLock {
             self._autoLock.onNext(AutoLockSetting(rawValue: autoLock))
         } else {
-            self._autoLock.onNext(AutoLockSetting.Never)
+            self._autoLock.onNext(AutoLockSetting.FiveMinutes)
         }
     }
 
