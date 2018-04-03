@@ -153,8 +153,8 @@ class RootViewSpec: QuickSpec {
 
                 describe("account") {
                     beforeEach {
-                        self.subject.startMainStack()
-                        self.subject.startSettingStack(false)
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
                         self.subject.pushSettingView(view: .account)
                     }
 

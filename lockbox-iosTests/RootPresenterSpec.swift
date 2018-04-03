@@ -790,10 +790,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument).to(beNil())
                                 }
 
                                 it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -809,10 +811,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
 
                                 it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
                             }
@@ -880,10 +884,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -899,10 +905,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
                             }
