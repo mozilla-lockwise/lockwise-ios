@@ -14,6 +14,7 @@
 		7AA541388E228B6281F2A2E8 /* UserInfoStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E826632AFFBA1677E5E /* UserInfoStoreSpec.swift */; };
 		7AA541B3BC9C4F5E6A725222 /* FxAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C12A1BC616CA2344584 /* FxAView.swift */; };
 		7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547CE3404CC8123CA455D /* Observable+Spec.swift */; };
+		7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */; };
 		7AA5435895EE131D6B5BD4ED /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5450E45A4DB17626F4684 /* WebView.swift */; };
 		7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5439EEDE4AB222842E7C8 /* DataStoreSpec.swift */; };
 		7AA543A00DEEDF6947B578EC /* UserInfoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54146E0C9269A0CE8D53A /* UserInfoStore.swift */; };
@@ -60,6 +61,7 @@
 		7AA54B936D967416C7AD4F3C /* Observable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */; };
 		7AA54BE3C277CF8AC0C4306A /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5404248F72FC87CC4978B /* Date+.swift */; };
 		7AA54BF8B62177DC348BFDA6 /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542A3362BE85B313A88B8 /* UIImage+.swift */; };
+		7AA54C0AFF50DFF42D405014 /* SettingAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA549ACA818E06061329FE7 /* SettingAction.swift */; };
 		7AA54C1981A1295939512085 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5444E03C80B7A8A0E4EE5 /* String+.swift */; };
 		7AA54C4B886A9388A2BCE81A /* FxAPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA548CFC3319394489DD10E /* FxAPresenter.swift */; };
 		7AA54C6D0A4BEB2C3900424F /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542F5012A5D2E954E030A /* Data+.swift */; };
@@ -241,6 +243,8 @@
 		7AA548CFC3319394489DD10E /* FxAPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPresenter.swift; sourceTree = "<group>"; };
 		7AA54915F5D12D1929527EDE /* FxAAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAAction.swift; sourceTree = "<group>"; };
 		7AA5492DA3988625D1DAB5BD /* UserInfoAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoAction.swift; sourceTree = "<group>"; };
+		7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingActionSpec.swift; sourceTree = "<group>"; };
+		7AA549ACA818E06061329FE7 /* SettingAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingAction.swift; sourceTree = "<group>"; };
 		7AA549BD9AE6A6DD82FDA434 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7AA549F525E77FA0FE9D9B54 /* buddybuild_postbuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buddybuild_postbuild.sh; sourceTree = "<group>"; };
 		7AA54A76AB52465AE5AE41E2 /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
@@ -472,6 +476,7 @@
 				7AA54B41C60F04FA585E5B8F /* ItemDetailAction.swift */,
 				7AA54575C8FE51664E45ACD8 /* CopyAction.swift */,
 				7AA54E02364E77393B85C6FE /* ItemListDisplayAction.swift */,
+				7AA549ACA818E06061329FE7 /* SettingAction.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -614,6 +619,7 @@
 				D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
 				D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */,
 				D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */,
+				7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -845,6 +851,7 @@
 				7AA5469948A8AE091E024CC7 /* ItemListDisplayStoreSpec.swift in Sources */,
 				7AA545D1DBB719E27B782966 /* ItemListDisplayActionSpec.swift in Sources */,
 				7AA54850D6DE1CD66D8C43AE /* UserInfoActionSpec.swift in Sources */,
+				7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -909,6 +916,7 @@
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
 				7AA54BE3C277CF8AC0C4306A /* Date+.swift in Sources */,
 				7AA54B00F88A2EF6FDFA2892 /* SettingNavigationController.swift in Sources */,
+				7AA54C0AFF50DFF42D405014 /* SettingAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

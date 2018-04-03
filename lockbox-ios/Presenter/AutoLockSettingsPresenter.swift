@@ -13,9 +13,9 @@ protocol AutoLockSettingViewProtocol {
 
 class AutoLockSettingPresenter {
     private var view: AutoLockSettingViewProtocol
-    private var userInfoStore: UserInfoStore
+    private var userDefaults: UserDefaults
     private var routeActionHandler: RouteActionHandler
-    private var userInfoActionHandler: UserInfoActionHandler
+    private var settingActionHandler: SettingActionHandler
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
@@ -41,30 +41,38 @@ class AutoLockSettingPresenter {
                 return
             }
 
-            target.userInfoActionHandler.invoke(.autoLock(value: newAutoLockValue))
+            target.settingActionHandler.invoke(.autoLock(timeout: newAutoLockValue))
             }.asObserver()
     }()
 
     init(view: AutoLockSettingViewProtocol,
-         userInfoStore: UserInfoStore = UserInfoStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared) {
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
         self.view = view
-        self.userInfoStore = userInfoStore
+        self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
-        self.userInfoActionHandler = userInfoActionHandler
+        self.settingActionHandler = settingActionHandler
     }
 
     func onViewReady() {
-        let driver = self.userInfoStore.autoLock.map({ (setting) -> [CheckmarkSettingCellConfiguration] in
-            return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
-                cellConfiguration.isChecked =
-                    (cellConfiguration.valueWhenChecked as? AutoLockSetting) == setting ? true : false
-                return cellConfiguration
-            }
-        }).map { (cellConfigurations) -> [AutoLockSettingSectionModel] in
-            return [AnimatableSectionModel(model: 0, items: cellConfigurations)]
-        }.asDriver(onErrorJustReturn: [])
+        let driver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue)
+                .filterNil()
+                .map { value -> AutoLockSetting? in
+                    return AutoLockSetting(rawValue: value)
+                }
+                .filterNil()
+                .map { setting -> [CheckmarkSettingCellConfiguration] in
+                    return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
+                        cellConfiguration.isChecked =
+                                (cellConfiguration.valueWhenChecked as? AutoLockSetting) == setting ? true : false
+                        return cellConfiguration
+                    }
+                }
+                .map { cellConfigurations -> [AutoLockSettingSectionModel] in
+                    return [AnimatableSectionModel(model: 0, items: cellConfigurations)]
+                }
+                .asDriver(onErrorJustReturn: [])
 
         view.bind(items: driver)
     }

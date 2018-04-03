@@ -21,14 +21,6 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoStore: UserInfoStore {
-        let biometricsEnabledSubject = PublishSubject<Bool?>()
-
-        override var biometricLoginEnabled: Observable<Bool?> {
-            return biometricsEnabledSubject.asObservable()
-        }
-    }
-
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
 
@@ -37,17 +29,16 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoActionHandler: UserInfoActionHandler {
-        var actionArgument: UserInfoAction?
-        override func invoke(_ action: UserInfoAction) {
+    class FakeSettingActionHandler: SettingActionHandler {
+        var actionArgument: SettingAction?
+        override func invoke(_ action: SettingAction) {
             actionArgument = action
         }
     }
 
     private var view: FakeSettingsView!
-    private var userInfoStore: FakeUserInfoStore!
     private var routeActionHandler: FakeRouteActionHandler!
-    private var userInfoActionHandler: FakeUserInfoActionHandler!
+    private var settingActionHandler: FakeSettingActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
 
     var subject: SettingsPresenter!
@@ -56,23 +47,18 @@ class SettingsPresenterSpec: QuickSpec {
         describe("SettingsPresenter") {
             beforeEach {
                 self.view = FakeSettingsView()
-                self.userInfoStore = FakeUserInfoStore()
                 self.routeActionHandler = FakeRouteActionHandler()
-                self.userInfoActionHandler = FakeUserInfoActionHandler()
+                self.settingActionHandler = FakeSettingActionHandler()
 
                 self.subject = SettingsPresenter(view: self.view,
-                                            userInfoStore: self.userInfoStore,
                                             routeActionHandler: self.routeActionHandler,
-                                            userInfoActionHandler: self.userInfoActionHandler)
+                                            settingActionHandler: self.settingActionHandler)
             }
 
             describe("biometrics field") {
-                it("requests biometricsEnabled field on init") {
-                    expect(self.userInfoStore.biometricsEnabledSubject.hasObservers).to(beTrue())
-                }
-
                 it("respects biometricsEnabled stored value") {
-                    self.userInfoStore.biometricsEnabledSubject.onNext(true)
+                    UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
+
                     if let cellConfig = self.subject.settings.value[1].items[1] as? SwitchSettingCellConfiguration {
                         expect(cellConfig.isOn).to(beTrue())
                     } else {
@@ -95,7 +81,7 @@ class SettingsPresenterSpec: QuickSpec {
 
             it("calls handler when switch changes") {
                 self.subject.switchChanged(row: 4, isOn: true)
-                expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.biometricLogin(enabled: true)))
+                expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: true)))
             }
 
             it("handles action when item is selected") {
