@@ -146,6 +146,8 @@
 		D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */; };
 		D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */; };
 		D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */; };
+		D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */; };
+		D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
 /* End PBXBuildFile section */
 
@@ -341,6 +343,8 @@
 		D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenter.swift; sourceTree = "<group>"; };
 		D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenterSpec.swift; sourceTree = "<group>"; };
 		D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsViewSpec.swift; sourceTree = "<group>"; };
+		D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingView.swift; sourceTree = "<group>"; };
+		D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenter.swift; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -399,6 +403,7 @@
 				7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */,
 				D831FEDF204C92CD00EAE19A /* SettingsPresenter.swift */,
 				D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */,
+				D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -539,6 +544,7 @@
 				D831FEDD204C925100EAE19A /* SettingsView.swift */,
 				7D6FB87A204F00E2005E23AA /* StatusAlert.swift */,
 				D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */,
+				D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -882,6 +888,7 @@
 				7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */,
 				7AA548BBE384D40397D26E9B /* RootView.swift in Sources */,
 				7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */,
+				D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */,
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
 				7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */,
@@ -908,6 +915,7 @@
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
 				7AA54BE3C277CF8AC0C4306A /* Date+.swift in Sources */,
+				D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */,
 				7AA54B00F88A2EF6FDFA2892 /* SettingNavigationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -110,6 +110,8 @@ class RootView: UIViewController, RootViewProtocol {
             settingNavController?.popToRootViewController(animated: true)
         case .autoLock:
             settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
+        case .preferredBrowser:
+            settingNavController?.pushViewController(PreferredBrowserSettingView(), animated: true)
         default: break
         }
     }

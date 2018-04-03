@@ -56,6 +56,7 @@ struct Constant {
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsTouchId = NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings")
         static let settingsFaceId = NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings")
+        static let settingsBrowser = NSLocalizedString("settings.browser", value: "Browser", comment: "Preferred Browser option in settings")
         static let autoLockOnAppExit = NSLocalizedString("settings.autoLock.onAppExit", value: "On app exit", comment: "On app exit auto lock setting")
         static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
         static let autoLockFiveMinutes = NSLocalizedString("settings.autoLock.fiveMinutes", value: "5 minutes", comment: "5 minutes auto lock setting")

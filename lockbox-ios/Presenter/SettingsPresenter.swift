@@ -37,7 +37,9 @@ class SettingsPresenter {
         ]),
         SettingSectionModel(model: 1, items: [
             SettingCellConfiguration(text: Constant.string.settingsAccount, routeAction: SettingRouteAction.account),
-            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingRouteAction.autoLock)
+            SettingCellConfiguration(text: Constant.string.settingsAutoLock, routeAction: SettingRouteAction.autoLock),
+            SettingCellConfiguration(text: Constant.string.settingsBrowser,
+                                     routeAction: SettingRouteAction.preferredBrowser)
         ])
     ])
 

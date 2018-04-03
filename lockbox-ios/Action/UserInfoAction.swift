@@ -12,6 +12,7 @@ enum UserInfoAction: Action {
     case autoLock(value: AutoLockSetting)
     case load
     case clear
+    case preferredBrowser(value: PreferredBrowserSetting)
 }
 
 extension UserInfoAction: Equatable {
@@ -31,6 +32,8 @@ extension UserInfoAction: Equatable {
             return true
         case (.clear, .clear):
             return true
+        case (.preferredBrowser(let lhValue), .preferredBrowser(let rhValue)):
+            return lhValue == rhValue
         default:
             return false
         }

@@ -18,6 +18,7 @@ class UserInfoStore {
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
     private var _biometricLoginEnabled = ReplaySubject<Bool?>.create(bufferSize: 1)
     private var _autoLock = ReplaySubject<AutoLockSetting?>.create(bufferSize: 1)
+    private var _preferredBrowser = ReplaySubject<PreferredBrowserSetting?>.create(bufferSize: 1)
 
     public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
@@ -37,6 +38,10 @@ class UserInfoStore {
 
     public var autoLock: Observable<AutoLockSetting?> {
         return _autoLock.asObservable()
+    }
+
+    public var preferredBrowser: Observable<PreferredBrowserSetting?> {
+        return _preferredBrowser.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -71,9 +76,13 @@ class UserInfoStore {
                         if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
                             self._biometricLoginEnabled.onNext(enabled)
                         }
-                    case.autoLock(let value):
+                    case .autoLock(let value):
                         if self.keychainManager.save(value.rawValue, identifier: .autoLock) {
                             self._autoLock.onNext(value)
+                        }
+                    case .preferredBrowser(let value):
+                        if self.keychainManager.save(value.rawValue, identifier: .preferredBrowser) {
+                            self._preferredBrowser.onNext(value)
                         }
                     }
                 })
@@ -123,6 +132,13 @@ class UserInfoStore {
         } else {
             self._autoLock.onNext(AutoLockSetting.Never)
         }
+
+        let preferredBrowser = self.keychainManager.retrieve(.preferredBrowser)
+        if let preferredBrowser = preferredBrowser {
+            self._preferredBrowser.onNext(PreferredBrowserSetting(rawValue: preferredBrowser))
+        } else {
+            self._preferredBrowser.onNext(PreferredBrowserSetting.Safari)
+        }
     }
 
     private func clear() {
@@ -144,4 +160,11 @@ enum AutoLockSetting: String {
     case TwelveHours
     case TwentyFourHours
     case Never
+}
+
+enum PreferredBrowserSetting: String {
+    case Chrome
+    case Firefox
+    case Focus
+    case Safari
 }

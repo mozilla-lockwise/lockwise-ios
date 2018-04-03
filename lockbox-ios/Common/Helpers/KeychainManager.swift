@@ -6,7 +6,7 @@ import Foundation
 import Security
 
 enum KeychainManagerIdentifier: String {
-    case email, scopedKey, uid, refreshToken, accessToken, idToken, avatarURL, biometricLoginEnabled, autoLock
+    case email, scopedKey, uid, refreshToken, accessToken, idToken, avatarURL, biometricLoginEnabled, autoLock, preferredBrowser
 
     static let allValues: [KeychainManagerIdentifier] = [
         .email,
@@ -17,7 +17,8 @@ enum KeychainManagerIdentifier: String {
         .idToken,
         .avatarURL,
         .biometricLoginEnabled,
-        .autoLock
+        .autoLock,
+        .preferredBrowser
     ]
 }
 
