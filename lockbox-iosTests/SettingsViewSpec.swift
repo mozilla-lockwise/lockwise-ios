@@ -16,6 +16,7 @@ class SettingsViewSpec: QuickSpec {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
         var switchChangedCalled = false
+        var settingCellStub: TestableObserver<SettingRouteAction?>!
 
         override func onViewReady() {
             onViewReadyCalled = true
@@ -28,19 +29,26 @@ class SettingsViewSpec: QuickSpec {
         override var onDone: AnyObserver<Void> {
             return Binder(self) { target, _ in
                 target.onDoneActionDispatched = true
-                }.asObserver()
+            }.asObserver()
+        }
+
+        override var onSettingCellTapped: AnyObserver<SettingRouteAction?> {
+            return self.settingCellStub.asObserver()
         }
     }
 
+    private var presenter: FakeSettingsPresenter!
+    private var scheduler = TestScheduler(initialClock: 0)
     var subject: SettingsView!
-    var presenter: FakeSettingsPresenter!
 
     override func spec() {
         describe("SettingsView") {
             beforeEach {
                 self.subject = SettingsView()
                 self.presenter = FakeSettingsPresenter(view: self.subject)
+                self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
                 self.subject.presenter = self.presenter
+
                 self.subject.viewWillAppear(false)
                 self.subject.viewDidLoad()
             }
@@ -78,6 +86,34 @@ class SettingsViewSpec: QuickSpec {
 
                 it("calls presenter when switch is flipped") {
                     expect(self.presenter.switchChangedCalled).to(beTrue())
+                }
+            }
+
+            describe("tableview delegate configuration") {
+                let configDriver = PublishSubject<[SettingSectionModel]>()
+                let sectionModels = [
+                    SettingSectionModel(model: 0, items: [
+                        SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
+                        SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
+                    ]),
+                    SettingSectionModel(model: 1, items: [
+                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
+                    ])
+                ]
+
+                beforeEach {
+                    self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
+                    configDriver.onNext(sectionModels)
+                }
+
+                describe("onCellTapped") {
+                    beforeEach {
+                        self.subject.tableView.delegate!.tableView!(self.subject.tableView, didSelectRowAt: [0, 0])
+                    }
+
+                    it("tells the presenter with the appropriate action") {
+                        expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.account))
+                    }
                 }
             }
         }

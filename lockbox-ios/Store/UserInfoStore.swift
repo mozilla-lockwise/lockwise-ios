@@ -39,8 +39,7 @@ class UserInfoStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .profileInfo(let info):
-                        if self.keychainManager.save(info.email, identifier: .email) &&
-                                   self.keychainManager.save(info.uid, identifier: .uid) {
+                        if self.saveProfileInfo(info) {
                             self._profileInfo.onNext(info)
                         }
                     case .oauthInfo(let info):
@@ -62,14 +61,21 @@ class UserInfoStore {
                 .disposed(by: self.disposeBag)
 
     }
+}
 
+extension UserInfoStore {
     private func populateInitialValues() {
         if let email = self.keychainManager.retrieve(.email),
            let uid = self.keychainManager.retrieve(.uid) {
+            let avatarURL = self.keychainManager.retrieve(.avatarURL)
+            let displayName = self.keychainManager.retrieve(.displayName)
+
             self._profileInfo.onNext(
                     ProfileInfo.Builder()
                             .uid(uid)
                             .email(email)
+                            .avatar(avatarURL)
+                            .displayName(displayName)
                             .build()
             )
         } else {
@@ -101,6 +107,21 @@ class UserInfoStore {
         self._profileInfo.onNext(nil)
         self._oauthInfo.onNext(nil)
         self._profileInfo.onNext(nil)
+    }
+
+    private func saveProfileInfo(_ info: ProfileInfo) -> Bool {
+        var success = self.keychainManager.save(info.email, identifier: .email) &&
+                self.keychainManager.save(info.uid, identifier: .uid)
+
+        if let displayName = info.displayName {
+            success = success && self.keychainManager.save(displayName, identifier: .displayName)
+        }
+
+        if let avatar = info.avatar {
+            success = success && self.keychainManager.save(avatar, identifier: .avatarURL)
+        }
+
+        return success
     }
 }
 

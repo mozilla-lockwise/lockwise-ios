@@ -12,6 +12,7 @@ struct Constant {
     }
 
     struct color {
+        static let cellBorderGrey = UIColor(hex: 0xC8C7CC)
         static let lightGrey = UIColor(hex: 0xEFEFEF)
         static let listBackground = UIColor(hex: 0xEFEFF4)
         static let lockBoxBlue = UIColor(hex: 0x0088D9)
@@ -29,6 +30,7 @@ struct Constant {
     }
 
     struct string {
+        static let account = NSLocalizedString("account", value: "Account", comment: "Title for settings page letting users manage their accounts")
         static let alphabetically = NSLocalizedString("alphabetically", value: "Alphabetically", comment: "Label for the option sheet action allowing users to sort an entry list alphabetically")
         static let aToZ = NSLocalizedString("a_to_z", value: "A-Z", comment: "Label for the button allowing users to sort an entry list alphabetically")
         static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
