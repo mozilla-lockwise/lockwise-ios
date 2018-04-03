@@ -162,6 +162,11 @@ class RootViewSpec: QuickSpec {
                     it("makes the list view the top view of the modal stack") {
                         expect(self.subject.modalViewIs(SettingsView.self)).to(beTrue())
                     }
+
+                    it("push autolock view") {
+                        self.subject.pushSettingView(view: .autoLock)
+                        expect(self.subject.modalViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
+                    }
                 }
             }
         }

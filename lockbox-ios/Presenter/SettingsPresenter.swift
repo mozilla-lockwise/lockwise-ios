@@ -21,6 +21,13 @@ class SettingsPresenter {
             }.asObserver()
     }()
 
+    lazy private(set) var itemSelectedObserver: AnyObserver<SettingCellConfiguration?> = {
+        return Binder(self) { target, setting in
+            guard let routeAction = setting?.routeAction else { return }
+            target.routeActionHandler.invoke(routeAction)
+            }.asObserver()
+    }()
+
     var settings = Variable([SettingSectionModel(model: 0, items: [
         SettingCellConfiguration(text: Constant.string.settingsProvideFeedback,
                                  routeAction: SettingRouteAction.provideFeedback),

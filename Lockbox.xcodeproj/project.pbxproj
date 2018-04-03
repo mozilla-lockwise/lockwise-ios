@@ -142,6 +142,10 @@
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
+		D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */; };
+		D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */; };
+		D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */; };
+		D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
 /* End PBXBuildFile section */
 
@@ -333,6 +337,10 @@
 		D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewSpec.swift; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
+		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
+		D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenter.swift; sourceTree = "<group>"; };
+		D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenterSpec.swift; sourceTree = "<group>"; };
+		D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsViewSpec.swift; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -390,6 +398,7 @@
 				7AA541C0A078BB02BFD7EB0B /* RootPresenter.swift */,
 				7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */,
 				D831FEDF204C92CD00EAE19A /* SettingsPresenter.swift */,
+				D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -529,6 +538,7 @@
 				7AA5463052854371E7D28818 /* TableViewCell */,
 				D831FEDD204C925100EAE19A /* SettingsView.swift */,
 				7D6FB87A204F00E2005E23AA /* StatusAlert.swift */,
+				D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -602,6 +612,8 @@
 				7AA541A676EEC9A2C4E3909B /* ItemListDisplayActionSpec.swift */,
 				7AA54FC2201512347C683533 /* UserInfoActionSpec.swift */,
 				D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
+				D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */,
+				D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -805,12 +817,14 @@
 				7AA54843ADAB6552EDA77C81 /* ProfileInfoSpec.swift in Sources */,
 				7AA5456C114B68E64CB540AD /* KeychainManagerSpec.swift in Sources */,
 				7AA54D2B9BA6B3140A7EE905 /* DataStoreActionIntegrationSpec.swift in Sources */,
+				D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */,
 				7AA54DF06588E3B35E010980 /* DispatcherSpec.swift in Sources */,
 				7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */,
 				7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */,
 				7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */,
 				7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */,
 				D831FEE7205F3D5100EAE19A /* SettingsViewSpec.swift in Sources */,
+				D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */,
 				7AA54B255317D07347416493 /* RouteStoreSpec.swift in Sources */,
 				7AA54DD6E3A60AC511C4D53A /* RouteActionSpec.swift in Sources */,
 				7AA54852A3EF5EBAB04AAD42 /* FxAStoreSpec.swift in Sources */,
@@ -847,6 +861,7 @@
 				7AA547F600FA69AF18A9D55C /* ProfileInfo.swift in Sources */,
 				7AA54C8928B257655856C516 /* AppDelegate.swift in Sources */,
 				7AA540D7395F48BD6983CC3E /* Dispatcher.swift in Sources */,
+				D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */,
 				D831FEE0204C92CD00EAE19A /* SettingsPresenter.swift in Sources */,
 				7DA4C6832028F84800B61DD8 /* ItemListView.swift in Sources */,
 				7AA54E03B01B57D89DE9CF6B /* Action.swift in Sources */,
@@ -882,6 +897,7 @@
 				7DA4C6932028FB0900B61DD8 /* UIColor+.swift in Sources */,
 				7AA5465C5FE10715567F5E83 /* LoginNavigationController.swift in Sources */,
 				7AA54869D92433B631B6560B /* MainNavigationController.swift in Sources */,
+				D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */,
 				7AA547EF949CA76FC018402A /* ItemListCell.swift in Sources */,
 				7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */,

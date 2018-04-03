@@ -97,6 +97,16 @@ class SettingsPresenterSpec: QuickSpec {
                 self.subject.switchChanged(row: 4, isOn: true)
                 expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.biometricLogin(enabled: true)))
             }
+
+            it("handles action when item is selected") {
+                self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Auto Lock", routeAction: SettingRouteAction.autoLock))
+                expect(self.routeActionHandler.routeActionArgument as? SettingRouteAction).to(equal(SettingRouteAction.autoLock))
+            }
+
+            it("does not call action handler when there is no action") {
+                self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Fake Item", routeAction: nil))
+                expect(self.routeActionHandler.routeActionArgument).to(beNil())
+            }
         }
     }
 }

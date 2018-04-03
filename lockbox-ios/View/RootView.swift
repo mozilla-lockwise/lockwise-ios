@@ -108,6 +108,8 @@ class RootView: UIViewController, RootViewProtocol {
         switch view {
         case .list:
             settingNavController?.popToRootViewController(animated: true)
+        case .autoLock:
+            settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
         default: break
         }
     }
