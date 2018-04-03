@@ -10,9 +10,9 @@ import LocalAuthentication
 
 class SettingsPresenter {
     private var view: SettingsProtocol
-    private var userInfoStore: UserInfoStore
+    private var userDefaults: UserDefaults
     private var routeActionHandler: RouteActionHandler
-    private var userInfoActionHandler: UserInfoActionHandler
+    private var settingActionHandler: SettingActionHandler
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onDone: AnyObserver<Void> = {
@@ -56,28 +56,29 @@ class SettingsPresenter {
     }
 
     init(view: SettingsProtocol,
-         userInfoStore: UserInfoStore = UserInfoStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared) {
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
         self.view = view
-        self.userInfoStore = userInfoStore
+        self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
-        self.userInfoActionHandler = userInfoActionHandler
+        self.settingActionHandler = settingActionHandler
 
         let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
         settings.value[1].items.insert(biometricSetting, at: settings.value[1].items.endIndex-1)
 
-        userInfoStore.biometricLoginEnabled.subscribe(onNext: { enabled in
-            biometricSetting.isOn = enabled ?? false
-        }).disposed(by: disposeBag)
+        self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
+                .subscribe(onNext: { enabled in
+                    biometricSetting.isOn = enabled ?? false
+                }).disposed(by: disposeBag)
     }
 
     func switchChanged(row: Int, isOn: Bool) {
-        userInfoActionHandler.invoke(.biometricLogin(enabled: isOn))
+        settingActionHandler.invoke(.biometricLogin(enabled: isOn))
     }
 
     func onViewReady() {
-        let driver  = settings.asDriver()
+        let driver = settings.asDriver()
         view.bind(items: driver)
     }
 }

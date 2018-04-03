@@ -58,11 +58,6 @@ class UserInfoActionSpec: QuickSpec {
                     expect(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().accessToken("blah").build())).notTo(equal(UserInfoAction.oauthInfo(info: OAuthInfo.Builder().accessToken("meh").build())))
                 }
 
-                it("biometricLogin is equal when the enabled value is the same") {
-                    expect(UserInfoAction.biometricLogin(enabled: true)).to(equal(UserInfoAction.biometricLogin(enabled: true)))
-                    expect(UserInfoAction.biometricLogin(enabled: true)).notTo(equal(UserInfoAction.biometricLogin(enabled: false)))
-                }
-
                 it("load actions are always equal") {
                     expect(UserInfoAction.load).to(equal(UserInfoAction.load))
                 }
