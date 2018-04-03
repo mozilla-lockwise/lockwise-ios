@@ -228,7 +228,7 @@ extension ItemListView {
 
     fileprivate func styleTableViewBackground() {
         let backgroundView = UIView(frame: self.view.bounds)
-        backgroundView.backgroundColor = Constant.color.lightGrey
+        backgroundView.backgroundColor = Constant.color.listBackground
         self.tableView.backgroundView = backgroundView
     }
 }
