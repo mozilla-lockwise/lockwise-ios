@@ -6,6 +6,7 @@ import Foundation
 import Quick
 import Nimble
 import RxSwift
+import UIKit
 
 @testable import Lockbox
 
@@ -19,64 +20,64 @@ enum RootPresenterSharedExampleVar: String {
 
 class RootPresenterSpec: QuickSpec {
     class FakeRootView: RootViewProtocol {
+        var topViewIsArgument: UIViewController.Type?
         var topViewIsVar: Bool!
+
+        var modalViewIsArgument: UIViewController.Type?
         var modalViewIsVar: Bool!
+
+        var mainStackIsArgument: UINavigationController.Type?
+        var mainStackIsVar: Bool!
+
+        var modalStackIsArgument: UINavigationController.Type?
+        var modalStackIsVar: Bool!
+
+        var startMainStackArgument: UINavigationController.Type?
+        var startModalStackArgument: UINavigationController.Type?
         var dismissModalCalled: Bool = false
 
-        var loginStackDisplayedStub: Bool!
-        var startLoginStackCalled = false
-        var pushLoginViewArgument: LoginRouteAction?
-
-        var mainStackDisplayedStub: Bool!
-        var startMainStackCalled = false
+        var pushLoginViewRouteArgument: LoginRouteAction?
         var pushMainViewArgument: MainRouteAction?
-
-        var settingStackDisplayedStub: Bool!
-        var startSettingStackCalled = false
         var pushSettingViewArgument: SettingRouteAction?
 
-        func topViewIs<T>(_ class: T.Type) -> Bool {
-            return topViewIsVar
+        func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+            self.topViewIsArgument = type
+            return self.topViewIsVar
         }
 
-        func modalViewIs<T>(_ class: T.Type) -> Bool {
-            return modalViewIsVar
+        func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+            self.modalViewIsArgument = type
+            return self.modalViewIsVar
+        }
+
+        func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+            self.mainStackIsArgument = type
+            return self.mainStackIsVar
+        }
+
+        func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+            self.modalStackIsArgument = type
+            return self.modalStackIsVar
+        }
+
+        func startMainStack<T: UINavigationController>(_ type: T.Type) {
+            self.startMainStackArgument = type
+        }
+
+        func startModalStack<T: UINavigationController>(_ type: T.Type) {
+            self.startModalStackArgument = type
         }
 
         func dismissModals() {
             self.dismissModalCalled = true
         }
 
-        var loginStackDisplayed: Bool {
-            return loginStackDisplayedStub
-        }
-
-        func startLoginStack() {
-            self.startLoginStackCalled = true
-        }
-
         func pushLoginView(view: LoginRouteAction) {
-            self.pushLoginViewArgument = view
-        }
-
-        var mainStackDisplayed: Bool {
-            return mainStackDisplayedStub
-        }
-
-        func startMainStack() {
-            self.startMainStackCalled = true
+            self.pushLoginViewRouteArgument = view
         }
 
         func pushMainView(view: MainRouteAction) {
             self.pushMainViewArgument = view
-        }
-
-        var settingStackDisplayed: Bool {
-            return settingStackDisplayedStub
-        }
-
-        func startSettingStack(_ animated: Bool = true) {
-            self.startSettingStackCalled = true
         }
 
         func pushSettingView(view: SettingRouteAction) {
@@ -346,7 +347,7 @@ class RootPresenterSpec: QuickSpec {
                 describe("LoginRouteActions") {
                     describe("if the login stack is already displayed") {
                         beforeEach {
-                            self.view.loginStackDisplayedStub = true
+                            self.view.mainStackIsVar = true
                         }
 
                         describe(".login") {
@@ -360,12 +361,14 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beFalse())
+                                it("checks & does not start the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("tells the view to show the loginview") {
-                                    expect(self.view.pushLoginViewArgument).to(equal(LoginRouteAction.welcome))
+                                it("checks for the WelcomeView & tells the view to show the loginview") {
+                                    expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.welcome))
                                 }
                             }
 
@@ -379,12 +382,14 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beFalse())
+                                it("checks & does not start the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("nothing happens") {
-                                    expect(self.view.pushLoginViewArgument).to(beNil())
+                                it("checks for the WelcomeView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
                                 }
                             }
                         }
@@ -401,11 +406,13 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beFalse())
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("tells the view to show the loginview") {
-                                    expect(self.view.pushLoginViewArgument).to(equal(LoginRouteAction.welcome))
+                                it("checks for the FxAView & tells the view to show the loginview") {
+                                    expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.welcome))
                                 }
                             }
 
@@ -420,11 +427,13 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beFalse())
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("nothing happens") {
-                                    expect(self.view.pushLoginViewArgument).to(beNil())
+                                it("checks for the FxAView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
                                 }
                             }
                         }
@@ -432,7 +441,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("if the login stack is not already displayed") {
                         beforeEach {
-                            self.view.loginStackDisplayedStub = false
+                            self.view.mainStackIsVar = false
                         }
 
                         describe(".login") {
@@ -447,11 +456,13 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the fxa stack") {
-                                    expect(self.view.startLoginStackCalled).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
                                 }
 
-                                it("tells the view to show the fxaview") {
-                                    expect(self.view.pushLoginViewArgument).to(equal(LoginRouteAction.fxa))
+                                it("checks for the WelcomeView & tells the view to show the fxaview") {
+                                    expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.fxa))
                                 }
                             }
 
@@ -466,11 +477,13 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
                                 }
 
-                                it("nothing happens") {
-                                    expect(self.view.pushLoginViewArgument).to(beNil())
+                                it("checks for the WelcomeView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
                                 }
                             }
                         }
@@ -487,11 +500,13 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
                                 }
 
-                                it("tells the view to show the loginview") {
-                                    expect(self.view.pushLoginViewArgument).to(equal(LoginRouteAction.fxa))
+                                it("checks for the FxAView & tells the view to show the loginview") {
+                                    expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.fxa))
                                 }
                             }
 
@@ -506,11 +521,13 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the login stack") {
-                                    expect(self.view.startLoginStackCalled).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
                                 }
 
-                                it("nothing happens") {
-                                    expect(self.view.pushLoginViewArgument).to(beNil())
+                                it("checks for the FxAView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
                                 }
                             }
                         }
@@ -520,7 +537,7 @@ class RootPresenterSpec: QuickSpec {
                 describe("MainRouteActions") {
                     describe("if the main stack is already displayed") {
                         beforeEach {
-                            self.view.mainStackDisplayedStub = true
+                            self.view.mainStackIsVar = true
                         }
 
                         describe(".list") {
@@ -535,10 +552,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beFalse())
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("tells the view to show the loginview") {
+                                it("checks for the ListView & tells the view to show the loginview") {
+                                    expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.list))
                                 }
                             }
@@ -553,11 +572,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beFalse())
+                                it("does not start the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("nothing happens") {
+                                it("checks for the ListView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }
@@ -575,11 +596,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beFalse())
+                                it("does not start the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("tells the view to show the loginview") {
+                                it("checks for the DetailView & tells the view to show the detail view") {
+                                    expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument)
                                             .to(equal(MainRouteAction.detail(itemId: itemId)))
                                 }
@@ -595,11 +618,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beFalse())
+                                it("does not start the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
-                                it("nothing happens") {
+                                it("checks for the DetailView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }
@@ -608,7 +633,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("if the main stack is not already displayed") {
                         beforeEach {
-                            self.view.mainStackDisplayedStub = false
+                            self.view.mainStackIsVar = false
                         }
 
                         describe(".list") {
@@ -622,11 +647,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("starts the fxa stack") {
-                                    expect(self.view.startMainStackCalled).to(beTrue())
+                                it("starts the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
                                 }
 
-                                it("tells the view to show the fxaview") {
+                                it("checks for the ListView & tells the view to show the listview") {
+                                    expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.list))
                                 }
                             }
@@ -641,11 +668,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("starts the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beTrue())
+                                it("starts the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
                                 }
 
-                                it("nothing happens") {
+                                it("checks for the ListView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }
@@ -663,11 +692,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beTrue())
+                                it("starts the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
                                 }
 
-                                it("tells the view to show the loginview") {
+                                it("checks for the DetailView & tells the view to show the loginview") {
+                                    expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument)
                                             .to(equal(MainRouteAction.detail(itemId: itemId)))
                                 }
@@ -683,11 +714,13 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
-                                it("does not start the login stack") {
-                                    expect(self.view.startMainStackCalled).to(beTrue())
+                                it("starts the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
                                 }
 
-                                it("nothing happens") {
+                                it("checks for the DetailView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }
@@ -698,7 +731,7 @@ class RootPresenterSpec: QuickSpec {
                 describe("SettingRouteActions") {
                     describe("if the setting stack is already displayed") {
                         beforeEach {
-                            self.view.settingStackDisplayedStub = true
+                            self.view.modalStackIsVar = true
                         }
 
                         describe(".list") {
@@ -713,10 +746,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument).to(beNil())
                                 }
 
                                 it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -732,10 +767,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument).to(beNil())
                                 }
 
                                 it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
@@ -753,10 +790,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument).to(beNil())
                                 }
 
                                 it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -772,10 +811,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beFalse())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
 
                                 it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
                             }
@@ -784,7 +825,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("if the setting stack is not already displayed") {
                         beforeEach {
-                            self.view.settingStackDisplayedStub = false
+                            self.view.modalStackIsVar = false
                         }
 
                         describe(".list") {
@@ -799,10 +840,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -818,10 +861,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
@@ -839,10 +884,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -858,10 +905,12 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.startSettingStackCalled).to(beTrue())
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
                             }

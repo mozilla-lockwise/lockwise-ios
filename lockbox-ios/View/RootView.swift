@@ -29,18 +29,6 @@ class RootView: UIViewController, RootViewProtocol {
         }
     }
 
-    var loginStackDisplayed: Bool {
-        return (self.currentViewController as? LoginNavigationController) != nil
-    }
-
-    var mainStackDisplayed: Bool {
-        return (self.currentViewController as? MainNavigationController) != nil
-    }
-
-    var settingStackDisplayed: Bool {
-        return (self.currentViewController?.presentedViewController as? SettingNavigationController) != nil
-    }
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
     }
@@ -55,20 +43,32 @@ class RootView: UIViewController, RootViewProtocol {
         self.presenter?.onViewReady()
     }
 
-    func topViewIs<T>(_ class: T.Type) -> Bool {
+    func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
         return self.currentViewController?.topViewController is T
     }
 
-    func modalViewIs<T>(_ class: T.Type) -> Bool {
+    func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
         return (self.currentViewController?.presentedViewController as? UINavigationController)?.topViewController is T
+    }
+
+    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+        return self.currentViewController is T
+    }
+
+    func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+        return self.currentViewController?.presentedViewController is T
+    }
+
+    func startMainStack<T: UINavigationController>(_ type: T.Type) {
+        self.currentViewController = type.init()
+    }
+
+    func startModalStack<T: UINavigationController>(_ type: T.Type) {
+        self.currentViewController?.present(type.init(), animated: true)
     }
 
     func dismissModals() {
         self.currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
-    }
-
-    func startLoginStack() {
-        self.currentViewController = LoginNavigationController()
     }
 
     func pushLoginView(view: LoginRouteAction) {
@@ -78,10 +78,6 @@ class RootView: UIViewController, RootViewProtocol {
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
         }
-    }
-
-    func startMainStack() {
-        self.currentViewController = MainNavigationController()
     }
 
     func pushMainView(view: MainRouteAction) {
@@ -96,10 +92,6 @@ class RootView: UIViewController, RootViewProtocol {
             itemDetailView.itemId = id
             self.currentViewController?.pushViewController(itemDetailView, animated: true)
         }
-    }
-
-    func startSettingStack(_ animated: Bool = true) {
-        self.currentViewController?.present(SettingNavigationController(), animated: animated)
     }
 
     func pushSettingView(view: SettingRouteAction) {

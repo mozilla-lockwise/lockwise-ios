@@ -36,57 +36,39 @@ class RootViewSpec: QuickSpec {
                 expect(self.presenter.onViewReadyCalled).to(beTrue())
             }
 
-            describe("loginStackDisplayed") {
-                describe("without displaying the login stack") {
+            describe("mainStackIs") {
+                describe("without displaying a stack") {
                     it("returns false") {
-                        expect(self.subject.loginStackDisplayed).to(beFalse())
+                        expect(self.subject.mainStackIs(MainNavigationController.self)).to(beFalse())
                     }
                 }
 
-                describe("displaying the login stack") {
+                describe("displaying a stack") {
                     beforeEach {
-                        self.subject.startLoginStack()
+                        self.subject.startMainStack(MainNavigationController.self)
                     }
 
                     it("returns true") {
-                        expect(self.subject.loginStackDisplayed).to(beTrue())
+                        expect(self.subject.mainStackIs(MainNavigationController.self)).to(beTrue())
                     }
                 }
             }
 
-            describe("mainStackDisplayed") {
-                describe("without displaying the main stack") {
+            describe("modalStackIs") {
+                describe("without displaying a modal stack") {
                     it("returns false") {
-                        expect(self.subject.mainStackDisplayed).to(beFalse())
-                    }
-                }
-
-                describe("displaying the main stack") {
-                    beforeEach {
-                        self.subject.startMainStack()
-                    }
-
-                    it("returns true") {
-                        expect(self.subject.mainStackDisplayed).to(beTrue())
-                    }
-                }
-            }
-
-            describe("settingStackDisplayed") {
-                describe("without displaying the setting stack") {
-                    it("returns false") {
-                        expect(self.subject.settingStackDisplayed).to(beFalse())
+                        expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beFalse())
                     }
                 }
 
                 describe("displaying the setting stack") {
                     beforeEach {
-                        self.subject.startMainStack()
-                        self.subject.startSettingStack(false)
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
                     }
 
                     it("returns true") {
-                        expect(self.subject.settingStackDisplayed).to(beTrue())
+                        expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beTrue())
                     }
                 }
             }
@@ -94,7 +76,7 @@ class RootViewSpec: QuickSpec {
             describe("pushing login views") {
                 describe("login") {
                     beforeEach {
-                        self.subject.startLoginStack()
+                        self.subject.startMainStack(LoginNavigationController.self)
                         self.subject.pushLoginView(view: LoginRouteAction.welcome)
                     }
 
@@ -105,7 +87,7 @@ class RootViewSpec: QuickSpec {
 
                 describe("fxa") {
                     beforeEach {
-                        self.subject.startLoginStack()
+                        self.subject.startMainStack(LoginNavigationController.self)
                         self.subject.pushLoginView(view: LoginRouteAction.fxa)
                     }
 
@@ -117,20 +99,20 @@ class RootViewSpec: QuickSpec {
 
             describe("displaying main stack after login stack") {
                 beforeEach {
-                    self.subject.startLoginStack()
-                    self.subject.startMainStack()
+                    self.subject.startMainStack(LoginNavigationController.self)
+                    self.subject.startMainStack(MainNavigationController.self)
                 }
 
                 it("displays the main stack only") {
-                    expect(self.subject.loginStackDisplayed).to(beFalse())
-                    expect(self.subject.mainStackDisplayed).to(beTrue())
+                    expect(self.subject.mainStackIs(LoginNavigationController.self)).to(beFalse())
+                    expect(self.subject.mainStackIs(MainNavigationController.self)).to(beTrue())
                 }
             }
 
             describe("pushing main views") {
                 describe("list") {
                     beforeEach {
-                        self.subject.startMainStack()
+                        self.subject.startMainStack(MainNavigationController.self)
                         self.subject.pushMainView(view: .list)
                     }
 
@@ -141,7 +123,7 @@ class RootViewSpec: QuickSpec {
 
                 describe("detail") {
                     beforeEach {
-                        self.subject.startMainStack()
+                        self.subject.startMainStack(MainNavigationController.self)
                         self.subject.pushMainView(view: .detail(itemId: "dffsdfs"))
                     }
 
@@ -154,8 +136,8 @@ class RootViewSpec: QuickSpec {
             describe("pushing settings views") {
                 describe("list") {
                     beforeEach {
-                        self.subject.startMainStack()
-                        self.subject.startSettingStack(false)
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
                         self.subject.pushSettingView(view: .list)
                     }
 
@@ -171,8 +153,8 @@ class RootViewSpec: QuickSpec {
 
                 describe("account") {
                     beforeEach {
-                        self.subject.startMainStack()
-                        self.subject.startSettingStack(false)
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
                         self.subject.pushSettingView(view: .account)
                     }
 
