@@ -58,7 +58,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
             self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
             self.subject.onViewReady()
 
-            UserDefaults.standard.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLock.rawValue)
+            UserDefaults.standard.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
 
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 for item in settings[0].items {
@@ -77,7 +77,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
 
         it("calls handler when item is selected") {
             self.subject.itemSelectedObserver.onNext(AutoLockSetting.OneHour)
-            expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.autoLock(timeout: AutoLockSetting.OneHour)))
+            expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.autoLockTime(timeout: AutoLockSetting.OneHour)))
         }
     }
 }

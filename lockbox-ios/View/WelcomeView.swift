@@ -3,17 +3,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import RxSwift
 import RxCocoa
 
-class WelcomeView: UIViewController, WelcomeViewProtocol {
-    internal var presenter: WelcomePresenter!
+class WelcomeView: UIViewController {
+    internal var presenter: WelcomePresenter?
 
     @IBOutlet internal weak var fxASigninButton: UIButton!
-    @IBOutlet private weak var oceanView: UIImageView!
+    @IBOutlet internal weak var accessLockboxMessage: UILabel!
+    @IBOutlet internal weak var biometricSignInButton: UIButton!
+    @IBOutlet internal weak var fxAButtonTopSpacing: NSLayoutConstraint!
 
-    public var loginButtonPressed: ControlEvent<Void> {
-        return self.fxASigninButton.rx.tap
-    }
+    @IBOutlet private weak var oceanView: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.default
@@ -27,9 +28,10 @@ class WelcomeView: UIViewController, WelcomeViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        fxASigninButton.layer.cornerRadius = 5
-        fxASigninButton.clipsToBounds = true
-        self.presenter.onViewReady()
+        self.fxASigninButton.layer.cornerRadius = 5
+        self.fxASigninButton.clipsToBounds = true
+
+        self.presenter?.onViewReady()
     }
 
     override func viewDidLayoutSubviews() {
@@ -48,5 +50,35 @@ class WelcomeView: UIViewController, WelcomeViewProtocol {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+}
+
+extension WelcomeView: WelcomeViewProtocol {
+    public var loginButtonPressed: ControlEvent<Void> {
+        return self.fxASigninButton.rx.tap
+    }
+
+    public var firstTimeLoginMessageHidden: AnyObserver<Bool> {
+        return self.accessLockboxMessage.rx.isHidden.asObserver()
+    }
+
+    public var biometricAuthenticationPromptHidden: AnyObserver<Bool> {
+        return self.biometricSignInButton.rx.isHidden.asObserver()
+    }
+
+    public var biometricSignInText: AnyObserver<String?> {
+        return self.biometricSignInButton.rx.title().asObserver()
+    }
+
+    public var biometricImageName: AnyObserver<String> {
+        return Binder(self) { target, imageName in
+            let image = UIImage(named: imageName)
+
+            target.biometricSignInButton.rx.image().onNext(image)
+        }.asObserver()
+    }
+
+    public var fxAButtonTopSpace: AnyObserver<CGFloat> {
+        return self.fxAButtonTopSpacing.rx.constant.asObserver()
     }
 }

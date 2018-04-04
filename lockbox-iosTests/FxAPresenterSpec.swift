@@ -68,7 +68,7 @@ class FxAPresenterSpec: QuickSpec {
     }
 
     private var view: FakeFxAView!
-    private var store: FakeFxAStore!
+    private var fxaStore: FakeFxAStore!
     private var fxAActionHandler: FakeFxAActionHandler!
     private var routeActionHandler: FakeRouteActionHandler!
     var subject: FxAPresenter!
@@ -78,14 +78,14 @@ class FxAPresenterSpec: QuickSpec {
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
-                self.store = FakeFxAStore()
+                self.fxaStore = FakeFxAStore()
                 self.fxAActionHandler = FakeFxAActionHandler()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.subject = FxAPresenter(
                         view: self.view,
                         fxAActionHandler: self.fxAActionHandler,
                         routeActionHandler: self.routeActionHandler,
-                        store: self.store
+                        fxaStore: self.fxaStore
                 )
             }
 
@@ -97,7 +97,7 @@ class FxAPresenterSpec: QuickSpec {
                 describe("receiving .loadInitialURL") {
                     let url = URL(string: "www.properurltoload.com/manystuffs?ihavequery")!
                     beforeEach {
-                        self.store.fakeFxADisplay.onNext(FxADisplayAction.loadInitialURL(url: url))
+                        self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.loadInitialURL(url: url))
                     }
 
                     it("initiates fxa authentication") {
@@ -112,7 +112,7 @@ class FxAPresenterSpec: QuickSpec {
 
                 describe("receiving .finishedFetchingUserInformation") {
                     beforeEach {
-                        self.store.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
+                        self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
                     }
 
                     it("initiates fxa authentication") {

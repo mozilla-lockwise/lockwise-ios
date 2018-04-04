@@ -12,12 +12,18 @@ import RxCocoa
 @testable import Lockbox
 
 class SettingsPresenterSpec: QuickSpec {
-    class FakeSettingsView: SettingsProtocol {
+    class FakeSettingsView: SettingListViewProtocol {
         var itemsObserver: TestableObserver<[SettingSectionModel]>!
+        var fakeButtonPress = PublishSubject<Void>()
+
         private let disposeBag = DisposeBag()
 
         func bind(items: SharedSequence<DriverSharingStrategy, [SettingSectionModel]>) {
             items.drive(itemsObserver).disposed(by: disposeBag)
+        }
+
+        var onSignOut: ControlEvent<Void> {
+            return ControlEvent(events: fakeButtonPress.asObservable())
         }
     }
 
@@ -42,7 +48,7 @@ class SettingsPresenterSpec: QuickSpec {
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
 
-    var subject: SettingsPresenter!
+    var subject: SettingListPresenter!
 
     override func spec() {
         describe("SettingsPresenter") {
@@ -53,7 +59,7 @@ class SettingsPresenterSpec: QuickSpec {
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.settingActionHandler = FakeSettingActionHandler()
 
-                self.subject = SettingsPresenter(view: self.view,
+                self.subject = SettingListPresenter(view: self.view,
                                             routeActionHandler: self.routeActionHandler,
                                             settingActionHandler: self.settingActionHandler)
             }

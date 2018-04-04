@@ -12,7 +12,7 @@ class FxAStore {
     private var dispatcher: Dispatcher
     private let disposeBag = DisposeBag()
 
-    private var _fxADisplay = ReplaySubject<FxADisplayAction>.create(bufferSize: 1)
+    private var _fxADisplay = PublishSubject<FxADisplayAction>()
 
     public var fxADisplay: Driver<FxADisplayAction> {
         return _fxADisplay.distinctUntilChanged().asDriver(onErrorJustReturn: .fetchingUserInformation)

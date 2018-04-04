@@ -8,60 +8,43 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol SettingsProtocol {
-    func bind(items: Driver<[SettingSectionModel]>)
-}
-
 typealias SettingSectionModel = AnimatableSectionModel<Int, SettingCellConfiguration>
 
-class SettingsView: UITableViewController {
-    var presenter: SettingsPresenter?
+class SettingListView: UIViewController {
+    var presenter: SettingListPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<SettingSectionModel>?
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var signOutButton: UIButton!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
-    }
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        self.presenter = SettingsPresenter(view: self)
-        view.backgroundColor = Constant.color.settingsBackground
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupDataSource()
         self.setupDelegate()
+        self.setupSignOutButton()
         self.presenter?.onViewReady()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNavbar()
-        self.setupFooter()
-    }
-
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = UITableViewCell()
-        cell.textLabel?.textColor = Constant.color.settingsHeader
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 13.0, weight: UIFont.Weight.regular)
-        cell.textLabel?.text = section == 0 ?
-                Constant.string.settingsHelpSectionHeader : Constant.string.settingsConfigurationSectionHeader
-        return cell
-    }
-
-    @objc private func switchChanged(sender: UISwitch) {
-        let rowChanged = sender.tag
-        presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("not implemented")
+        super.init(coder: aDecoder)
+        self.presenter = SettingListPresenter(view: self)
     }
 }
 
-extension SettingsView: SettingsProtocol {
+extension SettingListView: SettingListViewProtocol {
+    public var onSignOut: ControlEvent<Void> {
+        return self.signOutButton.rx.tap
+    }
+
     func bind(items: Driver<[SettingSectionModel]>) {
         guard let dataSource = self.dataSource else {
             fatalError("datasource not set!")
@@ -72,7 +55,7 @@ extension SettingsView: SettingsProtocol {
     }
 }
 
-extension SettingsView {
+extension SettingListView: UITableViewDelegate {
     private func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
@@ -92,7 +75,10 @@ extension SettingsView {
                     cell.selectionStyle = UITableViewCellSelectionStyle.none
                 }
                 return cell
-        })
+        }, titleForHeaderInSection: { _, section in
+            return section == 0 ? Constant.string.settingsHelpSectionHeader :
+                    Constant.string.settingsConfigurationSectionHeader
+         })
     }
 
     private func setupDelegate() {
@@ -129,9 +115,15 @@ extension SettingsView {
         }
     }
 
-    private func setupFooter() {
-        let footer = UIView()
-        tableView.tableFooterView = footer
+    fileprivate func setupSignOutButton() {
+        self.signOutButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
+        self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
+    }
+
+    // todo: refactor this to use an rxcocoa binding on the switch
+    @objc private func switchChanged(sender: UISwitch) {
+        let rowChanged = sender.tag
+        presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
     }
 }
 

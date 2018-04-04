@@ -5,14 +5,15 @@
 import Foundation
 import Quick
 import Nimble
+import UIKit
 import RxTest
 import RxSwift
 import RxCocoa
 
 @testable import Lockbox
 
-class SettingsViewSpec: QuickSpec {
-    class FakeSettingsPresenter: SettingsPresenter {
+class SettingListViewSpec: QuickSpec {
+    class FakeSettingsPresenter: SettingListPresenter {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
         var switchChangedCalled = false
@@ -39,12 +40,12 @@ class SettingsViewSpec: QuickSpec {
 
     private var presenter: FakeSettingsPresenter!
     private var scheduler = TestScheduler(initialClock: 0)
-    var subject: SettingsView!
+    var subject: SettingListView!
 
     override func spec() {
-        describe("SettingsView") {
+        describe("SettingListView") {
             beforeEach {
-                self.subject = SettingsView()
+                self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as! SettingListView
                 self.presenter = FakeSettingsPresenter(view: self.subject)
                 self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
                 self.subject.presenter = self.presenter

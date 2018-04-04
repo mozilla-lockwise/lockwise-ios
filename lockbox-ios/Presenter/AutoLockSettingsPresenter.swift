@@ -38,10 +38,9 @@ class AutoLockSettingPresenter {
     lazy private(set) var itemSelectedObserver: AnyObserver<AutoLockSetting?> = {
         return Binder(self) { target, newAutoLockValue in
             if let newAutoLockValue = newAutoLockValue {
-                target.settingActionHandler.invoke(.autoLock(timeout: newAutoLockValue))
+                target.settingActionHandler.invoke(.autoLockTime(timeout: newAutoLockValue))
             }
-
-            }.asObserver()
+        }.asObserver()
     }()
 
     init(view: AutoLockSettingViewProtocol,
@@ -55,7 +54,7 @@ class AutoLockSettingPresenter {
     }
 
     func onViewReady() {
-        let driver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue)
+        let driver = self.userDefaults.rx.observe(String.self, SettingKey.autoLockTime.rawValue)
                 .filterNil()
                 .map { value -> AutoLockSetting? in
                     return AutoLockSetting(rawValue: value)

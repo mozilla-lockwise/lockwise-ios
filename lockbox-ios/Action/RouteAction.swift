@@ -17,7 +17,10 @@ class RouteActionHandler: ActionHandler {
     }
 }
 
-protocol RouteAction: Action { }
+protocol RouteAction: Action {
+    func equalTo(_ other: RouteAction) -> Bool
+    var asEquatable: EquatableRouteAction { get }
+}
 
 enum LoginRouteAction: RouteAction {
     case welcome
@@ -36,6 +39,28 @@ enum SettingRouteAction: RouteAction {
     case enableInBrowser
     case account
     case autoLock
+}
+
+extension RouteAction where Self: Equatable {
+    func equalTo(_ other: RouteAction) -> Bool {
+        guard let o = other as? Self else {
+            return false
+        }
+
+        return self == o
+    }
+
+    var asEquatable: EquatableRouteAction {
+        return EquatableRouteAction(self)
+    }
+}
+
+struct EquatableRouteAction: RouteAction, Equatable {
+    init(_ value: RouteAction) { self.value = value }
+    private let value: RouteAction
+    static func ==(lhs: EquatableRouteAction, rhs: EquatableRouteAction) -> Bool {
+        return lhs.value.equalTo(rhs.value)
+    }
 }
 
 extension MainRouteAction: Equatable {

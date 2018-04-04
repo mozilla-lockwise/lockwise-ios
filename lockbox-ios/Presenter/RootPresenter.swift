@@ -37,6 +37,17 @@ struct KeyLock {
     let locked: Bool
 }
 
+struct DeviceLockRoute {
+    let locked: Bool
+    let route: RouteAction
+}
+
+extension DeviceLockRoute: Equatable {
+    static func ==(lhs: DeviceLockRoute, rhs: DeviceLockRoute) -> Bool {
+        return lhs.locked == rhs.locked && lhs.route.asEquatable.equalTo(rhs.route.asEquatable)
+    }
+}
+
 class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
@@ -44,6 +55,7 @@ class RootPresenter {
     fileprivate let routeStore: RouteStore
     fileprivate let userInfoStore: UserInfoStore
     fileprivate let dataStore: DataStore
+    fileprivate let userDefaults: UserDefaults
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
 
@@ -51,6 +63,7 @@ class RootPresenter {
          routeStore: RouteStore = RouteStore.shared,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          dataStore: DataStore = DataStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared
     ) {
@@ -58,6 +71,7 @@ class RootPresenter {
         self.routeStore = routeStore
         self.userInfoStore = userInfoStore
         self.dataStore = dataStore
+        self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
 
@@ -108,19 +122,31 @@ class RootPresenter {
     }
 
     func onViewReady() {
-        self.routeStore.onRoute
+        let routeWithLockObservable = Observable.combineLatest(self.userDefaults.onLock, self.routeStore.onRoute)
+                .map { latest -> DeviceLockRoute in
+                    return DeviceLockRoute(locked: latest.0, route: latest.1)
+                }
+                .distinctUntilChanged()
+                .filter {
+                    !$0.locked || $0.route is LoginRouteAction
+                }
+                .map {
+                    $0.route
+                }
+
+        routeWithLockObservable
                 .filterByType(class: LoginRouteAction.self)
                 .asDriver(onErrorJustReturn: .welcome)
                 .drive(showLogin)
                 .disposed(by: disposeBag)
 
-        self.routeStore.onRoute
+        routeWithLockObservable
                 .filterByType(class: MainRouteAction.self)
                 .asDriver(onErrorJustReturn: .list)
                 .drive(showList)
                 .disposed(by: disposeBag)
 
-        self.routeStore.onRoute
+        routeWithLockObservable
                 .filterByType(class: SettingRouteAction.self)
                 .asDriver(onErrorJustReturn: .list)
                 .drive(self.showSetting)
@@ -189,7 +215,7 @@ class RootPresenter {
 
             switch settingAction {
             case .list:
-                if !view.modalViewIs(SettingsView.self) {
+                if !view.modalViewIs(SettingListView.self) {
                     view.pushSettingView(view: .list)
                 }
             case .account:

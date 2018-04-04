@@ -44,6 +44,8 @@ struct Constant {
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
         static let recent = NSLocalizedString("recent", value: "Recent", comment: "Button title when entries list is sorted by most recently used entry")
         static let recentlyUsed = NSLocalizedString("recently_used", value: "Recently Used", comment: "Label for the option sheet action allowing users to sort an entry list by the most recently used entries")
+        static let signInFaceID = NSLocalizedString("signin_with_faceid", value: "Sign in with FaceID", comment: "Label for the button to unlock the device using FaceID")
+        static let signInTouchID = NSLocalizedString("signin_with_touchid", value: "Sign in with TouchID", comment: "Label for the button to unlock the device using TouchID")
         static let sortEntries = NSLocalizedString("sort_entries", value: "Sort Entries", comment: "Title for the option sheet allowing users to sort entries")
         static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
@@ -76,10 +78,13 @@ struct Constant {
         static let displayStatusAlertFade = TimeInterval(0.3)
         static let displayStatusAlertOpacity: CGFloat = 0.75
         static let displayStatusAlertYPercentage: CGFloat = 0.4
+        static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
+        static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
     }
 
     struct setting {
         static let defaultBiometricLockEnabled = true
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
+        static let defaultLockedState = false
     }
 }
