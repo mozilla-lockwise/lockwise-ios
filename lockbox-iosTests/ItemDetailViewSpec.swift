@@ -80,23 +80,27 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.webAddress,
                                 value: "www.meow.com",
-                                password: false)
+                                password: false,
+                                size: 16)
                     ]),
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
                                 title: Constant.string.username,
                                 value: "tanya",
-                                password: false),
+                                password: false,
+                                size: 16),
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
-                                password: true)
+                                password: true,
+                                size: 16)
                     ]),
                     ItemDetailSectionModel(model: 2, items: [
                         ItemDetailCellConfiguration(
                                 title: Constant.string.notes,
                                 value: "some long note about whatever thing yeahh",
-                                password: false)
+                                password: false,
+                                size: 14)
                     ])
                 ]
 
@@ -158,7 +162,8 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
-                                password: true)
+                                password: true,
+                                size: 16)
                     ])
                 ]
 
@@ -181,7 +186,8 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
-                                password: true)
+                                password: true,
+                                size: 16)
                     ])
                 ]
 
@@ -206,7 +212,8 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
-                                password: true)
+                                password: true,
+                                size: 16)
                     ])
                 ]
 
@@ -229,7 +236,7 @@ class ItemDetailViewSpec: QuickSpec {
         describe("ItemDetailViewCellConfiguration") {
             describe("IdentifiableType") {
                 let title = "meow"
-                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", password: false)
+                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", password: false, size: 16)
 
                 it("uses the title as the identity string") {
                     expect(cellConfig.identity).to(equal(title))
@@ -241,31 +248,37 @@ class ItemDetailViewSpec: QuickSpec {
                     expect(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
-                            password: false)
+                            password: false,
+                            size: 16)
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
-                            password: false)
+                            password: false,
+                            size: 16)
                     ))
 
                     expect(ItemDetailCellConfiguration(
                             title: "woof",
                             value: "cats",
-                            password: false)
+                            password: false,
+                            size: 16)
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
-                            password: false)
+                            password: false,
+                            size: 16)
                     ))
 
                     expect(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "dogs",
-                            password: false)
+                            password: false,
+                            size: 16)
                     ).notTo(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
-                            password: false)
+                            password: false,
+                            size: 16)
                     ))
                 }
             }

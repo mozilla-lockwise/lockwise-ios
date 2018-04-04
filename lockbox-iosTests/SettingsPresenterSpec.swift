@@ -21,14 +21,6 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoStore: UserInfoStore {
-        let biometricsEnabledSubject = PublishSubject<Bool?>()
-
-        override var biometricLoginEnabled: Observable<Bool?> {
-            return biometricsEnabledSubject.asObservable()
-        }
-    }
-
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
 
@@ -37,18 +29,18 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoActionHandler: UserInfoActionHandler {
-        var actionArgument: UserInfoAction?
-        override func invoke(_ action: UserInfoAction) {
+    class FakeSettingActionHandler: SettingActionHandler {
+        var actionArgument: SettingAction?
+        override func invoke(_ action: SettingAction) {
             actionArgument = action
         }
     }
 
     private var view: FakeSettingsView!
-    private var userInfoStore: FakeUserInfoStore!
     private var routeActionHandler: FakeRouteActionHandler!
-    private var userInfoActionHandler: FakeUserInfoActionHandler!
+    private var settingActionHandler: FakeSettingActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
+    private var disposeBag = DisposeBag()
 
     var subject: SettingsPresenter!
 
@@ -56,56 +48,93 @@ class SettingsPresenterSpec: QuickSpec {
         describe("SettingsPresenter") {
             beforeEach {
                 self.view = FakeSettingsView()
-                self.userInfoStore = FakeUserInfoStore()
+                self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
+
                 self.routeActionHandler = FakeRouteActionHandler()
-                self.userInfoActionHandler = FakeUserInfoActionHandler()
+                self.settingActionHandler = FakeSettingActionHandler()
 
                 self.subject = SettingsPresenter(view: self.view,
-                                            userInfoStore: self.userInfoStore,
                                             routeActionHandler: self.routeActionHandler,
-                                            userInfoActionHandler: self.userInfoActionHandler)
+                                            settingActionHandler: self.settingActionHandler)
             }
 
-            describe("biometrics field") {
-                it("requests biometricsEnabled field on init") {
-                    expect(self.userInfoStore.biometricsEnabledSubject.hasObservers).to(beTrue())
+            describe("onViewReady") {
+                beforeEach {
+                    self.subject.onViewReady()
                 }
 
-                it("respects biometricsEnabled stored value") {
-                    self.userInfoStore.biometricsEnabledSubject.onNext(true)
-                    if let cellConfig = self.subject.settings.value[1].items[1] as? SwitchSettingCellConfiguration {
-                        expect(cellConfig.isOn).to(beTrue())
-                    } else {
-                        fail("could not retreive biometricsEnabled setting")
+                describe("biometrics field") {
+                    it("respects biometricsEnabled stored value") {
+                        UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
+
+                        let biometricCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1] as! SwitchSettingCellConfiguration
+                        expect(biometricCellConfig.isOn).to(beTrue())
                     }
                 }
             }
 
-            it("delivers driver onViewReady") {
-                self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
-                self.subject.onViewReady()
-                if let settings = self.view.itemsObserver.events.last?.value.element {
-                    expect(settings.count).to(be(2))
-                    expect(settings[0].items.count).to(be(3))
-                    expect(settings[1].items.count).to(be(3))
-                } else {
-                    fail("settings not set in onViewReady")
+            describe("onSwitch changing") {
+                beforeEach {
+                    self.subject.switchChanged(row: 4, isOn: true)
+                }
+
+                it("dipatches the biometriclogin enabled action") {
+                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: true)))
                 }
             }
 
-            it("calls handler when switch changes") {
-                self.subject.switchChanged(row: 4, isOn: true)
-                expect(self.userInfoActionHandler.actionArgument).to(equal(UserInfoAction.biometricLogin(enabled: true)))
+            describe("onDone") {
+                beforeEach {
+                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
+
+                    voidObservable
+                            .bind(to: self.subject.onDone)
+                            .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
+                }
+
+                it("invokes the main list action") {
+                    let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
+                    expect(argument).to(equal(MainRouteAction.list))
+                }
             }
 
-            it("handles action when item is selected") {
-                self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Auto Lock", routeAction: SettingRouteAction.autoLock))
-                expect(self.routeActionHandler.routeActionArgument as? SettingRouteAction).to(equal(SettingRouteAction.autoLock))
-            }
+            describe("onSettingCellTapped") {
+                describe("when the cell has a route action") {
+                    let action = SettingRouteAction.account
 
-            it("does not call action handler when there is no action") {
-                self.subject.itemSelectedObserver.onNext(SettingCellConfiguration(text: "Fake Item", routeAction: nil))
-                expect(self.routeActionHandler.routeActionArgument).to(beNil())
+                    beforeEach {
+                        let settingRouteObservable = self.scheduler.createColdObservable([next(50, action)])
+
+                        settingRouteObservable
+                                .bind(to: self.subject.onSettingCellTapped)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("invokes the setting route action") {
+                        let argument = self.routeActionHandler.routeActionArgument as! SettingRouteAction
+                        expect(argument).to(equal(action))
+                    }
+                }
+
+                describe("when the cell did not have a route action") {
+                    beforeEach {
+                        let settingRouteObservable: Observable<SettingRouteAction?> = self.scheduler.createColdObservable([next(50, nil)]).asObservable()
+
+                        settingRouteObservable
+                                .bind(to: self.subject.onSettingCellTapped)
+                                .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("does nothing") {
+                        expect(self.routeActionHandler.routeActionArgument).to(beNil())
+                    }
+                }
             }
         }
     }

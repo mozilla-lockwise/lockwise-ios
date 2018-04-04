@@ -5,22 +5,20 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import UIKit
 
 protocol RootViewProtocol: class {
-    func topViewIs<T>(_ class: T.Type) -> Bool
-    func modalViewIs<T>(_ class: T.Type) -> Bool
+    func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+    func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+
+    func startMainStack<T: UINavigationController>(_ type: T.Type)
+    func startModalStack<T: UINavigationController>(_ type: T.Type)
     func dismissModals()
 
-    var loginStackDisplayed: Bool { get }
-    func startLoginStack()
     func pushLoginView(view: LoginRouteAction)
-
-    var mainStackDisplayed: Bool { get }
-    func startMainStack()
     func pushMainView(view: MainRouteAction)
-
-    var settingStackDisplayed: Bool { get }
-    func startSettingStack(_ animated: Bool)
     func pushSettingView(view: SettingRouteAction)
 }
 
@@ -136,8 +134,8 @@ class RootPresenter {
 
             view.dismissModals()
 
-            if !view.loginStackDisplayed {
-                view.startLoginStack()
+            if !view.mainStackIs(LoginNavigationController.self) {
+                view.startMainStack(LoginNavigationController.self)
             }
 
             switch loginAction {
@@ -161,8 +159,8 @@ class RootPresenter {
 
             view.dismissModals()
 
-            if !view.mainStackDisplayed {
-                view.startMainStack()
+            if !view.mainStackIs(MainNavigationController.self) {
+                view.startMainStack(MainNavigationController.self)
             }
 
             switch mainAction {
@@ -184,14 +182,18 @@ class RootPresenter {
                 return
             }
 
-            if !view.settingStackDisplayed {
-                view.startSettingStack(true)
+            if !view.modalStackIs(SettingNavigationController.self) {
+                view.startModalStack(SettingNavigationController.self)
             }
 
             switch settingAction {
             case .list:
                 if !view.modalViewIs(SettingsView.self) {
                     view.pushSettingView(view: .list)
+                }
+            case .account:
+                if !view.modalViewIs(AccountSettingView.self) {
+                    view.pushSettingView(view: .account)
                 }
             case .autoLock:
                 if !view.modalViewIs(AutoLockSettingView.self) {

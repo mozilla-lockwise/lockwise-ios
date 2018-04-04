@@ -16,9 +16,6 @@ class UserInfoStore {
     private var _scopedKey = ReplaySubject<String?>.create(bufferSize: 1)
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
-    private var _biometricLoginEnabled = ReplaySubject<Bool?>.create(bufferSize: 1)
-    private var _autoLock = ReplaySubject<AutoLockSetting?>.create(bufferSize: 1)
-    private var _preferredBrowser = ReplaySubject<PreferredBrowserSetting?>.create(bufferSize: 1)
 
     public var scopedKey: Observable<String?> {
         return _scopedKey.asObservable()
@@ -32,18 +29,6 @@ class UserInfoStore {
         return _oauthInfo.asObservable()
     }
 
-    public var biometricLoginEnabled: Observable<Bool?> {
-        return _biometricLoginEnabled.asObservable()
-    }
-
-    public var autoLock: Observable<AutoLockSetting?> {
-        return _autoLock.asObservable()
-    }
-
-    public var preferredBrowser: Observable<PreferredBrowserSetting?> {
-        return _preferredBrowser.asObservable()
-    }
-
     init(dispatcher: Dispatcher = Dispatcher.shared,
          keychainManager: KeychainManager = KeychainManager()) {
         self.dispatcher = dispatcher
@@ -54,8 +39,7 @@ class UserInfoStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .profileInfo(let info):
-                        if self.keychainManager.save(info.email, identifier: .email) &&
-                                   self.keychainManager.save(info.uid, identifier: .uid) {
+                        if self.saveProfileInfo(info) {
                             self._profileInfo.onNext(info)
                         }
                     case .oauthInfo(let info):
@@ -72,31 +56,26 @@ class UserInfoStore {
                         self.populateInitialValues()
                     case .clear:
                         self.clear()
-                    case .biometricLogin(let enabled):
-                        if self.keychainManager.save(enabled.description, identifier: .biometricLoginEnabled) {
-                            self._biometricLoginEnabled.onNext(enabled)
-                        }
-                    case .autoLock(let value):
-                        if self.keychainManager.save(value.rawValue, identifier: .autoLock) {
-                            self._autoLock.onNext(value)
-                        }
-                    case .preferredBrowser(let value):
-                        if self.keychainManager.save(value.rawValue, identifier: .preferredBrowser) {
-                            self._preferredBrowser.onNext(value)
-                        }
                     }
                 })
                 .disposed(by: self.disposeBag)
 
     }
+}
 
+extension UserInfoStore {
     private func populateInitialValues() {
         if let email = self.keychainManager.retrieve(.email),
            let uid = self.keychainManager.retrieve(.uid) {
+            let avatarURL = self.keychainManager.retrieve(.avatarURL)
+            let displayName = self.keychainManager.retrieve(.displayName)
+
             self._profileInfo.onNext(
                     ProfileInfo.Builder()
                             .uid(uid)
                             .email(email)
+                            .avatar(avatarURL)
+                            .displayName(displayName)
                             .build()
             )
         } else {
@@ -118,27 +97,6 @@ class UserInfoStore {
         } else {
             self._oauthInfo.onNext(nil)
         }
-
-        let enabled = self.keychainManager.retrieve(.biometricLoginEnabled)
-        if enabled == nil {
-            self._biometricLoginEnabled.onNext(nil)
-        } else {
-            self._biometricLoginEnabled.onNext(enabled == "true")
-        }
-
-        let autoLock = self.keychainManager.retrieve(.autoLock)
-        if let autoLock = autoLock {
-            self._autoLock.onNext(AutoLockSetting(rawValue: autoLock))
-        } else {
-            self._autoLock.onNext(AutoLockSetting.Never)
-        }
-
-        let preferredBrowser = self.keychainManager.retrieve(.preferredBrowser)
-        if let preferredBrowser = preferredBrowser {
-            self._preferredBrowser.onNext(PreferredBrowserSetting(rawValue: preferredBrowser))
-        } else {
-            self._preferredBrowser.onNext(PreferredBrowserSetting.Safari)
-        }
     }
 
     private func clear() {
@@ -149,6 +107,21 @@ class UserInfoStore {
         self._profileInfo.onNext(nil)
         self._oauthInfo.onNext(nil)
         self._profileInfo.onNext(nil)
+    }
+
+    private func saveProfileInfo(_ info: ProfileInfo) -> Bool {
+        var success = self.keychainManager.save(info.email, identifier: .email) &&
+                self.keychainManager.save(info.uid, identifier: .uid)
+
+        if let displayName = info.displayName {
+            success = success && self.keychainManager.save(displayName, identifier: .displayName)
+        }
+
+        if let avatar = info.avatar {
+            success = success && self.keychainManager.save(avatar, identifier: .avatarURL)
+        }
+
+        return success
     }
 }
 
