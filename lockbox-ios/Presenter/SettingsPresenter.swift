@@ -94,7 +94,10 @@ extension SettingsPresenter {
                 biometricSetting,
                 SettingCellConfiguration(
                         text: Constant.string.settingsAutoLock,
-                        routeAction: SettingRouteAction.autoLock)
+                        routeAction: SettingRouteAction.autoLock),
+                SettingCellConfiguration(
+                    text: Constant.string.settingsBrowser,
+                    routeAction: SettingRouteAction.preferredBrowser)
             ])
         ]
     }

@@ -8,6 +8,86 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+typealias PreferredBrowserSettingSectionModel = AnimatableSectionModel<Int, CheckmarkSettingCellConfiguration>
+
 class PreferredBrowserSettingView: UITableViewController {
-    
+    var presenter: PreferredBrowserSettingPresenter?
+    private var disposeBag = DisposeBag()
+    private var dataSource: RxTableViewSectionedReloadDataSource<PreferredBrowserSettingSectionModel>?
+
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        self.presenter = PreferredBrowserSettingPresenter(view: self)
+        view.backgroundColor = Constant.color.settingsBackground
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setupNavbar()
+        self.setupFooter()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setupDataSource()
+        self.setupDelegate()
+        self.presenter?.onViewReady()
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UITableViewCell()
+    }
+}
+
+extension PreferredBrowserSettingView {
+    private func setupNavbar() {
+        navigationItem.title = Constant.string.settingsBrowser
+    }
+
+    private func setupFooter() {
+        self.tableView.tableFooterView = UIView()
+    }
+
+    private func setupDataSource() {
+        self.dataSource = RxTableViewSectionedReloadDataSource(
+            configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
+                let cell = UITableViewCell()
+                cell.textLabel?.text = cellConfiguration.text
+
+                cell.accessoryType = cellConfiguration.isChecked ?
+                    UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+
+                return cell
+        })
+    }
+
+    private func setupDelegate() {
+        guard let presenter = self.presenter else { return }
+        self.tableView.rx.itemSelected
+            .map { (indexPath) -> PreferredBrowserSetting? in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                return self.dataSource?[indexPath].valueWhenChecked as? PreferredBrowserSetting
+            }.bind(to: presenter.itemSelectedObserver)
+            .disposed(by: self.disposeBag)
+    }
+}
+
+extension PreferredBrowserSettingView: PreferredBrowserSettingViewProtocol {
+    func bind(items: SharedSequence<DriverSharingStrategy, [PreferredBrowserSettingSectionModel]>) {
+        guard let dataSource = self.dataSource else {
+            fatalError("datasource not set!")
+        }
+
+        items
+            .drive(self.tableView.rx.items(dataSource: dataSource))
+            .disposed(by: self.disposeBag)
+    }
 }

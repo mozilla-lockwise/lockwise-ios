@@ -7,6 +7,66 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
+protocol PreferredBrowserSettingViewProtocol {
+    func bind(items: Driver<[PreferredBrowserSettingSectionModel]>)
+}
+
 class PreferredBrowserSettingPresenter {
-    
+    private var view: PreferredBrowserSettingViewProtocol
+    private var userDefaults: UserDefaults
+    private var routeActionHandler: RouteActionHandler
+    private var settingActionHandler: SettingActionHandler
+    private var disposeBag = DisposeBag()
+
+    lazy var initialSettings = [
+        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserChrome,
+                                          valueWhenChecked: PreferredBrowserSetting.Chrome),
+        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox,
+                                          valueWhenChecked: PreferredBrowserSetting.Firefox),
+        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus,
+                                          valueWhenChecked: PreferredBrowserSetting.Focus),
+        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari,
+                                          valueWhenChecked: PreferredBrowserSetting.Safari)
+    ]
+
+    lazy private(set) var itemSelectedObserver: AnyObserver<PreferredBrowserSetting?> = {
+        return Binder(self) { target, newPreferredBrowserValue in
+            guard let newPreferredBrowserValue = newPreferredBrowserValue else {
+                return
+            }
+
+            target.settingActionHandler.invoke(.preferredBrowser(browser: newPreferredBrowserValue))
+            }.asObserver()
+    }()
+
+    init(view: PreferredBrowserSettingViewProtocol,
+         userDefaults: UserDefaults = UserDefaults.standard,
+         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
+        self.view = view
+        self.userDefaults = userDefaults
+        self.routeActionHandler = routeActionHandler
+        self.settingActionHandler = settingActionHandler
+    }
+
+    func onViewReady() {
+        let driver = self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
+            .map { value -> PreferredBrowserSetting? in
+                guard let value = value else { return PreferredBrowserSetting.Safari }
+                return PreferredBrowserSetting(rawValue: value)
+            }
+            .map { setting -> [CheckmarkSettingCellConfiguration] in
+                return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
+                    cellConfiguration.isChecked =
+                        cellConfiguration.valueWhenChecked as? PreferredBrowserSetting == setting
+                    return cellConfiguration
+                })
+            }
+            .map { (cellConfigurations) -> [PreferredBrowserSettingSectionModel] in
+                return [PreferredBrowserSettingSectionModel(model: 0, items: cellConfigurations)]
+            }
+            .asDriver(onErrorJustReturn: [])
+
+        view.bind(items: driver)
+    }
 }
