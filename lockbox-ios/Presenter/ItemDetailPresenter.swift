@@ -40,26 +40,35 @@ class ItemDetailPresenter {
 
     lazy private(set) var onCellTapped: AnyObserver<String?> = {
         return Binder(self) { target, value in
-            guard let value = value,
-                  copyableFields.contains(value) else {
+            guard let value = value else {
                 return
             }
 
-            target.dataStore.onItem(self.view?.itemId ?? "")
+            if copyableFields.contains(value) {
+                target.dataStore.onItem(self.view?.itemId ?? "")
+                        .take(1)
+                        .subscribe(onNext: { item in
+                            var text = ""
+                            if value == Constant.string.username {
+                                text = item.entry.username ?? ""
+                            } else if value == Constant.string.password {
+                                text = item.entry.password ?? ""
+                            }
+
+                            target.dataStoreActionHandler.touch(item)
+                            target.copyActionHandler.invoke(CopyAction(text: text, fieldName: value))
+                        })
+                        .disposed(by: target.disposeBag)
+            } else if value == Constant.string.webAddress {
+                target.dataStore.onItem(self.view?.itemId ?? "")
                     .take(1)
                     .subscribe(onNext: { item in
-                        var text = ""
-                        if value == Constant.string.username {
-                            text = item.entry.username ?? ""
-                        } else if value == Constant.string.password {
-                            text = item.entry.password ?? ""
+                        if let origin = item.origins.first {
+                            target.routeActionHandler.invoke(MainRouteAction.webAddress(url: origin))
                         }
-
-                        target.dataStoreActionHandler.touch(item)
-                        target.copyActionHandler.invoke(CopyAction(text: text, fieldName: value))
                     })
                     .disposed(by: target.disposeBag)
-
+            }
         }.asObserver()
     }()
 
