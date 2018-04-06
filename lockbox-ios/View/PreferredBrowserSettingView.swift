@@ -61,9 +61,13 @@ extension PreferredBrowserSettingView {
             configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
                 let cell = UITableViewCell()
                 cell.textLabel?.text = cellConfiguration.text
-
                 cell.accessoryType = cellConfiguration.isChecked ?
                     UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+
+                if !cellConfiguration.enabled {
+                    cell.isUserInteractionEnabled = false
+                    cell.textLabel?.isEnabled = false
+                }
 
                 return cell
         })

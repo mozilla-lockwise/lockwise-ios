@@ -167,6 +167,7 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
 class CheckmarkSettingCellConfiguration: SettingCellConfiguration {
     var isChecked: Bool = false
     var valueWhenChecked: Any?
+    var enabled: Bool = true
 
     init(text: String, isChecked: Bool = false, valueWhenChecked: Any?) {
         super.init(text: text, routeAction: nil)

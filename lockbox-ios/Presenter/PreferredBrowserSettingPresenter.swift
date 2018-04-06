@@ -52,13 +52,14 @@ class PreferredBrowserSettingPresenter {
     func onViewReady() {
         let driver = self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
             .map { value -> PreferredBrowserSetting? in
-                guard let value = value else { return PreferredBrowserSetting.Safari }
+                guard let value = value else { return PreferredBrowserSetting.defaultValue }
                 return PreferredBrowserSetting(rawValue: value)
             }
             .map { setting -> [CheckmarkSettingCellConfiguration] in
                 return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                     cellConfiguration.isChecked =
                         cellConfiguration.valueWhenChecked as? PreferredBrowserSetting == setting
+                    cellConfiguration.enabled = (cellConfiguration.valueWhenChecked as? PreferredBrowserSetting)?.canOpenBrowser() ?? false
                     return cellConfiguration
                 })
             }

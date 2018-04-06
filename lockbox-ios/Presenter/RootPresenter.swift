@@ -172,10 +172,8 @@ class RootPresenter {
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
                 }
-            case .webAddress(let urlStr):
-                if let url = URL(string: "http://\(urlStr)") {
-                    self.openUrl(url: url)
-                }
+            case .webAddress(let urlString):
+                self.openUrl(string: urlString)
             }
         }.asObserver()
     }()
@@ -213,23 +211,17 @@ class RootPresenter {
         }.asObserver()
     }()
 
-    private func openUrl(url: URL) {
+    private func openUrl(string url: String) {
         UserDefaults.standard.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
             .take(1)
             .map { value -> PreferredBrowserSetting in
                 guard let value = value,
                     let setting = PreferredBrowserSetting(rawValue: value)
-                        else { return PreferredBrowserSetting.Safari }
+                        else { return PreferredBrowserSetting.defaultValue }
                 return setting
             }
             .subscribe(onNext: { (latest: PreferredBrowserSetting) in
-                switch latest {
-                case .Safari:
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-
-                default:
-                    break
-                }
+                latest.openUrl(url: url)
             })
             .disposed(by: self.disposeBag)
     }
