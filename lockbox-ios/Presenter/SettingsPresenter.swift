@@ -60,9 +60,13 @@ class SettingsPresenter {
     }
 
     func onViewReady() {
-        let settingsConfigDriver = self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
-                .map { enabled -> [SettingSectionModel] in
-                    return self.settingsWithBiometricLoginEnabled(enabled ?? false)
+        let biometricObserver = self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
+        let autoLockObserver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue)
+
+        let settingsConfigDriver = Observable.combineLatest(biometricObserver, autoLockObserver)
+                .map { (latest: (Bool?, String?)) -> [SettingSectionModel] in
+                    let autoLock = latest.1 != nil ? AutoLockSetting(rawValue: latest.1!) : AutoLockSetting.FiveMinutes
+                    return self.settingsWithBiometricLoginEnabled(latest.0 ?? false, autoLock: autoLock)
                 }
                 .asDriver(onErrorJustReturn: [])
 
@@ -71,9 +75,16 @@ class SettingsPresenter {
 }
 
 extension SettingsPresenter {
-    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool) -> [SettingSectionModel] {
+    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?)
+        -> [SettingSectionModel] {
         let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
         biometricSetting.isOn = enabled
+
+        let autoLockSetting = SettingCellConfiguration(
+            text: Constant.string.settingsAutoLock,
+            routeAction: SettingRouteAction.autoLock)
+
+        autoLockSetting.detailText = autoLock?.toString()
 
         return [
             SettingSectionModel(model: 0, items: [
@@ -92,9 +103,7 @@ extension SettingsPresenter {
                         text: Constant.string.settingsAccount,
                         routeAction: SettingRouteAction.account),
                 biometricSetting,
-                SettingCellConfiguration(
-                        text: Constant.string.settingsAutoLock,
-                        routeAction: SettingRouteAction.autoLock)
+                autoLockSetting
             ])
         ]
     }
