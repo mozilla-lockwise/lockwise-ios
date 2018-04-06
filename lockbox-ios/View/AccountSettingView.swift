@@ -51,16 +51,14 @@ extension AccountSettingView: AccountSettingViewProtocol {
 
 extension AccountSettingView: UIGestureRecognizerDelegate {
     fileprivate func setupUnlinkAccountButton() {
-        guard let presenter = self.presenter else {
-            return
-        }
-
         self.unlinkAccountButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
         self.unlinkAccountButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
 
-        self.unlinkAccountButton.rx.tap
-                .bind(to: presenter.unlinkAccountObserver)
-                .disposed(by: self.disposeBag)
+        if let presenter = self.presenter {
+            self.unlinkAccountButton.rx.tap
+                    .bind(to: presenter.unlinkAccountObserver)
+                    .disposed(by: self.disposeBag)
+        }
     }
 
     fileprivate func setupNavBar() {
@@ -84,20 +82,18 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
-        guard let presenter = self.presenter else {
-            return
+        if let presenter = self.presenter {
+            leftButton.rx.tap
+                    .bind(to: presenter.onSettingsTap)
+                    .disposed(by: self.disposeBag)
+
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                    .map { _ -> Void in
+                        return ()
+                    }
+                    .bind(to: presenter.onSettingsTap)
+                    .disposed(by: self.disposeBag)
         }
-
-        leftButton.rx.tap
-                .bind(to: presenter.onSettingsTap)
-                .disposed(by: self.disposeBag)
-
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.rx.event
-                .map { _ -> Void in
-                    return ()
-                }
-                .bind(to: presenter.onSettingsTap)
-                .disposed(by: self.disposeBag)
     }
 }

@@ -64,11 +64,9 @@ class ItemListView: UIViewController {
 
 extension ItemListView: ItemListViewProtocol {
     func bind(items: Driver<[ItemSectionModel]>) {
-        guard let dataSource = self.dataSource else {
-            fatalError("dataSource not set!")
+        if let dataSource = self.dataSource {
+            items.drive(self.tableView.rx.items(dataSource: dataSource)).disposed(by: self.disposeBag)
         }
-
-        items.drive(self.tableView.rx.items(dataSource: dataSource)).disposed(by: self.disposeBag)
     }
 
     func bind(sortingButtonTitle: Driver<String>) {
@@ -148,25 +146,23 @@ extension ItemListView {
     }
 
     fileprivate func setupDelegate() {
-        guard let presenter = self.presenter else {
-            return
+        if let presenter = self.presenter {
+            self.tableView.rx.itemSelected
+                    .map { (path: IndexPath) -> String? in
+                        guard let config = self.dataSource?[path] else {
+                            return nil
+                        }
+
+                        switch config {
+                        case .Item(_, _, let id):
+                            return id
+                        default:
+                            return nil
+                        }
+                    }
+                    .bind(to: presenter.itemSelectedObserver)
+                    .disposed(by: self.disposeBag)
         }
-
-        self.tableView.rx.itemSelected
-                .map { (path: IndexPath) -> String? in
-                    guard let config = self.dataSource?[path] else {
-                        return nil
-                    }
-
-                    switch config {
-                    case .Item(_, _, let id):
-                        return id
-                    default:
-                        return nil
-                    }
-                }
-                .bind(to: presenter.itemSelectedObserver)
-                .disposed(by: self.disposeBag)
     }
 }
 
@@ -213,17 +209,15 @@ extension ItemListView {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
 
-        guard let presenter = presenter else {
-            return
+        if let presenter = presenter {
+            self.prefButton.rx.tap
+                    .bind(to: presenter.onSettingsTapped)
+                    .disposed(by: self.disposeBag)
+
+            self.sortingButton.rx.tap
+                    .bind(to: presenter.sortingButtonObserver)
+                    .disposed(by: self.disposeBag)
         }
-
-        prefButton.rx.tap
-                .bind(to: presenter.onSettingsTapped)
-                .disposed(by: self.disposeBag)
-
-        sortingButton.rx.tap
-                .bind(to: presenter.sortingButtonObserver)
-                .disposed(by: self.disposeBag)
     }
 
     fileprivate func styleTableViewBackground() {

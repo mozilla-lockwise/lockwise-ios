@@ -56,13 +56,11 @@ class ItemDetailView: UIViewController {
 
 extension ItemDetailView: ItemDetailViewProtocol {
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
-        guard let dataSource = self.dataSource else {
-            fatalError("datasource not set!")
+        if let dataSource = self.dataSource {
+            itemDetail
+                    .drive(self.tableView.rx.items(dataSource: dataSource))
+                    .disposed(by: self.disposeBag)
         }
-
-        itemDetail
-                .drive(self.tableView.rx.items(dataSource: dataSource))
-                .disposed(by: self.disposeBag)
     }
 
     func bind(titleText: Driver<String>) {
@@ -102,21 +100,19 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
-        guard let presenter = self.presenter else {
-            return
+        if let presenter = self.presenter {
+            leftButton.rx.tap
+                    .bind(to: presenter.onCancel)
+                    .disposed(by: self.disposeBag)
+
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                    .map { _ -> Void in
+                        return ()
+                    }
+                    .bind(to: presenter.onCancel)
+                    .disposed(by: self.disposeBag)
         }
-
-        leftButton.rx.tap
-                .bind(to: presenter.onCancel)
-                .disposed(by: self.disposeBag)
-
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.rx.event
-                .map { _ -> Void in
-                    return ()
-                }
-                .bind(to: presenter.onCancel)
-                .disposed(by: self.disposeBag)
     }
 
     fileprivate func styleTableBackground() {
@@ -140,21 +136,19 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
-                    passwordConfig:if cellConfiguration.password {
+                    if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
 
-                        guard let presenter = self.presenter else {
-                            break passwordConfig
+                        if let presenter = self.presenter {
+                            cell.revealButton.rx.tap
+                                    .map { _ -> Bool in
+                                        cell.revealButton.isSelected = !cell.revealButton.isSelected
+
+                                        return cell.revealButton.isSelected
+                                    }
+                                    .bind(to: presenter.onPasswordToggle)
+                                    .disposed(by: cell.disposeBag)
                         }
-
-                        cell.revealButton.rx.tap
-                                .map { _ -> Bool in
-                                    cell.revealButton.isSelected = !cell.revealButton.isSelected
-
-                                    return cell.revealButton.isSelected
-                                }
-                                .bind(to: presenter.onPasswordToggle)
-                                .disposed(by: cell.disposeBag)
                     }
 
                     return cell
@@ -162,19 +156,17 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
     }
 
     fileprivate func setupDelegate() {
-        guard let presenter = self.presenter else {
-            return
-        }
+        if let presenter = self.presenter {
+            self.tableView.rx.itemSelected
+                    .map { path -> String? in
+                        guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
+                            return nil
+                        }
 
-        self.tableView.rx.itemSelected
-                .map { path -> String? in
-                    guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
-                        return nil
+                        return selectedCell.titleLabel.text
                     }
-
-                    return selectedCell.titleLabel.text
-                }
-                .bind(to: presenter.onCellTapped)
-                .disposed(by: self.disposeBag)
+                    .bind(to: presenter.onCellTapped)
+                    .disposed(by: self.disposeBag)
+        }
     }
 }
