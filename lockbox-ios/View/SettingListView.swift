@@ -55,7 +55,7 @@ extension SettingListView: SettingListViewProtocol {
     }
 }
 
-extension SettingListView: UITableViewDelegate {
+extension SettingListView {
     private func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
