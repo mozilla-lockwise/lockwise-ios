@@ -105,6 +105,8 @@ class UserInfoStoreSpec: QuickSpec {
                 let profileInfo = ProfileInfo.Builder()
                         .uid("jklfsdlkjdfs")
                         .email("sand@sand.com")
+                        .displayName("squasha")
+                        .avatar("www.picturesite.com")
                         .build()
 
                 beforeEach {
@@ -135,7 +137,7 @@ class UserInfoStoreSpec: QuickSpec {
                     }
                 }
 
-                describe("when only the email or uid is saved successfully to the keychain") {
+                describe("when only some of the profileinfo is saved successfully to the keychain") {
                     beforeEach {
                         self.keychainManager.saveSuccess = false
                         self.dispatcher.fakeRegistration.onNext(UserInfoAction.profileInfo(info: profileInfo))

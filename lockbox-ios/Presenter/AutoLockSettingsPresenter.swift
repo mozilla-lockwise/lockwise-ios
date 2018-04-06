@@ -37,11 +37,10 @@ class AutoLockSettingPresenter {
 
     lazy private(set) var itemSelectedObserver: AnyObserver<AutoLockSetting?> = {
         return Binder(self) { target, newAutoLockValue in
-            guard let newAutoLockValue = newAutoLockValue else {
-                return
+            if let newAutoLockValue = newAutoLockValue {
+                target.settingActionHandler.invoke(.autoLock(timeout: newAutoLockValue))
             }
 
-            target.settingActionHandler.invoke(.autoLock(timeout: newAutoLockValue))
             }.asObserver()
     }()
 
