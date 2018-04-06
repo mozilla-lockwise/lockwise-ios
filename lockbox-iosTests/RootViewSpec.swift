@@ -217,7 +217,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("stays on the list") {
-                        expect(self.subject.modalViewIs(SettingsView.self)).to(beTrue())
+                        expect(self.subject.modalViewIs(SettingListView.self)).to(beTrue())
                     }
                 }
             }

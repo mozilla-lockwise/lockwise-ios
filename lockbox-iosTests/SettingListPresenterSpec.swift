@@ -78,9 +78,21 @@ class SettingsPresenterSpec: QuickSpec {
                     }
                 }
 
+                describe("onSignOut") {
+                    beforeEach {
+                        self.view.fakeButtonPress.onNext(())
+                    }
+
+                    it("locks the application and routes to the login flow") {
+                        expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.lock(locked: true)))
+                        let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
+                        expect(argument).to(equal(LoginRouteAction.welcome))
+                    }
+                }
+
                 describe("autolock field") {
                     it("sets detail value for autolock") {
-                        UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLock.rawValue)
+                        UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
 
                         let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
                         expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))

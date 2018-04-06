@@ -13,10 +13,6 @@ import RxTest
 
 class FxAPresenterSpec: QuickSpec {
     class FakeFxAView: FxAViewProtocol {
-        func dismiss() {
-
-        }
-
         var loadRequestArgument: URLRequest?
 
         func loadRequest(_ urlRequest: URLRequest) {
@@ -46,6 +42,14 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeSettingActionHandler: SettingActionHandler {
+        var invokeArgument: SettingAction?
+
+        override func invoke(_ action: SettingAction) {
+            self.invokeArgument = action
+        }
+    }
+
     class FakeFxAActionHandler: FxAActionHandler {
         var initiateFxAAuthenticationReceived = false
         var matchingRedirectURLComponentsArgument: URLComponents?
@@ -69,6 +73,7 @@ class FxAPresenterSpec: QuickSpec {
 
     private var view: FakeFxAView!
     private var fxaStore: FakeFxAStore!
+    private var settingActionHandler: FakeSettingActionHandler!
     private var fxAActionHandler: FakeFxAActionHandler!
     private var routeActionHandler: FakeRouteActionHandler!
     var subject: FxAPresenter!
@@ -79,11 +84,13 @@ class FxAPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeFxAView()
                 self.fxaStore = FakeFxAStore()
+                self.settingActionHandler = FakeSettingActionHandler()
                 self.fxAActionHandler = FakeFxAActionHandler()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.subject = FxAPresenter(
                         view: self.view,
                         fxAActionHandler: self.fxAActionHandler,
+                        settingActionHandler: self.settingActionHandler,
                         routeActionHandler: self.routeActionHandler,
                         fxaStore: self.fxaStore
                 )
@@ -94,14 +101,14 @@ class FxAPresenterSpec: QuickSpec {
                     self.subject.onViewReady()
                 }
 
+                it("initiates fxa authentication") {
+                    expect(self.fxAActionHandler.initiateFxAAuthenticationReceived).to(beTrue())
+                }
+
                 describe("receiving .loadInitialURL") {
                     let url = URL(string: "www.properurltoload.com/manystuffs?ihavequery")!
                     beforeEach {
                         self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.loadInitialURL(url: url))
-                    }
-
-                    it("initiates fxa authentication") {
-                        expect(self.fxAActionHandler.initiateFxAAuthenticationReceived).to(beTrue())
                     }
 
                     it("tells the view to load the url") {
@@ -115,8 +122,8 @@ class FxAPresenterSpec: QuickSpec {
                         self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
                     }
 
-                    it("initiates fxa authentication") {
-                        expect(self.fxAActionHandler.initiateFxAAuthenticationReceived).to(beTrue())
+                    it("tells the settings to unlock the application") {
+                        expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.lock(locked: false)))
                     }
 
                     it("tells routing action handler to show the listview") {

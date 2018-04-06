@@ -17,21 +17,29 @@ protocol WelcomeViewProtocol: class {
     var fxAButtonTopSpace: AnyObserver<CGFloat> { get }
 }
 
+struct LockedEnabled {
+    let locked: Bool
+    let enabled: Bool
+}
+
+extension LockedEnabled: Equatable {
+    static func ==(lhs: LockedEnabled, rhs: LockedEnabled) -> Bool {
+        return lhs.locked == rhs.locked && lhs.enabled == rhs.enabled
+    }
+}
+
 class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
     private let routeActionHandler: RouteActionHandler
-    private let routeStore: RouteStore
     private let userDefaults: UserDefaults
     private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         routeStore: RouteStore = RouteStore.shared,
          userDefaults: UserDefaults = UserDefaults.standard) {
         self.view = view
         self.routeActionHandler = routeActionHandler
-        self.routeStore = routeStore
         self.userDefaults = userDefaults
     }
 
@@ -42,20 +50,27 @@ class WelcomePresenter {
         self.view?.biometricSignInText.onNext(biometricButtonText)
         self.view?.biometricImageName.onNext(biometricImageName)
 
-        let lockedObservable = self.userDefaults.onLock
+        let lockedObservable = self.userDefaults.onLock.distinctUntilChanged()
+        let biometricsObservable = self.userDefaults.onBiometricsEnabled.distinctUntilChanged()
 
         if let view = self.view {
             lockedObservable
                     .bind(to: view.firstTimeLoginMessageHidden)
                     .disposed(by: self.disposeBag)
 
-            lockedObservable
-                    .map { !$0 }
+            Observable.combineLatest(lockedObservable, biometricsObservable)
+                    .map { LockedEnabled(locked: $0.0, enabled: $0.1) }
+                    .distinctUntilChanged()
+                    .map { latest -> Bool in
+                        !latest.locked ? true : !latest.enabled
+                    }
                     .bind(to: view.biometricAuthenticationPromptHidden)
                     .disposed(by: self.disposeBag)
 
             lockedObservable
-                    .map { $0 ? Constant.number.fxaButtonTopSpaceUnlock : Constant.number.fxaButtonTopSpaceFirstLogin }
+                    .map {
+                        $0 ? Constant.number.fxaButtonTopSpaceUnlock : Constant.number.fxaButtonTopSpaceFirstLogin
+                    }
                     .bind(to: view.fxAButtonTopSpace)
                     .disposed(by: self.disposeBag)
         }

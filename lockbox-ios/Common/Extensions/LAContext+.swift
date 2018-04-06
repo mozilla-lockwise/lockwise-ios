@@ -6,7 +6,7 @@ import Foundation
 import LocalAuthentication
 
 extension LAContext {
-    static var usesFaceId: Bool {
+    public static var usesFaceId: Bool {
         let authContext = LAContext()
         var error: NSError?
         if authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {

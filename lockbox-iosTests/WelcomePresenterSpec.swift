@@ -79,13 +79,63 @@ class WelcomePresenterSpec: QuickSpec {
                     self.subject.onViewReady()
                 }
 
-                it("sets up the biometric image & text based on device capabilities") {
-                    if LAContext.usesFaceID {
-                        expect(self.view.biometricSignInTextStub.events.last!.value.element).to(equal(Constant.string.signInFaceID))
-                        expect(self.view.biometricImageName.events.last!.value.element).to(equal("face"))
-                    } else {
-                        expect(self.view.biometricSignInTextStub.events.last!.value.element).to(equal(Constant.string.signInTouchID))
-                        expect(self.view.biometricImageName.events.last!.value.element).to(equal("fingerprint"))
+                describe("when the device is locked") {
+                    beforeEach {
+                        UserDefaults.standard.set(true, forKey: SettingKey.locked.rawValue)
+                    }
+
+                    describe("when biometrics are enabled") {
+                        beforeEach {
+                            UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
+                        }
+
+                        it("hides the first time login message") {
+                            expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+
+                        it("moves the FxA button up") {
+                            expect(self.view.fxaButtonTopSpaceStub.events.last!.value.element).to(equal(Constant.number.fxaButtonTopSpaceUnlock))
+                        }
+
+                        it("shows the biometric auth prompt button") {
+                            expect(self.view.biometricAuthMessageHiddenStub.events.last!.value.element).to(beFalse())
+                        }
+                    }
+
+                    describe("when biometrics are not enabled") {
+                        beforeEach {
+                            UserDefaults.standard.set(false, forKey: SettingKey.biometricLogin.rawValue)
+                        }
+
+                        it("hides the first time login message") {
+                            expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+
+                        it("moves the FxA button up") {
+                            expect(self.view.fxaButtonTopSpaceStub.events.last!.value.element).to(equal(Constant.number.fxaButtonTopSpaceUnlock))
+                        }
+
+                        it("hides the biometric auth prompt button") {
+                            expect(self.view.biometricAuthMessageHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+                    }
+                }
+
+                describe("when the device is unlocked (first time login)") {
+                    beforeEach {
+                        UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
+                    }
+
+                    it("hides the first time login message") {
+                        expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beFalse())
+                    }
+
+                    it("moves the FxA button up") {
+                        expect(self.view.fxaButtonTopSpaceStub.events.last!.value.element).to(equal(Constant.number.fxaButtonTopSpaceFirstLogin))
+                    }
+
+                    it("hides the biometric auth prompt button") {
+                        expect(self.view.biometricAuthMessageHiddenStub.events.last!.value.element).to(beTrue())
                     }
                 }
 

@@ -10,4 +10,8 @@ extension UserDefaults {
     var onLock: Observable<Bool> {
         return self.rx.observe(Bool.self, SettingKey.locked.rawValue).filterNil()
     }
+
+    var onBiometricsEnabled: Observable<Bool> {
+        return self.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue).filterNil()
+    }
 }

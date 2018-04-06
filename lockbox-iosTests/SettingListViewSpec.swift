@@ -39,7 +39,8 @@ class SettingListViewSpec: QuickSpec {
     }
 
     private var presenter: FakeSettingsPresenter!
-    private var scheduler = TestScheduler(initialClock: 0)
+    private let scheduler = TestScheduler(initialClock: 0)
+    private let disposeBag = DisposeBag()
     var subject: SettingListView!
 
     override func spec() {
@@ -50,8 +51,7 @@ class SettingListViewSpec: QuickSpec {
                 self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
                 self.subject.presenter = self.presenter
 
-                self.subject.viewWillAppear(false)
-                self.subject.viewDidLoad()
+                self.subject.preloadView()
             }
 
             it("informs the presenter") {
@@ -121,6 +121,22 @@ class SettingListViewSpec: QuickSpec {
                     it("tells the presenter with the appropriate action") {
                         expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.account))
                     }
+                }
+            }
+
+            describe("onSignOut") {
+                var observer = self.scheduler.createObserver(Void.self)
+
+                beforeEach {
+                    observer = self.scheduler.createObserver(Void.self)
+
+                    self.subject.onSignOut.subscribe(observer).disposed(by: self.disposeBag)
+
+                    self.subject.signOutButton.sendActions(for: .touchUpInside)
+                }
+
+                it("tells any observers") {
+                    expect(observer.events.count).to(equal(1))
                 }
             }
         }

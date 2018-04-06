@@ -83,7 +83,7 @@ struct Constant {
     }
 
     struct setting {
-        static let defaultBiometricLockEnabled = true
+        static let defaultBiometricLockEnabled = false
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
         static let defaultLockedState = false
     }

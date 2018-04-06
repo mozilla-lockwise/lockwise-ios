@@ -11,18 +11,12 @@ protocol FxAViewProtocol: class, ErrorView {
     func loadRequest(_ urlRequest: URLRequest)
 }
 
-struct DisplayLock {
-    let action: FxADisplayAction
-    let locked: Bool
-}
-
 class FxAPresenter {
     private weak var view: FxAViewProtocol?
     fileprivate let fxAActionHandler: FxAActionHandler
     fileprivate let settingActionHandler: SettingActionHandler
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let fxaStore: FxAStore
-    fileprivate let userDefaults: UserDefaults
 
     private var disposeBag = DisposeBag()
 
@@ -36,33 +30,22 @@ class FxAPresenter {
          fxAActionHandler: FxAActionHandler = FxAActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         fxaStore: FxAStore = FxAStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard) {
+         fxaStore: FxAStore = FxAStore.shared) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
         self.settingActionHandler = settingActionHandler
         self.routeActionHandler = routeActionHandler
         self.fxaStore = fxaStore
-        self.userDefaults = userDefaults
     }
 
     func onViewReady() {
-        let lockedDriver = self.userDefaults.onLock
-                .asDriver(onErrorJustReturn: false)
-
-        Driver.combineLatest(self.fxaStore.fxADisplay, lockedDriver)
-                .map { latest -> DisplayLock in
-                    return DisplayLock(action: latest.0, locked: latest.1)
-                }
-                .drive(onNext: { latest in
-                    switch latest.action {
+        self.fxaStore.fxADisplay
+                .drive(onNext: { action in
+                    switch action {
                     case .loadInitialURL(let url):
                         self.view?.loadRequest(URLRequest(url: url))
                     case .finishedFetchingUserInformation:
-                        if latest.locked {
-                            self.settingActionHandler.invoke(SettingAction.lock(locked: false))
-                        }
-
+                        self.settingActionHandler.invoke(SettingAction.lock(locked: false))
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
                         break
