@@ -140,5 +140,16 @@ class SettingListViewSpec: QuickSpec {
                 }
             }
         }
+
+        describe("SettingCellConfiguration") {
+            describe("equality") {
+                it("SettingCellConfigurations are equal when the text and route actions are equal") {
+                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
+                }
+            }
+        }
     }
 }

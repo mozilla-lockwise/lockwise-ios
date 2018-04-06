@@ -46,12 +46,10 @@ extension SettingListView: SettingListViewProtocol {
     }
 
     func bind(items: Driver<[SettingSectionModel]>) {
-        guard let dataSource = self.dataSource else {
-            fatalError("datasource not set!")
+        if let dataSource = self.dataSource {
+            items.drive(self.tableView.rx.items(dataSource: dataSource))
+                    .disposed(by: self.disposeBag)
         }
-
-        items.drive(self.tableView.rx.items(dataSource: dataSource))
-                .disposed(by: self.disposeBag)
     }
 }
 
@@ -82,16 +80,14 @@ extension SettingListView {
     }
 
     private func setupDelegate() {
-        guard let presenter = self.presenter else {
-            return
+        if let presenter = self.presenter {
+            self.tableView.rx.itemSelected
+                    .map { path -> SettingRouteAction? in
+                        return self.dataSource?[path].routeAction
+                    }
+                    .bind(to: presenter.onSettingCellTapped)
+                    .disposed(by: self.disposeBag)
         }
-
-        self.tableView.rx.itemSelected
-                .map { path -> SettingRouteAction? in
-                    return self.dataSource?[path].routeAction
-                }
-                .bind(to: presenter.onSettingCellTapped)
-                .disposed(by: self.disposeBag)
     }
 
     private func setupNavbar() {

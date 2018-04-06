@@ -132,6 +132,18 @@ class FxAPresenterSpec: QuickSpec {
                         expect(argument).to(equal(MainRouteAction.list))
                     }
                 }
+
+                describe("receiving any other fxa action") {
+                    beforeEach {
+                        self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.fetchingUserInformation)
+                    }
+
+                    it("does nothing") {
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        expect(self.settingActionHandler.invokeArgument).to(beNil())
+                        expect(self.view.loadRequestArgument).to(beNil())
+                    }
+                }
             }
 
             describe(".webViewRequest") {
