@@ -54,16 +54,13 @@ class FxAPresenter {
 
     func webViewRequest(decidePolicyFor navigationAction: WKNavigationAction,
                         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        guard let navigationURL = navigationAction.request.url else {
-            decisionHandler(.allow)
-            return
-        }
-
-        if "\(navigationURL.scheme!)://\(navigationURL.host!)\(navigationURL.path)" == Constant.app.redirectURI,
-           let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true) {
-            self.fxAActionHandler.matchingRedirectURLReceived(components: components)
-            decisionHandler(.cancel)
-            return
+        if let navigationURL = navigationAction.request.url {
+            if "\(navigationURL.scheme!)://\(navigationURL.host!)\(navigationURL.path)" == Constant.app.redirectURI,
+               let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true) {
+                self.fxAActionHandler.matchingRedirectURLReceived(components: components)
+                decisionHandler(.cancel)
+                return
+            }
         }
 
         decisionHandler(.allow)

@@ -85,12 +85,10 @@ class RootView: UIViewController, RootViewProtocol {
         case .list:
             self.currentViewController?.popToRootViewController(animated: true)
         case .detail(let id):
-            guard let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView else { // swiftlint:disable:this line_length
-                return
+            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView { // swiftlint:disable:this line_length
+                itemDetailView.itemId = id
+                self.currentViewController?.pushViewController(itemDetailView, animated: true)
             }
-
-            itemDetailView.itemId = id
-            self.currentViewController?.pushViewController(itemDetailView, animated: true)
         }
     }
 
@@ -101,11 +99,9 @@ class RootView: UIViewController, RootViewProtocol {
         case .list:
             settingNavController?.popToRootViewController(animated: true)
         case .account:
-            guard let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView else { // swiftlint:disable:this line_length
-                return
+            if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView { // swiftlint:disable:this line_length
+                settingNavController?.pushViewController(accountSettingView, animated: true)
             }
-
-            settingNavController?.pushViewController(accountSettingView, animated: true)
         case .autoLock:
             settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
         default: break

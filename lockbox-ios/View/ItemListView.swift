@@ -70,36 +70,30 @@ extension ItemListView: ItemListViewProtocol {
     }
 
     func bind(sortingButtonTitle: Driver<String>) {
-        guard let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton else {
-            fatalError("no sorting button!")
-        }
-
-        sortingButtonTitle
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            sortingButtonTitle
                 .drive(button.rx.title())
                 .disposed(by: self.disposeBag)
+        }
     }
 
     func displayEmptyStateMessaging() {
-        guard let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView else {
-            return
-        }
-        self.tableView.backgroundView?.addSubview(emptyStateView)
-
-        guard let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton else {
-            fatalError("no sorting button!")
+        if let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView {
+            self.tableView.backgroundView?.addSubview(emptyStateView)
         }
 
-        button.isHidden = true
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            button.isHidden = true
+        }
+
     }
 
     func hideEmptyStateMessaging() {
         self.tableView.backgroundView?.subviews.forEach({ $0.removeFromSuperview() })
 
-        guard let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton else {
-            fatalError("no sorting button!")
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            button.isHidden = false
         }
-
-        button.isHidden = false
     }
 }
 
@@ -210,11 +204,11 @@ extension ItemListView {
         ]
 
         if let presenter = presenter {
-            self.prefButton.rx.tap
+            prefButton.rx.tap
                     .bind(to: presenter.onSettingsTapped)
                     .disposed(by: self.disposeBag)
 
-            self.sortingButton.rx.tap
+            sortingButton.rx.tap
                     .bind(to: presenter.sortingButtonObserver)
                     .disposed(by: self.disposeBag)
         }

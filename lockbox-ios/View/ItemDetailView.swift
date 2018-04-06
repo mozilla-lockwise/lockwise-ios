@@ -116,10 +116,9 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
     }
 
     fileprivate func styleTableBackground() {
-        guard let disclaimerView = Bundle.main.loadNibNamed("EntryEditDisclaimer", owner: self)?[0] as? UIView else {
-            return
+        if let disclaimerView = Bundle.main.loadNibNamed("EntryEditDisclaimer", owner: self)?[0] as? UIView {
+            self.tableView.backgroundView = disclaimerView
         }
-        self.tableView.backgroundView = disclaimerView
     }
 
     fileprivate func setupDataSource() {
