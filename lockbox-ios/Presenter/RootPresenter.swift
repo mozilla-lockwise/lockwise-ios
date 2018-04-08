@@ -199,6 +199,10 @@ class RootPresenter {
                 if !view.modalViewIs(AutoLockSettingView.self) {
                     view.pushSettingView(view: .autoLock)
                 }
+            case .faq:
+                view.pushSettingView(view: .faq)
+            case .provideFeedback:
+                view.pushSettingView(view: .provideFeedback)
             default: break
             }
 
