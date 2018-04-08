@@ -5,9 +5,6 @@
 import Foundation
 import Quick
 import Nimble
-import RxTest
-import RxSwift
-import RxCocoa
 
 @testable import Lockbox
 

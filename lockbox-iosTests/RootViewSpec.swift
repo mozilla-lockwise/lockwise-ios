@@ -144,11 +144,6 @@ class RootViewSpec: QuickSpec {
                     it("makes the list view the top view of the modal stack") {
                         expect(self.subject.modalViewIs(SettingsView.self)).to(beTrue())
                     }
-
-                    it("push autolock view") {
-                        self.subject.pushSettingView(view: .autoLock)
-                        expect(self.subject.modalViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
-                    }
                 }
 
                 describe("account") {
@@ -160,6 +155,30 @@ class RootViewSpec: QuickSpec {
 
                     it("makes the list view the top view of the modal stack") {
                         expect(self.subject.modalViewIs(AccountSettingView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
+
+                describe("autolock") {
+                    beforeEach {
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
+                        self.subject.pushSettingView(view: .autoLock)
+                    }
+
+                    it("makes the autolock view the top view of the modal stack") {
+                        expect(self.subject.modalViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
+
+                describe("any other setting view") {
+                    beforeEach {
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
+                        self.subject.pushSettingView(view: .faq)
+                    }
+
+                    it("stays on the list") {
+                        expect(self.subject.modalViewIs(SettingsView.self)).to(beTrue())
                     }
                 }
             }
