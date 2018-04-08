@@ -69,6 +69,8 @@ class SettingsViewSpec: QuickSpec {
                     ])
                 ]
 
+                sectionModels[0].items[1].detailText = "FAQ Detail"
+
                 beforeEach {
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
@@ -86,6 +88,10 @@ class SettingsViewSpec: QuickSpec {
 
                 it("calls presenter when switch is flipped") {
                     expect(self.presenter.switchChangedCalled).to(beTrue())
+                }
+
+                it("sets detail text") {
+                    expect(self.subject.tableView.cellForRow(at: IndexPath(item: 1, section: 0))?.detailTextLabel?.text).to(equal("FAQ Detail"))
                 }
             }
 

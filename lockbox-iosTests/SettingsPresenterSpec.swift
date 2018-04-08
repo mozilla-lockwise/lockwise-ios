@@ -71,6 +71,15 @@ class SettingsPresenterSpec: QuickSpec {
                         expect(biometricCellConfig.isOn).to(beTrue())
                     }
                 }
+
+                describe("autolock field") {
+                    it("sets detail value for autolock") {
+                        UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLock.rawValue)
+
+                        let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
+                        expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))
+                    }
+                }
             }
 
             describe("onSwitch changing") {
