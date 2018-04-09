@@ -75,24 +75,23 @@ extension AutoLockSettingView {
     }
 
     private func setupDelegate() {
-        guard let presenter = self.presenter else { return }
-        self.tableView.rx.itemSelected
-            .map { (indexPath) -> AutoLockSetting? in
-                self.tableView.deselectRow(at: indexPath, animated: true)
-                return self.dataSource?[indexPath].valueWhenChecked as? AutoLockSetting
-            }.bind(to: presenter.itemSelectedObserver)
-            .disposed(by: self.disposeBag)
+        if let presenter = self.presenter {
+            self.tableView.rx.itemSelected
+                    .map { (indexPath) -> AutoLockSetting? in
+                        self.tableView.deselectRow(at: indexPath, animated: true)
+                        return self.dataSource?[indexPath].valueWhenChecked as? AutoLockSetting
+                    }.bind(to: presenter.itemSelectedObserver)
+                    .disposed(by: self.disposeBag)
+        }
     }
 }
 
 extension AutoLockSettingView: AutoLockSettingViewProtocol {
     func bind(items: SharedSequence<DriverSharingStrategy, [AutoLockSettingSectionModel]>) {
-        guard let dataSource = self.dataSource else {
-            fatalError("datasource not set!")
+        if let dataSource = self.dataSource {
+            items
+                    .drive(self.tableView.rx.items(dataSource: dataSource))
+                    .disposed(by: self.disposeBag)
         }
-
-        items
-            .drive(self.tableView.rx.items(dataSource: dataSource))
-            .disposed(by: self.disposeBag)
     }
 }
