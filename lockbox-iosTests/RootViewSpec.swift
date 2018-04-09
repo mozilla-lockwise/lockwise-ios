@@ -170,6 +170,45 @@ class RootViewSpec: QuickSpec {
                     }
                 }
 
+                describe("web view settings") {
+                    beforeEach {
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
+                    }
+
+                    describe("faq") {
+                        beforeEach {
+                            self.subject.pushSettingView(view: .faq)
+                        }
+
+                        it("makes the web view the top view of the modal stack") {
+                            expect(self.subject.modalViewIs(SettingWebView.self)).toEventually(beTrue(), timeout: 20)
+                        }
+                    }
+
+                    describe("provide feedback") {
+                        beforeEach {
+                            self.subject.pushSettingView(view: .provideFeedback)
+                        }
+
+                        it("makes the web view the top view of the modal stack") {
+                            expect(self.subject.modalViewIs(SettingWebView.self)).toEventually(beTrue(), timeout: 20)
+                        }
+                    }
+                }
+
+                describe("faq") {
+                    beforeEach {
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController.self)
+                        self.subject.pushSettingView(view: .faq)
+                    }
+
+                    it("makes the faq view the top view of the modal stack") {
+                        expect(self.subject.modalViewIs(SettingWebView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
+
                 describe("any other setting view") {
                     beforeEach {
                         self.subject.startMainStack(MainNavigationController.self)
