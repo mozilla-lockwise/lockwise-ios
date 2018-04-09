@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+bash <(curl -s https://codecov.io/bash) -J Lockbox -t $CODECOV_TOKEN
