@@ -5,7 +5,7 @@
 import WebKit
 import UIKit
 
-class SettingsWebView: UIViewController {
+class SettingWebView: UIViewController {
     private var url: String
     private var navTitle: String
     private var webView = WKWebView()
