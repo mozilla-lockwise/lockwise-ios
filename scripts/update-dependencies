@@ -19,7 +19,7 @@ export MINVERSION=9.0
 # download & cross-compile openssl (most of the heavy lifting done by iconfigure-openssl)
 OPENSSLDIR="openssl"
 cd "${OPENSSLDIR}"
-source "iconfigure-openssl" --archs="x86_64 i386 arm64 armv7s armv7"
+source "iconfigure-openssl" --archs="arm64 armv7s armv7"
 cd ..
 
 # download & cross-compile jansson
