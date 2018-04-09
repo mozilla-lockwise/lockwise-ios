@@ -7,12 +7,12 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol PreferredBrowserSettingViewProtocol {
+protocol PreferredBrowserSettingViewProtocol: class {
     func bind(items: Driver<[PreferredBrowserSettingSectionModel]>)
 }
 
 class PreferredBrowserSettingPresenter {
-    private weak var view: PreferredBrowserSettingViewProtocol
+    private weak var view: PreferredBrowserSettingViewProtocol?
     private var userDefaults: UserDefaults
     private var routeActionHandler: RouteActionHandler
     private var settingActionHandler: SettingActionHandler
@@ -69,6 +69,6 @@ class PreferredBrowserSettingPresenter {
             }
             .asDriver(onErrorJustReturn: [])
 
-        view.bind(items: driver)
+        view?.bind(items: driver)
     }
 }
