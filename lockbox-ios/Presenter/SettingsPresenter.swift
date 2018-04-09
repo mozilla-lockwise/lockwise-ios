@@ -61,11 +61,11 @@ class SettingsPresenter {
 
     func onViewReady() {
         let biometricObserver = self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
-        let autoLockObserver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue)
+        let autoLockObserver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue).filterNil()
 
         let settingsConfigDriver = Observable.combineLatest(biometricObserver, autoLockObserver)
-                .map { (latest: (Bool?, String?)) -> [SettingSectionModel] in
-                    let autoLock = latest.1 != nil ? AutoLockSetting(rawValue: latest.1!) : AutoLockSetting.FiveMinutes
+                .map { (latest: (Bool?, String)) -> [SettingSectionModel] in
+                    let autoLock = AutoLockSetting(rawValue: latest.1) ?? AutoLockSetting.FiveMinutes
                     return self.settingsWithBiometricLoginEnabled(latest.0 ?? false, autoLock: autoLock)
                 }
                 .asDriver(onErrorJustReturn: [])
