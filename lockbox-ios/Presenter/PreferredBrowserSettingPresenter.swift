@@ -12,7 +12,7 @@ protocol PreferredBrowserSettingViewProtocol {
 }
 
 class PreferredBrowserSettingPresenter {
-    private var view: PreferredBrowserSettingViewProtocol
+    private weak var view: PreferredBrowserSettingViewProtocol
     private var userDefaults: UserDefaults
     private var routeActionHandler: RouteActionHandler
     private var settingActionHandler: SettingActionHandler
