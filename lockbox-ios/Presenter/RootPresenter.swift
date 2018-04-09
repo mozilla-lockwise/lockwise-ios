@@ -172,8 +172,6 @@ class RootPresenter {
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
                 }
-            case .webAddress(let urlString):
-                self.openUrl(string: urlString)
             }
         }.asObserver()
     }()
@@ -210,21 +208,6 @@ class RootPresenter {
 
         }.asObserver()
     }()
-
-    private func openUrl(string url: String) {
-        UserDefaults.standard.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
-            .take(1)
-            .map { value -> PreferredBrowserSetting in
-                guard let value = value,
-                    let setting = PreferredBrowserSetting(rawValue: value)
-                        else { return PreferredBrowserSetting.defaultValue }
-                return setting
-            }
-            .subscribe(onNext: { (latest: PreferredBrowserSetting) in
-                latest.openUrl(url: url)
-            })
-            .disposed(by: self.disposeBag)
-    }
 }
 
 extension RootPresenter {

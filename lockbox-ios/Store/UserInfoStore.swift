@@ -5,7 +5,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import UIKit
 
 class UserInfoStore {
     static let shared = UserInfoStore()
@@ -134,54 +133,4 @@ enum AutoLockSetting: String {
     case TwelveHours
     case TwentyFourHours
     case Never
-}
-
-enum PreferredBrowserSetting: String {
-    case Chrome
-    case Firefox
-    case Focus
-    case Safari
-
-    static var defaultValue: PreferredBrowserSetting {
-        return PreferredBrowserSetting.Safari
-    }
-
-    func canOpenBrowser(application: UIApplication = UIApplication.shared) -> Bool {
-        var scheme: String?
-        switch self {
-        case .Safari:
-            return true
-        case .Firefox:
-            scheme = "firefox://open-url?url=http://mozilla.org"
-        case .Focus:
-            scheme = "firefox-focus://open-url?url=http://mozilla.org"
-        case .Chrome:
-            scheme = "googlechrome://"
-        }
-
-        if let scheme = scheme,
-            let url = URL(string: scheme) {
-            return application.canOpenURL(url)
-        }
-
-        return false
-    }
-
-    func openUrl(url: String, application: UIApplication = UIApplication.shared) {
-        var urlToOpen: URL?
-        switch self {
-        case .Safari:
-            urlToOpen = URL(string: "http://\(url)")
-        case .Firefox:
-            urlToOpen = URL(string: "firefox://open-url?url=http://\(url)")
-        case .Focus:
-            urlToOpen = URL(string: "firefox-focus://open-url?url=http://\(url)")
-        case .Chrome:
-            urlToOpen = URL(string: "googlechrome://\(url)")
-        }
-
-        if let urlToOpen = urlToOpen {
-            application.open(urlToOpen, options: [:], completionHandler: nil)
-        }
-    }
 }

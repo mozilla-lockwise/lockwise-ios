@@ -22,7 +22,7 @@ class PreferredBrowserSettingView: UITableViewController {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("not implemented")
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {

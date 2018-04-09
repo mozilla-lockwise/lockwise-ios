@@ -36,7 +36,7 @@ class PreferredBrowserSettingPresenter {
             }
 
             target.settingActionHandler.invoke(.preferredBrowser(browser: newPreferredBrowserValue))
-            }.asObserver()
+        }.asObserver()
     }()
 
     init(view: PreferredBrowserSettingViewProtocol,
@@ -59,7 +59,8 @@ class PreferredBrowserSettingPresenter {
                 return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                     cellConfiguration.isChecked =
                         cellConfiguration.valueWhenChecked as? PreferredBrowserSetting == setting
-                    cellConfiguration.enabled = (cellConfiguration.valueWhenChecked as? PreferredBrowserSetting)?.canOpenBrowser() ?? false
+                    cellConfiguration.enabled =
+                        (cellConfiguration.valueWhenChecked as? PreferredBrowserSetting)?.canOpenBrowser() ?? false
                     return cellConfiguration
                 })
             }

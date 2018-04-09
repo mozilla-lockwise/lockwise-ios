@@ -24,6 +24,7 @@ class ItemDetailPresenter {
     private var dataStoreActionHandler: DataStoreActionHandler
     private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
+    private var externalLinkActionHandler: ExternalLinkActionHandler
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -61,13 +62,13 @@ class ItemDetailPresenter {
                         .disposed(by: target.disposeBag)
             } else if value == Constant.string.webAddress {
                 target.dataStore.onItem(self.view?.itemId ?? "")
-                    .take(1)
-                    .subscribe(onNext: { item in
-                        if let origin = item.origins.first {
-                            target.routeActionHandler.invoke(MainRouteAction.webAddress(url: origin))
-                        }
-                    })
-                    .disposed(by: target.disposeBag)
+                        .take(1)
+                        .subscribe(onNext: { item in
+                            if let origin = item.origins.first {
+                                target.externalLinkActionHandler.invoke(ExternalLinkAction(url: origin))
+                            }
+                        })
+                        .disposed(by: target.disposeBag)
             }
         }.asObserver()
     }()
@@ -79,7 +80,8 @@ class ItemDetailPresenter {
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
-         itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared) {
+         itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared,
+         externalLinkActionHandler: ExternalLinkActionHandler = ExternalLinkActionHandler.shared) {
         self.view = view
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
@@ -88,6 +90,7 @@ class ItemDetailPresenter {
         self.dataStoreActionHandler = dataStoreActionHandler
         self.copyActionHandler = copyActionHandler
         self.itemDetailActionHandler = itemDetailActionHandler
+        self.externalLinkActionHandler = externalLinkActionHandler
 
         self.itemDetailActionHandler.invoke(.togglePassword(displayed: false))
     }

@@ -89,8 +89,6 @@ class RootView: UIViewController, RootViewProtocol {
                 itemDetailView.itemId = id
                 self.currentViewController?.pushViewController(itemDetailView, animated: true)
             }
-        case .webAddress(let _):
-            break
         }
     }
 

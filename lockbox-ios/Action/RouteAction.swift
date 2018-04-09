@@ -27,7 +27,6 @@ enum LoginRouteAction: RouteAction {
 enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
-    case webAddress(url: String)
 }
 
 enum SettingRouteAction: RouteAction {

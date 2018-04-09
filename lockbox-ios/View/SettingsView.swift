@@ -136,6 +136,7 @@ extension SettingsView {
 class SettingCellConfiguration {
     var text: String
     var routeAction: SettingRouteAction?
+    var enabled: Bool = true
 
     init(text: String, routeAction: SettingRouteAction?) {
         self.text = text
@@ -167,7 +168,6 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
 class CheckmarkSettingCellConfiguration: SettingCellConfiguration {
     var isChecked: Bool = false
     var valueWhenChecked: Any?
-    var enabled: Bool = true
 
     init(text: String, isChecked: Bool = false, valueWhenChecked: Any?) {
         super.init(text: text, routeAction: nil)
