@@ -133,4 +133,23 @@ enum AutoLockSetting: String {
     case TwelveHours
     case TwentyFourHours
     case Never
+
+    func toString() -> String {
+        switch self {
+        case .OnAppExit:
+            return Constant.string.autoLockOnAppExit
+        case .FiveMinutes:
+            return Constant.string.autoLockFiveMinutes
+        case .Never:
+            return Constant.string.autoLockNever
+        case .OneHour:
+            return Constant.string.autoLockOneHour
+        case .OneMinute:
+            return Constant.string.autoLockOneMinute
+        case .TwelveHours:
+            return Constant.string.autoLockTwelveHours
+        case .TwentyFourHours:
+            return Constant.string.autoLockTwentyFourHours
+        }
+    }
 }
