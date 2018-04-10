@@ -242,8 +242,9 @@ class RootPresenterSpec: QuickSpec {
                     self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: false)
                 }
 
-                it("dispatches the open action") {
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                it("dispatches the open action and displays the list") {
+                    let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(argument).to(equal(MainRouteAction.list))
                     expect(self.dataStoreActionHandler.openUID).to(equal(uid))
                     expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
                 }
