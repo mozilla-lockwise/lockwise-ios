@@ -1,8 +1,5 @@
 # lockbox-ios code owners
 # https://help.github.com/articles/about-codeowners/
 
-# docs are shepherded by @devinreams
-/docs/    @sashei @devinreams
-
-# otherwise, everything is to be reviewed by @sashei
-* @sashei
+# everything is to be reviewed by the mobile team (for now..)
+* @mozilla-lockbox/mobile-engineering
