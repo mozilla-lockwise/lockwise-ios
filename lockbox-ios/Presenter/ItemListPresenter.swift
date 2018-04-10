@@ -174,9 +174,7 @@ extension ItemListPresenter {
                 .asDriver(onErrorJustReturn: [])
     }
 
-    // The typecasting and force-cast in this function are due to a bug in the Swift compiler that will be fixed in
-    // the Swift 4.1 release.
-    fileprivate func configurationsFromItems<T: IdentifiableType & Equatable>(_ items: [Item]) -> [T] {
+    fileprivate func configurationsFromItems(_ items: [Item]) -> [ItemListCellConfiguration] {
         let searchCell = [ItemListCellConfiguration.Search]
 
         let itemCells = items.map { item -> ItemListCellConfiguration in
@@ -187,7 +185,7 @@ extension ItemListPresenter {
             return ItemListCellConfiguration.Item(title: titleText, username: usernameText, id: item.id)
         }
 
-        return searchCell + itemCells as! [T] // swiftlint:disable:this force_cast
+        return searchCell + itemCells
     }
 
     fileprivate func filterItemsForText(_ text: String, items: [Item]) -> [Item] {
@@ -197,7 +195,7 @@ extension ItemListPresenter {
 
         return items.filter { item -> Bool in
             return [item.entry.username, item.origins.first, item.title]
-                    .flatMap {
+                    .compactMap {
                         $0?.localizedCaseInsensitiveContains(text) ?? false
                     }
                     .reduce(false) {
