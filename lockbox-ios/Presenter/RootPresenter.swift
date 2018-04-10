@@ -203,6 +203,10 @@ class RootPresenter {
                 if !view.modalViewIs(PreferredBrowserSettingView.self) {
                     view.pushSettingView(view: .preferredBrowser)
                 }
+            case .faq:
+                view.pushSettingView(view: .faq)
+            case .provideFeedback:
+                view.pushSettingView(view: .provideFeedback)
             default: break
             }
 

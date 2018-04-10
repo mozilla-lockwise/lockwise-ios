@@ -106,6 +106,13 @@ class RootView: UIViewController, RootViewProtocol {
             settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
         case .preferredBrowser:
             settingNavController?.pushViewController(PreferredBrowserSettingView(), animated: true)
+        case .faq:
+            settingNavController?.pushViewController(
+                SettingWebView(url: Constant.app.faqURL, title: Constant.string.settingsFaq), animated: true)
+        case .provideFeedback:
+            settingNavController?.pushViewController(
+                SettingWebView(url: Constant.app.provideFeedbackURL,
+                                title: Constant.string.settingsProvideFeedback), animated: true)
         default: break
         }
     }

@@ -151,6 +151,8 @@
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783612207C080300C19BC7 /* ExternalLinkAction.swift */; };
+		D878360F207ABDF100C19BC7 /* SettingWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* SettingWebView.swift */; };
+		D8783611207BE40A00C19BC7 /* SettingWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
 		D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */; };
 		D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */; };
@@ -361,6 +363,8 @@
 		D831FEE6205F3D5000EAE19A /* SettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewSpec.swift; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
 		D8783612207C080300C19BC7 /* ExternalLinkAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkAction.swift; sourceTree = "<group>"; };
+		D878360E207ABDF100C19BC7 /* SettingWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebView.swift; sourceTree = "<group>"; };
+		D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebViewSpec.swift; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
 		D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenter.swift; sourceTree = "<group>"; };
@@ -574,6 +578,7 @@
 				7AA546990E6805FBC0261737 /* AccountSettingView.swift */,
 				D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */,
 				D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */,
+				D878360E207ABDF100C19BC7 /* SettingWebView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -653,6 +658,7 @@
 				D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */,
 				7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */,
 				7AA54E8C5A0848F0669FBB10 /* SettingNavigationControllerSpec.swift */,
+				D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -852,6 +858,7 @@
 				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
 				7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */,
 				7AA543D2B55F2968B976F8EF /* OAuthInfoSpec.swift in Sources */,
+				D8783611207BE40A00C19BC7 /* SettingWebViewSpec.swift in Sources */,
 				7AA54D41D654320B1C2F9753 /* FxAViewSpec.swift in Sources */,
 				7DA4C68E2028F99500B61DD8 /* ItemListPresenterSpec.swift in Sources */,
 				7AA54843ADAB6552EDA77C81 /* ProfileInfoSpec.swift in Sources */,
@@ -946,6 +953,7 @@
 				D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */,
 				7AA547EF949CA76FC018402A /* ItemListCell.swift in Sources */,
 				7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */,
+				D878360F207ABDF100C19BC7 /* SettingWebView.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */,
 				7AA547376945C001B151491A /* ItemDetailAction.swift in Sources */,
 				7AA54EC7A9CA9BBD57AFEAF9 /* FilterCell.swift in Sources */,
