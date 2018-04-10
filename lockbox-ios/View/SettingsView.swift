@@ -76,11 +76,13 @@ extension SettingsView {
     private func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
-                    let cell = UITableViewCell()
-                    cell.textLabel?.text = cellConfiguration.text
+
+                let cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
+                cell.textLabel?.text = cellConfiguration.text
 
                 if cellConfiguration.routeAction != nil {
                     cell.accessoryType = .disclosureIndicator
+                    cell.detailTextLabel?.text = cellConfiguration.detailText
                 } else if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
                     let switchItem = UISwitch()
                     switchItem.onTintColor = Constant.color.lockBoxBlue
@@ -136,6 +138,7 @@ extension SettingsView {
 class SettingCellConfiguration {
     var text: String
     var routeAction: SettingRouteAction?
+    var detailText: String?
 
     init(text: String, routeAction: SettingRouteAction?) {
         self.text = text
