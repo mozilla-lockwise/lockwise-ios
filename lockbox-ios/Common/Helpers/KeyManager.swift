@@ -42,7 +42,7 @@ class KeyManager {
         let contentLen = UnsafeMutablePointer<size_t>.allocate(capacity: self.sizeTSize)
         guard let decryptedPayload = cjose_jwe_decrypt(cJoseJWE, self.jwk, contentLen, self.err) else {
             cjose_jwe_release(cJoseJWE)
-            contentLen.deallocate(capacity: self.sizeTSize)
+            contentLen.deallocate()
             throw KeyManagerError(message: self.errorMessage)
         }
 
@@ -53,18 +53,19 @@ class KeyManager {
                 length: contentLen.pointee,
                 encoding: .utf8,
                 freeWhenDone: true) else {
-            contentLen.deallocate(capacity: self.sizeTSize)
+            contentLen.deallocate()
             throw KeyManagerError(message: "Unable to import decrypted payload")
         }
 
-        contentLen.deallocate(capacity: self.sizeTSize)
+        contentLen.deallocate()
         return decryptedJWEString
     }
 
     func random32() -> Data? {
-        var d = Data(count: 32)
+        let dCount = 32
+        var d = Data(count: dCount)
         let result = d.withUnsafeMutableBytes {
-            SecRandomCopyBytes(kSecRandomDefault, d.count, $0)
+            SecRandomCopyBytes(kSecRandomDefault, dCount, $0)
         }
         if result == errSecSuccess {
             return d
@@ -74,7 +75,7 @@ class KeyManager {
     }
 
     deinit {
-        self.err.deallocate(capacity: self.errSize)
+        self.err.deallocate()
 
         guard let jwk = self.jwk else {
             return
