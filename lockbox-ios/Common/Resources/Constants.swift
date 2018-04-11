@@ -9,6 +9,8 @@ import UIKit
 struct Constant {
     struct app {
         static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
+        static let faqURL = "https://lockbox.firefox.com/faq/"
+        static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
     }
 
     struct color {
