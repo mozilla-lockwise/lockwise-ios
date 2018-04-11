@@ -41,7 +41,7 @@
                                 <color key="textColor" red="0.99609220027923584" green="0.996055006980896" blue="0.99608027935028076" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="your companion for accessing  saved Firefox logins" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="your companion for accessing  saved Firefox logins" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
                                 <rect key="frame" x="87" y="300" width="200" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="260" id="IYN-CR-Y5B"/>
