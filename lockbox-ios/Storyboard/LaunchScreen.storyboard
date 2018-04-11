@@ -21,20 +21,15 @@
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="wCL-jn-auR">
                                 <rect key="frame" x="-50.5" y="0.0" width="476" height="194"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-tagline" translatesAutoresizingMaskIntoConstraints="NO" id="ail-iv-36p" userLabel="Tagline">
-                                <rect key="frame" x="99" y="308.5" width="177" height="32"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ccq-W9-Eei" userLabel="Lockbox">
                                 <rect key="frame" x="125" y="267" width="125" height="27"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="ail-iv-36p" firstAttribute="top" secondItem="ccq-W9-Eei" secondAttribute="bottom" constant="14.5" id="4Aa-jd-qAL"/>
                             <constraint firstItem="wCL-jn-auR" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Ncv-FK-HVT"/>
                             <constraint firstItem="ccq-W9-Eei" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="P2L-sd-fgp"/>
                             <constraint firstItem="ccq-W9-Eei" firstAttribute="top" secondItem="wCL-jn-auR" secondAttribute="bottom" constant="73.5" id="Pn8-OP-4lw" userLabel="Lockbox.top = nessie.bottom + 73.5"/>
-                            <constraint firstItem="ail-iv-36p" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qz0-zL-2xL"/>
                             <constraint firstItem="wCL-jn-auR" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="w4k-WE-ibc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
@@ -46,7 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="lockbox-tagline" width="177" height="32"/>
         <image name="lockbox-title" width="125" height="27"/>
         <image name="nessie" width="476" height="194"/>
     </resources>
