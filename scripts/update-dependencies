@@ -10,16 +10,17 @@ BINARY_DIR="../lockbox-ios/binaries"
 
 JANSSON_VERSION=2.10
 JANSSON_SRC="http://www.digip.org/jansson/releases/jansson-${JANSSON_VERSION}.tar.gz"
-CJOSE_VERSION=0.6.0
+CJOSE_VERSION=master
 CJOSE_SRC="https://github.com/cisco/cjose/archive/${CJOSE_VERSION}.tar.gz"
 SCRIPT_DIR="$(pwd)"
+ARCHS="armv7 armv7s arm64"
 
 export MINVERSION=9.0
 
 # download & cross-compile openssl (most of the heavy lifting done by iconfigure-openssl)
 OPENSSLDIR="openssl"
 cd "${OPENSSLDIR}"
-source "iconfigure-openssl" --archs="x86_64 i386 arm64 armv7s armv7"
+source "iconfigure-openssl" --archs="${ARCHS}"
 cd ..
 
 # download & cross-compile jansson
@@ -30,6 +31,7 @@ tar zxf "${JANSSON_ARCHIVE_FILE}"
 cp iconfigure "${JANSSON_FILE}"
 cp autoframework "${JANSSON_FILE}"
 
+export ARCHS=${ARCHS}
 cd "${JANSSON_FILE}"
 source "autoframework" Jansson libjansson.a
 
