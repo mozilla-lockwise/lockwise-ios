@@ -83,6 +83,24 @@ class SettingActionSpec: QuickSpec {
                     }
                 }
 
+                describe(".preferredBrowser") {
+                    let browserSetting = PreferredBrowserSetting.Firefox
+
+                    beforeEach {
+                        self.subject.invoke(.preferredBrowser(browser: .Firefox))
+                    }
+
+                    it("sets the appropriate value for key in userdefaults") {
+                        expect(self.userDefaults.setString).to(equal(browserSetting.rawValue))
+                        expect(self.userDefaults.stringName).to(equal(SettingKey.preferredBrowser.rawValue))
+                    }
+
+                    it("tells the dispatcher") {
+                        let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
+                        expect(argument).to(equal(SettingAction.preferredBrowser(browser: browserSetting)))
+                    }
+                }
+
                 describe(".reset") {
                     beforeEach {
                         self.subject.invoke(.reset)

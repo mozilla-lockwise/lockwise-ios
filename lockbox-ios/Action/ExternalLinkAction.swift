@@ -10,6 +10,12 @@ struct ExternalLinkAction: Action {
     let url: String
 }
 
+extension ExternalLinkAction: Equatable {
+    static func ==(lhs: ExternalLinkAction, rhs: ExternalLinkAction) -> Bool {
+        return lhs.url == rhs.url
+    }
+}
+
 class ExternalLinkActionHandler: ActionHandler {
     static let shared = ExternalLinkActionHandler()
     private let disposeBag = DisposeBag()
