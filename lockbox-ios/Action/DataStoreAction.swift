@@ -402,10 +402,10 @@ extension DataStoreActionHandler {
         let items = [
             Item.Builder()
                     .title("Amazon")
-                    .origins(["www.amazon.com"])
+                    .origins(["amazon.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
-                            .username("tjacobson@yahoo.com")
+                            .username("tjacobson@example.com")
                             .password("iLUVdawgz")
                             .build())
                     .build(),
@@ -421,10 +421,10 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Reddit")
-                    .origins(["www.reddit.com"])
+                    .origins(["reddit.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
-                            .username("tjacobson@yahoo.com")
+                            .username("tjacobson@example.com")
                             .password("iLUVdawgz")
                             .build())
                     .build(),
@@ -433,7 +433,7 @@ extension DataStoreActionHandler {
                     .origins(["www.twitter.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
-                            .username("tjacobson@yahoo.com")
+                            .username("tjacobson@example.com")
                             .password("iLUVdawgz")
                             .build())
                     .build(),
@@ -441,7 +441,7 @@ extension DataStoreActionHandler {
                     .title("Wordpress")
                     .entry(ItemEntry.Builder()
                             .kind("login")
-                            .username("tjacobson@yahoo.com")
+                            .username("tjacobson@example.com")
                             .password("iLUVdawgz")
                             .build())
                     .build(),
