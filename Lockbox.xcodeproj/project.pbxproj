@@ -144,6 +144,9 @@
 		7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
+		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
+		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
 		D831FEDE204C925100EAE19A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingsView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingsPresenter.swift */; };
 		D831FEE5205C522200EAE19A /* SettingsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */; };
@@ -354,6 +357,9 @@
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
+		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
+		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenter.swift; sourceTree = "<group>"; };
 		D831FEE3205C518400EAE19A /* SettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPresenterSpec.swift; sourceTree = "<group>"; };
@@ -506,6 +512,7 @@
 		7AA547FECD9BACFBEE60F8B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5E2930C207D591C0039A0AC /* Fonts */,
 				7D522E952033473F00295FF8 /* Strings */,
 				7AA54B40696590744930A579 /* Assets.xcassets */,
 				7AA5406822AB67B669BAF89B /* Info.plist */,
@@ -518,6 +525,7 @@
 		7AA54A24CBF866544D764232 /* Storyboard */ = {
 			isa = PBXGroup;
 			children = (
+				D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */,
 				7D522E9D20334B8600295FF8 /* Welcome.strings */,
 				7D5889FA205706AA0087DF89 /* ItemList.storyboard */,
 				7D1B22072033C6250098C3A3 /* ItemDetail.storyboard */,
@@ -703,6 +711,15 @@
 			path = "lockbox-ios";
 			sourceTree = "<group>";
 		};
+		D5E2930C207D591C0039A0AC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */,
+				D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -802,13 +819,16 @@
 			files = (
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
+				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
 				7D522E9B20334B8600295FF8 /* Welcome.strings in Resources */,
 				7D38849C1F99374F0058DAFF /* lockbox-datastore in Resources */,
 				7D30DBB32033651600613B69 /* EmptyList.xib in Resources */,
 				7AA547E098053DFF64A3C0F9 /* Assets.xcassets in Resources */,
+				D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */,
 				7DEF297E203E3A2100ABC4AC /* EntryEditDisclaimer.xib in Resources */,
 				7D7AD94B204EFBA4002D35EE /* StatusAlert.xib in Resources */,
 				7D1B22082033C6250098C3A3 /* ItemDetail.storyboard in Resources */,
+				D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */,
 				7D5889F8205706AA0087DF89 /* ItemList.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

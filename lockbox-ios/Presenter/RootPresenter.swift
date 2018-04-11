@@ -77,6 +77,7 @@ class RootPresenter {
 
                     if !latest.opened {
                         self.dataStoreActionHandler.open(uid: uid)
+                        self.routeActionHandler.invoke(MainRouteAction.list)
                     }
                 }).disposed(by: self.disposeBag)
 
