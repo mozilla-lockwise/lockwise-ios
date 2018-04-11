@@ -10,7 +10,7 @@ BINARY_DIR="../lockbox-ios/binaries"
 
 JANSSON_VERSION=2.10
 JANSSON_SRC="http://www.digip.org/jansson/releases/jansson-${JANSSON_VERSION}.tar.gz"
-CJOSE_VERSION=0.6.0
+CJOSE_VERSION=master
 CJOSE_SRC="https://github.com/cisco/cjose/archive/${CJOSE_VERSION}.tar.gz"
 SCRIPT_DIR="$(pwd)"
 ARCHS="armv7 armv7s arm64"
