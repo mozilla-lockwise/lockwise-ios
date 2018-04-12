@@ -12,8 +12,8 @@ class SettingActionSpec: QuickSpec {
     class FakeUserDefaults: UserDefaults {
         var boolName: String?
         var setBool: Bool?
-        var stringName: String?
-        var setString: String?
+        var stringName = [String?]()
+        var setString = [String?]()
 
         override func set(_ value: Bool, forKey defaultName: String) {
             self.boolName = defaultName
@@ -21,8 +21,8 @@ class SettingActionSpec: QuickSpec {
         }
 
         override func set(_ value: Any?, forKey defaultName: String) {
-            self.stringName = defaultName
-            self.setString = value as? String
+            self.stringName.append(defaultName)
+            self.setString.append(value as? String)
         }
     }
 
@@ -73,8 +73,8 @@ class SettingActionSpec: QuickSpec {
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.setString).to(equal(autoLockSetting.rawValue))
-                        expect(self.userDefaults.stringName).to(equal(SettingKey.autoLock.rawValue))
+                        expect(self.userDefaults.setString[0]).to(equal(autoLockSetting.rawValue))
+                        expect(self.userDefaults.stringName[0]).to(equal(SettingKey.autoLock.rawValue))
                     }
 
                     it("tells the dispatcher") {
@@ -91,8 +91,8 @@ class SettingActionSpec: QuickSpec {
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.setString).to(equal(browserSetting.rawValue))
-                        expect(self.userDefaults.stringName).to(equal(SettingKey.preferredBrowser.rawValue))
+                        expect(self.userDefaults.setString[0]).to(equal(browserSetting.rawValue))
+                        expect(self.userDefaults.stringName[0]).to(equal(SettingKey.preferredBrowser.rawValue))
                     }
 
                     it("tells the dispatcher") {
@@ -107,10 +107,12 @@ class SettingActionSpec: QuickSpec {
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.setString).to(equal(Constant.setting.defaultAutoLockTimeout.rawValue))
-                        expect(self.userDefaults.stringName).to(equal(SettingKey.autoLock.rawValue))
+                        expect(self.userDefaults.setString[0]).to(equal(Constant.setting.defaultAutoLockTimeout.rawValue))
+                        expect(self.userDefaults.stringName[0]).to(equal(SettingKey.autoLock.rawValue))
                         expect(self.userDefaults.setBool).to(equal(Constant.setting.defaultBiometricLockEnabled))
                         expect(self.userDefaults.boolName).to(equal(SettingKey.biometricLogin.rawValue))
+                        expect(self.userDefaults.setString[1]).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
+                        expect(self.userDefaults.stringName[1]).to(equal(SettingKey.preferredBrowser.rawValue))
                     }
 
                     it("tells the dispatcher") {
