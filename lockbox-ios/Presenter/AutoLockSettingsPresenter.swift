@@ -54,12 +54,7 @@ class AutoLockSettingPresenter {
     }
 
     func onViewReady() {
-        let driver = self.userDefaults.rx.observe(String.self, SettingKey.autoLockTime.rawValue)
-                .filterNil()
-                .map { value -> AutoLockSetting? in
-                    return AutoLockSetting(rawValue: value)
-                }
-                .filterNil()
+        let driver = self.userDefaults.onAutoLockTime
                 .map { setting -> [CheckmarkSettingCellConfiguration] in
                     return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                         cellConfiguration.isChecked =

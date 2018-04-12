@@ -7,7 +7,7 @@ import Foundation
 enum SettingAction: Action {
     case biometricLogin(enabled: Bool)
     case autoLockTime(timeout: AutoLockSetting)
-    case lock(locked: Bool)
+    case visualLock(locked: Bool)
     case reset
 }
 
@@ -18,7 +18,7 @@ extension SettingAction: Equatable {
             return lhEnabled == rhEnabled
         case (.autoLockTime(let lhTimeout), .autoLockTime(let rhTimeout)):
             return lhTimeout == rhTimeout
-        case (.lock(let lhLocked), .lock(let rhLocked)):
+        case (.visualLock(let lhLocked), .visualLock(let rhLocked)):
             return lhLocked == rhLocked
         case (.reset, .reset):
             return true
@@ -49,7 +49,7 @@ class SettingActionHandler: ActionHandler {
             self.userDefaults.set(enabled, forKey: SettingKey.biometricLogin.rawValue)
         case .autoLockTime(let timeout):
             self.userDefaults.set(timeout.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-        case .lock(let locked):
+        case .visualLock(let locked):
             self.userDefaults.set(locked, forKey: SettingKey.locked.rawValue)
         case .reset:
             self.userDefaults.set(Constant.setting.defaultBiometricLockEnabled,

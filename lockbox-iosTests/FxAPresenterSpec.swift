@@ -123,7 +123,7 @@ class FxAPresenterSpec: QuickSpec {
                     }
 
                     it("tells the settings to unlock the application") {
-                        expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.lock(locked: false)))
+                        expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
                     }
 
                     it("tells routing action handler to show the listview") {

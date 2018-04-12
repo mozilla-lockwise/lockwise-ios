@@ -18,13 +18,13 @@ protocol WelcomeViewProtocol: class {
 }
 
 struct LockedEnabled {
-    let locked: Bool
-    let enabled: Bool
+    let appLocked: Bool
+    let biometricsEnabled: Bool
 }
 
 extension LockedEnabled: Equatable {
     static func ==(lhs: LockedEnabled, rhs: LockedEnabled) -> Bool {
-        return lhs.locked == rhs.locked && lhs.enabled == rhs.enabled
+        return lhs.appLocked == rhs.appLocked && lhs.biometricsEnabled == rhs.biometricsEnabled
     }
 }
 
@@ -59,10 +59,10 @@ class WelcomePresenter {
                     .disposed(by: self.disposeBag)
 
             Observable.combineLatest(lockedObservable, biometricsObservable)
-                    .map { LockedEnabled(locked: $0.0, enabled: $0.1) }
+                    .map { LockedEnabled(appLocked: $0.0, biometricsEnabled: $0.1) }
                     .distinctUntilChanged()
                     .map { latest -> Bool in
-                        !latest.locked ? true : !latest.enabled
+                        !latest.appLocked ? true : !latest.biometricsEnabled
                     }
                     .bind(to: view.biometricAuthenticationPromptHidden)
                     .disposed(by: self.disposeBag)

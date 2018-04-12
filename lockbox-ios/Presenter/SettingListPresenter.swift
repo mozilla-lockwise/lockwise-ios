@@ -55,12 +55,9 @@ class SettingListPresenter {
     }
 
     func onViewReady() {
-        let autoLockObserver = self.userDefaults.rx.observe(String.self, SettingKey.autoLockTime.rawValue).filterNil()
-
-        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, autoLockObserver)
-                .map { (latest: (Bool, String)) -> [SettingSectionModel] in
-                    let autoLock = AutoLockSetting(rawValue: latest.1) ?? AutoLockSetting.FiveMinutes
-                    return self.settingsWithBiometricLoginEnabled(latest.0, autoLock: autoLock)
+        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime) // swiftlint:disable:this line_length
+                .map { (latest: (Bool, AutoLockSetting)) -> [SettingSectionModel] in
+                    return self.settingsWithBiometricLoginEnabled(latest.0, autoLock: latest.1)
                 }
                 .asDriver(onErrorJustReturn: [])
 
@@ -68,7 +65,7 @@ class SettingListPresenter {
 
         self.view?.onSignOut
                 .subscribe { _ in
-                    self.settingActionHandler.invoke(SettingAction.lock(locked: true))
+                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
                     self.routeActionHandler.invoke(LoginRouteAction.welcome)
                 }
                 .disposed(by: self.disposeBag)

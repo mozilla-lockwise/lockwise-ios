@@ -84,7 +84,7 @@ class SettingActionSpec: QuickSpec {
                     let locked = true
 
                     beforeEach {
-                        self.subject.invoke(.lock(locked: locked))
+                        self.subject.invoke(.visualLock(locked: locked))
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
@@ -93,7 +93,7 @@ class SettingActionSpec: QuickSpec {
 
                     it("tells the dispatcher") {
                         let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
-                        expect(argument).to(equal(SettingAction.lock(locked: locked)))
+                        expect(argument).to(equal(SettingAction.visualLock(locked: locked)))
                     }
                 }
 
@@ -130,8 +130,8 @@ class SettingActionSpec: QuickSpec {
                 }
 
                 it("lock is equal based on the locked value") {
-                    expect(SettingAction.lock(locked: true)).to(equal(SettingAction.lock(locked: true)))
-                    expect(SettingAction.lock(locked: true)).notTo(equal(SettingAction.lock(locked: false)))
+                    expect(SettingAction.visualLock(locked: true)).to(equal(SettingAction.visualLock(locked: true)))
+                    expect(SettingAction.visualLock(locked: true)).notTo(equal(SettingAction.visualLock(locked: false)))
                 }
 
                 it("reset is always equal") {

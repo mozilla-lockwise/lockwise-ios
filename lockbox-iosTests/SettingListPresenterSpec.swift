@@ -84,7 +84,7 @@ class SettingsPresenterSpec: QuickSpec {
                     }
 
                     it("locks the application and routes to the login flow") {
-                        expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.lock(locked: true)))
+                        expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.visualLock(locked: true)))
                         let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
                         expect(argument).to(equal(LoginRouteAction.welcome))
                     }

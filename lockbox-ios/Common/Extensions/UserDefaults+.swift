@@ -7,11 +7,22 @@ import RxSwift
 import RxCocoa
 
 extension UserDefaults {
+    func on<T>(setting: SettingKey, type: T.Type) -> Observable<T> {
+        return self.rx.observe(type, setting.rawValue).filterNil()
+    }
+}
+
+extension UserDefaults {
     var onLock: Observable<Bool> {
-        return self.rx.observe(Bool.self, SettingKey.locked.rawValue).filterNil()
+        return self.on(setting: .locked, type: Bool.self)
     }
 
     var onBiometricsEnabled: Observable<Bool> {
-        return self.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue).filterNil()
+        return self.on(setting: .biometricLogin, type: Bool.self)
+    }
+
+    var onAutoLockTime: Observable<AutoLockSetting> {
+        return self.on(setting: .autoLockTime, type: String.self)
+                .map { AutoLockSetting(rawValue: $0) ?? Constant.setting.defaultAutoLockTimeout }
     }
 }

@@ -51,6 +51,30 @@ class UserDefaultSpec: QuickSpec {
                 expect(lockObserver.events.last!.value.element).to(beTrue())
             }
         }
+
+        describe("onAutoLockSetting") {
+            var autoLockSettingObserver = self.scheduler.createObserver(AutoLockSetting.self)
+
+            beforeEach {
+                autoLockSettingObserver = self.scheduler.createObserver(AutoLockSetting.self)
+
+                UserDefaults.standard.onAutoLockTime
+                        .subscribe(autoLockSettingObserver)
+                        .disposed(by: self.disposeBag)
+            }
+
+            it("pushes new values for the SettingKey to observers") {
+                UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+
+                expect(autoLockSettingObserver.events.last!.value.element).to(equal(AutoLockSetting.OnAppExit))
+            }
+
+            it("pushes the default value when a meaningless autolock time is set") {
+                UserDefaults.standard.set("FOREVER", forKey: SettingKey.autoLockTime.rawValue)
+
+                expect(autoLockSettingObserver.events.last!.value.element).to(equal(Constant.setting.defaultAutoLockTimeout))
+            }
+        }
     }
 
 }

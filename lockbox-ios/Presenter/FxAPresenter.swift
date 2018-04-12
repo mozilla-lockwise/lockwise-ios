@@ -45,7 +45,7 @@ class FxAPresenter {
                     case .loadInitialURL(let url):
                         self.view?.loadRequest(URLRequest(url: url))
                     case .finishedFetchingUserInformation:
-                        self.settingActionHandler.invoke(SettingAction.lock(locked: false))
+                        self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
                         break
