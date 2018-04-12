@@ -51,10 +51,11 @@ class PreferredBrowserSettingPresenter {
 
     func onViewReady() {
         let driver = self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
+            .filterNil()
             .map { value -> PreferredBrowserSetting? in
-                guard let value = value else { return PreferredBrowserSetting.defaultValue }
                 return PreferredBrowserSetting(rawValue: value)
             }
+            .filterNil()
             .map { setting -> [CheckmarkSettingCellConfiguration] in
                 return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                     cellConfiguration.isChecked =

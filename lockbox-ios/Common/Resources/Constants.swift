@@ -86,5 +86,6 @@ struct Constant {
     struct setting {
         static let defaultBiometricLockEnabled = true
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
+        static let defaultPreferredBrowser = PreferredBrowserSetting.Safari
     }
 }

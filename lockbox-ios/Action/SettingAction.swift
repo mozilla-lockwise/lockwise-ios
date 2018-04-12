@@ -56,6 +56,7 @@ class SettingActionHandler: ActionHandler {
                     forKey: SettingKey.biometricLogin.rawValue)
             self.userDefaults.set(Constant.setting.defaultAutoLockTimeout.rawValue,
                     forKey: SettingKey.autoLock.rawValue)
+            self.userDefaults.set(Constant.setting.defaultPreferredBrowser.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
         }
 
         // purely for telemetry, no app functionality depends on this

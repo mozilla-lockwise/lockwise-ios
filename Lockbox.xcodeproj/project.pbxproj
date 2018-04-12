@@ -155,6 +155,7 @@
 		D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783612207C080300C19BC7 /* ExternalLinkAction.swift */; };
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
 		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
+		D8783615207D303E00C19BC7 /* ExternalLinkActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
 		D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */; };
 		D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */; };
@@ -369,6 +370,7 @@
 		D8783612207C080300C19BC7 /* ExternalLinkAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkAction.swift; sourceTree = "<group>"; };
 		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
 		D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingViewSpec.swift; sourceTree = "<group>"; };
+		D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkActionSpec.swift; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
 		D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenter.swift; sourceTree = "<group>"; };
@@ -665,6 +667,7 @@
 				D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */,
 				D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */,
 				D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */,
+				D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -895,6 +898,7 @@
 				7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */,
 				7AA54E698CA72C6C83804EAC /* CopyActionSpec.swift in Sources */,
 				7AA54EEAB64EF8D9A7F48739 /* CopyConfirmationDisplayStoreSpec.swift in Sources */,
+				D8783615207D303E00C19BC7 /* ExternalLinkActionSpec.swift in Sources */,
 				7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */,
 				7AA5469948A8AE091E024CC7 /* ItemListDisplayStoreSpec.swift in Sources */,
 				7AA545D1DBB719E27B782966 /* ItemListDisplayActionSpec.swift in Sources */,
