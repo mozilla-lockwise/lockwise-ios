@@ -506,7 +506,7 @@ extension DataStoreActionHandler {
                     .disposed(by: self.disposeBag)
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 120, execute: {
             self.list()
         })
     }
