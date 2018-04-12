@@ -14,8 +14,9 @@ protocol FxAViewProtocol: class, ErrorView {
 class FxAPresenter {
     private weak var view: FxAViewProtocol?
     fileprivate let fxAActionHandler: FxAActionHandler
+    fileprivate let settingActionHandler: SettingActionHandler
     fileprivate let routeActionHandler: RouteActionHandler
-    fileprivate let store: FxAStore
+    fileprivate let fxaStore: FxAStore
 
     private var disposeBag = DisposeBag()
 
@@ -27,21 +28,24 @@ class FxAPresenter {
 
     init(view: FxAViewProtocol,
          fxAActionHandler: FxAActionHandler = FxAActionHandler.shared,
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         store: FxAStore = FxAStore.shared) {
+         fxaStore: FxAStore = FxAStore.shared) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
+        self.settingActionHandler = settingActionHandler
         self.routeActionHandler = routeActionHandler
-        self.store = store
+        self.fxaStore = fxaStore
     }
 
     func onViewReady() {
-        self.store.fxADisplay
+        self.fxaStore.fxADisplay
                 .drive(onNext: { action in
                     switch action {
                     case .loadInitialURL(let url):
                         self.view?.loadRequest(URLRequest(url: url))
                     case .finishedFetchingUserInformation:
+                        self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
                         break

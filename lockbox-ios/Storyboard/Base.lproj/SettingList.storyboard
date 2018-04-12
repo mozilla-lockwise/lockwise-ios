@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Setting List View-->
+        <scene sceneID="zyw-ug-N7k">
+            <objects>
+                <viewController storyboardIdentifier="settinglist" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lXi-bT-YWI" customClass="SettingListView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1WP-Gl-N6y">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="lcM-sN-0rK">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="583"/>
+                                <color key="backgroundColor" red="0.94528132679999999" green="0.94593185189999995" blue="0.96244353059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="evG-dP-9fl">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pN4-iy-qw4">
+                                <rect key="frame" x="0.0" y="583" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.99963909387588501" green="1" blue="0.99975615739822388" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="MnG-dC-F5w"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Sign Out">
+                                    <color key="titleColor" red="0.99948698282241821" green="0.26723262667655945" blue="0.21373838186264038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94528132677078247" green="0.94593185186386108" blue="0.96244353055953979" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="pN4-iy-qw4" firstAttribute="leading" secondItem="1WP-Gl-N6y" secondAttribute="leading" id="3vE-5U-ZxS"/>
+                            <constraint firstItem="lcM-sN-0rK" firstAttribute="leading" secondItem="1WP-Gl-N6y" secondAttribute="leading" id="3wo-s3-hbU"/>
+                            <constraint firstAttribute="bottom" secondItem="pN4-iy-qw4" secondAttribute="bottom" constant="40" id="O54-5g-1Sa"/>
+                            <constraint firstAttribute="trailing" secondItem="pN4-iy-qw4" secondAttribute="trailing" id="W7f-hx-HfS"/>
+                            <constraint firstAttribute="trailing" secondItem="lcM-sN-0rK" secondAttribute="trailing" id="bcv-hz-Eqg"/>
+                            <constraint firstItem="lcM-sN-0rK" firstAttribute="top" secondItem="1WP-Gl-N6y" secondAttribute="top" id="rc1-eN-hss"/>
+                            <constraint firstItem="pN4-iy-qw4" firstAttribute="top" secondItem="lcM-sN-0rK" secondAttribute="bottom" id="yuW-xO-WWT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="signOutButton" destination="pN4-iy-qw4" id="qsV-Cq-DCy"/>
+                        <outlet property="tableView" destination="lcM-sN-0rK" id="bkh-nq-W3I"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xcQ-bl-Z8V" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="64.799999999999997" y="101.19940029985008"/>
+        </scene>
+    </scenes>
+</document>

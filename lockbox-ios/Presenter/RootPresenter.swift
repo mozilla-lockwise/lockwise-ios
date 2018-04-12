@@ -189,7 +189,7 @@ class RootPresenter {
 
             switch settingAction {
             case .list:
-                if !view.modalViewIs(SettingsView.self) {
+                if !view.modalViewIs(SettingListView.self) {
                     view.pushSettingView(view: .list)
                 }
             case .account:

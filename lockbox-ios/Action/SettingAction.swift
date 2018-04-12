@@ -6,7 +6,8 @@ import Foundation
 
 enum SettingAction: Action {
     case biometricLogin(enabled: Bool)
-    case autoLock(timeout: AutoLockSetting)
+    case autoLockTime(timeout: AutoLockSetting)
+    case visualLock(locked: Bool)
     case reset
 }
 
@@ -15,8 +16,10 @@ extension SettingAction: Equatable {
         switch (lhs, rhs) {
         case (.biometricLogin(let lhEnabled), .biometricLogin(let rhEnabled)):
             return lhEnabled == rhEnabled
-        case (.autoLock(let lhTimeout), .autoLock(let rhTimeout)):
+        case (.autoLockTime(let lhTimeout), .autoLockTime(let rhTimeout)):
             return lhTimeout == rhTimeout
+        case (.visualLock(let lhLocked), .visualLock(let rhLocked)):
+            return lhLocked == rhLocked
         case (.reset, .reset):
             return true
         default:
@@ -26,7 +29,7 @@ extension SettingAction: Equatable {
 }
 
 enum SettingKey: String {
-    case biometricLogin, autoLock
+    case biometricLogin, autoLockTime, locked
 }
 
 class SettingActionHandler: ActionHandler {
@@ -44,13 +47,17 @@ class SettingActionHandler: ActionHandler {
         switch action {
         case .biometricLogin(let enabled):
             self.userDefaults.set(enabled, forKey: SettingKey.biometricLogin.rawValue)
-        case .autoLock(let timeout):
-            self.userDefaults.set(timeout.rawValue, forKey: SettingKey.autoLock.rawValue)
+        case .autoLockTime(let timeout):
+            self.userDefaults.set(timeout.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+        case .visualLock(let locked):
+            self.userDefaults.set(locked, forKey: SettingKey.locked.rawValue)
         case .reset:
             self.userDefaults.set(Constant.setting.defaultBiometricLockEnabled,
                     forKey: SettingKey.biometricLogin.rawValue)
             self.userDefaults.set(Constant.setting.defaultAutoLockTimeout.rawValue,
-                    forKey: SettingKey.autoLock.rawValue)
+                    forKey: SettingKey.autoLockTime.rawValue)
+            self.userDefaults.set(Constant.setting.defaultLockedState,
+                    forKey: SettingKey.locked.rawValue)
         }
 
         // purely for telemetry, no app functionality depends on this

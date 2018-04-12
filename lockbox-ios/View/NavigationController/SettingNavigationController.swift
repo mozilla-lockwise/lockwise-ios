@@ -6,7 +6,8 @@ import UIKit
 
 class SettingNavigationController: UINavigationController {
     convenience init() {
-        let settingsView = SettingsView()
-        self.init(rootViewController: settingsView)
+        let settingListView = UIStoryboard(name: "SettingList", bundle: .main)
+                .instantiateViewController(withIdentifier: "settinglist")
+        self.init(rootViewController: settingListView)
     }
 }

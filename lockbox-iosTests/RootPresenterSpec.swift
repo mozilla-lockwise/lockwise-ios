@@ -752,7 +752,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -773,7 +773,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
@@ -846,7 +846,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -867,7 +867,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }

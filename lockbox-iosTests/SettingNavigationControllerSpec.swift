@@ -18,7 +18,7 @@ class SettingNavigationControllerSpec: QuickSpec {
             }
 
             it("sets setting list as root") {
-                expect(self.settingNavigationController.topViewController).to(beAnInstanceOf(SettingsView.self))
+                expect(self.settingNavigationController.topViewController).to(beAnInstanceOf(SettingListView.self))
             }
         }
     }

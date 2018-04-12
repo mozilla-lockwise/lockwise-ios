@@ -5,14 +5,15 @@
 import Foundation
 import Quick
 import Nimble
+import UIKit
 import RxTest
 import RxSwift
 import RxCocoa
 
 @testable import Lockbox
 
-class SettingsViewSpec: QuickSpec {
-    class FakeSettingsPresenter: SettingsPresenter {
+class SettingListViewSpec: QuickSpec {
+    class FakeSettingsPresenter: SettingListPresenter {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
         var switchChangedCalled = false
@@ -38,19 +39,19 @@ class SettingsViewSpec: QuickSpec {
     }
 
     private var presenter: FakeSettingsPresenter!
-    private var scheduler = TestScheduler(initialClock: 0)
-    var subject: SettingsView!
+    private let scheduler = TestScheduler(initialClock: 0)
+    private let disposeBag = DisposeBag()
+    var subject: SettingListView!
 
     override func spec() {
-        describe("SettingsView") {
+        describe("SettingListView") {
             beforeEach {
-                self.subject = SettingsView()
+                self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as! SettingListView
                 self.presenter = FakeSettingsPresenter(view: self.subject)
                 self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
                 self.subject.presenter = self.presenter
 
-                self.subject.viewWillAppear(false)
-                self.subject.viewDidLoad()
+                self.subject.preloadView()
             }
 
             it("informs the presenter") {
@@ -120,6 +121,33 @@ class SettingsViewSpec: QuickSpec {
                     it("tells the presenter with the appropriate action") {
                         expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.account))
                     }
+                }
+            }
+
+            describe("onSignOut") {
+                var observer = self.scheduler.createObserver(Void.self)
+
+                beforeEach {
+                    observer = self.scheduler.createObserver(Void.self)
+
+                    self.subject.onSignOut.subscribe(observer).disposed(by: self.disposeBag)
+
+                    self.subject.signOutButton.sendActions(for: .touchUpInside)
+                }
+
+                it("tells any observers") {
+                    expect(observer.events.count).to(equal(1))
+                }
+            }
+        }
+
+        describe("SettingCellConfiguration") {
+            describe("equality") {
+                it("SettingCellConfigurations are equal when the text and route actions are equal") {
+                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
                 }
             }
         }

@@ -8,8 +8,13 @@ import RxCocoa
 import RxDataSources
 import LocalAuthentication
 
-class SettingsPresenter {
-    private var view: SettingsProtocol
+protocol SettingListViewProtocol: class {
+    func bind(items: Driver<[SettingSectionModel]>)
+    var onSignOut: ControlEvent<Void> { get }
+}
+
+class SettingListPresenter {
+    weak private var view: SettingListViewProtocol?
     private var userDefaults: UserDefaults
     private var routeActionHandler: RouteActionHandler
     private var settingActionHandler: SettingActionHandler
@@ -34,18 +39,7 @@ class SettingsPresenter {
     lazy var touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
     lazy var faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
 
-    private var usesFaceId: Bool {
-        let authContext = LAContext()
-        var error: NSError?
-        if authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            if #available(iOS 11.0, *) {
-                return authContext.biometryType == .faceID
-            }
-        }
-        return false
-    }
-
-    init(view: SettingsProtocol,
+    init(view: SettingListViewProtocol,
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
@@ -55,29 +49,32 @@ class SettingsPresenter {
         self.settingActionHandler = settingActionHandler
     }
 
+    // todo: this should be an observer binding
     func switchChanged(row: Int, isOn: Bool) {
-        settingActionHandler.invoke(.biometricLogin(enabled: isOn))
+        self.settingActionHandler.invoke(.biometricLogin(enabled: isOn))
     }
 
     func onViewReady() {
-        let biometricObserver = self.userDefaults.rx.observe(Bool.self, SettingKey.biometricLogin.rawValue)
-        let autoLockObserver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue).filterNil()
-
-        let settingsConfigDriver = Observable.combineLatest(biometricObserver, autoLockObserver)
-                .map { (latest: (Bool?, String)) -> [SettingSectionModel] in
-                    let autoLock = AutoLockSetting(rawValue: latest.1) ?? AutoLockSetting.FiveMinutes
-                    return self.settingsWithBiometricLoginEnabled(latest.0 ?? false, autoLock: autoLock)
+        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime) // swiftlint:disable:this line_length
+                .map { (latest: (Bool, AutoLockSetting)) -> [SettingSectionModel] in
+                    return self.settingsWithBiometricLoginEnabled(latest.0, autoLock: latest.1)
                 }
                 .asDriver(onErrorJustReturn: [])
 
-        view.bind(items: settingsConfigDriver)
+        self.view?.bind(items: settingsConfigDriver)
+
+        self.view?.onSignOut
+                .subscribe { _ in
+                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
+                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                }
+                .disposed(by: self.disposeBag)
     }
 }
 
-extension SettingsPresenter {
-    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?)
-        -> [SettingSectionModel] {
-        let biometricSetting = usesFaceId ? faceIdSetting : touchIdSetting
+extension SettingListPresenter {
+    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?) -> [SettingSectionModel] { // swiftlint:disable:this line_length
+        let biometricSetting = LAContext.usesFaceId ? faceIdSetting : touchIdSetting
         biometricSetting.isOn = enabled
 
         let autoLockSetting = SettingCellConfiguration(
