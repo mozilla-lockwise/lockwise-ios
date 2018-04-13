@@ -242,8 +242,9 @@ class RootPresenterSpec: QuickSpec {
                     self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: false)
                 }
 
-                it("dispatches the open action") {
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                it("dispatches the open action and displays the list") {
+                    let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(argument).to(equal(MainRouteAction.list))
                     expect(self.dataStoreActionHandler.openUID).to(equal(uid))
                     expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
                 }
@@ -751,7 +752,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -772,7 +773,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
@@ -845,7 +846,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
@@ -866,7 +867,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingsView.self).to(beTrue())
+                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }

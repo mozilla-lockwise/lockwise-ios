@@ -38,10 +38,9 @@ class AutoLockSettingPresenter {
     lazy private(set) var itemSelectedObserver: AnyObserver<AutoLockSetting?> = {
         return Binder(self) { target, newAutoLockValue in
             if let newAutoLockValue = newAutoLockValue {
-                target.settingActionHandler.invoke(.autoLock(timeout: newAutoLockValue))
+                target.settingActionHandler.invoke(.autoLockTime(timeout: newAutoLockValue))
             }
-
-            }.asObserver()
+        }.asObserver()
     }()
 
     init(view: AutoLockSettingViewProtocol,
@@ -55,12 +54,7 @@ class AutoLockSettingPresenter {
     }
 
     func onViewReady() {
-        let driver = self.userDefaults.rx.observe(String.self, SettingKey.autoLock.rawValue)
-                .filterNil()
-                .map { value -> AutoLockSetting? in
-                    return AutoLockSetting(rawValue: value)
-                }
-                .filterNil()
+        let driver = self.userDefaults.onAutoLockTime
                 .map { setting -> [CheckmarkSettingCellConfiguration] in
                     return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                         cellConfiguration.isChecked =

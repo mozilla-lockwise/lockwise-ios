@@ -54,13 +54,11 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ], for: .normal)
 
-        guard let presenter = self.presenter else {
-            return
+        if let presenter = self.presenter {
+            self.navigationItem.leftBarButtonItem!.rx.tap
+                    .bind(to: presenter.onCancel)
+                    .disposed(by: self.disposeBag)
         }
-
-        self.navigationItem.leftBarButtonItem!.rx.tap
-                .bind(to: presenter.onCancel)
-                .disposed(by: self.disposeBag)
     }
 
     required init?(coder aDecoder: NSCoder) {

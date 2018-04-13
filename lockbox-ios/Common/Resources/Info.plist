@@ -25,6 +25,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>FiraSans-Bold.ttf</string>
+		<string>FiraSans-Italic.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

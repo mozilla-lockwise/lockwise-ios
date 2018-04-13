@@ -13,13 +13,13 @@ class RouteStore {
     fileprivate var routeState = ReplaySubject<RouteAction>.create(bufferSize: 1)
 
     public var onRoute: Observable<RouteAction> {
-        return routeState.asObservable()
+        return self.routeState.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         dispatcher.register
                 .filterByType(class: RouteAction.self)
-                .bind(to: routeState)
+                .bind(to: self.routeState)
                 .disposed(by: self.disposeBag)
     }
 }

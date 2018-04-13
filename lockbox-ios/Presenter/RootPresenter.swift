@@ -77,6 +77,7 @@ class RootPresenter {
 
                     if !latest.opened {
                         self.dataStoreActionHandler.open(uid: uid)
+                        self.routeActionHandler.invoke(MainRouteAction.list)
                     }
                 }).disposed(by: self.disposeBag)
 
@@ -188,7 +189,7 @@ class RootPresenter {
 
             switch settingAction {
             case .list:
-                if !view.modalViewIs(SettingsView.self) {
+                if !view.modalViewIs(SettingListView.self) {
                     view.pushSettingView(view: .list)
                 }
             case .account:
