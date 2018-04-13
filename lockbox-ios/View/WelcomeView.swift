@@ -58,6 +58,10 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.fxASigninButton.rx.tap
     }
 
+    public var biometricSignInButtonPressed: ControlEvent<Void> {
+        return self.biometricSignInButton.rx.tap
+    }
+
     public var firstTimeLoginMessageHidden: AnyObserver<Bool> {
         return self.accessLockboxMessage.rx.isHidden.asObserver()
     }

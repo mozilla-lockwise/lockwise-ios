@@ -26,6 +26,10 @@ class WelcomePresenterSpec: QuickSpec {
             return ControlEvent<Void>(events: fakeButtonPress.asObservable())
         }
 
+        var biometricSignInButtonPressed: ControlEvent<Void> {
+            return ControlEvent<Void>(events: fakeButtonPress.asObservable())
+        }
+
         var firstTimeLoginMessageHidden: AnyObserver<Bool> {
             return self.firstTimeMessageHiddenStub.asObserver()
         }
@@ -51,6 +55,34 @@ class WelcomePresenterSpec: QuickSpec {
 
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
+        }
+    }
+
+    class FakeSettingActionHandler: SettingActionHandler {
+        var invokeArgument: SettingAction?
+
+        override func invoke(_ action: SettingAction) {
+            self.invokeArgument = action
+        }
+    }
+
+    class FakeBiometryManager: BiometryManager {
+        var faceIdStub: Bool!
+        var touchIdStub: Bool!
+        var authMessage: String?
+        var fakeAuthResponse = PublishSubject<Void>()
+
+        override var usesTouchID: Bool {
+            return self.touchIdStub
+        }
+
+        override var usesFaceID: Bool {
+            return self.faceIdStub
+        }
+
+        override func authenticateWithMessage(_ message: String) -> Single<Void> {
+            self.authMessage = message
+            return fakeAuthResponse.take(1).asSingle()
         }
     }
 
@@ -82,6 +114,10 @@ class WelcomePresenterSpec: QuickSpec {
                 describe("when the device is locked") {
                     beforeEach {
                         UserDefaults.standard.set(true, forKey: SettingKey.locked.rawValue)
+                    }
+
+                    describe("when touchID is available") {
+
                     }
 
                     describe("when biometrics are enabled") {
