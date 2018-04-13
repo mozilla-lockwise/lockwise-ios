@@ -11,22 +11,6 @@
 
     
     <url>
-     <loc>/install/</loc>
-     <lastmod>2018-04-13</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    
-
-    
-    <url>
-     <loc>/updating_libraries/</loc>
-     <lastmod>2018-04-13</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    
-
-    
-    <url>
      <loc>/contributing/</loc>
      <lastmod>2018-04-13</lastmod>
      <changefreq>daily</changefreq>
@@ -35,10 +19,32 @@
 
     
     <url>
-     <loc>/code_of_conduct/</loc>
+     <loc>/metrics/</loc>
      <lastmod>2018-04-13</lastmod>
      <changefreq>daily</changefreq>
     </url>
+    
+
+    
+        
+    <url>
+     <loc>/install/</loc>
+     <lastmod>2018-04-13</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/architecture/</loc>
+     <lastmod>2018-04-13</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/updating_libraries/</loc>
+     <lastmod>2018-04-13</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
 </urlset>

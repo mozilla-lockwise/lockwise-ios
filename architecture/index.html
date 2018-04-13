@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Build and Install - Lockbox iOS</title>
+  <title>Architecture - Lockbox iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Build and Install";
-    var mkdocs_page_input_path = "install.md";
-    var mkdocs_page_url = "/install/";
+    var mkdocs_page_name = "Architecture";
+    var mkdocs_page_input_path = "architecture.md";
+    var mkdocs_page_url = "/architecture/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -66,16 +66,29 @@
 		
     <span class="caption-text">Developer Guides</span>
     <ul class="subnav">
-                <li class=" current">
-                    
-    <a class="current" href="./">Build and Install</a>
-    <ul class="subnav">
-            
-    </ul>
-                </li>
                 <li class="">
                     
-    <a class="" href="../architecture/">Architecture</a>
+    <a class="" href="../install/">Build and Install</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="./">Architecture</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#lockbox-architecture">Lockbox Architecture</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#rxswift">RxSwift</a></li>
+        
+            <li><a class="toctree-l4" href="#presenters-views">Presenters &amp; Views</a></li>
+        
+            <li><a class="toctree-l4" href="#flux">Flux</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
                 <li class="">
                     
@@ -110,10 +123,10 @@
         
       
     
-    <li>Build and Install</li>
+    <li>Architecture</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/install.md"
+        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/architecture.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -123,31 +136,23 @@
           <div role="main">
             <div class="section">
               
-                <ol>
-<li>
-<p>Install the latest <a href="https://developer.apple.com/xcode/downloads/">Xcode developer tools</a> from Apple</p>
-</li>
-<li>
-<p>Install Carthage</p>
-<p><code>brew update
-brew install carthage</code></p>
-</li>
-<li>
-<p>Clone the repository</p>
-<p><code>git clone https://github.com/mozilla-lockbox/lockbox-ios</code></p>
-</li>
-<li>
-<p>Pull in the project dependencies:</p>
-<p><code>cd lockbox-ios
-sh ./bootstrap.sh</code></p>
-</li>
-<li>
-<p>Open <code>Lockbox.xcodeproj</code> in Xcode</p>
-</li>
-<li>
-<p>Build/Run the <code>lockbox</code> scheme in Xcode</p>
-</li>
-</ol>
+                <h1 id="lockbox-architecture">Lockbox Architecture</h1>
+<h2 id="rxswift">RxSwift</h2>
+<p>Lockbox makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the <a href="http://reactivex.io/">ReactiveX documentation</a>.</p>
+<h2 id="presenters-views">Presenters &amp; Views</h2>
+<p>All views are bound to a presenter[1]. In this separation, the presenter is responsible for all business logic, and the view is abstracted to a simple protocol. The view is responsible for UI-specific configuration and passing user input to its presenter for handling. This allows any complex view-related configuration to be abstracted when dealing with business logic changes, and vice versa. Presenters should never import UIKit.</p>
+<h2 id="flux">Flux</h2>
+<h3 id="architecture-pattern">Architecture Pattern</h3>
+<p>In short, Flux architecture design maintains a unidirectional data flow, in which a global Dispatcher receives Actions &amp; dispatches them to appropriate Stores. The Stores, in turn, process data &amp; provide the source of truth for the Views. As users interact with the Views, any updates are made via a dispatched Action and the cycle begins again. See this <a href="https://facebook.github.io/flux/docs/overview.html">flux architecture</a> writeup for more details on the Flux architecture scheme.</p>
+<h3 id="usage">Usage</h3>
+<p>RxSwift observables are used as the hooks between the dispatcher and stores, the stores &amp; views, and in Action-specific cases, to deal with asynchronous application requirements.</p>
+<p>The View component of Flux is represented by the Presenter+View couples. The Presenter is responsible for listening to the appropriate Store observables, and firing Actions to their respective handlers.</p>
+<h3 id="routing">Routing</h3>
+<p>The special case in this scenario is view routing. To handle the view-changing component of the architecture, there will be a special Store observed by a ContainerView. This “containing” view will never be displayed to the user; rather, it will perform the role of listening for navigation-specific Actions &amp; performing the necessary top-level navigation stack swapping or navigation stack manipulation.</p>
+<h3 id="async">Async</h3>
+<p>Asynchronous pieces of work are not handled in the definition of Flux architecture. In keeping with the typical solution for this pattern, async pieces of work in Lockbox iOS will be bundled into Action handlers, keeping Stores simple in-memory repositories to track persistent data as required by the View components.</p>
+<hr />
+<p>[1] the name here is pure semantics -- can be thought of as a ViewModel</p>
               
             </div>
           </div>
@@ -155,10 +160,10 @@ sh ./bootstrap.sh</code></p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../updating_libraries/" class="btn btn-neutral float-right" title="Dependencies">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../metrics/" class="btn btn-neutral" title="Telemetry and Metrics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../install/" class="btn btn-neutral" title="Build and Install"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -186,10 +191,10 @@ sh ./bootstrap.sh</code></p>
           <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../metrics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../install/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../updating_libraries/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

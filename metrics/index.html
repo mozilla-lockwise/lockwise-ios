@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Telemetry and Metrics - Lockbox iOS</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Telemetry and Metrics";
+    var mkdocs_page_input_path = "metrics.md";
+    var mkdocs_page_url = "/metrics/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Lockbox iOS</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../contributing/">Contributing</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Telemetry and Metrics</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#lockbox-for-ios-metrics-plan">Lockbox for iOS Metrics Plan</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#analysis">Analysis</a></li>
+        
+            <li><a class="toctree-l3" href="#collection">Collection</a></li>
+        
+            <li><a class="toctree-l3" href="#list-of-proposed-events">List of Proposed Events</a></li>
+        
+            <li><a class="toctree-l3" href="#references">References</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Developer Guides</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../install/">Build and Install</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../architecture/">Architecture</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../updating_libraries/">Dependencies</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Lockbox iOS</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Telemetry and Metrics</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/metrics.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="lockbox-for-ios-metrics-plan">Lockbox for iOS Metrics Plan</h1>
+<p><em>Last Updated: March 14, 2018</em></p>
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+<ul>
+<li><a href="#analysis">Analysis</a></li>
+<li><a href="#collection">Collection</a></li>
+<li><a href="#list-of-proposed-events">List of Proposed Events</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+<!-- /TOC -->
+
+<p>This is the metrics collection plan for the Lockbox iOS app. It documents all events that are planned to be collected through telemetry. It will be updated periodically to reflect all new and planned data collection.</p>
+<h2 id="analysis">Analysis</h2>
+<p>Data collection is done solely for the purpose of product development, improvement and maintenance.</p>
+<p>More here TBD</p>
+<h2 id="collection">Collection</h2>
+<p>Data will be collected using this library:</p>
+<p>https://github.com/mozilla-mobile/telemetry-ios/</p>
+<p>We plan to submit two ping types.</p>
+<p>First is the "core ping", which contains information about the iOS version, architecture, etc of the device lockbox has been installed on:</p>
+<p>https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/data/core-ping.html</p>
+<p>The second is the "focus event ping" which allows us to record event telemetry:</p>
+<p>https://github.com/mozilla-mobile/focus-ios/wiki/Event-Tracking-with-Mozilla%27s-Telemetry-Service</p>
+<p>The ping types are defined in <code>lockbox-ios/Common/AppDelegate.swift</code>. Scheduling of ping transmission is done in the same file.</p>
+<p>Every event must contain <code>category</code>, <code>method</code> and <code>object</code> fields, and may optionally contain <code>value</code> and <code>extra</code> fields as well. Possible values for the former three fields are defined in <code>lockbox-ios/TelemetryIntegration.swift</code></p>
+<p>Events related to specific items should have an item id in the extra field where possible.</p>
+<p>Here's an example of (something like) the swift code needed to record the event that fires when an item in the entry list is tapped:</p>
+<pre><code class="swift">Telemetry.default.recordEvent(
+    category: TelemetryEventCategory.action,
+    method: TelemetryEventMethod.tap,
+    object: TelemetryEventObject.entryList,
+    value: nil,
+    extras: [&quot;itemid&quot; : itemid]
+)
+</code></pre>
+
+<p>Finally, the <code>appName</code> metadata sent with each ping should always be 'Lockbox'.</p>
+<p>See here for more information on event schemas:</p>
+<p>https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/collection/events.html#public-js-api</p>
+<h2 id="list-of-proposed-events">List of Proposed Events</h2>
+<ol>
+<li>
+<p>When the app starts up:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: startup</li>
+<li><code>object</code>: app</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When a user taps the fxa signin button:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: tap</li>
+<li><code>object</code>: fxaSigninButton</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>Whether a user successfully authorizes with FxA:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: signin</li>
+<li><code>object</code>: app</li>
+<li><code>value</code>: <code>true</code> or <code>false</code></li>
+<li><code>extras</code>: ["error" : nil or string]<ul>
+<li>Note: If there is an authentication error, let's put it in the extra field here, if possible.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>When a user taps an item in the entry list:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: tap</li>
+<li><code>object</code>: entryList</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: ["itemid" : itemid]</li>
+</ul>
+</li>
+<li>
+<p>When a user taps one of the buttons available after entering the entry view:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: tap</li>
+<li><code>object</code>: entryCopyUsernameButton, entryCopyPasswordButton, viewPasswordButton, entryShowPasswordButton</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: ["itemid" : itemid]</li>
+</ul>
+</li>
+<li>
+<p>When a user taps the settings button:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: tap</li>
+<li><code>object</code>: settingsButton</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When a user taps the FAQ button:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: tap</li>
+<li><code>object</code>: faqButton</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When the app enters the background or foreground:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: background, foreground</li>
+<li><code>object</code>: app</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+</ol>
+<h2 id="references">References</h2>
+<p><a href="https://github.com/mozilla-mobile/telemetry-ios/">Library used to collect and send telemetry on iOS</a></p>
+<p><a href="https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/data/core-ping.html">Description of the "Core" ping</a></p>
+<p><a href="https://github.com/mozilla-mobile/focus-ios/wiki/Event-Tracking-with-Mozilla%27s-Telemetry-Service">Description of the "Focus Event" Ping</a></p>
+<p><a href="https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/collection/events.html#public-js-api">Description of Event Schemas in General</a></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../install/" class="btn btn-neutral float-right" title="Build and Install">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../contributing/" class="btn btn-neutral" title="Contributing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../contributing/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../install/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>
