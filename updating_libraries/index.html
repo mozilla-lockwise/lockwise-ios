@@ -126,6 +126,11 @@
                 <h1 id="external-dependencies">External Dependencies</h1>
 <h2 id="swift-frameworks">Swift frameworks</h2>
 <p>All Swift frameworks are managed via <a href="https://github.com/carthage/carthage">Carthage</a>. In the home directory for the project, run <code>carthage update --platform iOS</code> to fetch &amp; build dependencies.</p>
+<p><strong>NOTE:</strong>  In some cases, the Swift frameworks might be built using a different version of Swift (e.g., 4.0 versus 4.1) and an error like the following is encountered for the mismatch:</p>
+<pre><code>    Incompatible Swift version - framework was built with 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2) and the local version is 4.1 (swiftlang-902.0.48 clang-902.0.37.1).
+</code></pre>
+
+<p>If this occurs, run <code>carthage update --platform iOS --no-use-binaries</code> to build from sources instead.</p>
 <h2 id="c-libraries">C Libraries</h2>
 <p>Lockbox for iOS uses <a href="https://github.com/cisco/cjose">cjose</a> for JOSE encryption &amp; decryption in the FxA OAuth flow. The binaries to support this external dependency are provided along with this code (in the <code>lockbox-ios/binaries</code> folder). However, if you find yourself wanting to update this library (or either of its dependencies, Jansson or OpenSSL), navigate to the <code>scripts</code> directory and run <code>./update-dependencies</code>. NOTE: You will have to build the project at least once for the appropriate <code>binaries</code> folder to get un-tarred (or you can do it yourself).</p>
 <h2 id="datastore">Datastore</h2>
