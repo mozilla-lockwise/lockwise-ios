@@ -72,9 +72,9 @@ struct Constant {
         static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
         static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
         static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your Lockbox.", comment: "Header displayed above auto lock settings")
-        static let settingsBrowserChrome = NSLocalizedString("settings.browser.chrome", value: "Chrome", comment: "Chrome Browser")
+        static let settingsBrowserChrome = NSLocalizedString("settings.browser.chrome", value: "Google Chrome", comment: "Chrome Browser")
         static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
-        static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Focus", comment: "Focus Browser")
+        static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
         static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
     }
 
