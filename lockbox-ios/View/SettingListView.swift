@@ -83,6 +83,7 @@ extension SettingListView {
         if let presenter = self.presenter {
             self.tableView.rx.itemSelected
                     .map { path -> SettingRouteAction? in
+                        self.tableView.deselectRow(at: path, animated: true)
                         return self.dataSource?[path].routeAction
                     }
                     .bind(to: presenter.onSettingCellTapped)
