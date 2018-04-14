@@ -102,8 +102,7 @@ class SettingActionSpec: QuickSpec {
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.setString[0]).to(equal(browserSetting.rawValue))
-                        expect(self.userDefaults.stringName[0]).to(equal(SettingKey.preferredBrowser.rawValue))
+                        expect(self.userDefaults.strings[SettingKey.preferredBrowser.rawValue]).to(equal(browserSetting.rawValue))
                     }
 
                     it("tells the dispatcher") {

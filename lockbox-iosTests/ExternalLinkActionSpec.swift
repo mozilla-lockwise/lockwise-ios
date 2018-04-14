@@ -9,23 +9,29 @@ import Nimble
 @testable import Lockbox
 
 class ExternalLinkActionSpec: QuickSpec {
-    private var application: UIApplication!
-    private var userDefaults: FakeUserDefaults!
+    private var application: FakeApplication!
+    private var userDefaults: UserDefaults!
     private var testUrl = "https://github.com/mozilla-lockbox/lockbox-ios"
 
-    class FakeUserDefaults: UserDefaults {
-        var keyArgument: String?
-        override func string(forKey defaultName: String) -> String? {
-            keyArgument = defaultName
-            return PreferredBrowserSetting.Firefox.rawValue
+    class FakeApplication: OpenUrlProtocol {
+        var openArgument: URL?
+        var canOpenURLArgument: URL?
+
+        func open(_ url: URL, options: [String: Any], completionHandler completion: ((Bool) -> Swift.Void)?) {
+            self.openArgument = url
+        }
+
+        func canOpenURL(_ url: URL) -> Bool {
+            self.canOpenURLArgument = url
+            return true
         }
     }
 
     override func spec() {
         describe("PreferredBrowserSetting") {
             beforeEach {
-                self.application = UIApplication.shared
-                self.userDefaults = FakeUserDefaults()
+                self.application = FakeApplication()
+                self.userDefaults = UserDefaults.standard
             }
 
             describe("PreferredBrowserSetting") {
@@ -46,6 +52,13 @@ class ExternalLinkActionSpec: QuickSpec {
                         expect(PreferredBrowserSetting.Chrome.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("googlechrome://\(self.testUrl)"))
                     }
                 }
+
+                describe("canOpenBrowser") {
+                    it("tries to open browser") {
+                        expect(PreferredBrowserSetting.Safari.canOpenBrowser(application: self.application)).to(beTrue())
+                        expect(self.application.canOpenURLArgument?.absoluteString).toNot(beNil())
+                    }
+                }
             }
 
             describe("ExternalLinkActionHandler") {
@@ -53,12 +66,14 @@ class ExternalLinkActionSpec: QuickSpec {
 
                 beforeEach {
                     subject = ExternalLinkActionHandler(dispatcher: Dispatcher.shared, application: self.application, userDefaults: self.userDefaults)
-                    subject.invoke(ExternalLinkAction(url: self.testUrl))
                 }
 
                 describe("openUrl") {
-
-
+                    it("opens safari with deeplink") {
+                        self.userDefaults.set(PreferredBrowserSetting.Safari.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                        subject.invoke(ExternalLinkAction(url: self.testUrl))
+                        expect(self.application.openArgument?.absoluteString).to(equal(self.testUrl))
+                    }
                 }
             }
         }

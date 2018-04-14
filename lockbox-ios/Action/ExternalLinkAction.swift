@@ -21,11 +21,11 @@ class ExternalLinkActionHandler: ActionHandler {
     private let disposeBag = DisposeBag()
 
     private let dispatcher: Dispatcher
-    private let application: UIApplication
+    private let application: OpenUrlProtocol
     private let userDefaults: UserDefaults
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         application: UIApplication = UIApplication.shared,
+         application: OpenUrlProtocol = UIApplication.shared,
          userDefaults: UserDefaults = UserDefaults.standard) {
         self.dispatcher = dispatcher
         self.application = application
@@ -33,10 +33,10 @@ class ExternalLinkActionHandler: ActionHandler {
     }
 
     func invoke(_ action: ExternalLinkAction) {
-        self.openUrl(string: action.url)
+        self.openUrl(string: action.url, application: self.application)
     }
 
-    private func openUrl(string url: String) {
+    private func openUrl(string url: String, application: OpenUrlProtocol = UIApplication.shared) {
         self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
             .take(1)
             .filterNil()
@@ -46,7 +46,7 @@ class ExternalLinkActionHandler: ActionHandler {
                 return setting
             }
             .subscribe(onNext: { (latest: PreferredBrowserSetting) in
-                latest.openUrl(url: url)
+                latest.openUrl(url: url, application: application)
             })
             .disposed(by: self.disposeBag)
     }
@@ -73,7 +73,7 @@ enum PreferredBrowserSetting: String {
         }
     }
 
-    func canOpenBrowser(application: UIApplication = UIApplication.shared) -> Bool {
+    func canOpenBrowser(application: OpenUrlProtocol = UIApplication.shared) -> Bool {
         if let url = getPreferredBrowserDeeplink(url: "https://mozilla.org") {
             return application.canOpenURL(url)
         }
@@ -82,7 +82,7 @@ enum PreferredBrowserSetting: String {
     }
 
     func openUrl(url: String,
-                 application: UIApplication = UIApplication.shared,
+                 application: OpenUrlProtocol = UIApplication.shared,
                  completion: ((Bool) -> Swift.Void)? = nil) {
         if let urlToOpen = getPreferredBrowserDeeplink(url: url) {
             application.open(urlToOpen, options: [:], completionHandler: completion)
