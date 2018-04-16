@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import MobileCoreServices
 
 struct CopyAction: Action {
     let text: String
@@ -40,7 +41,8 @@ class CopyActionHandler: ActionHandler {
     }
 
     func invoke(_ action: CopyAction) {
-        self.pasteboard.string = action.text
+        self.pasteboard.setItems([[kUTTypeUTF8PlainText as String: action.text]],
+                                options: [UIPasteboardOption.expirationDate: Date().addingTimeInterval(60)])
         self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: action.fieldName))
     }
 }
