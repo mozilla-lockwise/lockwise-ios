@@ -37,14 +37,7 @@ class ExternalLinkActionHandler: ActionHandler {
     }
 
     private func openUrl(string url: String, application: OpenUrlProtocol = UIApplication.shared) {
-        self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
-            .take(1)
-            .filterNil()
-            .map { value -> PreferredBrowserSetting in
-                guard let setting = PreferredBrowserSetting(rawValue: value)
-                    else { return Constant.setting.defaultPreferredBrowser }
-                return setting
-            }
+        self.userDefaults.onPreferredBrowser
             .subscribe(onNext: { (latest: PreferredBrowserSetting) in
                 latest.openUrl(url: url, application: application)
             })
@@ -74,7 +67,7 @@ enum PreferredBrowserSetting: String {
     }
 
     func canOpenBrowser(application: OpenUrlProtocol = UIApplication.shared) -> Bool {
-        if let url = getPreferredBrowserDeeplink(url: "https://mozilla.org") {
+        if let url = self.getPreferredBrowserDeeplink(url: "https://mozilla.org") {
             return application.canOpenURL(url)
         }
 
@@ -84,7 +77,7 @@ enum PreferredBrowserSetting: String {
     func openUrl(url: String,
                  application: OpenUrlProtocol = UIApplication.shared,
                  completion: ((Bool) -> Swift.Void)? = nil) {
-        if let urlToOpen = getPreferredBrowserDeeplink(url: url) {
+        if let urlToOpen = self.getPreferredBrowserDeeplink(url: url) {
             application.open(urlToOpen, options: [:], completionHandler: completion)
         }
     }
