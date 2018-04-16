@@ -44,6 +44,14 @@ extension UIImage {
 
         return roundedImage
     }
+
+    func tinted(_ color: UIColor) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        color.set()
+        draw(in: CGRect(origin: .zero, size: size))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
 }
 
 private func gradientStartPoint(frame: CGRect) -> CGPoint {
