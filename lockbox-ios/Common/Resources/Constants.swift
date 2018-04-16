@@ -80,6 +80,7 @@ struct Constant {
         static let displayStatusAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
+        static let copyExpireTimeSecs = 60
     }
 
     struct setting {
