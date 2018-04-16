@@ -7,27 +7,30 @@ import LocalAuthentication
 import RxSwift
 
 enum LocalError: Error {
-    case Unknown
+    case LAError
 }
 
 class BiometryManager {
     private let context: LAContext
 
     var usesFaceID: Bool {
-        let authContext = LAContext()
-        var error: NSError?
-        if authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+        if self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             if #available(iOS 11.0, *) {
-                return authContext.biometryType == .faceID
+                return self.context.biometryType == .faceID
             }
         }
+
         return false
     }
 
     var usesTouchID: Bool {
-        let authContext = LAContext()
-        var error: NSError?
-        return authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        if self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+            if #available(iOS 11.0, *) {
+                return self.context.biometryType == .touchID
+            }
+        }
+
+        return false
     }
 
     init(context: LAContext = LAContext()) {
@@ -35,9 +38,7 @@ class BiometryManager {
     }
 
     func authenticateWithMessage(_ message: String) -> Single<Void> {
-        var error: NSError?
-
-        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
+        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
             return Single.create { [weak self] observer in
                 self?.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: message) { success, error in
                     if success {
@@ -49,11 +50,8 @@ class BiometryManager {
 
                 return Disposables.create()
             }
-
-        } else if let err = error {
-            return Single.error(err)
         }
 
-        return Single.error(LocalError.Unknown)
+        return Single.error(LocalError.LAError)
     }
 }
