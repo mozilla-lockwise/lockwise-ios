@@ -54,11 +54,15 @@ class WelcomePresenter {
     }
 
     func onViewReady() {
-        let biometricButtonText = self.biometryManager.usesFaceID ? Constant.string.signInFaceID : Constant.string.signInTouchID // swiftlint:disable:this line_length
-        let biometricImageName = self.biometryManager.usesFaceID ? "face" : "fingerprint"
+        let biometricsAvailable = self.biometryManager.usesFaceID || self.biometryManager.usesTouchID
 
-        self.view?.biometricSignInText.onNext(biometricButtonText)
-        self.view?.biometricImageName.onNext(biometricImageName)
+        if biometricsAvailable {
+            let biometricButtonText = self.biometryManager.usesFaceID ? Constant.string.signInFaceID : Constant.string.signInTouchID // swiftlint:disable:this line_length
+            let biometricImageName = self.biometryManager.usesFaceID ? "face" : "fingerprint"
+
+            self.view?.biometricSignInText.onNext(biometricButtonText)
+            self.view?.biometricImageName.onNext(biometricImageName)
+        }
 
         let lockedObservable = self.userDefaults.onLock.distinctUntilChanged()
         let biometricsObservable = self.userDefaults.onBiometricsEnabled.distinctUntilChanged()
@@ -74,7 +78,7 @@ class WelcomePresenter {
                     }
                     .distinctUntilChanged()
                     .map { latest -> Bool in
-                        if !self.biometryManager.usesFaceID && !self.biometryManager.usesTouchID {
+                        if !biometricsAvailable {
                             return true
                         }
 
@@ -93,10 +97,10 @@ class WelcomePresenter {
             Observable.combineLatest(self.userInfoStore.profileInfo.filterNil(), view.biometricSignInButtonPressed)
                     .flatMap {
                         self.biometryManager.authenticateWithMessage($0.0.email)
-                    }
-                    .catchError { _ in
-                        // we don't care about errors with local authentication because users can fall back to FxA
-                        return Observable.empty()
+                                .catchError { _ in
+                                    // ignore errors from local authentication because users can fall back to FxA
+                                    return Observable.never().asSingle()
+                                }
                     }
                     .subscribe(onNext: { _ in
                         self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
