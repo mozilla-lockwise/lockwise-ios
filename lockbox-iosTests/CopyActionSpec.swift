@@ -19,16 +19,14 @@ class CopyActionSpec: QuickSpec {
     }
 
     class FakePasteboard: UIPasteboard {
-        var newString: String?
+        var passedItems: [[String: Any]]?
+        var options: [UIPasteboardOption: Any]?
 
-        override var string: String? {
-            get {
-                return super.string
-            }
-            set {
-                self.newString = newValue
-            }
+        override func setItems(_ items: [[String: Any]], options: [UIPasteboardOption: Any]) {
+            self.passedItems = items
+            self.options = options
         }
+
     }
 
     private var dispatcher: FakeDispatcher!
@@ -56,8 +54,11 @@ class CopyActionSpec: QuickSpec {
                     self.subject.invoke(action)
                 }
 
-                it("copies the text to the pasteboard") {
-                    expect(self.pasteboard.newString).to(equal(text))
+                it("add the item to the pasteboard with item and timeout option") {
+                    let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
+
+                    expect(self.pasteboard.passedItems![0][UIPasteboardTypeAutomatic] as? String).to(equal(text))
+                    expect(self.pasteboard.options![UIPasteboardOption.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
                 }
 
                 it("dispatches the copied action") {
