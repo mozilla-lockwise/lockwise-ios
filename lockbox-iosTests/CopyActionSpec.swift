@@ -26,7 +26,6 @@ class CopyActionSpec: QuickSpec {
             self.passedItems = items
             self.options = options
         }
-
     }
 
     private var dispatcher: FakeDispatcher!
