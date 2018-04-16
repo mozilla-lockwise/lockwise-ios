@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import MobileCoreServices
 
 struct CopyAction: Action {
     let text: String
@@ -43,7 +42,7 @@ class CopyActionHandler: ActionHandler {
     func invoke(_ action: CopyAction) {
         let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
 
-        self.pasteboard.setItems([[kUTTypeUTF8PlainText as String: action.text]],
+        self.pasteboard.setItems([[UIPasteboardTypeAutomatic: action.text]],
                                  options: [UIPasteboardOption.expirationDate: expireDate])
         self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: action.fieldName))
     }
