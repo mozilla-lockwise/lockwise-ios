@@ -6,7 +6,9 @@ repo_url: https://github.com/mozilla-lockbox/lockbox-ios
 
 pages:
 - 'Introduction': 'index.md'
-- 'Installing': 'install.md'
-- 'Dependencies': 'updating_libraries.md'
 - 'Contributing': 'contributing.md'
-- 'Code of Conduct': 'code_of_conduct.md'
+- 'Telemetry and Metrics': 'metrics.md'
+- 'Developer Guides':
+  - 'Build and Install': 'install.md'
+  - 'Architecture': 'architecture.md'
+  - 'Dependencies': 'updating_libraries.md'
