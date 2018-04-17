@@ -12,7 +12,8 @@ extension UIImage {
             return color.cgColor
         })
         gradientLayer.frame = frame
-        gradientLayer.locations = [0.0, 0.85]
+        gradientLayer.transform = CATransform3DMakeRotation(CGFloat.pi / 2, 0, 0, 1)
+        gradientLayer.locations = [0.15, 0]
         gradientLayer.startPoint = gradientStartPoint(frame: frame)
         gradientLayer.endPoint = gradientEndPoint(frame: frame)
 
