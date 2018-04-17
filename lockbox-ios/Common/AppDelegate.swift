@@ -35,11 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         if #available(iOS 11.0, *) {
             UINavigationBar.appearance().barTintColor = UIColor(patternImage: navBarImage!)
+            UINavigationBar.appearance().isTranslucent = true
             UINavigationBar.appearance().prefersLargeTitles = true
             UINavigationBar.appearance().largeTitleTextAttributes = [
                 NSAttributedStringKey.foregroundColor: UIColor.white
             ]
-            UINavigationBar.appearance().isTranslucent = true
         } else {
             UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
             UINavigationBar.appearance().isTranslucent = false
