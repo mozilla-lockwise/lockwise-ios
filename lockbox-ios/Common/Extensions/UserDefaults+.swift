@@ -25,4 +25,9 @@ extension UserDefaults {
         return self.on(setting: .autoLockTime, type: String.self)
                 .map { AutoLockSetting(rawValue: $0) ?? Constant.setting.defaultAutoLockTimeout }
     }
+
+    var onPreferredBrowser: Observable<PreferredBrowserSetting> {
+        return self.on(setting: .preferredBrowser, type: String.self)
+            .map { PreferredBrowserSetting(rawValue: $0) ?? Constant.setting.defaultPreferredBrowser }
+    }
 }

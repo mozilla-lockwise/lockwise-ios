@@ -89,12 +89,21 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeExternalLinkActionHandler: ExternalLinkActionHandler {
+        var invokedAction: ExternalLinkAction?
+
+        override func invoke(_ action: ExternalLinkAction) {
+            self.invokedAction = action
+        }
+    }
+
     private var view: FakeItemDetailView!
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var copyActionHandler: FakeCopyActionHandler!
+    private var externalLinkHandler: FakeExternalLinkActionHandler!
     private var itemDetailActionHandler: FakeItemDetailActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -110,6 +119,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.copyActionHandler = FakeCopyActionHandler()
                 self.itemDetailActionHandler = FakeItemDetailActionHandler()
+                self.externalLinkHandler = FakeExternalLinkActionHandler()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
@@ -118,7 +128,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                         copyDisplayStore: self.copyDisplayStore,
                         routeActionHandler: self.routeActionHandler,
                         copyActionHandler: self.copyActionHandler,
-                        itemDetailActionHandler: self.itemDetailActionHandler
+                        itemDetailActionHandler: self.itemDetailActionHandler,
+                        externalLinkActionHandler: self.externalLinkHandler
                 )
             }
 
@@ -272,9 +283,42 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("all other cells") {
+                describe("when the title of the tapped cell is the web address constant") {
                     beforeEach {
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
+
+                        cellTappedObservable
+                            .bind(to: self.subject.onCellTapped)
+                            .disposed(by: self.disposeBag)
+
+                        self.scheduler.start()
+                    }
+
+                    it("requests the current item from the datastore") {
+                        expect(self.dataStore.itemIDArgument).notTo(beNil())
+                    }
+
+                    describe("getting the item") {
+                        let webAddress = "https://www.mozilla.org"
+
+                        beforeEach {
+                            let item = Item.Builder()
+                                    .origins([webAddress])
+                                    .build()
+
+                            self.dataStore.onItemStub.onNext(item)
+                        }
+
+                        it("dispatches the externalLink action") {
+                            expect(self.externalLinkHandler.invokedAction).notTo(beNil())
+                            expect(self.externalLinkHandler.invokedAction).to(equal(ExternalLinkAction(url: webAddress)))
+                        }
+                    }
+                }
+
+                describe("all other cells") {
+                    beforeEach {
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.notes)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)
