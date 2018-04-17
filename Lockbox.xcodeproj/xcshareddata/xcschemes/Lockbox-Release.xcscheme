@@ -5,6 +5,15 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
+      <PreActions>
+         <ExecutionAction
+            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
+            <ActionContent
+               title = "Run Script"
+               scriptText = "APP_PATH=&quot;${TARGET_BUILD_DIR}/${WRAPPER_NAME}&quot;&#10;STRIPARCHS=&quot;x86_64 i386&quot;&#10;for t in $STRIPARCHS&#10;do&#10;&#10;if find &quot;$APP_PATH&quot; -name &apos;*.a&apos; -exec lipo -info {} \; | grep $t ; then&#10;find &quot;$APP_PATH&quot; -name &apos;*.a&apos; -exec lipo -remove $t {} -output {}2 \; -exec rm {} \; -exec mv {}2 {} \; ;&#10;fi&#10;&#10;done&#10;&#10;exit 0">
+            </ActionContent>
+         </ExecutionAction>
+      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -43,8 +52,8 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Release"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
