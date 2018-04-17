@@ -64,9 +64,6 @@ class SettingListViewSpec: QuickSpec {
                     SettingSectionModel(model: 0, items: [
                         SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
                         SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
-                    ]),
-                    SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
                     ])
                 ]
 
@@ -102,9 +99,6 @@ class SettingListViewSpec: QuickSpec {
                     SettingSectionModel(model: 0, items: [
                         SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
                         SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
-                    ]),
-                    SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
                     ])
                 ]
 
