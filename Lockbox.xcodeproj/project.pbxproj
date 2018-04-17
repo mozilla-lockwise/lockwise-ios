@@ -149,22 +149,30 @@
 		7DF469C41F9F8F8000375C74 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
+		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
+		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
 		D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingListView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */; };
 		D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */; };
 		D831FEE7205F3D5100EAE19A /* SettingListViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */; };
-		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
-		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
-		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
 		D83C9FBF1FAD3D6100D08AAE /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		D83C9FC01FAD3D6100D08AAE /* Telemetry.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CBE2B2085488D008245A7 /* SettingCell.swift */; };
+		D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86A307520829B7F00589CA8 /* UIApplication+.swift */; };
 		D878360F207ABDF100C19BC7 /* SettingWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* SettingWebView.swift */; };
 		D8783611207BE40A00C19BC7 /* SettingWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */; };
+		D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783612207C080300C19BC7 /* ExternalLinkAction.swift */; };
+		D8783615207D303E00C19BC7 /* ExternalLinkActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */; };
+		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
+		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
 		D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */; };
 		D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */; };
 		D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */; };
 		D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */; };
+		D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */; };
+		D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */; };
 		D8FD41491FABD7BB0080D183 /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */; };
 /* End PBXBuildFile section */
 
@@ -370,21 +378,29 @@
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
+		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
+		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenter.swift; sourceTree = "<group>"; };
 		D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenterSpec.swift; sourceTree = "<group>"; };
 		D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListViewSpec.swift; sourceTree = "<group>"; };
-		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
-		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
+		D83CBE2B2085488D008245A7 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		D86A307520829B7F00589CA8 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		D878360E207ABDF100C19BC7 /* SettingWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebView.swift; sourceTree = "<group>"; };
 		D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebViewSpec.swift; sourceTree = "<group>"; };
+		D8783612207C080300C19BC7 /* ExternalLinkAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkAction.swift; sourceTree = "<group>"; };
+		D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkActionSpec.swift; sourceTree = "<group>"; };
+		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
+		D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingViewSpec.swift; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
 		D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenter.swift; sourceTree = "<group>"; };
 		D8D0292F20686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsPresenterSpec.swift; sourceTree = "<group>"; };
 		D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsViewSpec.swift; sourceTree = "<group>"; };
+		D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingView.swift; sourceTree = "<group>"; };
+		D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenter.swift; sourceTree = "<group>"; };
 		D8FD41481FABD7BB0080D183 /* TelemetryIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -444,6 +460,7 @@
 				7AA5410097B2C840B28B007E /* AccountSettingPresenter.swift */,
 				D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */,
 				D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */,
+				D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -502,6 +519,7 @@
 				7AA546FD22761BBAAD41A800 /* ItemListCell.swift */,
 				7AA547106248ADBADAF76239 /* ItemDetailCell.swift */,
 				7AA54B0FC602D0A79D87D3BD /* FilterCell.swift */,
+				D83CBE2B2085488D008245A7 /* SettingCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -518,6 +536,7 @@
 				7AA54575C8FE51664E45ACD8 /* CopyAction.swift */,
 				7AA54E02364E77393B85C6FE /* ItemListDisplayAction.swift */,
 				7AA549ACA818E06061329FE7 /* SettingAction.swift */,
+				D8783612207C080300C19BC7 /* ExternalLinkAction.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -565,6 +584,7 @@
 				7AA541788930690293EECA43 /* LAContext+.swift */,
 				7AA54BF70B374C370B51ECB9 /* UIView+.swift */,
 				7AA54D3C8D454F79BD580AAF /* UserDefaults+.swift */,
+				D86A307520829B7F00589CA8 /* UIApplication+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -593,6 +613,7 @@
 				7D6FB87A204F00E2005E23AA /* StatusAlert.swift */,
 				7AA546990E6805FBC0261737 /* AccountSettingView.swift */,
 				D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */,
+				D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */,
 				D878360E207ABDF100C19BC7 /* SettingWebView.swift */,
 			);
 			path = View;
@@ -676,6 +697,9 @@
 				7AA546618500E909B1E98632 /* UserDefaults+Spec.swift */,
 				7AA54E8C5A0848F0669FBB10 /* SettingNavigationControllerSpec.swift */,
 				D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */,
+				D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */,
+				D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */,
+				D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -910,6 +934,7 @@
 				7AA541388E228B6281F2A2E8 /* UserInfoStoreSpec.swift in Sources */,
 				7AA54B2587BDE8D88215802C /* RootPresenterSpec.swift in Sources */,
 				7AA546E44E75EC392E1AF728 /* RootViewSpec.swift in Sources */,
+				D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */,
 				D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */,
 				7AA54896CA92B9048C531179 /* LoginNavigationControllerSpec.swift in Sources */,
 				7AA545ADA952B5C4ECF6D313 /* ItemDetailPresenterSpec.swift in Sources */,
@@ -918,6 +943,7 @@
 				7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */,
 				7AA54E698CA72C6C83804EAC /* CopyActionSpec.swift in Sources */,
 				7AA54EEAB64EF8D9A7F48739 /* CopyConfirmationDisplayStoreSpec.swift in Sources */,
+				D8783615207D303E00C19BC7 /* ExternalLinkActionSpec.swift in Sources */,
 				7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */,
 				7AA5469948A8AE091E024CC7 /* ItemListDisplayStoreSpec.swift in Sources */,
 				7AA545D1DBB719E27B782966 /* ItemListDisplayActionSpec.swift in Sources */,
@@ -925,6 +951,7 @@
 				7AA5409BBD9A60ACCD9C4149 /* LAContext+Spec.swift in Sources */,
 				7AA54E2C7C6639BCA7C37A1F /* AccountSettingPresenterSpec.swift in Sources */,
 				7AA541ED07A75F27A211819B /* AccountSettingViewSpec.swift in Sources */,
+				D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */,
 				7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */,
 				7AA54AA7964A1C95FDB7AA6E /* UserDefaults+Spec.swift in Sources */,
 				7AA540CB2BA73DB82EDDAED1 /* SettingNavigationControllerSpec.swift in Sources */,
@@ -963,11 +990,15 @@
 				7AA54E83D68AA39FB3A895AF /* RootPresenter.swift in Sources */,
 				7AA54B936D967416C7AD4F3C /* Observable+.swift in Sources */,
 				7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */,
+				D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */,
 				7AA548BBE384D40397D26E9B /* RootView.swift in Sources */,
 				7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */,
+				D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */,
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
 				7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */,
+				D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */,
+				D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */,
 				7AA546A2A19976883EB9CFE4 /* DataStore.swift in Sources */,
 				7AA5449807A6E898C9BEAE23 /* FxAAction.swift in Sources */,
 				7AA54DDC2527A59C773FAC3D /* Constants.swift in Sources */,
@@ -994,6 +1025,7 @@
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
 				7AA54BE3C277CF8AC0C4306A /* Date+.swift in Sources */,
+				D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */,
 				7AA5462CD711A33ACB5E48A2 /* UIView+.swift in Sources */,
 				7AA54B00F88A2EF6FDFA2892 /* SettingNavigationController.swift in Sources */,
 				7AA54A178B60FDF318C44B4F /* LAContext+.swift in Sources */,

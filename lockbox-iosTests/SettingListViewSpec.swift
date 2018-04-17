@@ -122,6 +122,18 @@ class SettingListViewSpec: QuickSpec {
                         expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.account))
                     }
                 }
+
+                describe("SettingCell") {
+                    it("highlights correctly") {
+                        let cell = self.subject.tableView.cellForRow(at: [0, 0])
+
+                        cell?.setHighlighted(true, animated: false)
+                        expect(cell?.backgroundColor).to(equal(Constant.color.tableViewCellHighlighted))
+
+                        cell?.setHighlighted(false, animated: false)
+                        expect(cell?.backgroundColor).to(equal(UIColor.white))
+                    }
+                }
             }
 
             describe("onSignOut") {

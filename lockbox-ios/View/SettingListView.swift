@@ -58,8 +58,9 @@ extension SettingListView {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
 
-                let cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
+                let cell = SettingCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
                 cell.textLabel?.text = cellConfiguration.text
+                cell.selectionStyle = UITableViewCellSelectionStyle.none
 
                 if cellConfiguration.routeAction != nil {
                     cell.accessoryType = .disclosureIndicator
@@ -70,7 +71,6 @@ extension SettingListView {
                     switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
-                    cell.selectionStyle = UITableViewCellSelectionStyle.none
                 }
                 return cell
         }, titleForHeaderInSection: { _, section in
@@ -126,6 +126,7 @@ extension SettingListView {
 class SettingCellConfiguration {
     var text: String
     var routeAction: SettingRouteAction?
+    var enabled: Bool = true
     var detailText: String?
 
     init(text: String, routeAction: SettingRouteAction?) {

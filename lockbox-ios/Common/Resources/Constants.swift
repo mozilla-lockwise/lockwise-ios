@@ -62,6 +62,7 @@ struct Constant {
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsTouchId = NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings")
         static let settingsFaceId = NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings")
+        static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")
         static let autoLockOnAppExit = NSLocalizedString("settings.autoLock.onAppExit", value: "On app exit", comment: "On app exit auto lock setting")
         static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
         static let autoLockFiveMinutes = NSLocalizedString("settings.autoLock.fiveMinutes", value: "5 minutes", comment: "5 minutes auto lock setting")
@@ -71,6 +72,10 @@ struct Constant {
         static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
         static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
         static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your Lockbox.", comment: "Header displayed above auto lock settings")
+        static let settingsBrowserChrome = NSLocalizedString("settings.browser.chrome", value: "Google Chrome", comment: "Chrome Browser")
+        static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
+        static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
+        static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
     }
 
     struct number {
@@ -85,6 +90,7 @@ struct Constant {
     struct setting {
         static let defaultBiometricLockEnabled = false
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
+        static let defaultPreferredBrowser = PreferredBrowserSetting.Safari
         static let defaultLockedState = false
     }
 }
