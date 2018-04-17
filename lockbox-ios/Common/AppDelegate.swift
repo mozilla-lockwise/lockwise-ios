@@ -30,7 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         let navBarImage = UIImage.createGradientImage(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
-                colors: [Constant.color.lockBoxBlue, Constant.color.lockBoxTeal]
+                colors: [Constant.color.lockBoxBlue, Constant.color.lockBoxTeal],
+                locations: [0.15, 0]
         )
         if #available(iOS 11.0, *) {
             UINavigationBar.appearance().barTintColor = UIColor(patternImage: navBarImage!)
