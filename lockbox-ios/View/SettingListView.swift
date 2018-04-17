@@ -37,6 +37,7 @@ override func viewWillAppear(_ animated: Bool) {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.presenter = SettingListPresenter(view: self)
+        view.backgroundColor = Constant.color.viewBackground
     }
 }
 
