@@ -80,6 +80,7 @@ extension ItemListView: ItemListViewProtocol {
     func displayEmptyStateMessaging() {
         if let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView {
             self.tableView.backgroundView?.addSubview(emptyStateView)
+            self.tableView.isScrollEnabled = false
         }
 
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
@@ -90,6 +91,7 @@ extension ItemListView: ItemListViewProtocol {
 
     func hideEmptyStateMessaging() {
         self.tableView.backgroundView?.subviews.forEach({ $0.removeFromSuperview() })
+        self.tableView.isScrollEnabled = true
 
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             button.isHidden = false
