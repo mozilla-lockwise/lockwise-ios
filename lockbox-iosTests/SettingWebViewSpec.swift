@@ -20,6 +20,7 @@ class SettingWebViewSpec: QuickSpec {
                 self.subject = SettingWebView(url: self.url, title: self.title)
                 self.subject.viewDidLoad()
             }
+
             it("sets title") {
                 expect(self.subject.navigationItem.title).to(equal(self.title))
             }
@@ -27,6 +28,10 @@ class SettingWebViewSpec: QuickSpec {
             it("loads url") {
                 let webView = self.subject.view as! WKWebView
                 expect(webView.url).to(equal(URL(string: self.url)))
+            }
+
+            it("sets status bar style") {
+                expect(self.subject.preferredStatusBarStyle).to(equal(UIStatusBarStyle.lightContent))
             }
         }
     }
