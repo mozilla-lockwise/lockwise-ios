@@ -126,6 +126,7 @@ extension SettingListView {
 class SettingCellConfiguration {
     var text: String
     var routeAction: SettingRouteAction?
+    var enabled: Bool = true
     var detailText: String?
 
     init(text: String, routeAction: SettingRouteAction?) {

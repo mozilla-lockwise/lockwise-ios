@@ -822,6 +822,50 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
+
+                        describe(".preferredBrowser") {
+                            describe("when the top view is the preferred browser view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("does not start the setting stack") {
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                }
+                            }
+
+                            describe("when the top view is not the preferred browser view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("does not start the setting stack") {
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
+                                }
+
+                                it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
+                                }
+                            }
+                        }
                     }
 
                     describe("if the setting stack is not already displayed") {
@@ -913,6 +957,50 @@ class RootPresenterSpec: QuickSpec {
                                 it("pushes a new setting view argument") {
                                     expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
+                                }
+                            }
+                        }
+
+                        describe(".preferredBrowser") {
+                            describe("when the top view is the preferred browser view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("starts the setting stack") {
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                }
+
+                                it("does not push a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                }
+                            }
+
+                            describe("when the top view is not the preferred browser view") {
+                                beforeEach {
+                                    self.view.modalViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
+                                }
+
+                                it("dismisses no modals") {
+                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                }
+
+                                it("starts the setting stack") {
+                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                }
+
+                                it("pushes a new setting view argument") {
+                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
                                 }
                             }
                         }

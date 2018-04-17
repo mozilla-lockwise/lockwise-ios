@@ -75,6 +75,21 @@ class UserDefaultSpec: QuickSpec {
                 expect(autoLockSettingObserver.events.last!.value.element).to(equal(Constant.setting.defaultAutoLockTimeout))
             }
         }
-    }
 
+        describe("onPreferredBrowser") {
+            var preferredBrowserSettingObserver: TestableObserver<PreferredBrowserSetting>!
+
+            beforeEach {
+                preferredBrowserSettingObserver = self.scheduler.createObserver(PreferredBrowserSetting.self)
+                UserDefaults.standard.onPreferredBrowser
+                        .subscribe(preferredBrowserSettingObserver)
+                        .disposed(by: self.disposeBag)
+            }
+
+            it("pushes new values for theSettingKey to observers") {
+                UserDefaults.standard.set(PreferredBrowserSetting.Firefox.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(PreferredBrowserSetting.Firefox))
+            }
+        }
+    }
 }

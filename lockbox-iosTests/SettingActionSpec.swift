@@ -11,16 +11,14 @@ import Nimble
 class SettingActionSpec: QuickSpec {
     class FakeUserDefaults: UserDefaults {
         var bools: [String: Bool] = [:]
-        var stringName: String?
-        var setString: String?
+        var strings: [String: String] = [:]
 
         override func set(_ value: Bool, forKey defaultName: String) {
             self.bools[defaultName] = value
         }
 
         override func set(_ value: Any?, forKey defaultName: String) {
-            self.stringName = defaultName
-            self.setString = value as? String
+            self.strings[defaultName] = value as? String
         }
     }
 
@@ -70,8 +68,7 @@ class SettingActionSpec: QuickSpec {
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.setString).to(equal(autoLockSetting.rawValue))
-                        expect(self.userDefaults.stringName).to(equal(SettingKey.autoLockTime.rawValue))
+                        expect(self.userDefaults.strings[SettingKey.autoLockTime.rawValue]).to(equal(autoLockSetting.rawValue))
                     }
 
                     it("tells the dispatcher") {
@@ -97,16 +94,33 @@ class SettingActionSpec: QuickSpec {
                     }
                 }
 
+                describe(".preferredBrowser") {
+                    let browserSetting = PreferredBrowserSetting.Firefox
+
+                    beforeEach {
+                        self.subject.invoke(.preferredBrowser(browser: .Firefox))
+                    }
+
+                    it("sets the appropriate value for key in userdefaults") {
+                        expect(self.userDefaults.strings[SettingKey.preferredBrowser.rawValue]).to(equal(browserSetting.rawValue))
+                    }
+
+                    it("tells the dispatcher") {
+                        let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
+                        expect(argument).to(equal(SettingAction.preferredBrowser(browser: browserSetting)))
+                    }
+                }
+
                 describe(".reset") {
                     beforeEach {
                         self.subject.invoke(.reset)
                     }
 
                     it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.setString).to(equal(Constant.setting.defaultAutoLockTimeout.rawValue))
-                        expect(self.userDefaults.stringName).to(equal(SettingKey.autoLockTime.rawValue))
+                        expect(self.userDefaults.strings[SettingKey.autoLockTime.rawValue]).to(equal(Constant.setting.defaultAutoLockTimeout.rawValue))
                         expect(self.userDefaults.bools[SettingKey.biometricLogin.rawValue]).to(equal(Constant.setting.defaultBiometricLockEnabled))
                         expect(self.userDefaults.bools[SettingKey.locked.rawValue]).to(equal(Constant.setting.defaultLockedState))
+                        expect(self.userDefaults.strings[SettingKey.preferredBrowser.rawValue]).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
                     }
 
                     it("tells the dispatcher") {
