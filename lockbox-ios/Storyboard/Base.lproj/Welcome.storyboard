@@ -59,7 +59,7 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="315" id="v9d-HV-Tyg"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Get Started">
+                                <state key="normal" title="Sign in with your Firefox Account">
                                     <color key="titleColor" red="0.059756595641374588" green="0.3597700297832489" blue="0.8745732307434082" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                             </button>
