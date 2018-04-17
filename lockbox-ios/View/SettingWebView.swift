@@ -21,6 +21,10 @@ class SettingWebView: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.styleNavigationBar()
