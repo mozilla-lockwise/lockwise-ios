@@ -402,7 +402,7 @@ extension DataStoreActionHandler {
         let items = [
             Item.Builder()
                     .title("Amazon")
-                    .origins(["amazon.com"])
+                    .origins(["https://amazon.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -411,7 +411,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Facebook")
-                    .origins(["www.facebook.com"])
+                    .origins(["https://www.facebook.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tanya.jacobson")
@@ -421,7 +421,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Reddit")
-                    .origins(["reddit.com"])
+                    .origins(["https://reddit.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -430,7 +430,6 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Twitter")
-                    .origins(["www.twitter.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -439,6 +438,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Wordpress")
+                    .origins(["http://www.twitter.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -447,7 +447,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                 .title("Blogspot")
-                .origins(["accounts.google.com"])
+                .origins(["https://accounts.google.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tjacobson@example.com")
@@ -457,7 +457,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Chase")
-                .origins(["www.chase.com"])
+                .origins(["https://www.chase.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("jacobsonfamily444")
@@ -466,7 +466,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Linkedin")
-                .origins(["www.linkedin.com"])
+                .origins(["https://www.linkedin.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tanyamjackson@example.com")
@@ -475,7 +475,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Bank of America")
-                .origins(["www.bankofamerica.com"])
+                .origins(["http://www.bankofamerica.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tjacobson735")
@@ -493,7 +493,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Comcast")
-                .origins(["www.comcast.net"])
+                .origins(["http://www.comcast.net"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tjacobsonlongfamilyusername@example.com")
