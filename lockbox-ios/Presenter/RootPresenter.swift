@@ -27,14 +27,15 @@ struct KeyInit {
     let initialized: Bool
 }
 
-struct InfoOpen {
+struct InfoOpenLock {
     let profileInfo: ProfileInfo?
     let opened: Bool
+    let visualLocked: Bool
 }
 
-struct KeyLock {
+struct KeyDataStoreLock {
     let scopedKey: String?
-    let locked: Bool
+    let dataStoreLocked: Bool
 }
 
 class RootPresenter {
@@ -44,6 +45,7 @@ class RootPresenter {
     fileprivate let routeStore: RouteStore
     fileprivate let userInfoStore: UserInfoStore
     fileprivate let dataStore: DataStore
+    fileprivate let userDefaults: UserDefaults
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
 
@@ -51,6 +53,7 @@ class RootPresenter {
          routeStore: RouteStore = RouteStore.shared,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          dataStore: DataStore = DataStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared
     ) {
@@ -58,6 +61,7 @@ class RootPresenter {
         self.routeStore = routeStore
         self.userInfoStore = userInfoStore
         self.dataStore = dataStore
+        self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
 
@@ -65,12 +69,12 @@ class RootPresenter {
         self.dataStoreActionHandler.updateInitialized()
         self.dataStoreActionHandler.updateLocked()
 
-        Observable.combineLatest(self.userInfoStore.profileInfo, self.dataStore.onOpened)
-                .map { (latest: (ProfileInfo?, Bool)) -> InfoOpen in
-                    return InfoOpen(profileInfo: latest.0, opened: latest.1)
+        Observable.combineLatest(self.userInfoStore.profileInfo, self.dataStore.onOpened, self.userDefaults.onLock)
+                .map { (latest: (ProfileInfo?, Bool, Bool)) -> InfoOpenLock in
+                    return InfoOpenLock(profileInfo: latest.0, opened: latest.1, visualLocked: latest.2)
                 }
-                .subscribe(onNext: { (latest: InfoOpen) in
-                    guard let uid = latest.profileInfo?.uid else {
+                .subscribe(onNext: { (latest: InfoOpenLock) in
+                    guard let uid = latest.profileInfo?.uid, !latest.visualLocked else {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                         return
                     }
@@ -99,8 +103,6 @@ class RootPresenter {
                     } else {
                         self.dataStoreActionHandler.populateTestData()
                     }
-
-                    self.routeActionHandler.invoke(MainRouteAction.list)
                 })
                 .disposed(by: self.disposeBag)
 
@@ -221,15 +223,15 @@ extension RootPresenter {
                 .filter { (latest: (Bool, String?, Bool)) -> Bool in
                     return latest.0
                 }
-                .map { (latest: (Bool, String?, Bool)) -> KeyLock in
-                    return KeyLock(scopedKey: latest.1, locked: latest.2)
+                .map { (latest: (Bool, String?, Bool)) -> KeyDataStoreLock in
+                    return KeyDataStoreLock(scopedKey: latest.1, dataStoreLocked: latest.2)
                 }
-                .subscribe(onNext: { (latest: KeyLock) in
+                .subscribe(onNext: { (latest: KeyDataStoreLock) in
                     guard let scopedKey = latest.scopedKey else {
                         return
                     }
 
-                    if latest.locked {
+                    if latest.dataStoreLocked {
                         self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
                     } else {
                         self.dataStoreActionHandler.list()
