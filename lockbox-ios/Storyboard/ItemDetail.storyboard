@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="osx-2O-xPR">
-                                    <rect key="frame" x="0.0" y="137.5" width="375" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="119.5" width="375" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
@@ -96,7 +96,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="hide-eye" width="20" height="20"/>
-        <image name="reveal-eye" width="20" height="13"/>
+        <image name="hide-eye" width="18" height="16"/>
+        <image name="reveal-eye" width="18" height="14"/>
     </resources>
 </document>
