@@ -168,7 +168,7 @@ extension SettingCellConfiguration: Equatable {
 
 class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
-    
+
     var onChanged: AnyObserver<Bool>?
     init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false) {
         super.init(text: text, routeAction: routeAction)

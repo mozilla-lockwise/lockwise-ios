@@ -62,9 +62,12 @@ class SettingListPresenter {
     }
 
     func onViewReady() {
-        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime) // swiftlint:disable:this line_length
-                .map { (latest: (Bool, AutoLockSetting)) -> [SettingSectionModel] in
-                    return self.settingsWithBiometricLoginEnabled(latest.0, autoLock: latest.1, usageDataEnabled: true)
+        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
+                .map { (latest: (Bool, AutoLockSetting, Bool)) -> [SettingSectionModel] in
+                    return self.settingsWithBiometricLoginEnabled(
+                        latest.0,
+                        autoLock: latest.1,
+                        usageDataEnabled: latest.2)
                 }
                 .asDriver(onErrorJustReturn: [])
 

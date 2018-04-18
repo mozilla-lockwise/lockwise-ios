@@ -4,6 +4,7 @@
 
 import UIKit
 import Telemetry
+import RxSwift
 
 let PostFirstRunKey = "firstrun"
 
@@ -11,6 +12,7 @@ let PostFirstRunKey = "firstrun"
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    private var disposeBag = DisposeBag()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -72,15 +74,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.appVersion = AppInfo.shortVersion
 
+        UserDefaults.standard.onRecordUsageData.subscribe(onNext: { (enabled) in
 #if DEBUG
-        telemetryConfig.isCollectionEnabled = false
-        telemetryConfig.isUploadEnabled = false
-        telemetryConfig.updateChannel = "debug"
+            telemetryConfig.isCollectionEnabled = false
+            telemetryConfig.isUploadEnabled = false
+            telemetryConfig.updateChannel = "debug"
 #else
-        telemetryConfig.isCollectionEnabled = true
-        telemetryConfig.isUploadEnabled = true
-        telemetryConfig.updateChannel = "release"
+            telemetryConfig.isCollectionEnabled = enabled
+            telemetryConfig.isUploadEnabled = true
+            telemetryConfig.updateChannel = "release"
 #endif
+        }).disposed(by: self.disposeBag)
 
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
