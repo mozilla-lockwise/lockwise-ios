@@ -76,7 +76,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         let leftButton = UIButton()
         leftButton.adjustsImageWhenHighlighted = false
 
-        let leftImage = UIImage(named: "back-button")?.withRenderingMode(.alwaysTemplate)
+        let leftImage = UIImage(named: "back")?.withRenderingMode(.alwaysTemplate)
         leftButton.setImage(leftImage, for: .normal)
         leftButton.setTitle(Constant.string.back, for: .normal)
 

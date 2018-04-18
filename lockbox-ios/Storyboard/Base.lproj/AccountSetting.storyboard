@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -17,10 +18,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To manage your Firefox Account password and other settings, login to your account in your browser." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
-                                <rect key="frame" x="48" y="167" width="279" height="54"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
+                                <rect key="frame" x="51" y="167" width="273" height="56"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="To manage your Firefox Account password and other settings, login to your account in your browser.">
+                                        <attributes>
+                                            <font key="NSFont" size="15" name=".SFNSText"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="1.5" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
@@ -59,7 +66,7 @@
                             <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9B0-EH-D9l" secondAttribute="top" constant="30" id="0tC-Tq-dmb"/>
                             <constraint firstItem="dKb-ji-8VE" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="15" id="0tG-IM-h0B"/>
                             <constraint firstItem="htf-cl-VXU" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" id="6W4-Fs-nDO"/>
-                            <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="48" id="7bq-qv-41L"/>
+                            <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="51" id="7bq-qv-41L"/>
                             <constraint firstAttribute="bottom" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="90" id="OOO-8n-6MF"/>
                             <constraint firstAttribute="trailing" secondItem="htf-cl-VXU" secondAttribute="trailing" id="Rk4-d2-iOq"/>
                             <constraint firstItem="f32-KR-4Nm" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="bSG-y6-P71"/>
@@ -70,6 +77,7 @@
                             <constraint firstItem="6A6-i9-hvw" firstAttribute="top" secondItem="f32-KR-4Nm" secondAttribute="bottom" constant="30" id="wWu-hi-qyR"/>
                             <constraint firstItem="dKb-ji-8VE" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="ztw-Hb-70m"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="PPt-yW-Jkp"/>
                     </view>
                     <connections>
                         <outlet property="avatarImageView" destination="meC-vW-3bR" id="aRQ-Ve-ZQb"/>

@@ -32,6 +32,7 @@ class SettingListView: UIViewController {
 override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNavbar()
+        self.styleTableViewBackground()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -61,7 +62,9 @@ extension SettingListView {
                 let cell = UITableViewCell(
                     style: cellConfiguration.cellStyle,
                     reuseIdentifier: cellConfiguration.reuseIndicator)
+
                 cell.textLabel?.text = cellConfiguration.text
+                cell.selectionStyle = UITableViewCellSelectionStyle.none
 
                 if cellConfiguration.subtitle != nil {
                     cell.detailTextLabel?.attributedText = cellConfiguration.subtitle
@@ -82,7 +85,6 @@ extension SettingListView {
                     }
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
-                    cell.selectionStyle = UITableViewCellSelectionStyle.none
                 }
                 return cell
         }, titleForHeaderInSection: { _, section in
@@ -126,6 +128,12 @@ extension SettingListView {
     fileprivate func setupSignOutButton() {
         self.signOutButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
         self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
+    }
+
+    fileprivate func styleTableViewBackground() {
+        let backgroundView = UIView(frame: self.view.bounds)
+        backgroundView.backgroundColor = Constant.color.viewBackground
+        self.tableView.backgroundView = backgroundView
     }
 }
 
