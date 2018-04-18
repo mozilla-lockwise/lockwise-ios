@@ -38,6 +38,7 @@ class ExternalLinkActionHandler: ActionHandler {
 
     private func openUrl(string url: String, application: OpenUrlProtocol = UIApplication.shared) {
         self.userDefaults.onPreferredBrowser
+            .take(1)
             .subscribe(onNext: { (latest: PreferredBrowserSetting) in
                 latest.openUrl(url: url, application: application)
             })
