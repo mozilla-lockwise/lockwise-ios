@@ -98,7 +98,13 @@ extension SettingListPresenter {
             text: Constant.string.settingsUsageData,
             routeAction: nil,
             isOn: usageDataEnabled)
-        usageDataSetting.subtitle = Constant.string.settingsUsageDataSubtitle
+        let subtitle = NSMutableAttributedString(
+            string: Constant.string.settingsUsageDataSubtitle,
+            attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+//        subtitle.append(NSAttributedString(
+//            string: Constant.string.learnMore,
+//            attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
+        usageDataSetting.subtitle = subtitle
         usageDataSetting.onChanged = self.onUsageDataSettingChanged
 
         return [

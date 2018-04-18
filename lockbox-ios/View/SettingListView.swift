@@ -64,7 +64,7 @@ extension SettingListView {
                 cell.textLabel?.text = cellConfiguration.text
 
                 if cellConfiguration.subtitle != nil {
-                    cell.detailTextLabel?.text = cellConfiguration.subtitle
+                    cell.detailTextLabel?.attributedText = cellConfiguration.subtitle
                     cell.detailTextLabel?.numberOfLines = 0
                 } else if cellConfiguration.detailText != nil {
                     cell.detailTextLabel?.text = cellConfiguration.detailText
@@ -134,7 +134,7 @@ class SettingCellConfiguration {
     var routeAction: SettingRouteAction?
     var enabled: Bool = true
     var detailText: String?
-    var subtitle: String?
+    var subtitle: NSAttributedString?
 
     init(text: String, routeAction: SettingRouteAction?) {
         self.text = text
