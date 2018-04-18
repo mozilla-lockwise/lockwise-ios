@@ -1030,9 +1030,9 @@ class RootPresenterSpec: QuickSpec {
     }
 
     private func advance(profileInfo: ProfileInfo?, opened: Bool, locked: Bool) {
+        UserDefaults.standard.set(locked, forKey: SettingKey.locked.rawValue)
         self.userInfoStore.profileInfoSubject.onNext(profileInfo)
         self.dataStore.openedSubject.onNext(opened)
-        UserDefaults.standard.set(locked, forKey: SettingKey.locked.rawValue)
     }
 
     private func advance(scopedKey: String?, initialized: Bool) {
