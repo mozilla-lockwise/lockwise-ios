@@ -15,13 +15,12 @@ struct Constant {
 
     struct color {
         static let cellBorderGrey = UIColor(hex: 0xC8C7CC)
+        static let viewBackground = UIColor(hex: 0xEFEFF4)
         static let lightGrey = UIColor(hex: 0xEFEFEF)
-        static let listBackground = UIColor(hex: 0xEFEFF4)
         static let lockBoxBlue = UIColor(hex: 0x0060DF)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
         static let kebabBlue = UIColor(hex: 0x003EAA)
         static let settingsHeader = UIColor(hex: 0x737373)
-        static let settingsBackground = UIColor(hex: 0xEFEFEF)
         static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
     }
 
@@ -62,6 +61,7 @@ struct Constant {
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsTouchId = NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings")
         static let settingsFaceId = NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings")
+        static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")
         static let autoLockOnAppExit = NSLocalizedString("settings.autoLock.onAppExit", value: "On app exit", comment: "On app exit auto lock setting")
         static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
         static let autoLockFiveMinutes = NSLocalizedString("settings.autoLock.fiveMinutes", value: "5 minutes", comment: "5 minutes auto lock setting")
@@ -71,6 +71,10 @@ struct Constant {
         static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
         static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
         static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your Lockbox.", comment: "Header displayed above auto lock settings")
+        static let settingsBrowserChrome = NSLocalizedString("settings.browser.chrome", value: "Google Chrome", comment: "Chrome Browser")
+        static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
+        static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
+        static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
     }
 
     struct number {
@@ -80,11 +84,13 @@ struct Constant {
         static let displayStatusAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
+        static let copyExpireTimeSecs = 60
     }
 
     struct setting {
         static let defaultBiometricLockEnabled = false
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
+        static let defaultPreferredBrowser = PreferredBrowserSetting.Safari
         static let defaultLockedState = false
     }
 }

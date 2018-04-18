@@ -200,6 +200,10 @@ class RootPresenter {
                 if !view.modalViewIs(AutoLockSettingView.self) {
                     view.pushSettingView(view: .autoLock)
                 }
+            case .preferredBrowser:
+                if !view.modalViewIs(PreferredBrowserSettingView.self) {
+                    view.pushSettingView(view: .preferredBrowser)
+                }
             case .faq:
                 view.pushSettingView(view: .faq)
             case .provideFeedback:

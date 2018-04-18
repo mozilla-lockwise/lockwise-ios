@@ -100,7 +100,10 @@ extension SettingListPresenter {
                         text: Constant.string.settingsAccount,
                         routeAction: SettingRouteAction.account),
                 biometricSetting,
-                autoLockSetting
+                autoLockSetting,
+                SettingCellConfiguration(
+                    text: Constant.string.settingsBrowser,
+                    routeAction: SettingRouteAction.preferredBrowser)
             ])
         ]
     }

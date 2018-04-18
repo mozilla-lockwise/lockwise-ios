@@ -36,6 +36,7 @@ enum SettingRouteAction: RouteAction {
     case enableInBrowser
     case account
     case autoLock
+    case preferredBrowser
 }
 
 extension MainRouteAction: Equatable {

@@ -16,9 +16,9 @@ class AutoLockSettingView: UITableViewController {
     private var dataSource: RxTableViewSectionedReloadDataSource<AutoLockSettingSectionModel>?
 
     init() {
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: UITableViewStyle.grouped)
         self.presenter = AutoLockSettingPresenter(view: self)
-        view.backgroundColor = Constant.color.settingsBackground
+        view.backgroundColor = Constant.color.viewBackground
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -48,6 +48,7 @@ class AutoLockSettingView: UITableViewController {
         cell.textLabel?.font = UIFont.systemFont(ofSize: 13.0, weight: UIFont.Weight.regular)
         cell.textLabel?.text = Constant.string.autoLockHeader
         cell.textLabel?.textAlignment = NSTextAlignment.center
+        cell.textLabel?.numberOfLines = 0
         return cell
     }
 }

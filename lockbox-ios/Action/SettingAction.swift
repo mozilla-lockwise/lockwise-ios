@@ -9,6 +9,7 @@ enum SettingAction: Action {
     case autoLockTime(timeout: AutoLockSetting)
     case visualLock(locked: Bool)
     case reset
+    case preferredBrowser(browser: PreferredBrowserSetting)
 }
 
 extension SettingAction: Equatable {
@@ -20,6 +21,8 @@ extension SettingAction: Equatable {
             return lhTimeout == rhTimeout
         case (.visualLock(let lhLocked), .visualLock(let rhLocked)):
             return lhLocked == rhLocked
+        case (.preferredBrowser(let lhBrowser), .preferredBrowser(let rhBrowser)):
+            return lhBrowser == rhBrowser
         case (.reset, .reset):
             return true
         default:
@@ -29,7 +32,7 @@ extension SettingAction: Equatable {
 }
 
 enum SettingKey: String {
-    case biometricLogin, autoLockTime, locked
+    case biometricLogin, autoLockTime, locked, preferredBrowser
 }
 
 class SettingActionHandler: ActionHandler {
@@ -51,13 +54,17 @@ class SettingActionHandler: ActionHandler {
             self.userDefaults.set(timeout.rawValue, forKey: SettingKey.autoLockTime.rawValue)
         case .visualLock(let locked):
             self.userDefaults.set(locked, forKey: SettingKey.locked.rawValue)
+        case .preferredBrowser(let browser):
+            self.userDefaults.set(browser.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
         case .reset:
             self.userDefaults.set(Constant.setting.defaultBiometricLockEnabled,
                     forKey: SettingKey.biometricLogin.rawValue)
             self.userDefaults.set(Constant.setting.defaultAutoLockTimeout.rawValue,
-                    forKey: SettingKey.autoLockTime.rawValue)
+                                  forKey: SettingKey.autoLockTime.rawValue)
             self.userDefaults.set(Constant.setting.defaultLockedState,
-                    forKey: SettingKey.locked.rawValue)
+                                  forKey: SettingKey.locked.rawValue)
+            self.userDefaults.set(Constant.setting.defaultPreferredBrowser.rawValue,
+                                  forKey: SettingKey.preferredBrowser.rawValue)
         }
 
         // purely for telemetry, no app functionality depends on this

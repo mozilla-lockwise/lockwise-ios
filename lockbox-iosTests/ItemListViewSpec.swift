@@ -150,6 +150,10 @@ class ItemListViewSpec: QuickSpec {
                 it("hides the left bar button item") {
                     expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beTrue())
                 }
+
+                it("disables scrolling") {
+                    expect(self.subject.tableView.isScrollEnabled).to(beFalse())
+                }
             }
 
             describe("hideEmptyStateMessaging") {
@@ -164,6 +168,10 @@ class ItemListViewSpec: QuickSpec {
 
                 it("shows the left bar button item") {
                     expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beFalse())
+                }
+
+                it("enables scrolling") {
+                    expect(self.subject.tableView.isScrollEnabled).to(beTrue())
                 }
             }
 
