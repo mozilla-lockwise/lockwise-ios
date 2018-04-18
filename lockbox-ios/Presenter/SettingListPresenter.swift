@@ -36,6 +36,18 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
+    lazy private(set) var onBiometricSettingChanged: AnyObserver<Bool> = {
+        return Binder(self) { target, enabled in
+            target.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: enabled))
+        }.asObserver()
+    }()
+
+    lazy private(set) var onUsageDataSettingChanged: AnyObserver<Bool> = {
+        return Binder(self) { target, enabled in
+            target.settingActionHandler.invoke(SettingAction.recordUsageData(enabled: enabled))
+        }.asObserver()
+    }()
+
     lazy var touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
     lazy var faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
 
@@ -49,15 +61,10 @@ class SettingListPresenter {
         self.settingActionHandler = settingActionHandler
     }
 
-    // todo: this should be an observer binding
-    func switchChanged(row: Int, isOn: Bool) {
-        self.settingActionHandler.invoke(.biometricLogin(enabled: isOn))
-    }
-
     func onViewReady() {
         let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime) // swiftlint:disable:this line_length
                 .map { (latest: (Bool, AutoLockSetting)) -> [SettingSectionModel] in
-                    return self.settingsWithBiometricLoginEnabled(latest.0, autoLock: latest.1)
+                    return self.settingsWithBiometricLoginEnabled(latest.0, autoLock: latest.1, usageDataEnabled: true)
                 }
                 .asDriver(onErrorJustReturn: [])
 
@@ -73,15 +80,23 @@ class SettingListPresenter {
 }
 
 extension SettingListPresenter {
-    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?) -> [SettingSectionModel] { // swiftlint:disable:this line_length
+    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?, usageDataEnabled: Bool) -> [SettingSectionModel] { // swiftlint:disable:this line_length
         let biometricSetting = LAContext.usesFaceId ? faceIdSetting : touchIdSetting
         biometricSetting.isOn = enabled
+        biometricSetting.onChanged = onBiometricSettingChanged
 
         let autoLockSetting = SettingCellConfiguration(
             text: Constant.string.settingsAutoLock,
             routeAction: SettingRouteAction.autoLock)
 
         autoLockSetting.detailText = autoLock?.toString()
+
+        let usageDataSetting = SwitchSettingCellConfiguration(
+            text: Constant.string.settingsUsageData,
+            routeAction: nil,
+            isOn: usageDataEnabled)
+        usageDataSetting.subtitle = Constant.string.settingsUsageDataSubtitle
+        usageDataSetting.onChanged = self.onUsageDataSettingChanged
 
         return [
             SettingSectionModel(model: 0, items: [
@@ -101,6 +116,7 @@ extension SettingListPresenter {
                         routeAction: SettingRouteAction.account),
                 biometricSetting,
                 autoLockSetting,
+                usageDataSetting,
                 SettingCellConfiguration(
                     text: Constant.string.settingsBrowser,
                     routeAction: SettingRouteAction.preferredBrowser)

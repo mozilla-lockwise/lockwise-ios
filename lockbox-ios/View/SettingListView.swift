@@ -58,16 +58,28 @@ extension SettingListView {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
 
-                let cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
+                let cell = UITableViewCell(
+                    style: cellConfiguration.cellStyle,
+                    reuseIdentifier: cellConfiguration.reuseIndicator)
                 cell.textLabel?.text = cellConfiguration.text
+
+                if cellConfiguration.subtitle != nil {
+                    cell.detailTextLabel?.text = cellConfiguration.subtitle
+                    cell.detailTextLabel?.numberOfLines = 0
+                } else if cellConfiguration.detailText != nil {
+                    cell.detailTextLabel?.text = cellConfiguration.detailText
+                }
 
                 if cellConfiguration.routeAction != nil {
                     cell.accessoryType = .disclosureIndicator
-                    cell.detailTextLabel?.text = cellConfiguration.detailText
                 } else if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
                     let switchItem = UISwitch()
                     switchItem.onTintColor = Constant.color.lockBoxBlue
-                    switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
+                    if let onChanged = switchSetting.onChanged {
+                        switchItem.rx.value.changed.asObservable()
+                            .bind(to: onChanged)
+                            .disposed(by: self.disposeBag)
+                    }
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
                     cell.selectionStyle = UITableViewCellSelectionStyle.none
@@ -115,12 +127,6 @@ extension SettingListView {
         self.signOutButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
         self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
     }
-
-    // todo: refactor this to use an rxcocoa binding on the switch
-    @objc private func switchChanged(sender: UISwitch) {
-        let rowChanged = sender.tag
-        presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
-    }
 }
 
 class SettingCellConfiguration {
@@ -128,10 +134,23 @@ class SettingCellConfiguration {
     var routeAction: SettingRouteAction?
     var enabled: Bool = true
     var detailText: String?
+    var subtitle: String?
 
     init(text: String, routeAction: SettingRouteAction?) {
         self.text = text
         self.routeAction = routeAction
+    }
+
+    var reuseIndicator: String {
+        return "\(self.cellStyle.rawValue)-setting-cell"
+    }
+
+    var cellStyle: UITableViewCellStyle {
+        if self.subtitle != nil {
+            return UITableViewCellStyle.subtitle
+        }
+
+        return UITableViewCellStyle.value1
     }
 }
 
@@ -149,7 +168,8 @@ extension SettingCellConfiguration: Equatable {
 
 class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
-
+    
+    var onChanged: AnyObserver<Bool>?
     init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false) {
         super.init(text: text, routeAction: routeAction)
         self.isOn = isOn
