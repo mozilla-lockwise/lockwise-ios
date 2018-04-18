@@ -402,7 +402,7 @@ extension DataStoreActionHandler {
         let items = [
             Item.Builder()
                     .title("Amazon")
-                    .origins(["amazon.com"])
+                    .origins(["https://amazon.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -411,7 +411,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Facebook")
-                    .origins(["www.facebook.com"])
+                    .origins(["https://www.facebook.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tanya.jacobson")
@@ -421,7 +421,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Reddit")
-                    .origins(["reddit.com"])
+                    .origins(["https://reddit.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -430,15 +430,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                     .title("Twitter")
-                    .origins(["www.twitter.com"])
-                    .entry(ItemEntry.Builder()
-                            .kind("login")
-                            .username("tjacobson@example.com")
-                            .password("iLUVdawgz")
-                            .build())
-                    .build(),
-            Item.Builder()
-                    .title("Wordpress")
+                    .origins(["http://www.twitter.com"])
                     .entry(ItemEntry.Builder()
                             .kind("login")
                             .username("tjacobson@example.com")
@@ -447,7 +439,7 @@ extension DataStoreActionHandler {
                     .build(),
             Item.Builder()
                 .title("Blogspot")
-                .origins(["accounts.google.com"])
+                .origins(["https://accounts.google.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tjacobson@example.com")
@@ -457,7 +449,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Chase")
-                .origins(["www.chase.com"])
+                .origins(["https://www.chase.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("jacobsonfamily444")
@@ -466,7 +458,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Linkedin")
-                .origins(["www.linkedin.com"])
+                .origins(["https://www.linkedin.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tanyamjackson@example.com")
@@ -475,7 +467,7 @@ extension DataStoreActionHandler {
                 .build(),
             Item.Builder()
                 .title("Bank of America")
-                .origins(["www.bankofamerica.com"])
+                .origins(["http://www.bankofamerica.com"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tjacobson735")
@@ -483,83 +475,11 @@ extension DataStoreActionHandler {
                     .build())
                 .build(),
             Item.Builder()
-                .title("Best Buy")
-                .origins(["www.bestbuy.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("tjacobson@example.com")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
                 .title("Comcast")
-                .origins(["www.comcast.net"])
+                .origins(["http://www.comcast.net"])
                 .entry(ItemEntry.Builder()
                     .kind("login")
                     .username("tjacobsonlongfamilyusername@example.com")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Pinterest")
-                .origins(["www.pinterest.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("theladytj")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Test 1")
-                .origins(["www.example.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("test1")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Test 2")
-                .origins(["www.example.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("test2")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Test 3")
-                .origins(["www.example.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("test3")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Test 4")
-                .origins(["www.example.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("test4")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Test 5")
-                .origins(["www.example.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("test5")
-                    .password("iLUVdawgz")
-                    .build())
-                .build(),
-            Item.Builder()
-                .title("Test 6")
-                .origins(["www.example.com"])
-                .entry(ItemEntry.Builder()
-                    .kind("login")
-                    .username("test6")
                     .password("iLUVdawgz")
                     .build())
                 .build(),
@@ -586,7 +506,7 @@ extension DataStoreActionHandler {
                     .disposed(by: self.disposeBag)
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 30, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 120, execute: {
             self.list()
         })
     }
