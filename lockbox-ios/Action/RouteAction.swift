@@ -22,6 +22,7 @@ protocol RouteAction: Action { }
 enum LoginRouteAction: RouteAction {
     case welcome
     case fxa
+    case onboardingBiometrics
 }
 
 enum MainRouteAction: RouteAction {

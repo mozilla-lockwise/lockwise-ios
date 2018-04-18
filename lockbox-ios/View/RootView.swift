@@ -77,6 +77,10 @@ class RootView: UIViewController, RootViewProtocol {
             self.currentViewController?.popToRootViewController(animated: true)
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
+        case .onboardingBiometrics:
+            if let onboardingBiometricView = UIStoryboard(name: "BiometryOnboarding", bundle: nil).instantiateViewController(withIdentifier: "biometryonboarding") as? BiometryOnboardingView { // swiftlint:disable:this line_length
+                self.currentViewController?.pushViewController(onboardingBiometricView, animated: true)
+            }
         }
     }
 

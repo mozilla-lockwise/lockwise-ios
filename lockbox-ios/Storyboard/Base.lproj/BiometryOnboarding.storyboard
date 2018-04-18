@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Biometry Onboarding View-->
+        <scene sceneID="9vo-VY-cwq">
+            <objects>
+                <viewController storyboardIdentifier="biometryonboarding" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lr1-VI-eGH" customClass="BiometryOnboardingView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XPw-RQ-JGv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="fingerprint-large" translatesAutoresizingMaskIntoConstraints="NO" id="QHk-b4-71t">
+                                <rect key="frame" x="157" y="220" width="60" height="61"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rab-vl-hna">
+                                <rect key="frame" x="40" y="534" width="295" height="48"/>
+                                <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="TZH-dE-zj0"/>
+                                </constraints>
+                                <state key="normal" title="Enable">
+                                    <color key="titleColor" red="0.97932499650000004" green="0.98005276919999995" blue="0.98282974960000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0wC-w2-M0L">
+                                <rect key="frame" x="157" y="602" width="60" height="30"/>
+                                <state key="normal" title="Not Now"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use Touch ID to sign in" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8lx-1j-0OS">
+                                <rect key="frame" x="73" y="305" width="229.5" height="29"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Easily unlock your Lockbox  with the touch of your finger. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9AT-vx-1Cv">
+                                <rect key="frame" x="48" y="346" width="279" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Rab-vl-hna" firstAttribute="leading" secondItem="XPw-RQ-JGv" secondAttribute="leading" constant="40" id="6g0-Mv-7aa"/>
+                            <constraint firstAttribute="bottom" secondItem="0wC-w2-M0L" secondAttribute="bottom" constant="35" id="FqO-Tw-Np3"/>
+                            <constraint firstItem="0wC-w2-M0L" firstAttribute="top" secondItem="Rab-vl-hna" secondAttribute="bottom" constant="20" id="L9a-qj-fN8"/>
+                            <constraint firstItem="8lx-1j-0OS" firstAttribute="top" secondItem="QHk-b4-71t" secondAttribute="bottom" constant="24" id="MPE-7z-HlK"/>
+                            <constraint firstItem="8lx-1j-0OS" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="NvW-mo-dXs"/>
+                            <constraint firstItem="9AT-vx-1Cv" firstAttribute="leading" secondItem="XPw-RQ-JGv" secondAttribute="leading" constant="48" id="PuP-XU-JME"/>
+                            <constraint firstItem="QHk-b4-71t" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="Ro8-yC-b7a"/>
+                            <constraint firstItem="Rab-vl-hna" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="TkB-4T-THV"/>
+                            <constraint firstItem="0wC-w2-M0L" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="a3O-1b-buL"/>
+                            <constraint firstItem="9AT-vx-1Cv" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="ay6-79-mIW"/>
+                            <constraint firstItem="9AT-vx-1Cv" firstAttribute="top" secondItem="8lx-1j-0OS" secondAttribute="bottom" constant="12" id="hRJ-hX-Loj"/>
+                            <constraint firstItem="QHk-b4-71t" firstAttribute="top" secondItem="XPw-RQ-JGv" secondAttribute="top" constant="220" id="wfJ-Ll-ITY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="WeY-6Q-Kxw"/>
+                    </view>
+                    <connections>
+                        <outlet property="biometricImage" destination="QHk-b4-71t" id="vah-41-e9r"/>
+                        <outlet property="biometricSubTitle" destination="9AT-vx-1Cv" id="FH1-gO-ebM"/>
+                        <outlet property="biometricTitle" destination="8lx-1j-0OS" id="0Eo-jP-BRe"/>
+                        <outlet property="enableButton" destination="Rab-vl-hna" id="yeZ-JO-OxD"/>
+                        <outlet property="notNowButton" destination="0wC-w2-M0L" id="FJ3-3z-CVz"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="efR-oz-CUk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-135.19999999999999" y="136.28185907046478"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="fingerprint-large" width="60" height="61"/>
+    </resources>
+</document>
