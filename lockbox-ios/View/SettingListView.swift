@@ -59,7 +59,7 @@ extension SettingListView {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
 
-                let cell = UITableViewCell(
+                let cell = SettingCell(
                     style: cellConfiguration.cellStyle,
                     reuseIdentifier: cellConfiguration.reuseIndicator)
 
@@ -73,19 +73,18 @@ extension SettingListView {
                     cell.detailTextLabel?.text = cellConfiguration.detailText
                 }
 
-                if cellConfiguration.routeAction != nil {
-                    cell.accessoryType = .disclosureIndicator
-                } else if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
+                if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
                     let switchItem = UISwitch()
                     switchItem.onTintColor = Constant.color.lockBoxBlue
-                    if let onChanged = switchSetting.onChanged {
-                        switchItem.rx.value.changed.asObservable()
-                            .bind(to: onChanged)
-                            .disposed(by: self.disposeBag)
-                    }
+                    switchItem.rx.value.changed.asObservable()
+                        .bind(to: switchSetting.onChanged)
+                        .disposed(by: cell.disposeBag)
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
+                } else if cellConfiguration.routeAction != nil {
+                    cell.accessoryType = .disclosureIndicator
                 }
+
                 return cell
         }, titleForHeaderInSection: { _, section in
             return section == 0 ? Constant.string.settingsHelpSectionHeader :
@@ -177,10 +176,11 @@ extension SettingCellConfiguration: Equatable {
 class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
 
-    var onChanged: AnyObserver<Bool>?
-    init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false) {
-        super.init(text: text, routeAction: routeAction)
+    var onChanged: AnyObserver<Bool>
+    init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false, onChanged: AnyObserver<Bool>) {
         self.isOn = isOn
+        self.onChanged = onChanged
+        super.init(text: text, routeAction: routeAction)
     }
 }
 

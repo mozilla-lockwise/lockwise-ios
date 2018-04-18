@@ -48,8 +48,14 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
-    lazy var touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
-    lazy var faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
+    lazy var touchIdSetting = SwitchSettingCellConfiguration(
+        text: Constant.string.settingsTouchId,
+        routeAction: nil,
+        onChanged: onBiometricSettingChanged)
+    lazy var faceIdSetting = SwitchSettingCellConfiguration(
+        text: Constant.string.settingsFaceId,
+        routeAction: nil,
+        onChanged: onBiometricSettingChanged)
 
     init(view: SettingListViewProtocol,
          userDefaults: UserDefaults = UserDefaults.standard,
@@ -86,7 +92,6 @@ extension SettingListPresenter {
     fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?, usageDataEnabled: Bool) -> [SettingSectionModel] { // swiftlint:disable:this line_length
         let biometricSetting = LAContext.usesFaceId ? faceIdSetting : touchIdSetting
         biometricSetting.isOn = enabled
-        biometricSetting.onChanged = onBiometricSettingChanged
 
         let autoLockSetting = SettingCellConfiguration(
             text: Constant.string.settingsAutoLock,
@@ -96,16 +101,16 @@ extension SettingListPresenter {
 
         let usageDataSetting = SwitchSettingCellConfiguration(
             text: Constant.string.settingsUsageData,
-            routeAction: nil,
-            isOn: usageDataEnabled)
+            routeAction: SettingRouteAction.faq,
+            isOn: usageDataEnabled,
+            onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
             string: Constant.string.settingsUsageDataSubtitle,
             attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
-//        subtitle.append(NSAttributedString(
-//            string: Constant.string.learnMore,
-//            attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
+        subtitle.append(NSAttributedString(
+            string: Constant.string.learnMore,
+            attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
-        usageDataSetting.onChanged = self.onUsageDataSettingChanged
 
         return [
             SettingSectionModel(model: 0, items: [
