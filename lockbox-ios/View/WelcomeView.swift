@@ -38,7 +38,8 @@ class WelcomeView: UIViewController {
         super.viewDidLayoutSubviews()
         self.oceanView.image = UIImage.createGradientImage(
                 frame: self.oceanView.frame,
-                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue]
+                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue],
+                locations: [0, 0.85]
         )
     }
 

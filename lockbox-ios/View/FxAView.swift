@@ -54,6 +54,10 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ], for: .normal)
 
+        if #available(iOS 11.0, *) {
+            self.navigationItem.largeTitleDisplayMode = .never
+        }
+
         if let presenter = self.presenter {
             self.navigationItem.leftBarButtonItem!.rx.tap
                     .bind(to: presenter.onCancel)
