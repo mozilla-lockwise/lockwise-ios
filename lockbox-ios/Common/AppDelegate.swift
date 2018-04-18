@@ -81,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             telemetryConfig.updateChannel = "debug"
 #else
             telemetryConfig.isCollectionEnabled = enabled
-            telemetryConfig.isUploadEnabled = true
+            telemetryConfig.isUploadEnabled = enabled
             telemetryConfig.updateChannel = "release"
 #endif
         }).disposed(by: self.disposeBag)
