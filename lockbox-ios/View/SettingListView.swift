@@ -32,6 +32,7 @@ class SettingListView: UIViewController {
 override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNavbar()
+        self.styleTableViewBackground()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -120,6 +121,12 @@ extension SettingListView {
     @objc private func switchChanged(sender: UISwitch) {
         let rowChanged = sender.tag
         presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
+    }
+
+    fileprivate func styleTableViewBackground() {
+        let backgroundView = UIView(frame: self.view.bounds)
+        backgroundView.backgroundColor = Constant.color.viewBackground
+        self.tableView.backgroundView = backgroundView
     }
 }
 

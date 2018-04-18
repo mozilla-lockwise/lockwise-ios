@@ -18,7 +18,7 @@ class PreferredBrowserSettingView: UITableViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         self.presenter = PreferredBrowserSettingPresenter(view: self)
-        view.backgroundColor = Constant.color.settingsBackground
+        view.backgroundColor = Constant.color.viewBackground
     }
 
     required init?(coder aDecoder: NSCoder) {
