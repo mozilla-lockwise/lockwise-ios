@@ -33,13 +33,14 @@ class ExternalLinkActionHandler: ActionHandler {
     }
 
     func invoke(_ action: ExternalLinkAction) {
-        self.openUrl(string: action.url, application: self.application)
+        self.openUrl(string: action.url)
     }
 
-    private func openUrl(string url: String, application: OpenUrlProtocol = UIApplication.shared) {
+    private func openUrl(string url: String) {
         self.userDefaults.onPreferredBrowser
+            .take(1)
             .subscribe(onNext: { (latest: PreferredBrowserSetting) in
-                latest.openUrl(url: url, application: application)
+                latest.openUrl(url: url, application: self.application)
             })
             .disposed(by: self.disposeBag)
     }

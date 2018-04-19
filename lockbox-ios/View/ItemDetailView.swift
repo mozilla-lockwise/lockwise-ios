@@ -100,6 +100,10 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
+        if #available(iOS 11.0, *) {
+            self.navigationItem.largeTitleDisplayMode = .always
+        }
+
         if let presenter = self.presenter {
             leftButton.rx.tap
                     .bind(to: presenter.onCancel)

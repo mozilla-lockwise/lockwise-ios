@@ -58,6 +58,24 @@ class WelcomeViewSpec: QuickSpec {
                 }
             }
 
+            describe("biometricSignInButton") {
+                var buttonObserver = self.scheduler.createObserver(Void.self)
+
+                beforeEach {
+                    buttonObserver = self.scheduler.createObserver(Void.self)
+
+                    self.subject.biometricSignInButtonPressed
+                            .subscribe(buttonObserver)
+                            .disposed(by: self.disposeBag)
+
+                    self.subject.biometricSignInButton.sendActions(for: .touchUpInside)
+                }
+
+                it("tells observers about button taps") {
+                    expect(buttonObserver.events.count).to(be(1))
+                }
+            }
+
             describe("firstTimeLoginMessageHidden") {
                 beforeEach {
                     self.subject.firstTimeLoginMessageHidden.onNext(true)
