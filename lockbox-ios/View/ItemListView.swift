@@ -72,8 +72,8 @@ extension ItemListView: ItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>) {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             sortingButtonTitle
-                .drive(button.rx.title())
-                .disposed(by: self.disposeBag)
+                    .drive(button.rx.title())
+                    .disposed(by: self.disposeBag)
         }
     }
 
@@ -165,38 +165,10 @@ extension ItemListView {
 // view styling
 extension ItemListView {
     fileprivate func styleNavigationBar() {
-        let prefButton = UIButton()
-        let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
-        prefButton.setImage(prefImage, for: .normal)
-        prefButton.tintColor = .white
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: prefButton)
-
-        let sortingButton = UIButton()
-        sortingButton.adjustsImageWhenHighlighted = false
-
-        let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
-        sortingButton.setImage(sortingImage, for: .normal)
-        sortingButton.setTitle(Constant.string.aToZ, for: .normal)
-
-        sortingButton.contentHorizontalAlignment = .left
-        sortingButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        sortingButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
-        sortingButton.setTitleColor(.white, for: .normal)
-        sortingButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
-        sortingButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
-        sortingButton.tintColor = .white
-
-        sortingButton.addConstraint(NSLayoutConstraint(
-                item: sortingButton,
-                attribute: .width,
-                relatedBy: .equal,
-                toItem: nil,
-                attribute: .notAnAttribute,
-                multiplier: 1.0,
-                constant: 100)
-        )
-
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sortingButton)
+        let preferencesButton = self.prefButton
+        let sortButton = self.sortingButton
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: preferencesButton)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sortButton)
 
         self.navigationItem.title = Constant.string.yourLockbox
 
@@ -224,5 +196,43 @@ extension ItemListView {
         let backgroundView = UIView(frame: self.view.bounds)
         backgroundView.backgroundColor = Constant.color.viewBackground
         self.tableView.backgroundView = backgroundView
+    }
+
+    private var prefButton: UIButton {
+        let button = UIButton()
+        let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(prefImage, for: .normal)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }
+
+    private var sortingButton: UIButton {
+        let button = UIButton()
+        button.adjustsImageWhenHighlighted = false
+
+        let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(sortingImage, for: .normal)
+        button.setTitle(Constant.string.aToZ, for: .normal)
+
+        button.contentHorizontalAlignment = .left
+        button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        button.addConstraint(NSLayoutConstraint(
+                item: button,
+                attribute: .width,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .notAnAttribute,
+                multiplier: 1.0,
+                constant: 100)
+        )
+        return button
     }
 }
