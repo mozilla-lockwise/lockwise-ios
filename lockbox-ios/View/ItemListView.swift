@@ -165,10 +165,8 @@ extension ItemListView {
 // view styling
 extension ItemListView {
     fileprivate func styleNavigationBar() {
-        let preferencesButton = self.prefButton
-        let sortButton = self.sortingButton
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: preferencesButton)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: sortButton)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 
         self.navigationItem.title = Constant.string.yourLockbox
 
@@ -182,11 +180,11 @@ extension ItemListView {
         ]
 
         if let presenter = presenter {
-            prefButton.rx.tap
+            (self.navigationItem.rightBarButtonItem?.customView as? UIButton)?.rx.tap
                     .bind(to: presenter.onSettingsTapped)
                     .disposed(by: self.disposeBag)
 
-            sortingButton.rx.tap
+            (self.navigationItem.leftBarButtonItem?.customView as? UIButton)?.rx.tap
                     .bind(to: presenter.sortingButtonObserver)
                     .disposed(by: self.disposeBag)
         }
@@ -201,7 +199,10 @@ extension ItemListView {
     private var prefButton: UIButton {
         let button = UIButton()
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
+        let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         button.setImage(prefImage, for: .normal)
+        button.setImage(tintedPrefImage, for: .selected)
+        button.setImage(tintedPrefImage, for: .highlighted)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
