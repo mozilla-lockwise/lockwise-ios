@@ -71,12 +71,13 @@ class SettingListPresenter {
     }
 
     func onViewReady() {
-        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
-                .map { (latest: (Bool, AutoLockSetting, Bool)) -> [SettingSectionModel] in
+        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
+                .map { (latest: (Bool, AutoLockSetting, PreferredBrowserSetting, Bool)) -> [SettingSectionModel] in
                     return self.settingsWithBiometricLoginEnabled(
                         latest.0,
                         autoLock: latest.1,
-                        usageDataEnabled: latest.2)
+                        preferredBrowser: latest.2,
+                        usageDataEnabled: latest.3)
                 }
                 .asDriver(onErrorJustReturn: [])
 
@@ -92,17 +93,14 @@ class SettingListPresenter {
 }
 
 extension SettingListPresenter {
-    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?, usageDataEnabled: Bool) -> [SettingSectionModel] { // swiftlint:disable:this line_length
+    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?, preferredBrowser: PreferredBrowserSetting, usageDataEnabled: Bool) -> [SettingSectionModel] { // swiftlint:disable:this line_length
         let accountSettingSection = SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsProvideFeedback,
                     routeAction: SettingRouteAction.provideFeedback),
             SettingCellConfiguration(
                     text: Constant.string.settingsFaq,
-                    routeAction: SettingRouteAction.faq),
-            SettingCellConfiguration(
-                    text: Constant.string.settingsEnableInBrowser,
-                    routeAction: SettingRouteAction.enableInBrowser)
+                    routeAction: SettingRouteAction.faq)
         ])
 
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
@@ -124,11 +122,11 @@ extension SettingListPresenter {
         autoLockSetting.detailText = autoLock?.toString()
         applicationConfigurationSection.items.append(autoLockSetting)
 
-        applicationConfigurationSection.items.append(
-                SettingCellConfiguration(
-                        text: Constant.string.settingsBrowser,
-                        routeAction: SettingRouteAction.preferredBrowser)
-        )
+        let preferredBrowserSetting = SettingCellConfiguration(
+            text: Constant.string.settingsBrowser,
+            routeAction: SettingRouteAction.preferredBrowser)
+        preferredBrowserSetting.detailText = preferredBrowser.toString()
+        applicationConfigurationSection.items.append(preferredBrowserSetting)
 
         let usageDataSetting = SwitchSettingCellConfiguration(
             text: Constant.string.settingsUsageData,

@@ -74,6 +74,7 @@ class SettingListViewSpec: QuickSpec {
                             SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
                             ]),
                         SettingSectionModel(model: 1, items: [
+                            SwitchSettingCellConfiguration(text: "Face ID", routeAction: nil, isOn: true, onChanged: self.presenter.onBiometricSettingChanged),
                             SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
                             ])
                     ]
@@ -83,7 +84,7 @@ class SettingListViewSpec: QuickSpec {
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
 
-                    let cell = self.subject.tableView.cellForRow(at: IndexPath(item: 0, section: 1))
+                    let cell = self.subject.tableView.cellForRow(at: IndexPath(item: 1, section: 1))
                     let switchControl = cell?.accessoryView as? UISwitch
                     switchControl?.isOn = false
                     switchControl?.sendActions(for: .valueChanged)
@@ -92,7 +93,7 @@ class SettingListViewSpec: QuickSpec {
                 it("configures table view based on model") {
                     expect(self.subject.tableView.numberOfSections).to(equal(2))
                     expect(self.subject.tableView.numberOfRows(inSection: 0)).to(equal(2))
-                    expect(self.subject.tableView.numberOfRows(inSection: 1)).to(equal(1))
+                    expect(self.subject.tableView.numberOfRows(inSection: 1)).to(equal(2))
                 }
 
                 it("calls presenter when usage data switch is flipped") {
@@ -113,6 +114,7 @@ class SettingListViewSpec: QuickSpec {
                             SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
                             ]),
                         SettingSectionModel(model: 1, items: [
+                            SwitchSettingCellConfiguration(text: "Face ID", routeAction: nil, isOn: true, onChanged: self.presenter.onBiometricSettingChanged),
                             SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
                             ])
                     ]

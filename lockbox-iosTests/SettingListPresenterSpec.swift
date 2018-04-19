@@ -152,19 +152,25 @@ class SettingsPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("autolock field") {
+                describe("detail values on view modules") {
                     beforeEach {
                         self.biometryManager.faceIdStub = false
                         self.biometryManager.touchIdStub = true
 
                         UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
                         UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                         self.subject.onViewReady()
                     }
 
                     it("sets detail value for autolock") {
                         let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
                         expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))
+                    }
+
+                    it("sets detail value for preferred browser") {
+                        let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[3]
+                        expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
                     }
                 }
             }
