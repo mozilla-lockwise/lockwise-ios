@@ -214,7 +214,6 @@ class RootViewSpec: QuickSpec {
                     beforeEach {
                         self.subject.startMainStack(MainNavigationController.self)
                         self.subject.startModalStack(SettingNavigationController.self)
-                        self.subject.pushSettingView(view: .enableInBrowser)
                     }
 
                     it("stays on the list") {
