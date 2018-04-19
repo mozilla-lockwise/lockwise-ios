@@ -15,10 +15,11 @@ protocol SettingListViewProtocol: class {
 
 class SettingListPresenter {
     weak private var view: SettingListViewProtocol?
-    private var userDefaults: UserDefaults
-    private var routeActionHandler: RouteActionHandler
-    private var settingActionHandler: SettingActionHandler
-    private var disposeBag = DisposeBag()
+    private let routeActionHandler: RouteActionHandler
+    private let settingActionHandler: SettingActionHandler
+    private let userDefaults: UserDefaults
+    private let biometryManager: BiometryManager
+    private let disposeBag = DisposeBag()
 
     lazy private(set) var onDone: AnyObserver<Void> = {
         return Binder(self) { target, _ in
@@ -40,13 +41,15 @@ class SettingListPresenter {
     lazy var faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
 
     init(view: SettingListViewProtocol,
-         userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
+         userDefaults: UserDefaults = UserDefaults.standard,
+         biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
-        self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.settingActionHandler = settingActionHandler
+        self.userDefaults = userDefaults
+        self.biometryManager = biometryManager
     }
 
     // todo: this should be an observer binding
@@ -74,34 +77,44 @@ class SettingListPresenter {
 
 extension SettingListPresenter {
     fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?) -> [SettingSectionModel] { // swiftlint:disable:this line_length
-        let biometricSetting = LAContext.usesFaceId ? faceIdSetting : touchIdSetting
-        biometricSetting.isOn = enabled
+        let accountSettingSection = SettingSectionModel(model: 0, items: [
+            SettingCellConfiguration(
+                    text: Constant.string.settingsProvideFeedback,
+                    routeAction: SettingRouteAction.provideFeedback),
+            SettingCellConfiguration(
+                    text: Constant.string.settingsFaq,
+                    routeAction: SettingRouteAction.faq),
+            SettingCellConfiguration(
+                    text: Constant.string.settingsEnableInBrowser,
+                    routeAction: SettingRouteAction.enableInBrowser)
+        ])
+
+        var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
+            SettingCellConfiguration(
+                    text: Constant.string.settingsAccount,
+                    routeAction: SettingRouteAction.account)
+        ])
+
+        if self.biometryManager.usesFaceID || self.biometryManager.usesTouchID {
+            let biometricSetting = self.biometryManager.usesFaceID ? faceIdSetting : touchIdSetting
+            biometricSetting.isOn = enabled
+
+            applicationConfigurationSection.items.append(biometricSetting)
+        }
 
         let autoLockSetting = SettingCellConfiguration(
-            text: Constant.string.settingsAutoLock,
-            routeAction: SettingRouteAction.autoLock)
-
+                text: Constant.string.settingsAutoLock,
+                routeAction: SettingRouteAction.autoLock)
         autoLockSetting.detailText = autoLock?.toString()
 
-        return [
-            SettingSectionModel(model: 0, items: [
+        applicationConfigurationSection.items.append(autoLockSetting)
+
+        applicationConfigurationSection.items.append(
                 SettingCellConfiguration(
-                        text: Constant.string.settingsProvideFeedback,
-                        routeAction: SettingRouteAction.provideFeedback),
-                SettingCellConfiguration(
-                        text: Constant.string.settingsFaq,
-                        routeAction: SettingRouteAction.faq)
-            ]),
-            SettingSectionModel(model: 1, items: [
-                SettingCellConfiguration(
-                        text: Constant.string.settingsAccount,
-                        routeAction: SettingRouteAction.account),
-                biometricSetting,
-                autoLockSetting,
-                SettingCellConfiguration(
-                    text: Constant.string.settingsBrowser,
-                    routeAction: SettingRouteAction.preferredBrowser)
-            ])
-        ]
+                        text: Constant.string.settingsBrowser,
+                        routeAction: SettingRouteAction.preferredBrowser)
+        )
+
+        return [ accountSettingSection, applicationConfigurationSection ]
     }
 }

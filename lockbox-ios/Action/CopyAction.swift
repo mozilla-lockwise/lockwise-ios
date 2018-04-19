@@ -40,7 +40,10 @@ class CopyActionHandler: ActionHandler {
     }
 
     func invoke(_ action: CopyAction) {
-        self.pasteboard.string = action.text
+        let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
+
+        self.pasteboard.setItems([[UIPasteboardTypeAutomatic: action.text]],
+                                 options: [UIPasteboardOption.expirationDate: expireDate])
         self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: action.fieldName))
     }
 }

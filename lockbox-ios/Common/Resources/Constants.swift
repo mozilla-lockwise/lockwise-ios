@@ -15,13 +15,12 @@ struct Constant {
 
     struct color {
         static let cellBorderGrey = UIColor(hex: 0xC8C7CC)
+        static let viewBackground = UIColor(hex: 0xEFEFF4)
         static let lightGrey = UIColor(hex: 0xEFEFEF)
-        static let listBackground = UIColor(hex: 0xEFEFF4)
         static let lockBoxBlue = UIColor(hex: 0x0060DF)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
         static let kebabBlue = UIColor(hex: 0x003EAA)
         static let settingsHeader = UIColor(hex: 0x737373)
-        static let settingsBackground = UIColor(hex: 0xEFEFEF)
         static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
     }
 
@@ -84,6 +83,7 @@ struct Constant {
         static let displayStatusAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
+        static let copyExpireTimeSecs = 60
     }
 
     struct setting {
