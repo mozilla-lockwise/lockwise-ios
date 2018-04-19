@@ -200,6 +200,10 @@ extension ItemListView {
 
         self.navigationItem.title = Constant.string.yourLockbox
 
+        if #available(iOS 11.0, *) {
+            self.navigationItem.largeTitleDisplayMode = .never
+        }
+
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
@@ -218,7 +222,7 @@ extension ItemListView {
 
     fileprivate func styleTableViewBackground() {
         let backgroundView = UIView(frame: self.view.bounds)
-        backgroundView.backgroundColor = Constant.color.listBackground
+        backgroundView.backgroundColor = Constant.color.viewBackground
         self.tableView.backgroundView = backgroundView
     }
 }

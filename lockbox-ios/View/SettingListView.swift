@@ -32,6 +32,7 @@ class SettingListView: UIViewController {
 override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNavbar()
+        self.styleTableViewBackground()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,8 +59,9 @@ extension SettingListView {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
 
-                let cell = UITableViewCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
+                let cell = SettingCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
                 cell.textLabel?.text = cellConfiguration.text
+                cell.selectionStyle = UITableViewCellSelectionStyle.none
 
                 if cellConfiguration.routeAction != nil {
                     cell.accessoryType = .disclosureIndicator
@@ -70,7 +72,6 @@ extension SettingListView {
                     switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
-                    cell.selectionStyle = UITableViewCellSelectionStyle.none
                 }
                 return cell
         }, titleForHeaderInSection: { _, section in
@@ -98,6 +99,10 @@ extension SettingListView {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
 
+        if #available(iOS 11.0, *) {
+            self.navigationItem.largeTitleDisplayMode = .never
+        }
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done,
                 style: .done,
                 target: nil,
@@ -120,6 +125,12 @@ extension SettingListView {
     @objc private func switchChanged(sender: UISwitch) {
         let rowChanged = sender.tag
         presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
+    }
+
+    fileprivate func styleTableViewBackground() {
+        let backgroundView = UIView(frame: self.view.bounds)
+        backgroundView.backgroundColor = Constant.color.viewBackground
+        self.tableView.backgroundView = backgroundView
     }
 }
 

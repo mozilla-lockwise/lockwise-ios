@@ -5,14 +5,14 @@
 import UIKit
 
 extension UIImage {
-    static func createGradientImage(frame: CGRect, colors: [UIColor]) -> UIImage? {
+    static func createGradientImage(frame: CGRect, colors: [UIColor], locations: [NSNumber] = [0.15, 0]) -> UIImage? {
         let gradientLayer = CAGradientLayer()
 
         gradientLayer.colors = colors.map({ (color) -> CGColor in
             return color.cgColor
         })
         gradientLayer.frame = frame
-        gradientLayer.locations = [0.0, 0.85]
+        gradientLayer.locations = locations
         gradientLayer.startPoint = gradientStartPoint(frame: frame)
         gradientLayer.endPoint = gradientEndPoint(frame: frame)
 

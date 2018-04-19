@@ -18,7 +18,7 @@ class AutoLockSettingView: UITableViewController {
     init() {
         super.init(style: UITableViewStyle.grouped)
         self.presenter = AutoLockSettingPresenter(view: self)
-        view.backgroundColor = Constant.color.settingsBackground
+        view.backgroundColor = Constant.color.viewBackground
     }
 
     required init?(coder aDecoder: NSCoder) {
