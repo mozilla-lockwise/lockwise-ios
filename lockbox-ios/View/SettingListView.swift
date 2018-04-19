@@ -99,6 +99,10 @@ extension SettingListView {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
 
+        if #available(iOS 11.0, *) {
+            self.navigationItem.largeTitleDisplayMode = .never
+        }
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done,
                 style: .done,
                 target: nil,

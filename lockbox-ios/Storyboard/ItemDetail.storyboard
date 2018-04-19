@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="osx-2O-xPR">
-                                    <rect key="frame" x="0.0" y="137.5" width="375" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="119.5" width="375" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
@@ -50,7 +50,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhp-Pp-rfw">
-                                                    <rect key="frame" x="330" y="-4" width="45" height="52"/>
+                                                    <rect key="frame" x="327" y="-4" width="43" height="52"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="reveal-eye"/>
                                                     <state key="selected" image="hide-eye"/>
@@ -65,7 +65,7 @@
                                                 <constraint firstItem="tuK-Xc-guT" firstAttribute="top" secondItem="t0H-71-xTp" secondAttribute="bottom" id="aUX-6o-tGa"/>
                                                 <constraint firstItem="tuK-Xc-guT" firstAttribute="leading" secondItem="H0O-36-Vfq" secondAttribute="leading" constant="15" id="npB-KA-kFK"/>
                                                 <constraint firstItem="t0H-71-xTp" firstAttribute="top" secondItem="H0O-36-Vfq" secondAttribute="top" constant="12" id="qEP-rE-sRP"/>
-                                                <constraint firstAttribute="trailing" secondItem="Mhp-Pp-rfw" secondAttribute="trailing" id="t5g-OT-BvC"/>
+                                                <constraint firstAttribute="trailing" secondItem="Mhp-Pp-rfw" secondAttribute="trailing" constant="5" id="t5g-OT-BvC"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -96,7 +96,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="hide-eye" width="20" height="20"/>
-        <image name="reveal-eye" width="20" height="13"/>
+        <image name="hide-eye" width="18" height="16"/>
+        <image name="reveal-eye" width="18" height="14"/>
     </resources>
 </document>
