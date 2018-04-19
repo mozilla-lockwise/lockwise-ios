@@ -143,6 +143,12 @@ class SettingListViewSpec: QuickSpec {
                         cell?.setHighlighted(false, animated: false)
                         expect(cell?.backgroundColor).to(equal(UIColor.white))
                     }
+
+                    it("prepareForReuse changes DisposeBag") {
+                        let cell = SettingCell(style: UITableViewCellStyle.default, reuseIdentifier: "setting-cell")
+                        let oldDisposeBag = cell.disposeBag
+                        expect(cell.prepareForReuse()).toNot(be(oldDisposeBag))
+                    }
                 }
             }
 
