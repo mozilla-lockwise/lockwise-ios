@@ -86,10 +86,7 @@ extension SettingListPresenter {
                     routeAction: SettingRouteAction.provideFeedback),
             SettingCellConfiguration(
                     text: Constant.string.settingsFaq,
-                    routeAction: SettingRouteAction.faq),
-            SettingCellConfiguration(
-                    text: Constant.string.settingsEnableInBrowser,
-                    routeAction: SettingRouteAction.enableInBrowser)
+                    routeAction: SettingRouteAction.faq)
         ])
 
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [

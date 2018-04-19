@@ -33,7 +33,6 @@ enum SettingRouteAction: RouteAction {
     case list
     case provideFeedback
     case faq
-    case enableInBrowser
     case account
     case autoLock
     case preferredBrowser
