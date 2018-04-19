@@ -82,4 +82,17 @@ enum PreferredBrowserSetting: String {
             application.open(urlToOpen, options: [:], completionHandler: completion)
         }
     }
+
+    func toString() -> String {
+        switch self {
+        case .Safari:
+            return Constant.string.settingsBrowserSafari
+        case .Chrome:
+            return Constant.string.settingsBrowserChrome
+        case .Firefox:
+            return Constant.string.settingsBrowserFirefox
+        case .Focus:
+            return Constant.string.settingsBrowserFocus
+        }
+    }
 }
