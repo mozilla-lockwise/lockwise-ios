@@ -29,13 +29,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserInfoActionHandler.shared.invoke(.load)
         }
 
-        let barHeight = 44 + UIApplication.shared.statusBarFrame.height
         let navBarImage = UIImage.createGradientImage(
-                frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: barHeight),
-                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue]
+                frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
+                colors: [Constant.color.lockBoxBlue, Constant.color.lockBoxTeal],
+                locations: [0.15, 0]
         )
-        UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
-        UINavigationBar.appearance().isTranslucent = false
+        if #available(iOS 11.0, *) {
+            UINavigationBar.appearance().barTintColor = UIColor(patternImage: navBarImage!)
+            UINavigationBar.appearance().isTranslucent = true
+            UINavigationBar.appearance().prefersLargeTitles = true
+            UINavigationBar.appearance().largeTitleTextAttributes = [
+                NSAttributedStringKey.foregroundColor: UIColor.white
+            ]
+        } else {
+            UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
+            UINavigationBar.appearance().isTranslucent = false
+        }
 
         UITextField.appearance().tintColor = .black
 

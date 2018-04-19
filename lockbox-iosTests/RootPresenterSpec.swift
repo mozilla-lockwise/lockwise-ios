@@ -11,11 +11,11 @@ import UIKit
 @testable import Lockbox
 
 enum RootPresenterSharedExample: String {
-    case NoLoginOrInitialize, NoUnlockOrList, EmptyProfileInfo, EmptyScopedKey
+    case NoLoginOrInitialize, NoUnlockOrList, RouteToWelcome, EmptyScopedKey
 }
 
 enum RootPresenterSharedExampleVar: String {
-    case scopedKey, profileInfo, initialized, locked, opened
+    case scopedKey, profileInfo, initialized, dataStoreLocked, opened, visuallyLocked
 }
 
 class RootPresenterSpec: QuickSpec {
@@ -193,12 +193,13 @@ class RootPresenterSpec: QuickSpec {
                 expect(self.dataStoreActionHandler.updateLockedCalled).to(beTrue())
             }
 
-            describe("when getting an empty profile info object, regardless of opened value") {
-                sharedExamples(RootPresenterSharedExample.EmptyProfileInfo.rawValue) { context in
+            describe("when getting an empty profile info object OR visually locked setting, regardless of opened value") {
+                sharedExamples(RootPresenterSharedExample.RouteToWelcome.rawValue) { context in
                     it("starts the login flow") {
                         let info = context()[RootPresenterSharedExampleVar.profileInfo.rawValue] as? ProfileInfo
                         let opened = context()[RootPresenterSharedExampleVar.opened.rawValue] as! Bool
-                        self.advance(profileInfo: info, opened: opened)
+                        let locked = context()[RootPresenterSharedExampleVar.visuallyLocked.rawValue] as! Bool
+                        self.advance(profileInfo: info, opened: opened, locked: locked)
 
                         expect(self.routeActionHandler.invokeArgument).notTo(beNil())
                         let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
@@ -208,24 +209,42 @@ class RootPresenterSpec: QuickSpec {
                     }
                 }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {
+                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
                     [
-                        RootPresenterSharedExampleVar.opened.rawValue: true
+                        RootPresenterSharedExampleVar.opened.rawValue: true,
+                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
                     ]
                 }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyProfileInfo.rawValue) {
+                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
                     [
-                        RootPresenterSharedExampleVar.opened.rawValue: false
+                        RootPresenterSharedExampleVar.opened.rawValue: false,
+                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
+                    ]
+                }
+
+                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.profileInfo.rawValue: ProfileInfo.Builder().uid("something").build(),
+                        RootPresenterSharedExampleVar.opened.rawValue: false,
+                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
+                    ]
+                }
+
+                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
+                    [
+                        RootPresenterSharedExampleVar.profileInfo.rawValue: ProfileInfo.Builder().uid("something").build(),
+                        RootPresenterSharedExampleVar.opened.rawValue: true,
+                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
                     ]
                 }
             }
 
-            describe("getting a populated profile info object and the datastore is opened") {
+            describe("getting a populated profile info object while the app is unlocked and the datastore is opened") {
                 let uid = "fsdsfdfsd"
 
                 beforeEach {
-                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: true)
+                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: true, locked: false)
                 }
 
                 it("does nothing") {
@@ -235,11 +254,11 @@ class RootPresenterSpec: QuickSpec {
                 }
             }
 
-            describe("getting an empty profile info object and the datastore is not opened") {
+            describe("getting a populated profile info object while the app is unlocked and the datastore is not opened") {
                 let uid = "fsdsfdfsd"
 
                 beforeEach {
-                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: false)
+                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: false, locked: false)
                 }
 
                 it("dispatches the open action and displays the list") {
@@ -312,7 +331,7 @@ class RootPresenterSpec: QuickSpec {
                 sharedExamples(RootPresenterSharedExample.NoUnlockOrList.rawValue) { context in
                     it("does nothing") {
                         let scopedKey = context()[RootPresenterSharedExampleVar.scopedKey.rawValue] as? String
-                        let locked = context()[RootPresenterSharedExampleVar.locked.rawValue] as! Bool
+                        let locked = context()[RootPresenterSharedExampleVar.dataStoreLocked.rawValue] as! Bool
 
                         self.advance(scopedKey: scopedKey, locked: locked)
                         expect(self.dataStoreActionHandler.unlockScopedKey).to(beNil())
@@ -322,20 +341,20 @@ class RootPresenterSpec: QuickSpec {
 
                 itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
                     [
-                        RootPresenterSharedExampleVar.locked.rawValue: false
+                        RootPresenterSharedExampleVar.dataStoreLocked.rawValue: false
                     ]
                 }
 
                 itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
                     [
                         RootPresenterSharedExampleVar.scopedKey.rawValue: "meow",
-                        RootPresenterSharedExampleVar.locked.rawValue: false
+                        RootPresenterSharedExampleVar.dataStoreLocked.rawValue: false
                     ]
                 }
 
                 itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
                     [
-                        RootPresenterSharedExampleVar.locked.rawValue: true
+                        RootPresenterSharedExampleVar.dataStoreLocked.rawValue: true
                     ]
                 }
             }
@@ -1010,7 +1029,8 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    private func advance(profileInfo: ProfileInfo?, opened: Bool) {
+    private func advance(profileInfo: ProfileInfo?, opened: Bool, locked: Bool) {
+        UserDefaults.standard.set(locked, forKey: SettingKey.locked.rawValue)
         self.userInfoStore.profileInfoSubject.onNext(profileInfo)
         self.dataStore.openedSubject.onNext(opened)
     }

@@ -28,6 +28,11 @@ class WelcomeView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.biometricSignInButton.setTitleColor(.white, for: .normal)
+        self.biometricSignInButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        self.biometricSignInButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        self.biometricSignInButton.tintColor = .white
+
         self.fxASigninButton.layer.cornerRadius = 5
         self.fxASigninButton.clipsToBounds = true
 
@@ -38,7 +43,8 @@ class WelcomeView: UIViewController {
         super.viewDidLayoutSubviews()
         self.oceanView.image = UIImage.createGradientImage(
                 frame: self.oceanView.frame,
-                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue]
+                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue],
+                locations: [0, 0.85]
         )
     }
 
@@ -58,6 +64,10 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.fxASigninButton.rx.tap
     }
 
+    public var biometricSignInButtonPressed: ControlEvent<Void> {
+        return self.biometricSignInButton.rx.tap
+    }
+
     public var firstTimeLoginMessageHidden: AnyObserver<Bool> {
         return self.accessLockboxMessage.rx.isHidden.asObserver()
     }
@@ -73,8 +83,11 @@ extension WelcomeView: WelcomeViewProtocol {
     public var biometricImageName: AnyObserver<String> {
         return Binder(self) { target, imageName in
             let image = UIImage(named: imageName)
+            let tintedImage = image?.tinted(UIColor(white: 1.0, alpha: 0.6))
 
-            target.biometricSignInButton.rx.image().onNext(image)
+            target.biometricSignInButton.rx.image(for: .normal).onNext(image)
+            target.biometricSignInButton.rx.image(for: .highlighted).onNext(tintedImage)
+            target.biometricSignInButton.rx.image(for: .selected).onNext(tintedImage)
         }.asObserver()
     }
 
