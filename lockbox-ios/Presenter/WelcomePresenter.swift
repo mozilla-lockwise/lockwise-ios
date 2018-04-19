@@ -54,9 +54,7 @@ class WelcomePresenter {
     }
 
     func onViewReady() {
-        let biometricsAvailable = self.biometryManager.usesFaceID || self.biometryManager.usesTouchID
-
-        if biometricsAvailable {
+        if self.biometryManager.usesBiometrics {
             let biometricButtonText = self.biometryManager.usesFaceID ? Constant.string.signInFaceID : Constant.string.signInTouchID // swiftlint:disable:this line_length
             let biometricImageName = self.biometryManager.usesFaceID ? "face" : "fingerprint"
 
@@ -78,11 +76,7 @@ class WelcomePresenter {
                     }
                     .distinctUntilChanged()
                     .map { latest -> Bool in
-                        if !biometricsAvailable {
-                            return true
-                        }
-
-                        return !latest.appLocked ? true : !latest.biometricsEnabled
+                        return !self.biometryManager.usesBiometrics || !latest.appLocked || !latest.biometricsEnabled
                     }
                     .bind(to: view.biometricAuthenticationPromptHidden)
                     .disposed(by: self.disposeBag)

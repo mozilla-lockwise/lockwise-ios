@@ -13,6 +13,8 @@ enum LocalError: Error {
 class BiometryManager {
     private let context: LAContext
 
+    lazy var usesBiometrics: Bool = self.usesTouchID || self.usesFaceID
+
     var usesFaceID: Bool {
         if self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             if #available(iOS 11.0, *) {
