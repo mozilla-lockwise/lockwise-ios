@@ -111,6 +111,21 @@ class SettingActionSpec: QuickSpec {
                     }
                 }
 
+                describe(".recordUsageData") {
+                    beforeEach {
+                        self.subject.invoke(.recordUsageData(enabled: false))
+                    }
+
+                    it("sets the appropriate value for the key in userdefaults") {
+                        expect(self.userDefaults.bools[SettingKey.recordUsageData.rawValue]).to(beFalse())
+                    }
+
+                    it("tells the dispatcher") {
+                        let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
+                        expect(argument).to(equal(SettingAction.recordUsageData(enabled: false)))
+                    }
+                }
+
                 describe(".reset") {
                     beforeEach {
                         self.subject.invoke(.reset)
@@ -121,6 +136,7 @@ class SettingActionSpec: QuickSpec {
                         expect(self.userDefaults.bools[SettingKey.biometricLogin.rawValue]).to(equal(Constant.setting.defaultBiometricLockEnabled))
                         expect(self.userDefaults.bools[SettingKey.locked.rawValue]).to(equal(Constant.setting.defaultLockedState))
                         expect(self.userDefaults.strings[SettingKey.preferredBrowser.rawValue]).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
+                        expect(self.userDefaults.bools[SettingKey.recordUsageData.rawValue]).to(equal(Constant.setting.defaultRecordUsageData))
                     }
 
                     it("tells the dispatcher") {

@@ -16,15 +16,12 @@ class SettingListViewSpec: QuickSpec {
     class FakeSettingsPresenter: SettingListPresenter {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
-        var switchChangedCalled = false
         var settingCellStub: TestableObserver<SettingRouteAction?>!
+        var biometricCellStub: TestableObserver<Bool>!
+        var usageDataCellStub: TestableObserver<Bool>!
 
         override func onViewReady() {
             onViewReadyCalled = true
-        }
-
-        override func switchChanged(row: Int, isOn: Bool) {
-            switchChangedCalled = true
         }
 
         override var onDone: AnyObserver<Void> {
@@ -35,6 +32,14 @@ class SettingListViewSpec: QuickSpec {
 
         override var onSettingCellTapped: AnyObserver<SettingRouteAction?> {
             return self.settingCellStub.asObserver()
+        }
+
+        override var onBiometricSettingChanged: AnyObserver<Bool> {
+            return self.biometricCellStub.asObserver()
+        }
+
+        override var onUsageDataSettingChanged: AnyObserver<Bool> {
+            return self.usageDataCellStub.asObserver()
         }
     }
 
@@ -49,6 +54,8 @@ class SettingListViewSpec: QuickSpec {
                 self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as! SettingListView
                 self.presenter = FakeSettingsPresenter(view: self.subject)
                 self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
+                self.presenter.biometricCellStub = self.scheduler.createObserver(Bool.self)
+                self.presenter.usageDataCellStub = self.scheduler.createObserver(Bool.self)
                 self.subject.presenter = self.presenter
 
                 self.subject.preloadView()
@@ -59,25 +66,26 @@ class SettingListViewSpec: QuickSpec {
             }
 
             describe("tableview datasource configuration") {
-                let configDriver = PublishSubject<[SettingSectionModel]>()
-                let sectionModels = [
-                    SettingSectionModel(model: 0, items: [
-                        SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
-                        SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
-                    ]),
-                    SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
-                    ])
-                ]
-
-                sectionModels[0].items[1].detailText = "FAQ Detail"
-
                 beforeEach {
+                    let configDriver = PublishSubject<[SettingSectionModel]>()
+                    let sectionModels = [
+                        SettingSectionModel(model: 0, items: [
+                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
+                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
+                            ]),
+                        SettingSectionModel(model: 1, items: [
+                            SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
+                            ])
+                    ]
+
+                    sectionModels[0].items[1].detailText = "FAQ Detail"
+
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
 
                     let cell = self.subject.tableView.cellForRow(at: IndexPath(item: 0, section: 1))
                     let switchControl = cell?.accessoryView as? UISwitch
+                    switchControl?.isOn = false
                     switchControl?.sendActions(for: .valueChanged)
                 }
 
@@ -87,8 +95,8 @@ class SettingListViewSpec: QuickSpec {
                     expect(self.subject.tableView.numberOfRows(inSection: 1)).to(equal(1))
                 }
 
-                it("calls presenter when switch is flipped") {
-                    expect(self.presenter.switchChangedCalled).to(beTrue())
+                it("calls presenter when usage data switch is flipped") {
+                    expect(self.presenter.usageDataCellStub.events.last!.value.element).to(beFalse())
                 }
 
                 it("sets detail text") {
@@ -97,18 +105,18 @@ class SettingListViewSpec: QuickSpec {
             }
 
             describe("tableview delegate configuration") {
-                let configDriver = PublishSubject<[SettingSectionModel]>()
-                let sectionModels = [
-                    SettingSectionModel(model: 0, items: [
-                        SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
-                        SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
-                    ]),
-                    SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
-                    ])
-                ]
-
                 beforeEach {
+                    let configDriver = PublishSubject<[SettingSectionModel]>()
+                    let sectionModels = [
+                        SettingSectionModel(model: 0, items: [
+                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
+                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
+                            ]),
+                        SettingSectionModel(model: 1, items: [
+                            SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
+                            ])
+                    ]
+
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
                 }

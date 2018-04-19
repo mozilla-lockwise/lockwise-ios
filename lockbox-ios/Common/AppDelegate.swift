@@ -4,7 +4,6 @@
 
 import UIKit
 import Telemetry
-import RxSwift
 
 let PostFirstRunKey = "firstrun"
 
@@ -87,8 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         telemetryConfig.isUploadEnabled = false
         telemetryConfig.updateChannel = "debug"
 #else
-        telemetryConfig.isCollectionEnabled = enabled
-        telemetryConfig.isUploadEnabled = enabled
+        telemetryConfig.isCollectionEnabled = true
+        telemetryConfig.isUploadEnabled = true
         telemetryConfig.updateChannel = "release"
 #endif
 
