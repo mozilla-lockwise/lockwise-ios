@@ -110,7 +110,7 @@ class BiometryManagerSpec: QuickSpec {
                             if #available(iOS 11.0, *) {
                                 expect(self.subject.usesTouchID).to(beTrue())
                             } else {
-                                expect(self.subject.usesTouchID).to(beFalse())
+                                expect(self.subject.usesTouchID).to(beTrue())
                             }
                         }
                     }
@@ -126,7 +126,7 @@ class BiometryManagerSpec: QuickSpec {
                             if #available(iOS 11.0, *) {
                                 expect(self.subject.usesTouchID).to(beFalse())
                             } else {
-                                expect(self.subject.usesTouchID).to(beFalse())
+                                expect(self.subject.usesTouchID).to(beTrue())
                             }
                         }
                     }
