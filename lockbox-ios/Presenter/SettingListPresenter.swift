@@ -73,8 +73,8 @@ class SettingListPresenter {
     func onViewReady() {
         let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
                 .map { (latest: (Bool, AutoLockSetting, PreferredBrowserSetting, Bool)) -> [SettingSectionModel] in
-                    return self.settingsWithBiometricLoginEnabled(
-                        latest.0,
+                    return self.getSettings(
+                        biometricSettingEnabled: latest.0,
                         autoLock: latest.1,
                         preferredBrowser: latest.2,
                         usageDataEnabled: latest.3)
@@ -93,7 +93,12 @@ class SettingListPresenter {
 }
 
 extension SettingListPresenter {
-    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?, preferredBrowser: PreferredBrowserSetting, usageDataEnabled: Bool) -> [SettingSectionModel] { // swiftlint:disable:this line_length
+    fileprivate func getSettings(
+        biometricSettingEnabled: Bool,
+        autoLock: AutoLockSetting?,
+        preferredBrowser: PreferredBrowserSetting,
+        usageDataEnabled: Bool) -> [SettingSectionModel] {
+
         let accountSettingSection = SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsProvideFeedback,
@@ -111,7 +116,7 @@ extension SettingListPresenter {
 
         if self.biometryManager.usesFaceID || self.biometryManager.usesTouchID {
             let biometricSetting = self.biometryManager.usesFaceID ? faceIdSetting : touchIdSetting
-            biometricSetting.isOn = enabled
+            biometricSetting.isOn = biometricSettingEnabled
 
             applicationConfigurationSection.items.append(biometricSetting)
         }

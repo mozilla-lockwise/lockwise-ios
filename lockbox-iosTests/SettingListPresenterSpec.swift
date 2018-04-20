@@ -190,6 +190,22 @@ class SettingsPresenterSpec: QuickSpec {
                 }
             }
 
+            describe("onUsageDataSettingChanged") {
+                beforeEach {
+                    let voidObservable = self.scheduler.createColdObservable([next(50, false)])
+
+                    voidObservable
+                        .bind(to: self.subject.onUsageDataSettingChanged)
+                        .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
+                }
+
+                it("calls settingActionHandler") {
+                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.recordUsageData(enabled: false)))
+                }
+            }
+
             describe("onDone") {
                 beforeEach {
                     let voidObservable = self.scheduler.createColdObservable([next(50, ())])
