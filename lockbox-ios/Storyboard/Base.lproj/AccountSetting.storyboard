@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
-                                <rect key="frame" x="51" y="167" width="273" height="56"/>
+                                <rect key="frame" x="51" y="167" width="273" height="55.5"/>
                                 <attributedString key="attributedText">
                                     <fragment content="To manage your Firefox Account password and other settings, login to your account in your browser.">
                                         <attributes>
@@ -79,6 +79,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PPt-yW-Jkp"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="avatarImageView" destination="meC-vW-3bR" id="aRQ-Ve-ZQb"/>
                         <outlet property="unlinkAccountButton" destination="htf-cl-VXU" id="zlU-hU-Ucc"/>
