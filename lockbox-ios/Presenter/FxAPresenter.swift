@@ -11,12 +11,18 @@ protocol FxAViewProtocol: class, ErrorView {
     func loadRequest(_ urlRequest: URLRequest)
 }
 
+struct FxADisplayFirstRun {
+    let action: FxADisplayAction
+    let isFirstRun: Bool
+}
+
 class FxAPresenter {
     private weak var view: FxAViewProtocol?
     fileprivate let fxAActionHandler: FxAActionHandler
     fileprivate let settingActionHandler: SettingActionHandler
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let fxaStore: FxAStore
+    fileprivate let userDefaults: UserDefaults
 
     private var disposeBag = DisposeBag()
 
@@ -30,23 +36,31 @@ class FxAPresenter {
          fxAActionHandler: FxAActionHandler = FxAActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         fxaStore: FxAStore = FxAStore.shared) {
+         fxaStore: FxAStore = FxAStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard
+    ) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
         self.settingActionHandler = settingActionHandler
         self.routeActionHandler = routeActionHandler
         self.fxaStore = fxaStore
+        self.userDefaults = userDefaults
     }
 
     func onViewReady() {
-        self.fxaStore.fxADisplay
-                .drive(onNext: { action in
-                    switch action {
+        Observable.combineLatest(self.fxaStore.fxADisplay, self.userDefaults.onLock)
+                .map { FxADisplayFirstRun(action: $0.0, isFirstRun: !$0.1) }
+                .asDriver(onErrorJustReturn: FxADisplayFirstRun(action: .fetchingUserInformation, isFirstRun: true))
+                .drive(onNext: { latest in
+                    switch latest.action {
                     case .loadInitialURL(let url):
                         self.view?.loadRequest(URLRequest(url: url))
                     case .finishedFetchingUserInformation:
                         self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
-                        self.routeActionHandler.invoke(MainRouteAction.list)
+
+                        let route: RouteAction = latest.isFirstRun ? LoginRouteAction.biometryOnboarding : MainRouteAction.list // swiftlint:disable:this line_length
+
+                        self.routeActionHandler.invoke(route)
                     default:
                         break
                     }

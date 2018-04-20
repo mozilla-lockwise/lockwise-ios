@@ -37,8 +37,8 @@ class FxAPresenterSpec: QuickSpec {
     class FakeFxAStore: FxAStore {
         var fakeFxADisplay = PublishSubject<FxADisplayAction>()
 
-        override var fxADisplay: Driver<FxADisplayAction> {
-            return fakeFxADisplay.asDriver(onErrorJustReturn: .fetchingUserInformation)
+        override var fxADisplay: Observable<FxADisplayAction> {
+            return fakeFxADisplay.asObservable()
         }
     }
 
@@ -99,6 +99,7 @@ class FxAPresenterSpec: QuickSpec {
             describe(".onViewReady()") {
                 beforeEach {
                     self.subject.onViewReady()
+                    UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
                 }
 
                 it("initiates fxa authentication") {
@@ -117,19 +118,47 @@ class FxAPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("receiving .finishedFetchingUserInformation") {
+                describe("when authenticating during the first run") {
                     beforeEach {
-                        self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
+                        UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
                     }
 
-                    it("tells the settings to unlock the application") {
-                        expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
+                    describe("receiving .finishedFetchingUserInformation") {
+                        beforeEach {
+                            self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
+                        }
+
+                        it("tells the settings to unlock the application") {
+                            expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
+                        }
+
+                        it("tells routing action handler to show the onboarding with biometrics screen") {
+                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                            let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                            expect(argument).to(equal(LoginRouteAction.biometryOnboarding))
+                        }
+                    }
+                }
+
+                describe("when authenticating from lock") {
+                    beforeEach {
+                        UserDefaults.standard.set(true, forKey: SettingKey.locked.rawValue)
                     }
 
-                    it("tells routing action handler to show the listview") {
-                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(argument).to(equal(MainRouteAction.list))
+                    describe("receiving .finishedFetchingUserInformation") {
+                        beforeEach {
+                            self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
+                        }
+
+                        it("tells the settings to unlock the application") {
+                            expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
+                        }
+
+                        it("tells routing action handler to show the listview") {
+                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                            let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                            expect(argument).to(equal(MainRouteAction.list))
+                        }
                     }
                 }
 

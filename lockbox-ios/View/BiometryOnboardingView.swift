@@ -22,7 +22,21 @@ class BiometryOnboardingView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.enableButton.layer.cornerRadius = 5
+        self.enableButton.clipsToBounds = true
+
         self.presenter?.onViewReady()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 }
 
@@ -33,6 +47,10 @@ extension BiometryOnboardingView: BiometryOnboardingViewProtocol {
 
     var notNowTapped: Observable<Void> {
         return self.notNowButton.rx.tap.asObservable()
+    }
+
+    var oniPhoneX: Bool {
+        return UIDevice.oniPhoneX
     }
 
     func setBiometricsImageName(_ name: String) {

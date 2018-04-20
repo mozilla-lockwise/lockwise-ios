@@ -39,10 +39,12 @@
 		7AA540D7395F48BD6983CC3E /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CDEA56C47263160AD0E /* Dispatcher.swift */; };
 		7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54D4E439D76B910034E2A /* ErrorAction.swift */; };
 		7AA541388E228B6281F2A2E8 /* UserInfoStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E826632AFFBA1677E5E /* UserInfoStoreSpec.swift */; };
+		7AA5419CD8E02252DE21CF47 /* BiometryOnboardingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E4D59360BF1BD561D91 /* BiometryOnboardingPresenterSpec.swift */; };
 		7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547479EBD794467A4A4DF /* ApplicationLifecycleAction.swift */; };
 		7AA541B3BC9C4F5E6A725222 /* FxAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C12A1BC616CA2344584 /* FxAView.swift */; };
 		7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547CE3404CC8123CA455D /* Observable+Spec.swift */; };
 		7AA541ED07A75F27A211819B /* AccountSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E25FB7C712ECE1069E5 /* AccountSettingViewSpec.swift */; };
+		7AA5420384315455A53FA30F /* UIDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA543D643DF97497E6D21C1 /* UIDevice+.swift */; };
 		7AA542395C9C6379C27909B5 /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54D3C8D454F79BD580AAF /* UserDefaults+.swift */; };
 		7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */; };
 		7AA5435895EE131D6B5BD4ED /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5450E45A4DB17626F4684 /* WebView.swift */; };
@@ -90,6 +92,7 @@
 		7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA545A7472772984D517CB0 /* ErrorActionSpec.swift */; };
 		7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547106248ADBADAF76239 /* ItemDetailCell.swift */; };
 		7AA54AA7964A1C95FDB7AA6E /* UserDefaults+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA546618500E909B1E98632 /* UserDefaults+Spec.swift */; };
+		7AA54AE829C6BD09C57D5372 /* BiometryOnboardingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5402F2105BDC7F8F308DA /* BiometryOnboardingViewSpec.swift */; };
 		7AA54B00F88A2EF6FDFA2892 /* SettingNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FD51CE484EAF78B4324 /* SettingNavigationController.swift */; };
 		7AA54B255317D07347416493 /* RouteStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C53A73B2C31DAB76E08 /* RouteStoreSpec.swift */; };
 		7AA54B2587BDE8D88215802C /* RootPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C72B63B2B4C8200F3F8 /* RootPresenterSpec.swift */; };
@@ -252,6 +255,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7AA5402F2105BDC7F8F308DA /* BiometryOnboardingViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryOnboardingViewSpec.swift; sourceTree = "<group>"; };
 		391233712090E56E00CB0233 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		391233772090E5A200CB0233 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = Carthage/Build/iOS/Shared.framework; sourceTree = "<group>"; };
@@ -292,6 +296,7 @@
 		7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = bootstrap.sh; sourceTree = "<group>"; };
 		7AA5437C9484207EEC3C6B2E /* DataStoreActionIntegrationSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreActionIntegrationSpec.swift; sourceTree = "<group>"; };
 		7AA5439EEDE4AB222842E7C8 /* DataStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreSpec.swift; sourceTree = "<group>"; };
+		7AA543D643DF97497E6D21C1 /* UIDevice+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+.swift"; sourceTree = "<group>"; };
 		7AA5444E03C80B7A8A0E4EE5 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		7AA5445B47B7A548F0F0E294 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		7AA5445C1077C84873E7CB1C /* Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
@@ -352,6 +357,7 @@
 		7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailStore.swift; sourceTree = "<group>"; };
 		7AA54E25FB7C712ECE1069E5 /* AccountSettingViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSettingViewSpec.swift; sourceTree = "<group>"; };
 		7AA54E38ACC2FDBBF700D5E1 /* RouteAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteAction.swift; sourceTree = "<group>"; };
+		7AA54E4D59360BF1BD561D91 /* BiometryOnboardingPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryOnboardingPresenterSpec.swift; sourceTree = "<group>"; };
 		7AA54E826632AFFBA1677E5E /* UserInfoStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoStoreSpec.swift; sourceTree = "<group>"; };
 		7AA54E8C5A0848F0669FBB10 /* SettingNavigationControllerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		7AA54E9846C5A9F801A7FE1C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -672,6 +678,7 @@
 				7AA54BF70B374C370B51ECB9 /* UIView+.swift */,
 				7AA54D3C8D454F79BD580AAF /* UserDefaults+.swift */,
 				D86A307520829B7F00589CA8 /* UIApplication+.swift */,
+				7AA543D643DF97497E6D21C1 /* UIDevice+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -797,6 +804,8 @@
 				D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */,
 				D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */,
 				D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */,
+				7AA5402F2105BDC7F8F308DA /* BiometryOnboardingViewSpec.swift */,
+				7AA54E4D59360BF1BD561D91 /* BiometryOnboardingPresenterSpec.swift */,
 				7AA545541FB802B047FACA4C /* ApplicationLifecycleActionSpec.swift */,
 				7AA544D5B320BB5C55723EB0 /* TelemetryActionSpec.swift */,
 				7AA542CB670BA12339305AC7 /* TelemetryStoreSpec.swift */,
@@ -1097,6 +1106,8 @@
 				7AA540CB2BA73DB82EDDAED1 /* SettingNavigationControllerSpec.swift in Sources */,
 				7AA54C2A679E7AAF3C34E7E6 /* BiometryManagerSpec.swift in Sources */,
 				7AA54FF1E300E6DEEFD77717 /* UIColor+Spec.swift in Sources */,
+				7AA54AE829C6BD09C57D5372 /* BiometryOnboardingViewSpec.swift in Sources */,
+				7AA5419CD8E02252DE21CF47 /* BiometryOnboardingPresenterSpec.swift in Sources */,
 				7AA54BF88A5C814303E07729 /* ApplicationLifecycleActionSpec.swift in Sources */,
 				7AA54E94693B86C2EFCD4F5B /* TelemetryActionSpec.swift in Sources */,
 				7AA54BED3E368028D3315105 /* TelemetryStoreSpec.swift in Sources */,
@@ -1176,6 +1187,7 @@
 				7AA54F829FEA140A047FE407 /* BiometryOnboardingView.swift in Sources */,
 				7AA5471A8AE113FDD07B27A3 /* BiometryOnboardingPresenter.swift in Sources */,
 				7AA54D3D19DB0AC7D0B59812 /* BiometryManager.swift in Sources */,
+				7AA5420384315455A53FA30F /* UIDevice+.swift in Sources */,
 				7AA546B578EBABE3543AB466 /* TelemetryAction.swift in Sources */,
 				7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */,
 				7AA5457DB74127B904E5A767 /* TelemetryStore.swift in Sources */,

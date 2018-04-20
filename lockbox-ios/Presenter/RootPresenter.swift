@@ -158,9 +158,9 @@ class RootPresenter {
                 if !view.topViewIs(FxAView.self) {
                     view.pushLoginView(view: .fxa)
                 }
-            case .onboardingBiometrics:
+            case .biometryOnboarding:
                 if !view.topViewIs(BiometryOnboardingView.self) {
-                    view.pushLoginView(view: .onboardingBiometrics)
+                    view.pushLoginView(view: .biometryOnboarding)
                 }
             }
         }.asObserver()
