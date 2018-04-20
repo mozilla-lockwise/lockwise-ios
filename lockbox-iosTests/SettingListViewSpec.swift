@@ -62,11 +62,11 @@ class SettingListViewSpec: QuickSpec {
                 let configDriver = PublishSubject<[SettingSectionModel]>()
                 let sectionModels = [
                     SettingSectionModel(model: 0, items: [
-                        SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
+                        SettingCellConfiguration(text: "Provide Feedback", routeAction: SettingRouteAction.provideFeedback),
                         SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
                     ]),
                     SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
+                        SwitchSettingCellConfiguration(text: "Face ID", routeAction: nil, isOn: true)
                     ])
                 ]
 
@@ -100,11 +100,11 @@ class SettingListViewSpec: QuickSpec {
                 let configDriver = PublishSubject<[SettingSectionModel]>()
                 let sectionModels = [
                     SettingSectionModel(model: 0, items: [
-                        SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
+                        SettingCellConfiguration(text: "Provide Feedback", routeAction: SettingRouteAction.provideFeedback),
                         SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
                     ]),
                     SettingSectionModel(model: 1, items: [
-                        SwitchSettingCellConfiguration(text: "Enable in browser", routeAction: nil, isOn: true)
+                        SwitchSettingCellConfiguration(text: "Face ID", routeAction: nil, isOn: true)
                     ])
                 ]
 
@@ -119,7 +119,7 @@ class SettingListViewSpec: QuickSpec {
                     }
 
                     it("tells the presenter with the appropriate action") {
-                        expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.account))
+                        expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.provideFeedback))
                     }
                 }
 
