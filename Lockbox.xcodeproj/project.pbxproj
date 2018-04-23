@@ -1333,7 +1333,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = ZAU58TE88U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1348,7 +1348,7 @@
 					"$(PROJECT_DIR)",
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.paul.lockbox;
 				PRODUCT_NAME = Lockbox;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
@@ -1369,7 +1369,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = ZAU58TE88U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1384,7 +1384,7 @@
 					"$(PROJECT_DIR)",
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.paul.lockbox;
 				PRODUCT_NAME = Lockbox;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
@@ -1466,7 +1466,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
+				DEVELOPMENT_TEAM = ZAU58TE88U;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1481,7 +1481,7 @@
 					"$(PROJECT_DIR)",
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
+				PRODUCT_BUNDLE_IDENTIFIER = com.paul.lockbox;
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Lockbox-Branch";
 				PROVISIONING_PROFILE_SPECIFIER = "";

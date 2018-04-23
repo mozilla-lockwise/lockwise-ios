@@ -5,10 +5,12 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import UIKit
 
 protocol AccountSettingViewProtocol: class {
     func bind(avatarImage: Driver<Data>)
     func bind(displayName: Driver<String>)
+    func displayAlert()
 }
 
 class AccountSettingPresenter {
@@ -26,6 +28,12 @@ class AccountSettingPresenter {
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.routeActionHandler.invoke(SettingRouteAction.list)
+        }.asObserver()
+    }()
+
+    lazy private(set) var unLinkAccountTapped: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.view?.displayAlert()
         }.asObserver()
     }()
 
