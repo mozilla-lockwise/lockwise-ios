@@ -210,7 +210,6 @@ class RootPresenter {
                 view.pushSettingView(view: .faq)
             case .provideFeedback:
                 view.pushSettingView(view: .provideFeedback)
-            default: break
             }
 
         }.asObserver()
