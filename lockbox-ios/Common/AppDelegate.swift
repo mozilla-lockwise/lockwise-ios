@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import FxAUtils
 import UIKit
 import Telemetry
 
@@ -11,6 +12,14 @@ let PostFirstRunKey = "firstrun"
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+
+    var profile: Profile!
+
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
+        profile = BrowserProfile(localName: "lockbox-profile")
+        FxALoginHelper.sharedInstance.application(application, didLoadProfile: profile)
+        return true
+    }
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
