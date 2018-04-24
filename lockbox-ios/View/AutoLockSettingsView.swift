@@ -65,8 +65,9 @@ extension AutoLockSettingView {
     private func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource(
             configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
-            let cell = UITableViewCell()
+            let cell = SettingCell()
             cell.textLabel?.text = cellConfiguration.text
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
 
             cell.accessoryType = cellConfiguration.isChecked ?
                 UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none

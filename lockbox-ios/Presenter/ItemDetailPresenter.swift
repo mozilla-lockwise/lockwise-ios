@@ -143,7 +143,8 @@ extension ItemDetailPresenter {
                         title: Constant.string.webAddress,
                         value: item.origins.first ?? "",
                         password: false,
-                        size: 16)
+                        size: 16,
+                        valueFontColor: Constant.color.lockBoxBlue)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
