@@ -12,7 +12,7 @@ import RxTest
 
 class ViewControllerSpec: QuickSpec {
 
-    var subject: (UIViewController & ErrorView & StatusAlertView & OptionSheetView)!
+    var subject: (UIViewController & ErrorView & StatusAlertView & AlertControllerView)!
 
     override func spec() {
         beforeEach {
@@ -60,12 +60,15 @@ class ViewControllerSpec: QuickSpec {
         xdescribe(".displayOptionSheet") {
             let title = "title!"
             let buttons = [
-                OptionSheetButtonConfiguration(title: "something", tapObserver: nil, cancel: false),
-                OptionSheetButtonConfiguration(title: "blah", tapObserver: nil, cancel: true)
+                AlertActionButtonConfiguration(title: "something", tapObserver: nil, style: .default),
+                AlertActionButtonConfiguration(title: "blah", tapObserver: nil, style: .cancel)
             ]
 
             beforeEach {
-                self.subject.displayOptionSheet(buttons: buttons, title: title)
+                self.subject.displayAlertController(buttons: buttons,
+                                                    title: title,
+                                                    message: nil,
+                                                    style: .actionSheet)
             }
 
             it("displays an optionsheet alert controller") {

@@ -13,6 +13,7 @@ import RxCocoa
 
 class AccountSettingPresenterSpec: QuickSpec {
     class FakeAccountSettingView: AccountSettingViewProtocol {
+
         var avatarImageDataObserver: TestableObserver<Data>!
         var displayNameObserver: TestableObserver<String>!
 
@@ -24,6 +25,10 @@ class AccountSettingPresenterSpec: QuickSpec {
 
         func bind(displayName: Driver<String>) {
             displayName.drive(self.displayNameObserver).disposed(by: self.disposeBag)
+        }
+
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
+
         }
     }
 
