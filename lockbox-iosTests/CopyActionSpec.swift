@@ -11,10 +11,10 @@ import Nimble
 
 class CopyActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {
-        var dispatchedAction: Action?
+        var dispatchedActions: [Action] = []
 
         override func dispatch(action: Action) {
-            self.dispatchedAction = action
+            self.dispatchedActions.append(action)
         }
     }
 
@@ -46,8 +46,8 @@ class CopyActionSpec: QuickSpec {
 
             describe("invoke") {
                 let text = "myspecialtext"
-                let fieldName = "Password"
-                let action = CopyAction(text: text, fieldName: fieldName)
+                let fieldName = CopyField.password
+                let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd")
 
                 beforeEach {
                     self.subject.invoke(action)
@@ -60,10 +60,12 @@ class CopyActionSpec: QuickSpec {
                     expect(self.pasteboard.options![UIPasteboardOption.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
                 }
 
-                it("dispatches the copied action") {
-                    expect(self.dispatcher.dispatchedAction).notTo(beNil())
-                    let copiedAction = self.dispatcher.dispatchedAction as! CopyConfirmationDisplayAction
-                    expect(copiedAction).to(equal(CopyConfirmationDisplayAction(fieldName: fieldName)))
+                it("dispatches the copied action and the copy action") {
+                    let copiedAction = self.dispatcher.dispatchedActions[0] as! CopyConfirmationDisplayAction
+                    expect(copiedAction).to(equal(CopyConfirmationDisplayAction(fieldName: Constant.string.password)))
+
+                    let copyAction = self.dispatcher.dispatchedActions[1] as! CopyAction
+                    expect(copyAction).to(equal(action))
                 }
             }
         }
@@ -80,10 +82,22 @@ class CopyActionSpec: QuickSpec {
         describe("CopyAction") {
             describe("equality") {
                 it("CopyActions are equal when fieldnames and text are equal") {
-                    expect(CopyAction(text: "bleh", fieldName: "something")).to(equal(CopyAction(text: "bleh", fieldName: "something")))
-                    expect(CopyAction(text: "murf", fieldName: "something")).notTo(equal(CopyAction(text: "bleh", fieldName: "something")))
-                    expect(CopyAction(text: "bleh", fieldName: "something")).notTo(equal(CopyAction(text: "bleh", fieldName: "not")))
-                    expect(CopyAction(text: "murf", fieldName: "something")).notTo(equal(CopyAction(text: "bleh", fieldName: "not")))
+                    expect(CopyAction(text: "bleh", field: .username, itemID: "fdsfdsds")).to(equal(CopyAction(text: "bleh", field: .username, itemID: "fdsfdsds")))
+                    expect(CopyAction(text: "murf", field: .password, itemID: "fdsfdsds")).notTo(equal(CopyAction(text: "bleh", field: .password, itemID: "fdsfdsds")))
+                    expect(CopyAction(text: "bleh", field: .username, itemID: "fdsfdsds")).notTo(equal(CopyAction(text: "bleh", field: .password, itemID: "fdsfdsds")))
+                    expect(CopyAction(text: "murf", field: .username, itemID: "fdsfdsds")).notTo(equal(CopyAction(text: "bleh", field: .password, itemID: "fdsfdsds")))
+                }
+            }
+
+            describe("telemetry") {
+                it("returns the tap event method") {
+                    expect(CopyAction(text: "anything", field: .password, itemID: "fsdfsgfhgdfdfds").eventMethod).to(equal(TelemetryEventMethod.tap))
+                }
+
+                it("returns the button pressed as the object") {
+                    expect(CopyAction(text: "anything", field: .password, itemID: "fsdfsgfhgdfdfds").eventObject).to(equal(TelemetryEventObject.entryCopyPasswordButton))
+                    expect(CopyAction(text: "anything", field: .username, itemID: "fsdfsgfhgdfdfds").eventObject).to(equal(TelemetryEventObject.entryCopyUsernameButton))
+
                 }
             }
         }

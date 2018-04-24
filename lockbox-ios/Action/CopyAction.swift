@@ -5,15 +5,43 @@
 import Foundation
 import UIKit
 
+enum CopyField {
+    case username, password
+}
+
 struct CopyAction: Action {
     let text: String
-    let fieldName: String
+    let field: CopyField
+    let itemID: String
+}
+
+extension CopyAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return TelemetryEventMethod.tap
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self.field {
+        case .password:
+            return TelemetryEventObject.entryCopyPasswordButton
+        case .username:
+            return TelemetryEventObject.entryCopyUsernameButton
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        return [ExtraKey.itemid.rawValue: self.itemID]
+    }
 }
 
 extension CopyAction: Equatable {
     static func ==(lhs: CopyAction, rhs: CopyAction) -> Bool {
         return lhs.text == rhs.text &&
-                lhs.fieldName == rhs.fieldName
+                lhs.field == rhs.field
     }
 }
 
@@ -43,7 +71,16 @@ class CopyActionHandler: ActionHandler {
         let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
 
         self.pasteboard.setItems([[UIPasteboardTypeAutomatic: action.text]],
-                                 options: [UIPasteboardOption.expirationDate: expireDate])
-        self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: action.fieldName))
+                options: [UIPasteboardOption.expirationDate: expireDate])
+
+        var fieldName: String
+        switch action.field {
+        case .password: fieldName = Constant.string.password
+        case .username: fieldName = Constant.string.username
+        }
+
+        self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: fieldName))
+        // only for telemetry purposes, no one is listening for this
+        self.dispatcher.dispatch(action: action)
     }
 }

@@ -45,19 +45,24 @@ class ItemDetailPresenter {
                 return
             }
 
+            let itemId = target.view?.itemId ?? ""
+
             if copyableFields.contains(value) {
-                target.dataStore.onItem(self.view?.itemId ?? "")
+                target.dataStore.onItem(itemId)
                         .take(1)
                         .subscribe(onNext: { item in
+                            var field = CopyField.username
                             var text = ""
                             if value == Constant.string.username {
                                 text = item.entry.username ?? ""
+                                field = CopyField.username
                             } else if value == Constant.string.password {
                                 text = item.entry.password ?? ""
+                                field = CopyField.password
                             }
 
                             target.dataStoreActionHandler.touch(item)
-                            target.copyActionHandler.invoke(CopyAction(text: text, fieldName: value))
+                            target.copyActionHandler.invoke(CopyAction(text: text, field: field, itemID: itemId))
                         })
                         .disposed(by: target.disposeBag)
             } else if value == Constant.string.webAddress {

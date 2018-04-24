@@ -45,25 +45,32 @@ class RootPresenter {
     fileprivate let routeStore: RouteStore
     fileprivate let userInfoStore: UserInfoStore
     fileprivate let dataStore: DataStore
+    fileprivate let telemetryStore: TelemetryStore
     fileprivate let userDefaults: UserDefaults
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
+    fileprivate let telemetryActionHandler: TelemetryActionHandler
 
     init(view: RootViewProtocol,
+         dispatcher: Dispatcher = Dispatcher.shared,
          routeStore: RouteStore = RouteStore.shared,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          dataStore: DataStore = DataStore.shared,
+         telemetryStore: TelemetryStore = TelemetryStore.shared,
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared
+         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared
     ) {
         self.view = view
         self.routeStore = routeStore
         self.userInfoStore = userInfoStore
         self.dataStore = dataStore
+        self.telemetryStore = telemetryStore
         self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
+        self.telemetryActionHandler = telemetryActionHandler
 
         // request init & lock status update on app launch
         self.dataStoreActionHandler.updateInitialized()
@@ -106,6 +113,7 @@ class RootPresenter {
                 })
                 .disposed(by: self.disposeBag)
 
+        self.startTelemetry()
         self.unlockBlindly()
     }
 
@@ -217,7 +225,13 @@ class RootPresenter {
 }
 
 extension RootPresenter {
-    private func unlockBlindly() {
+    fileprivate func startTelemetry() {
+        self.telemetryStore.telemetryFilter
+                .bind(to: self.telemetryActionHandler.telemetryActionListener)
+                .disposed(by: self.disposeBag)
+    }
+
+    fileprivate func unlockBlindly() {
         Observable.combineLatest(self.dataStore.onInitialized, self.userInfoStore.scopedKey, self.dataStore.onLocked)
                 .filter { (latest: (Bool, String?, Bool)) -> Bool in
                     return latest.0
@@ -226,13 +240,9 @@ extension RootPresenter {
                     return KeyDataStoreLock(scopedKey: latest.1, dataStoreLocked: latest.2)
                 }
                 .subscribe(onNext: { (latest: KeyDataStoreLock) in
-                    guard let scopedKey = latest.scopedKey else {
-                        return
-                    }
-
-                    if latest.dataStoreLocked {
+                    if let scopedKey = latest.scopedKey, latest.dataStoreLocked {
                         self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
-                    } else {
+                    } else if !latest.dataStoreLocked {
                         self.dataStoreActionHandler.list()
                     }
                 })
