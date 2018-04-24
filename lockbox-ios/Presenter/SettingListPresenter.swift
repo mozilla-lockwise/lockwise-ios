@@ -99,7 +99,7 @@ extension SettingListPresenter {
         preferredBrowser: PreferredBrowserSetting,
         usageDataEnabled: Bool) -> [SettingSectionModel] {
 
-        let accountSettingSection = SettingSectionModel(model: 0, items: [
+        var supportSettingSection = SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsProvideFeedback,
                     routeAction: SettingRouteAction.provideFeedback),
@@ -145,8 +145,8 @@ extension SettingListPresenter {
             string: Constant.string.learnMore,
             attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
-        applicationConfigurationSection.items.append(usageDataSetting)
+        supportSettingSection.items.append(usageDataSetting)
 
-        return [ accountSettingSection, applicationConfigurationSection ]
+        return [ supportSettingSection, applicationConfigurationSection ]
     }
 }

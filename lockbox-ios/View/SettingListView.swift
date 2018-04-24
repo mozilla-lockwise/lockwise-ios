@@ -87,7 +87,7 @@ extension SettingListView {
 
                 return cell
         }, titleForHeaderInSection: { _, section in
-            return section == 0 ? Constant.string.settingsHelpSectionHeader :
+            return section == 0 ? Constant.string.settingsSupportSectionHeader :
                     Constant.string.settingsConfigurationSectionHeader
          })
     }
