@@ -8,7 +8,7 @@ import RxSwift
 protocol BiometryOnboardingViewProtocol: class {
     var enableTapped: Observable<Void> { get }
     var notNowTapped: Observable<Void> { get }
-    var oniPhoneX: Bool { get }
+    var hasFaceID: Bool { get }
 
     func setBiometricsImageName(_ name: String)
     func setBiometricsTitle(_ title: String)
@@ -36,9 +36,9 @@ class BiometryOnboardingPresenter {
         self.setUpContent()
 
         self.view?.enableTapped
-                .subscribe { [weak self] _ in
+                .subscribe { [weak self] (_) in
                     if let view = self?.view,
-                       view.oniPhoneX {
+                       view.hasFaceID {
                         self?.initialFaceIDAuth()
                     }
 
@@ -48,7 +48,7 @@ class BiometryOnboardingPresenter {
                 .disposed(by: self.disposeBag)
 
         self.view?.notNowTapped
-                .subscribe { [weak self] _ in
+                .subscribe { [weak self] (_) in
                     self?.routeActionHandler.invoke(MainRouteAction.list)
                 }
                 .disposed(by: self.disposeBag)
@@ -58,11 +58,19 @@ class BiometryOnboardingPresenter {
 extension BiometryOnboardingPresenter {
     fileprivate func setUpContent() {
         if let view = self.view {
-            let iPhoneX = view.oniPhoneX
+            var imageName: String
+            var pageTitle: String
+            var subtitle: String
 
-            let imageName = iPhoneX ? "face-large" : "fingerprint-large"
-            let pageTitle = iPhoneX ? Constant.string.onboardingFaceIDHeader : Constant.string.onboardingTouchIDHeader
-            let subtitle = iPhoneX ? Constant.string.onboardingFaceIDSubtitle : Constant.string.onboardingTouchIDSubtitle // swiftlint:disable:this line_length
+            if view.hasFaceID {
+                imageName = "face-large"
+                pageTitle = Constant.string.onboardingFaceIDHeader
+                subtitle = Constant.string.onboardingFaceIDSubtitle
+            } else {
+                imageName = "fingerprint-large"
+                pageTitle = Constant.string.onboardingTouchIDHeader
+                subtitle = Constant.string.onboardingTouchIDSubtitle
+            }
 
             view.setBiometricsImageName(imageName)
             view.setBiometricsTitle(pageTitle)

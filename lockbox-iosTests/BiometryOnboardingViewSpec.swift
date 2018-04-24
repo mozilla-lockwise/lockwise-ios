@@ -77,10 +77,10 @@ class BiometryOnboardingViewSpec: QuickSpec {
 
             describe("oniPhoneX") {
                 it("returns the UIDevice value") {
-                    if UIDevice.oniPhoneX {
-                        expect(self.subject.oniPhoneX).to(beTrue())
+                    if UIDevice.hasFaceID {
+                        expect(self.subject.hasFaceID).to(beTrue())
                     } else {
-                        expect(self.subject.oniPhoneX).to(beFalse())
+                        expect(self.subject.hasFaceID).to(beFalse())
                     }
                 }
             }

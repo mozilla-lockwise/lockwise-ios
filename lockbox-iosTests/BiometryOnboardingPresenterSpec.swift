@@ -26,7 +26,7 @@ class BiometryOnboardingPresenterSpec: QuickSpec {
             return self.notNowStub.asObservable()
         }
 
-        var oniPhoneX: Bool {
+        var hasFaceID: Bool {
             return self.iPhoneXStub
         }
 

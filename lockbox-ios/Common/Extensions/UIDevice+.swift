@@ -5,7 +5,7 @@
 import UIKit
 
 extension UIDevice {
-    public static var oniPhoneX: Bool {
+    public static var hasFaceID: Bool {
         let currentDevice = UIDevice.current.model
         return currentDevice == "iPhone X"
     }

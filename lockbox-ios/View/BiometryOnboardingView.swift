@@ -49,8 +49,8 @@ extension BiometryOnboardingView: BiometryOnboardingViewProtocol {
         return self.notNowButton.rx.tap.asObservable()
     }
 
-    var oniPhoneX: Bool {
-        return UIDevice.oniPhoneX
+    var hasFaceID: Bool {
+        return UIDevice.hasFaceID
     }
 
     func setBiometricsImageName(_ name: String) {
