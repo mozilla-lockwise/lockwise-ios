@@ -81,7 +81,8 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.webAddress,
                                 value: "www.meow.com",
                                 password: false,
-                                size: 16)
+                                size: 16,
+                                valueFontColor: Constant.color.lockBoxBlue)
                     ]),
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
@@ -129,6 +130,10 @@ class ItemDetailViewSpec: QuickSpec {
                     it("extracts the titlelabel text and tells the presenter") {
                         expect(self.presenter.onCellTappedValue).to(equal(Constant.string.username))
                     }
+                }
+
+                it("sets the font color for web address") {
+                    expect((self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell).valueLabel.textColor).to(equal(Constant.color.lockBoxBlue))
                 }
             }
 
