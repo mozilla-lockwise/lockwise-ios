@@ -59,10 +59,11 @@ extension PreferredBrowserSettingView {
     private func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource(
             configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
-                let cell = UITableViewCell()
+                let cell = SettingCell()
                 cell.textLabel?.text = cellConfiguration.text
                 cell.accessoryType = cellConfiguration.isChecked ?
                     UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+                cell.selectionStyle = UITableViewCellSelectionStyle.none
 
                 if !cellConfiguration.enabled {
                     cell.isUserInteractionEnabled = false

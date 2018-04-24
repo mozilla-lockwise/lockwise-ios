@@ -19,12 +19,12 @@ class PreferredBrowserSettingPresenter {
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
-        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserChrome,
-                                          valueWhenChecked: PreferredBrowserSetting.Chrome),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox,
                                           valueWhenChecked: PreferredBrowserSetting.Firefox),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus,
                                           valueWhenChecked: PreferredBrowserSetting.Focus),
+        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserChrome,
+                                          valueWhenChecked: PreferredBrowserSetting.Chrome),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari,
                                           valueWhenChecked: PreferredBrowserSetting.Safari)
     ]

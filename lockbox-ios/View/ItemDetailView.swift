@@ -14,6 +14,15 @@ struct ItemDetailCellConfiguration {
     let value: String
     let password: Bool
     let size: CGFloat
+    let valueFontColor: UIColor
+
+    init(title: String, value: String, password: Bool, size: CGFloat, valueFontColor: UIColor = UIColor.black) {
+        self.title = title
+        self.value = value
+        self.password = password
+        self.size = size
+        self.valueFontColor = valueFontColor
+    }
 }
 
 extension ItemDetailCellConfiguration: IdentifiableType {
@@ -136,6 +145,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.valueLabel.text = cellConfiguration.value
 
                     cell.valueLabel.font = cell.valueLabel.font.withSize(cellConfiguration.size)
+                    cell.valueLabel.textColor = cellConfiguration.valueFontColor
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
