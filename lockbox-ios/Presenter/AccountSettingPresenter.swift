@@ -5,12 +5,10 @@
 import Foundation
 import RxCocoa
 import RxSwift
-import UIKit
 
-protocol AccountSettingViewProtocol: class {
+protocol AccountSettingViewProtocol: class, AlertControllerView {
     func bind(avatarImage: Driver<Data>)
     func bind(displayName: Driver<String>)
-    func displayAlert()
 }
 
 class AccountSettingPresenter {
@@ -33,7 +31,16 @@ class AccountSettingPresenter {
 
     lazy private(set) var unLinkAccountTapped: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.view?.displayAlert()
+            target.view?.displayAlertController(buttons: [
+                AlertActionButtonConfiguration(title: "Cancel",
+                                               tapObserver: nil,
+                                               style: .default),
+                AlertActionButtonConfiguration(title: "Unlink",
+                                               tapObserver: target.unlinkAccountObserver,
+                                               style: .destructive)],
+                                            title: "Are you sure you want to unlink your account?",
+                                            message: "This will sign you out and any settings you made will be reset for this device.",
+                                            style: .alert)
         }.asObserver()
     }()
 

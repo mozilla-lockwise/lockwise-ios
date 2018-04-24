@@ -47,22 +47,6 @@ extension AccountSettingView: AccountSettingViewProtocol {
                 .drive(self.usernameLabel.rx.text)
                 .disposed(by: self.disposeBag)
     }
-
-    func displayAlert() {
-        let alert = UIAlertController(title: "Are you sure you want to unlink your account?",
-                                      message: "This will sign you out and any settings you made will be reset for this device.",
-                                      preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel",
-                                     style: .default)
-
-        let unlinkAction = UIAlertAction(title: "Unlink",
-                                         style: .destructive) { _ in
-                                            self.presenter?.unlinkAccountObserver }
-        alert.addAction(cancelAction)
-        alert.addAction(unlinkAction)
-        self.present(alert,
-                     animated: true)
-    }
 }
 
 extension AccountSettingView: UIGestureRecognizerDelegate {

@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol ItemListViewProtocol: class, OptionSheetView {
+protocol ItemListViewProtocol: class, AlertControllerView {
     func bind(items: Driver<[ItemSectionModel]>)
     func bind(sortingButtonTitle: Driver<String>)
     func displayEmptyStateMessaging()
@@ -60,21 +60,20 @@ class ItemListPresenter {
 
     lazy private(set) var sortingButtonObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.view?.displayOptionSheet(buttons: [
-                OptionSheetButtonConfiguration(
-                        title: Constant.string.alphabetically,
-                        tapObserver: target.alphabeticSortObserver,
-                        cancel: false),
-                OptionSheetButtonConfiguration(
-                        title: Constant.string.recentlyUsed,
-                        tapObserver: target.recentlyUsedSortObserver,
-                        cancel: false),
-                OptionSheetButtonConfiguration(
-                        title: Constant.string.cancel,
-                        tapObserver: nil,
-                        cancel: true)
-            ], title: Constant.string.sortEntries)
-        }.asObserver()
+            target.view?.displayAlertController(buttons: [
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.alphabetically,
+                                    tapObserver: target.alphabeticSortObserver,
+                                    style: .default),
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.recentlyUsed,
+                                    tapObserver: target.recentlyUsedSortObserver,
+                                    style: .default),
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.cancel,
+                                    tapObserver: nil,
+                                    style: .cancel)], title: Constant.string.sortEntries, message: nil, style: .actionSheet)
+            }.asObserver()
     }()
 
     lazy private var alphabeticSortObserver: AnyObserver<Void> = {

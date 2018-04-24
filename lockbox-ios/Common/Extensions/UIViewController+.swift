@@ -13,14 +13,17 @@ protocol StatusAlertView {
     func displayTemporaryAlert(_ message: String, timeout: TimeInterval)
 }
 
-struct OptionSheetButtonConfiguration {
+struct AlertActionButtonConfiguration {
     let title: String
     let tapObserver: AnyObserver<Void>?
-    let cancel: Bool
+    let style: UIAlertActionStyle
 }
 
-protocol OptionSheetView {
-    func displayOptionSheet(buttons: [OptionSheetButtonConfiguration], title: String?)
+protocol AlertControllerView {
+    func displayAlertController(buttons: [AlertActionButtonConfiguration],
+                                title: String?,
+                                message: String?,
+                                style: UIAlertControllerStyle)
 }
 
 extension UIViewController: ErrorView {
@@ -69,13 +72,15 @@ extension UIViewController: StatusAlertView {
     }
 }
 
-extension UIViewController: OptionSheetView {
-    func displayOptionSheet(buttons: [OptionSheetButtonConfiguration], title: String?) {
-        let alertController = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+extension UIViewController: AlertControllerView {
+    func displayAlertController(buttons: [AlertActionButtonConfiguration],
+                                title: String?,
+                                message: String?,
+                                style: UIAlertControllerStyle) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
 
         for buttonConfig in buttons {
-            let style = buttonConfig.cancel ? UIAlertActionStyle.cancel : UIAlertActionStyle.default
-            let action = UIAlertAction(title: buttonConfig.title, style: style) { _ in
+            let action = UIAlertAction(title: buttonConfig.title, style: buttonConfig.style) { _ in
                 buttonConfig.tapObserver?.onNext(())
                 buttonConfig.tapObserver?.onCompleted()
             }
