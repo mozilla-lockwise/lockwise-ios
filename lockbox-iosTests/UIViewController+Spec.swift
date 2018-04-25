@@ -22,7 +22,7 @@ class ViewControllerSpec: QuickSpec {
             self.subject.preloadView()
         }
 
-        describe(".displayError()") {
+        xdescribe(".displayError()") {
             let error = NSError(domain: "someerror", code: -1)
             beforeEach {
                 self.subject.displayError(error)
@@ -39,7 +39,7 @@ class ViewControllerSpec: QuickSpec {
             }
         }
 
-        describe(".displayTemporaryAlert") {
+        xdescribe(".displayTemporaryAlert") {
             let message = "Something copied to clipboard"
 
             beforeEach {
@@ -57,7 +57,7 @@ class ViewControllerSpec: QuickSpec {
             }
         }
 
-        describe(".displayOptionSheet") {
+        xdescribe(".displayOptionSheet") {
             let title = "title!"
             let buttons = [
                 OptionSheetButtonConfiguration(title: "something", tapObserver: nil, cancel: false),
