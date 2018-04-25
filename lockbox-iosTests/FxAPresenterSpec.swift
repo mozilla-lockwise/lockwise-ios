@@ -18,9 +18,6 @@ class FxAPresenterSpec: QuickSpec {
         func loadRequest(_ urlRequest: URLRequest) {
             self.loadRequestArgument = urlRequest
         }
-
-        func displayError(_ error: Error) {
-        }
     }
 
     class FakeNavigationAction: WKNavigationAction {

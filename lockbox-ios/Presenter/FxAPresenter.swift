@@ -7,7 +7,7 @@ import WebKit
 import RxSwift
 import RxCocoa
 
-protocol FxAViewProtocol: class, ErrorView {
+protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
 }
 
@@ -23,6 +23,7 @@ class FxAPresenter {
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let fxaStore: FxAStore
     fileprivate let userDefaults: UserDefaults
+    fileprivate let biometryManager: BiometryManager
 
     private var disposeBag = DisposeBag()
 
@@ -37,7 +38,8 @@ class FxAPresenter {
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          fxaStore: FxAStore = FxAStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard
+         userDefaults: UserDefaults = UserDefaults.standard,
+         biometryManager: BiometryManager = BiometryManager()
     ) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
@@ -45,11 +47,17 @@ class FxAPresenter {
         self.routeActionHandler = routeActionHandler
         self.fxaStore = fxaStore
         self.userDefaults = userDefaults
+        self.biometryManager = biometryManager
     }
 
     func onViewReady() {
         Observable.combineLatest(self.fxaStore.fxADisplay, self.userDefaults.onLock)
-                .map { FxADisplayFirstRun(action: $0.0, isFirstRun: !$0.1) }
+                .map {
+                    FxADisplayFirstRun(action: $0.0, isFirstRun: !$0.1)
+                }
+                .distinctUntilChanged { (older: FxADisplayFirstRun, newer: FxADisplayFirstRun) in
+                    return older.action == newer.action
+                }
                 .asDriver(onErrorJustReturn: FxADisplayFirstRun(action: .fetchingUserInformation, isFirstRun: true))
                 .drive(onNext: { latest in
                     switch latest.action {

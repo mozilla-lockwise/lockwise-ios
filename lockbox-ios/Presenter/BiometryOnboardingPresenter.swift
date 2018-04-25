@@ -58,9 +58,9 @@ class BiometryOnboardingPresenter {
 extension BiometryOnboardingPresenter {
     fileprivate func setUpContent() {
         if let view = self.view {
-            var imageName: String
-            var pageTitle: String
-            var subtitle: String
+            let imageName: String
+            let pageTitle: String
+            let subtitle: String
 
             if view.hasFaceID {
                 imageName = "face-large"
