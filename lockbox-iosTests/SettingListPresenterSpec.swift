@@ -97,7 +97,7 @@ class SettingsPresenterSpec: QuickSpec {
                             let userAccountSettings = self.view.itemsObserver.events.last!.value.element![1].items
 
                             expect(userAccountSettings.filter { item -> Bool in
-                                return item is SwitchSettingCellConfiguration
+                                return (item as? SwitchSettingCellConfiguration)?.detailText == AutoLockSetting.OneHour.toString()
                             }.count).to(equal(0))
                         }
                     }
@@ -175,13 +175,34 @@ class SettingsPresenterSpec: QuickSpec {
                 }
             }
 
-            describe("onSwitch changing") {
+            describe("onBiometricSettingChanged") {
                 beforeEach {
-                    self.subject.switchChanged(row: 4, isOn: true)
+                    let voidObservable = self.scheduler.createColdObservable([next(50, true)])
+
+                    voidObservable
+                        .bind(to: self.subject.onBiometricSettingChanged)
+                        .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
+                }
+                it("calls settingActionHandler") {
+                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: true)))
+                }
+            }
+
+            describe("onUsageDataSettingChanged") {
+                beforeEach {
+                    let voidObservable = self.scheduler.createColdObservable([next(50, false)])
+
+                    voidObservable
+                        .bind(to: self.subject.onUsageDataSettingChanged)
+                        .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
                 }
 
-                it("dipatches the biometriclogin enabled action") {
-                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: true)))
+                it("calls settingActionHandler") {
+                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.recordUsageData(enabled: false)))
                 }
             }
 
