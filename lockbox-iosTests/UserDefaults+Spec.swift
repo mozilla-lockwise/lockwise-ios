@@ -91,5 +91,21 @@ class UserDefaultSpec: QuickSpec {
                 expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(PreferredBrowserSetting.Firefox))
             }
         }
+
+        describe("onRecordUsageData") {
+            var recordUsageDataSettingObserver: TestableObserver<Bool>!
+
+            beforeEach {
+                recordUsageDataSettingObserver = self.scheduler.createObserver(Bool.self)
+                UserDefaults.standard.onRecordUsageData
+                        .subscribe(recordUsageDataSettingObserver)
+                        .disposed(by: self.disposeBag)
+            }
+
+            it("pushs new values for the correct setting key") {
+                UserDefaults.standard.set(false, forKey: SettingKey.recordUsageData.rawValue)
+                expect(recordUsageDataSettingObserver.events.last!.value.element).to(beFalse())
+            }
+        }
     }
 }

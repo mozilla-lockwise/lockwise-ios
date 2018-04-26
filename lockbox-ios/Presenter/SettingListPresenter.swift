@@ -37,8 +37,26 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
-    lazy var touchIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsTouchId, routeAction: nil)
-    lazy var faceIdSetting = SwitchSettingCellConfiguration(text: Constant.string.settingsFaceId, routeAction: nil)
+    lazy private(set) var onBiometricSettingChanged: AnyObserver<Bool> = {
+        return Binder(self) { target, enabled in
+            target.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: enabled))
+        }.asObserver()
+    }()
+
+    lazy private(set) var onUsageDataSettingChanged: AnyObserver<Bool> = {
+        return Binder(self) { target, enabled in
+            target.settingActionHandler.invoke(SettingAction.recordUsageData(enabled: enabled))
+        }.asObserver()
+    }()
+
+    lazy var touchIdSetting = SwitchSettingCellConfiguration(
+        text: Constant.string.settingsTouchId,
+        routeAction: nil,
+        onChanged: onBiometricSettingChanged)
+    lazy var faceIdSetting = SwitchSettingCellConfiguration(
+        text: Constant.string.settingsFaceId,
+        routeAction: nil,
+        onChanged: onBiometricSettingChanged)
 
     init(view: SettingListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
@@ -52,18 +70,14 @@ class SettingListPresenter {
         self.biometryManager = biometryManager
     }
 
-    // todo: this should be an observer binding
-    func switchChanged(row: Int, isOn: Bool) {
-        self.settingActionHandler.invoke(.biometricLogin(enabled: isOn))
-    }
-
     func onViewReady() {
-        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser) // swiftlint:disable:this line_length
-                .map { (latest: (Bool, AutoLockSetting, PreferredBrowserSetting)) -> [SettingSectionModel] in
-                    return self.settingsWithBiometricLoginEnabled(
-                        latest.0,
+        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
+                .map { (latest: (Bool, AutoLockSetting, PreferredBrowserSetting, Bool)) -> [SettingSectionModel] in
+                    return self.getSettings(
+                        biometricSettingEnabled: latest.0,
                         autoLock: latest.1,
-                        preferredBrowser: latest.2)
+                        preferredBrowser: latest.2,
+                        usageDataEnabled: latest.3)
                 }
                 .asDriver(onErrorJustReturn: [])
 
@@ -79,8 +93,13 @@ class SettingListPresenter {
 }
 
 extension SettingListPresenter {
-    fileprivate func settingsWithBiometricLoginEnabled(_ enabled: Bool, autoLock: AutoLockSetting?, preferredBrowser: PreferredBrowserSetting) -> [SettingSectionModel] { // swiftlint:disable:this line_length
-        let accountSettingSection = SettingSectionModel(model: 0, items: [
+    fileprivate func getSettings(
+        biometricSettingEnabled: Bool,
+        autoLock: AutoLockSetting?,
+        preferredBrowser: PreferredBrowserSetting,
+        usageDataEnabled: Bool) -> [SettingSectionModel] {
+
+        var supportSettingSection = SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsProvideFeedback,
                     routeAction: SettingRouteAction.provideFeedback),
@@ -97,7 +116,7 @@ extension SettingListPresenter {
 
         if self.biometryManager.usesFaceID || self.biometryManager.usesTouchID {
             let biometricSetting = self.biometryManager.usesFaceID ? faceIdSetting : touchIdSetting
-            biometricSetting.isOn = enabled
+            biometricSetting.isOn = biometricSettingEnabled
 
             applicationConfigurationSection.items.append(biometricSetting)
         }
@@ -114,6 +133,20 @@ extension SettingListPresenter {
         preferredBrowserSetting.detailText = preferredBrowser.toString()
         applicationConfigurationSection.items.append(preferredBrowserSetting)
 
-        return [ accountSettingSection, applicationConfigurationSection ]
+        let usageDataSetting = SwitchSettingCellConfiguration(
+            text: Constant.string.settingsUsageData,
+            routeAction: SettingRouteAction.faq,
+            isOn: usageDataEnabled,
+            onChanged: self.onUsageDataSettingChanged)
+        let subtitle = NSMutableAttributedString(
+            string: Constant.string.settingsUsageDataSubtitle,
+            attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+        subtitle.append(NSAttributedString(
+            string: Constant.string.learnMore,
+            attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
+        usageDataSetting.subtitle = subtitle
+        supportSettingSection.items.append(usageDataSetting)
+
+        return [ supportSettingSection, applicationConfigurationSection ]
     }
 }

@@ -30,4 +30,8 @@ extension UserDefaults {
         return self.on(setting: .preferredBrowser, type: String.self)
             .map { PreferredBrowserSetting(rawValue: $0) ?? Constant.setting.defaultPreferredBrowser }
     }
+
+    var onRecordUsageData: Observable<Bool> {
+        return self.on(setting: .recordUsageData, type: Bool.self)
+    }
 }

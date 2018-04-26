@@ -10,6 +10,7 @@ enum SettingAction: Action {
     case visualLock(locked: Bool)
     case reset
     case preferredBrowser(browser: PreferredBrowserSetting)
+    case recordUsageData(enabled: Bool)
 }
 
 extension SettingAction: Equatable {
@@ -23,6 +24,8 @@ extension SettingAction: Equatable {
             return lhLocked == rhLocked
         case (.preferredBrowser(let lhBrowser), .preferredBrowser(let rhBrowser)):
             return lhBrowser == rhBrowser
+        case (.recordUsageData(let lhEnabled), .recordUsageData(let rhEnabled)):
+            return lhEnabled == rhEnabled
         case (.reset, .reset):
             return true
         default:
@@ -32,7 +35,7 @@ extension SettingAction: Equatable {
 }
 
 enum SettingKey: String {
-    case biometricLogin, autoLockTime, locked, preferredBrowser
+    case biometricLogin, autoLockTime, locked, preferredBrowser, recordUsageData
 }
 
 class SettingActionHandler: ActionHandler {
@@ -56,6 +59,8 @@ class SettingActionHandler: ActionHandler {
             self.userDefaults.set(locked, forKey: SettingKey.locked.rawValue)
         case .preferredBrowser(let browser):
             self.userDefaults.set(browser.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+        case .recordUsageData(let enabled):
+            self.userDefaults.set(enabled, forKey: SettingKey.recordUsageData.rawValue)
         case .reset:
             self.userDefaults.set(Constant.setting.defaultBiometricLockEnabled,
                     forKey: SettingKey.biometricLogin.rawValue)
@@ -65,6 +70,8 @@ class SettingActionHandler: ActionHandler {
                                   forKey: SettingKey.locked.rawValue)
             self.userDefaults.set(Constant.setting.defaultPreferredBrowser.rawValue,
                                   forKey: SettingKey.preferredBrowser.rawValue)
+            self.userDefaults.set(Constant.setting.defaultRecordUsageData,
+                                  forKey: SettingKey.recordUsageData.rawValue)
         }
 
         // purely for telemetry, no app functionality depends on this

@@ -59,23 +59,35 @@ extension SettingListView {
         self.dataSource = RxTableViewSectionedReloadDataSource(
                 configureCell: { _, _, _, cellConfiguration in
 
-                let cell = SettingCell(style: UITableViewCellStyle.value1, reuseIdentifier: "settings-cell")
+                let cell = SettingCell(
+                    style: cellConfiguration.cellStyle,
+                    reuseIdentifier: cellConfiguration.reuseIndicator)
+
                 cell.textLabel?.text = cellConfiguration.text
                 cell.selectionStyle = UITableViewCellSelectionStyle.none
 
-                if cellConfiguration.routeAction != nil {
-                    cell.accessoryType = .disclosureIndicator
+                if cellConfiguration.subtitle != nil {
+                    cell.detailTextLabel?.attributedText = cellConfiguration.subtitle
+                    cell.detailTextLabel?.numberOfLines = 0
+                } else if cellConfiguration.detailText != nil {
                     cell.detailTextLabel?.text = cellConfiguration.detailText
-                } else if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
+                }
+
+                if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
                     let switchItem = UISwitch()
                     switchItem.onTintColor = Constant.color.lockBoxBlue
-                    switchItem.addTarget(self, action: #selector(self.switchChanged), for: .valueChanged)
+                    switchItem.rx.value.changed.asObservable()
+                        .bind(to: switchSetting.onChanged)
+                        .disposed(by: cell.disposeBag)
                     switchItem.isOn = switchSetting.isOn
                     cell.accessoryView = switchItem
+                } else if cellConfiguration.routeAction != nil {
+                    cell.accessoryType = .disclosureIndicator
                 }
+
                 return cell
         }, titleForHeaderInSection: { _, section in
-            return section == 0 ? Constant.string.settingsHelpSectionHeader :
+            return section == 0 ? Constant.string.settingsSupportSectionHeader :
                     Constant.string.settingsConfigurationSectionHeader
          })
     }
@@ -121,12 +133,6 @@ extension SettingListView {
         self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
     }
 
-    // todo: refactor this to use an rxcocoa binding on the switch
-    @objc private func switchChanged(sender: UISwitch) {
-        let rowChanged = sender.tag
-        presenter?.switchChanged(row: rowChanged, isOn: sender.isOn)
-    }
-
     fileprivate func styleTableViewBackground() {
         let backgroundView = UIView(frame: self.view.bounds)
         backgroundView.backgroundColor = Constant.color.viewBackground
@@ -139,10 +145,23 @@ class SettingCellConfiguration {
     var routeAction: SettingRouteAction?
     var enabled: Bool = true
     var detailText: String?
+    var subtitle: NSAttributedString?
 
     init(text: String, routeAction: SettingRouteAction?) {
         self.text = text
         self.routeAction = routeAction
+    }
+
+    var reuseIndicator: String {
+        return "\(self.cellStyle.rawValue)-setting-cell"
+    }
+
+    var cellStyle: UITableViewCellStyle {
+        if self.subtitle != nil {
+            return UITableViewCellStyle.subtitle
+        }
+
+        return UITableViewCellStyle.value1
     }
 }
 
@@ -161,9 +180,11 @@ extension SettingCellConfiguration: Equatable {
 class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
 
-    init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false) {
-        super.init(text: text, routeAction: routeAction)
+    var onChanged: AnyObserver<Bool>
+    init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false, onChanged: AnyObserver<Bool>) {
         self.isOn = isOn
+        self.onChanged = onChanged
+        super.init(text: text, routeAction: routeAction)
     }
 }
 
