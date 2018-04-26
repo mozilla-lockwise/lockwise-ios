@@ -15,6 +15,9 @@ class AccountSettingPresenterSpec: QuickSpec {
     class FakeAccountSettingView: AccountSettingViewProtocol {
         var avatarImageDataObserver: TestableObserver<Data>!
         var displayNameObserver: TestableObserver<String>!
+        var displayAlertActionButtons: [AlertActionButtonConfiguration]?
+        var displayAlertControllerTitle: String?
+        var displayAlertControllerMessage: String?
 
         let disposeBag = DisposeBag()
 
@@ -27,7 +30,9 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
 
         func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
-
+            self.displayAlertActionButtons = buttons
+            self.displayAlertControllerMessage = message
+            self.displayAlertControllerTitle = title
         }
     }
 
@@ -164,6 +169,22 @@ class AccountSettingPresenterSpec: QuickSpec {
 
                 it("sends the clear action") {
                     expect(self.userInfoActionHandler.invokeArgument).to(equal(UserInfoAction.clear))
+                }
+            }
+
+            describe("unlinkAccountTapped") {
+                beforeEach {
+                    let voidObservable = self.scheduler.createColdObservable([ next(50, ())])
+
+                    voidObservable
+                        .bind(to: self.subject.unLinkAccountTapped)
+                        .disposed(by: self.disposeBag)
+                    self.scheduler.start()
+                }
+                it("displays the alert controller") {
+                    expect(self.view.displayAlertActionButtons).notTo(beNil())
+                    expect(self.view.displayAlertControllerTitle).to(equal(Constant.string.confirmDialogTitle))
+                    expect(self.view.displayAlertControllerMessage).to(equal(Constant.string.confirmDialogMessage))
                 }
             }
 
