@@ -48,8 +48,12 @@ class ExternalLinkActionSpec: QuickSpec {
                         expect(PreferredBrowserSetting.Focus.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
                     }
 
-                    it("creates chrome deeplinks") {
-                        expect(PreferredBrowserSetting.Chrome.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("googlechrome://\(self.testUrl)"))
+                    it("creates chrome https deeplinks") {
+                        expect(PreferredBrowserSetting.Chrome.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("googlechromes://github.com/mozilla-lockbox/lockbox-ios"))
+                    }
+
+                    it("creates chrome http deeplinks") {
+                        expect(PreferredBrowserSetting.Chrome.getPreferredBrowserDeeplink(url: "http://mozilla.org")?.absoluteString).to(equal("googlechrome://mozilla.org"))
                     }
                 }
 
