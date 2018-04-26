@@ -1059,14 +1059,29 @@ class RootPresenterSpec: QuickSpec {
                 describe("telemetry") {
                     let action = CopyAction(text: "somethin", field: .password, itemID: "fsdsdfsf") as TelemetryAction
 
-                    beforeEach {
-                        self.telemetryStore.telemetryStub.onNext(action)
+                    describe("when usage data can be recorded") {
+                        beforeEach {
+                            UserDefaults.standard.set(true, forKey: SettingKey.recordUsageData.rawValue)
+                            self.telemetryStore.telemetryStub.onNext(action)
+                        }
+
+                        it("passes all telemetry actions through to the telemetryactionhandler") {
+                            expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventMethod).to(equal(action.eventMethod))
+                            expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventObject).to(equal(action.eventObject))
+                        }
                     }
 
-                    it("passes all telemetry actions through to the telemetryactionhandler") {
-                        expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventMethod).to(equal(action.eventMethod))
-                        expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventObject).to(equal(action.eventObject))
+                    describe("when usage data cannot be recorded") {
+                        beforeEach {
+                            UserDefaults.standard.set(false, forKey: SettingKey.recordUsageData.rawValue)
+                            self.telemetryStore.telemetryStub.onNext(action)
+                        }
+
+                        it("passes no telemetry actions through to the telemetryactionhandler") {
+                            expect(self.telemetryActionHandler.telemetryListener.events.count).to(equal(0))
+                        }
                     }
+
                 }
             }
         }

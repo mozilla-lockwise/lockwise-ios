@@ -226,7 +226,9 @@ class RootPresenter {
 
 extension RootPresenter {
     fileprivate func startTelemetry() {
-        self.telemetryStore.telemetryFilter
+        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaults.onRecordUsageData)
+                .filter { $0.1 }
+                .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
                 .disposed(by: self.disposeBag)
     }
