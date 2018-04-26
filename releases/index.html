@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Build and Install - Lockbox iOS</title>
+  <title>Release Instructions - Lockbox iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Build and Install";
-    var mkdocs_page_input_path = "install.md";
-    var mkdocs_page_url = "/install/";
+    var mkdocs_page_name = "Release Instructions";
+    var mkdocs_page_input_path = "releases.md";
+    var mkdocs_page_url = "/releases/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -71,12 +71,9 @@
 		
     <span class="caption-text">Developer Guides</span>
     <ul class="subnav">
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Build and Install</a>
-    <ul class="subnav">
-            
-    </ul>
+    <a class="" href="../install/">Build and Install</a>
                 </li>
                 <li class="">
                     
@@ -86,9 +83,25 @@
                     
     <a class="" href="../updating_libraries/">Dependencies</a>
                 </li>
-                <li class="">
+                <li class=" current">
                     
-    <a class="" href="../releases/">Release Instructions</a>
+    <a class="current" href="./">Release Instructions</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#release-instructions">Release Instructions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#distributing-builds-through-buddybuild-branch-release">Distributing Builds through buddybuild (branch / release)</a></li>
+        
+            <li><a class="toctree-l4" href="#distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</a></li>
+        
+            <li><a class="toctree-l4" href="#distributing-through-the-app-store-release">Distributing through the App Store (release)</a></li>
+        
+        </ul>
+    
+
+    </ul>
                 </li>
     </ul>
 	    </li>
@@ -119,10 +132,10 @@
         
       
     
-    <li>Build and Install</li>
+    <li>Release Instructions</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/install.md"
+        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/releases.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -132,31 +145,43 @@
           <div role="main">
             <div class="section">
               
-                <ol>
-<li>
-<p>Install the latest <a href="https://developer.apple.com/xcode/downloads/">Xcode developer tools</a> from Apple</p>
-</li>
-<li>
-<p>Install Carthage</p>
-<p><code>brew update
-brew install carthage</code></p>
-</li>
-<li>
-<p>Clone the repository</p>
-<p><code>git clone https://github.com/mozilla-lockbox/lockbox-ios</code></p>
-</li>
-<li>
-<p>Pull in the project dependencies:</p>
-<p><code>cd lockbox-ios
-sh ./bootstrap.sh</code></p>
-</li>
-<li>
-<p>Open <code>Lockbox.xcodeproj</code> in Xcode</p>
-</li>
-<li>
-<p>Build/Run the <code>lockbox</code> scheme in Xcode</p>
-</li>
+                <h1 id="release-instructions">Release Instructions</h1>
+<p>Some assumptions:</p>
+<ul>
+<li><code>master</code> is the default branch and is production-ready</li>
+<li>commits made to master are built and pass in <a href="https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85">buddybuild</a></li>
+<li>all builds are sent to iTunes Connect, with the same buddybuild build number</li>
+<li>iTunes Connect has <a href="https://developer.apple.com/testflight/testers/">"internal" testers</a> (mobile devs, product integrity)</li>
+<li>thus, iTunes Connect and TestFlight can have <a href="https://developer.apple.com/testflight/testers/">"external" testers</a> which we add manually</li>
+<li>currently, no plans exist for "external" users to include anyone outside of Mozilla</li>
+</ul>
+<h2 id="distributing-builds-through-buddybuild-branch-release">Distributing Builds through buddybuild (branch / release)</h2>
+<p><em>all commits on all branches and pull requests are automatically built</em></p>
+<ol>
+<li>Push to the GitHub branch</li>
+<li>Open <a href="https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85">buddybuild</a> from a mobile device and browse to the build</li>
+<li>Alternatively, add an email address to the "Deployments" email list(s)</li>
+<li>this is expected to be a small group of contributors and Mozillians</li>
 </ol>
+<h2 id="distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</h2>
+<p><em>all <code>master</code> branch builds are automatically uploaded from buddybuild</em></p>
+<ol>
+<li>Browse to <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds">TestFlight &gt; Builds &gt; iOS</a></li>
+<li>Find the desired build number to distribute</li>
+<li>Provide <a href="export-compliance.md">export compliance responses</a></li>
+<li>this makes the build immediately available to "internal" iTunes Connect users</li>
+<li>Add at least one other "Group" of "external" testers to the build</li>
+<li>after review, this will make it available for all those "external" testers</li>
+<li>example: "lockbox-dev" which includes our other non-iTunes Connect engineers</li>
+<li>example: "Product" which includes other product and content Mozillians</li>
+</ol>
+<h2 id="distributing-through-the-app-store-release">Distributing through the App Store (release)</h2>
+<ol>
+<li>Browse to iTunes Connect</li>
+<li>???</li>
+<li>Profit</li>
+</ol>
+<hr />
               
             </div>
           </div>
@@ -164,10 +189,8 @@ sh ./bootstrap.sh</code></p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture">Next <span class="icon icon-circle-arrow-right"></span></a>
       
-      
-        <a href="../metrics/" class="btn btn-neutral" title="Telemetry and Metrics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../updating_libraries/" class="btn btn-neutral" title="Dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -195,10 +218,8 @@ sh ./bootstrap.sh</code></p>
           <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../metrics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../updating_libraries/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
-      
-        <span style="margin-left: 15px"><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

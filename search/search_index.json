@@ -6,6 +6,26 @@
             "title": "Introduction"
         }, 
         {
+            "location": "/release-notes/", 
+            "text": "Release Notes\n\n\n1.0 (Build 742)\n\n\nDate: 2018-04-24\n\n\n\n\n\n\nThis build includes: sign in with Firefox Accounts, sign out to \"lock\", search and sort items, show/hide passwords, copy username and password to pasteboard (expires after 60 seconds), open web addresses in preferred web browser.\n\n\n\n\n\n\nThis build does NOT include: actual Sync data (test data only), Face ID nor Touch ID biometrics to unlock, onboarding instructions, FAQ content.\n\n\n\n\n\n\nKnown Issues\n\n\n\n\nThe only data loaded into the app is hard-coded test data (not real Sync data)", 
+            "title": "Release Notes"
+        }, 
+        {
+            "location": "/release-notes/#release-notes", 
+            "text": "", 
+            "title": "Release Notes"
+        }, 
+        {
+            "location": "/release-notes/#10-build-742", 
+            "text": "Date: 2018-04-24    This build includes: sign in with Firefox Accounts, sign out to \"lock\", search and sort items, show/hide passwords, copy username and password to pasteboard (expires after 60 seconds), open web addresses in preferred web browser.    This build does NOT include: actual Sync data (test data only), Face ID nor Touch ID biometrics to unlock, onboarding instructions, FAQ content.", 
+            "title": "1.0 (Build 742)"
+        }, 
+        {
+            "location": "/release-notes/#known-issues", 
+            "text": "The only data loaded into the app is hard-coded test data (not real Sync data)", 
+            "title": "Known Issues"
+        }, 
+        {
             "location": "/contributing/", 
             "text": "Contributing\n\n\nThank you for considering and taking the time to contribute!\n\n\nThe following are guidelines for contributing to this project.\n\n\nCode of Conduct\n\n\nThis repository is governed by Mozilla's code of conduct and etiquette guidelines. For more details please see the \nMozilla Community Participation Guidelines\n and \nDeveloper Etiquette Guidelines\n.\n\n\nHow to Get Started\n\n\nPlease refer to installation and build instructions in the \ndocumentation\n.\n\n\nHow to Report Bugs\n\n\nPlease open \na new issue in the GitHub repository\n with steps to reproduce the problem you're experiencing.\n\n\nBe sure to include as much information including screenshots, text output, and both your expected and actual results.\n\n\nHow to Request Enhancements\n\n\nFirst, please refer to the applicable \nGitHub repository\n and search \nthe repository's GitHub issues\n to make sure your idea has not been (or is not still) considered.\n\n\nThen, please \ncreate a new issue in the GitHub repository\n describing your enhancement.\n\n\nBe sure to include as much detail as possible including step-by-step descriptions, specific examples, screenshots or mockups, and reasoning for why the enhancement might be worthwhile.\n\n\nPlease keep in mind, by opening an issue we provide no guarantee the enhancement will be implemented.", 
             "title": "Contributing"
@@ -139,6 +159,31 @@
             "location": "/updating_libraries/#datastore", 
             "text": "Lockbox for iOS uses the Lockbox  Datastore  to provide data storage   encryption. The datastore code is bundled into a  bundle.js  file using  browserify  (available via npm) and provided along with this code (in the  lockbox-datastore  folder). However, if you find yourself wanting to update this library, clone the source code, install  its  dependencies with  npm install , and run  browserify lib/index.js -s DataStoreModule -o bundle.js . Replace the version at  lockbox-datastore/bundle.js  with the newly browserify-ed  bundle.js .", 
             "title": "Datastore"
+        }, 
+        {
+            "location": "/releases/", 
+            "text": "Release Instructions\n\n\nSome assumptions:\n\n\n\n\nmaster\n is the default branch and is production-ready\n\n\ncommits made to master are built and pass in \nbuddybuild\n\n\nall builds are sent to iTunes Connect, with the same buddybuild build number\n\n\niTunes Connect has \n\"internal\" testers\n (mobile devs, product integrity)\n\n\nthus, iTunes Connect and TestFlight can have \n\"external\" testers\n which we add manually\n\n\ncurrently, no plans exist for \"external\" users to include anyone outside of Mozilla\n\n\n\n\nDistributing Builds through buddybuild (branch / release)\n\n\nall commits on all branches and pull requests are automatically built\n\n\n\n\nPush to the GitHub branch\n\n\nOpen \nbuddybuild\n from a mobile device and browse to the build\n\n\nAlternatively, add an email address to the \"Deployments\" email list(s)\n\n\nthis is expected to be a small group of contributors and Mozillians\n\n\n\n\nDistributing Builds through TestFlight (release)\n\n\nall \nmaster\n branch builds are automatically uploaded from buddybuild\n\n\n\n\nBrowse to \nTestFlight \n Builds \n iOS\n\n\nFind the desired build number to distribute\n\n\nProvide \nexport compliance responses\n\n\nthis makes the build immediately available to \"internal\" iTunes Connect users\n\n\nAdd at least one other \"Group\" of \"external\" testers to the build\n\n\nafter review, this will make it available for all those \"external\" testers\n\n\nexample: \"lockbox-dev\" which includes our other non-iTunes Connect engineers\n\n\nexample: \"Product\" which includes other product and content Mozillians\n\n\n\n\nDistributing through the App Store (release)\n\n\n\n\nBrowse to iTunes Connect\n\n\n???\n\n\nProfit", 
+            "title": "Release Instructions"
+        }, 
+        {
+            "location": "/releases/#release-instructions", 
+            "text": "Some assumptions:   master  is the default branch and is production-ready  commits made to master are built and pass in  buddybuild  all builds are sent to iTunes Connect, with the same buddybuild build number  iTunes Connect has  \"internal\" testers  (mobile devs, product integrity)  thus, iTunes Connect and TestFlight can have  \"external\" testers  which we add manually  currently, no plans exist for \"external\" users to include anyone outside of Mozilla", 
+            "title": "Release Instructions"
+        }, 
+        {
+            "location": "/releases/#distributing-builds-through-buddybuild-branch-release", 
+            "text": "all commits on all branches and pull requests are automatically built   Push to the GitHub branch  Open  buddybuild  from a mobile device and browse to the build  Alternatively, add an email address to the \"Deployments\" email list(s)  this is expected to be a small group of contributors and Mozillians", 
+            "title": "Distributing Builds through buddybuild (branch / release)"
+        }, 
+        {
+            "location": "/releases/#distributing-builds-through-testflight-release", 
+            "text": "all  master  branch builds are automatically uploaded from buddybuild   Browse to  TestFlight   Builds   iOS  Find the desired build number to distribute  Provide  export compliance responses  this makes the build immediately available to \"internal\" iTunes Connect users  Add at least one other \"Group\" of \"external\" testers to the build  after review, this will make it available for all those \"external\" testers  example: \"lockbox-dev\" which includes our other non-iTunes Connect engineers  example: \"Product\" which includes other product and content Mozillians", 
+            "title": "Distributing Builds through TestFlight (release)"
+        }, 
+        {
+            "location": "/releases/#distributing-through-the-app-store-release", 
+            "text": "Browse to iTunes Connect  ???  Profit", 
+            "title": "Distributing through the App Store (release)"
         }
     ]
 }
