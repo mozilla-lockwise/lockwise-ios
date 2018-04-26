@@ -1,6 +1,6 @@
 # Lockbox for iOS Metrics Plan
 
-_Last Updated: March 14, 2018_
+_Last Updated: April 26, 2018_
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
@@ -17,7 +17,40 @@ This is the metrics collection plan for the Lockbox iOS app. It documents all ev
 
 Data collection is done solely for the purpose of product development, improvement and maintenance.
 
-More here TBD
+We will analyze the data described in this doc *primarily* with the purpose of (dis)confirming the following hypothesis:
+
+`If Firefox users have access to their browser-saved passwords, outside of the mobile browser, then they will use those passwords to log into accounts (both in mobile browsers and in apps). We will know this to be true when copy credentials (username or password) is the most frequent action taken in the app.`
+
+Note that because the first version of the app will not allow for "auto-filling" of credentials, the copy events (and to a lesser extent, the password reveal events) are the best signal we have that users are gaining the intended value from the app.
+
+In service to validating the above hypothesis, we plan on answering these specific questions, given the data we plan to collect (see [List of Proposed Events](#list-of-proposed-events)):
+
+*Note that when referring to copying of "credentials", we mean copying of either usernames or passwords.*
+
+* Are users using Lockbox to retrieve credentials?
+	* For different intervals of time (e.g. day, week, month), what is:
+		* The average rate with which a user copies a credential or reveals a password
+		* The distribution of above rates across all users
+* Pending the implementation of a share sheet, how often do users access Lockbox via a mobile browser?
+	* Out of all the times a credential was copied, how often was it a result of tap on the share sheet?
+		* This will help us understand whether users are primarily accessing credentials for use in a browser or with third party apps.
+* Once downloaded, do users continue to use the app? (i.e., how well are they retained?)
+	* We will count a user as retained in a given time interval if they perform one of the following actions:
+		* Display the credential list
+		* Tap a credential in the credential list
+		* Copy a credential to the clipboard
+		* Reveal a password
+		* Tap the URI associated with a credential (to open it in an app or browser)
+	* Since they can be performed automatically, we will **not** count a user as retained if they *only* perform the following actions (in absence of any in the list above):
+		* Unlock their credentials
+		* Sync their credentials from the Firefox desktop browser
+* Does requiring a Firefox Account constitute a roadblock to adoption?
+	* What proportion of new Lockbox users are pre-existing Firefox Account users?
+	* What proportion of users start the Account sign-in process but never complete it?
+* Does adoption of Lockbox lead to adoption of Firefox Mobile browsers (e.g. Focus)?
+	* Do users set the default browser in Lockbox to be a Firefox-related browser?
+
+In addition to answering the above questions that directly concern actions in the app, we will also be analyzing telemetry emitted from the password manager that exists in the the Firefox desktop browser. These analyses will primarily examine whether users of Lockbox start active curation of their credentials in the desktop browser (Lockbox users will not be able to edit credentials directly from the app).
 
 ## Collection
 
