@@ -156,22 +156,6 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
             }
 
-            describe("unlinkAccountObserver") {
-                beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.unlinkAccountObserver)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
-                }
-
-                it("sends the clear action") {
-                    expect(self.userInfoActionHandler.invokeArgument).to(equal(UserInfoAction.clear))
-                }
-            }
-
             describe("unlinkAccountTapped") {
                 beforeEach {
                     let voidObservable = self.scheduler.createColdObservable([ next(50, ())])
@@ -185,6 +169,16 @@ class AccountSettingPresenterSpec: QuickSpec {
                     expect(self.view.displayAlertActionButtons).notTo(beNil())
                     expect(self.view.displayAlertControllerTitle).to(equal(Constant.string.confirmDialogTitle))
                     expect(self.view.displayAlertControllerMessage).to(equal(Constant.string.confirmDialogMessage))
+                }
+
+                describe("unlinkAccountObserver") {
+                    beforeEach {
+                        self.view.displayAlertActionButtons![1].tapObserver?.onNext(())
+                    }
+
+                    it("sends the clear action") {
+                        expect(self.userInfoActionHandler.invokeArgument).to(equal(UserInfoAction.clear))
+                    }
                 }
             }
 

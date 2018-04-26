@@ -17,7 +17,7 @@ class AccountSettingPresenter {
     let routeActionHandler: RouteActionHandler
     let userInfoActionHandler: UserInfoActionHandler
 
-    lazy private(set) var unlinkAccountObserver: AnyObserver<Void> = {
+    lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.userInfoActionHandler.invoke(.clear)
         }.asObserver()
