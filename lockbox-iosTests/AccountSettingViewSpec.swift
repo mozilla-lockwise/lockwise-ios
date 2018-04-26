@@ -17,7 +17,7 @@ class AccountSettingViewSpec: QuickSpec {
         var unlinkAccountStub: TestableObserver<Void>!
         var settingTapStub: TestableObserver<Void>!
 
-        override var unlinkAccountObserver: AnyObserver<Void> {
+        override var unLinkAccountTapped: AnyObserver<Void> {
             return self.unlinkAccountStub.asObserver()
         }
 

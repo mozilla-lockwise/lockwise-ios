@@ -13,7 +13,6 @@ import RxCocoa
 
 class AccountSettingPresenterSpec: QuickSpec {
     class FakeAccountSettingView: AccountSettingViewProtocol {
-
         var avatarImageDataObserver: TestableObserver<Data>!
         var displayNameObserver: TestableObserver<String>!
 

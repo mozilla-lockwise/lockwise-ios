@@ -72,7 +72,10 @@ class ItemListPresenter {
                                 AlertActionButtonConfiguration(
                                     title: Constant.string.cancel,
                                     tapObserver: nil,
-                                    style: .cancel)], title: Constant.string.sortEntries, message: nil, style: .actionSheet)
+                                    style: .cancel)],
+                                                title: Constant.string.sortEntries,
+                                                message: nil,
+                                                style: .actionSheet)
             }.asObserver()
     }()
 

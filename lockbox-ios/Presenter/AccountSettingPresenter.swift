@@ -32,14 +32,14 @@ class AccountSettingPresenter {
     lazy private(set) var unLinkAccountTapped: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.view?.displayAlertController(buttons: [
-                AlertActionButtonConfiguration(title: "Cancel",
+                AlertActionButtonConfiguration(title: Constant.string.cancel,
                                                tapObserver: nil,
                                                style: .default),
-                AlertActionButtonConfiguration(title: "Unlink",
+                AlertActionButtonConfiguration(title: Constant.string.unlink,
                                                tapObserver: target.unlinkAccountObserver,
                                                style: .destructive)],
-                                            title: "Are you sure you want to unlink your account?",
-                                            message: "This will sign you out and any settings you made will be reset for this device.",
+                                            title: Constant.string.confirmDialogTitle,
+                                            message: Constant.string.confirmDialogMessage,
                                             style: .alert)
         }.asObserver()
     }()
