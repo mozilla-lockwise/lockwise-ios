@@ -56,7 +56,7 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
 
         if let presenter = self.presenter {
             self.unlinkAccountButton.rx.tap
-                    .bind(to: presenter.unlinkAccountObserver)
+                    .bind(to: presenter.unLinkAccountTapped)
                     .disposed(by: self.disposeBag)
         }
     }

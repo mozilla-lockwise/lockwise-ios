@@ -19,7 +19,7 @@ class ItemListPresenterSpec: QuickSpec {
         var hideEmptyStateMessagingCalled = false
         let disposeBag = DisposeBag()
 
-        var displayOptionSheetButtons: [OptionSheetButtonConfiguration]?
+        var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
 
         func bind(items: Driver<[ItemSectionModel]>) {
@@ -38,7 +38,7 @@ class ItemListPresenterSpec: QuickSpec {
             self.hideEmptyStateMessagingCalled = true
         }
 
-        func displayOptionSheet(buttons: [OptionSheetButtonConfiguration], title: String?) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
             self.displayOptionSheetButtons = buttons
             self.displayOptionSheetTitle = title
         }

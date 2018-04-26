@@ -6,7 +6,7 @@ import Foundation
 import RxCocoa
 import RxSwift
 
-protocol AccountSettingViewProtocol: class {
+protocol AccountSettingViewProtocol: class, AlertControllerView {
     func bind(avatarImage: Driver<Data>)
     func bind(displayName: Driver<String>)
 }
@@ -17,7 +17,7 @@ class AccountSettingPresenter {
     let routeActionHandler: RouteActionHandler
     let userInfoActionHandler: UserInfoActionHandler
 
-    lazy private(set) var unlinkAccountObserver: AnyObserver<Void> = {
+    lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.userInfoActionHandler.invoke(.clear)
         }.asObserver()
@@ -26,6 +26,21 @@ class AccountSettingPresenter {
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.routeActionHandler.invoke(SettingRouteAction.list)
+        }.asObserver()
+    }()
+
+    lazy private(set) var unLinkAccountTapped: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.view?.displayAlertController(buttons: [
+                AlertActionButtonConfiguration(title: Constant.string.cancel,
+                                               tapObserver: nil,
+                                               style: .default),
+                AlertActionButtonConfiguration(title: Constant.string.unlink,
+                                               tapObserver: target.unlinkAccountObserver,
+                                               style: .destructive)],
+                                            title: Constant.string.confirmDialogTitle,
+                                            message: Constant.string.confirmDialogMessage,
+                                            style: .alert)
         }.asObserver()
     }()
 
