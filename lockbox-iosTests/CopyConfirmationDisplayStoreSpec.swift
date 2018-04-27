@@ -43,10 +43,10 @@ class CopyConfirmationDisplayStoreSpec: QuickSpec {
                 }
 
                 it("passes through CopyDisplayActions from the dispatcher") {
-                    self.dispatcher.fakeRegistration.onNext(CopyConfirmationDisplayAction(fieldName: "something"))
+                    self.dispatcher.fakeRegistration.onNext(CopyConfirmationDisplayAction(field: .password))
 
                     expect(displayObserver.events.count).to(equal(1))
-                    expect(displayObserver.events.first!.value.element!).to(equal(CopyConfirmationDisplayAction(fieldName: "something")))
+                    expect(displayObserver.events.first!.value.element!).to(equal(CopyConfirmationDisplayAction(field: .password)))
                 }
 
                 it("does not pass through non-ItemDetailDisplayActions") {

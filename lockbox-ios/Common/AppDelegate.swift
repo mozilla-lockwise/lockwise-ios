@@ -47,58 +47,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UITextField.appearance().tintColor = .black
 
-        setupTelemetry()
+        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.startup)
         return true
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        Telemetry.default.recordEvent(
-                category: TelemetryEventCategory.action,
-                method: TelemetryEventMethod.background,
-                object: TelemetryEventObject.app
-        )
-        Telemetry.default.recordSessionEnd()
-
-        // Add the CorePing and FocusEventPing to the queue and schedule them for upload in the
-        // background at iOS's discretion (usually happens immediately).
-        Telemetry.default.queue(pingType: CorePingBuilder.PingType)
-        Telemetry.default.queue(pingType: FocusEventPingBuilder.PingType)
-        Telemetry.default.scheduleUpload(pingType: CorePingBuilder.PingType)
-        Telemetry.default.scheduleUpload(pingType: FocusEventPingBuilder.PingType)
+        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.background)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        Telemetry.default.recordEvent(
-                category: TelemetryEventCategory.action,
-                method: TelemetryEventMethod.foreground,
-                object: TelemetryEventObject.app
-        )
-    }
-
-    private func setupTelemetry() {
-        let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = "Lockbox"
-        telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
-        telemetryConfig.appVersion = AppInfo.shortVersion
-
-#if DEBUG
-        telemetryConfig.isCollectionEnabled = false
-        telemetryConfig.isUploadEnabled = false
-        telemetryConfig.updateChannel = "debug"
-#else
-        telemetryConfig.isCollectionEnabled = true
-        telemetryConfig.isUploadEnabled = true
-        telemetryConfig.updateChannel = "release"
-#endif
-
-        Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
-        Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
-
-        Telemetry.default.recordSessionStart()
-        Telemetry.default.recordEvent(
-                category: TelemetryEventCategory.action,
-                method: TelemetryEventMethod.startup,
-                object: TelemetryEventObject.app
-        )
+        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.foreground)
     }
 }
