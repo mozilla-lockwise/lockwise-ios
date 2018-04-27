@@ -49,6 +49,7 @@ class BiometryOnboardingPresenter {
 
         self.view?.notNowTapped
                 .subscribe { [weak self] (_) in
+                    self?.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: false))
                     self?.routeActionHandler.invoke(MainRouteAction.list)
                 }
                 .disposed(by: self.disposeBag)

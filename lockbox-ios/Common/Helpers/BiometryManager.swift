@@ -13,7 +13,9 @@ enum LocalError: Error {
 class BiometryManager {
     private let context: LAContext
 
-    lazy var usesBiometrics: Bool = self.usesTouchID || self.usesFaceID
+    var usesBiometrics: Bool {
+        return self.usesTouchID || self.usesFaceID
+    }
 
     var usesFaceID: Bool {
         if #available(iOS 11.0, *) {
