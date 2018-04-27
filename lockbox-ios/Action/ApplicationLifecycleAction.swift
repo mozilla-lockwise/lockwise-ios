@@ -11,14 +11,14 @@ enum LifecycleAction: Action {
 extension LifecycleAction: TelemetryAction {
     var eventMethod: TelemetryEventMethod {
         switch self {
-        case .foreground: return TelemetryEventMethod.foreground
-        case .background: return TelemetryEventMethod.background
-        case .startup: return TelemetryEventMethod.startup
+        case .foreground: return .foreground
+        case .background: return .background
+        case .startup: return .startup
         }
     }
 
     var eventObject: TelemetryEventObject {
-        return TelemetryEventObject.app
+        return .app
     }
 
     var value: String? {

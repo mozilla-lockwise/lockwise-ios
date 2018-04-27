@@ -53,7 +53,7 @@ class ItemDetailPresenterSpec: QuickSpec {
         var copyDisplayStub = PublishSubject<CopyConfirmationDisplayAction>()
 
         override var copyDisplay: Driver<CopyConfirmationDisplayAction> {
-            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(fieldName: ""))
+            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(field: .password))
         }
     }
 
@@ -481,14 +481,15 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 describe("getting a copy display action") {
-                    let fieldName = "schmield"
-
-                    beforeEach {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(fieldName: fieldName))
+                    it("tells the view to display a password temporary alert") {
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .password))
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.password)))
+                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
 
-                    it("tells the view to display a temporary alert") {
-                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, fieldName)))
+                    it("tells the view to display a username temporary alert") {
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .username))
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
                 }

@@ -123,7 +123,13 @@ class ItemDetailPresenter {
 
         self.copyDisplayStore.copyDisplay
                 .drive(onNext: { action in
-                    let message = String(format: Constant.string.fieldNameCopied, action.fieldName)
+                    let fieldName: String
+                    switch action.field {
+                    case .password: fieldName = Constant.string.password
+                    case .username: fieldName = Constant.string.username
+                    }
+
+                    let message = String(format: Constant.string.fieldNameCopied, fieldName)
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
                 })
                 .disposed(by: self.disposeBag)

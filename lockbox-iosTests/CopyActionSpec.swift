@@ -62,7 +62,7 @@ class CopyActionSpec: QuickSpec {
 
                 it("dispatches the copied action and the copy action") {
                     let copiedAction = self.dispatcher.dispatchedActions[0] as! CopyConfirmationDisplayAction
-                    expect(copiedAction).to(equal(CopyConfirmationDisplayAction(fieldName: Constant.string.password)))
+                    expect(copiedAction).to(equal(CopyConfirmationDisplayAction(field: .password)))
 
                     let copyAction = self.dispatcher.dispatchedActions[1] as! CopyAction
                     expect(copyAction).to(equal(action))
@@ -73,8 +73,8 @@ class CopyActionSpec: QuickSpec {
         describe("CopyDisplayAction") {
             describe("equality") {
                 it("CopyDisplayActions are equal when fieldnames are equal") {
-                    expect(CopyConfirmationDisplayAction(fieldName: "something")).to(equal(CopyConfirmationDisplayAction(fieldName: "something")))
-                    expect(CopyConfirmationDisplayAction(fieldName: "something")).notTo(equal(CopyConfirmationDisplayAction(fieldName: "not")))
+                    expect(CopyConfirmationDisplayAction(field: CopyField.password)).to(equal(CopyConfirmationDisplayAction(field: CopyField.password)))
+                    expect(CopyConfirmationDisplayAction(field: CopyField.password)).notTo(equal(CopyConfirmationDisplayAction(field: CopyField.username)))
                 }
             }
         }
@@ -97,7 +97,6 @@ class CopyActionSpec: QuickSpec {
                 it("returns the button pressed as the object") {
                     expect(CopyAction(text: "anything", field: .password, itemID: "fsdfsgfhgdfdfds").eventObject).to(equal(TelemetryEventObject.entryCopyPasswordButton))
                     expect(CopyAction(text: "anything", field: .username, itemID: "fsdfsgfhgdfdfds").eventObject).to(equal(TelemetryEventObject.entryCopyUsernameButton))
-
                 }
             }
         }

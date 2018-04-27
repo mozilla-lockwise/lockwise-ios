@@ -17,15 +17,15 @@ struct CopyAction: Action {
 
 extension CopyAction: TelemetryAction {
     var eventMethod: TelemetryEventMethod {
-        return TelemetryEventMethod.tap
+        return .tap
     }
 
     var eventObject: TelemetryEventObject {
         switch self.field {
         case .password:
-            return TelemetryEventObject.entryCopyPasswordButton
+            return .entryCopyPasswordButton
         case .username:
-            return TelemetryEventObject.entryCopyUsernameButton
+            return .entryCopyUsernameButton
         }
     }
 
@@ -46,12 +46,12 @@ extension CopyAction: Equatable {
 }
 
 struct CopyConfirmationDisplayAction: Action {
-    let fieldName: String
+    let field: CopyField
 }
 
 extension CopyConfirmationDisplayAction: Equatable {
     static func ==(lhs: CopyConfirmationDisplayAction, rhs: CopyConfirmationDisplayAction) -> Bool {
-        return lhs.fieldName == rhs.fieldName
+        return lhs.field == rhs.field
     }
 }
 
@@ -73,13 +73,7 @@ class CopyActionHandler: ActionHandler {
         self.pasteboard.setItems([[UIPasteboardTypeAutomatic: action.text]],
                 options: [UIPasteboardOption.expirationDate: expireDate])
 
-        var fieldName: String
-        switch action.field {
-        case .password: fieldName = Constant.string.password
-        case .username: fieldName = Constant.string.username
-        }
-
-        self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(fieldName: fieldName))
+        self.dispatcher.dispatch(action: CopyConfirmationDisplayAction(field: action.field))
         // only for telemetry purposes, no one is listening for this
         self.dispatcher.dispatch(action: action)
     }
