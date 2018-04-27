@@ -53,7 +53,7 @@ class ItemDetailPresenterSpec: QuickSpec {
         var copyDisplayStub = PublishSubject<CopyConfirmationDisplayAction>()
 
         override var copyDisplay: Driver<CopyConfirmationDisplayAction> {
-            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(fieldName: ""))
+            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(field: .password))
         }
     }
 
@@ -208,7 +208,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                             it("dispatches the copy action") {
                                 expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: username, fieldName: Constant.string.username)))
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: username, field: .username, itemID: "")))
                             }
                         }
 
@@ -224,7 +224,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                             it("dispatches the copy action with no text") {
                                 expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", fieldName: Constant.string.username)))
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", field: .username, itemID: "")))
                             }
                         }
                     }
@@ -261,7 +261,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                             it("dispatches the copy action") {
                                 expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: password, fieldName: Constant.string.password)))
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: password, field: .password, itemID: "")))
                             }
                         }
 
@@ -277,7 +277,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                             it("dispatches the copy action with no text") {
                                 expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", fieldName: Constant.string.password)))
+                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", field: .password, itemID: "")))
                             }
                         }
                     }
@@ -481,14 +481,15 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 describe("getting a copy display action") {
-                    let fieldName = "schmield"
-
-                    beforeEach {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(fieldName: fieldName))
+                    it("tells the view to display a password temporary alert") {
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .password))
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.password)))
+                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
 
-                    it("tells the view to display a temporary alert") {
-                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, fieldName)))
+                    it("tells the view to display a username temporary alert") {
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .username))
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
                 }

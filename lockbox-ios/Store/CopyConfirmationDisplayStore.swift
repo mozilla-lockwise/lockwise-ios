@@ -14,7 +14,7 @@ class CopyConfirmationDisplayStore {
     private let _copyDisplay = PublishSubject<CopyConfirmationDisplayAction>()
 
     public var copyDisplay: Driver<CopyConfirmationDisplayAction> {
-        return _copyDisplay.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(fieldName: ""))
+        return _copyDisplay.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(field: .password))
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
