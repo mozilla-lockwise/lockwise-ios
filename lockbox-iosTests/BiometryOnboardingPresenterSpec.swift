@@ -161,7 +161,7 @@ class BiometryOnboardingPresenterSpec: QuickSpec {
                         }
 
                         it("routes to the list & ensures the biometric login is disabled") {
-                            expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: true)))
+                            expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: false)))
                             let route = self.routeActionHandler.invokeArgument as! MainRouteAction
                             expect(route).to(equal(MainRouteAction.list))
                         }
