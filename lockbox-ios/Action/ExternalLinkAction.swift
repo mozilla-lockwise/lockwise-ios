@@ -71,7 +71,7 @@ enum PreferredBrowserSetting: String {
     }
 
     func canOpenBrowser(application: OpenUrlProtocol = UIApplication.shared) -> Bool {
-        if let url = self.getPreferredBrowserDeeplink(url: "https://mozilla.org") {
+        if let url = self.getPreferredBrowserDeeplink(url: "http://mozilla.org") {
             return application.canOpenURL(url)
         }
 

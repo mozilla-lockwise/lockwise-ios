@@ -62,6 +62,11 @@ class ExternalLinkActionSpec: QuickSpec {
                         expect(PreferredBrowserSetting.Safari.canOpenBrowser(application: self.application)).to(beTrue())
                         expect(self.application.canOpenURLArgument?.absoluteString).toNot(beNil())
                     }
+
+                    it("uses an http link for chrome") {
+                        expect(PreferredBrowserSetting.Chrome.canOpenBrowser(application: self.application)).to(beTrue())
+                        expect(self.application.canOpenURLArgument?.absoluteString).to(equal("googlechrome://mozilla.org"))
+                    }
                 }
             }
 
