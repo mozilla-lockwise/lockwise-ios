@@ -43,23 +43,18 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeBiometryManager: BiometryManager {
-        var touchIdStub: Bool!
-        var faceIdStub: Bool!
+    class FakeDataStoreActionHandler: DataStoreActionHandler {
+        var actionArgument: DataStoreAction?
 
-        override var usesTouchID: Bool {
-            return self.touchIdStub
-        }
-
-        override var usesFaceID: Bool {
-            return self.faceIdStub
+        override func invoke(_ action: DataStoreAction) {
+            self.actionArgument = action
         }
     }
 
     private var view: FakeSettingsView!
     private var routeActionHandler: FakeRouteActionHandler!
     private var settingActionHandler: FakeSettingActionHandler!
-    private var biometryManager: FakeBiometryManager!
+    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
 
@@ -73,80 +68,23 @@ class SettingsPresenterSpec: QuickSpec {
 
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.settingActionHandler = FakeSettingActionHandler()
-                self.biometryManager = FakeBiometryManager()
+                self.dataStoreActionHandler = FakeDataStoreActionHandler()
 
                 self.subject = SettingListPresenter(view: self.view,
                         routeActionHandler: self.routeActionHandler,
                         settingActionHandler: self.settingActionHandler,
-                        biometryManager: self.biometryManager)
+                        dataStoreActionHandler: self.dataStoreActionHandler)
             }
 
             describe("onViewReady") {
-                describe("biometrics field") {
-                    describe("when the user has not given the app access to touchID or faceID") {
-                        beforeEach {
-                            self.biometryManager.faceIdStub = false
-                            self.biometryManager.touchIdStub = false
-
-                            UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            self.subject.onViewReady()
-                        }
-
-                        it("doesn't show the biometric setting") {
-                            let userAccountSettings = self.view.itemsObserver.events.last!.value.element![1].items
-
-                            expect(userAccountSettings.filter { item -> Bool in
-                                return (item as? SwitchSettingCellConfiguration)?.detailText == AutoLockSetting.OneHour.toString()
-                            }.count).to(equal(0))
-                        }
-                    }
-
-                    describe("when the user has given the app access to faceID") {
-                        beforeEach {
-                            self.biometryManager.faceIdStub = true
-                            self.biometryManager.touchIdStub = true
-
-                            UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            self.subject.onViewReady()
-                        }
-
-                        it("respects biometricsEnabled stored value & sets the title appropriately") {
-                            let biometricCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1] as! SwitchSettingCellConfiguration
-                            expect(biometricCellConfig.text).to(equal(Constant.string.settingsFaceId))
-                            expect(biometricCellConfig.isOn).to(beTrue())
-                        }
-                    }
-
-                    describe("when the user has given the app access to touchID but not faceID") {
-                        beforeEach {
-                            self.biometryManager.faceIdStub = false
-                            self.biometryManager.touchIdStub = true
-
-                            UserDefaults.standard.set(false, forKey: SettingKey.biometricLogin.rawValue)
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            self.subject.onViewReady()
-                        }
-
-                        it("respects biometricsEnabled stored value & sets the title appropriately") {
-                            let biometricCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1] as! SwitchSettingCellConfiguration
-                            expect(biometricCellConfig.text).to(equal(Constant.string.settingsTouchId))
-                            expect(biometricCellConfig.isOn).to(beFalse())
-                        }
-                    }
-                }
-
                 describe("onSignOut") {
                     beforeEach {
-                        self.biometryManager.faceIdStub = false
-                        self.biometryManager.touchIdStub = true
                         self.subject.onViewReady()
                         self.view.fakeButtonPress.onNext(())
                     }
 
                     it("locks the application and routes to the login flow") {
-                        expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.visualLock(locked: true)))
+                        expect(self.dataStoreActionHandler.actionArgument).to(equal(DataStoreAction.lock))
                         let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
                         expect(argument).to(equal(LoginRouteAction.welcome))
                     }
@@ -154,39 +92,20 @@ class SettingsPresenterSpec: QuickSpec {
 
                 describe("detail values on view modules") {
                     beforeEach {
-                        self.biometryManager.faceIdStub = false
-                        self.biometryManager.touchIdStub = true
-
-                        UserDefaults.standard.set(true, forKey: SettingKey.biometricLogin.rawValue)
                         UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
                         UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                         self.subject.onViewReady()
                     }
 
                     it("sets detail value for autolock") {
-                        let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
+                        let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
                         expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))
                     }
 
                     it("sets detail value for preferred browser") {
-                        let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[3]
+                        let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
                         expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
                     }
-                }
-            }
-
-            describe("onBiometricSettingChanged") {
-                beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, true)])
-
-                    voidObservable
-                        .bind(to: self.subject.onBiometricSettingChanged)
-                        .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
-                }
-                it("calls settingActionHandler") {
-                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.biometricLogin(enabled: true)))
                 }
             }
 

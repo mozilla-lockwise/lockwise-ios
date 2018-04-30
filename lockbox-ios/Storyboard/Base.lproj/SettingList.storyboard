@@ -33,7 +33,7 @@
                                     <constraint firstAttribute="height" constant="44" id="MnG-dC-F5w"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Sign Out">
+                                <state key="normal" title="Lock Now">
                                     <color key="titleColor" red="0.99948698282241821" green="0.26723262667655945" blue="0.21373838186264038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>

@@ -5,10 +5,6 @@
 import UIKit
 import RxSwift
 
-protocol ErrorView {
-    func displayError(_ error: Error)
-}
-
 protocol StatusAlertView {
     func displayTemporaryAlert(_ message: String, timeout: TimeInterval)
 }
@@ -24,19 +20,6 @@ protocol AlertControllerView {
                                 title: String?,
                                 message: String?,
                                 style: UIAlertControllerStyle)
-}
-
-extension UIViewController: ErrorView {
-    func displayError(_ error: Error) {
-        let alertController = UIAlertController(title: error.localizedDescription, message: nil, preferredStyle: .alert)
-
-        let cancelAction = UIAlertAction(title: Constant.string.ok, style: .cancel)
-        alertController.addAction(cancelAction)
-
-        DispatchQueue.main.async {
-            self.present(alertController, animated: true, completion: nil)
-        }
-    }
 }
 
 extension UIViewController: StatusAlertView {

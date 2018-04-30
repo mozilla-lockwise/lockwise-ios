@@ -57,7 +57,7 @@ class ItemListDisplayStoreSpec: QuickSpec {
                 }
 
                 it("does not push non-ItemListDisplay events") {
-                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.locked(locked: false))
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.lock)
                     expect(displayObserver.events.count).to(equal(1))
                 }
             }
