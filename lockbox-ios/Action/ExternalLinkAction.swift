@@ -63,12 +63,15 @@ enum PreferredBrowserSetting: String {
         case .Focus:
             return URL(string: "firefox-focus://open-url?url=\(encodedString)")
         case .Chrome:
-            return URL(string: "googlechrome://\(url)")
+            let split = url.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false)
+            let urlWithoutScheme = split[1]
+            let chromeScheme = split[0] == "http" ? "googlechrome:" : "googlechromes:"
+            return URL(string: "\(chromeScheme)\(urlWithoutScheme)")
         }
     }
 
     func canOpenBrowser(application: OpenUrlProtocol = UIApplication.shared) -> Bool {
-        if let url = self.getPreferredBrowserDeeplink(url: "https://mozilla.org") {
+        if let url = self.getPreferredBrowserDeeplink(url: "http://mozilla.org") {
             return application.canOpenURL(url)
         }
 

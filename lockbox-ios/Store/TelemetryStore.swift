@@ -6,23 +6,23 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class CopyConfirmationDisplayStore {
-    static let shared = CopyConfirmationDisplayStore()
+class TelemetryStore {
+    static let shared = TelemetryStore()
     private let disposeBag = DisposeBag()
 
     private let dispatcher: Dispatcher
-    private let _copyDisplay = PublishSubject<CopyConfirmationDisplayAction>()
+    private let _telemetryFilter = PublishSubject<TelemetryAction>()
 
-    public var copyDisplay: Driver<CopyConfirmationDisplayAction> {
-        return _copyDisplay.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(field: .password))
+    public var telemetryFilter: Observable<TelemetryAction> {
+        return _telemetryFilter.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
 
         self.dispatcher.register
-                .filterByType(class: CopyConfirmationDisplayAction.self)
-                .bind(to: self._copyDisplay)
+                .filterByType(class: TelemetryAction.self)
+                .bind(to: self._telemetryFilter)
                 .disposed(by: self.disposeBag)
     }
 }

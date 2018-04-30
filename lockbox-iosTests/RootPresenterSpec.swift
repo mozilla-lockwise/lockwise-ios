@@ -6,6 +6,7 @@ import Foundation
 import Quick
 import Nimble
 import RxSwift
+import RxTest
 import UIKit
 
 @testable import Lockbox
@@ -125,6 +126,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeTelemetryStore: TelemetryStore {
+        let telemetryStub = PublishSubject<TelemetryAction>()
+
+        override var telemetryFilter: Observable<TelemetryAction> {
+            return telemetryStub.asObservable()
+        }
+    }
+
     class FakeRouteActionHandler: RouteActionHandler {
         var invokeArgument: RouteAction?
 
@@ -161,12 +170,27 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeTelemetryActionHandler: TelemetryActionHandler {
+        var telemetryListener: TestableObserver<TelemetryAction>!
+
+        override var telemetryActionListener: AnyObserver<TelemetryAction> {
+            get {
+                return self.telemetryListener.asObserver()
+            }
+
+            set { }
+        }
+    }
+
     private var view: FakeRootView!
     private var routeStore: FakeRouteStore!
     private var userInfoStore: FakeUserInfoStore!
     private var dataStore: FakeDataStore!
+    private var telemetryStore: FakeTelemetryStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var telemetryActionHandler: FakeTelemetryActionHandler!
+    private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
     override func spec() {
@@ -176,15 +200,21 @@ class RootPresenterSpec: QuickSpec {
                 self.routeStore = FakeRouteStore()
                 self.userInfoStore = FakeUserInfoStore()
                 self.dataStore = FakeDataStore()
+                self.telemetryStore = FakeTelemetryStore()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.telemetryActionHandler = FakeTelemetryActionHandler()
+                self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
+
                 self.subject = RootPresenter(
                         view: self.view,
                         routeStore: self.routeStore,
                         userInfoStore: self.userInfoStore,
                         dataStore: self.dataStore,
+                        telemetryStore: self.telemetryStore,
                         routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler
+                        dataStoreActionHandler: self.dataStoreActionHandler,
+                        telemetryActionHandler: self.telemetryActionHandler
                 )
             }
 
@@ -1024,6 +1054,34 @@ class RootPresenterSpec: QuickSpec {
                             }
                         }
                     }
+                }
+
+                describe("telemetry") {
+                    let action = CopyAction(text: "somethin", field: .password, itemID: "fsdsdfsf") as TelemetryAction
+
+                    describe("when usage data can be recorded") {
+                        beforeEach {
+                            UserDefaults.standard.set(true, forKey: SettingKey.recordUsageData.rawValue)
+                            self.telemetryStore.telemetryStub.onNext(action)
+                        }
+
+                        it("passes all telemetry actions through to the telemetryactionhandler") {
+                            expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventMethod).to(equal(action.eventMethod))
+                            expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventObject).to(equal(action.eventObject))
+                        }
+                    }
+
+                    describe("when usage data cannot be recorded") {
+                        beforeEach {
+                            UserDefaults.standard.set(false, forKey: SettingKey.recordUsageData.rawValue)
+                            self.telemetryStore.telemetryStub.onNext(action)
+                        }
+
+                        it("passes no telemetry actions through to the telemetryactionhandler") {
+                            expect(self.telemetryActionHandler.telemetryListener.events.count).to(equal(0))
+                        }
+                    }
+
                 }
             }
         }
