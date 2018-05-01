@@ -76,8 +76,8 @@
                                     <color key="titleColor" red="0.97932499647140503" green="0.98005276918411255" blue="0.982829749584198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In order for Lockbox to display saved logins, you need to enable sync on Firefox." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="37" y="514.5" width="300" height="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
+                                <rect key="frame" x="37" y="500.5" width="300" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="1Z8-yX-Sl3"/>
                                     <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
