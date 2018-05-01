@@ -19,20 +19,37 @@ enum TelemetryEventCategory: String {
 }
 
 enum TelemetryEventMethod: String {
-    case tap, signin, startup, foreground, background
+case tap, signin, signinError, startup, foreground, background, settingChanged, show
 }
 
 enum TelemetryEventObject: String {
     case app = "app"
     case entryList = "entry_list"
-    case settingsButton = "settings_button"
-    case feedbackButton = "feedback_button"
-    case faqButton = "faq_button"
-    case viewEntryButton = "view_entry_button"
-    case entryCancelButton = "entry_cancel_button"
+    case entryDetail = "entry_detail"
+    case revealPassword = "reveal_password"
     case entryCopyUsernameButton = "entry_copy_username_button"
     case entryCopyPasswordButton = "entry_copy_password_button"
-    case entryShowPasswordButton = "entry_view_password_button"
+    case settingsList = "settings_list"
+    case settingsBiometricLogin = "settings_biometric_login"
+    case settingsAutolockTime = "settings_autolock_time"
+    case settingsAutolock = "settings_autolock"
+    case settingsReset = "settings_reset"
+    case settingsVisualLock = "settings_visual_lock"
+    case settingsPreferredBrowser = "settings_preferred_browser"
+    case settingsRecordUsageData = "settings_record_usage_data"
+    case settingsAccount = "settings_account"
+    case settingsFaq = "settings_faq"
+    case settingsProvideFeedback = "settings_provide_feedback"
+    case fxaLoadInitialURL = "fxa_load_initial_url"
+    case fxaFetchingUserInformation = "fxa_fetching_user_info"
+    case fxaFinishedFetchingUserInformation = "fxa_finished_fetching_user_info"
+    case fxaRedirectNoState = "fxa_error_redirect_no_state"
+    case fxaRedirectNoCode = "fxa_error_redirect_no_code"
+    case fxaRedirectBadState = "fxa_error_redirect_bad_state"
+    case fxaEmptyOAuthData = "fxa_error_empty_oauth_data"
+    case fxaEmptyProfileInfoData = "fxa_error_empty_profile_info_data"
+    case fxaUnexpectedDataFormat = "fxa_error_unexpected_data_format"
+    case fxaUnknown = "fxa_error_unknown"
 }
 
 enum ExtraKey: String {

@@ -1,6 +1,6 @@
 # Lockbox for iOS Metrics Plan
 
-_Last Updated: April 26, 2018_
+_Last Updated: May 1, 2018_
 
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
@@ -92,7 +92,7 @@ See here for more information on event schemas:
 
 https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/collection/events.html#public-js-api
 
-## List of Proposed Events
+## List of Implemented Events
 
 1. When the app starts up:
 	* `category`: action
@@ -101,50 +101,63 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 	* `value`: nil
 	* `extras`: nil
 
-2. When a user taps the fxa signin button:
-	* `category`: action
-	* `method`: tap
-	* `object`: fxaSigninButton
-	* `value`: nil
-	* `extras`: nil
-
-2. Whether a user successfully authorizes with FxA:
+2. Events that fire during the FxA signin process:
 	* `category`: action
 	* `method`: signin
-	* `object`: app
-	* `value`: `true` or `false`
-	* `extras`: ["error" : nil or string]
-		* Note: If there is an authentication error, let's put it in the extra field here, if possible.
+	* `object`: fxa_load_initial_url, fxa_fetching_user_info, fxa_finished_fetching_user_info
+	* `value`: nil
+	* `extras`: nil
 
-3. When a user taps an item in the entry list:
+3. When there's an error in the FxA signin process:
 	* `category`: action
-	* `method`: tap
+	* `method`: signinError
+	* `object`: fxa_error_redirect_no_state, fxa_error_redirect_no_code, fxa_error_redirect_bad_state, fxa_error_empty_oauth_data, fxa_error_empty_profile_info_data, fxa_error_unexpected_data_format, fxa_error_unknown
+	* `value`: nil
+	* `extras`: nil
+
+4. When the main item list is shown to the user:
+	* `category`: action
+	* `method`: show
 	* `object`: entryList
 	* `value`: nil
-	* `extras`: ["itemid" : itemid]
-
-4. When a user taps one of the buttons available after entering the entry view:
-	* `category`: action
-	* `method`: tap
-	* `object`: entryCopyUsernameButton, entryCopyPasswordButton, viewPasswordButton, entryShowPasswordButton
-	* `value`: nil
-	* `extras`: ["itemid" : itemid]
-
-5. When a user taps the settings button:
-	* `category`: action
-	* `method`: tap
-	* `object`: settingsButton
-	* `value`: nil
 	* `extras`: nil
 
-6. When a user taps the FAQ button:
+5. When a user shows the details of an item in the entry list:
+	* `category`: action
+	* `method`: show
+	* `object`: entryDetail
+	* `value`: nil
+	* `extras`: ["itemid" : itemid]
+
+6. When a user taps one of the copy buttons available after being shown entry details:
 	* `category`: action
 	* `method`: tap
-	* `object`: faqButton
+	* `object`: entryCopyUsernameButton, entryCopyPasswordButton
 	* `value`: nil
+	* `extras`: ["itemid" : itemid]
+
+7. When a user shows details from an item, is the password shown?:
+	* `category`: action
+	* `method`: tap
+	* `object`: reveal_password
+	* `value`: true or false, whether the pw is displayed
 	* `extras`: nil
 
-7. When the app enters the background or foreground:
+8. When one of the settings pages is shown to the user:
+	* `category`: action
+	* `method`: show
+	* `object`: settings_list, settings_autolock, settings_preferred_browser, settings_account, settings_faq, settings_provide_feedback
+	* `value`: whatever the value of each of the above was changed to, or nil for settings_reset
+	* `extras`: nil
+
+9. When a user changes something on the settings page:
+	* `category`: action
+	* `method`: settingsChanged
+	* `object`: settings_biometric_login, settings_autolock_time, settings_reset, settings_visual_lock, settings_preferred_browser, settings_record_usage_data
+	* `value`: whatever the value of each of the above was changed to, or nil for settings_reset
+	* `extras`: nil
+
+10. When the app enters the background or foreground:
 	* `category`: action
 	* `method`: background, foreground
 	* `object`: app

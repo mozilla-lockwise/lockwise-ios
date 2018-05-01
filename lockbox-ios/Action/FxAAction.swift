@@ -11,6 +11,31 @@ enum FxADisplayAction: Action {
     case finishedFetchingUserInformation
 }
 
+extension FxADisplayAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .signin
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self {
+        case .loadInitialURL:
+            return .fxaLoadInitialURL
+        case .fetchingUserInformation:
+            return .fxaFetchingUserInformation
+        case .finishedFetchingUserInformation:
+            return .fxaFinishedFetchingUserInformation
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
+}
+
 extension FxADisplayAction: Equatable {
 
     static func ==(lhs: FxADisplayAction, rhs: FxADisplayAction) -> Bool {
@@ -36,6 +61,39 @@ enum FxAError: Error {
     case EmptyProfileInfoData
     case UnexpectedDataFormat
     case Unknown
+}
+
+extension FxAError: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .signinError
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self {
+        case .RedirectNoState:
+            return .fxaRedirectNoState
+        case .RedirectNoCode:
+            return .fxaRedirectNoCode
+        case .RedirectBadState:
+            return .fxaRedirectBadState
+        case .EmptyOAuthData:
+            return .fxaEmptyOAuthData
+        case .EmptyProfileInfoData:
+            return .fxaEmptyProfileInfoData 
+        case .UnexpectedDataFormat:
+            return .fxaUnexpectedDataFormat
+        case .Unknown:
+            return .fxaUnknown
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
 }
 
 class FxAActionHandler: ActionHandler {
