@@ -8,7 +8,7 @@ import UIKit
 
 struct Constant {
     struct app {
-        static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
+        static let redirectURI = "https://lockbox.firefox.com/fxa/ios-redirect.html"
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
     }
@@ -40,7 +40,9 @@ struct Constant {
         static let confirmDialogTitle = NSLocalizedString("confirm_dialog_title", value: "Are you sure you want to unlink your account?", comment: "Confirm dialog title")
         static let confirmDialogMessage = NSLocalizedString("confirm_dialog_message", value: "This will sign you out and any settings you made will be reset for this device.", comment: "Confirm Dialog Message")
         static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
-        static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied to clipboard", comment: "Alert text when a field has been copied, with an interpolated field name value")
+        static let confirmDialogTitle = NSLocalizedString("confirm_dialog_title", value: "Clear out your Firefox Lockbox?", comment: "Confirm dialog title")
+        static let confirmDialogMessage = NSLocalizedString("confirm_dialog_message", value: "This will delete your Firefox Account information and all saved entries from Firefox Lockbox.", comment: "Confirm dialog message")
+        static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied", comment: "Alert text when a field has been copied, with an interpolated field name value")
         static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
@@ -53,7 +55,7 @@ struct Constant {
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
         static let webAddress = NSLocalizedString("web_address", value: "Web Address", comment: "Section title text for the web address on the item detail screen")
-        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
+        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
         static let settingsSupportSectionHeader = NSLocalizedString("settings.support.header", value: "SUPPORT", comment: "Support section label in settings")
         static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
         static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
@@ -72,13 +74,13 @@ struct Constant {
         static let autoLockTwelveHours = NSLocalizedString("settings.autoLock.twelveHour", value: "12 hours", comment: "12 hours auto lock setting")
         static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
         static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
-        static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when you would like us to lock your Lockbox.", comment: "Header displayed above auto lock settings")
+        static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Sign out of Firefox Lockbox after", comment: "Header displayed above auto lock settings")
         static let settingsBrowserChrome = NSLocalizedString("settings.browser.chrome", value: "Google Chrome", comment: "Chrome Browser")
         static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
         static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
         static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
-        static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
+        static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Firefox Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
     }
 

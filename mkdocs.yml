@@ -1,5 +1,5 @@
-site_name: Lockbox iOS
-site_description: Documentation for Lockbox's iOS application
+site_name: Firefox Lockbox for iOS
+site_description: Documentation for Firefox Lockbox for iOS application
 theme: readthedocs
 repo_name: GitHub
 repo_url: https://github.com/mozilla-lockbox/lockbox-ios
