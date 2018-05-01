@@ -10,9 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="FiraSans-Bold.ttf">
-            <string>FiraSans-Bold</string>
-        </array>
         <array key="FiraSans-Italic.ttf">
             <string>FiraSans-Italic</string>
         </array>
@@ -32,16 +29,13 @@
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
                                 <rect key="frame" x="-50.5" y="0.0" width="476" height="194"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firefox Lockbox" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ctm-Z1-jcM" userLabel="Lockbox">
-                                <rect key="frame" x="70.5" y="262" width="235" height="38.5"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-2v-Rbb" userLabel="Lockbox">
+                                <rect key="frame" x="72.5" y="267" width="230" height="28"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="38.5" id="4PL-3e-Kqa"/>
+                                    <constraint firstAttribute="width" constant="230" id="aRw-PY-7Xc"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="FiraSans-Bold" family="Fira Sans" pointSize="33"/>
-                                <color key="textColor" red="0.99609220027923584" green="0.996055006980896" blue="0.99608027935028076" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Take your passwords everywhere" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Take your passwords everywhere" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
                                 <rect key="frame" x="87" y="300" width="200" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="IYN-CR-Y5B"/>
@@ -52,7 +46,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
-                                <rect key="frame" x="30" y="415.5" width="315" height="45"/>
+                                <rect key="frame" x="30" y="410" width="315" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VuQ-t5-UWT"/>
@@ -64,7 +58,7 @@
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l70-UW-2Lm">
-                                <rect key="frame" x="127.5" y="524" width="120" height="40"/>
+                                <rect key="frame" x="127.5" y="518.5" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="kr3-Mt-8ev"/>
                                 </constraints>
@@ -77,7 +71,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="37" y="500.5" width="300" height="40"/>
+                                <rect key="frame" x="37" y="495" width="300" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="1Z8-yX-Sl3"/>
                                     <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
@@ -94,14 +88,16 @@
                             <constraint firstItem="l70-UW-2Lm" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="LMU-FO-EQ2"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
-                            <constraint firstItem="Ctm-Z1-jcM" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="68" id="N5J-ck-8M7"/>
+                            <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="68" id="N5J-ck-8M7"/>
                             <constraint firstItem="l70-UW-2Lm" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="64" id="Rsc-oo-LDE"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG"/>
-                            <constraint firstItem="Ctm-Z1-jcM" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
+                            <constraint firstItem="4k3-9F-Bvv" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
                             <constraint firstAttribute="bottom" secondItem="4k3-9F-Bvv" secondAttribute="bottom" id="aGi-Kj-ckL"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="top" secondItem="Zs6-ts-YH0" secondAttribute="top" id="aZr-YV-g8U"/>
                             <constraint firstAttribute="trailing" secondItem="4k3-9F-Bvv" secondAttribute="trailing" id="dQQ-8g-Mhl"/>
-                            <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="Ctm-Z1-jcM" secondAttribute="bottom" constant="5" id="ieo-1p-rxW"/>
+                            <constraint firstItem="ehm-2v-Rbb" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="hez-iz-r81"/>
+                            <constraint firstItem="ehm-2v-Rbb" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="73" id="htJ-IO-AQJ"/>
+                            <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="ehm-2v-Rbb" secondAttribute="bottom" constant="5" id="ieo-1p-rxW"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cuz-yd-F4J" secondAttribute="trailing" constant="20" id="uoc-MO-hF7"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="40" id="v7E-My-ZJE"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="vVj-mn-ajo"/>
@@ -124,6 +120,7 @@
     </scenes>
     <resources>
         <image name="fingerprint" width="40" height="40"/>
+        <image name="lockbox-title" width="224" height="28"/>
         <image name="nessie" width="476" height="194"/>
     </resources>
 </document>
