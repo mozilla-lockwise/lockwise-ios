@@ -1,6 +1,6 @@
 
-/* Class = "UILabel"; text = "Lockbox"; ObjectID = "Ctm-Z1-jcM"; */
-"Ctm-Z1-jcM.text" = "Lockbox";
+/* Class = "UILabel"; text = "Firefox Lockbox"; ObjectID = "Ctm-Z1-jcM"; */
+"Ctm-Z1-jcM.text" = "Firefox Lockbox";
 
 /* Class = "UIButton"; normalTitle = "Sign in with your Firefox Account"; ObjectID = "cuz-yd-F4J"; */
 "cuz-yd-F4J.normalTitle" = "Sign in with your Firefox Account";
