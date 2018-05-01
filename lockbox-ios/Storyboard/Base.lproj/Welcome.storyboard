@@ -52,19 +52,19 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
-                                <rect key="frame" x="30" y="429.5" width="315" height="45"/>
+                                <rect key="frame" x="30" y="415.5" width="315" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VuQ-t5-UWT"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="315" id="v9d-HV-Tyg"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Sign in with your Firefox Account">
+                                <state key="normal" title="Sign In">
                                     <color key="titleColor" red="0.059756595641374588" green="0.3597700297832489" blue="0.8745732307434082" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l70-UW-2Lm">
-                                <rect key="frame" x="127.5" y="538" width="120" height="40"/>
+                                <rect key="frame" x="127.5" y="524" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="kr3-Mt-8ev"/>
                                 </constraints>

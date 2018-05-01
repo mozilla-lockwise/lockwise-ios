@@ -2,8 +2,8 @@
 /* Class = "UILabel"; text = "Firefox Lockbox"; ObjectID = "Ctm-Z1-jcM"; */
 "Ctm-Z1-jcM.text" = "Firefox Lockbox";
 
-/* Class = "UIButton"; normalTitle = "Sign in with your Firefox Account"; ObjectID = "cuz-yd-F4J"; */
-"cuz-yd-F4J.normalTitle" = "Sign in with your Firefox Account";
+/* Class = "UIButton"; normalTitle = "Sign In"; ObjectID = "cuz-yd-F4J"; */
+"cuz-yd-F4J.normalTitle" = "Sign In";
 
 /* Class = "UILabel"; text = "Take your passwords everywhere"; ObjectID = "hwO-wS-oS4"; */
 "hwO-wS-oS4.text" = "Take your passwords everywhere";
