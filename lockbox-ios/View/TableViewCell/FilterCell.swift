@@ -7,6 +7,7 @@ import RxSwift
 
 class FilterCell: UITableViewCell {
     @IBOutlet weak var filterTextField: UITextField!
+    @IBOutlet weak var cancelButton: UIButton!
     var disposeBag = DisposeBag()
 
     override func prepareForReuse() {

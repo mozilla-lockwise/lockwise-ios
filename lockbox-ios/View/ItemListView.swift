@@ -97,6 +97,28 @@ extension ItemListView: ItemListViewProtocol {
             button.isHidden = false
         }
     }
+
+    func dismissKeyboard() {
+        if let cell = self.getFilterCell() {
+            cell.filterTextField.resignFirstResponder()
+        }
+    }
+
+    func displayFilterCancelButton() {
+        if let cell = self.getFilterCell() {
+            cell.cancelButton.isHidden = false
+        }
+    }
+
+    func hideFilterCancelButton() {
+        if let cell = self.getFilterCell() {
+            cell.cancelButton.isHidden = true
+        }
+    }
+
+    private func getFilterCell() -> FilterCell? {
+        return self.tableView.cellForRow(at: [0, 0]) as? FilterCell
+    }
 }
 
 extension ItemListView {
@@ -118,6 +140,8 @@ extension ItemListView {
                                 .asObservable()
                                 .bind(to: presenter.filterTextObserver)
                                 .disposed(by: cell.disposeBag)
+
+                        cell.cancelButton.rx.tap.bind(to: presenter.filterCancelObserver).disposed(by: cell.disposeBag)
 
                         retCell = cell
                     case .Item(let title, let username, _):
