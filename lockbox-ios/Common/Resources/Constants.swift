@@ -40,7 +40,7 @@ struct Constant {
         static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
         static let confirmDialogTitle = NSLocalizedString("confirm_dialog_title", value: "Clear out your Lockbox?", comment: "Confirm dialog title")
         static let confirmDialogMessage = NSLocalizedString("confirm_dialog_message", value: "This will delete your Firefox Account information and all saved entries from Lockbox.", comment: "Confirm dialog message")
-        static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied to clipboard", comment: "Alert text when a field has been copied, with an interpolated field name value")
+        static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied", comment: "Alert text when a field has been copied, with an interpolated field name value")
         static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
