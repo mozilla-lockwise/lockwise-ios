@@ -117,6 +117,17 @@ class BiometryOnboardingViewSpec: QuickSpec {
                     expect(self.subject.biometricSubTitle.text).to(equal(subtitle))
                 }
             }
+
+            describe("setBiometricEnableButton") {
+                let enableButton = "Enable Touch ID"
+                beforeEach {
+                    self.subject.setBiometricsEnableButton(enableButton)
+                }
+
+                it("sets the enable button") {
+                    expect(self.subject.enableButton.currentTitle).to(equal(enableButton))
+                }
+            }
         }
     }
 }
