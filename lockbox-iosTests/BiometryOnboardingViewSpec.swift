@@ -96,7 +96,7 @@ class BiometryOnboardingViewSpec: QuickSpec {
                 }
             }
 
-            describe("setBiometricImageName") {
+            describe("setBiometricTitle") {
                 let title = "YOU GONNA TOUCH DIS"
                 beforeEach {
                     self.subject.setBiometricsTitle(title)
@@ -107,14 +107,25 @@ class BiometryOnboardingViewSpec: QuickSpec {
                 }
             }
 
-            describe("setBiometricImageName") {
+            describe("setBiometricSubTitle") {
                 let subtitle = "WE KNOW WHO YOU ARE"
                 beforeEach {
                     self.subject.setBiometricsSubTitle(subtitle)
                 }
 
-                it("sets the title") {
+                it("sets the subtitle") {
                     expect(self.subject.biometricSubTitle.text).to(equal(subtitle))
+                }
+            }
+
+            describe("setBiometricEnableButton") {
+                let enableButton = "Enable Touch ID"
+                beforeEach {
+                    self.subject.setBiometricsEnableButton(enableButton)
+                }
+
+                it("sets the enable button") {
+                    expect(self.subject.enableButton.currentTitle).to(equal(enableButton))
                 }
             }
         }

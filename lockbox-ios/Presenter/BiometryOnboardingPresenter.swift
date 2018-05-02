@@ -13,6 +13,7 @@ protocol BiometryOnboardingViewProtocol: class {
     func setBiometricsImageName(_ name: String)
     func setBiometricsTitle(_ title: String)
     func setBiometricsSubTitle(_ subTitle: String)
+    func setBiometricsEnableButton(_ enableButton: String)
 }
 
 class BiometryOnboardingPresenter {
@@ -62,20 +63,24 @@ extension BiometryOnboardingPresenter {
             let imageName: String
             let pageTitle: String
             let subtitle: String
+            let enableButton: String
 
             if view.hasFaceID {
                 imageName = "face-large"
                 pageTitle = Constant.string.onboardingFaceIDHeader
                 subtitle = Constant.string.onboardingFaceIDSubtitle
+                enableButton = Constant.string.onboardingFaceIDEnable
             } else {
                 imageName = "fingerprint-large"
                 pageTitle = Constant.string.onboardingTouchIDHeader
                 subtitle = Constant.string.onboardingTouchIDSubtitle
+                enableButton = Constant.string.onboardingTouchIDEnable
             }
 
             view.setBiometricsImageName(imageName)
             view.setBiometricsTitle(pageTitle)
             view.setBiometricsSubTitle(subtitle)
+            view.setBiometricsEnableButton(enableButton)
         }
     }
 

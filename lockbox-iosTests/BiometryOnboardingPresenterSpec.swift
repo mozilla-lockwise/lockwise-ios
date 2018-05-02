@@ -17,6 +17,7 @@ class BiometryOnboardingPresenterSpec: QuickSpec {
         var biometricImageName: String?
         var biometricTitle: String?
         var biometricSubTitle: String?
+        var biometricEnableButton: String?
 
         var enableTapped: Observable<Void> {
             return self.enableStub.asObservable()
@@ -40,6 +41,10 @@ class BiometryOnboardingPresenterSpec: QuickSpec {
 
         func setBiometricsSubTitle(_ subTitle: String) {
             self.biometricSubTitle = subTitle
+        }
+
+        func setBiometricsEnableButton(_ enableButton: String) {
+            self.biometricEnableButton = enableButton
         }
     }
 
@@ -101,6 +106,7 @@ class BiometryOnboardingPresenterSpec: QuickSpec {
                         expect(self.view.biometricImageName).to(equal("face-large"))
                         expect(self.view.biometricTitle).to(equal(Constant.string.onboardingFaceIDHeader))
                         expect(self.view.biometricSubTitle).to(equal(Constant.string.onboardingFaceIDSubtitle))
+                        expect(self.view.biometricEnableButton).to(equal(Constant.string.onboardingFaceIDEnable))
                     }
 
                     describe("enableTapped") {
@@ -141,6 +147,7 @@ class BiometryOnboardingPresenterSpec: QuickSpec {
                         expect(self.view.biometricImageName).to(equal("fingerprint-large"))
                         expect(self.view.biometricTitle).to(equal(Constant.string.onboardingTouchIDHeader))
                         expect(self.view.biometricSubTitle).to(equal(Constant.string.onboardingTouchIDSubtitle))
+                        expect(self.view.biometricEnableButton).to(equal(Constant.string.onboardingTouchIDEnable))
                     }
 
                     describe("enableTapped") {
