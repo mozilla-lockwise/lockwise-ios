@@ -96,7 +96,7 @@ class BiometryOnboardingViewSpec: QuickSpec {
                 }
             }
 
-            describe("setBiometricImageName") {
+            describe("setBiometricTitle") {
                 let title = "YOU GONNA TOUCH DIS"
                 beforeEach {
                     self.subject.setBiometricsTitle(title)
@@ -107,13 +107,13 @@ class BiometryOnboardingViewSpec: QuickSpec {
                 }
             }
 
-            describe("setBiometricImageName") {
+            describe("setBiometricSubTitle") {
                 let subtitle = "WE KNOW WHO YOU ARE"
                 beforeEach {
                     self.subject.setBiometricsSubTitle(subtitle)
                 }
 
-                it("sets the title") {
+                it("sets the subtitle") {
                     expect(self.subject.biometricSubTitle.text).to(equal(subtitle))
                 }
             }
