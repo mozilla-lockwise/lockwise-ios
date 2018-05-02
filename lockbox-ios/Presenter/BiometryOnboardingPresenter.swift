@@ -36,22 +36,22 @@ class BiometryOnboardingPresenter {
         self.setUpContent()
 
         self.view?.enableTapped
-                .subscribe { [weak self] (_) in
-                    if let view = self?.view,
+                .subscribe( onNext: { _ in
+                    if let view = self.view,
                        view.hasFaceID {
-                        self?.initialFaceIDAuth()
+                        self.initialFaceIDAuth()
                     }
 
-                    self?.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: true))
-                    self?.routeActionHandler.invoke(MainRouteAction.list)
-                }
+                    self.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: true))
+                    self.routeActionHandler.invoke(MainRouteAction.list)
+                })
                 .disposed(by: self.disposeBag)
 
         self.view?.notNowTapped
-                .subscribe { [weak self] (_) in
-                    self?.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: false))
-                    self?.routeActionHandler.invoke(MainRouteAction.list)
-                }
+                .subscribe( onNext: { _ in
+                    self.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: false))
+                    self.routeActionHandler.invoke(MainRouteAction.list)
+                })
                 .disposed(by: self.disposeBag)
     }
 }
