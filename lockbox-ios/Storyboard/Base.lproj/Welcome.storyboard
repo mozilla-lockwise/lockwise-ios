@@ -70,16 +70,33 @@
                                     <color key="titleColor" red="0.97932499647140503" green="0.98005276918411255" blue="0.982829749584198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="37" y="495" width="300" height="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
+                                <rect key="frame" x="37" y="495" width="300" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="1Z8-yX-Sl3"/>
+                                    <constraint firstAttribute="height" constant="50" id="1Z8-yX-Sl3"/>
                                     <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.93730175495147705" green="0.93717384338378906" blue="0.94118618965148926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins.">
+                                        <attributes>
+                                            <color key="NSColor" red="0.93730175495147705" green="0.93717384338378906" blue="0.94118618965148926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" metaFont="system" size="15"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.1499999999999999" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
+                                <rect key="frame" x="140.5" y="550" width="94" height="18"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" link="YES" image="YES"/>
+                                </accessibility>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Learn more" image="arrowhead-right-16">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="5w6-4I-b3t"/>
@@ -89,6 +106,7 @@
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="68" id="N5J-ck-8M7"/>
+                            <constraint firstItem="JTP-OD-6TF" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Nf8-HW-nnV"/>
                             <constraint firstItem="l70-UW-2Lm" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="64" id="Rsc-oo-LDE"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
@@ -98,6 +116,7 @@
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="hez-iz-r81"/>
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="73" id="htJ-IO-AQJ"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="ehm-2v-Rbb" secondAttribute="bottom" constant="5" id="ieo-1p-rxW"/>
+                            <constraint firstItem="JTP-OD-6TF" firstAttribute="top" secondItem="xyY-bk-Xw8" secondAttribute="bottom" constant="5" id="jv8-4Y-uqi"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cuz-yd-F4J" secondAttribute="trailing" constant="20" id="uoc-MO-hF7"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="40" id="v7E-My-ZJE"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="vVj-mn-ajo"/>
@@ -110,6 +129,7 @@
                         <outlet property="biometricSignInButton" destination="l70-UW-2Lm" id="c9f-df-FZw"/>
                         <outlet property="fxAButtonTopSpacing" destination="WWA-h0-rTG" id="jGY-5e-0sR"/>
                         <outlet property="fxASigninButton" destination="cuz-yd-F4J" id="Fwi-eS-e53"/>
+                        <outlet property="learnMore" destination="JTP-OD-6TF" id="AUR-8T-44D"/>
                         <outlet property="oceanView" destination="4k3-9F-Bvv" id="dlf-79-jBs"/>
                     </connections>
                 </viewController>
@@ -119,6 +139,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrowhead-right-16" width="16" height="16"/>
         <image name="fingerprint" width="40" height="40"/>
         <image name="lockbox-title" width="224" height="28"/>
         <image name="nessie" width="476" height="194"/>
