@@ -79,8 +79,8 @@ struct Constant {
         static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
         static let onboardingTouchIDHeader = NSLocalizedString("onboarding.touchid.header", value: "Use Touch ID to sign in", comment: "Header for screen allowing users to enable Touch ID")
         static let onboardingTouchIDSubtitle = NSLocalizedString("onboarding.touchid.message", value: "Easily unlock your Lockbox  with the touch of your finger.", comment: "Subtitle for screen allowing users to enable Touch ID")
-        static let onboardingFaceIDHeader = NSLocalizedString("onboarding.faceid.header", value: "Use Face ID to sign in", comment: "Header for screen allowing users to enable Face ID")
-        static let onboardingFaceIDSubtitle = NSLocalizedString("onboarding.faceid.message", value: "Easily unlock your Lockbox  with just a glance.", comment: "Subtitle for screen allowing users to enable Touch ID")
+        static let onboardingFaceIDHeader = NSLocalizedString("onboarding.faceid.header", value: "Sign in with Face ID", comment: "Header for screen allowing users to enable Face ID")
+        static let onboardingFaceIDSubtitle = NSLocalizedString("onboarding.faceid.message", value: "Access Firefox Lockbox with just a glance.", comment: "Subtitle for screen allowing users to enable Touch ID")
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
         static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
