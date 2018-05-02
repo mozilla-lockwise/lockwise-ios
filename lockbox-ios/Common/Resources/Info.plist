@@ -29,7 +29,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Enabling Face ID allows for quick and secure access to your account.</string>
+	<string>Firefox Lockbox will use Face ID to sign you in to the app.</string>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>UIAppFonts</key>
