@@ -64,4 +64,8 @@ extension BiometryOnboardingView: BiometryOnboardingViewProtocol {
     func setBiometricsSubTitle(_ subTitle: String) {
         self.biometricSubTitle.text = subTitle
     }
+
+    func setBiometricsEnableButton(_ enableButtonString: String) {
+        self.enableButton.setTitle(enableButtonString, for: .normal)
+    }
 }

@@ -7,6 +7,3 @@
 
 /* Class = "UILabel"; text = "Access Firefox Lockbox with just a touch."; ObjectID = "9AT-vx-1Cv"; */
 "9AT-vx-1Cv.text" = "Access Firefox Lockbox with just a touch.";
-
-/* Class = "UIButton"; normalTitle = "Use Touch ID"; ObjectID = "Rab-vl-hna"; */
-"Rab-vl-hna.normalTitle" = "Use Touch ID";
