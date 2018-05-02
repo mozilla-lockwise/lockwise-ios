@@ -13,6 +13,7 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var biometricSignInButton: UIButton!
     @IBOutlet internal weak var fxAButtonTopSpacing: NSLayoutConstraint!
+    @IBOutlet internal weak var learnMore: UIButton!
 
     @IBOutlet private weak var oceanView: UIImageView!
 
@@ -68,8 +69,16 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.biometricSignInButton.rx.tap
     }
 
+    public var learnMorePressed: ControlEvent<Void> {
+        return self.learnMore.rx.tap
+    }
+
     public var firstTimeLoginMessageHidden: AnyObserver<Bool> {
         return self.accessLockboxMessage.rx.isHidden.asObserver()
+    }
+
+    public var firstTimeLearnMoreHidden: AnyObserver<Bool> {
+        return self.learnMore.rx.isHidden.asObserver()
     }
 
     public var biometricAuthenticationPromptHidden: AnyObserver<Bool> {

@@ -12,6 +12,7 @@ protocol WelcomeViewProtocol: class {
     var loginButtonPressed: ControlEvent<Void> { get }
     var biometricSignInButtonPressed: ControlEvent<Void> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
+    var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
     var biometricAuthenticationPromptHidden: AnyObserver<Bool> { get }
     var biometricSignInText: AnyObserver<String?> { get }
     var biometricImageName: AnyObserver<String> { get }
@@ -69,6 +70,10 @@ class WelcomePresenter {
             lockedObservable
                     .bind(to: view.firstTimeLoginMessageHidden)
                     .disposed(by: self.disposeBag)
+
+            lockedObservable
+                .bind(to: view.firstTimeLearnMoreHidden)
+                .disposed(by: self.disposeBag)
 
             Observable.combineLatest(lockedObservable, biometricsObservable)
                     .map {
