@@ -7,8 +7,13 @@ import WebKit
 import RxSwift
 import RxCocoa
 
-protocol FxAViewProtocol: class, ErrorView {
+protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
+}
+
+struct FxADisplayFirstRun {
+    let action: FxADisplayAction
+    let isFirstRun: Bool
 }
 
 class FxAPresenter {
@@ -17,6 +22,8 @@ class FxAPresenter {
     fileprivate let settingActionHandler: SettingActionHandler
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let fxaStore: FxAStore
+    fileprivate let userDefaults: UserDefaults
+    fileprivate let biometryManager: BiometryManager
 
     private var disposeBag = DisposeBag()
 
@@ -30,23 +37,38 @@ class FxAPresenter {
          fxAActionHandler: FxAActionHandler = FxAActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         fxaStore: FxAStore = FxAStore.shared) {
+         fxaStore: FxAStore = FxAStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard,
+         biometryManager: BiometryManager = BiometryManager()
+    ) {
         self.view = view
         self.fxAActionHandler = fxAActionHandler
         self.settingActionHandler = settingActionHandler
         self.routeActionHandler = routeActionHandler
         self.fxaStore = fxaStore
+        self.userDefaults = userDefaults
+        self.biometryManager = biometryManager
     }
 
     func onViewReady() {
-        self.fxaStore.fxADisplay
-                .drive(onNext: { action in
-                    switch action {
+        Observable.combineLatest(self.fxaStore.fxADisplay, self.userDefaults.onLock)
+                .map {
+                    FxADisplayFirstRun(action: $0.0, isFirstRun: !$0.1)
+                }
+                .distinctUntilChanged { (older: FxADisplayFirstRun, newer: FxADisplayFirstRun) in
+                    return older.action == newer.action
+                }
+                .asDriver(onErrorJustReturn: FxADisplayFirstRun(action: .fetchingUserInformation, isFirstRun: true))
+                .drive(onNext: { latest in
+                    switch latest.action {
                     case .loadInitialURL(let url):
                         self.view?.loadRequest(URLRequest(url: url))
                     case .finishedFetchingUserInformation:
                         self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
-                        self.routeActionHandler.invoke(MainRouteAction.list)
+
+                        let route: RouteAction = latest.isFirstRun ? LoginRouteAction.biometryOnboarding : MainRouteAction.list // swiftlint:disable:this line_length
+
+                        self.routeActionHandler.invoke(route)
                     default:
                         break
                     }

@@ -14,8 +14,8 @@ class FxAStore {
 
     private var _fxADisplay = PublishSubject<FxADisplayAction>()
 
-    public var fxADisplay: Driver<FxADisplayAction> {
-        return _fxADisplay.distinctUntilChanged().asDriver(onErrorJustReturn: .fetchingUserInformation)
+    public var fxADisplay: Observable<FxADisplayAction> {
+        return _fxADisplay.distinctUntilChanged()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
