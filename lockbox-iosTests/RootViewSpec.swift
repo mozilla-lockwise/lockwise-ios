@@ -96,6 +96,17 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(FxAView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
+
+                describe("biometryOnboarding") {
+                    beforeEach {
+                        self.subject.startMainStack(LoginNavigationController.self)
+                        self.subject.pushLoginView(view: LoginRouteAction.biometryOnboarding)
+                    }
+
+                    it("makes an fxaview the top view") {
+                        expect(self.subject.topViewIs(BiometryOnboardingView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
             }
 
             describe("displaying main stack after login stack") {
