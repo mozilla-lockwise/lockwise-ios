@@ -27,7 +27,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="TZH-dE-zj0"/>
                                 </constraints>
-                                <state key="normal" title="Enable">
+                                <state key="normal" title="Use Touch ID">
                                     <color key="titleColor" red="0.97932499650000004" green="0.98005276919999995" blue="0.98282974960000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
@@ -41,8 +41,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Easily unlock your Lockbox  with the touch of your finger. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9AT-vx-1Cv">
-                                <rect key="frame" x="48" y="346" width="279" height="36"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Access Firefox Lockbox with just a touch." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9AT-vx-1Cv">
+                                <rect key="frame" x="38" y="346" width="300" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -55,7 +55,7 @@
                             <constraint firstItem="0wC-w2-M0L" firstAttribute="top" secondItem="Rab-vl-hna" secondAttribute="bottom" constant="20" id="L9a-qj-fN8"/>
                             <constraint firstItem="8lx-1j-0OS" firstAttribute="top" secondItem="QHk-b4-71t" secondAttribute="bottom" constant="24" id="MPE-7z-HlK"/>
                             <constraint firstItem="8lx-1j-0OS" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="NvW-mo-dXs"/>
-                            <constraint firstItem="9AT-vx-1Cv" firstAttribute="leading" secondItem="XPw-RQ-JGv" secondAttribute="leading" constant="48" id="PuP-XU-JME"/>
+                            <constraint firstItem="9AT-vx-1Cv" firstAttribute="leading" secondItem="XPw-RQ-JGv" secondAttribute="leading" constant="38" id="PuP-XU-JME"/>
                             <constraint firstItem="QHk-b4-71t" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="Ro8-yC-b7a"/>
                             <constraint firstItem="Rab-vl-hna" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="TkB-4T-THV"/>
                             <constraint firstItem="0wC-w2-M0L" firstAttribute="centerX" secondItem="XPw-RQ-JGv" secondAttribute="centerX" id="a3O-1b-buL"/>

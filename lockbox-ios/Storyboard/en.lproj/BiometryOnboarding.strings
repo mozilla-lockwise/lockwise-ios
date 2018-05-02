@@ -5,8 +5,8 @@
 /* Class = "UILabel"; text = "Use Touch ID to sign in"; ObjectID = "8lx-1j-0OS"; */
 "8lx-1j-0OS.text" = "Use Touch ID to sign in";
 
-/* Class = "UILabel"; text = "Easily unlock your Lockbox  with the touch of your finger. "; ObjectID = "9AT-vx-1Cv"; */
-"9AT-vx-1Cv.text" = "Easily unlock your Lockbox  with the touch of your finger. ";
+/* Class = "UILabel"; text = "Access Firefox Lockbox with just a touch."; ObjectID = "9AT-vx-1Cv"; */
+"9AT-vx-1Cv.text" = "Access Firefox Lockbox with just a touch.";
 
-/* Class = "UIButton"; normalTitle = "Enable"; ObjectID = "Rab-vl-hna"; */
-"Rab-vl-hna.normalTitle" = "Enable";
+/* Class = "UIButton"; normalTitle = "Use Touch ID"; ObjectID = "Rab-vl-hna"; */
+"Rab-vl-hna.normalTitle" = "Use Touch ID";
