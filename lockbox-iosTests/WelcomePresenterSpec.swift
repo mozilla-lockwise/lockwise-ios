@@ -18,6 +18,7 @@ class WelcomePresenterSpec: QuickSpec {
         var fakeFxAButtonPress = PublishSubject<Void>()
         var fakeBiometricButtonPress = PublishSubject<Void>()
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
+        var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var biometricAuthMessageHiddenStub: TestableObserver<Bool>!
         var biometricSignInTextStub: TestableObserver<String?>!
         var biometricImageNameStub: TestableObserver<String>!
@@ -33,6 +34,9 @@ class WelcomePresenterSpec: QuickSpec {
 
         var firstTimeLoginMessageHidden: AnyObserver<Bool> {
             return self.firstTimeMessageHiddenStub.asObserver()
+        }
+        var firstTimeLearnMoreHidden: AnyObserver<Bool> {
+            return self.firstTimeLearnMoreHiddenStub.asObserver()
         }
         var biometricAuthenticationPromptHidden: AnyObserver<Bool> {
             return self.biometricAuthMessageHiddenStub.asObserver()
@@ -110,6 +114,7 @@ class WelcomePresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeWelcomeView()
                 self.view.firstTimeMessageHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.firstTimeLearnMoreHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.biometricAuthMessageHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.biometricSignInTextStub = self.scheduler.createObserver(String?.self)
                 self.view.biometricImageNameStub = self.scheduler.createObserver(String.self)
@@ -155,6 +160,10 @@ class WelcomePresenterSpec: QuickSpec {
                                 expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             }
 
+                            it("hides the first time login button") {
+                                expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                            }
+
                             it("moves the FxA button up") {
                                 expect(self.view.fxaButtonTopSpaceStub.events.last!.value.element).to(equal(Constant.number.fxaButtonTopSpaceUnlock))
                             }
@@ -171,6 +180,10 @@ class WelcomePresenterSpec: QuickSpec {
 
                             it("hides the first time login message") {
                                 expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
+                            }
+
+                            it("hides the first time login button") {
+                                expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
                             }
 
                             it("moves the FxA button up") {
@@ -204,6 +217,10 @@ class WelcomePresenterSpec: QuickSpec {
                                 expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             }
 
+                            it("hides the first time login button") {
+                                expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                            }
+
                             it("moves the FxA button up") {
                                 expect(self.view.fxaButtonTopSpaceStub.events.last!.value.element).to(equal(Constant.number.fxaButtonTopSpaceUnlock))
                             }
@@ -220,6 +237,10 @@ class WelcomePresenterSpec: QuickSpec {
 
                             it("hides the first time login message") {
                                 expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
+                            }
+
+                            it("hides the first time login button") {
+                                expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
                             }
 
                             it("moves the FxA button up") {
@@ -271,6 +292,10 @@ class WelcomePresenterSpec: QuickSpec {
                                 expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             }
 
+                            it("hides the first time login button") {
+                                expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                            }
+
                             it("moves the FxA button up") {
                                 expect(self.view.fxaButtonTopSpaceStub.events.last!.value.element).to(equal(Constant.number.fxaButtonTopSpaceUnlock))
                             }
@@ -290,6 +315,10 @@ class WelcomePresenterSpec: QuickSpec {
 
                     it("hides the first time login message") {
                         expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beFalse())
+                    }
+
+                    it("hides the first time login button") {
+                        expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
                     }
 
                     it("moves the FxA button up") {

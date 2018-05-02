@@ -11,9 +11,9 @@ class WelcomeView: UIViewController {
 
     @IBOutlet internal weak var fxASigninButton: UIButton!
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
+    @IBOutlet internal weak var learnMore: UIButton!
     @IBOutlet internal weak var biometricSignInButton: UIButton!
     @IBOutlet internal weak var fxAButtonTopSpacing: NSLayoutConstraint!
-    @IBOutlet internal weak var learnMore: UIButton!
 
     @IBOutlet private weak var oceanView: UIImageView!
 

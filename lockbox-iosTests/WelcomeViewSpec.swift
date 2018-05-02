@@ -86,6 +86,16 @@ class WelcomeViewSpec: QuickSpec {
                 }
             }
 
+            describe("firstTimeLearnMoreHidden") {
+                beforeEach {
+                    self.subject.firstTimeLearnMoreHidden.onNext(true)
+                }
+
+                it("updates the hidden value of the learnMore button accordingly") {
+                    expect(self.subject.learnMore.isHidden).to(beTrue())
+                }
+            }
+
             describe("biometricAuthenticationPromptHidden") {
                 beforeEach {
                     self.subject.biometricAuthenticationPromptHidden.onNext(true)
