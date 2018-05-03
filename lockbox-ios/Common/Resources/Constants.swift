@@ -48,8 +48,8 @@ struct Constant {
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
         static let recent = NSLocalizedString("recent", value: "Recent", comment: "Button title when entries list is sorted by most recently used entry")
         static let recentlyUsed = NSLocalizedString("recently_used", value: "Recently Used", comment: "Label for the option sheet action allowing users to sort an entry list by the most recently used entries")
-        static let signInFaceID = NSLocalizedString("signin_with_faceid", value: "Sign in with FaceID", comment: "Label for the button to unlock the device using FaceID")
-        static let signInTouchID = NSLocalizedString("signin_with_touchid", value: "Sign in with TouchID", comment: "Label for the button to unlock the device using TouchID")
+        static let signInFaceID = NSLocalizedString("signin_with_faceid", value: "Sign in with Face ID", comment: "Label for the button to unlock the device using Face ID")
+        static let signInTouchID = NSLocalizedString("signin_with_touchid", value: "Sign in with Touch ID", comment: "Label for the button to unlock the device using Touch ID")
         static let sortEntries = NSLocalizedString("sort_entries", value: "Sort Entries", comment: "Title for the option sheet allowing users to sort entries")
         static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
@@ -79,6 +79,10 @@ struct Constant {
         static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
         static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
         static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
+        static let onboardingTouchIDHeader = NSLocalizedString("onboarding.touchid.header", value: "Use Touch ID to sign in", comment: "Header for screen allowing users to enable Touch ID")
+        static let onboardingTouchIDSubtitle = NSLocalizedString("onboarding.touchid.message", value: "Easily unlock your Lockbox  with the touch of your finger.", comment: "Subtitle for screen allowing users to enable Touch ID")
+        static let onboardingFaceIDHeader = NSLocalizedString("onboarding.faceid.header", value: "Use Face ID to sign in", comment: "Header for screen allowing users to enable Face ID")
+        static let onboardingFaceIDSubtitle = NSLocalizedString("onboarding.faceid.message", value: "Easily unlock your Lockbox  with just a glance.", comment: "Subtitle for screen allowing users to enable Touch ID")
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
         static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Firefox Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
