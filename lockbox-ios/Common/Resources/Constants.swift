@@ -37,8 +37,6 @@ struct Constant {
         static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let unlink = NSLocalizedString("unlink", value: "Unlink", comment: "Unlink button title")
-        static let confirmDialogTitle = NSLocalizedString("confirm_dialog_title", value: "Are you sure you want to unlink your account?", comment: "Confirm dialog title")
-        static let confirmDialogMessage = NSLocalizedString("confirm_dialog_message", value: "This will sign you out and any settings you made will be reset for this device.", comment: "Confirm Dialog Message")
         static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
         static let confirmDialogTitle = NSLocalizedString("confirm_dialog_title", value: "Clear out your Firefox Lockbox?", comment: "Confirm dialog title")
         static let confirmDialogMessage = NSLocalizedString("confirm_dialog_message", value: "This will delete your Firefox Account information and all saved entries from Firefox Lockbox.", comment: "Confirm dialog message")
