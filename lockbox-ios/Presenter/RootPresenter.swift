@@ -85,7 +85,12 @@ class RootPresenter {
                     return InfoOpenLock(profileInfo: latest.0, opened: latest.1, visualLocked: latest.2)
                 }
                 .subscribe(onNext: { (latest: InfoOpenLock) in
-                    guard let uid = latest.profileInfo?.uid, !latest.visualLocked else {
+                    guard let uid = latest.profileInfo?.uid else {
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                        return
+                    }
+
+                    if latest.visualLocked {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                         return
                     }
@@ -94,7 +99,8 @@ class RootPresenter {
                         self.dataStoreActionHandler.open(uid: uid)
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     }
-                }).disposed(by: self.disposeBag)
+                })
+                .disposed(by: self.disposeBag)
 
         Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onInitialized)
                 .map { (latest: (String?, Bool)) -> KeyInit in
@@ -178,6 +184,10 @@ class RootPresenter {
             case .fxa:
                 if !view.topViewIs(FxAView.self) {
                     view.pushLoginView(view: .fxa)
+                }
+            case .biometryOnboarding:
+                if !view.topViewIs(BiometryOnboardingView.self) {
+                    view.pushLoginView(view: .biometryOnboarding)
                 }
             }
         }.asObserver()
