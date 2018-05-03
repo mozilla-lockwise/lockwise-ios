@@ -13,7 +13,9 @@ enum LocalError: Error {
 class BiometryManager {
     private let context: LAContext
 
-    lazy var usesBiometrics: Bool = self.usesTouchID || self.usesFaceID
+    var usesBiometrics: Bool {
+        return self.usesTouchID || self.usesFaceID
+    }
 
     var usesFaceID: Bool {
         if #available(iOS 11.0, *) {
@@ -37,20 +39,14 @@ class BiometryManager {
 
     func authenticateWithMessage(_ message: String) -> Single<Void> {
         if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
-            return Single.create { [weak self] observer in
-                self?.context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: message) { success, error in
-                    if success {
-                        observer(.success(()))
-                    } else if let err = error {
-                        observer(.error(err))
-                    }
-                }
-
-                return Disposables.create()
-            }
+            return self.authenticate(message: message, policy: .deviceOwnerAuthentication)
         }
 
         return Single.error(LocalError.LAError)
+    }
+
+    func authenticateWithBiometrics(message: String) -> Single<Void> {
+        return self.authenticate(message: message, policy: .deviceOwnerAuthenticationWithBiometrics)
     }
 
     @available(iOS 11.0, *)
@@ -60,5 +56,19 @@ class BiometryManager {
         }
 
         return false
+    }
+
+    private func authenticate(message: String, policy: LAPolicy) -> Single<Void> {
+        return Single.create { [weak self] observer in
+            self?.context.evaluatePolicy(policy, localizedReason: message) { success, error in
+                if success {
+                    observer(.success(()))
+                } else if let err = error {
+                    observer(.error(err))
+                }
+            }
+
+            return Disposables.create()
+        }
     }
 }

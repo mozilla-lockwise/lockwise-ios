@@ -114,7 +114,7 @@ extension SettingListPresenter {
                     routeAction: SettingRouteAction.account)
         ])
 
-        if self.biometryManager.usesFaceID || self.biometryManager.usesTouchID {
+        if self.biometryManager.usesBiometrics {
             let biometricSetting = self.biometryManager.usesFaceID ? faceIdSetting : touchIdSetting
             biometricSetting.isOn = biometricSettingEnabled
 
