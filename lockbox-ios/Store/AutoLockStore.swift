@@ -39,7 +39,6 @@ class AutoLockStore {
             .filterByType(class: LifecycleAction.self)
             .subscribe(self.lifecycleAction)
             .disposed(by: self.disposeBag)
-
     }
 
     private func lifecycleAction(evt: Event<LifecycleAction>) {
@@ -76,23 +75,6 @@ class AutoLockStore {
                 }
             })
             .disposed(by: self.disposeBag)
-    }
-
-    private func dataStoreAction(evt: Event<DataStoreAction>) {
-        guard let action = evt.element else { return }
-
-        switch action {
-        case .locked(let locked):
-            if locked {
-                self.stopTimer()
-            }
-        case .opened(let opened):
-            if opened {
-                self.setupTimer()
-            }
-        default:
-            return
-        }
     }
 
     private func setTimer(seconds: Int) {
