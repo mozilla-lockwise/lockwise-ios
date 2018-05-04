@@ -124,24 +124,7 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.startTelemetry()
-
-        self.userDefaults.onAutoLockTime.take(1).subscribe(onNext: { autoLockSetting in
-            switch autoLockSetting {
-            case .OnAppExit:
-                self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
-            case .Never:
-                self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
-            default:
-                let date = NSDate(timeIntervalSince1970:
-                    self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue))
-
-                if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
-                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
-                } else {
-                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
-                }
-            }
-        }).disposed(by: self.disposeBag)
+        self.checkAutoLockTimer()
     }
 
     func onViewReady() {
@@ -262,5 +245,25 @@ extension RootPresenter {
                 .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
                 .disposed(by: self.disposeBag)
+    }
+
+    fileprivate func checkAutoLockTimer() {
+        self.userDefaults.onAutoLockTime.take(1).subscribe(onNext: { autoLockSetting in
+            switch autoLockSetting {
+            case .OnAppExit:
+                self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
+            case .Never:
+                self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
+            default:
+                let date = NSDate(timeIntervalSince1970:
+                    self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue))
+
+                if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
+                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
+                } else {
+                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
+                }
+            }
+        }).disposed(by: self.disposeBag)
     }
 }
