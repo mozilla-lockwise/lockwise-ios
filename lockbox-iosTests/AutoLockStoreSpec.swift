@@ -83,45 +83,46 @@ class AutoLockStoreSpec: QuickSpec {
             }
 
             describe("onLock setting changed") {
-                describe("to lock") {
+                describe("to unlock") {
                     describe("auto lock timer is a time interval") {
                         beforeEach {
-                            UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
-                            self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
                             UserDefaults.standard.set(true, forKey: SettingKey.locked.rawValue)
+                            self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
                         }
 
-                        it("nulls the timer") {
-                            expect(self.subject.timer).to(beNil())
+                        it("sets the timer") {
+                            expect(self.subject.timer).toNot(beNil())
                         }
 
-                        it("removes the timer value from user defaults") {
-                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        it("sets the timer value from user defaults") {
+                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).toNot(beNil())
                         }
                     }
 
                     it("doesn't set timer for AutoLockSetting.Never") {
-                        self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
                         self.userDefaults.set(true, forKey: SettingKey.locked.rawValue)
-                        expect(self.subject.timer).to(beNil())
+                        self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        self.userDefaults.set(false, forKey: SettingKey.locked.rawValue)
+                        expect(self.subject.timer?.isValid).to(beFalsy())
                         expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
 
                     it("doesn't set timer for AutoLockSetting.OnAppExit") {
                         self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        self.userDefaults.set(true, forKey: SettingKey.locked.rawValue)
-                        expect(self.subject.timer).to(beNil())
+                        self.userDefaults.set(false, forKey: SettingKey.locked.rawValue)
+                        expect(self.subject.timer?.isValid).to(beFalsy())
                         expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
 
-                describe("to unlock") {
+                describe("to lock") {
                     beforeEach {
-                        self.userDefaults.removeObject(forKey: SettingKey.locked.rawValue)
-                        self.userDefaults.set(false, forKey: SettingKey.locked.rawValue)
+                        self.userDefaults.set(true, forKey: SettingKey.locked.rawValue)
                     }
+
                     it("stops the timer") {
-                        expect(self.subject.timer).to(beNil())
+                        expect(self.subject.timer?.isValid).to(beFalsy())
                         expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }

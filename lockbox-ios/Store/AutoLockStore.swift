@@ -69,7 +69,7 @@ class AutoLockStore {
                 case .TwentyFourHours:
                     self.setTimer(seconds: 60 * 60 * 24)
                 case .Never:
-                    return
+                    self.stopTimer()
                 case .OnAppExit:
                     return
                 }
