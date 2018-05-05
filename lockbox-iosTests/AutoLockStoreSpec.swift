@@ -117,6 +117,7 @@ class AutoLockStoreSpec: QuickSpec {
 
                 describe("to unlock") {
                     beforeEach {
+                        self.userDefaults.removeObject(forKey: SettingKey.locked.rawValue)
                         self.userDefaults.set(false, forKey: SettingKey.locked.rawValue)
                     }
                     it("stops the timer") {
