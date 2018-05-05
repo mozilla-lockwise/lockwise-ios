@@ -288,18 +288,6 @@ class ItemListViewSpec: QuickSpec {
                         expect(cell.cancelButton.isHidden).to(beTrue())
                     }
                 }
-
-                describe("dismissKeyboard") {
-                    beforeEach {
-                        cell.filterTextField.becomeFirstResponder()
-                        expect(cell.filterTextField.isFirstResponder).toEventually(beTrue())
-                        self.subject.dismissKeyboard()
-                    }
-
-                    it("hides the keyboard") {
-                        expect(cell.filterTextField.isFirstResponder).toEventually(beFalse())
-                    }
-                }
             }
         }
 
