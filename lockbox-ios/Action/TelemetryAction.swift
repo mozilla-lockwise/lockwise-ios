@@ -19,7 +19,7 @@ enum TelemetryEventCategory: String {
 }
 
 enum TelemetryEventMethod: String {
-case tap, signin, signinError, startup, foreground, background, settingChanged, show
+case tap, startup, foreground, background, settingChanged, show
 }
 
 enum TelemetryEventObject: String {
@@ -40,16 +40,6 @@ enum TelemetryEventObject: String {
     case settingsAccount = "settings_account"
     case settingsFaq = "settings_faq"
     case settingsProvideFeedback = "settings_provide_feedback"
-    case fxaLoadInitialURL = "fxa_load_initial_url"
-    case fxaFetchingUserInformation = "fxa_fetching_user_info"
-    case fxaFinishedFetchingUserInformation = "fxa_finished_fetching_user_info"
-    case fxaRedirectNoState = "fxa_error_redirect_no_state"
-    case fxaRedirectNoCode = "fxa_error_redirect_no_code"
-    case fxaRedirectBadState = "fxa_error_redirect_bad_state"
-    case fxaEmptyOAuthData = "fxa_error_empty_oauth_data"
-    case fxaEmptyProfileInfoData = "fxa_error_empty_profile_info_data"
-    case fxaUnexpectedDataFormat = "fxa_error_unexpected_data_format"
-    case fxaUnknown = "fxa_error_unknown"
 }
 
 enum ExtraKey: String {
