@@ -173,6 +173,21 @@ class SettingActionSpec: QuickSpec {
                     expect(SettingAction.reset).notTo(equal(SettingAction.biometricLogin(enabled: true)))
                 }
             }
+
+            describe("telemetry") {
+                it("event method should equal settingChanged") {
+                    expect(SettingAction.visualLock(locked: true).eventMethod).to(equal(TelemetryEventMethod.settingChanged))
+                }
+
+                it("event object should be the setting that changed") {
+                    expect(SettingAction.biometricLogin(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsBiometricLogin))
+                    expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours).eventObject).to(equal(TelemetryEventObject.settings_autolock_time))
+                    expect(SettingAction.visualLock(locked: true).eventObject).to(equal(TelemetryEventObject.settingsVisualLock))
+                    expect(SettingAction.preferredBrowser(browser: PreferredBrowserSetting.Firefox).eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
+                    expect(SettingAction.reset.eventObject).to(equal(TelemetryEventObject.settingsReset))
+                    expect(SettingAction.recordUsageData(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsRecordUsageData))
+                }
+            }
         }
     }
 }
