@@ -9,7 +9,7 @@ import RxTest
 import RxSwift
 import RxCocoa
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {

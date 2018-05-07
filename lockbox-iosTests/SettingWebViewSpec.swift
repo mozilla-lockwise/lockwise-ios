@@ -7,7 +7,7 @@ import Quick
 import Nimble
 import WebKit
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class SettingWebViewSpec: QuickSpec {
     private let title = "a fake title"

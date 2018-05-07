@@ -6,7 +6,7 @@ import Quick
 import Nimble
 import Foundation
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class OAuthInfoSpec: QuickSpec {
     override func spec() {

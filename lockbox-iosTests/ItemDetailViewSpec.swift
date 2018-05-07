@@ -9,7 +9,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class ItemDetailViewSpec: QuickSpec {
 

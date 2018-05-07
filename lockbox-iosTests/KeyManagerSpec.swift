@@ -6,7 +6,7 @@ import Quick
 import Nimble
 import CJose
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class KeyManagerSpec: QuickSpec {
     var subject: KeyManager!

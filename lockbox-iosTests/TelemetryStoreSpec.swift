@@ -8,7 +8,7 @@ import Nimble
 import RxTest
 import RxSwift
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class TelemetryStoreSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

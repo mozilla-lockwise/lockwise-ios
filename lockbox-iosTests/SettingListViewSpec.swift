@@ -10,7 +10,7 @@ import RxTest
 import RxSwift
 import RxCocoa
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class SettingListViewSpec: QuickSpec {
     class FakeSettingsPresenter: SettingListPresenter {

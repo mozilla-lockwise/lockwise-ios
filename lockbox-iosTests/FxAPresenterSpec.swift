@@ -9,7 +9,7 @@ import RxCocoa
 import RxSwift
 import RxTest
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class FxAPresenterSpec: QuickSpec {
     class FakeFxAView: FxAViewProtocol {

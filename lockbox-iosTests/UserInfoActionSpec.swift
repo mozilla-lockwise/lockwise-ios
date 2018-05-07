@@ -7,7 +7,7 @@ import Quick
 import Nimble
 import RxSwift
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class UserInfoActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

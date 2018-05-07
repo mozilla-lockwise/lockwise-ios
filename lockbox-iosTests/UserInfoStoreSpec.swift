@@ -7,7 +7,7 @@ import Nimble
 import RxSwift
 import RxTest
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 enum UserInfoStoreSharedExamples: String {
     case SaveScopedKeyToKeychain, SaveProfileInfoToKeychain

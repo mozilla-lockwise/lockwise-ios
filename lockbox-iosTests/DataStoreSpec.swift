@@ -9,7 +9,7 @@ import RxTest
 import RxSwift
 import RxBlocking
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class DataStoreSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

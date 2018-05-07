@@ -6,7 +6,7 @@ import Foundation
 import Quick
 import Nimble
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 public func matchErrorAction(_ expected: ErrorAction) -> Predicate<ErrorAction> {
     return Predicate.fromDeprecatedClosure { actualExpression, _ in

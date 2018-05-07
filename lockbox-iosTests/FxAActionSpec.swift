@@ -5,7 +5,7 @@
 import Quick
 import Nimble
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 enum FxAActionSpecSharedExample: String {
     case DispatchDecodingError, PostOAuthInfoButDispatchError

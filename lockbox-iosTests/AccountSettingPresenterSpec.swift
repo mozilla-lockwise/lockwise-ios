@@ -9,7 +9,7 @@ import RxSwift
 import RxTest
 import RxCocoa
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class AccountSettingPresenterSpec: QuickSpec {
     class FakeAccountSettingView: AccountSettingViewProtocol {

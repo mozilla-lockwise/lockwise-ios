@@ -6,7 +6,7 @@ import UIKit
 import Quick
 import Nimble
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class LoginNavigationControllerSpec: QuickSpec {
     var subject: LoginNavigationController!

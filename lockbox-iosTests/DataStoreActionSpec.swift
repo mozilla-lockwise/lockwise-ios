@@ -10,7 +10,7 @@ import WebKit
 import RxTest
 import RxSwift
 
-@testable import Firefox_Lockbox
+@testable import Lockbox
 
 class DataStoreActionSpec: QuickSpec {
     class FakeWebView: WKWebView, TypedJavaScriptWebView {
