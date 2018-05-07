@@ -1460,6 +1460,7 @@
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
+				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Firefox Lockbox";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
@@ -1496,6 +1497,7 @@
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
+				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Firefox Lockbox";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
