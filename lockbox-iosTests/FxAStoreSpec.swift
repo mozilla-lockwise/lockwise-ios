@@ -36,7 +36,7 @@ class FxAStoreSpec: QuickSpec {
                     displayObserver = self.scheduler.createObserver(FxADisplayAction.self)
 
                     self.subject.fxADisplay
-                            .subscribe(displayObserver)
+                            .drive(displayObserver)
                             .disposed(by: self.disposeBag)
 
                     self.dispatcher.fakeRegistration.onNext(FxADisplayAction.fetchingUserInformation)
