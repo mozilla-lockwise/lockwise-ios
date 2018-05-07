@@ -61,6 +61,13 @@ class RouteActionSpec: QuickSpec {
                     expect(MainRouteAction.detail(itemId: "sfddfs")).notTo(equal(MainRouteAction.list))
                 }
             }
+
+            describe("telemetry") {
+                it("returns the type of view as event object") {
+                    expect(MainRouteAction.list.eventObject).to(equal(TelemetryEventObject.entryList))
+                    expect(MainRouteAction.detail(itemId: "sfddfs").eventObject).to(equal(TelemetryEventObject.entryDetail))
+                }
+            }
         }
     }
 }
