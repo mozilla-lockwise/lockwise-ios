@@ -9,7 +9,7 @@ import RxTest
 import RxSwift
 import RxBlocking
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class WebViewSpec: QuickSpec {
     class StubbedEvaluateJSWebView: WebView {

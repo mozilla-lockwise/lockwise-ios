@@ -9,7 +9,7 @@ import LocalAuthentication
 import RxSwift
 import RxTest
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 @available(iOS 11.0, *)
 var biometryTypeStub: LABiometryType!

@@ -8,7 +8,7 @@ import Nimble
 import RxTest
 import RxSwift
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class CopyConfirmationDisplayStoreSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

@@ -8,7 +8,7 @@ import UIKit
 import WebKit
 import RxSwift
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class FxAViewSpec: QuickSpec {
     class FakeFxAPresenter: FxAPresenter {

@@ -8,7 +8,7 @@ import Nimble
 import RxTest
 import RxSwift
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class DispatcherSpec: QuickSpec {
     private let scheduler = TestScheduler.init(initialClock: 0)

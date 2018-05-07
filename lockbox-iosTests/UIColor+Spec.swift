@@ -6,7 +6,7 @@ import UIKit
 import Quick
 import Nimble
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class UIColorSpec: QuickSpec {
     override func spec() {

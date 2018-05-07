@@ -9,7 +9,7 @@ import RxSwift
 import RxTest
 import UIKit
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 enum RootPresenterSharedExample: String {
     case NoLoginOrInitialize, NoUnlockOrList, RouteToWelcome, EmptyScopedKey

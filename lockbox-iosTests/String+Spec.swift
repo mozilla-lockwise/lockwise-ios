@@ -6,7 +6,7 @@ import Quick
 import Nimble
 import Foundation
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class StringSpec: QuickSpec {
     override func spec() {

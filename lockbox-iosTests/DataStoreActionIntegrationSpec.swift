@@ -8,7 +8,7 @@ import WebKit
 import RxSwift
 import RxBlocking
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class DataStoreHandlerIntegrationSpec: QuickSpec {
     private let scopedKey = "{\"kty\":\"oct\",\"kid\":\"kUIwo-jEhthmgdF_NhVAJesXh9OakaOfCWsmueU2MXA\",\"alg\":\"A256GCM\",\"k\":\"_6nSctCGlXWOOfCV6Faaieiy2HJri0qSjQmBvxYRlT8\"}" // swiftlint:disable:this line_length

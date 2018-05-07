@@ -9,7 +9,7 @@ import RxSwift
 import RxTest
 import RxCocoa
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class UserDefaultSpec: QuickSpec {
     private let scheduler = TestScheduler(initialClock: 0)

@@ -6,7 +6,7 @@ import Foundation
 import Quick
 import Nimble
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class ApplicationLifecycleActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

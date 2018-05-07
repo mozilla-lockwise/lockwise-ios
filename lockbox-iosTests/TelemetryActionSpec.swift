@@ -8,7 +8,7 @@ import Quick
 import Nimble
 import RxSwift
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class TelemetryActionSpec: QuickSpec {
     class FakeTelemetry: Telemetry {

@@ -5,7 +5,7 @@
 import Quick
 import Nimble
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class ItemEntrySpec: QuickSpec {
     override func spec() {

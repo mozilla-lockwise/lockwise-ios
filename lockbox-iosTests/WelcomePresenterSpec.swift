@@ -11,7 +11,7 @@ import RxTest
 import CoreGraphics
 import LocalAuthentication
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class WelcomePresenterSpec: QuickSpec {
     class FakeWelcomeView: WelcomeViewProtocol {

@@ -6,7 +6,7 @@ import Quick
 import Nimble
 import Foundation
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class ProfileInfoSpec: QuickSpec {
     override func spec() {

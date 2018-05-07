@@ -7,7 +7,7 @@ import UIKit
 import Quick
 import Nimble
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class CopyActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

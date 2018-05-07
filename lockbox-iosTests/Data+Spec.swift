@@ -8,7 +8,7 @@ import Foundation
 import RxSwift
 import RxBlocking
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class DataSpec: QuickSpec {
 

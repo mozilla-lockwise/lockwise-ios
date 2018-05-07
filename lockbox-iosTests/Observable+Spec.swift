@@ -7,7 +7,7 @@ import RxSwift
 import Quick
 import Nimble
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class ObservableSpec: QuickSpec {
     class Common {}

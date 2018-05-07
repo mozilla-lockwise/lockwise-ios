@@ -9,7 +9,7 @@ import RxTest
 import RxSwift
 import RxCocoa
 
-@testable import Lockbox
+@testable import Firefox_Lockbox
 
 class PreferredBrowserSettingPresenterSpec: QuickSpec {
     class FakePreferredBrowserView: PreferredBrowserSettingViewProtocol {
