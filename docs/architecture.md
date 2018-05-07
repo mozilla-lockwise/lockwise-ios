@@ -1,8 +1,8 @@
-# Lockbox Architecture
+# Firefox Lockbox for iOS Architecture
 
 ## RxSwift
 
-Lockbox makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the [ReactiveX documentation](http://reactivex.io/).
+Firefox Lockbox for iOS makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the [ReactiveX documentation](http://reactivex.io/).
 
 ## Presenters & Views
 
