@@ -2,14 +2,14 @@
 [![Coverage Status][codecov-image]][codecov-link]
 [![Waffle Board][waffle-image]][waffle-link]
 
-# Lockbox iOS
+# Firefox Lockbox for iOS
 
-The iOS application repository for [Lockbox][org-website].
+The iOS application repository for [Firefox Lockbox][org-website].
 
 ## [Documentation][docs-link]
 
-*This is just one component of the Lockbox product. Please see the
-[Lockbox website][org-website] for more context.*
+*This is just one component of the Firefox Lockbox product. Please see the
+[Firefox Lockbox website][org-website] for more context.*
 
 For detailed documentation and installation instructions, please see the
 [`docs` directory][docs-link].
@@ -32,7 +32,7 @@ version 2.0][license-link].
 [waffle-image]: https://badge.waffle.io/mozilla-lockbox/lockbox-extension.svg?columns=In%20Progress
 [waffle-link]: https://waffle.io/mozilla-lockbox/lockbox-extension
 [docs-link]: docs/
-[org-website]: https://mozilla-lockbox.github.io/
+[org-website]: https://lockbox.firefox.com/
 [contributing-link]: docs/contributing.md
 [coc-link]: docs/code_of_conduct.md
 [license-link]: /LICENSE
