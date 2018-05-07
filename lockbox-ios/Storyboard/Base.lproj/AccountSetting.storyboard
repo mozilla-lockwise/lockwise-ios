@@ -18,10 +18,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
-                                <rect key="frame" x="51" y="167" width="273" height="55.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
+                                <rect key="frame" x="62" y="167" width="250" height="55.5"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="To manage your Firefox Account password and other settings, login to your account in your browser.">
+                                    <fragment content="To make changes to your account, log in to your Firefox Account from any browser.">
                                         <attributes>
                                             <font key="NSFont" size="15" name=".SFNSText"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="1.5" tighteningFactorForTruncation="0.0"/>
@@ -66,14 +66,15 @@
                             <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9B0-EH-D9l" secondAttribute="top" constant="30" id="0tC-Tq-dmb"/>
                             <constraint firstItem="dKb-ji-8VE" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="15" id="0tG-IM-h0B"/>
                             <constraint firstItem="htf-cl-VXU" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" id="6W4-Fs-nDO"/>
-                            <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="51" id="7bq-qv-41L"/>
+                            <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="62" id="7bq-qv-41L"/>
+                            <constraint firstItem="dKb-ji-8VE" firstAttribute="top" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="5" id="CNN-2E-rJd"/>
                             <constraint firstAttribute="bottom" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="90" id="OOO-8n-6MF"/>
                             <constraint firstAttribute="trailing" secondItem="htf-cl-VXU" secondAttribute="trailing" id="Rk4-d2-iOq"/>
                             <constraint firstItem="f32-KR-4Nm" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="bSG-y6-P71"/>
                             <constraint firstItem="6A6-i9-hvw" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="g2N-6t-uHz"/>
                             <constraint firstItem="f32-KR-4Nm" firstAttribute="top" secondItem="meC-vW-3bR" secondAttribute="bottom" constant="10" id="jUe-ph-ux4"/>
                             <constraint firstItem="meC-vW-3bR" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="sBd-U0-dtZ"/>
-                            <constraint firstAttribute="bottom" secondItem="dKb-ji-8VE" secondAttribute="bottom" constant="50" id="tEA-Ex-Vaa"/>
+                            <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="dKb-ji-8VE" secondAttribute="bottom" constant="50" id="tEA-Ex-Vaa"/>
                             <constraint firstItem="6A6-i9-hvw" firstAttribute="top" secondItem="f32-KR-4Nm" secondAttribute="bottom" constant="30" id="wWu-hi-qyR"/>
                             <constraint firstItem="dKb-ji-8VE" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="ztw-Hb-70m"/>
                         </constraints>

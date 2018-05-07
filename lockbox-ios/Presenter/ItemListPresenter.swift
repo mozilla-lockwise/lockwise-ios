@@ -12,6 +12,9 @@ protocol ItemListViewProtocol: class, AlertControllerView {
     func bind(sortingButtonTitle: Driver<String>)
     func displayEmptyStateMessaging()
     func hideEmptyStateMessaging()
+    func dismissKeyboard()
+    func displayFilterCancelButton()
+    func hideFilterCancelButton()
 }
 
 struct ItemListTextSort {
@@ -55,6 +58,12 @@ class ItemListPresenter {
     lazy private(set) var filterTextObserver: AnyObserver<String> = {
         return Binder(self) { target, filterText in
             target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: filterText))
+        }.asObserver()
+    }()
+
+    lazy private(set) var filterCancelObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.dismissKeyboard()
         }.asObserver()
     }()
 
@@ -121,6 +130,13 @@ class ItemListPresenter {
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListFilterAction.self)
+            .do(onNext: { filterAction in
+                if filterAction.filteringText.isEmpty {
+                    self.view?.hideFilterCancelButton()
+                } else {
+                    self.view?.displayFilterCancelButton()
+                }
+            })
 
         let listDriver = self.createItemListDriver(
                 itemListObservable: itemListObservable,
@@ -204,5 +220,9 @@ extension ItemListPresenter {
                         $0 || $1
                     }
         }
+    }
+
+    func dismissKeyboard() {
+        view?.dismissKeyboard()
     }
 }
