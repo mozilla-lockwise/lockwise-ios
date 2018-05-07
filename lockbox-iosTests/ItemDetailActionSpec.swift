@@ -52,5 +52,15 @@ class ItemDetailActionHandlerSpec: QuickSpec {
                         .notTo(equal(ItemDetailDisplayAction.togglePassword(displayed: false)))
             }
         }
+
+        describe("telemetry") {
+            it("event method should equal tap") {
+                expect(ItemDetailDisplayAction.togglepassword(displayed: true).eventMethod).to(equal(TelemetryEventMethod.tap))
+            }
+
+            it("event object should equal revealPassword") {
+                expect(ItemDetailDisplayAction.togglepassword(displayed: true).eventObject).to(equal(TelemetryEventObject.revealPassword))
+            }
+        }
     }
 }
