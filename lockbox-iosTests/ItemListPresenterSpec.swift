@@ -18,6 +18,9 @@ class ItemListPresenterSpec: QuickSpec {
         var displayEmptyStateMessagingCalled = false
         var hideEmptyStateMessagingCalled = false
         let disposeBag = DisposeBag()
+        var dismissKeyboardCalled = false
+        var displayFilterCancelButtonCalled = false
+        var hideFilterCancelButtonCalled = false
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -41,6 +44,18 @@ class ItemListPresenterSpec: QuickSpec {
         func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
             self.displayOptionSheetButtons = buttons
             self.displayOptionSheetTitle = title
+        }
+
+        func dismissKeyboard() {
+            self.dismissKeyboardCalled = true
+        }
+
+        func displayFilterCancelButton() {
+            self.displayFilterCancelButtonCalled = true
+        }
+
+        func hideFilterCancelButton() {
+            self.hideFilterCancelButtonCalled = true
         }
     }
 
@@ -220,6 +235,27 @@ class ItemListPresenterSpec: QuickSpec {
                                 expect(configuration.first!.items).to(equal(expectedItemConfigurations))
                             }
                         }
+
+                        describe("when the text is not empty") {
+                            beforeEach {
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "me"))
+                            }
+
+                            it("displays the cancel button") {
+                                expect(self.view.displayFilterCancelButtonCalled).to(beTrue())
+                            }
+                        }
+
+                        describe("when the text is empty") {
+                            beforeEach {
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                            }
+
+                            it("hides the cancel button") {
+                                expect(self.view.hideFilterCancelButtonCalled).to(beTrue())
+                                expect(self.view.displayFilterCancelButtonCalled).to(beFalse())
+                            }
+                        }
                     }
 
                     describe("when sorting method switches to recently used") {
@@ -256,6 +292,18 @@ class ItemListPresenterSpec: QuickSpec {
                 it("dispatches the filtertext item list display action") {
                     let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterAction
                     expect(action.filteringText).to(equal(text))
+                }
+            }
+
+            describe("filterCancelButton") {
+                beforeEach {
+                    let cancelButtonObservable = self.scheduler.createColdObservable([next(40, ())])
+                    cancelButtonObservable.bind(to: self.subject.filterCancelObserver).disposed(by: self.disposeBag)
+                    self.scheduler.start()
+                }
+
+                it("hides keyboard") {
+                    expect(self.view.dismissKeyboardCalled).to(beTrue())
                 }
             }
 

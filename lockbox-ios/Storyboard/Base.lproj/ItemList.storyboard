@@ -46,19 +46,26 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                 </textField>
+                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JtN-An-cj9">
+                                                    <rect key="frame" x="313" y="7" width="48" height="30"/>
+                                                    <state key="normal" title="Cancel"/>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="ClX-iU-pch" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="1QS-QH-YGz"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="leading" secondItem="ClX-iU-pch" secondAttribute="trailing" constant="8" id="2sW-JE-5Ml"/>
+                                                <constraint firstItem="JtN-An-cj9" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="6ul-W4-dcn"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="height" secondItem="0wm-do-QXQ" secondAttribute="height" id="Bw6-Nb-6As"/>
                                                 <constraint firstItem="ClX-iU-pch" firstAttribute="leading" secondItem="0wm-do-QXQ" secondAttribute="leading" constant="16" id="LM8-cK-tpK"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="XIp-62-hZo"/>
-                                                <constraint firstAttribute="trailing" secondItem="DEF-qU-5KB" secondAttribute="trailing" constant="8" id="nuG-Zz-idu"/>
+                                                <constraint firstItem="JtN-An-cj9" firstAttribute="trailing" secondItem="0wm-do-QXQ" secondAttribute="trailing" constant="-14" id="aGy-iM-bvS"/>
+                                                <constraint firstItem="DEF-qU-5KB" firstAttribute="trailing" secondItem="JtN-An-cj9" secondAttribute="leading" id="nuG-Zz-idu"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.92951178550720215" green="0.92919707298278809" blue="0.94118726253509521" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
+                                            <outlet property="cancelButton" destination="JtN-An-cj9" id="akd-xw-NCE"/>
                                             <outlet property="filterTextField" destination="DEF-qU-5KB" id="mzd-ec-hdw"/>
                                         </connections>
                                     </tableViewCell>
