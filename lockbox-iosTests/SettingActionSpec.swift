@@ -181,7 +181,7 @@ class SettingActionSpec: QuickSpec {
 
                 it("event object should be the setting that changed") {
                     expect(SettingAction.biometricLogin(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsBiometricLogin))
-                    expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours).eventObject).to(equal(TelemetryEventObject.settings_autolock_time))
+                    expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours).eventObject).to(equal(TelemetryEventObject.settingsAutolockTime))
                     expect(SettingAction.visualLock(locked: true).eventObject).to(equal(TelemetryEventObject.settingsVisualLock))
                     expect(SettingAction.preferredBrowser(browser: PreferredBrowserSetting.Firefox).eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
                     expect(SettingAction.reset.eventObject).to(equal(TelemetryEventObject.settingsReset))
