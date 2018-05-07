@@ -18,6 +18,9 @@ class FxAPresenterSpec: QuickSpec {
         func loadRequest(_ urlRequest: URLRequest) {
             self.loadRequestArgument = urlRequest
         }
+
+        func displayError(_ error: Error) {
+        }
     }
 
     class FakeNavigationAction: WKNavigationAction {
@@ -34,8 +37,8 @@ class FxAPresenterSpec: QuickSpec {
     class FakeFxAStore: FxAStore {
         var fakeFxADisplay = PublishSubject<FxADisplayAction>()
 
-        override var fxADisplay: Observable<FxADisplayAction> {
-            return fakeFxADisplay.asObservable()
+        override var fxADisplay: Driver<FxADisplayAction> {
+            return fakeFxADisplay.asDriver(onErrorJustReturn: .fetchingUserInformation)
         }
     }
 
@@ -96,7 +99,6 @@ class FxAPresenterSpec: QuickSpec {
             describe(".onViewReady()") {
                 beforeEach {
                     self.subject.onViewReady()
-                    UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
                 }
 
                 it("initiates fxa authentication") {
@@ -115,47 +117,19 @@ class FxAPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("when authenticating during the first run") {
+                describe("receiving .finishedFetchingUserInformation") {
                     beforeEach {
-                        UserDefaults.standard.set(false, forKey: SettingKey.locked.rawValue)
+                        self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
                     }
 
-                    describe("receiving .finishedFetchingUserInformation") {
-                        beforeEach {
-                            self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
-                        }
-
-                        it("tells the settings to unlock the application") {
-                            expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
-                        }
-
-                        it("tells routing action handler to show the onboarding with biometrics screen") {
-                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                            let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                            expect(argument).to(equal(LoginRouteAction.biometryOnboarding))
-                        }
-                    }
-                }
-
-                describe("when authenticating from lock") {
-                    beforeEach {
-                        UserDefaults.standard.set(true, forKey: SettingKey.locked.rawValue)
+                    it("tells the settings to unlock the application") {
+                        expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
                     }
 
-                    describe("receiving .finishedFetchingUserInformation") {
-                        beforeEach {
-                            self.fxaStore.fakeFxADisplay.onNext(FxADisplayAction.finishedFetchingUserInformation)
-                        }
-
-                        it("tells the settings to unlock the application") {
-                            expect(self.settingActionHandler.invokeArgument).to(equal(SettingAction.visualLock(locked: false)))
-                        }
-
-                        it("tells routing action handler to show the listview") {
-                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                            let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
-                            expect(argument).to(equal(MainRouteAction.list))
-                        }
+                    it("tells routing action handler to show the listview") {
+                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                        let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(argument).to(equal(MainRouteAction.list))
                     }
                 }
 
@@ -201,7 +175,7 @@ class FxAPresenterSpec: QuickSpec {
 
                     beforeEach {
                         urlComponents.scheme = "https"
-                        urlComponents.host = "mozilla-lockbox.github.io"
+                        urlComponents.host = "lockbox.firefox.com"
                         urlComponents.path = "/fxa/ios-redirect.html"
 
                         let request = URLRequest(url: urlComponents.url!)

@@ -51,7 +51,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
         self.navigationItem.leftBarButtonItem!.setTitleTextAttributes([
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18)
         ], for: .normal)
 
         if #available(iOS 11.0, *) {

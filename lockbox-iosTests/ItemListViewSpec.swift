@@ -24,6 +24,7 @@ class ItemListViewSpec: QuickSpec {
         var fakeItemSelectedObserver: TestableObserver<String?>!
         var fakeFilterTextObserver: TestableObserver<String>!
         var fakeSortingButtonObserver: TestableObserver<Void>!
+        var fakeCancelObserver: TestableObserver<Void>!
 
         override func onViewReady() {
             onViewReadyCalled = true
@@ -39,6 +40,10 @@ class ItemListViewSpec: QuickSpec {
 
         override var sortingButtonObserver: AnyObserver<Void> {
             return self.fakeSortingButtonObserver.asObserver()
+        }
+
+        override var filterCancelObserver: AnyObserver<Void> {
+            return self.fakeCancelObserver.asObserver()
         }
     }
 
@@ -56,6 +61,7 @@ class ItemListViewSpec: QuickSpec {
                 self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(String?.self)
                 self.presenter.fakeFilterTextObserver = self.scheduler.createObserver(String.self)
                 self.presenter.fakeSortingButtonObserver = self.scheduler.createObserver(Void.self)
+                self.presenter.fakeCancelObserver = self.scheduler.createObserver(Void.self)
                 self.subject.presenter = self.presenter
 
                 _ = UINavigationController(rootViewController: self.subject)
@@ -244,21 +250,43 @@ class ItemListViewSpec: QuickSpec {
             }
 
             describe("FilterCell") {
+                var cell: FilterCell!
+
                 beforeEach {
                     self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: [ItemListCellConfiguration.Search])]))
+                    cell = self.subject.tableView.dataSource!.tableView(
+                        self.subject.tableView,
+                        cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as! FilterCell
                 }
 
                 it("disposes of its bag when preparing for reuse") {
-                    let cell = self.subject.tableView.dataSource!.tableView(
-                            self.subject.tableView,
-                            cellForRowAt: IndexPath(row: 0, section: 0)
-                    ) as! FilterCell
-
                     let disposeBag = cell.disposeBag
 
                     cell.prepareForReuse()
 
                     expect(cell.disposeBag === disposeBag).notTo(beTrue())
+                }
+
+                describe("displayFilterCancelButton") {
+                    beforeEach {
+                        self.subject.displayFilterCancelButton()
+                    }
+                    it("shows the button") {
+                        cell = self.subject.tableView.cellForRow(at: [0, 0]) as! FilterCell
+                        expect(cell.cancelButton.isHidden).toEventually(beFalse())
+                    }
+                }
+
+                describe("hideFilterCancelButton") {
+                    beforeEach {
+                        self.subject.hideFilterCancelButton()
+                    }
+
+                    it("hides the button") {
+                        cell = self.subject.tableView.cellForRow(at: [0, 0]) as! FilterCell
+                        expect(cell.cancelButton.isHidden).to(beTrue())
+                    }
                 }
             }
         }

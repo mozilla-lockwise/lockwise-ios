@@ -116,7 +116,7 @@ extension SettingListView {
         }
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done,
-                style: .done,
+                style: .plain,
                 target: nil,
                 action: nil)
         navigationItem.rightBarButtonItem?.tintColor = UIColor.white
