@@ -88,8 +88,7 @@ class WelcomePresenter {
                     .bind(to: view.fxAButtonTopSpace)
                     .disposed(by: self.disposeBag)
 
-            let profileInfoObservable = self.userInfoStore.profileInfo.filterNil().distinctUntilChanged()
-            Observable.combineLatest(profileInfoObservable, view.biometricSignInButtonPressed)
+            Observable.combineLatest(self.userInfoStore.profileInfo.filterNil(), view.biometricSignInButtonPressed)
                     .flatMap {
                         self.biometryManager.authenticateWithMessage($0.0.email)
                                 .catchError { _ in
