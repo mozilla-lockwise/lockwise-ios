@@ -34,7 +34,7 @@ class AccountSettingPresenter {
             target.view?.displayAlertController(buttons: [
                 AlertActionButtonConfiguration(title: Constant.string.cancel,
                                                tapObserver: nil,
-                                               style: .default),
+                                               style: .cancel),
                 AlertActionButtonConfiguration(title: Constant.string.unlink,
                                                tapObserver: target.unlinkAccountObserver,
                                                style: .destructive)],
