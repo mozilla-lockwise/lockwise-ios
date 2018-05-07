@@ -13,19 +13,16 @@ class AutoLockStore {
     private let dispatcher: Dispatcher
     private let userDefaults: UserDefaults
     private let settingActionHandler: SettingActionHandler
-    private let routeActionHandler: RouteActionHandler
 
     var timer: Timer?
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          userDefaults: UserDefaults = UserDefaults.standard,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared) {
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
 
         self.dispatcher = dispatcher
         self.userDefaults = userDefaults
         self.settingActionHandler = settingActionHandler
-        self.routeActionHandler = routeActionHandler
 
         self.userDefaults.onLock.subscribe(onNext: { locked in
             if locked {
@@ -108,7 +105,6 @@ class AutoLockStore {
 
     @objc private func lockApp() {
         self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
-        self.routeActionHandler.invoke(LoginRouteAction.welcome)
         self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
     }
 }
