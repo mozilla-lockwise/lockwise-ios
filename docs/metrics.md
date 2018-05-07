@@ -1,4 +1,4 @@
-# Lockbox for iOS Metrics Plan
+# Firefox Lockbox for iOS Metrics Plan
 
 _Last Updated: March 14, 2018_
 

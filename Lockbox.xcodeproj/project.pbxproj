@@ -402,7 +402,7 @@
 		7D5889FC205706AB0087DF89 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
 		7D5889FE205706AD0087DF89 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ItemList.strings; sourceTree = "<group>"; };
 		7D588A00205706AD0087DF89 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ItemList.strings; sourceTree = "<group>"; };
-		7D5DF8731F87F2600039B23E /* Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lockbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D5F1D7F20866A9400688DEA /* RxGesture.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxGesture.framework; path = Carthage/Build/iOS/RxGesture.framework; sourceTree = "<group>"; };
 		7D6FB87A204F00E2005E23AA /* StatusAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAlert.swift; sourceTree = "<group>"; };
 		7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatusAlert.xib; sourceTree = "<group>"; };
@@ -821,7 +821,7 @@
 		7D5DF8741F87F2600039B23E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7D5DF8731F87F2600039B23E /* Lockbox.app */,
+				7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */,
 				7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */,
 			);
 			name = Products;
@@ -872,9 +872,9 @@
 			productReference = 7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7D5DF8721F87F2600039B23E /* Lockbox */ = {
+		7D5DF8721F87F2600039B23E /* Firefox Lockbox */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Lockbox" */;
+			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Firefox Lockbox" */;
 			buildPhases = (
 				7D651D68203CE50700BD9B6E /* ShellScript */,
 				7DCB3F2C208699930043ADCE /* ShellScript */,
@@ -888,9 +888,9 @@
 			);
 			dependencies = (
 			);
-			name = Lockbox;
+			name = "Firefox Lockbox";
 			productName = "lockbox-exploration";
-			productReference = 7D5DF8731F87F2600039B23E /* Lockbox.app */;
+			productReference = 7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -931,7 +931,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7D5DF8721F87F2600039B23E /* Lockbox */,
+				7D5DF8721F87F2600039B23E /* Firefox Lockbox */,
 				7D1B1AC31F99028D00C1F5FF /* LockboxTests */,
 			);
 		};
@@ -1172,7 +1172,7 @@
 /* Begin PBXTargetDependency section */
 		7D1B1ACA1F99028D00C1F5FF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7D5DF8721F87F2600039B23E /* Lockbox */;
+			target = 7D5DF8721F87F2600039B23E /* Firefox Lockbox */;
 			targetProxy = 7D1B1AC91F99028D00C1F5FF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1285,7 +1285,7 @@
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lockbox.app/Lockbox";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Lockbox.app/Firefox Lockbox";
 			};
 			name = Debug;
 		};
@@ -1314,7 +1314,7 @@
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lockbox.app/Lockbox";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Lockbox.app/Firefox Lockbox";
 			};
 			name = Release;
 		};
@@ -1460,7 +1460,7 @@
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
-				PRODUCT_NAME = Lockbox;
+				PRODUCT_NAME = "Firefox Lockbox";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
@@ -1496,7 +1496,7 @@
 					"${PROJECT_DIR}/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
-				PRODUCT_NAME = Lockbox;
+				PRODUCT_NAME = "Firefox Lockbox";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
@@ -1662,7 +1662,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Lockbox" */ = {
+		7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Firefox Lockbox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D5DF8911F87F2600039B23E /* Debug */,
