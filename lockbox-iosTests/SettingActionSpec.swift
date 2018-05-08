@@ -187,6 +187,12 @@ class SettingActionSpec: QuickSpec {
                     expect(SettingAction.reset.eventObject).to(equal(TelemetryEventObject.settingsReset))
                     expect(SettingAction.recordUsageData(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsRecordUsageData))
                 }
+
+                it("telemetry event value is equal to setting value") {
+                    expect(SettingAction.biometricLogin(enabled: true).value).to(equal("true"))
+                    expect(SettingAction.recordUsageData(enabled: true).value).to(equal("true"))
+                    expect(SettingAction.visualLock(locked: true).value).to(equal("true"))
+                }
             }
         }
     }
