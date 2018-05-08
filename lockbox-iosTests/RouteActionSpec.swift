@@ -69,7 +69,24 @@ class RouteActionSpec: QuickSpec {
                 }
 
                 it("returns show as event method") {
-                    expect(MainRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))                  
+                    expect(MainRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))
+                }
+            }
+        }
+
+        describe("SettingRouteAction") {
+            describe("telemetry") {
+                it("event method is equal to show") {
+                    expect(SettingRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))
+                }
+
+                it("event object is equal to the setting view shown") {
+                    expect(SettingRouteAction.list.eventObject).to(equal(TelemetryEventObject.settingsList))
+                    expect(SettingRouteAction.provideFeedback.eventObject).to(equal(TelemetryEventObject.settingsProvideFeedback))
+                    expect(SettingRouteAction.faq.eventObject).to(equal(TelemetryEventObject.settingsFaq))
+                    expect(SettingRouteAction.account.eventObject).to(equal(TelemetryEventObject.settingsAccount))
+                    expect(SettingRouteAction.autoLock.eventObject).to(equal(TelemetryEventObject.settingsAutolock))
+                    expect(SettingRouteAction.preferredBrowser.eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
                 }
             }
         }
