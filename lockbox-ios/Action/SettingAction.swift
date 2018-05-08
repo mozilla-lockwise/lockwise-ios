@@ -35,7 +35,7 @@ extension SettingAction: Equatable {
 }
 
 enum SettingKey: String {
-    case biometricLogin, autoLockTime, locked, preferredBrowser, recordUsageData
+    case biometricLogin, autoLockTime, locked, preferredBrowser, recordUsageData, autoLockTimerDate
 }
 
 class SettingActionHandler: ActionHandler {
