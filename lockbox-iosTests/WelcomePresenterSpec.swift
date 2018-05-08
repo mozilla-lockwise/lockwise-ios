@@ -64,6 +64,14 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
+    class FakeLifecycleStore: LifecycleStore {
+        var fakeCycle = PublishSubject<LifecycleAction>()
+
+        override var lifecycleFilter: Observable<LifecycleAction> {
+            return self.fakeCycle.asObservable()
+        }
+    }
+
     class FakeBiometryManager: BiometryManager {
         var authMessage: String?
         var fakeAuthResponse = PublishSubject<Void>()
@@ -79,6 +87,7 @@ class WelcomePresenterSpec: QuickSpec {
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var userInfoStore: FakeUserInfoStore!
     private var dataStore: FakeDataStore!
+    private var lifecycleStore: FakeLifecycleStore!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -96,6 +105,7 @@ class WelcomePresenterSpec: QuickSpec {
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.userInfoStore = FakeUserInfoStore()
                 self.dataStore = FakeDataStore()
+                self.lifecycleStore = FakeLifecycleStore()
                 self.biometryManager = FakeBiometryManager()
                 self.subject = WelcomePresenter(
                         view: self.view,
@@ -103,6 +113,7 @@ class WelcomePresenterSpec: QuickSpec {
                         dataStoreActionHandler: self.dataStoreActionHandler,
                         userInfoStore: self.userInfoStore,
                         dataStore: self.dataStore,
+                        lifecycleStore: self.lifecycleStore,
                         biometryManager: self.biometryManager
                 )
             }
@@ -149,6 +160,17 @@ class WelcomePresenterSpec: QuickSpec {
 
                     it("begins authentication with the profileInfo email") {
                         expect(self.biometryManager.authMessage).to(equal(email))
+                    }
+
+                    describe("foregrounding actions") {
+                        beforeEach {
+                            self.biometryManager.authMessage = nil
+                            self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                        }
+
+                        it("starts authentication again") {
+                            expect(self.biometryManager.authMessage).to(equal(email))
+                        }
                     }
 
                     describe("successful authentication") {

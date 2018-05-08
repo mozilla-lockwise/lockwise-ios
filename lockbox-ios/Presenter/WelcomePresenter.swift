@@ -33,6 +33,7 @@ class WelcomePresenter {
     private let userInfoActionHandler: UserInfoActionHandler
     private let userInfoStore: UserInfoStore
     private let dataStore: DataStore
+    private let lifecycleStore: LifecycleStore
     private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
 
@@ -42,6 +43,7 @@ class WelcomePresenter {
          userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          dataStore: DataStore = DataStore.shared,
+         lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.routeActionHandler = routeActionHandler
@@ -49,6 +51,7 @@ class WelcomePresenter {
         self.userInfoActionHandler = userInfoActionHandler
         self.userInfoStore = userInfoStore
         self.dataStore = dataStore
+        self.lifecycleStore = lifecycleStore
         self.biometryManager = biometryManager
     }
 
@@ -63,24 +66,28 @@ class WelcomePresenter {
             lockedObservable
                     .bind(to: view.loginButtonHidden)
                     .disposed(by: self.disposeBag)
-
-            Observable.combineLatest(self.userInfoStore.profileInfo, lockedObservable)
-                    .filter { $0.1 }
-                    .map { $0.0 }
-                    .filterNil()
-                    .flatMap { latest in
-                        self.biometryManager.authenticateWithMessage(latest.email)
-                                .catchError { _ in
-                                    // ignore errors from local authentication
-                                    return Observable.never().asSingle()
-                                }
-                    }
-                    .subscribe(onNext: { _ in
-                        self.dataStoreActionHandler.invoke(.unlock)
-                        self.routeActionHandler.invoke(MainRouteAction.list)
-                    })
-                    .disposed(by: self.disposeBag)
         }
+
+        let lifecycleObservable = self.lifecycleStore.lifecycleFilter
+                .filter { action -> Bool in
+                    return action == LifecycleAction.foreground
+                }
+
+        let lifecycleMindingLockedObservable = Observable.combineLatest(
+                        self.userInfoStore.profileInfo,
+                        self.dataStore.locked.distinctUntilChanged(),
+                        lifecycleObservable
+                )
+                .map { ($0.0, $0.1) }
+
+        self.handleBiometrics(lifecycleMindingLockedObservable)
+
+        let standardLockedObservable = Observable.combineLatest(
+                self.userInfoStore.profileInfo,
+                self.dataStore.locked.distinctUntilChanged()
+        )
+
+        self.handleBiometrics(standardLockedObservable)
 
         self.view?.loginButtonPressed
                 .subscribe(onNext: { _ in
@@ -89,5 +96,24 @@ class WelcomePresenter {
                 .disposed(by: self.disposeBag)
 
         self.userInfoActionHandler.invoke(.load)
+    }
+
+    private func handleBiometrics(_ infoLockedObservable: Observable<(ProfileInfo?, Bool)>) {
+        infoLockedObservable
+                .filter { $0.1 }
+                .map { $0.0 }
+                .take(1)
+                .flatMap { latest in
+                    self.biometryManager.authenticateWithMessage(latest?.email ?? "")
+                            .catchError { _ in
+                                // ignore errors from local authentication
+                                return Observable.never().asSingle()
+                            }
+                }
+                .subscribe(onNext: { _ in
+                    self.dataStoreActionHandler.invoke(.unlock)
+                    self.routeActionHandler.invoke(MainRouteAction.list)
+                })
+                .disposed(by: self.disposeBag)
     }
 }

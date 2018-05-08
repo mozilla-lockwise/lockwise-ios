@@ -41,7 +41,7 @@
 		7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54D4E439D76B910034E2A /* ErrorAction.swift */; };
 		7AA541388E228B6281F2A2E8 /* UserInfoStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E826632AFFBA1677E5E /* UserInfoStoreSpec.swift */; };
 		7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547479EBD794467A4A4DF /* ApplicationLifecycleAction.swift */; };
-		7AA5419CD8E02252DE21CF47 /* BiometryOnboardingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E4D59360BF1BD561D91 /* BiometryOnboardingPresenterSpec.swift */; };
+		7AA541AFF5CAB679285F8FFC /* LifecycleStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54B2BAE0933D9BCD573D4 /* LifecycleStoreSpec.swift */; };
 		7AA541B3BC9C4F5E6A725222 /* FxAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54C12A1BC616CA2344584 /* FxAView.swift */; };
 		7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547CE3404CC8123CA455D /* Observable+Spec.swift */; };
 		7AA541ED07A75F27A211819B /* AccountSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E25FB7C712ECE1069E5 /* AccountSettingViewSpec.swift */; };
@@ -107,6 +107,7 @@
 		7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */; };
 		7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5410097B2C840B28B007E /* AccountSettingPresenter.swift */; };
 		7AA54E2C7C6639BCA7C37A1F /* AccountSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA540A0F78A75AF0296924E /* AccountSettingPresenterSpec.swift */; };
+		7AA54E336336462A6DEB79EE /* LifecycleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA543A8C2F252E8F8C2B1AF /* LifecycleStore.swift */; };
 		7AA54E698CA72C6C83804EAC /* CopyActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54B7943446ED2E302C470 /* CopyActionSpec.swift */; };
 		7AA54E83D68AA39FB3A895AF /* RootPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA541C0A078BB02BFD7EB0B /* RootPresenter.swift */; };
 		7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54549204186237036B464 /* DataStoreAction.swift */; };
@@ -274,6 +275,7 @@
 		7AA543307459610B170AFBD5 /* CopyConfirmationDisplayStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyConfirmationDisplayStoreSpec.swift; sourceTree = "<group>"; };
 		7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = bootstrap.sh; sourceTree = "<group>"; };
 		7AA5439EEDE4AB222842E7C8 /* DataStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataStoreSpec.swift; sourceTree = "<group>"; };
+		7AA543A8C2F252E8F8C2B1AF /* LifecycleStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleStore.swift; sourceTree = "<group>"; };
 		7AA5444E03C80B7A8A0E4EE5 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		7AA5445B47B7A548F0F0E294 /* Action.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		7AA544D5B320BB5C55723EB0 /* TelemetryActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryActionSpec.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 		7AA549F525E77FA0FE9D9B54 /* buddybuild_postbuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buddybuild_postbuild.sh; sourceTree = "<group>"; };
 		7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailActionSpec.swift; sourceTree = "<group>"; };
 		7AA54B0FC602D0A79D87D3BD /* FilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
+		7AA54B2BAE0933D9BCD573D4 /* LifecycleStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleStoreSpec.swift; sourceTree = "<group>"; };
 		7AA54B40696590744930A579 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7AA54B40E4D80EE455AEA16D /* ItemDetailViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewSpec.swift; sourceTree = "<group>"; };
 		7AA54B41C60F04FA585E5B8F /* ItemDetailAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailAction.swift; sourceTree = "<group>"; };
@@ -542,6 +545,7 @@
 				7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */,
 				7AA548F4166A1826238F6589 /* TelemetryStore.swift */,
 				D895605B20967C5300CC7E47 /* AutoLockStore.swift */,
+				7AA543A8C2F252E8F8C2B1AF /* LifecycleStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -746,6 +750,7 @@
 				7AA544D5B320BB5C55723EB0 /* TelemetryActionSpec.swift */,
 				7AA542CB670BA12339305AC7 /* TelemetryStoreSpec.swift */,
 				D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */,
+				7AA54B2BAE0933D9BCD573D4 /* LifecycleStoreSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1038,6 +1043,7 @@
 				7AA54BF88A5C814303E07729 /* ApplicationLifecycleActionSpec.swift in Sources */,
 				7AA54E94693B86C2EFCD4F5B /* TelemetryActionSpec.swift in Sources */,
 				7AA54BED3E368028D3315105 /* TelemetryStoreSpec.swift in Sources */,
+				7AA541AFF5CAB679285F8FFC /* LifecycleStoreSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1108,6 +1114,7 @@
 				7AA546B578EBABE3543AB466 /* TelemetryAction.swift in Sources */,
 				7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */,
 				7AA5457DB74127B904E5A767 /* TelemetryStore.swift in Sources */,
+				7AA54E336336462A6DEB79EE /* LifecycleStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
