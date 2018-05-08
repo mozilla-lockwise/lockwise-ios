@@ -76,7 +76,7 @@ class AutoLockStore {
 
     private func setTimer(seconds: Int) {
         let timerValue = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
-        if timerValue != 0 {
+        if timerValue != 0 && timerValue > Date().timeIntervalSince1970 {
             self.timer = Timer(fireAt: Date(timeIntervalSince1970: timerValue),
                                interval: 0,
                                target: self,
@@ -92,6 +92,10 @@ class AutoLockStore {
 
             self.userDefaults.set(self.timer?.fireDate.timeIntervalSince1970,
                                   forKey: SettingKey.autoLockTimerDate.rawValue)
+        }
+
+        if let timer = self.timer {
+            RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
         }
     }
 
