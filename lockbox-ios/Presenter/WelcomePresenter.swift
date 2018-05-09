@@ -12,6 +12,7 @@ protocol WelcomeViewProtocol: class {
     var loginButtonPressed: ControlEvent<Void> { get }
     var loginButtonHidden: AnyObserver<Bool> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
+    var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
 }
 
 struct LockedEnabled {
@@ -61,6 +62,10 @@ class WelcomePresenter {
         if let view = self.view {
             lockedObservable
                     .bind(to: view.firstTimeLoginMessageHidden)
+                    .disposed(by: self.disposeBag)
+
+            lockedObservable
+                    .bind(to: view.firstTimeLearnMoreHidden)
                     .disposed(by: self.disposeBag)
 
             lockedObservable

@@ -1,12 +1,9 @@
 
-/* Class = "UILabel"; text = "Lockbox"; ObjectID = "Ctm-Z1-jcM"; */
-"Ctm-Z1-jcM.text" = "Lockbox";
+/* Class = "UIButton"; normalTitle = "Get Started"; ObjectID = "cuz-yd-F4J"; */
+"cuz-yd-F4J.normalTitle" = "Get Started";
 
-/* Class = "UIButton"; normalTitle = "Sign in with your Firefox Account"; ObjectID = "cuz-yd-F4J"; */
-"cuz-yd-F4J.normalTitle" = "Sign in with your Firefox Account";
+/* Class = "UILabel"; text = "Take your passwords everywhere"; ObjectID = "hwO-wS-oS4"; */
+"hwO-wS-oS4.text" = "Take your passwords everywhere";
 
-/* Class = "UILabel"; text = "your companion for accessing  saved Firefox logins"; ObjectID = "hwO-wS-oS4"; */
-"hwO-wS-oS4.text" = "your companion for accessing  saved Firefox logins";
-
-/* Class = "UILabel"; text = "In order for Lockbox to display saved logins, you need to enable sync on Firefox."; ObjectID = "xyY-bk-Xw8"; */
-"xyY-bk-Xw8.text" = "In order for Lockbox to display saved logins, you need to enable sync on Firefox.";
+/* Class = "UILabel"; text = "To use Firefox Lockbox, you’ll need a Firefox Account with saved logins."; ObjectID = "xyY-bk-Xw8"; */
+"xyY-bk-Xw8.text" = "To use Firefox Lockbox, you’ll need a Firefox Account with saved logins.";

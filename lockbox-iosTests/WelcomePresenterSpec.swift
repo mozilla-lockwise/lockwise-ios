@@ -17,6 +17,7 @@ class WelcomePresenterSpec: QuickSpec {
     class FakeWelcomeView: WelcomeViewProtocol {
         var fakeFxAButtonPress = PublishSubject<Void>()
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
+        var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
 
         var loginButtonPressed: ControlEvent<Void> {
@@ -25,6 +26,9 @@ class WelcomePresenterSpec: QuickSpec {
 
         var firstTimeLoginMessageHidden: AnyObserver<Bool> {
             return self.firstTimeMessageHiddenStub.asObserver()
+        }
+        var firstTimeLearnMoreHidden: AnyObserver<Bool> {
+            return self.firstTimeLearnMoreHiddenStub.asObserver()
         }
 
         var loginButtonHidden: AnyObserver<Bool> {
@@ -99,6 +103,7 @@ class WelcomePresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeWelcomeView()
                 self.view.firstTimeMessageHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.firstTimeLearnMoreHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.loginButtonHiddenStub = self.scheduler.createObserver(Bool.self)
 
                 self.routeActionHandler = FakeRouteActionHandler()
@@ -128,6 +133,10 @@ class WelcomePresenterSpec: QuickSpec {
                     it("shows the first time login message and the fxa login button") {
                         expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beFalse())
                         expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beFalse())
+                    }
+
+                    it("hides the first time login button") {
+                      expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
                     }
                 }
 
