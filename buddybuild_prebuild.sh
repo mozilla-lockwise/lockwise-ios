@@ -4,5 +4,3 @@
 cd lockbox-ios
 tar xvfz binaries.tar.gz
 cd ..
-
-source 'scripts/update-datastore'

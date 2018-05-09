@@ -8,6 +8,7 @@ import RxSwift
 import RxTest
 
 @testable import Lockbox
+import SwiftKeychainWrapper
 
 enum UserInfoStoreSharedExamples: String {
     case SaveScopedKeyToKeychain, SaveProfileInfoToKeychain
@@ -22,19 +23,21 @@ class UserInfoStoreSpec: QuickSpec {
         }
     }
 
-    class FakeKeychainManager: KeychainManager {
-        var saveArguments: [KeychainManagerIdentifier: String] = [:]
+    class FakeKeychainManager: KeychainWrapper {
+        var saveArguments: [String: String] = [:]
         var saveSuccess: Bool!
-        var retrieveResult: [KeychainManagerIdentifier: String] = [:]
+        var retrieveResult: [String: String] = [:]
 
-        override func save(_ data: String, identifier: KeychainManagerIdentifier) -> Bool {
-            self.saveArguments[identifier] = data
+        override func set(_ value: String, forKey key: String, withAccessibility accessibility: SwiftKeychainWrapper.KeychainItemAccessibility? = nil) -> Bool {
+            self.saveArguments[key] = value
             return saveSuccess
         }
 
-        override func retrieve(_ identifier: KeychainManagerIdentifier) -> String? {
-            return retrieveResult[identifier]
+        override func string(forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> String? {
+            return retrieveResult[key]
         }
+
+        init() { super.init(serviceName: "blah") }
     }
 
     private var dispatcher: FakeDispatcher!
@@ -50,63 +53,16 @@ class UserInfoStoreSpec: QuickSpec {
                 self.keychainManager = FakeKeychainManager()
                 self.subject = UserInfoStore(
                         dispatcher: self.dispatcher,
-                        keychainManager: self.keychainManager
+                        keychainWrapper: self.keychainManager
                 )
-            }
-
-            describe("scopedKey") {
-                var keyObserver = self.scheduler.createObserver(String?.self)
-                let key = "fsdlkjsdfljafsdjlkfdsajkldf"
-
-                beforeEach {
-                    keyObserver = self.scheduler.createObserver(String?.self)
-
-                    self.subject.scopedKey
-                            .bind(to: keyObserver)
-                            .disposed(by: self.disposeBag)
-                }
-
-                sharedExamples(UserInfoStoreSharedExamples.SaveScopedKeyToKeychain.rawValue) {
-                    it("attempts to save the scoped key to the keychain") {
-                        expect(self.keychainManager.saveArguments[.scopedKey]).notTo(beNil())
-                        expect(self.keychainManager.saveArguments[.scopedKey]).to(equal(key))
-                    }
-                }
-
-                describe("when the key is saved to the key manager successfully") {
-                    beforeEach {
-                        self.keychainManager.saveSuccess = true
-                        self.dispatcher.fakeRegistration.onNext(UserInfoAction.scopedKey(key: key))
-                    }
-
-                    itBehavesLike(UserInfoStoreSharedExamples.SaveScopedKeyToKeychain.rawValue)
-
-                    it("pushes the scopedKey to the observers") {
-                        expect(keyObserver.events.last!.value.element!).to(equal(key))
-                    }
-                }
-
-                describe("when the key is not saved to the key manager successfully") {
-                    beforeEach {
-                        self.keychainManager.saveSuccess = false
-                        self.dispatcher.fakeRegistration.onNext(UserInfoAction.scopedKey(key: key))
-                    }
-
-                    itBehavesLike(UserInfoStoreSharedExamples.SaveScopedKeyToKeychain.rawValue)
-
-                    it("does not push the scopedKey to the observers") {
-                        expect(keyObserver.events.count).to(be(0))
-                    }
-                }
             }
 
             describe("ProfileInfo") {
                 var profileInfoObserver = self.scheduler.createObserver(ProfileInfo?.self)
                 let profileInfo = ProfileInfo.Builder()
-                        .uid("jklfsdlkjdfs")
                         .email("sand@sand.com")
                         .displayName("squasha")
-                        .avatar("www.picturesite.com")
+                        .avatar(URL(string: "www.picturesite.com")!)
                         .build()
 
                 beforeEach {
@@ -118,9 +74,8 @@ class UserInfoStoreSpec: QuickSpec {
                 }
 
                 sharedExamples(UserInfoStoreSharedExamples.SaveProfileInfoToKeychain.rawValue) {
-                    it("attempts to save the uid and email to the keychain") {
-                        expect(self.keychainManager.saveArguments[.email]).to(equal(profileInfo.email))
-                        expect(self.keychainManager.saveArguments[.uid]).to(equal(profileInfo.uid))
+                    it("attempts to save the email to the keychain") {
+                        expect(self.keychainManager.saveArguments[KeychainKey.email.rawValue]).to(equal(profileInfo.email))
                     }
                 }
 
@@ -149,55 +104,6 @@ class UserInfoStoreSpec: QuickSpec {
                 }
             }
 
-            describe("OAuthInfo") {
-                var oAuthInfoObserver = self.scheduler.createObserver(OAuthInfo?.self)
-                let oauthInfo = OAuthInfo.Builder()
-                        .idToken("fdskjldsflkjdfs")
-                        .accessToken("mekhjfdsj")
-                        .refreshToken("fdssfdjhk")
-                        .build()
-
-                beforeEach {
-                    oAuthInfoObserver = self.scheduler.createObserver(OAuthInfo?.self)
-
-                    self.subject.oauthInfo
-                            .bind(to: oAuthInfoObserver)
-                            .disposed(by: self.disposeBag)
-                }
-
-                describe("when the tokens are saved successfully to the keychain") {
-                    beforeEach {
-                        self.keychainManager.saveSuccess = true
-                        self.dispatcher.fakeRegistration.onNext(UserInfoAction.oauthInfo(info: oauthInfo))
-                    }
-
-                    it("attempts to save the tokens to the keychain") {
-                        expect(self.keychainManager.saveArguments[.idToken]).to(equal(oauthInfo.idToken))
-                        expect(self.keychainManager.saveArguments[.accessToken]).to(equal(oauthInfo.accessToken))
-                        expect(self.keychainManager.saveArguments[.refreshToken]).to(equal(oauthInfo.refreshToken))
-                    }
-
-                    it("pushes the oauthInfo to the observer") {
-                        expect(oAuthInfoObserver.events.last!.value.element!).to(equal(oauthInfo))
-                    }
-                }
-
-                describe("when nothing is saved successfully to the keychain") {
-                    beforeEach {
-                        self.keychainManager.saveSuccess = false
-                        self.dispatcher.fakeRegistration.onNext(UserInfoAction.oauthInfo(info: oauthInfo))
-                    }
-
-                    it("attempts to save tokens to the keychain") {
-                        expect(self.keychainManager.saveArguments[.accessToken]).to(equal(oauthInfo.accessToken))
-                    }
-
-                    it("pushes nothing to the observer") {
-                        expect(oAuthInfoObserver.events.count).to(equal(0))
-                    }
-                }
-            }
-
             describe("populating initial values") {
                 describe("ProfileInfo") {
                     var profileInfoObserver = self.scheduler.createObserver(ProfileInfo?.self)
@@ -206,12 +112,10 @@ class UserInfoStoreSpec: QuickSpec {
                         profileInfoObserver = self.scheduler.createObserver(ProfileInfo?.self)
                     }
 
-                    describe("when both uid and email have previously been saved in the keychain") {
+                    describe("when email haa previously been saved in the keychain") {
                         let email = "butts@butts.com"
-                        let uid = "kjfdslkjsdflkjads"
                         beforeEach {
-                            self.keychainManager.retrieveResult[.email] = email
-                            self.keychainManager.retrieveResult[.uid] = uid
+                            self.keychainManager.retrieveResult[KeychainKey.email.rawValue] = email
 
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
@@ -222,45 +126,11 @@ class UserInfoStoreSpec: QuickSpec {
 
                         it("passes the resulting profileinfo object to subscribers") {
                             expect(profileInfoObserver.events.first!.value.element!)
-                                    .to(equal(ProfileInfo.Builder().uid(uid).email(email).build()))
+                                    .to(equal(ProfileInfo.Builder().email(email).build()))
                         }
                     }
 
-                    describe("when only uid has been saved in the keychain") {
-                        let uid = "kjfdslkjsdflkjads"
-                        beforeEach {
-                            self.keychainManager.retrieveResult[.uid] = uid
-
-                            self.subject.profileInfo
-                                    .bind(to: profileInfoObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("passes a nil profileinfo to subscribers") {
-                            expect(profileInfoObserver.events.first!.value.element as? ProfileInfo).to(beNil())
-                        }
-                    }
-
-                    describe("when only email has been saved in the keychain") {
-                        let email = "butts@butts.com"
-                        beforeEach {
-                            self.keychainManager.retrieveResult[.email] = email
-
-                            self.subject.profileInfo
-                                    .bind(to: profileInfoObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("passes a nil profileinfo to subscribers") {
-                            expect(profileInfoObserver.events.first!.value.element as? ProfileInfo).to(beNil())
-                        }
-                    }
-
-                    describe("when neither have been saved in the keychain") {
+                    describe("when no email has been saved in the keychain") {
                         beforeEach {
                             self.subject.profileInfo
                                     .bind(to: profileInfoObserver)
@@ -271,114 +141,6 @@ class UserInfoStoreSpec: QuickSpec {
 
                         it("passes a nil profileinfo to subscribers") {
                             expect(profileInfoObserver.events.first!.value.element as? ProfileInfo).to(beNil())
-                        }
-                    }
-                }
-
-                describe("scopedKey") {
-                    var keyObserver = self.scheduler.createObserver(String?.self)
-                    let key = "fsdlkjsdfljafsdjlkfdsajkldf"
-
-                    beforeEach {
-                        keyObserver = self.scheduler.createObserver(String?.self)
-                    }
-
-                    describe("when the scopedKey has previously been saved to the keychain") {
-                        beforeEach {
-                            self.keychainManager.retrieveResult[.scopedKey] = key
-
-                            self.subject.scopedKey
-                                    .bind(to: keyObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("stores the key for subsequent observers") {
-                            expect(keyObserver.events.first!.value.element!).to(equal(key))
-                        }
-                    }
-
-                    describe("when the scopedKey has not previously been saved to the keychain") {
-                        beforeEach {
-                            self.subject.scopedKey
-                                    .bind(to: keyObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("pushes an nil key to key observers") {
-                            expect(keyObserver.events.first!.value.element as? String).to(beNil())
-                        }
-                    }
-                }
-
-                describe("OAuthInfo") {
-                    var oAuthInfoObserver = self.scheduler.createObserver(OAuthInfo?.self)
-
-                    beforeEach {
-                        oAuthInfoObserver = self.scheduler.createObserver(OAuthInfo?.self)
-                    }
-
-                    describe("when all tokens have previously been saved in the keychain") {
-                        let accessToken = "meow"
-                        let idToken = "kjfdslkjsdflkjads"
-                        let refreshToken = "fsdkjlkfsdfddf"
-
-                        beforeEach {
-                            self.keychainManager.retrieveResult[.accessToken] = accessToken
-                            self.keychainManager.retrieveResult[.idToken] = idToken
-                            self.keychainManager.retrieveResult[.refreshToken] = refreshToken
-
-                            self.subject.oauthInfo
-                                    .bind(to: oAuthInfoObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("passes the resulting oauthInfo object to subscribers") {
-                            expect(oAuthInfoObserver.events.first!.value.element!).to(equal(OAuthInfo.Builder()
-                                    .idToken(idToken)
-                                    .refreshToken(refreshToken)
-                                    .accessToken(accessToken)
-                                    .build()
-                            ))
-                        }
-                    }
-
-                    describe("when not all tokens have been saved in the keychain") {
-                        let accessToken = "meow"
-                        let refreshToken = "fsdkjlkfsdfddf"
-
-                        beforeEach {
-                            self.keychainManager.retrieveResult[.accessToken] = accessToken
-                            self.keychainManager.retrieveResult[.refreshToken] = refreshToken
-
-                            self.subject.oauthInfo
-                                    .bind(to: oAuthInfoObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("passes a nil OAuthInfo to subscribers") {
-                            expect(oAuthInfoObserver.events.first!.value.element as? OAuthInfo).to(beNil())
-                        }
-                    }
-
-                    describe("when no tokens have been saved in the keychain") {
-                        beforeEach {
-                            self.subject.oauthInfo
-                                    .bind(to: oAuthInfoObserver)
-                                    .disposed(by: self.disposeBag)
-
-                            self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
-                        }
-
-                        it("passes an empty OAuthInfo to subscribers") {
-                            expect(oAuthInfoObserver.events.first!.value.element as? OAuthInfo).to(beNil())
                         }
                     }
                 }

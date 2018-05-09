@@ -6,24 +6,23 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class FxAStore {
-    static let shared = FxAStore()
-
-    private var dispatcher: Dispatcher
+class LifecycleStore {
+    static let shared = LifecycleStore()
     private let disposeBag = DisposeBag()
 
-    private var _fxADisplay = PublishSubject<FxADisplayAction>()
+    private let dispatcher: Dispatcher
+    private let _lifecycleFilter = PublishSubject<LifecycleAction>()
 
-    public var fxADisplay: Driver<FxADisplayAction> {
-        return _fxADisplay.distinctUntilChanged().asDriver(onErrorJustReturn: .fetchingUserInformation)
+    public var lifecycleFilter: Observable<LifecycleAction> {
+        return _lifecycleFilter.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
 
         self.dispatcher.register
-                .filterByType(class: FxADisplayAction.self)
-                .bind(to: _fxADisplay)
+                .filterByType(class: LifecycleAction.self)
+                .bind(to: self._lifecycleFilter)
                 .disposed(by: self.disposeBag)
     }
 }

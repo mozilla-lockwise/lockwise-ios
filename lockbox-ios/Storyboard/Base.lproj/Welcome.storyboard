@@ -63,19 +63,6 @@
                                     <color key="titleColor" red="0.059756595641374588" green="0.3597700297832489" blue="0.8745732307434082" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l70-UW-2Lm">
-                                <rect key="frame" x="127.5" y="538" width="120" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="kr3-Mt-8ev"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="tintColor" red="0.97932499650000004" green="0.98005276919999995" blue="0.98282974960000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <inset key="titleEdgeInsets" minX="-40" minY="70" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="40" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Sign in with Touch ID" image="fingerprint">
-                                    <color key="titleColor" red="0.97932499647140503" green="0.98005276918411255" blue="0.982829749584198" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In order for Lockbox to display saved logins, you need to enable sync on Firefox." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
                                 <rect key="frame" x="37" y="514.5" width="300" height="40"/>
                                 <constraints>
@@ -91,11 +78,9 @@
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="5w6-4I-b3t"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="8gy-fK-aY4"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="leading" secondItem="Zs6-ts-YH0" secondAttribute="leading" id="KIj-hv-llI"/>
-                            <constraint firstItem="l70-UW-2Lm" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="LMU-FO-EQ2"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
                             <constraint firstItem="Ctm-Z1-jcM" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="68" id="N5J-ck-8M7"/>
-                            <constraint firstItem="l70-UW-2Lm" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="64" id="Rsc-oo-LDE"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG"/>
                             <constraint firstItem="Ctm-Z1-jcM" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
                             <constraint firstAttribute="bottom" secondItem="4k3-9F-Bvv" secondAttribute="bottom" id="aGi-Kj-ckL"/>
@@ -111,8 +96,6 @@
                     </view>
                     <connections>
                         <outlet property="accessLockboxMessage" destination="xyY-bk-Xw8" id="GG2-Fn-0Dz"/>
-                        <outlet property="biometricSignInButton" destination="l70-UW-2Lm" id="c9f-df-FZw"/>
-                        <outlet property="fxAButtonTopSpacing" destination="WWA-h0-rTG" id="jGY-5e-0sR"/>
                         <outlet property="fxASigninButton" destination="cuz-yd-F4J" id="Fwi-eS-e53"/>
                         <outlet property="oceanView" destination="4k3-9F-Bvv" id="dlf-79-jBs"/>
                     </connections>
@@ -123,7 +106,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="fingerprint" width="40" height="40"/>
         <image name="nessie" width="476" height="194"/>
     </resources>
 </document>

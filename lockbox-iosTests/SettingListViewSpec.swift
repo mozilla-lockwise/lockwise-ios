@@ -17,7 +17,6 @@ class SettingListViewSpec: QuickSpec {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
         var settingCellStub: TestableObserver<SettingRouteAction?>!
-        var biometricCellStub: TestableObserver<Bool>!
         var usageDataCellStub: TestableObserver<Bool>!
 
         override func onViewReady() {
@@ -32,10 +31,6 @@ class SettingListViewSpec: QuickSpec {
 
         override var onSettingCellTapped: AnyObserver<SettingRouteAction?> {
             return self.settingCellStub.asObserver()
-        }
-
-        override var onBiometricSettingChanged: AnyObserver<Bool> {
-            return self.biometricCellStub.asObserver()
         }
 
         override var onUsageDataSettingChanged: AnyObserver<Bool> {
@@ -54,7 +49,6 @@ class SettingListViewSpec: QuickSpec {
                 self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as! SettingListView
                 self.presenter = FakeSettingsPresenter(view: self.subject)
                 self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
-                self.presenter.biometricCellStub = self.scheduler.createObserver(Bool.self)
                 self.presenter.usageDataCellStub = self.scheduler.createObserver(Bool.self)
                 self.subject.presenter = self.presenter
 
@@ -74,7 +68,6 @@ class SettingListViewSpec: QuickSpec {
                             SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
                             ]),
                         SettingSectionModel(model: 1, items: [
-                            SwitchSettingCellConfiguration(text: "Face ID", routeAction: nil, isOn: true, onChanged: self.presenter.onBiometricSettingChanged),
                             SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
                             ])
                     ]
@@ -84,7 +77,7 @@ class SettingListViewSpec: QuickSpec {
                     self.subject.bind(items: configDriver.asDriver(onErrorJustReturn: []))
                     configDriver.onNext(sectionModels)
 
-                    let cell = self.subject.tableView.cellForRow(at: IndexPath(item: 1, section: 1))
+                    let cell = self.subject.tableView.cellForRow(at: IndexPath(item: 0, section: 1))
                     let switchControl = cell?.accessoryView as? UISwitch
                     switchControl?.isOn = false
                     switchControl?.sendActions(for: .valueChanged)
@@ -93,7 +86,7 @@ class SettingListViewSpec: QuickSpec {
                 it("configures table view based on model") {
                     expect(self.subject.tableView.numberOfSections).to(equal(2))
                     expect(self.subject.tableView.numberOfRows(inSection: 0)).to(equal(2))
-                    expect(self.subject.tableView.numberOfRows(inSection: 1)).to(equal(2))
+                    expect(self.subject.tableView.numberOfRows(inSection: 1)).to(equal(1))
                 }
 
                 it("calls presenter when usage data switch is flipped") {
@@ -114,7 +107,6 @@ class SettingListViewSpec: QuickSpec {
                             SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
                             ]),
                         SettingSectionModel(model: 1, items: [
-                            SwitchSettingCellConfiguration(text: "Face ID", routeAction: nil, isOn: true, onChanged: self.presenter.onBiometricSettingChanged),
                             SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
                             ])
                     ]

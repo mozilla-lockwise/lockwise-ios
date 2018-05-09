@@ -17,8 +17,8 @@ class SettingListPresenter {
     weak private var view: SettingListViewProtocol?
     private let routeActionHandler: RouteActionHandler
     private let settingActionHandler: SettingActionHandler
+    private let dataStoreActionHandler: DataStoreActionHandler
     private let userDefaults: UserDefaults
-    private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
 
     lazy private(set) var onDone: AnyObserver<Void> = {
@@ -37,47 +37,31 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
-    lazy private(set) var onBiometricSettingChanged: AnyObserver<Bool> = {
-        return Binder(self) { target, enabled in
-            target.settingActionHandler.invoke(SettingAction.biometricLogin(enabled: enabled))
-        }.asObserver()
-    }()
-
     lazy private(set) var onUsageDataSettingChanged: AnyObserver<Bool> = {
         return Binder(self) { target, enabled in
             target.settingActionHandler.invoke(SettingAction.recordUsageData(enabled: enabled))
         }.asObserver()
     }()
 
-    lazy var touchIdSetting = SwitchSettingCellConfiguration(
-        text: Constant.string.settingsTouchId,
-        routeAction: nil,
-        onChanged: onBiometricSettingChanged)
-    lazy var faceIdSetting = SwitchSettingCellConfiguration(
-        text: Constant.string.settingsFaceId,
-        routeAction: nil,
-        onChanged: onBiometricSettingChanged)
-
     init(view: SettingListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
-         userDefaults: UserDefaults = UserDefaults.standard,
-         biometryManager: BiometryManager = BiometryManager()) {
+         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         userDefaults: UserDefaults = UserDefaults.standard) {
         self.view = view
         self.routeActionHandler = routeActionHandler
         self.settingActionHandler = settingActionHandler
+        self.dataStoreActionHandler = dataStoreActionHandler
         self.userDefaults = userDefaults
-        self.biometryManager = biometryManager
     }
 
     func onViewReady() {
-        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onBiometricsEnabled, self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
-                .map { (latest: (Bool, AutoLockSetting, PreferredBrowserSetting, Bool)) -> [SettingSectionModel] in
+        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
+                .map { (latest: (AutoLockSetting, PreferredBrowserSetting, Bool)) -> [SettingSectionModel] in
                     return self.getSettings(
-                        biometricSettingEnabled: latest.0,
-                        autoLock: latest.1,
-                        preferredBrowser: latest.2,
-                        usageDataEnabled: latest.3)
+                            autoLock: latest.0,
+                            preferredBrowser: latest.1,
+                            usageDataEnabled: latest.2)
                 }
                 .asDriver(onErrorJustReturn: [])
 
@@ -85,7 +69,7 @@ class SettingListPresenter {
 
         self.view?.onSignOut
                 .subscribe { _ in
-                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
+                    self.dataStoreActionHandler.invoke(.lock)
                     self.routeActionHandler.invoke(LoginRouteAction.welcome)
                 }
                 .disposed(by: self.disposeBag)
@@ -94,10 +78,9 @@ class SettingListPresenter {
 
 extension SettingListPresenter {
     fileprivate func getSettings(
-        biometricSettingEnabled: Bool,
-        autoLock: AutoLockSetting?,
-        preferredBrowser: PreferredBrowserSetting,
-        usageDataEnabled: Bool) -> [SettingSectionModel] {
+            autoLock: AutoLockSetting?,
+            preferredBrowser: PreferredBrowserSetting,
+            usageDataEnabled: Bool) -> [SettingSectionModel] {
 
         var supportSettingSection = SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
@@ -114,13 +97,6 @@ extension SettingListPresenter {
                     routeAction: SettingRouteAction.account)
         ])
 
-        if self.biometryManager.usesFaceID || self.biometryManager.usesTouchID {
-            let biometricSetting = self.biometryManager.usesFaceID ? faceIdSetting : touchIdSetting
-            biometricSetting.isOn = biometricSettingEnabled
-
-            applicationConfigurationSection.items.append(biometricSetting)
-        }
-
         let autoLockSetting = SettingCellConfiguration(
                 text: Constant.string.settingsAutoLock,
                 routeAction: SettingRouteAction.autoLock)
@@ -128,25 +104,25 @@ extension SettingListPresenter {
         applicationConfigurationSection.items.append(autoLockSetting)
 
         let preferredBrowserSetting = SettingCellConfiguration(
-            text: Constant.string.settingsBrowser,
-            routeAction: SettingRouteAction.preferredBrowser)
+                text: Constant.string.settingsBrowser,
+                routeAction: SettingRouteAction.preferredBrowser)
         preferredBrowserSetting.detailText = preferredBrowser.toString()
         applicationConfigurationSection.items.append(preferredBrowserSetting)
 
         let usageDataSetting = SwitchSettingCellConfiguration(
-            text: Constant.string.settingsUsageData,
-            routeAction: SettingRouteAction.faq,
-            isOn: usageDataEnabled,
-            onChanged: self.onUsageDataSettingChanged)
+                text: Constant.string.settingsUsageData,
+                routeAction: SettingRouteAction.faq,
+                isOn: usageDataEnabled,
+                onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
-            string: Constant.string.settingsUsageDataSubtitle,
-            attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+                string: Constant.string.settingsUsageDataSubtitle,
+                attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
         subtitle.append(NSAttributedString(
-            string: Constant.string.learnMore,
-            attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
+                string: Constant.string.learnMore,
+                attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
         supportSettingSection.items.append(usageDataSetting)
 
-        return [ supportSettingSection, applicationConfigurationSection ]
+        return [supportSettingSection, applicationConfigurationSection]
     }
 }
