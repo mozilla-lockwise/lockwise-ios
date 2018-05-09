@@ -16,13 +16,6 @@ class FxAViewSpec: QuickSpec {
         var webViewNavigationAction: WKNavigationAction?
         var onViewReadyCalled = false
 
-        override func webViewRequest(
-                decidePolicyFor navigationAction: WKNavigationAction,
-                decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-            self.webViewRequestCalled = true
-            self.webViewNavigationAction = navigationAction
-        }
-
         override func onViewReady() {
             onViewReadyCalled = true
         }
@@ -37,17 +30,6 @@ class FxAViewSpec: QuickSpec {
             self.loadArgument = request
 
             return nil
-        }
-    }
-
-    class FakeNavigationAction: WKNavigationAction {
-        private var fakeRequest: URLRequest
-        override var request: URLRequest {
-            return self.fakeRequest
-        }
-
-        init(request: URLRequest) {
-            self.fakeRequest = request
         }
     }
 
@@ -79,26 +61,6 @@ class FxAViewSpec: QuickSpec {
             it("tells the webview to load the request") {
                 expect(self.webView.loadCalled).to(beTrue())
                 expect(self.webView.loadArgument).to(equal(request))
-            }
-        }
-
-        describe(".webView(decidePolicy:decisionHandler:") {
-            let request = URLRequest(url: URL(string: "www.mozilla.com")!)
-            let action = FakeNavigationAction(request: request)
-            let handler: ((WKNavigationActionPolicy) -> Void) = { policy in
-            }
-
-            beforeEach {
-                self.webView.navigationDelegate!.webView!(
-                        self.webView,
-                        decidePolicyFor: action,
-                        decisionHandler: handler
-                )
-            }
-
-            it("passes the relevant information to the presenter to make a decision") {
-                expect(self.presenter.webViewRequestCalled).to(beTrue())
-                expect(self.presenter.webViewNavigationAction).to(equal(action))
             }
         }
     }

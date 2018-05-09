@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxCocoa
 import RxTest
+import Storage
 
 @testable import Lockbox
 
@@ -76,9 +77,9 @@ class ItemListPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var itemListObservable: TestableObservable<[Item]>?
+        var itemListObservable: TestableObservable<[Login]>?
 
-        override var onItemList: Observable<[Item]> {
+        override var list: Observable<[Login]> {
             return self.itemListObservable!.asObservable()
         }
     }
@@ -134,30 +135,16 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 describe("when the datastore pushes a populated list of items") {
-                    let title1 = "meow"
-                    let title2 = "aaaaaa"
+                    let webAddress1 = "http://meow"
+                    let webAddress2 = "http://aaaaaa"
                     let username = "cats@cats.com"
 
                     let id1 = "fdsdfsfdsfds"
                     let id2 = "ghfhghgff"
                     let items = [
-                        Item.Builder()
-                                .title(title1).entry(
-                                        ItemEntry.Builder()
-                                                .username(username)
-                                                .build()
-                                )
-                                .lastUsed("1970-01-01T00:03:20.4500Z")
-                                .id(id1)
-                                .build(),
-                        Item.Builder()
-                                .origins(["www.dogs.com"])
-                                .lastUsed("1970-01-01T00:02:20.4500Z")
-                                .id(id2)
-                                .build(),
-                        Item.Builder()
-                                .title(title2)
-                                .build()
+                        Login(guid: id1, hostname: webAddress1, username: username, password: ""),
+                        Login(guid: id2, hostname: "", username: "", password: ""),
+                        Login(guid: "", hostname: webAddress2, username: "", password: "fdsfdsfd")
                     ]
 
                     beforeEach {
@@ -174,10 +161,10 @@ class ItemListPresenterSpec: QuickSpec {
 
                     it("tells the view to display the items in alphabetic order by title") {
                         let expectedItemConfigurations = [
-                            ItemListCellConfiguration.Search,
-                            ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2),
-                            ItemListCellConfiguration.Item(title: title2, username: Constant.string.usernamePlaceholder, id: nil),
-                            ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                            LoginListCellConfiguration.Search,
+                            LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
+                            LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: ""),
+                            LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1)
                         ]
                         expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
                         let configuration = self.view.itemsObserver.events.first!.value.element!
@@ -192,8 +179,8 @@ class ItemListPresenterSpec: QuickSpec {
 
                             it("updates the view with the appropriate items") {
                                 let expectedItemConfigurations = [
-                                    ItemListCellConfiguration.Search,
-                                    ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                                    LoginListCellConfiguration.Search,
+                                    LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1)
                                 ]
 
                                 expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
@@ -204,30 +191,13 @@ class ItemListPresenterSpec: QuickSpec {
 
                         describe("when the text matches an item's origins") {
                             beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "dog"))
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "meow"))
                             }
 
                             it("updates the view with the appropriate items") {
                                 let expectedItemConfigurations = [
-                                    ItemListCellConfiguration.Search,
-                                    ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2)
-                                ]
-
-                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                                let configuration = self.view.itemsObserver.events.last!.value.element!
-                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                            }
-                        }
-
-                        describe("when the text matches an item's title") {
-                            beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "me"))
-                            }
-
-                            it("updates the view with the appropriate items") {
-                                let expectedItemConfigurations = [
-                                    ItemListCellConfiguration.Search,
-                                    ItemListCellConfiguration.Item(title: title1, username: username, id: id1)
+                                    LoginListCellConfiguration.Search,
+                                    LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: "")
                                 ]
 
                                 expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
@@ -258,17 +228,18 @@ class ItemListPresenterSpec: QuickSpec {
                         }
                     }
 
-                    describe("when sorting method switches to recently used") {
+                    xdescribe("when sorting method switches to recently used") {
+                        // pended until it's possible to construct Logins with recently_used dates
                         beforeEach {
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.recentlyUsed)
                         }
 
                         it("pushes the new configuration with the items") {
                             let expectedItemConfigurations = [
-                                ItemListCellConfiguration.Search,
-                                ItemListCellConfiguration.Item(title: title1, username: username, id: id1),
-                                ItemListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, id: id2),
-                                ItemListCellConfiguration.Item(title: title2, username: Constant.string.usernamePlaceholder, id: nil)
+                                LoginListCellConfiguration.Search,
+                                LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1),
+                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
+                                LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: nil)
                             ]
                             expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
                             let configuration = self.view.itemsObserver.events.last!.value.element!

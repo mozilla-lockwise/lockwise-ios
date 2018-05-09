@@ -16,18 +16,8 @@ var biometryTypeStub: LABiometryType!
 
 class BiometryManagerSpec: QuickSpec {
     class FakeLAContext: LAContext {
-        var canEvaluatePolicyStub: Bool!
         var evaluateReason: String?
         var evaluateReply: ((Bool, Error?) -> Void)?
-
-        @available(iOS 11.0, *)
-        override var biometryType: LABiometryType {
-            return biometryTypeStub
-        }
-
-        override func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool {
-            return self.canEvaluatePolicyStub
-        }
 
         override func evaluatePolicy(_ policy: LAPolicy, localizedReason: String, reply: @escaping (Bool, Error?) -> Void) {
             self.evaluateReason = localizedReason
@@ -47,102 +37,6 @@ class BiometryManagerSpec: QuickSpec {
                 self.subject = BiometryManager(context: self.context)
             }
 
-            describe("usesFaceId") {
-                describe("when the app can evaluate deviceOwnerAuthenticationWithBiometrics") {
-                    beforeEach {
-                        self.context.canEvaluatePolicyStub = true
-                    }
-
-                    describe("when the biometry type is faceID") {
-                        beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .faceID
-                            }
-                        }
-
-                        it("returns true") {
-                            if #available(iOS 11.0, *) {
-                                expect(self.subject.usesFaceID).to(beTrue())
-                            } else {
-                                expect(self.subject.usesFaceID).to(beFalse())
-                            }
-                        }
-                    }
-
-                    describe("when the biometry type is not faceID") {
-                        beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .touchID
-                            }
-                        }
-
-                        it("returns false") {
-                            expect(self.subject.usesFaceID).to(beFalse())
-                        }
-                    }
-                }
-
-                describe("when the app cannot evaluate deviceOwnerAuthenticationWithBiometrics") {
-                    beforeEach {
-                        self.context.canEvaluatePolicyStub = false
-                    }
-
-                    it("returns false") {
-                        expect(self.subject.usesFaceID).to(beFalse())
-                    }
-                }
-            }
-
-            describe("usesTouchId") {
-                describe("when the app can evaluate deviceOwnerAuthenticationWithBiometrics") {
-                    beforeEach {
-                        self.context.canEvaluatePolicyStub = true
-                    }
-
-                    describe("when the biometry type is touchID") {
-                        beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .touchID
-                            }
-                        }
-
-                        it("returns true") {
-                            if #available(iOS 11.0, *) {
-                                expect(self.subject.usesTouchID).to(beTrue())
-                            } else {
-                                expect(self.subject.usesTouchID).to(beTrue())
-                            }
-                        }
-                    }
-
-                    describe("when the biometry type is not touchID") {
-                        beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .faceID
-                            }
-                        }
-
-                        it("returns false") {
-                            if #available(iOS 11.0, *) {
-                                expect(self.subject.usesTouchID).to(beFalse())
-                            } else {
-                                expect(self.subject.usesTouchID).to(beTrue())
-                            }
-                        }
-                    }
-                }
-
-                describe("when the app cannot evaluate deviceOwnerAuthenticationWithBiometrics") {
-                    beforeEach {
-                        self.context.canEvaluatePolicyStub = false
-                    }
-
-                    it("returns false") {
-                        expect(self.subject.usesTouchID).to(beFalse())
-                    }
-                }
-            }
-
             describe("authenticateWithMessage") {
                 let message = "tjacobson@yahoo.com"
                 var voidObserver = self.scheduler.createObserver(Void.self)
@@ -153,8 +47,6 @@ class BiometryManagerSpec: QuickSpec {
 
                 describe("when the app can evaluate owner authentication") {
                     beforeEach {
-                        self.context.canEvaluatePolicyStub = true
-
                         self.subject.authenticateWithMessage(message)
                                 .asObservable()
                                 .subscribe(voidObserver)
@@ -184,21 +76,6 @@ class BiometryManagerSpec: QuickSpec {
                         it("pushes the error to the observer") {
                             expect(voidObserver.events.first!.value.error).to(matchError(error))
                         }
-                    }
-                }
-
-                describe("when the app cannot evaluate owner authentication") {
-                    beforeEach {
-                        self.context.canEvaluatePolicyStub = false
-
-                        self.subject.authenticateWithMessage(message)
-                                .asObservable()
-                                .subscribe(voidObserver)
-                                .disposed(by: self.disposeBag)
-                    }
-
-                    it("pushes an error") {
-                        expect(voidObserver.events.first!.value.error).notTo(beNil())
                     }
                 }
             }

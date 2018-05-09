@@ -58,24 +58,6 @@ class WelcomeViewSpec: QuickSpec {
                 }
             }
 
-            describe("biometricSignInButton") {
-                var buttonObserver = self.scheduler.createObserver(Void.self)
-
-                beforeEach {
-                    buttonObserver = self.scheduler.createObserver(Void.self)
-
-                    self.subject.biometricSignInButtonPressed
-                            .subscribe(buttonObserver)
-                            .disposed(by: self.disposeBag)
-
-                    self.subject.biometricSignInButton.sendActions(for: .touchUpInside)
-                }
-
-                it("tells observers about button taps") {
-                    expect(buttonObserver.events.count).to(be(1))
-                }
-            }
-
             describe("firstTimeLoginMessageHidden") {
                 beforeEach {
                     self.subject.firstTimeLoginMessageHidden.onNext(true)
@@ -86,49 +68,13 @@ class WelcomeViewSpec: QuickSpec {
                 }
             }
 
-            describe("biometricAuthenticationPromptHidden") {
+            describe("loginButtonHidden") {
                 beforeEach {
-                    self.subject.biometricAuthenticationPromptHidden.onNext(true)
+                    self.subject.loginButtonHidden.onNext(true)
                 }
 
                 it("updates the hidden value of the biometric auth button accordingly") {
-                    expect(self.subject.biometricSignInButton.isHidden).to(beTrue())
-                }
-            }
-
-            describe("biometricSignInText") {
-                let text = "sign in with your cat"
-
-                beforeEach {
-                    self.subject.biometricSignInText.onNext(text)
-                }
-
-                it("updates the text of the biometric auth button") {
-                    expect(self.subject.biometricSignInButton.currentTitle).to(equal(text))
-                }
-            }
-
-            describe("biometricImageName") {
-                beforeEach {
-                    self.subject.biometricImageName.onNext("confirm")
-                }
-
-                it("updates the image of the biometric auth button") {
-                    let image = UIImage(named: "confirm")
-
-                    expect(self.subject.biometricSignInButton.currentImage).to(equal(image))
-                }
-            }
-
-            describe("fxaButtonTopSpacing") {
-                let spacing: CGFloat = 44.0
-
-                beforeEach {
-                    self.subject.fxAButtonTopSpace.onNext(spacing)
-                }
-
-                it("updates the spacing of the top constraint on the FxA button") {
-                    expect(self.subject.fxAButtonTopSpacing.constant).to(equal(spacing))
+                    expect(self.subject.fxASigninButton.isHidden).to(beTrue())
                 }
             }
         }

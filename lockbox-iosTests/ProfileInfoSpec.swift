@@ -12,15 +12,12 @@ class ProfileInfoSpec: QuickSpec {
     override func spec() {
         describe("builder") {
             it("builds the ProfileInfo with all the provided parameters") {
-                let uid = "something"
                 let email = "something@something.com"
 
                 let info = ProfileInfo.Builder()
-                        .uid(uid)
                         .email(email)
                         .build()
 
-                expect(info.uid).to(equal(uid))
                 expect(info.email).to(equal(email))
             }
         }

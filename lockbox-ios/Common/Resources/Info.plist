@@ -30,6 +30,8 @@
 	<true/>
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows for quick and secure access to your account.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>FiraSans-Bold.ttf</string>

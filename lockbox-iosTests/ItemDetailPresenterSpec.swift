@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 
 @testable import Lockbox
+import Storage
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
@@ -40,11 +41,11 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var onItemStub = PublishSubject<Item>()
-        var itemIDArgument: String?
+        var onItemStub = PublishSubject<Login?>()
+        var loginIDArg: String?
 
-        override func onItem(_ itemId: String) -> Observable<Item> {
-            self.itemIDArgument = itemId
+        override func get(_ id: String) -> Observable<Login?> {
+            self.loginIDArg = id
             return onItemStub.asObservable()
         }
     }
@@ -189,7 +190,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("requests the current item from the datastore") {
-                        expect(self.dataStore.itemIDArgument).notTo(beNil())
+                        expect(self.dataStore.loginIDArg).notTo(beNil())
                     }
 
                     describe("getting the item") {
@@ -197,12 +198,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let username = "some username"
 
                             beforeEach {
-                                let item = Item.Builder()
-                                        .entry(
-                                                ItemEntry.Builder()
-                                                        .username(username)
-                                                        .build())
-                                        .build()
+                                let item = Login(guid: "fsdfds", hostname: "www.butts.com", username: username, password: "meow")
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -214,11 +210,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         describe("when the item does not have a username") {
                             beforeEach {
-                                let item = Item.Builder()
-                                        .entry(
-                                                ItemEntry.Builder()
-                                                        .build())
-                                        .build()
+                                let item = Login(guid: "", hostname: "", username: "", password: "")
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -242,7 +234,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("requests the current item from the datastore") {
-                        expect(self.dataStore.itemIDArgument).notTo(beNil())
+                        expect(self.dataStore.loginIDArg).notTo(beNil())
                     }
 
                     describe("getting the item") {
@@ -250,12 +242,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let password = "some password"
 
                             beforeEach {
-                                let item = Item.Builder()
-                                        .entry(
-                                                ItemEntry.Builder()
-                                                        .password(password)
-                                                        .build())
-                                        .build()
+                                let item = Login(guid: "sdfdsf", hostname: "www.butts.com", username: "", password: password)
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -267,11 +254,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         describe("when the item does not have a password") {
                             beforeEach {
-                                let item = Item.Builder()
-                                        .entry(
-                                                ItemEntry.Builder()
-                                                        .build())
-                                        .build()
+                                let item = Login(guid: "", hostname: "", username: "", password: "")
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -295,16 +278,14 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("requests the current item from the datastore") {
-                        expect(self.dataStore.itemIDArgument).notTo(beNil())
+                        expect(self.dataStore.loginIDArg).notTo(beNil())
                     }
 
                     describe("getting the item") {
                         let webAddress = "https://www.mozilla.org"
 
                         beforeEach {
-                            let item = Item.Builder()
-                                    .origins([webAddress])
-                                    .build()
+                            let item = Login(guid: "sdfdfsfd", hostname: webAddress, username: "ffs", password: "ilikecatz")
 
                             self.dataStore.onItemStub.onNext(item)
                         }
@@ -328,22 +309,14 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(self.dataStore.itemIDArgument).to(beNil())
+                        expect(self.dataStore.loginIDArg).to(beNil())
                         expect(self.copyActionHandler.invokedAction).to(beNil())
                     }
                 }
             }
 
             describe(".onViewReady") {
-                let item = Item.Builder()
-                        .title("some title")
-                        .origins(["www.cats.com"])
-                        .entry(ItemEntry.Builder()
-                                .username("meow")
-                                .password("iluvkatz")
-                                .notes("long notes string yayayaya")
-                                .build())
-                        .build()
+                let item = Login(guid: "sdfsdfdfs", hostname: "www.cats.com", username: "meow", password: "iluvkats")
 
                 beforeEach {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
@@ -353,7 +326,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("requests the correct item from the datastore") {
-                    expect(self.dataStore.itemIDArgument).to(equal(self.view.itemId))
+                    expect(self.dataStore.loginIDArg).to(equal(self.view.itemId))
                 }
 
                 describe("getting an item with the password displayed") {
@@ -364,7 +337,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the title") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.title))
+                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.hostname))
                     }
 
                     it("passes the configuration with a shown password for the item") {
@@ -372,23 +345,18 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-                        expect(webAddressSection.value).to(equal(item.origins.first!))
+                        expect(webAddressSection.value).to(equal(item.hostname))
                         expect(webAddressSection.password).to(beFalse())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
-                        expect(usernameSection.value).to(equal(item.entry.username!))
+                        expect(usernameSection.value).to(equal(item.username))
                         expect(usernameSection.password).to(beFalse())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
-                        expect(passwordSection.value).to(equal(item.entry.password!))
+                        expect(passwordSection.value).to(equal(item.password))
                         expect(passwordSection.password).to(beTrue())
-
-                        let notesSection = viewConfig[2].items[0]
-                        expect(notesSection.title).to(equal(Constant.string.notes))
-                        expect(notesSection.value).to(equal(item.entry.notes!))
-                        expect(notesSection.password).to(beFalse())
                     }
                 }
 
@@ -400,7 +368,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the title") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.title))
+                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.hostname))
                     }
 
                     it("passes the configuration with an obscured password for the item") {
@@ -408,47 +376,25 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-                        expect(webAddressSection.value).to(equal(item.origins.first!))
+                        expect(webAddressSection.value).to(equal(item.hostname))
                         expect(webAddressSection.password).to(beFalse())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
-                        expect(usernameSection.value).to(equal(item.entry.username!))
+                        expect(usernameSection.value).to(equal(item.username!))
                         expect(usernameSection.password).to(beFalse())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
                         expect(passwordSection.value).to(equal("••••••••"))
                         expect(passwordSection.password).to(beTrue())
-
-                        let notesSection = viewConfig[2].items[0]
-                        expect(notesSection.title).to(equal(Constant.string.notes))
-                        expect(notesSection.value).to(equal(item.entry.notes!))
-                        expect(notesSection.password).to(beFalse())
-                    }
-                }
-
-                describe("when there is no title") {
-                    beforeEach {
-                        item.title = nil
-                        self.dataStore.onItemStub.onNext(item)
-                        self.itemDetailStore.itemDetailDisplayStub
-                                .onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
-                    }
-
-                    it("displays the first origins value") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.origins.first!))
                     }
                 }
 
                 describe("when there is no title, origin, username, or notes") {
                     beforeEach {
-                        item.title = nil
-                        item.origins = []
-                        item.entry.password = nil
-                        item.entry.username = nil
-                        item.entry.notes = nil
-                        self.dataStore.onItemStub.onNext(item)
+                        let emptyItem = Login(guid: "", hostname: "", username: "", password: "")
+                        self.dataStore.onItemStub.onNext(emptyItem)
                         self.itemDetailStore.itemDetailDisplayStub
                                 .onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
                     }

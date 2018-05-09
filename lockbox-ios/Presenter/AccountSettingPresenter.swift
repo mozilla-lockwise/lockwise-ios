@@ -15,10 +15,12 @@ class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
     let userInfoStore: UserInfoStore
     let routeActionHandler: RouteActionHandler
+    let dataStoreActionHandler: DataStoreActionHandler
     let userInfoActionHandler: UserInfoActionHandler
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            target.dataStoreActionHandler.invoke(.reset)
             target.userInfoActionHandler.invoke(.clear)
         }.asObserver()
     }()
@@ -36,22 +38,24 @@ class AccountSettingPresenter {
                                                tapObserver: nil,
                                                style: .cancel),
                 AlertActionButtonConfiguration(title: Constant.string.unlink,
-                                               tapObserver: target.unlinkAccountObserver,
-                                               style: .destructive)],
-                                            title: Constant.string.confirmDialogTitle,
-                                            message: Constant.string.confirmDialogMessage,
-                                            style: .alert)
+                        tapObserver: target.unlinkAccountObserver,
+                        style: .destructive)],
+                    title: Constant.string.confirmDialogTitle,
+                    message: Constant.string.confirmDialogMessage,
+                    style: .alert)
         }.asObserver()
     }()
 
     init(view: AccountSettingViewProtocol,
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
+         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared
     ) {
         self.view = view
         self.userInfoStore = userInfoStore
         self.routeActionHandler = routeActionHandler
+        self.dataStoreActionHandler = dataStoreActionHandler
         self.userInfoActionHandler = userInfoActionHandler
     }
 
@@ -69,8 +73,7 @@ class AccountSettingPresenter {
 
         let avatarImageDriver = profileInfoObservable
                 .flatMap { info -> Observable<Data?> in
-                    guard let avatarString = info.avatar,
-                          let avatarURL = URL(string: avatarString) else {
+                    guard let avatarURL = info.avatar else {
                         return Observable.just(nil)
                     }
 
@@ -81,5 +84,7 @@ class AccountSettingPresenter {
                 .filterNil()
 
         self.view?.bind(avatarImage: avatarImageDriver)
+
+        self.userInfoActionHandler.invoke(.load)
     }
 }
