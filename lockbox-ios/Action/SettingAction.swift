@@ -18,12 +18,8 @@ extension SettingAction: TelemetryAction {
 
     var eventObject: TelemetryEventObject {
         switch self {
-        case .biometricLogin:
-            return .settingsBiometricLogin
         case .autoLockTime:
             return .settingsAutolockTime
-        case .visualLock:
-            return .settingsVisualLock
         case .preferredBrowser:
             return .settingsPreferredBrowser
         case .reset:
@@ -35,15 +31,9 @@ extension SettingAction: TelemetryAction {
 
     var value: String? {
         switch self {
-        case .biometricLogin(let enabled):
-            let enabledString = String(enabled)
-            return enabledString
         case .autoLockTime(let timeout):
             let timeoutString = String(timeout.rawValue)
             return timeoutString
-        case .visualLock(let locked):
-            let lockedString = String(locked)
-            return lockedString
         case .preferredBrowser(let browser):
             let browserString = String(browser.rawValue)
             return browserString

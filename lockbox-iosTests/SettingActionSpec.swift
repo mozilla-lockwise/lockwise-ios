@@ -129,22 +129,18 @@ class SettingActionSpec: QuickSpec {
 
             describe("telemetry") {
                 it("event method should equal settingChanged") {
-                    expect(SettingAction.visualLock(locked: true).eventMethod).to(equal(TelemetryEventMethod.settingChanged))
+                    expect(SettingAction.reset.eventMethod).to(equal(TelemetryEventMethod.settingChanged))
                 }
 
                 it("event object should be the setting that changed") {
-                    expect(SettingAction.biometricLogin(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsBiometricLogin))
                     expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours).eventObject).to(equal(TelemetryEventObject.settingsAutolockTime))
-                    expect(SettingAction.visualLock(locked: true).eventObject).to(equal(TelemetryEventObject.settingsVisualLock))
                     expect(SettingAction.preferredBrowser(browser: PreferredBrowserSetting.Firefox).eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
                     expect(SettingAction.reset.eventObject).to(equal(TelemetryEventObject.settingsReset))
                     expect(SettingAction.recordUsageData(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsRecordUsageData))
                 }
 
                 it("telemetry event value is equal to setting value") {
-                    expect(SettingAction.biometricLogin(enabled: true).value).to(equal("true"))
                     expect(SettingAction.recordUsageData(enabled: true).value).to(equal("true"))
-                    expect(SettingAction.visualLock(locked: true).value).to(equal("true"))
                 }
             }
         }
