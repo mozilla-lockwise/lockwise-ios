@@ -65,8 +65,8 @@ class WelcomePresenter {
                     .disposed(by: self.disposeBag)
 
             lockedObservable
-                  .bind(to: view.firstTimeLearnMoreHidden)
-                  .disposed(by: self.disposeBag)
+                    .bind(to: view.firstTimeLearnMoreHidden)
+                    .disposed(by: self.disposeBag)
 
             lockedObservable
                     .bind(to: view.loginButtonHidden)
