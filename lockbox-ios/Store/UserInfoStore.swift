@@ -5,34 +5,31 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import SwiftKeychainWrapper
+
+enum KeychainKey: String {
+    case email, displayName, avatarURL
+
+    static let allValues: [KeychainKey] = [.email, .displayName, .avatarURL]
+}
 
 class UserInfoStore {
     static let shared = UserInfoStore()
 
     private var dispatcher: Dispatcher
-    private var keychainManager: KeychainManager
+    private var keychainWrapper: KeychainWrapper
     private let disposeBag = DisposeBag()
 
-    private var _scopedKey = ReplaySubject<String?>.create(bufferSize: 1)
     private var _profileInfo = ReplaySubject<ProfileInfo?>.create(bufferSize: 1)
-    private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
-
-    public var scopedKey: Observable<String?> {
-        return _scopedKey.asObservable()
-    }
 
     public var profileInfo: Observable<ProfileInfo?> {
         return _profileInfo.asObservable()
     }
 
-    public var oauthInfo: Observable<OAuthInfo?> {
-        return _oauthInfo.asObservable()
-    }
-
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         keychainManager: KeychainManager = KeychainManager()) {
+         keychainWrapper: KeychainWrapper = KeychainWrapper.standard) {
         self.dispatcher = dispatcher
-        self.keychainManager = keychainManager
+        self.keychainWrapper = keychainWrapper
 
         self.dispatcher.register
                 .filterByType(class: UserInfoAction.self)
@@ -41,16 +38,6 @@ class UserInfoStore {
                     case .profileInfo(let info):
                         if self.saveProfileInfo(info) {
                             self._profileInfo.onNext(info)
-                        }
-                    case .oauthInfo(let info):
-                        if self.keychainManager.save(info.accessToken, identifier: .accessToken) &&
-                                   self.keychainManager.save(info.idToken, identifier: .idToken) &&
-                                   self.keychainManager.save(info.refreshToken, identifier: .refreshToken) {
-                            self._oauthInfo.onNext(info)
-                        }
-                    case .scopedKey(let scopedKey):
-                        if self.keychainManager.save(scopedKey, identifier: .scopedKey) {
-                            self._scopedKey.onNext(scopedKey)
                         }
                     case .load:
                         self.populateInitialValues()
@@ -65,14 +52,16 @@ class UserInfoStore {
 
 extension UserInfoStore {
     private func populateInitialValues() {
-        if let email = self.keychainManager.retrieve(.email),
-           let uid = self.keychainManager.retrieve(.uid) {
-            let avatarURL = self.keychainManager.retrieve(.avatarURL)
-            let displayName = self.keychainManager.retrieve(.displayName)
+        if let email = self.keychainWrapper.string(forKey: KeychainKey.email.rawValue) {
+            var avatarURL: URL?
+            if let avatarString = self.keychainWrapper.string(forKey: KeychainKey.avatarURL.rawValue) {
+                avatarURL = URL(string: avatarString)
+            }
+
+            let displayName = self.keychainWrapper.string(forKey: KeychainKey.displayName.rawValue)
 
             self._profileInfo.onNext(
                     ProfileInfo.Builder()
-                            .uid(uid)
                             .email(email)
                             .avatar(avatarURL)
                             .displayName(displayName)
@@ -81,44 +70,26 @@ extension UserInfoStore {
         } else {
             self._profileInfo.onNext(nil)
         }
-
-        self._scopedKey.onNext(self.keychainManager.retrieve(.scopedKey))
-
-        if let accessToken = self.keychainManager.retrieve(.accessToken),
-           let idToken = self.keychainManager.retrieve(.idToken),
-           let refreshToken = self.keychainManager.retrieve(.refreshToken) {
-            self._oauthInfo.onNext(
-                    OAuthInfo.Builder()
-                            .refreshToken(refreshToken)
-                            .idToken(idToken)
-                            .accessToken(accessToken)
-                            .build()
-            )
-        } else {
-            self._oauthInfo.onNext(nil)
-        }
     }
 
     private func clear() {
-        for identifier in KeychainManagerIdentifier.allValues {
-            _ = self.keychainManager.delete(identifier)
+        for identifier in KeychainKey.allValues {
+            _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
         }
 
-        self._profileInfo.onNext(nil)
-        self._oauthInfo.onNext(nil)
         self._profileInfo.onNext(nil)
     }
 
     private func saveProfileInfo(_ info: ProfileInfo) -> Bool {
-        var success = self.keychainManager.save(info.email, identifier: .email) &&
-                self.keychainManager.save(info.uid, identifier: .uid)
+        var success = self.keychainWrapper.set(info.email, forKey: KeychainKey.email.rawValue)
 
         if let displayName = info.displayName {
-            success = success && self.keychainManager.save(displayName, identifier: .displayName)
+            success = success && self.keychainWrapper.set(displayName, forKey: KeychainKey.displayName.rawValue)
         }
 
         if let avatar = info.avatar {
-            success = success && self.keychainManager.save(avatar, identifier: .avatarURL)
+            let avatarString = avatar.absoluteString
+            success = success && self.keychainWrapper.set(avatarString, forKey: KeychainKey.avatarURL.rawValue)
         }
 
         return success

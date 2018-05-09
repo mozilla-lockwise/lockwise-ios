@@ -7,14 +7,14 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-typealias ItemSectionModel = AnimatableSectionModel<Int, ItemListCellConfiguration>
+typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
-enum ItemListCellConfiguration {
+enum LoginListCellConfiguration {
     case Search
-    case Item(title: String, username: String, id: String?)
+    case Item(title: String, username: String, guid: String?)
 }
 
-extension ItemListCellConfiguration: IdentifiableType {
+extension LoginListCellConfiguration: IdentifiableType {
     var identity: String {
         switch self {
         case .Search:
@@ -25,8 +25,8 @@ extension ItemListCellConfiguration: IdentifiableType {
     }
 }
 
-extension ItemListCellConfiguration: Equatable {
-    static func ==(lhs: ItemListCellConfiguration, rhs: ItemListCellConfiguration) -> Bool {
+extension LoginListCellConfiguration: Equatable {
+    static func ==(lhs: LoginListCellConfiguration, rhs: LoginListCellConfiguration) -> Bool {
         switch (lhs, rhs) {
         case (.Search, .Search): return true
         case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
@@ -54,6 +54,7 @@ class ItemListView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupRefresh()
         self.styleTableViewBackground()
         self.styleNavigationBar()
         self.setupDataSource()
@@ -184,6 +185,22 @@ extension ItemListView {
                     .disposed(by: self.disposeBag)
         }
     }
+
+    fileprivate func setupRefresh() {
+        if let presenter = self.presenter {
+            let button =  UIButton(type: .custom)
+            button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+            button.setTitle(Constant.string.yourLockbox, for: .normal)
+            button.setTitleColor(.white, for: .normal)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+
+            button.rx.tap
+                    .bind(to: presenter.refreshObserver)
+                    .disposed(by: self.disposeBag)
+
+            self.navigationItem.titleView = button
+        }
+    }
 }
 
 // view styling
@@ -192,16 +209,9 @@ extension ItemListView {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 
-        self.navigationItem.title = Constant.string.yourLockbox
-
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
         }
-
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
-        ]
 
         if let presenter = presenter {
             (self.navigationItem.rightBarButtonItem?.customView as? UIButton)?.rx.tap

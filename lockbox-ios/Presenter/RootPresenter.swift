@@ -22,28 +22,11 @@ protocol RootViewProtocol: class {
     func pushSettingView(view: SettingRouteAction)
 }
 
-struct KeyInit {
-    let scopedKey: String?
-    let initialized: Bool
-}
-
-struct InfoOpenLock {
-    let profileInfo: ProfileInfo?
-    let opened: Bool
-    let visualLocked: Bool
-}
-
-struct KeyDataStoreLock {
-    let scopedKey: String?
-    let dataStoreLocked: Bool
-}
-
 class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
 
     fileprivate let routeStore: RouteStore
-    fileprivate let userInfoStore: UserInfoStore
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let userDefaults: UserDefaults
@@ -54,7 +37,6 @@ class RootPresenter {
     init(view: RootViewProtocol,
          dispatcher: Dispatcher = Dispatcher.shared,
          routeStore: RouteStore = RouteStore.shared,
-         userInfoStore: UserInfoStore = UserInfoStore.shared,
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
          userDefaults: UserDefaults = UserDefaults.standard,
@@ -64,7 +46,6 @@ class RootPresenter {
     ) {
         self.view = view
         self.routeStore = routeStore
-        self.userInfoStore = userInfoStore
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
         self.userDefaults = userDefaults
@@ -72,49 +53,30 @@ class RootPresenter {
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
 
-        // request init & lock status update on app launch
-        self.dataStoreActionHandler.updateInitialized()
-        self.dataStoreActionHandler.updateLocked()
-
-        Observable.combineLatest(self.userInfoStore.profileInfo, self.dataStore.onOpened, self.userDefaults.onLock)
-                .map { (latest: (ProfileInfo?, Bool, Bool)) -> InfoOpenLock in
-                    return InfoOpenLock(profileInfo: latest.0, opened: latest.1, visualLocked: latest.2)
-                }
-                .subscribe(onNext: { (latest: InfoOpenLock) in
-                    guard let uid = latest.profileInfo?.uid, !latest.visualLocked else {
+        Observable.combineLatest(self.dataStore.locked, self.dataStore.syncState)
+                .do(onNext: { (latest: (Bool, SyncState)) in
+                    if latest.0 {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                        return
                     }
-
-                    if !latest.opened {
-                        self.dataStoreActionHandler.open(uid: uid)
+                })
+                .filter {
+                    !$0.0
+                }
+                .map {
+                    $0.1
+                }
+                .subscribe(onNext: { state in
+                    switch state {
+                    case .NotSyncable:
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    default:
                         self.routeActionHandler.invoke(MainRouteAction.list)
-                    }
-                }).disposed(by: self.disposeBag)
-
-        Observable.combineLatest(self.userInfoStore.scopedKey, self.dataStore.onInitialized)
-                .map { (latest: (String?, Bool)) -> KeyInit in
-                    return KeyInit(scopedKey: latest.0, initialized: latest.1)
-                }
-                .filter { latest in
-                    return (latest.scopedKey != nil)
-                }
-                .subscribe(onNext: { (latest: KeyInit) in
-                    guard let scopedKey = latest.scopedKey else {
-                        return
-                    }
-
-                    if !latest.initialized {
-                        self.dataStoreActionHandler.initialize(scopedKey: scopedKey)
-                        return
-                    } else {
-                        self.dataStoreActionHandler.populateTestData()
                     }
                 })
                 .disposed(by: self.disposeBag)
 
         self.startTelemetry()
-        self.unlockBlindly()
+        self.checkAutoLockTimer()
     }
 
     func onViewReady() {
@@ -227,25 +189,34 @@ class RootPresenter {
 extension RootPresenter {
     fileprivate func startTelemetry() {
         Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaults.onRecordUsageData)
-                .filter { $0.1 }
-                .map { $0.0 }
+                .filter {
+                    $0.1
+                }
+                .map {
+                    $0.0
+                }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
                 .disposed(by: self.disposeBag)
     }
 
-    fileprivate func unlockBlindly() {
-        Observable.combineLatest(self.dataStore.onInitialized, self.userInfoStore.scopedKey, self.dataStore.onLocked)
-                .filter { (latest: (Bool, String?, Bool)) -> Bool in
-                    return latest.0
-                }
-                .map { (latest: (Bool, String?, Bool)) -> KeyDataStoreLock in
-                    return KeyDataStoreLock(scopedKey: latest.1, dataStoreLocked: latest.2)
-                }
-                .subscribe(onNext: { (latest: KeyDataStoreLock) in
-                    if let scopedKey = latest.scopedKey, latest.dataStoreLocked {
-                        self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
-                    } else if !latest.dataStoreLocked {
-                        self.dataStoreActionHandler.list()
+    fileprivate func checkAutoLockTimer() {
+        self.userDefaults.onAutoLockTime
+                .take(1)
+                .subscribe(onNext: { autoLockSetting in
+                    switch autoLockSetting {
+                    case .OnAppExit:
+                        self.dataStoreActionHandler.invoke(.lock)
+                    case .Never:
+                        self.dataStoreActionHandler.invoke(.unlock)
+                    default:
+                        let date = NSDate(timeIntervalSince1970:
+                        self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue))
+
+                        if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
+                            self.dataStoreActionHandler.invoke(.unlock)
+                        } else {
+                            self.dataStoreActionHandler.invoke(.lock)
+                        }
                     }
                 })
                 .disposed(by: self.disposeBag)

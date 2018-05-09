@@ -12,7 +12,7 @@ import RxTest
 
 class ViewControllerSpec: QuickSpec {
 
-    var subject: (UIViewController & ErrorView & StatusAlertView & AlertControllerView)!
+    var subject: (UIViewController & StatusAlertView & AlertControllerView)!
 
     override func spec() {
         beforeEach {
@@ -20,23 +20,6 @@ class ViewControllerSpec: QuickSpec {
             UIApplication.shared.delegate!.window!!.rootViewController = self.subject
 
             self.subject.preloadView()
-        }
-
-        xdescribe(".displayError()") {
-            let error = NSError(domain: "someerror", code: -1)
-            beforeEach {
-                self.subject.displayError(error)
-            }
-
-            it("presents an alertcontroller with the appropriate messaging") {
-                expect(self.subject.presentedViewController).toEventually(beAnInstanceOf(UIAlertController.self))
-
-                let alertController = self.subject.presentedViewController as! UIAlertController
-
-                expect(alertController.title).to(equal(error.localizedDescription))
-                expect(alertController.actions[0].title).to(equal("OK"))
-                expect(alertController.actions[0].style).to(equal(UIAlertActionStyle.cancel))
-            }
         }
 
         xdescribe(".displayTemporaryAlert") {

@@ -11,14 +11,6 @@ import UIKit
 
 @testable import Lockbox
 
-enum RootPresenterSharedExample: String {
-    case NoLoginOrInitialize, NoUnlockOrList, RouteToWelcome, EmptyScopedKey
-}
-
-enum RootPresenterSharedExampleVar: String {
-    case scopedKey, profileInfo, initialized, dataStoreLocked, opened, visuallyLocked
-}
-
 class RootPresenterSpec: QuickSpec {
     class FakeRootView: RootViewProtocol {
         var topViewIsArgument: UIViewController.Type?
@@ -94,35 +86,16 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoStore: UserInfoStore {
-        let profileInfoSubject = PublishSubject<ProfileInfo?>()
-        let oauthInfoSubject = PublishSubject<OAuthInfo?>()
-        let scopedKeySubject = PublishSubject<String?>()
-
-        override var profileInfo: Observable<ProfileInfo?> {
-            return self.profileInfoSubject.asObservable()
-        }
-        override var oauthInfo: Observable<OAuthInfo?> {
-            return self.oauthInfoSubject.asObservable()
-        }
-        override var scopedKey: Observable<String?> {
-            return self.scopedKeySubject.asObservable()
-        }
-    }
-
     class FakeDataStore: DataStore {
-        let initSubject = PublishSubject<Bool>()
         let lockedSubject = PublishSubject<Bool>()
-        let openedSubject = PublishSubject<Bool>()
+        let syncSubject = PublishSubject<SyncState>()
 
-        override var onInitialized: Observable<Bool> {
-            return initSubject.asObservable()
+        override var locked: Observable<Bool> {
+            return self.lockedSubject.asObservable()
         }
-        override var onLocked: Observable<Bool> {
-            return lockedSubject.asObservable()
-        }
-        override var onOpened: Observable<Bool> {
-            return openedSubject.asObservable()
+
+        override var syncState: Observable<SyncState> {
+            return self.syncSubject.asObservable()
         }
     }
 
@@ -142,34 +115,6 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var updateInitializedCalled = false
-        var updateLockedCalled = false
-        var initializeScopedKey: String?
-        var openUID: String?
-        var unlockScopedKey: String?
-
-        override func updateInitialized() {
-            self.updateInitializedCalled = true
-        }
-
-        override func updateLocked() {
-            self.updateLockedCalled = true
-        }
-
-        override func initialize(scopedKey: String) {
-            self.initializeScopedKey = scopedKey
-        }
-
-        override func open(uid: String) {
-            self.openUID = uid
-        }
-
-        override func unlock(scopedKey: String) {
-            self.unlockScopedKey = scopedKey
-        }
-    }
-
     class FakeTelemetryActionHandler: TelemetryActionHandler {
         var telemetryListener: TestableObserver<TelemetryAction>!
 
@@ -178,18 +123,26 @@ class RootPresenterSpec: QuickSpec {
                 return self.telemetryListener.asObserver()
             }
 
-            set { }
+            set {
+            }
+        }
+    }
+
+    class FakeDataStoreActionHandler: DataStoreActionHandler {
+        var action: DataStoreAction?
+
+        override func invoke(_ action: DataStoreAction) {
+            self.action = action
         }
     }
 
     private var view: FakeRootView!
     private var routeStore: FakeRouteStore!
-    private var userInfoStore: FakeUserInfoStore!
     private var dataStore: FakeDataStore!
     private var telemetryStore: FakeTelemetryStore!
     private var routeActionHandler: FakeRouteActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
+    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -198,194 +151,82 @@ class RootPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeRootView()
                 self.routeStore = FakeRouteStore()
-                self.userInfoStore = FakeUserInfoStore()
                 self.dataStore = FakeDataStore()
                 self.telemetryStore = FakeTelemetryStore()
                 self.routeActionHandler = FakeRouteActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
+                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
 
                 self.subject = RootPresenter(
                         view: self.view,
                         routeStore: self.routeStore,
-                        userInfoStore: self.userInfoStore,
                         dataStore: self.dataStore,
                         telemetryStore: self.telemetryStore,
                         routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
                         telemetryActionHandler: self.telemetryActionHandler
                 )
             }
 
-            it("requests update for initialized & locked values immediately") {
-                expect(self.dataStoreActionHandler.updateInitializedCalled).to(beTrue())
-                expect(self.dataStoreActionHandler.updateLockedCalled).to(beTrue())
+            describe("when the datastore is locked, regardless of synced state") {
+                beforeEach {
+                    self.dataStore.lockedSubject.onNext(true)
+                }
+
+                it("routes to the welcome view") {
+                    self.dataStore.syncSubject.onNext(.NotSyncable)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the welcome view") {
+                    self.dataStore.syncSubject.onNext(.ReadyToSync)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the welcome view") {
+                    self.dataStore.syncSubject.onNext(.Synced)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the welcome view") {
+                    self.dataStore.syncSubject.onNext(.Syncing)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
             }
 
-            describe("when getting an empty profile info object OR visually locked setting, regardless of opened value") {
-                sharedExamples(RootPresenterSharedExample.RouteToWelcome.rawValue) { context in
-                    it("starts the login flow") {
-                        let info = context()[RootPresenterSharedExampleVar.profileInfo.rawValue] as? ProfileInfo
-                        let opened = context()[RootPresenterSharedExampleVar.opened.rawValue] as! Bool
-                        let locked = context()[RootPresenterSharedExampleVar.visuallyLocked.rawValue] as! Bool
-                        self.advance(profileInfo: info, opened: opened, locked: locked)
+            describe("when the datastore is unlocked") {
+                beforeEach {
+                    self.dataStore.lockedSubject.onNext(false)
+                }
 
-                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                        expect(argument).to(equal(LoginRouteAction.welcome))
-                        expect(self.dataStoreActionHandler.openUID).to(beNil())
-                        expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                describe("when the datastore is not syncable") {
+                    beforeEach {
+                        self.dataStore.syncSubject.onNext(.NotSyncable)
                     }
                 }
 
-                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.opened.rawValue: true,
-                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.opened.rawValue: false,
-                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.profileInfo.rawValue: ProfileInfo.Builder().uid("something").build(),
-                        RootPresenterSharedExampleVar.opened.rawValue: false,
-                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.RouteToWelcome.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.profileInfo.rawValue: ProfileInfo.Builder().uid("something").build(),
-                        RootPresenterSharedExampleVar.opened.rawValue: true,
-                        RootPresenterSharedExampleVar.visuallyLocked.rawValue: true
-                    ]
-                }
-            }
-
-            describe("getting a populated profile info object while the app is unlocked and the datastore is opened") {
-                let uid = "fsdsfdfsd"
-
-                beforeEach {
-                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: true, locked: false)
-                }
-
-                it("does nothing") {
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    expect(self.dataStoreActionHandler.openUID).to(beNil())
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
-                }
-            }
-
-            describe("getting a populated profile info object while the app is unlocked and the datastore is not opened") {
-                let uid = "fsdsfdfsd"
-
-                beforeEach {
-                    self.advance(profileInfo: ProfileInfo.Builder().uid(uid).build(), opened: false, locked: false)
-                }
-
-                it("dispatches the open action and displays the list") {
-                    let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
-                    expect(argument).to(equal(MainRouteAction.list))
-                    expect(self.dataStoreActionHandler.openUID).to(equal(uid))
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
-                }
-            }
-
-            describe("when getting an empty scoped key object, regardless of initialized value OR populated scoped key & a positive initialized value") { // swiftlint:disable:this line_length
-                sharedExamples(RootPresenterSharedExample.EmptyScopedKey.rawValue) { context in
-                    it("does nothing") {
-                        let scopedKey = context()[RootPresenterSharedExampleVar.scopedKey.rawValue] as? String
-                        let initialized = context()[RootPresenterSharedExampleVar.initialized.rawValue] as! Bool
-                        self.advance(scopedKey: scopedKey, initialized: initialized)
-
-//                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                        expect(self.dataStoreActionHandler.openUID).to(beNil())
-                        expect(self.dataStoreActionHandler.initializeScopedKey).to(beNil())
+                describe("any other sync state value") {
+                    it("routes to the list view") {
+                        self.dataStore.syncSubject.onNext(.ReadyToSync)
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
-                }
 
-                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.initialized.rawValue: true
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.initialized.rawValue: false
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.EmptyScopedKey.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.initialized.rawValue: true,
-                        RootPresenterSharedExampleVar.scopedKey.rawValue: "sdflkjsdfhjksdfkjhsdfhjksdf"
-                    ]
-                }
-            }
-
-            describe("when getting a populated scoped key object & the datastore is not initialized") {
-                let scopedKey = "bljlkadsfljkafdsljk"
-                beforeEach {
-                    self.advance(scopedKey: scopedKey, initialized: false)
-                }
-
-                it("dispatches the initialized() action") {
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    expect(self.dataStoreActionHandler.openUID).to(beNil())
-                    expect(self.dataStoreActionHandler.initializeScopedKey).to(equal(scopedKey))
-                }
-            }
-
-            describe("when getting a populated scoped key object & a locked datastore") {
-                let scopedKey = "fsdljksdfjklfsdljksd"
-                beforeEach {
-                    self.dataStore.initSubject.onNext(true)
-                    self.advance(scopedKey: scopedKey, locked: true)
-                }
-
-                it("unlocks the datastore") {
-                    expect(self.dataStoreActionHandler.unlockScopedKey).to(equal(scopedKey))
-                }
-            }
-
-            describe("all other cases for scoped key & locked values") {
-                sharedExamples(RootPresenterSharedExample.NoUnlockOrList.rawValue) { context in
-                    it("does nothing") {
-                        let scopedKey = context()[RootPresenterSharedExampleVar.scopedKey.rawValue] as? String
-                        let locked = context()[RootPresenterSharedExampleVar.dataStoreLocked.rawValue] as! Bool
-
-                        self.advance(scopedKey: scopedKey, locked: locked)
-                        expect(self.dataStoreActionHandler.unlockScopedKey).to(beNil())
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                    it("routes to the list view") {
+                        self.dataStore.syncSubject.onNext(.Syncing)
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
-                }
 
-                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.dataStoreLocked.rawValue: false
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.scopedKey.rawValue: "meow",
-                        RootPresenterSharedExampleVar.dataStoreLocked.rawValue: false
-                    ]
-                }
-
-                itBehavesLike(RootPresenterSharedExample.NoUnlockOrList.rawValue) {
-                    [
-                        RootPresenterSharedExampleVar.dataStoreLocked.rawValue: true
-                    ]
+                    it("routes to the list view") {
+                        self.dataStore.syncSubject.onNext(.Synced)
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
+                    }
                 }
             }
 
@@ -1083,23 +924,55 @@ class RootPresenterSpec: QuickSpec {
                     }
 
                 }
+
+                describe("Auto Lock Timer") {
+                    describe(".OnAppExit") {
+                        it("sets the visual lock") {
+                            UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                        }
+                    }
+
+                    describe(".Never") {
+                        it("unlocks the visual lock") {
+                            UserDefaults.standard.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.unlock))
+                        }
+                    }
+
+                    describe("is a timed value") {
+                        it("stored timer value has expired") {
+                            UserDefaults.standard.set(AutoLockSetting.OneMinute.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                            UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                        }
+
+                        it("stored timer value has not expired") {
+                            UserDefaults.standard.set(AutoLockSetting.TwelveHours.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                            UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                        }
+                    }
+                }
             }
         }
     }
 
-    private func advance(profileInfo: ProfileInfo?, opened: Bool, locked: Bool) {
-        UserDefaults.standard.set(locked, forKey: SettingKey.locked.rawValue)
-        self.userInfoStore.profileInfoSubject.onNext(profileInfo)
-        self.dataStore.openedSubject.onNext(opened)
-    }
-
-    private func advance(scopedKey: String?, initialized: Bool) {
-        self.userInfoStore.scopedKeySubject.onNext(scopedKey)
-        self.dataStore.initSubject.onNext(initialized)
-    }
-
-    private func advance(scopedKey: String?, locked: Bool) {
-        self.userInfoStore.scopedKeySubject.onNext(scopedKey)
-        self.dataStore.lockedSubject.onNext(locked)
+    private func getPresenter() -> RootPresenter {
+        return RootPresenter(
+                view: self.view,
+                routeStore: self.routeStore,
+                dataStore: self.dataStore,
+                telemetryStore: self.telemetryStore,
+                routeActionHandler: self.routeActionHandler,
+                dataStoreActionHandler: self.dataStoreActionHandler,
+                telemetryActionHandler: self.telemetryActionHandler
+        )
     }
 }

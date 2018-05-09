@@ -13,11 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    var profile: Profile!
-
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
-        profile = BrowserProfile(localName: "lockbox-profile")
-        FxALoginHelper.sharedInstance.application(application, didLoadProfile: profile)
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions
+                     launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
+        _ = DataStore.shared
         return true
     }
 
@@ -33,8 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SettingActionHandler.shared.invoke(.reset)
             UserInfoActionHandler.shared.invoke(.clear)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
-        } else {
-            UserInfoActionHandler.shared.invoke(.load)
         }
 
         let navBarImage = UIImage.createGradientImage(

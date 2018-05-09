@@ -43,23 +43,6 @@ class SettingActionSpec: QuickSpec {
             }
 
             describe(".invoke()") {
-                describe(".biometricLoginEnabled") {
-                    let enabled = true
-
-                    beforeEach {
-                        self.subject.invoke(.biometricLogin(enabled: enabled))
-                    }
-
-                    it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.bools[SettingKey.biometricLogin.rawValue]).to(equal(enabled))
-                    }
-
-                    it("tells the dispatcher") {
-                        let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
-                        expect(argument).to(equal(SettingAction.biometricLogin(enabled: enabled)))
-                    }
-                }
-
                 describe(".autolock") {
                     let autoLockSetting = AutoLockSetting.TwelveHours
 
@@ -74,23 +57,6 @@ class SettingActionSpec: QuickSpec {
                     it("tells the dispatcher") {
                         let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
                         expect(argument).to(equal(SettingAction.autoLockTime(timeout: autoLockSetting)))
-                    }
-                }
-
-                describe(".lock") {
-                    let locked = true
-
-                    beforeEach {
-                        self.subject.invoke(.visualLock(locked: locked))
-                    }
-
-                    it("sets the appropriate value for key in userdefaults") {
-                        expect(self.userDefaults.bools[SettingKey.locked.rawValue]).to(equal(locked))
-                    }
-
-                    it("tells the dispatcher") {
-                        let argument = self.dispatcher.actionTypeArguments.popLast() as! SettingAction
-                        expect(argument).to(equal(SettingAction.visualLock(locked: locked)))
                     }
                 }
 
@@ -133,8 +99,6 @@ class SettingActionSpec: QuickSpec {
 
                     it("sets the appropriate value for key in userdefaults") {
                         expect(self.userDefaults.strings[SettingKey.autoLockTime.rawValue]).to(equal(Constant.setting.defaultAutoLockTimeout.rawValue))
-                        expect(self.userDefaults.bools[SettingKey.biometricLogin.rawValue]).to(equal(Constant.setting.defaultBiometricLockEnabled))
-                        expect(self.userDefaults.bools[SettingKey.locked.rawValue]).to(equal(Constant.setting.defaultLockedState))
                         expect(self.userDefaults.strings[SettingKey.preferredBrowser.rawValue]).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
                         expect(self.userDefaults.bools[SettingKey.recordUsageData.rawValue]).to(equal(Constant.setting.defaultRecordUsageData))
                     }
@@ -149,19 +113,9 @@ class SettingActionSpec: QuickSpec {
 
         describe("SettingAction") {
             describe("equality") {
-                it("biometric login enabled is equal based on the enabled values") {
-                    expect(SettingAction.biometricLogin(enabled: true)).to(equal(SettingAction.biometricLogin(enabled: true)))
-                    expect(SettingAction.biometricLogin(enabled: true)).notTo(equal(SettingAction.biometricLogin(enabled: false)))
-                }
-
                 it("autoLock is equal based on the autolock values") {
                     expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwelveHours)).to(equal(SettingAction.autoLockTime(timeout: AutoLockSetting.TwelveHours)))
                     expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours)).notTo(equal(SettingAction.autoLockTime(timeout: AutoLockSetting.TwelveHours)))
-                }
-
-                it("lock is equal based on the locked value") {
-                    expect(SettingAction.visualLock(locked: true)).to(equal(SettingAction.visualLock(locked: true)))
-                    expect(SettingAction.visualLock(locked: true)).notTo(equal(SettingAction.visualLock(locked: false)))
                 }
 
                 it("reset is always equal") {
@@ -169,8 +123,7 @@ class SettingActionSpec: QuickSpec {
                 }
 
                 it("different enum values are not equal") {
-                    expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours)).notTo(equal(SettingAction.biometricLogin(enabled: true)))
-                    expect(SettingAction.reset).notTo(equal(SettingAction.biometricLogin(enabled: true)))
+                    expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours)).notTo(equal(SettingAction.reset))
                 }
             }
         }

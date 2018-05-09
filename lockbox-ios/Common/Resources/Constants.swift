@@ -100,7 +100,6 @@ struct Constant {
         static let defaultBiometricLockEnabled = false
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
         static let defaultPreferredBrowser = PreferredBrowserSetting.Safari
-        static let defaultLockedState = false
         static let defaultRecordUsageData = true
     }
 }

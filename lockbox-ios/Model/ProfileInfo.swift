@@ -5,39 +5,25 @@
 import Foundation
 
 class ProfileInfo: Codable {
-    var uid: String
     var email: String
     var displayName: String?
-    var avatar: String?
+    var avatar: URL?
 
-    init(uid: String, email: String, displayName: String? = nil, avatar: String? = nil) {
-        self.uid = uid
+    init(email: String, displayName: String? = nil, avatar: URL? = nil) {
         self.email = email
         self.displayName = displayName
         self.avatar = avatar
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case uid = "sub"
-        case displayName = "displayName"
-        case email = "email"
-        case avatar = "avatar"
     }
 
     class Builder {
         private var info: ProfileInfo!
 
         init() {
-            self.info = ProfileInfo(uid: "", email: "")
+            self.info = ProfileInfo(email: "")
         }
 
         func build() -> ProfileInfo {
             return self.info
-        }
-
-        func uid(_ uid: String) -> Builder {
-            self.info.uid = uid
-            return self
         }
 
         func email(_ email: String) -> Builder {
@@ -50,7 +36,7 @@ class ProfileInfo: Codable {
             return self
         }
 
-        func avatar(_ avatar: String?) -> Builder {
+        func avatar(_ avatar: URL?) -> Builder {
             self.info.avatar = avatar
             return self
         }
@@ -59,7 +45,6 @@ class ProfileInfo: Codable {
 
 extension ProfileInfo: Equatable {
     static func ==(lhs: ProfileInfo, rhs: ProfileInfo) -> Bool {
-        return lhs.uid == rhs.uid &&
-                lhs.email == rhs.email
+        return lhs.email == rhs.email
     }
 }
