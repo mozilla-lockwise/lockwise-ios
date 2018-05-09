@@ -12,8 +12,6 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var fxASigninButton: UIButton!
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!
-    @IBOutlet internal weak var biometricSignInButton: UIButton!
-    @IBOutlet internal weak var fxAButtonTopSpacing: NSLayoutConstraint!
 
     @IBOutlet private weak var oceanView: UIImageView!
 
@@ -28,11 +26,6 @@ class WelcomeView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.biometricSignInButton.setTitleColor(.white, for: .normal)
-        self.biometricSignInButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
-        self.biometricSignInButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
-        self.biometricSignInButton.tintColor = .white
 
         self.fxASigninButton.layer.cornerRadius = 5
         self.fxASigninButton.clipsToBounds = true
@@ -65,8 +58,8 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.fxASigninButton.rx.tap
     }
 
-    public var biometricSignInButtonPressed: ControlEvent<Void> {
-        return self.biometricSignInButton.rx.tap
+    public var loginButtonHidden: AnyObserver<Bool> {
+        return self.fxASigninButton.rx.isHidden.asObserver()
     }
 
     public var learnMorePressed: ControlEvent<Void> {
@@ -79,28 +72,5 @@ extension WelcomeView: WelcomeViewProtocol {
 
     public var firstTimeLearnMoreHidden: AnyObserver<Bool> {
         return self.learnMore.rx.isHidden.asObserver()
-    }
-
-    public var biometricAuthenticationPromptHidden: AnyObserver<Bool> {
-        return self.biometricSignInButton.rx.isHidden.asObserver()
-    }
-
-    public var biometricSignInText: AnyObserver<String?> {
-        return self.biometricSignInButton.rx.title().asObserver()
-    }
-
-    public var biometricImageName: AnyObserver<String> {
-        return Binder(self) { target, imageName in
-            let image = UIImage(named: imageName)
-            let tintedImage = image?.tinted(UIColor(white: 1.0, alpha: 0.6))
-
-            target.biometricSignInButton.rx.image(for: .normal).onNext(image)
-            target.biometricSignInButton.rx.image(for: .highlighted).onNext(tintedImage)
-            target.biometricSignInButton.rx.image(for: .selected).onNext(tintedImage)
-        }.asObserver()
-    }
-
-    public var fxAButtonTopSpace: AnyObserver<CGFloat> {
-        return self.fxAButtonTopSpacing.rx.constant.asObserver()
     }
 }

@@ -57,6 +57,7 @@
                                     <color key="titleColor" red="0.059756595641374588" green="0.3597700297832489" blue="0.8745732307434082" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                             </button>
+<<<<<<< HEAD
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l70-UW-2Lm">
                                 <rect key="frame" x="127.5" y="518.5" width="120" height="40"/>
                                 <constraints>
@@ -103,7 +104,6 @@
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="5w6-4I-b3t"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="8gy-fK-aY4"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="leading" secondItem="Zs6-ts-YH0" secondAttribute="leading" id="KIj-hv-llI"/>
-                            <constraint firstItem="l70-UW-2Lm" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="LMU-FO-EQ2"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="68" id="N5J-ck-8M7"/>
@@ -127,8 +127,6 @@
                     </view>
                     <connections>
                         <outlet property="accessLockboxMessage" destination="xyY-bk-Xw8" id="GG2-Fn-0Dz"/>
-                        <outlet property="biometricSignInButton" destination="l70-UW-2Lm" id="c9f-df-FZw"/>
-                        <outlet property="fxAButtonTopSpacing" destination="WWA-h0-rTG" id="jGY-5e-0sR"/>
                         <outlet property="fxASigninButton" destination="cuz-yd-F4J" id="Fwi-eS-e53"/>
                         <outlet property="learnMore" destination="JTP-OD-6TF" id="AUR-8T-44D"/>
                         <outlet property="oceanView" destination="4k3-9F-Bvv" id="dlf-79-jBs"/>
@@ -141,7 +139,6 @@
     </scenes>
     <resources>
         <image name="arrowhead-right-16" width="16" height="16"/>
-        <image name="fingerprint" width="40" height="40"/>
         <image name="lockbox-title" width="224" height="28"/>
         <image name="nessie" width="476" height="194"/>
     </resources>

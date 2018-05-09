@@ -13,14 +13,6 @@ extension UserDefaults {
 }
 
 extension UserDefaults {
-    var onLock: Observable<Bool> {
-        return self.on(setting: .locked, type: Bool.self)
-    }
-
-    var onBiometricsEnabled: Observable<Bool> {
-        return self.on(setting: .biometricLogin, type: Bool.self)
-    }
-
     var onAutoLockTime: Observable<AutoLockSetting> {
         return self.on(setting: .autoLockTime, type: String.self)
                 .map { AutoLockSetting(rawValue: $0) ?? Constant.setting.defaultAutoLockTimeout }

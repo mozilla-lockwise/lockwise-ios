@@ -57,7 +57,7 @@ class RouteStoreSpec: QuickSpec {
                 }
 
                 it("does not push non-RouteAction events") {
-                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.locked(locked: false))
+                    self.dispatcher.fakeRegistration.onNext(DataStoreAction.lock)
                     expect(routeObserver.events.count).to(equal(1))
                 }
             }

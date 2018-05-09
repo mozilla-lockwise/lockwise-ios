@@ -3,11 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import RxSwift
+import RxCocoa
+import RxOptional
+import Account
+import FxAUtils
 
 enum UserInfoAction: Action {
     case profileInfo(info: ProfileInfo)
-    case oauthInfo(info: OAuthInfo)
-    case scopedKey(key: String)
     case load
     case clear
 }
@@ -15,11 +18,7 @@ enum UserInfoAction: Action {
 extension UserInfoAction: Equatable {
     static func ==(lhs: UserInfoAction, rhs: UserInfoAction) -> Bool {
         switch (lhs, rhs) {
-        case (.scopedKey(let lhKey), .scopedKey(let rhKey)):
-            return lhKey == rhKey
         case (.profileInfo(let lhInfo), .profileInfo(let rhInfo)):
-            return lhInfo == rhInfo
-        case (.oauthInfo(let lhInfo), .oauthInfo(let rhInfo)):
             return lhInfo == rhInfo
         case (.load, .load):
             return true
@@ -34,9 +33,30 @@ extension UserInfoAction: Equatable {
 class UserInfoActionHandler: ActionHandler {
     static let shared = UserInfoActionHandler()
     fileprivate var dispatcher: Dispatcher
+    fileprivate let disposeBag = DisposeBag()
 
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
+    init(dispatcher: Dispatcher = Dispatcher.shared,
+         notificationCenter: NotificationCenter = NotificationCenter.default) {
         self.dispatcher = dispatcher
+
+        notificationCenter.rx
+                .notification(NotificationNames.FirefoxAccountProfileChanged)
+                .map { notification -> FirefoxAccount.FxAProfile? in
+                    let account = notification.object as? FirefoxAccount
+                    return account?.fxaProfile
+                }
+                .filterNil()
+                .map { profile -> ProfileInfo in
+                    return ProfileInfo.Builder()
+                            .email(profile.email)
+                            .avatar(profile.avatar.url)
+                            .displayName(profile.displayName)
+                            .build()
+                }
+                .subscribe(onNext: { profile in
+                    self.dispatcher.dispatch(action: UserInfoAction.profileInfo(info: profile))
+                })
+                .disposed(by: self.disposeBag)
     }
 
     func invoke(_ action: UserInfoAction) {

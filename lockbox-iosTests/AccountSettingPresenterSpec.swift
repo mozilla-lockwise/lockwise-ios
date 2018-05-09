@@ -60,10 +60,19 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDataStoreActionHandler: DataStoreActionHandler {
+        var invokeArgument: DataStoreAction?
+
+        override func invoke(_ action: DataStoreAction) {
+            self.invokeArgument = action
+        }
+    }
+
     private var view: FakeAccountSettingView!
     private var userInfoStore: FakeUserInfoStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var userInfoActionHandler: FakeUserInfoActionHandler!
+    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     var subject: AccountSettingPresenter!
 
     private let disposeBag = DisposeBag()
@@ -80,10 +89,12 @@ class AccountSettingPresenterSpec: QuickSpec {
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.userInfoStore = FakeUserInfoStore()
                 self.userInfoActionHandler = FakeUserInfoActionHandler()
+                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.subject = AccountSettingPresenter(
                         view: self.view,
                         userInfoStore: self.userInfoStore,
                         routeActionHandler: self.routeActionHandler,
+                        dataStoreActionHandler: self.dataStoreActionHandler,
                         userInfoActionHandler: self.userInfoActionHandler
                 )
             }
@@ -129,7 +140,7 @@ class AccountSettingPresenterSpec: QuickSpec {
                 describe("avatarImage") {
                     // tricky to test the network call here
                     xdescribe("when the profileInfo has an avatar url") {
-                        let avatarURL = "https://i.pinimg.com/236x/f8/93/b2/f893b23eaffac078d529989aad2c714c.jpg"
+                        let avatarURL = URL(string: "https://i.pinimg.com/236x/f8/93/b2/f893b23eaffac078d529989aad2c714c.jpg")
                         beforeEach {
                             self.userInfoStore.profileStub.onNext(
                                     ProfileInfo.Builder()
@@ -158,11 +169,11 @@ class AccountSettingPresenterSpec: QuickSpec {
 
             describe("unlinkAccountTapped") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([ next(50, ())])
+                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
 
                     voidObservable
-                        .bind(to: self.subject.unLinkAccountTapped)
-                        .disposed(by: self.disposeBag)
+                            .bind(to: self.subject.unLinkAccountTapped)
+                            .disposed(by: self.disposeBag)
                     self.scheduler.start()
                 }
                 it("displays the alert controller") {
@@ -176,7 +187,8 @@ class AccountSettingPresenterSpec: QuickSpec {
                         self.view.displayAlertActionButtons![1].tapObserver?.onNext(())
                     }
 
-                    it("sends the clear action") {
+                    it("sends the clear & reset actions") {
+                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.reset))
                         expect(self.userInfoActionHandler.invokeArgument).to(equal(UserInfoAction.clear))
                     }
                 }

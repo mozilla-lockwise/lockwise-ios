@@ -82,9 +82,9 @@ class ItemListViewSpec: QuickSpec {
                 let item2Title = "sum item"
                 let item2Username = "meh"
                 let items = [
-                    ItemListCellConfiguration.Search,
-                    ItemListCellConfiguration.Item(title: item1Title, username: item1Username, id: "fdssdfdfs"),
-                    ItemListCellConfiguration.Item(title: item2Title, username: item2Username, id: "sdfsdads")
+                    LoginListCellConfiguration.Search,
+                    LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs"),
+                    LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads")
                 ]
 
                 beforeEach {
@@ -184,8 +184,8 @@ class ItemListViewSpec: QuickSpec {
             describe("tapping a row") {
                 let id = "fdssdfdfs"
                 let items = [
-                    ItemListCellConfiguration.Search,
-                    ItemListCellConfiguration.Item(title: "item1", username: "bleh", id: id)
+                    LoginListCellConfiguration.Search,
+                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id)
                 ]
 
                 beforeEach {
@@ -228,7 +228,7 @@ class ItemListViewSpec: QuickSpec {
 
             describe("ItemListCell") {
                 let items = [
-                    ItemListCellConfiguration.Item(title: "item1", username: "bleh", id: "fdssdfdfs")
+                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: "fdssdfdfs")
                 ]
 
                 beforeEach {
@@ -253,7 +253,7 @@ class ItemListViewSpec: QuickSpec {
                 var cell: FilterCell!
 
                 beforeEach {
-                    self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: [ItemListCellConfiguration.Search])]))
+                    self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: [LoginListCellConfiguration.Search])]))
                     cell = self.subject.tableView.dataSource!.tableView(
                         self.subject.tableView,
                         cellForRowAt: IndexPath(row: 0, section: 0)
@@ -291,28 +291,28 @@ class ItemListViewSpec: QuickSpec {
             }
         }
 
-        describe("ItemListCellConfiguration") {
+        describe("LoginListCellConfiguration") {
             describe("IdentifiableType") {
                 it("uses either the item title or just returns `search`") {
-                    expect(ItemListCellConfiguration.Search.identity).to(equal("search"))
-                    expect(ItemListCellConfiguration.Item(title: "something", username: "", id: nil).identity).to(equal("something"))
+                    expect(LoginListCellConfiguration.Search.identity).to(equal("search"))
+                    expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: nil).identity).to(equal("something"))
                 }
             }
 
             describe("equality") {
                 it("search is always the same as search") {
-                    expect(ItemListCellConfiguration.Search).to(equal(ItemListCellConfiguration.Search))
+                    expect(LoginListCellConfiguration.Search).to(equal(LoginListCellConfiguration.Search))
                 }
 
                 it("items are the same if the titles & usernames are the same") {
-                    expect(ItemListCellConfiguration.Item(title: "blah", username: "", id: nil)).notTo(equal(ItemListCellConfiguration.Item(title: "blah", username: "meh", id: nil)))
-                    expect(ItemListCellConfiguration.Item(title: "blah", username: "meh", id: nil)).to(equal(ItemListCellConfiguration.Item(title: "blah", username: "meh", id: nil)))
-                    expect(ItemListCellConfiguration.Item(title: "meh", username: "meh", id: nil)).notTo(equal(ItemListCellConfiguration.Item(title: "blah", username: "meh", id: nil)))
-                    expect(ItemListCellConfiguration.Item(title: "meh", username: "blah", id: nil)).notTo(equal(ItemListCellConfiguration.Item(title: "blah", username: "meh", id: nil)))
+                    expect(LoginListCellConfiguration.Item(title: "blah", username: "", guid: nil)).notTo(equal(LoginListCellConfiguration.Item(title: "blah", username: "meh", guid: nil)))
+                    expect(LoginListCellConfiguration.Item(title: "blah", username: "meh", guid: nil)).to(equal(LoginListCellConfiguration.Item(title: "blah", username: "meh", guid: nil)))
+                    expect(LoginListCellConfiguration.Item(title: "meh", username: "meh", guid: nil)).notTo(equal(LoginListCellConfiguration.Item(title: "blah", username: "meh", guid: nil)))
+                    expect(LoginListCellConfiguration.Item(title: "meh", username: "blah", guid: nil)).notTo(equal(LoginListCellConfiguration.Item(title: "blah", username: "meh", guid: nil)))
                 }
 
                 it("search and item are never the same") {
-                    expect(ItemListCellConfiguration.Search).notTo(equal(ItemListCellConfiguration.Item(title: "", username: "", id: nil)))
+                    expect(LoginListCellConfiguration.Search).notTo(equal(LoginListCellConfiguration.Item(title: "", username: "", guid: nil)))
                 }
             }
         }
