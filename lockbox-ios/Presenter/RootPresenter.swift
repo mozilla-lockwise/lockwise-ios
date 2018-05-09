@@ -50,6 +50,7 @@ class RootPresenter {
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
+    fileprivate let settingActionHandler: SettingActionHandler
 
     init(view: RootViewProtocol,
          dispatcher: Dispatcher = Dispatcher.shared,
@@ -60,7 +61,9 @@ class RootPresenter {
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared
+         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
+         autoLockStore: AutoLockStore = AutoLockStore.shared
     ) {
         self.view = view
         self.routeStore = routeStore
@@ -71,6 +74,7 @@ class RootPresenter {
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
+        self.settingActionHandler = settingActionHandler
 
         // request init & lock status update on app launch
         self.dataStoreActionHandler.updateInitialized()
@@ -114,7 +118,7 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.startTelemetry()
-        self.unlockBlindly()
+        self.checkAutoLockTimer()
     }
 
     func onViewReady() {
@@ -233,21 +237,23 @@ extension RootPresenter {
                 .disposed(by: self.disposeBag)
     }
 
-    fileprivate func unlockBlindly() {
-        Observable.combineLatest(self.dataStore.onInitialized, self.userInfoStore.scopedKey, self.dataStore.onLocked)
-                .filter { (latest: (Bool, String?, Bool)) -> Bool in
-                    return latest.0
+    fileprivate func checkAutoLockTimer() {
+        self.userDefaults.onAutoLockTime.take(1).subscribe(onNext: { autoLockSetting in
+            switch autoLockSetting {
+            case .OnAppExit:
+                self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
+            case .Never:
+                self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
+            default:
+                let date = NSDate(timeIntervalSince1970:
+                    self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue))
+
+                if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
+                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: false))
+                } else {
+                    self.settingActionHandler.invoke(SettingAction.visualLock(locked: true))
                 }
-                .map { (latest: (Bool, String?, Bool)) -> KeyDataStoreLock in
-                    return KeyDataStoreLock(scopedKey: latest.1, dataStoreLocked: latest.2)
-                }
-                .subscribe(onNext: { (latest: KeyDataStoreLock) in
-                    if let scopedKey = latest.scopedKey, latest.dataStoreLocked {
-                        self.dataStoreActionHandler.unlock(scopedKey: scopedKey)
-                    } else if !latest.dataStoreLocked {
-                        self.dataStoreActionHandler.list()
-                    }
-                })
-                .disposed(by: self.disposeBag)
+            }
+        }).disposed(by: self.disposeBag)
     }
 }

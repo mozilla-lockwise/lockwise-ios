@@ -182,6 +182,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeSettingActionHandler: SettingActionHandler {
+        var action: SettingAction?
+
+        override func invoke(_ action: SettingAction) {
+            self.action = action
+        }
+    }
+
     private var view: FakeRootView!
     private var routeStore: FakeRouteStore!
     private var userInfoStore: FakeUserInfoStore!
@@ -190,6 +198,7 @@ class RootPresenterSpec: QuickSpec {
     private var routeActionHandler: FakeRouteActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
+    private var settingActionHandler: FakeSettingActionHandler!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -204,6 +213,7 @@ class RootPresenterSpec: QuickSpec {
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
+                self.settingActionHandler = FakeSettingActionHandler()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
 
                 self.subject = RootPresenter(
@@ -352,8 +362,8 @@ class RootPresenterSpec: QuickSpec {
                     self.advance(scopedKey: scopedKey, locked: true)
                 }
 
-                it("unlocks the datastore") {
-                    expect(self.dataStoreActionHandler.unlockScopedKey).to(equal(scopedKey))
+                it("does not unlock the datastore") {
+                    expect(self.dataStoreActionHandler.unlockScopedKey).to(beNil())
                 }
             }
 
@@ -1083,6 +1093,42 @@ class RootPresenterSpec: QuickSpec {
                     }
 
                 }
+
+                describe("Auto Lock Timer") {
+                    describe(".OnAppExit") {
+                        it("sets the visual lock") {
+                            UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.settingActionHandler.action).to(equal(SettingAction.visualLock(locked: true)))
+                        }
+                    }
+
+                    describe(".Never") {
+                        it("unlocks the visual lock") {
+                            UserDefaults.standard.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.settingActionHandler.action).to(equal(SettingAction.visualLock(locked: false)))
+                        }
+                    }
+
+                    describe("is a timed value") {
+                        it("stored timer value has expired") {
+                            UserDefaults.standard.set(AutoLockSetting.OneMinute.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                            UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.settingActionHandler.action).to(equal(SettingAction.visualLock(locked: true)))
+                        }
+
+                        it("stored timer value has not expired") {
+                            UserDefaults.standard.set(AutoLockSetting.TwelveHours.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                            UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                            _ = self.getPresenter()
+                            expect(self.settingActionHandler.action).to(equal(SettingAction.visualLock(locked: true)))
+                        }
+                    }
+                }
             }
         }
     }
@@ -1101,5 +1147,19 @@ class RootPresenterSpec: QuickSpec {
     private func advance(scopedKey: String?, locked: Bool) {
         self.userInfoStore.scopedKeySubject.onNext(scopedKey)
         self.dataStore.lockedSubject.onNext(locked)
+    }
+
+    private func getPresenter() -> RootPresenter {
+        return RootPresenter(
+            view: self.view,
+            routeStore: self.routeStore,
+            userInfoStore: self.userInfoStore,
+            dataStore: self.dataStore,
+            telemetryStore: self.telemetryStore,
+            routeActionHandler: self.routeActionHandler,
+            dataStoreActionHandler: self.dataStoreActionHandler,
+            telemetryActionHandler: self.telemetryActionHandler,
+            settingActionHandler: self.settingActionHandler
+        )
     }
 }
