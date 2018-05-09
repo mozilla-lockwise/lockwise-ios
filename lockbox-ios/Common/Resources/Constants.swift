@@ -62,8 +62,6 @@ struct Constant {
         static let settingsFaq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
         static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
-        static let settingsTouchId = NSLocalizedString("settings.touchId", value: "Touch ID", comment: "Touch ID option in settings")
-        static let settingsFaceId = NSLocalizedString("settings.faceId", value: "Face ID", comment: "Face ID option in settings")
         static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")
         static let autoLockOnAppExit = NSLocalizedString("settings.autoLock.onAppExit", value: "On app exit", comment: "On app exit auto lock setting")
         static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
@@ -78,10 +76,6 @@ struct Constant {
         static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
         static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
         static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
-        static let onboardingTouchIDHeader = NSLocalizedString("onboarding.touchid.header", value: "Use Touch ID to sign in", comment: "Header for screen allowing users to enable Touch ID")
-        static let onboardingTouchIDSubtitle = NSLocalizedString("onboarding.touchid.message", value: "Easily unlock Firefox Lockbox  with the touch of your finger.", comment: "Subtitle for screen allowing users to enable Touch ID")
-        static let onboardingFaceIDHeader = NSLocalizedString("onboarding.faceid.header", value: "Use Face ID to sign in", comment: "Header for screen allowing users to enable Face ID")
-        static let onboardingFaceIDSubtitle = NSLocalizedString("onboarding.faceid.message", value: "Easily unlock Firefox Lockbox  with just a glance.", comment: "Subtitle for screen allowing users to enable Touch ID")
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
         static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Firefox Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
