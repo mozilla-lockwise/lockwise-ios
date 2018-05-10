@@ -37,12 +37,12 @@
                                     <constraint firstAttribute="height" constant="44" id="mIY-nI-JMy"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Clear out Firefox Lockbox">
+                                <state key="normal" title="Disconnect Firefox Lockbox">
                                     <color key="titleColor" red="0.99718213081359863" green="0.2334609180688858" blue="0.1882847398519516" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will remove any synced entries from Firefox Lockbox, but will not delete your account or entries from Firefox." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
-                                <rect key="frame" x="15" y="582" width="345" height="47"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This removes synced entries from Firefox Lockbox, but will not delete your entries from Firefox." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
+                                <rect key="frame" x="15" y="582" width="345" height="35"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <color key="textColor" red="0.42766761779785156" green="0.42717477679252625" blue="0.44713732600212097" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
