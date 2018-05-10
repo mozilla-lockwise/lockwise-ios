@@ -156,54 +156,108 @@ class WelcomePresenterSpec: QuickSpec {
                 describe("when the device is locked") {
                     let email = "butts@butts.com"
 
-                    beforeEach {
-                        self.dataStore.fakeLocked.onNext(true)
-                        self.subject.onViewReady()
-                        self.userInfoStore.fakeProfileInfo.onNext(ProfileInfo.Builder().email(email).build())
-                    }
-
-                    it("hides the first time login message and the fxa login button") {
-                        expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
-                        expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
-                    }
-
-                    it("begins authentication with the profileInfo email") {
-                        expect(self.biometryManager.authMessage).to(equal(email))
-                    }
-
-                    describe("foregrounding actions") {
+                    describe("when the profileinfo has an email address") {
                         beforeEach {
-                            self.biometryManager.authMessage = nil
-                            self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                            self.dataStore.fakeLocked.onNext(true)
+                            self.subject.onViewReady()
+                            self.userInfoStore.fakeProfileInfo.onNext(ProfileInfo.Builder().email(email).build())
                         }
 
-                        it("starts authentication again") {
+                        it("hides the first time login message and the fxa login button") {
+                            expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
+                            expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+
+                        it("begins authentication with the profileInfo email") {
                             expect(self.biometryManager.authMessage).to(equal(email))
                         }
+
+                        describe("foregrounding actions") {
+                            beforeEach {
+                                self.biometryManager.authMessage = nil
+                                self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                            }
+
+                            it("starts authentication again") {
+                                expect(self.biometryManager.authMessage).to(equal(email))
+                            }
+                        }
+
+                        describe("successful authentication") {
+                            beforeEach {
+                                self.biometryManager.fakeAuthResponse.onNext(())
+                            }
+
+                            it("unlocks the application & routes to the list") {
+                                expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                                expect(argument).to(equal(MainRouteAction.list))
+                            }
+                        }
+
+                        describe("unsuccessful authentication") {
+                            beforeEach {
+                                self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                            }
+
+                            it("does nothing") {
+                                expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                            }
+                        }
                     }
 
-                    describe("successful authentication") {
+                    describe("when the profileinfo does not exist") {
                         beforeEach {
-                            self.biometryManager.fakeAuthResponse.onNext(())
+                            self.dataStore.fakeLocked.onNext(true)
+                            self.subject.onViewReady()
+                            self.userInfoStore.fakeProfileInfo.onNext(nil)
                         }
 
-                        it("unlocks the application & routes to the list") {
-                            expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                            let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
-                            expect(argument).to(equal(MainRouteAction.list))
+                        it("hides the first time login message and the fxa login button") {
+                            expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
+                            expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+
+                        it("begins authentication with the placeholder string") {
+                            expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                        }
+
+                        describe("foregrounding actions") {
+                            beforeEach {
+                                self.biometryManager.authMessage = nil
+                                self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                            }
+
+                            it("starts authentication again") {
+                                expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                            }
+                        }
+
+                        describe("successful authentication") {
+                            beforeEach {
+                                self.biometryManager.fakeAuthResponse.onNext(())
+                            }
+
+                            it("unlocks the application & routes to the list") {
+                                expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
+                                expect(argument).to(equal(MainRouteAction.list))
+                            }
+                        }
+
+                        describe("unsuccessful authentication") {
+                            beforeEach {
+                                self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                            }
+
+                            it("does nothing") {
+                                expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                            }
                         }
                     }
 
-                    describe("unsuccessful authentication") {
-                        beforeEach {
-                            self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
-                        }
-
-                        it("does nothing") {
-                            expect(self.routeActionHandler.invokeArgument).to(beNil())
-                            expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
-                        }
-                    }
                 }
             }
         }
