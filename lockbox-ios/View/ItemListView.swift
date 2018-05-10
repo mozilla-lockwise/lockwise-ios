@@ -12,6 +12,7 @@ typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfigurat
 enum LoginListCellConfiguration {
     case Search
     case Item(title: String, username: String, guid: String?)
+    case ListPlaceholder
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -21,6 +22,8 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "search"
         case .Item(let title, _, _):
             return title
+        case .ListPlaceholder:
+            return "placeholder"
         }
     }
 }
@@ -31,6 +34,7 @@ extension LoginListCellConfiguration: Equatable {
         case (.Search, .Search): return true
         case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
             return lhTitle == rhTitle && lhUsername == rhUsername
+        case (.ListPlaceholder, .ListPlaceholder): return true
         default:
             return false
         }
@@ -78,20 +82,27 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
-    func displayEmptyStateMessaging() {
-        if let emptyStateView = Bundle.main.loadNibNamed("EmptyList", owner: self)?[0] as? UIView {
-            self.tableView.backgroundView?.addSubview(emptyStateView)
-            self.tableView.isScrollEnabled = false
+    var tableViewInteractionEnabled: AnyObserver<Bool> {
+        return self.tableView.rx.isUserInteractionEnabled.asObserver()
+    }
+
+    var sortingButtonEnabled: AnyObserver<Bool>? {
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            return button.rx.isEnabled.asObserver()
         }
+
+        return nil
+    }
+
+    func displayEmptyStateMessaging() {
+        self.tableView.isScrollEnabled = false
 
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             button.isHidden = true
         }
-
     }
 
     func hideEmptyStateMessaging() {
-        self.tableView.backgroundView?.subviews.forEach({ $0.removeFromSuperview() })
         self.tableView.isScrollEnabled = true
 
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
@@ -159,6 +170,12 @@ extension ItemListView {
                         cell.detailLabel.text = username
 
                         retCell = cell
+                    case .ListPlaceholder:
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistplaceholder") else {
+                            fatalError("couldn't find the right cell!")
+                        }
+
+                        retCell = cell
                     }
 
                     return retCell
@@ -193,7 +210,7 @@ extension ItemListView {
 
     fileprivate func setupRefresh() {
         if let presenter = self.presenter {
-            let button =  UIButton(type: .custom)
+            let button = UIButton(type: .custom)
             button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
             button.setTitle(Constant.string.yourLockbox, for: .normal)
             button.setTitleColor(.white, for: .normal)
@@ -261,6 +278,7 @@ extension ItemListView {
         button.setTitleColor(.white, for: .normal)
         button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
         button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
 

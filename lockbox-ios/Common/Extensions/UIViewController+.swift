@@ -4,6 +4,7 @@
 
 import UIKit
 import RxSwift
+import RxCocoa
 
 protocol StatusAlertView {
     func displayTemporaryAlert(_ message: String, timeout: TimeInterval)
@@ -22,35 +23,20 @@ protocol AlertControllerView {
                                 style: UIAlertControllerStyle)
 }
 
+protocol SpinnerAlertView {
+    func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag)
+}
+
 extension UIViewController: StatusAlertView {
     func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
         if let temporaryAlertView = Bundle.main.loadNibNamed("StatusAlert", owner: self)?.first as? StatusAlert {
             temporaryAlertView.messageLabel.text = message
-            temporaryAlertView.layer.cornerRadius = 10.0
-            temporaryAlertView.clipsToBounds = true
-            temporaryAlertView.center = CGPoint(
-                    x: self.view.bounds.width * 0.5,
-                    y: self.view.bounds.height * Constant.number.displayStatusAlertYPercentage
-            )
-            temporaryAlertView.alpha = 0.0
-
+            self.styleAndCenterAlert(temporaryAlertView)
             self.view.addSubview(temporaryAlertView)
 
-            UIView.animate(
-                    withDuration: Constant.number.displayStatusAlertFade,
-                    animations: {
-                        temporaryAlertView.alpha = Constant.number.displayStatusAlertOpacity
-                    }, completion: { _ in
-                UIView.animate(
-                        withDuration: Constant.number.displayStatusAlertFade,
-                        delay: timeout,
-                        animations: {
-                            temporaryAlertView.alpha = 0.0
-                        },
-                        completion: { _ in
-                            temporaryAlertView.removeFromSuperview()
-                        })
-            })
+            self.animateAlertIn(temporaryAlertView) { _ in
+                self.animateAlertOut(temporaryAlertView, delay: timeout)
+            }
         }
     }
 }
@@ -74,6 +60,56 @@ extension UIViewController: AlertControllerView {
         DispatchQueue.main.async {
             self.present(alertController, animated: true)
         }
+    }
+}
+
+extension UIViewController: SpinnerAlertView {
+    func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
+        if let spinnerAlertView = Bundle.main.loadNibNamed("SpinnerAlert", owner: self)?.first as? SpinnerAlert {
+            self.styleAndCenterAlert(spinnerAlertView)
+            self.view.addSubview(spinnerAlertView)
+
+            spinnerAlertView.activityIndicatorView.startAnimating()
+            self.animateAlertIn(spinnerAlertView)
+
+            dismiss
+                    .drive(onNext: { _ in
+                        self.animateAlertOut(spinnerAlertView)
+                    })
+                    .disposed(by: bag)
+        }
+    }
+}
+
+extension UIViewController {
+    fileprivate func styleAndCenterAlert(_ view: UIView) {
+        view.layer.cornerRadius = 10.0
+        view.clipsToBounds = true
+        view.center = CGPoint(
+                x: self.view.bounds.width * 0.5,
+                y: self.view.bounds.height * Constant.number.displayAlertYPercentage
+        )
+        view.alpha = 0.0
+    }
+
+    fileprivate func animateAlertIn(_ view: UIView, completion: @escaping ((Bool) -> Void) = { _ in }) {
+        UIView.animate(
+                withDuration: Constant.number.displayAlertFade,
+                animations: {
+                    view.alpha = Constant.number.displayAlertOpacity
+                }, completion: completion)
+    }
+
+    fileprivate func animateAlertOut(_ view: UIView, delay: TimeInterval = 0.0) {
+        UIView.animate(
+                withDuration: Constant.number.displayAlertFade,
+                delay: delay,
+                animations: {
+                    view.alpha = 0.0
+                },
+                completion: { _ in
+                    view.removeFromSuperview()
+                })
     }
 }
 

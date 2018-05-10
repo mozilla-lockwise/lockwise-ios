@@ -110,9 +110,9 @@
 		7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22032033C57F0098C3A3 /* ItemDetailView.swift */; };
 		7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */; };
 		7D1B22082033C6250098C3A3 /* ItemDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D1B22072033C6250098C3A3 /* ItemDetail.storyboard */; };
+		7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */; };
 		7D302BE81FD7106B00D2FD4B /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; };
 		7D302BE91FD7108300D2FD4B /* RxBlocking.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7D30DBB32033651600613B69 /* EmptyList.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D30DBB52033651600613B69 /* EmptyList.xib */; };
 		7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920231FB131FB00709575 /* libcrypto.a */; };
 		7D3920281FB131FB00709575 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920241FB131FB00709575 /* libssl.a */; };
 		7D3920291FB131FB00709575 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920251FB131FB00709575 /* libjansson.a */; };
@@ -133,6 +133,7 @@
 		7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
 		7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6FB87A204F00E2005E23AA /* StatusAlert.swift */; };
+		7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */; };
 		7D7AD94B204EFBA4002D35EE /* StatusAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */; };
 		7DA4C6832028F84800B61DD8 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6802028F84800B61DD8 /* ItemListView.swift */; };
 		7DA4C6862028F85A00B61DD8 /* ItemListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6852028F85A00B61DD8 /* ItemListPresenter.swift */; };
@@ -321,10 +322,11 @@
 		7D1B22032033C57F0098C3A3 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailPresenter.swift; sourceTree = "<group>"; };
 		7D1B22072033C6250098C3A3 /* ItemDetail.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ItemDetail.storyboard; sourceTree = "<group>"; };
-		7D30DBB42033651600613B69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/EmptyList.xib; sourceTree = "<group>"; };
-		7D30DBB72033651900613B69 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/EmptyList.strings; sourceTree = "<group>"; };
-		7D30DBB92033651A00613B69 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/EmptyList.strings; sourceTree = "<group>"; };
-		7D30DBBB2033651B00613B69 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/EmptyList.strings; sourceTree = "<group>"; };
+		7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerAlert.swift; sourceTree = "<group>"; };
+		7D1D2F0620AA39700011BFC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SpinnerAlert.xib; sourceTree = "<group>"; };
+		7D1D2F0920AA39710011BFC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
+		7D1D2F0B20AA39750011BFC8 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
+		7D1D2F0D20AA39760011BFC8 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
 		7D320B3420360F9000891F73 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
 		7D3920231FB131FB00709575 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "lockbox-ios/binaries/libcrypto.a"; sourceTree = "<group>"; };
 		7D3920241FB131FB00709575 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "lockbox-ios/binaries/libssl.a"; sourceTree = "<group>"; };
@@ -580,11 +582,11 @@
 				7D522E9D20334B8600295FF8 /* Welcome.strings */,
 				7D5889FA205706AA0087DF89 /* ItemList.storyboard */,
 				7D1B22072033C6250098C3A3 /* ItemDetail.storyboard */,
-				7D30DBB52033651600613B69 /* EmptyList.xib */,
 				7DEF2980203E3A2100ABC4AC /* EntryEditDisclaimer.xib */,
 				7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */,
 				7DC75D7B206AD01C007CDDBB /* AccountSetting.storyboard */,
 				7D578D24207573B000DC9C73 /* SettingList.storyboard */,
+				7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -632,6 +634,7 @@
 				D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */,
 				D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */,
 				D878360E207ABDF100C19BC7 /* SettingWebView.swift */,
+				7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -882,13 +885,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				391233892092155300CB0233 /* FxASignIn.js in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
 				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
 				7D522E9B20334B8600295FF8 /* Welcome.strings in Resources */,
 				7D578D22207573B000DC9C73 /* SettingList.storyboard in Resources */,
-				7D30DBB32033651600613B69 /* EmptyList.xib in Resources */,
 				7AA547E098053DFF64A3C0F9 /* Assets.xcassets in Resources */,
 				D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */,
 				7DEF297E203E3A2100ABC4AC /* EntryEditDisclaimer.xib in Resources */,
@@ -1095,6 +1098,7 @@
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
 				D895605C20967C5300CC7E47 /* AutoLockStore.swift in Sources */,
 				7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */,
+				7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */,
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
 				7AA54BE3C277CF8AC0C4306A /* Date+.swift in Sources */,
@@ -1122,15 +1126,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		7D30DBB52033651600613B69 /* EmptyList.xib */ = {
+		7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7D30DBB42033651600613B69 /* Base */,
-				7D30DBB72033651900613B69 /* en */,
-				7D30DBB92033651A00613B69 /* es */,
-				7D30DBBB2033651B00613B69 /* de */,
+				7D1D2F0620AA39700011BFC8 /* Base */,
+				7D1D2F0920AA39710011BFC8 /* en */,
+				7D1D2F0B20AA39750011BFC8 /* es */,
+				7D1D2F0D20AA39760011BFC8 /* de */,
 			);
-			name = EmptyList.xib;
+			name = SpinnerAlert.xib;
 			sourceTree = "<group>";
 		};
 		7D522E9D20334B8600295FF8 /* Welcome.strings */ = {
