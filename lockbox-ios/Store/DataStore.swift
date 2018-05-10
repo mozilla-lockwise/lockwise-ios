@@ -234,6 +234,8 @@ extension DataStore {
             self.syncSubject.onNext(.NotSyncable)
         }
 
+        self.keychainWrapper.removeObject(forKey: lockedKey)
+
         stopSyncing() >>== disconnect >>== deleteAll >>== resetProfile
     }
 }
