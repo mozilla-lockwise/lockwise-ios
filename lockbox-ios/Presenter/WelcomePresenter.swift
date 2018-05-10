@@ -12,6 +12,7 @@ protocol WelcomeViewProtocol: class {
     var loginButtonPressed: ControlEvent<Void> { get }
     var loginButtonHidden: AnyObserver<Bool> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
+    var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
 }
 
 struct LockedEnabled {
@@ -64,6 +65,10 @@ class WelcomePresenter {
                     .disposed(by: self.disposeBag)
 
             lockedObservable
+                    .bind(to: view.firstTimeLearnMoreHidden)
+                    .disposed(by: self.disposeBag)
+
+            lockedObservable
                     .bind(to: view.loginButtonHidden)
                     .disposed(by: self.disposeBag)
         }
@@ -104,7 +109,7 @@ class WelcomePresenter {
                 .map { $0.0 }
                 .take(1)
                 .flatMap { latest in
-                    self.biometryManager.authenticateWithMessage(latest?.email ?? "")
+                    self.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
                             .catchError { _ in
                                 // ignore errors from local authentication
                                 return Observable.never().asSingle()

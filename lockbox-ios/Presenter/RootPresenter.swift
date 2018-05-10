@@ -29,6 +29,7 @@ class RootPresenter {
     fileprivate let routeStore: RouteStore
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
+    fileprivate let autoLockStore: AutoLockStore
     fileprivate let userDefaults: UserDefaults
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
@@ -39,6 +40,7 @@ class RootPresenter {
          routeStore: RouteStore = RouteStore.shared,
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
+         autoLockStore: AutoLockStore = AutoLockStore.shared,
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
@@ -48,6 +50,7 @@ class RootPresenter {
         self.routeStore = routeStore
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
+        self.autoLockStore = autoLockStore
         self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
