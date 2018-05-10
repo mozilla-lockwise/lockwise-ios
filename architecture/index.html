@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Architecture - Lockbox iOS</title>
+  <title>Architecture - Firefox Lockbox for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -35,7 +35,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> Lockbox iOS</a>
+        <a href=".." class="icon icon-home"> Firefox Lockbox for iOS</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -80,7 +80,7 @@
     <a class="current" href="./">Architecture</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#lockbox-architecture">Lockbox Architecture</a></li>
+    <li class="toctree-l3"><a href="#firefox-lockbox-for-ios-architecture">Firefox Lockbox for iOS Architecture</a></li>
     
         <ul>
         
@@ -116,7 +116,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">Lockbox iOS</a>
+        <a href="..">Firefox Lockbox for iOS</a>
       </nav>
 
       
@@ -145,9 +145,9 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="lockbox-architecture">Lockbox Architecture</h1>
+                <h1 id="firefox-lockbox-for-ios-architecture">Firefox Lockbox for iOS Architecture</h1>
 <h2 id="rxswift">RxSwift</h2>
-<p>Lockbox makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the <a href="http://reactivex.io/">ReactiveX documentation</a>.</p>
+<p>Firefox Lockbox for iOS makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the <a href="http://reactivex.io/">ReactiveX documentation</a>.</p>
 <h2 id="presenters-views">Presenters &amp; Views</h2>
 <p>All views are bound to a presenter[1]. In this separation, the presenter is responsible for all business logic, and the view is abstracted to a simple protocol. The view is responsible for UI-specific configuration and passing user input to its presenter for handling. This allows any complex view-related configuration to be abstracted when dealing with business logic changes, and vice versa. Presenters should never import UIKit.</p>
 <h2 id="flux">Flux</h2>

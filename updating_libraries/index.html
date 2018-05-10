@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Dependencies - Lockbox iOS</title>
+  <title>Dependencies - Firefox Lockbox for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -35,7 +35,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> Lockbox iOS</a>
+        <a href=".." class="icon icon-home"> Firefox Lockbox for iOS</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -92,8 +92,6 @@
         
             <li><a class="toctree-l4" href="#c-libraries">C Libraries</a></li>
         
-            <li><a class="toctree-l4" href="#datastore">Datastore</a></li>
-        
         </ul>
     
 
@@ -116,7 +114,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">Lockbox iOS</a>
+        <a href="..">Firefox Lockbox for iOS</a>
       </nav>
 
       
@@ -154,9 +152,7 @@
 
 <p>If this occurs, run <code>carthage update --platform iOS --no-use-binaries</code> to build from sources instead.</p>
 <h2 id="c-libraries">C Libraries</h2>
-<p>Lockbox for iOS uses <a href="https://github.com/cisco/cjose">cjose</a> for JOSE encryption &amp; decryption in the FxA OAuth flow. The binaries to support this external dependency are provided along with this code (in the <code>lockbox-ios/binaries</code> folder). However, if you find yourself wanting to update this library (or either of its dependencies, Jansson or OpenSSL), navigate to the <code>scripts</code> directory and run <code>./update-dependencies</code>. NOTE: You will have to build the project at least once for the appropriate <code>binaries</code> folder to get un-tarred (or you can do it yourself).</p>
-<h2 id="datastore">Datastore</h2>
-<p>Lockbox for iOS uses the Lockbox <a href="https://github.com/mozilla-lockbox/lockbox-datastore">Datastore</a> to provide data storage &amp; encryption. The datastore code is bundled into a <code>bundle.js</code> file using <a href="http://browserify.org/">browserify</a> (available via npm) and provided along with this code (in the <code>lockbox-datastore</code> folder). However, if you find yourself wanting to update this library, clone the source code, install <em>its</em> dependencies with <code>npm install</code>, and run <code>browserify lib/index.js -s DataStoreModule -o bundle.js</code>. Replace the version at <code>lockbox-datastore/bundle.js</code> with the newly browserify-ed <code>bundle.js</code>.</p>
+<p>Firefox Lockbox for iOS uses <a href="https://github.com/cisco/cjose">cjose</a> for JOSE encryption &amp; decryption in the FxA OAuth flow. The binaries to support this external dependency are provided along with this code (in the <code>lockbox-ios/binaries</code> folder). However, if you find yourself wanting to update this library (or either of its dependencies, Jansson or OpenSSL), navigate to the <code>scripts</code> directory and run <code>./update-dependencies</code>. NOTE: You will have to build the project at least once for the appropriate <code>binaries</code> folder to get un-tarred (or you can do it yourself).</p>
               
             </div>
           </div>
