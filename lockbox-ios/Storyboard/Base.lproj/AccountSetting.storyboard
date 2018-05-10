@@ -37,7 +37,7 @@
                                     <constraint firstAttribute="height" constant="44" id="mIY-nI-JMy"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <state key="normal" title="Clear out Firefox Lockbox">
+                                <state key="normal" title="Disconnect Firefox Lockbox">
                                     <color key="titleColor" red="0.99718213081359863" green="0.2334609180688858" blue="0.1882847398519516" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                             </button>
