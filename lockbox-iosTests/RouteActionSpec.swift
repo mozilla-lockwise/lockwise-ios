@@ -71,6 +71,18 @@ class RouteActionSpec: QuickSpec {
                 it("returns show as event method") {
                     expect(MainRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))
                 }
+
+                it("returns nil as the value") {
+                    expect(MainRouteAction.list.value).to(beNil())
+                    expect(MainRouteAction.detail(itemId: "fsdsdfd").value).to(beNil())
+                }
+
+                it("returns nil for the list extra and the itemID for the detail extra") {
+                    let itemID = "aadsadsdas"
+                    expect(MainRouteAction.list.extras).to(beNil())
+                    let extraValue = MainRouteAction.detail(itemId: itemID).extras?[ExtraKey.itemid.rawValue] as? String
+                    expect(extraValue).to(equal(itemID))
+                }
             }
         }
 
@@ -87,6 +99,24 @@ class RouteActionSpec: QuickSpec {
                     expect(SettingRouteAction.account.eventObject).to(equal(TelemetryEventObject.settingsAccount))
                     expect(SettingRouteAction.autoLock.eventObject).to(equal(TelemetryEventObject.settingsAutolock))
                     expect(SettingRouteAction.preferredBrowser.eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
+                }
+
+                it("returns nil as the value") {
+                    expect(SettingRouteAction.list.value).to(beNil())
+                    expect(SettingRouteAction.provideFeedback.value).to(beNil())
+                    expect(SettingRouteAction.faq.value).to(beNil())
+                    expect(SettingRouteAction.account.value).to(beNil())
+                    expect(SettingRouteAction.autoLock.value).to(beNil())
+                    expect(SettingRouteAction.preferredBrowser.value).to(beNil())
+                }
+
+                it("returns nil as for the extras") {
+                    expect(SettingRouteAction.list.extras).to(beNil())
+                    expect(SettingRouteAction.provideFeedback.extras).to(beNil())
+                    expect(SettingRouteAction.faq.extras).to(beNil())
+                    expect(SettingRouteAction.account.extras).to(beNil())
+                    expect(SettingRouteAction.autoLock.extras).to(beNil())
+                    expect(SettingRouteAction.preferredBrowser.extras).to(beNil())
                 }
             }
         }
