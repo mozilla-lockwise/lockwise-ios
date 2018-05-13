@@ -76,7 +76,9 @@ class RootView: UIViewController, RootViewProtocol {
         case .welcome:
             self.currentViewController?.popToRootViewController(animated: true)
         case .fxa:
-            self.currentViewController?.pushViewController(FxAView(), animated: true)
+            self.currentViewController?.pushViewController(FxAView(display: .login), animated: true)
+        case .learnMore:
+            self.currentViewController?.pushViewController(FxAView(display: .learnMore), animated: true)
         }
     }
 
