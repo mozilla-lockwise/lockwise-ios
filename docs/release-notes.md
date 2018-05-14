@@ -8,7 +8,9 @@ This build DOES include: signing in with Firefox Accounts to see your real "Save
 
 This build DOES NOT include: user-friendly item titles; links to real FAQ content; proper visual placeholders when an initial sync is occurring or when no items are found.
 
-Some KNOWN ISSUES include: the app may crash a couple times on first-run — just open the app again so it can fix itself; if you navigate away from the list view and a sync occurs it will pop you back into the list view; the search/filter keyboard is immediately dismissed after each character you type. Don't worry, we'll get these fixed soon!
+Some KNOWN ISSUES include: when navigating away from the list view and a sync occurs in the background the app will pop you back into the list view; the search/filter keyboard is immediately dismissed after the first and second character you type. Don't worry, we'll get these fixed soon!
+
+Please also note: the app may crash on first-run — just open it again and please let us know if you encounter this. We believe we squashed all the bugs but need your help making sure.
 
 ## 1.0 (Build 742)
 
