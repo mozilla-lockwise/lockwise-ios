@@ -104,7 +104,6 @@ class AutoLockStore {
             DispatchQueue.main.async {
                 RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
             }
-
         }
     }
 
@@ -117,9 +116,7 @@ class AutoLockStore {
     }
 
     @objc private func lockApp() {
-        DispatchQueue.main.async {
-            self.dataStoreActionHandler.invoke(.lock)
-            self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
-        }
+        self.dataStoreActionHandler.invoke(.lock)
+        self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
     }
 }
