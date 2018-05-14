@@ -126,6 +126,23 @@ class SettingActionSpec: QuickSpec {
                     expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours)).notTo(equal(SettingAction.reset))
                 }
             }
+
+            describe("telemetry") {
+                it("event method should equal settingChanged") {
+                    expect(SettingAction.reset.eventMethod).to(equal(TelemetryEventMethod.settingChanged))
+                }
+
+                it("event object should be the setting that changed") {
+                    expect(SettingAction.autoLockTime(timeout: AutoLockSetting.TwentyFourHours).eventObject).to(equal(TelemetryEventObject.settingsAutolockTime))
+                    expect(SettingAction.preferredBrowser(browser: PreferredBrowserSetting.Firefox).eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
+                    expect(SettingAction.reset.eventObject).to(equal(TelemetryEventObject.settingsReset))
+                    expect(SettingAction.recordUsageData(enabled: true).eventObject).to(equal(TelemetryEventObject.settingsRecordUsageData))
+                }
+
+                it("telemetry event value is equal to setting value") {
+                    expect(SettingAction.recordUsageData(enabled: true).value).to(equal("true"))
+                }
+            }
         }
     }
 }

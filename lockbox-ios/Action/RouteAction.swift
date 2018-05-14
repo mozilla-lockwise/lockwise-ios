@@ -29,6 +29,34 @@ enum MainRouteAction: RouteAction {
     case detail(itemId: String)
 }
 
+extension MainRouteAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .show
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self {
+        case .list:
+            return .entryList
+        case .detail:
+            return .entryDetail
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        switch self {
+        case .list:
+            return nil
+        case .detail(let itemId):
+            return [ExtraKey.itemid.rawValue: itemId]
+        }
+    }
+}
+
 enum SettingRouteAction: RouteAction {
     case list
     case provideFeedback
@@ -36,6 +64,38 @@ enum SettingRouteAction: RouteAction {
     case account
     case autoLock
     case preferredBrowser
+}
+
+extension SettingRouteAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .show
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self {
+        case .list:
+            return .settingsList
+        case .provideFeedback:
+            return .settingsProvideFeedback
+        case .faq:
+            return .settingsFaq
+        case .account:
+            return .settingsAccount
+        case .autoLock:
+            return .settingsAutolock
+        case .preferredBrowser:
+            return .settingsPreferredBrowser
+
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
 }
 
 extension MainRouteAction: Equatable {
