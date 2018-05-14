@@ -8,32 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		391233682090E52800CB0233 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB3677208E2A800026DA92 /* Account.framework */; };
-		391233692090E52800CB0233 /* Account.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB3677208E2A800026DA92 /* Account.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3912336A2090E52800CB0233 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
-		3912336B2090E52800CB0233 /* Deferred.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3912336C2090E52800CB0233 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
-		3912336D2090E52800CB0233 /* FxAUtils.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3912336E2090E52800CB0233 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB367D208E2F8F0026DA92 /* FxA.framework */; };
-		3912336F2090E52800CB0233 /* FxA.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB367D208E2F8F0026DA92 /* FxA.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233712090E56E00CB0233 /* SwiftyJSON.framework */; };
-		391233742090E56F00CB0233 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 391233712090E56E00CB0233 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */; };
-		391233762090E56F00CB0233 /* SwiftKeychainWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		391233782090E5A300CB0233 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233772090E5A200CB0233 /* Shared.framework */; };
-		391233792090E5A300CB0233 /* Shared.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 391233772090E5A200CB0233 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3912337C2090E5E200CB0233 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337A2090E5E200CB0233 /* Storage.framework */; };
-		3912337D2090E5E200CB0233 /* Storage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337A2090E5E200CB0233 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3912337E2090E5E200CB0233 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337B2090E5E200CB0233 /* Sync.framework */; };
-		3912337F2090E5E200CB0233 /* Sync.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337B2090E5E200CB0233 /* Sync.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233802090E60A00CB0233 /* XCGLogger.framework */; };
-		391233822090E60A00CB0233 /* XCGLogger.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 391233802090E60A00CB0233 /* XCGLogger.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		391233842090E63000CB0233 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233832090E63000CB0233 /* Alamofire.framework */; };
-		391233852090E63000CB0233 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 391233832090E63000CB0233 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		391233892092155300CB0233 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 391233882092155300CB0233 /* FxASignIn.js */; };
 		39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
 		39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
-		39DB3678208E2A800026DA92 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB3677208E2A800026DA92 /* Account.framework */; };
-		39DB3684208E2F8F0026DA92 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB367D208E2F8F0026DA92 /* FxA.framework */; };
 		7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */; };
 		7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */; };
 		7AA540CB2BA73DB82EDDAED1 /* SettingNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E8C5A0848F0669FBB10 /* SettingNavigationControllerSpec.swift */; };
@@ -205,17 +191,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				391233762090E56F00CB0233 /* SwiftKeychainWrapper.framework in Embed Frameworks */,
-				3912336F2090E52800CB0233 /* FxA.framework in Embed Frameworks */,
-				3912337D2090E5E200CB0233 /* Storage.framework in Embed Frameworks */,
-				391233692090E52800CB0233 /* Account.framework in Embed Frameworks */,
-				3912336B2090E52800CB0233 /* Deferred.framework in Embed Frameworks */,
-				391233822090E60A00CB0233 /* XCGLogger.framework in Embed Frameworks */,
-				3912336D2090E52800CB0233 /* FxAUtils.framework in Embed Frameworks */,
-				391233852090E63000CB0233 /* Alamofire.framework in Embed Frameworks */,
-				391233792090E5A300CB0233 /* Shared.framework in Embed Frameworks */,
-				391233742090E56F00CB0233 /* SwiftyJSON.framework in Embed Frameworks */,
-				3912337F2090E5E200CB0233 /* Sync.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -446,29 +421,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3912336C2090E52800CB0233 /* FxAUtils.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
-				391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */,
 				7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */,
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
 				7D5F1D7B20866A9400688DEA /* RxDataSources.framework in Frameworks */,
+				7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */,
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
+				7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */,
+				7D3920281FB131FB00709575 /* libssl.a in Frameworks */,
+				7D3920291FB131FB00709575 /* libjansson.a in Frameworks */,
+				7D39202A1FB131FB00709575 /* libcjose.a in Frameworks */,
+				391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */,
 				391233682090E52800CB0233 /* Account.framework in Frameworks */,
 				3912337C2090E5E200CB0233 /* Storage.framework in Frameworks */,
-				7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */,
 				3912336E2090E52800CB0233 /* FxA.framework in Frameworks */,
-				7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */,
 				3912337E2090E5E200CB0233 /* Sync.framework in Frameworks */,
 				391233842090E63000CB0233 /* Alamofire.framework in Frameworks */,
-				7D3920281FB131FB00709575 /* libssl.a in Frameworks */,
-				39DB3678208E2A800026DA92 /* Account.framework in Frameworks */,
-				7D3920291FB131FB00709575 /* libjansson.a in Frameworks */,
 				39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */,
 				391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */,
 				39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */,
-				39DB3684208E2F8F0026DA92 /* FxA.framework in Frameworks */,
-				7D39202A1FB131FB00709575 /* libcjose.a in Frameworks */,
 				391233782090E5A300CB0233 /* Shared.framework in Frameworks */,
 				3912336A2090E52800CB0233 /* Deferred.framework in Frameworks */,
 			);
@@ -943,6 +915,17 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Differentiator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Account.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Storage.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FxA.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Sync.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FxAUtils.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Shared.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
@@ -952,6 +935,17 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Telemetry.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differentiator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftKeychainWrapper.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftyJSON.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Account.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Storage.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxA.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sync.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XCGLogger.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAUtils.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Shared.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1408,6 +1402,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"${PROJECT_DIR}/lockbox-ios/binaries",
+					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
@@ -1445,6 +1440,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"${PROJECT_DIR}/lockbox-ios/binaries",
+					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
@@ -1543,6 +1539,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 					"${PROJECT_DIR}/lockbox-ios/binaries",
+					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
