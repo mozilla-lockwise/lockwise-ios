@@ -11,6 +11,45 @@ enum SettingAction: Action {
     case recordUsageData(enabled: Bool)
 }
 
+extension SettingAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .settingChanged
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self {
+        case .autoLockTime:
+            return .settingsAutolockTime
+        case .preferredBrowser:
+            return .settingsPreferredBrowser
+        case .reset:
+            return .settingsReset
+        case .recordUsageData:
+            return .settingsRecordUsageData
+        }
+    }
+
+    var value: String? {
+        switch self {
+        case .autoLockTime(let timeout):
+            let timeoutString = String(timeout.rawValue)
+            return timeoutString
+        case .preferredBrowser(let browser):
+            let browserString = String(browser.rawValue)
+            return browserString
+        case .reset:
+            return nil
+        case .recordUsageData(let enabled):
+            let enabledString = String(enabled)
+            return enabledString
+      }
+  }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
+}
+
 extension SettingAction: Equatable {
     static func ==(lhs: SettingAction, rhs: SettingAction) -> Bool {
         switch (lhs, rhs) {

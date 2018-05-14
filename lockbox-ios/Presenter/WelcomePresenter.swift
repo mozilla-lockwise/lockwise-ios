@@ -107,9 +107,8 @@ class WelcomePresenter {
         infoLockedObservable
                 .filter { $0.1 }
                 .map { $0.0 }
-                .take(1)
                 .flatMap { latest in
-                    self.biometryManager.authenticateWithMessage(latest?.email ?? "")
+                    self.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
                             .catchError { _ in
                                 // ignore errors from local authentication
                                 return Observable.never().asSingle()

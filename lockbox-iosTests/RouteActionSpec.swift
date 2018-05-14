@@ -61,6 +61,64 @@ class RouteActionSpec: QuickSpec {
                     expect(MainRouteAction.detail(itemId: "sfddfs")).notTo(equal(MainRouteAction.list))
                 }
             }
+
+            describe("telemetry") {
+                it("returns the type of view as event object") {
+                    expect(MainRouteAction.list.eventObject).to(equal(TelemetryEventObject.entryList))
+                    expect(MainRouteAction.detail(itemId: "sfddfs").eventObject).to(equal(TelemetryEventObject.entryDetail))
+                }
+
+                it("returns show as event method") {
+                    expect(MainRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))
+                }
+
+                it("returns nil as the value") {
+                    expect(MainRouteAction.list.value).to(beNil())
+                    expect(MainRouteAction.detail(itemId: "fsdsdfd").value).to(beNil())
+                }
+
+                it("returns nil for the list extra and the itemID for the detail extra") {
+                    let itemID = "aadsadsdas"
+                    expect(MainRouteAction.list.extras).to(beNil())
+                    let extraValue = MainRouteAction.detail(itemId: itemID).extras?[ExtraKey.itemid.rawValue] as? String
+                    expect(extraValue).to(equal(itemID))
+                }
+            }
+        }
+
+        describe("SettingRouteAction") {
+            describe("telemetry") {
+                it("event method is equal to show") {
+                    expect(SettingRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))
+                }
+
+                it("event object is equal to the setting view shown") {
+                    expect(SettingRouteAction.list.eventObject).to(equal(TelemetryEventObject.settingsList))
+                    expect(SettingRouteAction.provideFeedback.eventObject).to(equal(TelemetryEventObject.settingsProvideFeedback))
+                    expect(SettingRouteAction.faq.eventObject).to(equal(TelemetryEventObject.settingsFaq))
+                    expect(SettingRouteAction.account.eventObject).to(equal(TelemetryEventObject.settingsAccount))
+                    expect(SettingRouteAction.autoLock.eventObject).to(equal(TelemetryEventObject.settingsAutolock))
+                    expect(SettingRouteAction.preferredBrowser.eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
+                }
+
+                it("returns nil as the value") {
+                    expect(SettingRouteAction.list.value).to(beNil())
+                    expect(SettingRouteAction.provideFeedback.value).to(beNil())
+                    expect(SettingRouteAction.faq.value).to(beNil())
+                    expect(SettingRouteAction.account.value).to(beNil())
+                    expect(SettingRouteAction.autoLock.value).to(beNil())
+                    expect(SettingRouteAction.preferredBrowser.value).to(beNil())
+                }
+
+                it("returns nil as for the extras") {
+                    expect(SettingRouteAction.list.extras).to(beNil())
+                    expect(SettingRouteAction.provideFeedback.extras).to(beNil())
+                    expect(SettingRouteAction.faq.extras).to(beNil())
+                    expect(SettingRouteAction.account.extras).to(beNil())
+                    expect(SettingRouteAction.autoLock.extras).to(beNil())
+                    expect(SettingRouteAction.preferredBrowser.extras).to(beNil())
+                }
+            }
         }
     }
 }
