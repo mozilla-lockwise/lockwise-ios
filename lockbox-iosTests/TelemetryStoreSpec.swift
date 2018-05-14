@@ -50,11 +50,11 @@ class TelemetryStoreSpec: QuickSpec {
                 }
 
                 it("passes through TelemetryAction from the dispatcher") {
-                    self.dispatcher.fakeRegistration.onNext(FakeTelemetryAction(eventMethod: .tap, eventObject: .faqButton, value: nil, extras: nil))
+                    self.dispatcher.fakeRegistration.onNext(FakeTelemetryAction(eventMethod: .tap, eventObject: .entryList, value: nil, extras: nil))
 
                     expect(telemetryObserver.events.count).to(equal(1))
                     expect(telemetryObserver.events.first!.value.element!.eventMethod).to(equal(TelemetryEventMethod.tap))
-                    expect(telemetryObserver.events.first!.value.element!.eventObject).to(equal(TelemetryEventObject.faqButton))
+                    expect(telemetryObserver.events.first!.value.element!.eventObject).to(equal(TelemetryEventObject.entryList))
                 }
 
                 it("does not pass through non-ItemDetailDisplayActions") {

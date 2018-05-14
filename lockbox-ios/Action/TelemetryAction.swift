@@ -19,20 +19,25 @@ enum TelemetryEventCategory: String {
 }
 
 enum TelemetryEventMethod: String {
-    case tap, signin, startup, foreground, background
+case tap, startup, foreground, background, settingChanged, show
 }
 
 enum TelemetryEventObject: String {
     case app = "app"
     case entryList = "entry_list"
-    case settingsButton = "settings_button"
-    case feedbackButton = "feedback_button"
-    case faqButton = "faq_button"
-    case viewEntryButton = "view_entry_button"
-    case entryCancelButton = "entry_cancel_button"
+    case entryDetail = "entry_detail"
+    case revealPassword = "reveal_password"
     case entryCopyUsernameButton = "entry_copy_username_button"
     case entryCopyPasswordButton = "entry_copy_password_button"
-    case entryShowPasswordButton = "entry_view_password_button"
+    case settingsList = "settings_list"
+    case settingsAutolockTime = "settings_autolock_time"
+    case settingsAutolock = "settings_autolock"
+    case settingsReset = "settings_reset"
+    case settingsPreferredBrowser = "settings_preferred_browser"
+    case settingsRecordUsageData = "settings_record_usage_data"
+    case settingsAccount = "settings_account"
+    case settingsFaq = "settings_faq"
+    case settingsProvideFeedback = "settings_provide_feedback"
 }
 
 enum ExtraKey: String {

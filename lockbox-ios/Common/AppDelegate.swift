@@ -30,6 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.string(forKey: PostFirstRunKey) == nil {
             SettingActionHandler.shared.invoke(.reset)
             UserInfoActionHandler.shared.invoke(.clear)
+            DataStoreActionHandler.shared.invoke(.reset)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
         }
 
