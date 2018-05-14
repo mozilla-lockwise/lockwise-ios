@@ -4,7 +4,7 @@
 
 _Date: 2018-05-14_
 
-This build DOES include: signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox; automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data; searching and sorting items; showing/hiding passwords; coping usernames and passwords to the pasteboard (which expire after 60 seconds); opening web addresses in your preferred web browser.
+This build DOES include: signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox; automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data; searching and sorting items; showing/hiding passwords; coping usernames and passwords to the pasteboard (which expire after 60 seconds); opening web addresses in your preferred web browser; Telemetry for event tracking (no personally-identifiable information is collected).
 
 This build DOES NOT include: user-friendly item titles; links to real FAQ content; proper visual placeholders when an initial sync is occurring or when no items are found.
 
