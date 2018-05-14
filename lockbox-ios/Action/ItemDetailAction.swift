@@ -8,6 +8,28 @@ enum ItemDetailDisplayAction: Action {
     case togglePassword(displayed: Bool)
 }
 
+extension ItemDetailDisplayAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .tap
+    }
+
+    var eventObject: TelemetryEventObject {
+        return .revealPassword
+    }
+
+    var value: String? {
+        switch self {
+        case .togglePassword(let displayed):
+            let displayedString = String(displayed)
+            return displayedString
+        }
+    }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
+}
+
 extension ItemDetailDisplayAction: Equatable {
     static func ==(lhs: ItemDetailDisplayAction, rhs: ItemDetailDisplayAction) -> Bool {
         switch (lhs, rhs) {
