@@ -232,6 +232,12 @@ class WelcomePresenterSpec: QuickSpec {
                             it("starts authentication again") {
                                 expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
                             }
+
+                            it("starts auth again for subsequent foregrounding actions") {
+                                self.biometryManager.authMessage = nil
+                                self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                                expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                            }
                         }
 
                         describe("successful authentication") {
