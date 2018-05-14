@@ -47,7 +47,7 @@ class TelemetryActionSpec: QuickSpec {
             describe("invoke") {
                 let action = FakeTelemetryAction(
                         eventMethod: .tap,
-                        eventObject: .faqButton,
+                        eventObject: .entryList,
                         value: "meow",
                         extras: ["something": "blah", "something_else": nil, "third": 5]
                 )
