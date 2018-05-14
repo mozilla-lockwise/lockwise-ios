@@ -52,7 +52,7 @@ struct Constant {
         static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
-        static let unlockPlaceholder = NSLocalizedString("unlock_placeholder", value: "Firefox Lockbox will use Touch ID to sign you in to the app.", comment: "Placeholder text when the user's email is unavailable while unlocking Lockbox, matches NSFaceIDUsageDescription")
+        static let unlockPlaceholder = NSLocalizedString("unlock_placeholder", value: "This will unlock the app.", comment: "Placeholder text when the user's email is unavailable while unlocking Lockbox, shown in Touch ID and passcode prompts")
         static let webAddress = NSLocalizedString("web_address", value: "Web Address", comment: "Section title text for the web address on the item detail screen")
         static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
         static let settingsSupportSectionHeader = NSLocalizedString("settings.support.header", value: "SUPPORT", comment: "Support section label in settings")
