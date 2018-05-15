@@ -108,20 +108,22 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            DispatchQueue.main.async {
+                view.dismissModals()
 
-            if !view.mainStackIs(LoginNavigationController.self) {
-                view.startMainStack(LoginNavigationController.self)
-            }
-
-            switch loginAction {
-            case .welcome:
-                if !view.topViewIs(WelcomeView.self) {
-                    view.pushLoginView(view: .welcome)
+                if !view.mainStackIs(LoginNavigationController.self) {
+                    view.startMainStack(LoginNavigationController.self)
                 }
-            case .fxa:
-                if !view.topViewIs(FxAView.self) {
-                    view.pushLoginView(view: .fxa)
+
+                switch loginAction {
+                case .welcome:
+                    if !view.topViewIs(WelcomeView.self) {
+                        view.pushLoginView(view: .welcome)
+                    }
+                case .fxa:
+                    if !view.topViewIs(FxAView.self) {
+                        view.pushLoginView(view: .fxa)
+                    }
                 }
             }
         }.asObserver()
