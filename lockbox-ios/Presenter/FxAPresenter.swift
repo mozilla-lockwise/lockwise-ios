@@ -47,14 +47,8 @@ class FxAPresenter {
         self.dataStore = dataStore
     }
 
-    func onViewReady(display: FXADisplay) {
-        if display == .login {
+    func onViewReady() {
             self.view?.loadRequest(URLRequest(url: ProductionFirefoxAccountConfiguration().signInURL))
-        } else if display == .learnMore {
-            guard let url = URL(string: Constant.app.learnMoreURL)
-                else { return }
-            self.view?.loadRequest(URLRequest(url: url))
-        }
     }
 }
 

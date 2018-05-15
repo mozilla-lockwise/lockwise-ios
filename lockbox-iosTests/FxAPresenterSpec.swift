@@ -78,25 +78,13 @@ class FxAPresenterSpec: QuickSpec {
                 )
             }
 
-            describe(".onViewReady() for login") {
+            describe(".onViewReady()") {
                 beforeEach {
-                    self.subject.onViewReady(display: .login)
+                    self.subject.onViewReady()
                 }
 
                 it("tells the view to load the login URL") {
                     expect(self.view.loadRequestArgument?.url).to(equal(ProductionFirefoxAccountConfiguration().signInURL))
-                }
-            }
-
-            describe(".onViewReady() for learn more") {
-                beforeEach {
-                    self.subject.onViewReady(display: .learnMore)
-                }
-
-                it("tells the view to load the learn more URL") {
-                    guard let url = URL(string: Constant.app.learnMoreURL)
-                        else { fail("Learn More URL should not be nil"); return }
-                    expect(self.view.loadRequestArgument?.url).to(equal(url))
                 }
             }
 

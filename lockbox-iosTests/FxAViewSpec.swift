@@ -16,7 +16,7 @@ class FxAViewSpec: QuickSpec {
         var webViewNavigationAction: WKNavigationAction?
         var onViewReadyCalled = false
 
-        override func onViewReady(display: FXADisplay) {
+        override func onViewReady() {
             onViewReadyCalled = true
         }
     }
@@ -41,7 +41,7 @@ class FxAViewSpec: QuickSpec {
         beforeEach {
             self.webView = FakeWebView()
 
-            self.subject = FxAView(webView: self.webView, display: .login)
+            self.subject = FxAView(webView: self.webView)
             self.presenter = FakeFxAPresenter(view: self.subject)
             self.subject.presenter = self.presenter
 

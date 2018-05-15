@@ -12,15 +12,15 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     internal var presenter: FxAPresenter?
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
-    private var display: FXADisplay
+//    private var display: FXADisplay
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
 
-    init(webView: WKWebView = WKWebView(), display: FXADisplay) {
+    init(webView: WKWebView = WKWebView()) {
         self.webView = webView
-        self.display = display
+//        self.display = display
         super.init(nibName: nil, bundle: nil)
         self.presenter = FxAPresenter(view: self)
     }
@@ -32,7 +32,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
         self.view = self.webView
         self.styleNavigationBar()
 
-        self.presenter?.onViewReady(display: self.display)
+        self.presenter?.onViewReady()
     }
 
     func loadRequest(_ urlRequest: URLRequest) {
@@ -68,10 +68,11 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     }
 }
 
-public enum FXADisplay {
-    case login
-    case learnMore
-}
+//public enum FXADisplay {
+//    case login
+//    case learnMore
+//}
+
 private enum RemoteCommand: String {
     case canLinkAccount = "can_link_account"
     case loaded = "loaded"
