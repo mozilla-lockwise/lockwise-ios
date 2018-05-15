@@ -12,7 +12,6 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     internal var presenter: FxAPresenter?
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
-//    private var display: FXADisplay
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -20,7 +19,6 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
     init(webView: WKWebView = WKWebView()) {
         self.webView = webView
-//        self.display = display
         super.init(nibName: nil, bundle: nil)
         self.presenter = FxAPresenter(view: self)
     }
@@ -67,11 +65,6 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
         fatalError("not implemented")
     }
 }
-
-//public enum FXADisplay {
-//    case login
-//    case learnMore
-//}
 
 private enum RemoteCommand: String {
     case canLinkAccount = "can_link_account"

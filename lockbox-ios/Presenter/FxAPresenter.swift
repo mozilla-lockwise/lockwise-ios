@@ -48,7 +48,7 @@ class FxAPresenter {
     }
 
     func onViewReady() {
-            self.view?.loadRequest(URLRequest(url: ProductionFirefoxAccountConfiguration().signInURL))
+        self.view?.loadRequest(URLRequest(url: ProductionFirefoxAccountConfiguration().signInURL))
     }
 }
 
