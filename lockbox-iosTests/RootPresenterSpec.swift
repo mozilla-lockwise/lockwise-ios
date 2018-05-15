@@ -235,7 +235,7 @@ class RootPresenterSpec: QuickSpec {
                     self.subject.onViewReady()
                 }
 
-                describe("LoginRouteActions") {
+                xdescribe("LoginRouteActions") {
                     describe("if the login stack is already displayed") {
                         beforeEach {
                             self.view.mainStackIsVar = true
