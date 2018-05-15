@@ -144,6 +144,11 @@ extension ItemListView {
 
                         cell.cancelButton.rx.tap.bind(to: presenter.filterCancelObserver).disposed(by: cell.disposeBag)
 
+                        let borderView = UIView()
+                        borderView.frame = CGRect(x: 0, y: 0, width: 1, height: cell.frame.height)
+                        borderView.backgroundColor = Constant.color.cellBorderGrey
+                        cell.cancelButton.addSubview(borderView)
+
                         retCell = cell
                     case .Item(let title, let username, _):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else { // swiftlint:disable:this line_length
