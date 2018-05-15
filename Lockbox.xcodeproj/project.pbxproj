@@ -158,8 +158,8 @@
 		D831FEE7205F3D5100EAE19A /* SettingListViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */; };
 		D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CBE2B2085488D008245A7 /* SettingCell.swift */; };
 		D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86A307520829B7F00589CA8 /* UIApplication+.swift */; };
-		D878360F207ABDF100C19BC7 /* SettingWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* SettingWebView.swift */; };
-		D8783611207BE40A00C19BC7 /* SettingWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */; };
+		D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */; };
+		D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */; };
 		D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783612207C080300C19BC7 /* ExternalLinkAction.swift */; };
 		D8783615207D303E00C19BC7 /* ExternalLinkActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */; };
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
@@ -386,8 +386,8 @@
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
 		D83CBE2B2085488D008245A7 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		D86A307520829B7F00589CA8 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
-		D878360E207ABDF100C19BC7 /* SettingWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebView.swift; sourceTree = "<group>"; };
-		D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingWebViewSpec.swift; sourceTree = "<group>"; };
+		D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebView.swift; sourceTree = "<group>"; };
+		D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebViewSpec.swift; sourceTree = "<group>"; };
 		D8783612207C080300C19BC7 /* ExternalLinkAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkAction.swift; sourceTree = "<group>"; };
 		D8783614207D303E00C19BC7 /* ExternalLinkActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkActionSpec.swift; sourceTree = "<group>"; };
 		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
@@ -633,8 +633,8 @@
 				7AA546990E6805FBC0261737 /* AccountSettingView.swift */,
 				D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */,
 				D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */,
-				D878360E207ABDF100C19BC7 /* SettingWebView.swift */,
 				7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */,
+				D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -714,7 +714,7 @@
 				7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */,
 				7AA546618500E909B1E98632 /* UserDefaults+Spec.swift */,
 				7AA54E8C5A0848F0669FBB10 /* SettingNavigationControllerSpec.swift */,
-				D8783610207BE40A00C19BC7 /* SettingWebViewSpec.swift */,
+				D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */,
 				7AA5422EFD1C3BB23F8C6811 /* BiometryManagerSpec.swift */,
 				7AA54EDDE9ECFDD6DFC4DEC5 /* UIColor+Spec.swift */,
 				D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */,
@@ -996,7 +996,7 @@
 				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
 				7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */,
 				D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */,
-				D8783611207BE40A00C19BC7 /* SettingWebViewSpec.swift in Sources */,
+				D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */,
 				7AA54D41D654320B1C2F9753 /* FxAViewSpec.swift in Sources */,
 				7DA4C68E2028F99500B61DD8 /* ItemListPresenterSpec.swift in Sources */,
 				7AA54843ADAB6552EDA77C81 /* ProfileInfoSpec.swift in Sources */,
@@ -1089,7 +1089,7 @@
 				D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */,
 				7AA547EF949CA76FC018402A /* ItemListCell.swift in Sources */,
 				7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */,
-				D878360F207ABDF100C19BC7 /* SettingWebView.swift in Sources */,
+				D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */,
 				7AA547376945C001B151491A /* ItemDetailAction.swift in Sources */,
 				7AA54EC7A9CA9BBD57AFEAF9 /* FilterCell.swift in Sources */,
