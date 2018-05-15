@@ -17,8 +17,6 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func displayEmptyStateMessaging()
     func hideEmptyStateMessaging()
     func dismissKeyboard()
-    func displayFilterCancelButton()
-    func hideFilterCancelButton()
 }
 
 struct LoginListTextSort {
@@ -65,12 +63,14 @@ class ItemListPresenter {
     lazy private(set) var filterTextObserver: AnyObserver<String> = {
         return Binder(self) { target, filterText in
             target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: filterText))
+            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: true))
         }.asObserver()
     }()
 
     lazy private(set) var filterCancelObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.dismissKeyboard()
+            target.view?.dismissKeyboard()
+            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
         }.asObserver()
     }()
 
@@ -115,7 +115,7 @@ class ItemListPresenter {
 
     lazy private var syncPlaceholderItems = [
         ItemSectionModel(model: 0, items: [
-            LoginListCellConfiguration.Search,
+            LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
             LoginListCellConfiguration.ListPlaceholder
         ])
     ]
@@ -142,13 +142,6 @@ class ItemListPresenter {
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListFilterAction.self)
-                .do(onNext: { filterAction in
-                    if filterAction.filteringText.isEmpty {
-                        self.view?.hideFilterCancelButton()
-                    } else {
-                        self.view?.displayFilterCancelButton()
-                    }
-                })
 
         let listDriver = self.createItemListDriver(
                 loginListObservable: itemListObservable,
@@ -266,7 +259,19 @@ extension ItemListPresenter {
     }
 
     fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {
-        let searchCell = [LoginListCellConfiguration.Search]
+        let emptyTextObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: ItemListFilterAction.self)
+                .map { $0.filteringText.isEmpty }
+
+        let editingTextObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: ItemListFilterEditAction.self)
+                .map { $0.editing }
+
+        let cancelHiddenObservable = Observable.combineLatest(emptyTextObservable, editingTextObservable)
+                .map { !( !$0.0 && $0.1 ) }
+                .distinctUntilChanged()
+
+        let searchCell = [LoginListCellConfiguration.Search(cancelHidden: cancelHiddenObservable)]
 
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname
@@ -293,9 +298,5 @@ extension ItemListPresenter {
                         $0 || $1
                     }
         }
-    }
-
-    func dismissKeyboard() {
-        view?.dismissKeyboard()
     }
 }
