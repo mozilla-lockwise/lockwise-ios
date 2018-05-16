@@ -11,7 +11,7 @@ typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfigurat
 
 enum LoginListCellConfiguration {
     case Search(cancelHidden: Observable<Bool>)
-    case Item(title: String, username: String, guid: String?)
+    case Item(title: String, username: String, guid: String)
     case ListPlaceholder
 }
 
@@ -20,8 +20,8 @@ extension LoginListCellConfiguration: IdentifiableType {
         switch self {
         case .Search:
             return "search"
-        case .Item(let title, _, _):
-            return title
+        case .Item(_, _, let guid):
+            return guid
         case .ListPlaceholder:
             return "placeholder"
         }

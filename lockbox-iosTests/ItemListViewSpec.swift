@@ -311,7 +311,8 @@ class ItemListViewSpec: QuickSpec {
             describe("IdentifiableType") {
                 it("uses either the item title or just returns `search`") {
                     expect(LoginListCellConfiguration.Search.identity).to(equal("search"))
-                    expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: nil).identity).to(equal("something"))
+                    let guid = "sfsdsdffsd"
+                    expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: guid).identity).to(equal(guid))
                 }
             }
 
