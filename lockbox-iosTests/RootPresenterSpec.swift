@@ -210,22 +210,19 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 describe("any other sync state value") {
-                    it("routes to the list view") {
+                    it("does nothing") {
                         self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
 
-                    it("routes to the list view") {
+                    it("does nothing") {
                         self.dataStore.syncSubject.onNext(.Syncing)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
 
-                    it("routes to the list view") {
+                    it("does nothing") {
                         self.dataStore.syncSubject.onNext(.Synced)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
                 }
             }

@@ -69,11 +69,8 @@ class RootPresenter {
                     $0.1
                 }
                 .subscribe(onNext: { state in
-                    switch state {
-                    case .NotSyncable:
+                    if state == .NotSyncable {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    default:
-                        self.routeActionHandler.invoke(MainRouteAction.list)
                     }
                 })
                 .disposed(by: self.disposeBag)
