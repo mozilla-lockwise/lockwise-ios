@@ -120,7 +120,6 @@ class WelcomePresenter {
                 }
                 .subscribe(onNext: { [weak self] _ in
                     self?.dataStoreActionHandler.invoke(.unlock)
-                    self?.routeActionHandler.invoke(MainRouteAction.list)
                 })
                 .disposed(by: self.disposeBag)
     }
