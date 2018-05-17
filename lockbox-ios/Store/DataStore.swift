@@ -273,7 +273,7 @@ extension DataStore {
         self.profile.syncManager.syncEverything(why: .startup)
 
         self.storageStateSubject.onNext(.Unlocked)
-        self.keychainWrapper.set(true, forKey: lockedKey)
+        self.keychainWrapper.set(false, forKey: lockedKey)
     }
 }
 

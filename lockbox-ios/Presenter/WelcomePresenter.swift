@@ -107,16 +107,20 @@ class WelcomePresenter {
         infoLockedObservable
                 .filter { $0.1 }
                 .map { $0.0 }
-                .flatMap { latest in
-                    self.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
-                            .catchError { _ in
-                                // ignore errors from local authentication
-                                return Observable.never().asSingle()
-                            }
+                .flatMap { [weak self] latest -> Single<Void> in
+                    if let target = self {
+                        return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
+                                .catchError { _ in
+                                    // ignore errors from local authentication
+                                    return Observable.never().asSingle()
+                                }
+                    }
+
+                    return Observable.never().asSingle()
                 }
-                .subscribe(onNext: { _ in
-                    self.dataStoreActionHandler.invoke(.unlock)
-                    self.routeActionHandler.invoke(MainRouteAction.list)
+                .subscribe(onNext: { [weak self] _ in
+                    self?.dataStoreActionHandler.invoke(.unlock)
+                    self?.routeActionHandler.invoke(MainRouteAction.list)
                 })
                 .disposed(by: self.disposeBag)
     }
