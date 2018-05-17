@@ -101,7 +101,9 @@ class AutoLockStore {
         }
 
         if let timer = self.timer {
-            RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
+            DispatchQueue.main.async {
+                RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
+            }
         }
     }
 
