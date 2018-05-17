@@ -122,14 +122,31 @@ class ItemListPresenter {
     }()
 
     lazy private var syncPlaceholderItems = [
-        ItemSectionModel(model: 0, items: [
-            LoginListCellConfiguration.Search(
-                    cancelHidden: Observable.just(true),
-                    text: Observable.just("")
-            ),
-            LoginListCellConfiguration.ListPlaceholder
-        ])
+        ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.ListPlaceholder])
     ]
+
+    lazy private var searchItem: [LoginListCellConfiguration] = {
+        let emptyTextObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: ItemListFilterAction.self)
+                .map { $0.filteringText.isEmpty }
+
+        let editingTextObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: ItemListFilterEditAction.self)
+                .map { $0.editing }
+
+        let cancelHiddenObservable = Observable.combineLatest(emptyTextObservable, editingTextObservable)
+                .map { !(!$0.0 && $0.1) }
+                .distinctUntilChanged()
+
+        let externalTextChangeObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: ItemListFilterAction.self)
+                .map { $0.filteringText }
+
+        return [LoginListCellConfiguration.Search(
+                cancelHidden: cancelHiddenObservable,
+                text: externalTextChangeObservable
+        )]
+    }()
 
     init(view: ItemListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
@@ -270,27 +287,6 @@ extension ItemListPresenter {
     }
 
     fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {
-        let emptyTextObservable = self.itemListDisplayStore.listDisplay
-                .filterByType(class: ItemListFilterAction.self)
-                .map { $0.filteringText.isEmpty }
-
-        let editingTextObservable = self.itemListDisplayStore.listDisplay
-                .filterByType(class: ItemListFilterEditAction.self)
-                .map { $0.editing }
-
-        let cancelHiddenObservable = Observable.combineLatest(emptyTextObservable, editingTextObservable)
-                .map { !( !$0.0 && $0.1 ) }
-                .distinctUntilChanged()
-
-        let externalTextChangeObservable = self.itemListDisplayStore.listDisplay
-                .filterByType(class: ItemListFilterAction.self)
-                .map { $0.filteringText }
-
-        let searchCell = [LoginListCellConfiguration.Search(
-                cancelHidden: cancelHiddenObservable,
-                text: externalTextChangeObservable
-        )]
-
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname
             let usernameEmpty = login.username == "" || login.username == nil
@@ -299,7 +295,7 @@ extension ItemListPresenter {
             return LoginListCellConfiguration.Item(title: titleText, username: usernameText, guid: login.guid)
         }
 
-        return searchCell + loginCells
+        return self.searchItem + loginCells
     }
 
     fileprivate func filterItemsForText(_ text: String, items: [Login]) -> [Login] {
