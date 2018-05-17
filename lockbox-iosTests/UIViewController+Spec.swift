@@ -6,12 +6,13 @@ import UIKit
 import Quick
 import Nimble
 import RxSwift
+import RxCocoa
 import RxTest
 
 @testable import Lockbox
 
 class ViewControllerSpec: QuickSpec {
-
+    private let disposeBag = DisposeBag()
     var subject: (UIViewController & StatusAlertView & AlertControllerView)!
 
     override func spec() {
@@ -22,7 +23,7 @@ class ViewControllerSpec: QuickSpec {
             self.subject.preloadView()
         }
 
-        xdescribe(".displayTemporaryAlert") {
+        describe(".displayTemporaryAlert") {
             let message = "Something copied to clipboard"
 
             beforeEach {
@@ -40,7 +41,7 @@ class ViewControllerSpec: QuickSpec {
             }
         }
 
-        xdescribe(".displayOptionSheet") {
+        describe(".displayOptionSheet") {
             let title = "title!"
             let buttons = [
                 AlertActionButtonConfiguration(title: "something", tapObserver: nil, style: .default),
@@ -69,6 +70,23 @@ class ViewControllerSpec: QuickSpec {
             }
 
             // testing note: UIAlertAction handlers _not_ tested here because it's heinous to do so in Swift.
+        }
+
+        describe("displaySpinner") {
+            let dismissStub = PublishSubject<Void>()
+
+            beforeEach {
+                self.subject.displaySpinner(dismissStub.asDriver(onErrorJustReturn: ()), bag: self.disposeBag)
+            }
+
+            it("displays a spinner alert") {
+                expect(self.subject.view.subviews.first).toEventually(beAnInstanceOf(SpinnerAlert.self))
+            }
+
+            it("dismisses the spinner on new dismiss events") {
+                dismissStub.onNext(())
+                expect(self.subject.view.subviews.first).toEventually(beNil())
+            }
         }
     }
 }

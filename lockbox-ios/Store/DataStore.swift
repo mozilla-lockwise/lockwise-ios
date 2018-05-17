@@ -85,7 +85,7 @@ private let lockedKey = "application_locked_state"
 class DataStore {
     public static let shared = DataStore()
     private let disposeBag = DisposeBag()
-    private var listSubject = ReplaySubject<[Login]>.create(bufferSize: 1)
+    private var listSubject = BehaviorRelay<[Login]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
@@ -313,12 +313,12 @@ extension DataStore {
     private func updateList() {
         let logins = self.profile.logins
         logins.getAllLogins() >>== { (cursor: Cursor<Login>) in
-            self.listSubject.onNext(cursor.asArray())
+            self.listSubject.accept(cursor.asArray())
         }
     }
 
     private func makeEmptyList() {
-        self.listSubject.onNext([])
+        self.listSubject.accept([])
     }
 }
 
