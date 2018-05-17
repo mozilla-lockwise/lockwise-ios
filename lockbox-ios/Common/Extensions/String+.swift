@@ -16,6 +16,13 @@ extension String {
         return shaData.base64URLEncodedString()
     }
 
+    func titleFromHostname() -> String {
+        return self
+                .replacingOccurrences(of: "http://", with: "")
+                .replacingOccurrences(of: "https://", with: "")
+                .replacingOccurrences(of: "www.", with: "")
+    }
+
     private func sha256(_ data: Data) -> Data? {
         guard let res = NSMutableData(length: Int(CC_SHA256_DIGEST_LENGTH)) else { return nil }
         CC_SHA256((data as NSData).bytes, CC_LONG(data.count), res.mutableBytes.assumingMemoryBound(to: UInt8.self))

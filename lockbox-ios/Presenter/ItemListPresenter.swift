@@ -288,7 +288,7 @@ extension ItemListPresenter {
 
     fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {
         let loginCells = items.map { login -> LoginListCellConfiguration in
-            let titleText = self.titleFromHostname(login.hostname)
+            let titleText = login.hostname.titleFromHostname()
             let usernameEmpty = login.username == "" || login.username == nil
             let usernameText = usernameEmpty ? Constant.string.usernamePlaceholder : login.username!
 
@@ -304,7 +304,7 @@ extension ItemListPresenter {
         }
 
         return items.filter { item -> Bool in
-            return [item.username, self.titleFromHostname(item.hostname)]
+            return [item.username, item.hostname.titleFromHostname()]
                     .compactMap {
                         $0?.localizedCaseInsensitiveContains(text) ?? false
                     }
