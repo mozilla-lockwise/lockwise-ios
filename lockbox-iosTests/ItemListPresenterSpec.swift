@@ -227,8 +227,8 @@ class ItemListPresenterSpec: QuickSpec {
                         let expectedItemConfigurations = [
                             LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                             LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
-                            LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: ""),
-                            LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1)
+                            LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: ""),
+                            LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1)
                         ]
                         expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
                         let configuration = self.view.itemsObserver.events.first!.value.element!
@@ -244,7 +244,7 @@ class ItemListPresenterSpec: QuickSpec {
                             it("updates the view with the appropriate items") {
                                 let expectedItemConfigurations = [
                                     LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
-                                    LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1)
+                                    LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1)
                                 ]
 
                                 expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
@@ -261,7 +261,7 @@ class ItemListPresenterSpec: QuickSpec {
                             it("updates the view with the appropriate items") {
                                 let expectedItemConfigurations = [
                                     LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
-                                    LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: "")
+                                    LoginListCellConfiguration.Item(title: "meow", username: username, guid: "")
                                 ]
 
                                 expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
