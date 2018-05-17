@@ -15,13 +15,17 @@ import Storage
 class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
+        var sortButtonEnableObserver: TestableObserver<Bool>!
+        var tableViewEnableObserver: TestableObserver<Bool>!
         var sortingButtonTitleObserver: TestableObserver<String>!
+        var dismissSpinnerObserver: TestableObserver<Void>!
         var displayEmptyStateMessagingCalled = false
         var hideEmptyStateMessagingCalled = false
         let disposeBag = DisposeBag()
         var dismissKeyboardCalled = false
         var displayFilterCancelButtonCalled = false
         var hideFilterCancelButtonCalled = false
+        var displaySpinnerCalled = false
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -58,6 +62,19 @@ class ItemListPresenterSpec: QuickSpec {
         func hideFilterCancelButton() {
             self.hideFilterCancelButtonCalled = true
         }
+
+        var sortingButtonEnabled: AnyObserver<Bool>? {
+            return self.sortButtonEnableObserver.asObserver()
+        }
+
+        var tableViewInteractionEnabled: AnyObserver<Bool> {
+            return self.tableViewEnableObserver.asObserver()
+        }
+
+        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
+            self.displaySpinnerCalled = true
+            dismiss.drive(self.dismissSpinnerObserver).disposed(by: bag)
+        }
     }
 
     class FakeRouteActionHandler: RouteActionHandler {
@@ -78,9 +95,14 @@ class ItemListPresenterSpec: QuickSpec {
 
     class FakeDataStore: DataStore {
         var itemListObservable: TestableObservable<[Login]>?
+        var syncStateStub = PublishSubject<SyncState>()
 
         override var list: Observable<[Login]> {
             return self.itemListObservable!.asObservable()
+        }
+
+        override var syncState: Observable<SyncState> {
+            return self.syncStateStub.asObservable()
         }
     }
 
@@ -111,6 +133,9 @@ class ItemListPresenterSpec: QuickSpec {
                 self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
+                self.view.sortButtonEnableObserver = self.scheduler.createObserver(Bool.self)
+                self.view.tableViewEnableObserver = self.scheduler.createObserver(Bool.self)
+                self.view.dismissSpinnerObserver = self.scheduler.createObserver(Void.self)
 
                 self.subject = ItemListPresenter(
                         view: self.view,
@@ -129,8 +154,56 @@ class ItemListPresenterSpec: QuickSpec {
                         self.scheduler.start()
                     }
 
-                    it("tells the view to display the empty lockbox message") {
-                        expect(self.view.displayEmptyStateMessagingCalled).to(beTrue())
+                    describe("when the datastore is synced") {
+                        beforeEach {
+                            self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                        }
+
+                        it("tells the view to display the empty lockbox message") {
+                            expect(self.view.displayEmptyStateMessagingCalled).to(beTrue())
+                        }
+                    }
+
+                    describe("when the datastore is still syncing") {
+                        beforeEach {
+                            self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
+                        }
+
+                        it("tells the view to display the spinner") {
+                            expect(self.view.displaySpinnerCalled).to(beTrue())
+                        }
+
+                        it("pushes the search field and placeholder image to the itemlist") {
+                            let expectedItemConfigurations = [
+                                LoginListCellConfiguration.Search,
+                                LoginListCellConfiguration.ListPlaceholder
+                            ]
+                            expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
+                            let configuration = self.view.itemsObserver.events.first!.value.element!
+                            expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                        }
+
+                        it("disables the sorting button and the tableview") {
+                            expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beFalse())
+                            expect(self.view.tableViewEnableObserver.events.last!.value.element).to(beFalse())
+                        }
+
+                        describe("once the datastore is synced") {
+                            beforeEach {
+                                self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                            }
+
+                            it("dismisses the spinner") {
+                                expect(self.view.dismissSpinnerObserver.events.count).to(equal(1))
+                            }
+
+                            it("enables the sorting button and the tableview") {
+                                expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beFalse())
+                                expect(self.view.tableViewEnableObserver.events.last!.value.element).to(beFalse())
+                            }
+                        }
                     }
                 }
 
@@ -152,6 +225,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
+                        self.dataStore.syncStateStub.onNext(SyncState.Synced)
                         self.scheduler.start()
                     }
 

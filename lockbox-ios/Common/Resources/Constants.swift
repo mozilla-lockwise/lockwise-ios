@@ -83,9 +83,9 @@ struct Constant {
 
     struct number {
         static let displayStatusAlertLength = TimeInterval(1.5)
-        static let displayStatusAlertFade = TimeInterval(0.3)
-        static let displayStatusAlertOpacity: CGFloat = 0.75
-        static let displayStatusAlertYPercentage: CGFloat = 0.4
+        static let displayAlertFade = TimeInterval(0.3)
+        static let displayAlertOpacity: CGFloat = 0.75
+        static let displayAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
         static let copyExpireTimeSecs = 60
