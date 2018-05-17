@@ -75,7 +75,7 @@
         
             <li><a class="toctree-l3" href="#collection">Collection</a></li>
         
-            <li><a class="toctree-l3" href="#list-of-proposed-events">List of Proposed Events</a></li>
+            <li><a class="toctree-l3" href="#list-of-implemented-events">List of Implemented Events</a></li>
         
             <li><a class="toctree-l3" href="#references">References</a></li>
         
@@ -144,7 +144,7 @@
             <div class="section">
               
                 <h1 id="firefox-lockbox-for-ios-metrics-plan">Firefox Lockbox for iOS Metrics Plan</h1>
-<p><em>Last Updated: March 14, 2018</em></p>
+<p><em>Last Updated: May 1, 2018</em></p>
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 <ul>
@@ -158,7 +158,54 @@
 <p>This is the metrics collection plan for the Lockbox iOS app. It documents all events that are planned to be collected through telemetry. It will be updated periodically to reflect all new and planned data collection.</p>
 <h2 id="analysis">Analysis</h2>
 <p>Data collection is done solely for the purpose of product development, improvement and maintenance.</p>
-<p>More here TBD</p>
+<p>We will analyze the data described in this doc <em>primarily</em> with the purpose of (dis)confirming the following hypothesis:</p>
+<p><code>If Firefox users have access to their browser-saved passwords, outside of the mobile browser, then they will use those passwords to log into accounts (both in mobile browsers and in apps). We will know this to be true when copy credentials (username or password) is the most frequent action taken in the app.</code></p>
+<p>Note that because the first version of the app will not allow for "auto-filling" of credentials, the copy events (and to a lesser extent, the password reveal events) are the best signal we have that users are gaining the intended value from the app.</p>
+<p>In service to validating the above hypothesis, we plan on answering these specific questions, given the data we plan to collect (see <a href="#list-of-proposed-events">List of Proposed Events</a>):</p>
+<p><em>Note that when referring to copying of "credentials", we mean copying of either usernames or passwords.</em></p>
+<ul>
+<li>Are users using Lockbox to retrieve credentials?<ul>
+<li>For different intervals of time (e.g. day, week, month), what is:<ul>
+<li>The average rate with which a user copies a credential or reveals a password</li>
+<li>The distribution of above rates across all users</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Pending the implementation of a share sheet, how often do users access Lockbox via a mobile browser?<ul>
+<li>Out of all the times a credential was copied, how often was it a result of tap on the share sheet?<ul>
+<li>This will help us understand whether users are primarily accessing credentials for use in a browser or with third party apps.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Once downloaded, do users continue to use the app? (i.e., how well are they retained?)<ul>
+<li>We will count a user as retained in a given time interval if they perform one of the following actions:<ul>
+<li>Display the credential list</li>
+<li>Tap a credential in the credential list</li>
+<li>Copy a credential to the clipboard</li>
+<li>Reveal a password</li>
+<li>Tap the URI associated with a credential (to open it in an app or browser)</li>
+</ul>
+</li>
+<li>Since they can be performed automatically, we will <strong>not</strong> count a user as retained if they <em>only</em> perform the following actions (in absence of any in the list above):<ul>
+<li>Unlock their credentials</li>
+<li>Sync their credentials from the Firefox desktop browser</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Does requiring a Firefox Account constitute a roadblock to adoption?<ul>
+<li>What proportion of new Lockbox users are pre-existing Firefox Account users?</li>
+<li>What proportion of users start the Account sign-in process but never complete it?</li>
+</ul>
+</li>
+<li>Does adoption of Lockbox lead to adoption of Firefox Mobile browsers (e.g. Focus)?<ul>
+<li>Do users set the default browser in Lockbox to be a Firefox-related browser?</li>
+</ul>
+</li>
+</ul>
+<p>In addition to answering the above questions that directly concern actions in the app, we will also be analyzing telemetry emitted from the password manager that exists in the the Firefox desktop browser. These analyses will primarily examine whether users of Lockbox start active curation of their credentials in the desktop browser (Lockbox users will not be able to edit credentials directly from the app).</p>
 <h2 id="collection">Collection</h2>
 <p>Data will be collected using this library:</p>
 <p>https://github.com/mozilla-mobile/telemetry-ios/</p>
@@ -183,7 +230,7 @@
 <p>Finally, the <code>appName</code> metadata sent with each ping should always be 'Lockbox'.</p>
 <p>See here for more information on event schemas:</p>
 <p>https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/collection/events.html#public-js-api</p>
-<h2 id="list-of-proposed-events">List of Proposed Events</h2>
+<h2 id="list-of-implemented-events">List of Implemented Events</h2>
 <ol>
 <li>
 <p>When the app starts up:</p>
@@ -196,65 +243,82 @@
 </ul>
 </li>
 <li>
-<p>When a user taps the fxa signin button:</p>
-<ul>
-<li><code>category</code>: action</li>
-<li><code>method</code>: tap</li>
-<li><code>object</code>: fxaSigninButton</li>
-<li><code>value</code>: nil</li>
-<li><code>extras</code>: nil</li>
-</ul>
-</li>
-<li>
-<p>Whether a user successfully authorizes with FxA:</p>
+<p>Events that fire during the FxA signin process:</p>
 <ul>
 <li><code>category</code>: action</li>
 <li><code>method</code>: signin</li>
-<li><code>object</code>: app</li>
-<li><code>value</code>: <code>true</code> or <code>false</code></li>
-<li><code>extras</code>: ["error" : nil or string]<ul>
-<li>Note: If there is an authentication error, let's put it in the extra field here, if possible.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>When a user taps an item in the entry list:</p>
-<ul>
-<li><code>category</code>: action</li>
-<li><code>method</code>: tap</li>
-<li><code>object</code>: entryList</li>
-<li><code>value</code>: nil</li>
-<li><code>extras</code>: ["itemid" : itemid]</li>
-</ul>
-</li>
-<li>
-<p>When a user taps one of the buttons available after entering the entry view:</p>
-<ul>
-<li><code>category</code>: action</li>
-<li><code>method</code>: tap</li>
-<li><code>object</code>: entryCopyUsernameButton, entryCopyPasswordButton, viewPasswordButton, entryShowPasswordButton</li>
-<li><code>value</code>: nil</li>
-<li><code>extras</code>: ["itemid" : itemid]</li>
-</ul>
-</li>
-<li>
-<p>When a user taps the settings button:</p>
-<ul>
-<li><code>category</code>: action</li>
-<li><code>method</code>: tap</li>
-<li><code>object</code>: settingsButton</li>
+<li><code>object</code>: fxa_load_initial_url, fxa_fetching_user_info, fxa_finished_fetching_user_info</li>
 <li><code>value</code>: nil</li>
 <li><code>extras</code>: nil</li>
 </ul>
 </li>
 <li>
-<p>When a user taps the FAQ button:</p>
+<p>When there's an error in the FxA signin process:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: signinError</li>
+<li><code>object</code>: fxa_error_redirect_no_state, fxa_error_redirect_no_code, fxa_error_redirect_bad_state, fxa_error_empty_oauth_data, fxa_error_empty_profile_info_data, fxa_error_unexpected_data_format, fxa_error_unknown</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When the main item list is shown to the user:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: show</li>
+<li><code>object</code>: entryList</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When a user shows the details of an item in the entry list:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: show</li>
+<li><code>object</code>: entryDetail</li>
+<li><code>value</code>: nil</li>
+<li><code>extras</code>: ["itemid" : itemid]</li>
+</ul>
+</li>
+<li>
+<p>When a user taps one of the copy buttons available after being shown entry details:</p>
 <ul>
 <li><code>category</code>: action</li>
 <li><code>method</code>: tap</li>
-<li><code>object</code>: faqButton</li>
+<li><code>object</code>: entryCopyUsernameButton, entryCopyPasswordButton</li>
 <li><code>value</code>: nil</li>
+<li><code>extras</code>: ["itemid" : itemid]</li>
+</ul>
+</li>
+<li>
+<p>When a user shows details from an item, is the password shown?:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: tap</li>
+<li><code>object</code>: reveal_password</li>
+<li><code>value</code>: true or false, whether the pw is displayed</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When one of the settings pages is shown to the user:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: show</li>
+<li><code>object</code>: settings_list, settings_autolock, settings_preferred_browser, settings_account, settings_faq, settings_provide_feedback</li>
+<li><code>value</code>: whatever the value of each of the above was changed to, or nil for settings_reset</li>
+<li><code>extras</code>: nil</li>
+</ul>
+</li>
+<li>
+<p>When a user changes something on the settings page:</p>
+<ul>
+<li><code>category</code>: action</li>
+<li><code>method</code>: settingsChanged</li>
+<li><code>object</code>: settings_biometric_login, settings_autolock_time, settings_reset, settings_visual_lock, settings_preferred_browser, settings_record_usage_data</li>
+<li><code>value</code>: whatever the value of each of the above was changed to, or nil for settings_reset</li>
 <li><code>extras</code>: nil</li>
 </ul>
 </li>
