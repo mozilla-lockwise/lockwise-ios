@@ -71,6 +71,14 @@ class ItemListPresenter {
         return Binder(self) { target, _ in
             target.view?.dismissKeyboard()
             target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
+            target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
+        }.asObserver()
+    }()
+
+    lazy private(set) var editEndedObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.view?.dismissKeyboard()
+            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
         }.asObserver()
     }()
 
@@ -115,7 +123,10 @@ class ItemListPresenter {
 
     lazy private var syncPlaceholderItems = [
         ItemSectionModel(model: 0, items: [
-            LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+            LoginListCellConfiguration.Search(
+                    cancelHidden: Observable.just(true),
+                    text: Observable.just("")
+            ),
             LoginListCellConfiguration.ListPlaceholder
         ])
     ]
@@ -271,7 +282,14 @@ extension ItemListPresenter {
                 .map { !( !$0.0 && $0.1 ) }
                 .distinctUntilChanged()
 
-        let searchCell = [LoginListCellConfiguration.Search(cancelHidden: cancelHiddenObservable)]
+        let externalTextChangeObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: ItemListFilterAction.self)
+                .map { $0.filteringText }
+
+        let searchCell = [LoginListCellConfiguration.Search(
+                cancelHidden: cancelHiddenObservable,
+                text: externalTextChangeObservable
+        )]
 
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname

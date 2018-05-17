@@ -10,7 +10,7 @@ import RxDataSources
 typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
 enum LoginListCellConfiguration {
-    case Search(cancelHidden: Observable<Bool>)
+    case Search(cancelHidden: Observable<Bool>, text: Observable<String>)
     case Item(title: String, username: String, guid: String)
     case ListPlaceholder
 }
@@ -129,7 +129,7 @@ extension ItemListView {
 
                     var retCell: UITableViewCell
                     switch cellConfiguration {
-                    case .Search(let cancelHidden):
+                    case .Search(let cancelHidden, let text):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
                               let presenter = self.presenter else {
                             fatalError("couldn't find the right cell or presenter!")
@@ -146,11 +146,15 @@ extension ItemListView {
                                 .disposed(by: cell.disposeBag)
 
                         cell.filterTextField.rx.controlEvent(.editingDidEnd)
-                                .bind(to: presenter.filterCancelObserver)
+                                .bind(to: presenter.editEndedObserver)
                                 .disposed(by: cell.disposeBag)
 
                         cancelHidden
                                 .bind(to: cell.cancelButton.rx.isHidden)
+                                .disposed(by: cell.disposeBag)
+
+                        text
+                                .bind(to: cell.filterTextField.rx.text)
                                 .disposed(by: cell.disposeBag)
 
                         let borderView = UIView()

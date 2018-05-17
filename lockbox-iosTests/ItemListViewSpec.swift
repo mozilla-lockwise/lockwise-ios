@@ -25,6 +25,7 @@ class ItemListViewSpec: QuickSpec {
         var fakeFilterTextObserver: TestableObserver<String>!
         var fakeSortingButtonObserver: TestableObserver<Void>!
         var fakeCancelObserver: TestableObserver<Void>!
+        var fakeEditEndedObserver: TestableObserver<Void>!
 
         override func onViewReady() {
             onViewReadyCalled = true
@@ -45,6 +46,10 @@ class ItemListViewSpec: QuickSpec {
         override var filterCancelObserver: AnyObserver<Void> {
             return self.fakeCancelObserver.asObserver()
         }
+
+        override var editEndedObserver: AnyObserver<Void> {
+            return self.fakeEditEndedObserver.asObserver()
+        }
     }
 
     private var presenter: FakeItemListPresenter!
@@ -63,6 +68,7 @@ class ItemListViewSpec: QuickSpec {
                 self.presenter.fakeFilterTextObserver = self.scheduler.createObserver(String.self)
                 self.presenter.fakeSortingButtonObserver = self.scheduler.createObserver(Void.self)
                 self.presenter.fakeCancelObserver = self.scheduler.createObserver(Void.self)
+                self.presenter.fakeEditEndedObserver = self.scheduler.createObserver(Void.self)
                 self.subject.presenter = self.presenter
 
                 _ = UINavigationController(rootViewController: self.subject)
@@ -83,7 +89,7 @@ class ItemListViewSpec: QuickSpec {
                 let item2Title = "sum item"
                 let item2Username = "meh"
                 let items = [
-                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                     LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs"),
                     LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads")
                 ]
@@ -189,7 +195,7 @@ class ItemListViewSpec: QuickSpec {
             describe("tapping a row") {
                 let id = "fdssdfdfs"
                 let items = [
-                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                     LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id),
                     LoginListCellConfiguration.ListPlaceholder
                 ]
@@ -268,9 +274,10 @@ class ItemListViewSpec: QuickSpec {
             describe("FilterCell") {
                 var cell: FilterCell!
                 let cancelStub = PublishSubject<Bool>()
+                let textStub = PublishSubject<String>()
 
                 beforeEach {
-                    let array = [LoginListCellConfiguration.Search(cancelHidden: cancelStub.asObservable())]
+                    let array = [LoginListCellConfiguration.Search(cancelHidden: cancelStub.asObservable(), text: textStub.asObservable())]
                     self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: array)]))
                     cell = self.subject.tableView.dataSource!.tableView(
                         self.subject.tableView,
@@ -293,6 +300,14 @@ class ItemListViewSpec: QuickSpec {
                     expect(cell.cancelButton.isHidden).to(beFalse())
                 }
 
+                it("binds the text observable to the filtercell text") {
+                    let text = "something"
+                    textStub.onNext(text)
+                    expect(cell.filterTextField.text).to(equal(text))
+                    textStub.onNext("")
+                    expect(cell.filterTextField.text).to(equal(""))
+                }
+
                 it("tells the presenter when the cancel button is tapped") {
                     cell.cancelButton.sendActions(for: .touchUpInside)
 
@@ -302,7 +317,7 @@ class ItemListViewSpec: QuickSpec {
                 it("tells the presenter when the filtertextfield stops editing") {
                     cell.filterTextField.sendActions(for: .editingDidEnd)
 
-                    expect(self.presenter.fakeCancelObserver.events.count).to(equal(1))
+                    expect(self.presenter.fakeEditEndedObserver.events.count).to(equal(1))
                 }
             }
         }
@@ -310,7 +325,7 @@ class ItemListViewSpec: QuickSpec {
         describe("LoginListCellConfiguration") {
             describe("IdentifiableType") {
                 it("uses either the item title or just returns `search`") {
-                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)).identity).to(equal("search"))
+                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")).identity).to(equal("search"))
                     let guid = "sfsdsdffsd"
                     expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: guid).identity).to(equal(guid))
                 }
@@ -318,7 +333,7 @@ class ItemListViewSpec: QuickSpec {
 
             describe("equality") {
                 it("search is always the same as search") {
-                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(false))).to(equal(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true))))
+                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(false), text: Observable.just(""))).to(equal(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just(""))))
                 }
 
                 it("items are the same if the titles & usernames are the same") {
@@ -329,7 +344,7 @@ class ItemListViewSpec: QuickSpec {
                 }
 
                 it("search and item are never the same") {
-                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true))).notTo(equal(LoginListCellConfiguration.Item(title: "", username: "", guid: "qwqw")))
+                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just(""))).notTo(equal(LoginListCellConfiguration.Item(title: "", username: "", guid: "qwqw")))
                 }
             }
         }

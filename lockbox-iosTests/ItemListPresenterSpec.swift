@@ -167,7 +167,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("pushes the search field and placeholder image to the itemlist") {
                             let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Search,
+                                LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                                 LoginListCellConfiguration.ListPlaceholder
                             ]
                             expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
@@ -225,7 +225,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                     it("tells the view to display the items in alphabetic order by title") {
                         let expectedItemConfigurations = [
-                            LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+                            LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                             LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
                             LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: ""),
                             LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1)
@@ -243,7 +243,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                             it("updates the view with the appropriate items") {
                                 let expectedItemConfigurations = [
-                                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+                                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                                     LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1)
                                 ]
 
@@ -260,31 +260,13 @@ class ItemListPresenterSpec: QuickSpec {
 
                             it("updates the view with the appropriate items") {
                                 let expectedItemConfigurations = [
-                                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+                                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                                     LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: "")
                                 ]
 
                                 expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
                                 let configuration = self.view.itemsObserver.events.last!.value.element!
                                 expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                            }
-                        }
-
-                        describe("when the text is not empty") {
-                            beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "me"))
-                            }
-
-                            it("displays the cancel button") {
-                            }
-                        }
-
-                        describe("when the text is empty") {
-                            beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                            }
-
-                            it("hides the cancel button") {
                             }
                         }
                     }
@@ -297,7 +279,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("pushes the new configuration with the items") {
                             let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Search(cancelHidden: Observable.just(true)),
+                                LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
                                 LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1),
                                 LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
                                 LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: "fdssdf")
@@ -310,12 +292,17 @@ class ItemListPresenterSpec: QuickSpec {
 
                     describe("hiding and showing the cancel button") {
                         let cancelHiddenObserver = self.scheduler.createObserver(Bool.self)
+                        let textObserver = self.scheduler.createObserver(String.self)
 
                         beforeEach {
                             let searchCellConfig = self.view.itemsObserver.events.first!.value.element![0].items[0] as! LoginListCellConfiguration
-                            if case let .Search(cancelHidden: observable) = searchCellConfig {
-                                observable
+                            if case let .Search(cancelHidden: cancelObservable, text: textObservable) = searchCellConfig {
+                                cancelObservable
                                         .bind(to: cancelHiddenObserver)
+                                        .disposed(by: self.disposeBag)
+
+                                textObservable
+                                        .bind(to: textObserver)
                                         .disposed(by: self.disposeBag)
                             }
                         }
@@ -331,21 +318,28 @@ class ItemListPresenterSpec: QuickSpec {
                                 self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterEditAction(editing: false))
                                 expect(cancelHiddenObserver.events.last!.value.element).to(beTrue())
                             }
+
+                            it("updates the text field") {
+                                expect(textObserver.events.last!.value.element).to(equal(""))
+                            }
                         }
 
                         describe("when the text is not empty") {
+                            let text = "sum"
                             beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "sum"))
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: text))
                             }
 
-                            it("keeps the cancel button hidden when the text field is not selected") {
+                            it("keeps the cancel button hidden when the text field is not selected and tells the text observer") {
                                 self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterEditAction(editing: false))
                                 expect(cancelHiddenObserver.events.last!.value.element).to(beTrue())
+                                expect(textObserver.events.last!.value.element).to(equal(text))
                             }
 
-                            it("dispalys the cancel button when the text field is not selected") {
+                            it("dispalys the cancel button when the text field is not selected and tells the text observer") {
                                 self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterEditAction(editing: true))
                                 expect(cancelHiddenObserver.events.last!.value.element).to(beFalse())
+                                expect(textObserver.events.last!.value.element).to(equal(text))
                             }
                         }
                     }
@@ -378,11 +372,28 @@ class ItemListPresenterSpec: QuickSpec {
                     self.scheduler.start()
                 }
 
+                it("hides keyboard and dispatches false editing action, clearing the text from the textfield") {
+                    expect(self.view.dismissKeyboardCalled).to(beTrue())
+                    let filteringAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterAction
+                    expect(filteringAction.filteringText).to(equal(""))
+                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+                    expect(editingAction.editing).to(beFalse())
+                }
+            }
+
+            describe("editEnded event") {
+                beforeEach {
+                    let editEndedObservable = self.scheduler.createColdObservable([next(40, ())])
+                    editEndedObservable.bind(to: self.subject.editEndedObserver).disposed(by: self.disposeBag)
+                    self.scheduler.start()
+                }
+
                 it("hides keyboard and dispatches false editing action") {
                     expect(self.view.dismissKeyboardCalled).to(beTrue())
                     let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beFalse())
                 }
+
             }
 
             describe("itemSelected") {
