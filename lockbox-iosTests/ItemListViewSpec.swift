@@ -49,6 +49,7 @@ class ItemListViewSpec: QuickSpec {
 
     private var presenter: FakeItemListPresenter!
     private var scheduler = TestScheduler(initialClock: 0)
+    private let disposeBag = DisposeBag()
     var subject: ItemListView!
 
     override func spec() {
@@ -144,13 +145,21 @@ class ItemListViewSpec: QuickSpec {
                 }
             }
 
+            describe("new events to the sortingButtonEnabled observer") {
+                beforeEach {
+                    Observable.just(false).bind(to: self.subject.sortingButtonEnabled!).disposed(by: self.disposeBag)
+                }
+
+                it("changes the corresponding property on the sorting button") {
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+
+                    expect(button.isEnabled).to(beFalse())
+                }
+            }
+
             describe("displayEmptyStateMessaging") {
                 beforeEach {
                     self.subject.displayEmptyStateMessaging()
-                }
-
-                it("adds the empty list view to the background view") {
-                    expect(self.subject.tableView.backgroundView?.subviews.count).to(equal(1))
                 }
 
                 it("hides the left bar button item") {
@@ -168,10 +177,6 @@ class ItemListViewSpec: QuickSpec {
                     self.subject.hideEmptyStateMessaging()
                 }
 
-                it("removes the empty list view from the background view") {
-                    expect(self.subject.tableView.backgroundView?.subviews.count).toEventually(equal(0))
-                }
-
                 it("shows the left bar button item") {
                     expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beFalse())
                 }
@@ -185,7 +190,8 @@ class ItemListViewSpec: QuickSpec {
                 let id = "fdssdfdfs"
                 let items = [
                     LoginListCellConfiguration.Search,
-                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id)
+                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id),
+                    LoginListCellConfiguration.ListPlaceholder
                 ]
 
                 beforeEach {
@@ -206,6 +212,16 @@ class ItemListViewSpec: QuickSpec {
                 describe("tapping the search row") {
                     beforeEach {
                         (self.subject.tableView.delegate!).tableView!(self.subject.tableView, didSelectRowAt: [0, 0])
+                    }
+
+                    it("tells the presenter a nil item id") {
+                        expect(self.presenter.fakeItemSelectedObserver.events.first!.value.element!).to(beNil())
+                    }
+                }
+
+                describe("tapping the search row") {
+                    beforeEach {
+                        (self.subject.tableView.delegate!).tableView!(self.subject.tableView, didSelectRowAt: [0, 2])
                     }
 
                     it("tells the presenter a nil item id") {
