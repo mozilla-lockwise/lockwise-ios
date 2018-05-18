@@ -55,6 +55,7 @@ class ItemDetailView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Constant.color.viewBackground
         self.setupNavigation()
         self.styleTableBackground()
         self.setupDataSource()

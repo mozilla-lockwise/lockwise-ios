@@ -160,7 +160,6 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6QD-kO-MbW" firstAttribute="top" secondItem="EWp-zW-Z4E" secondAttribute="top" id="0B7-Xh-Vkb"/>
                             <constraint firstItem="6QD-kO-MbW" firstAttribute="leading" secondItem="EWp-zW-Z4E" secondAttribute="leading" id="9f3-nK-acR"/>
