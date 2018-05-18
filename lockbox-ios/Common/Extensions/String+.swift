@@ -18,9 +18,9 @@ extension String {
 
     func titleFromHostname() -> String {
         return self
-                .replacingOccurrences(of: "http://", with: "")
-                .replacingOccurrences(of: "https://", with: "")
-                .replacingOccurrences(of: "www.", with: "")
+                .replacingOccurrences(of: "^http://", with: "", options: .regularExpression)
+                .replacingOccurrences(of: "^https://", with: "", options: .regularExpression)
+                .replacingOccurrences(of: "^www.", with: "", options: .regularExpression)
     }
 
     private func sha256(_ data: Data) -> Data? {

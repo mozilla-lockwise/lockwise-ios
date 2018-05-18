@@ -240,7 +240,7 @@ extension ItemListPresenter {
                             .sorted { lhs, rhs -> Bool in
                                 switch latest.sortingOption {
                                 case .alphabetically:
-                                    return lhs.hostname < rhs.hostname
+                                    return lhs.hostname.titleFromHostname() < rhs.hostname.titleFromHostname()
                                 case .recentlyUsed:
                                     return lhs.timeLastUsed > rhs.timeLastUsed
                                 }
