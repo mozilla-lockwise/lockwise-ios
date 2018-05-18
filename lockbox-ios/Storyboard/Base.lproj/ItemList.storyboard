@@ -144,7 +144,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="253"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="item-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="hbE-L4-UGB">
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" image="item-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="hbE-L4-UGB">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="252.5"/>
                                                 </imageView>
                                             </subviews>
@@ -179,7 +179,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="item-list-placeholder" width="375" height="255"/>
+        <image name="item-list-placeholder" width="414" height="255"/>
         <image name="search" width="16" height="16"/>
     </resources>
 </document>
