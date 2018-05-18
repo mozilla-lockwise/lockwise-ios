@@ -207,22 +207,30 @@ class RootPresenterSpec: QuickSpec {
                     beforeEach {
                         self.dataStore.syncSubject.onNext(.NotSyncable)
                     }
+
+                    it("displays the welcome screen") {
+                        let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                        expect(arg).to(equal(LoginRouteAction.welcome))
+                    }
                 }
 
                 describe("any other sync state value") {
-                    it("does nothing") {
+                    it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
 
-                    it("does nothing") {
+                    it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.Syncing)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
 
-                    it("does nothing") {
+                    it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.Synced)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
                 }
             }
