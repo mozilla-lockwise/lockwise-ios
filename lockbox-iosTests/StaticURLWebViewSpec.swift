@@ -9,15 +9,15 @@ import WebKit
 
 @testable import Lockbox
 
-class SettingWebViewSpec: QuickSpec {
+class StaticURLWebViewSpec: QuickSpec {
     private let title = "a fake title"
     private let url = "http://www.mozilla.org/"
-    private var subject: SettingWebView!
+    private var subject: StaticURLWebView!
 
     override func spec() {
         describe("SettingWebView") {
             beforeEach {
-                self.subject = SettingWebView(url: self.url, title: self.title)
+                self.subject = StaticURLWebView(url: self.url, title: self.title)
                 self.subject.viewDidLoad()
             }
 
