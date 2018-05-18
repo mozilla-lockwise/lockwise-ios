@@ -170,7 +170,7 @@ extension ItemListView {
 
                         retCell = cell
                     case .EmptyListPlaceholder(let learnMoreObserver):
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder") as? EmptyPlaceholderCell else {
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder") as? EmptyPlaceholderCell else { // swiftlint:disable:this line_length
                             fatalError("couldn't find the right cell!")
                         }
 

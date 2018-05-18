@@ -121,7 +121,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            self.routeActionHandler.invoke(MainRouteAction.learnMore)
+            target.routeActionHandler.invoke(MainRouteAction.learnMore)
         }.asObserver()
     }()
 
@@ -213,8 +213,7 @@ class ItemListPresenter {
             return
         }
 
-        let enableObservable = self.dataStore.list
-                .map { !$0.isEmpty }
+        let enableObservable = self.dataStore.list.map { !$0.isEmpty }
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)

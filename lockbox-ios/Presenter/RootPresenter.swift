@@ -121,7 +121,7 @@ class RootPresenter {
                     view.pushLoginView(view: .fxa)
                 }
             case .learnMore:
-                if !view.topViewIs(FxAView.self) {
+                if !view.topViewIs(StaticURLWebView.self) {
                     view.pushLoginView(view: .learnMore)
                 }
             }
