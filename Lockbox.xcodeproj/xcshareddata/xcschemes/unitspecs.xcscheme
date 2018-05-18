@@ -39,6 +39,16 @@
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
+               BuildableName = "LockboxXCUITests.xctest"
+               BlueprintName = "LockboxXCUITests"
+               ReferencedContainer = "container:Lockbox.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
