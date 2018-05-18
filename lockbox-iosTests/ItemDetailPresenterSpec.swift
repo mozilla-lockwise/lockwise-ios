@@ -337,7 +337,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the title") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.hostname))
+                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal("cats.com"))
                     }
 
                     it("passes the configuration with a shown password for the item") {
@@ -368,7 +368,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the title") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal(item.hostname))
+                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal("cats.com"))
                     }
 
                     it("passes the configuration with an obscured password for the item") {

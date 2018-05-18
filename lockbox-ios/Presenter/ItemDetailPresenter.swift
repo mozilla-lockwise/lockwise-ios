@@ -116,7 +116,7 @@ class ItemDetailPresenter {
 
         let titleDriver = itemObservable
                 .map { item -> String in
-                    guard let title = item?.hostname else {
+                    guard let title = item?.hostname.titleFromHostname() else {
                         return Constant.string.unnamedEntry
                     }
 
