@@ -182,7 +182,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the web view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(SettingWebView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.modalViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
 
@@ -192,7 +192,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the faq view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(SettingWebView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.modalViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
             }
