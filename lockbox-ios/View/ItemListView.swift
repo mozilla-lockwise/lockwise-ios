@@ -12,7 +12,8 @@ typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfigurat
 enum LoginListCellConfiguration {
     case Search(cancelHidden: Observable<Bool>, text: Observable<String>)
     case Item(title: String, username: String, guid: String)
-    case ListPlaceholder
+    case SyncListPlaceholder
+    case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -22,8 +23,10 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "search"
         case .Item(_, _, let guid):
             return guid
-        case .ListPlaceholder:
-            return "placeholder"
+        case .SyncListPlaceholder:
+            return "syncplaceholder"
+        case .EmptyListPlaceholder:
+            return "emptyplaceholder"
         }
     }
 }
@@ -34,7 +37,8 @@ extension LoginListCellConfiguration: Equatable {
         case (.Search, .Search): return true
         case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
             return lhTitle == rhTitle && lhUsername == rhUsername
-        case (.ListPlaceholder, .ListPlaceholder): return true
+        case (.SyncListPlaceholder, .SyncListPlaceholder): return true
+        case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
         default:
             return false
         }
@@ -92,22 +96,6 @@ extension ItemListView: ItemListViewProtocol {
         }
 
         return nil
-    }
-
-    func displayEmptyStateMessaging() {
-        self.tableView.isScrollEnabled = false
-
-        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
-            button.isHidden = true
-        }
-    }
-
-    func hideEmptyStateMessaging() {
-        self.tableView.isScrollEnabled = true
-
-        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
-            button.isHidden = false
-        }
     }
 
     func dismissKeyboard() {
@@ -172,10 +160,20 @@ extension ItemListView {
                         cell.detailLabel.text = username
 
                         retCell = cell
-                    case .ListPlaceholder:
+                    case .SyncListPlaceholder:
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistplaceholder") else {
                             fatalError("couldn't find the right cell!")
                         }
+
+                        retCell = cell
+                    case .EmptyListPlaceholder(let learnMoreObserver):
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder") as? EmptyPlaceholderCell else {
+                            fatalError("couldn't find the right cell!")
+                        }
+
+                        cell.learnMoreButton.rx.tap
+                                .bind(to: learnMoreObserver)
+                                .disposed(by: cell.disposeBag)
 
                         retCell = cell
                     }
