@@ -1,5 +1,33 @@
 # Release Notes
 
+## 1.0 (Build 1189)
+
+What's NEW? We squashed a bunch of bugs (timed locking works much better now) and added a few improvements (user-friendly titles and a sync indicator that doesn't interrupt you). To recap...
+
+This build DOES include:
+
+- signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox
+- automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data
+- searching and sorting items
+- user-friendly item titles to help with readability
+- showing/hiding passwords
+- coping usernames and passwords to the pasteboard (which expire after 60 seconds)
+- opening web addresses in your preferred web browser
+- Telemetry for event tracking (no personally-identifiable information is collected).
+
+This build DOES NOT include:
+
+- links to real FAQ content (#172 and #340)
+- meaningful instructions when no items are found (#44)
+
+Some KNOWN ISSUES include:
+
+- you may sign in and receive a "confirmation" email but the app wont tell you that you need to go find that email, thus your list appears empty - please go find that email (#328)
+- if you delete the app and re-install it, your app may crash once (#374)
+- the autolocking timer was working inconsistently and may not have automatically locked the app, please keep testing this!
+
+Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+
 ## 1.0 (Build 1128)
 
 _Date: 2018-05-14_
@@ -20,6 +48,6 @@ This build includes: sign in with Firefox Accounts, sign out to "lock", search a
 
 This build does NOT include: actual Sync data (test data only), Face ID nor Touch ID biometrics to unlock, onboarding instructions, FAQ content.
 
-### Known Issues
+Please note: the only data loaded into the app is hard-coded test data (not real Sync data)
 
-- The only data loaded into the app is hard-coded test data (not real Sync data)
+[1]: https://github.com/mozilla-lockbox/lockbox-ios/issues
