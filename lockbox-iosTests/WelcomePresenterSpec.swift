@@ -16,11 +16,16 @@ import LocalAuthentication
 class WelcomePresenterSpec: QuickSpec {
     class FakeWelcomeView: WelcomeViewProtocol {
         var fakeFxAButtonPress = PublishSubject<Void>()
+        var fakeLoginButtonPress = PublishSubject<Void>()
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
 
         var loginButtonPressed: ControlEvent<Void> {
+            return ControlEvent<Void>(events: fakeLoginButtonPress.asObservable())
+        }
+
+        var learnMorePressed: ControlEvent<Void> {
             return ControlEvent<Void>(events: fakeFxAButtonPress.asObservable())
         }
 
@@ -143,13 +148,26 @@ class WelcomePresenterSpec: QuickSpec {
                 describe("receiving a login button press") {
                     beforeEach {
                         self.subject.onViewReady()
-                        self.view.fakeFxAButtonPress.onNext(())
+                        self.view.fakeLoginButtonPress.onNext(())
                     }
 
                     it("dispatches the fxa login route action") {
                         expect(self.routeActionHandler.invokeArgument).notTo(beNil())
                         let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
                         expect(argument).to(equal(LoginRouteAction.fxa))
+                    }
+                }
+
+                describe("receiving a learn more button press") {
+                    beforeEach {
+                        self.subject.onViewReady()
+                        self.view.fakeFxAButtonPress.onNext(())
+                    }
+
+                    it("dispatches the learn more route action") {
+                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                        let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                        expect(argument).to(equal(LoginRouteAction.learnMore))
                     }
                 }
 

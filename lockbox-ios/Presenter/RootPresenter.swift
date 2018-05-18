@@ -119,6 +119,10 @@ class RootPresenter {
                 if !view.topViewIs(FxAView.self) {
                     view.pushLoginView(view: .fxa)
                 }
+            case .learnMore:
+                if !view.topViewIs(FxAView.self) {
+                    view.pushLoginView(view: .learnMore)
+                }
             }
         }.asObserver()
     }()
