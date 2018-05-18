@@ -1,6 +1,6 @@
 # Release Notes
 
-## 1.0 (Build ???????)
+## 1.0 (Build 1189)
 
 What's NEW? We squashed a bunch of bugs (timed locking works much better now) and added a few improvements (user-friendly titles and a sync indicator that doesn't interrupt you). To recap...
 
