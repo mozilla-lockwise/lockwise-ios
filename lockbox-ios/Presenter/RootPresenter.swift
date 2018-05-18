@@ -149,6 +149,10 @@ class RootPresenter {
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
                 }
+            case .learnMore:
+                if !view.topViewIs(StaticURLWebView.self) {
+                    view.pushMainView(view: .learnMore)
+                }
             }
         }.asObserver()
     }()

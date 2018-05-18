@@ -10,7 +10,7 @@ import RxDataSources
 typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
 enum LoginListCellConfiguration {
-    case Search(cancelHidden: Observable<Bool>, text: Observable<String>)
+    case Search(enabled: Observable<Bool>, cancelHidden: Observable<Bool>, text: Observable<String>)
     case Item(title: String, username: String, guid: String)
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
@@ -86,8 +86,8 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
-    var tableViewInteractionEnabled: AnyObserver<Bool> {
-        return self.tableView.rx.isUserInteractionEnabled.asObserver()
+    var tableViewScrollEnabled: AnyObserver<Bool> {
+        return self.tableView.rx.isScrollEnabled.asObserver()
     }
 
     var sortingButtonEnabled: AnyObserver<Bool>? {
@@ -117,11 +117,14 @@ extension ItemListView {
 
                     var retCell: UITableViewCell
                     switch cellConfiguration {
-                    case .Search(let cancelHidden, let text):
+                    case .Search(let enabled, let cancelHidden, let text):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
                               let presenter = self.presenter else {
                             fatalError("couldn't find the right cell or presenter!")
                         }
+                        enabled
+                                .bind(to: cell.rx.isUserInteractionEnabled)
+                                .disposed(by: cell.disposeBag)
 
                         cell.filterTextField.rx.text
                                 .orEmpty
@@ -228,6 +231,12 @@ extension ItemListView {
 // view styling
 extension ItemListView {
     fileprivate func styleNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 
