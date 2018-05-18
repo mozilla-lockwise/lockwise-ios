@@ -77,6 +77,10 @@ class RootView: UIViewController, RootViewProtocol {
             self.currentViewController?.popToRootViewController(animated: true)
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
+        case .learnMore:
+            self.currentViewController?.pushViewController(StaticURLWebView(url: Constant.app.learnMoreURL,
+                                                                          title: Constant.string.learnMore),
+                                                           animated: true)
         }
     }
 
@@ -108,10 +112,10 @@ class RootView: UIViewController, RootViewProtocol {
             settingNavController?.pushViewController(PreferredBrowserSettingView(), animated: true)
         case .faq:
             settingNavController?.pushViewController(
-                SettingWebView(url: Constant.app.faqURL, title: Constant.string.settingsFaq), animated: true)
+                StaticURLWebView(url: Constant.app.faqURL, title: Constant.string.settingsFaq), animated: true)
         case .provideFeedback:
             settingNavController?.pushViewController(
-                SettingWebView(url: Constant.app.provideFeedbackURL,
+                StaticURLWebView(url: Constant.app.provideFeedbackURL,
                                 title: Constant.string.settingsProvideFeedback), animated: true)
         }
     }

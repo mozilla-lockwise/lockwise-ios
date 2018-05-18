@@ -11,6 +11,7 @@ struct Constant {
         static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
+        static let learnMoreURL = "https://lockbox.firefox.com/faq.html#how-do-i-use-lockbox"
     }
 
     struct color {

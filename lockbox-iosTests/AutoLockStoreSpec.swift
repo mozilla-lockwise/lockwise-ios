@@ -128,6 +128,49 @@ class AutoLockStoreSpec: QuickSpec {
                     }
                 }
             }
+
+            describe("onAutoLockTime change") {
+                var fireDate: TimeInterval?
+
+                beforeEach {
+                    self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                    fireDate = self.subject.timer?.fireDate.timeIntervalSince1970
+                }
+
+                describe("to Never") {
+                    beforeEach {
+                        self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                    }
+
+                    it("stops the timer") {
+                        expect(self.subject.timer?.isValid).to(beFalse())
+                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                    }
+                }
+
+                describe("to OnAppExit") {
+                    beforeEach {
+                        self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                    }
+
+                    it("stops the timer") {
+                        expect(self.subject.timer?.isValid).to(beFalse())
+                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                    }
+                }
+
+                describe("to different time interval") {
+                    beforeEach {
+                        self.userDefaults.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                    }
+
+                    it("restarts the timer") {
+                        expect(self.subject.timer).toNot(beNil())
+                        let newFireDate = self.subject.timer?.fireDate.timeIntervalSince1970
+                        expect(newFireDate).toNot(equal(fireDate))
+                    }
+                }
+            }
         }
     }
 }
