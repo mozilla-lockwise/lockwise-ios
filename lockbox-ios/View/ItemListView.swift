@@ -116,6 +116,13 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
+    func hidePullRefresh() {
+        if let refreshControl = self.tableView.refreshControl,
+            refreshControl.isRefreshing {
+            refreshControl.endRefreshing()
+        }
+    }
+
     private func getFilterCell() -> FilterCell? {
         return self.tableView.cellForRow(at: [0, 0]) as? FilterCell
     }
@@ -212,6 +219,12 @@ extension ItemListView {
 
     fileprivate func setupRefresh() {
         if let presenter = self.presenter {
+            let refreshControl = UIRefreshControl()
+            self.tableView.refreshControl = refreshControl
+            refreshControl.rx.controlEvent(.valueChanged)
+                .bind(to: presenter.refreshObserver)
+                .disposed(by: self.disposeBag)
+
             let button = UIButton(type: .custom)
             button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
             button.setTitle(Constant.string.yourLockbox, for: .normal)

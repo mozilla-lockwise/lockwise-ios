@@ -24,6 +24,7 @@ class ItemListPresenterSpec: QuickSpec {
         let disposeBag = DisposeBag()
         var dismissKeyboardCalled = false
         var displaySpinnerCalled = false
+        var hidePullRefreshCalled = false
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -42,6 +43,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         func hideEmptyStateMessaging() {
             self.hideEmptyStateMessagingCalled = true
+        }
+
+        func hidePullRefresh() {
+            self.hidePullRefreshCalled = true
         }
 
         func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
@@ -193,6 +198,27 @@ class ItemListPresenterSpec: QuickSpec {
                                 expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beFalse())
                                 expect(self.view.tableViewEnableObserver.events.last!.value.element).to(beFalse())
                             }
+                        }
+                    }
+
+                    describe("manual sync") {
+                        beforeEach {
+                            self.subject.manualSync = true
+                            self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
+                        }
+
+                        it("tells the view to hide pull to refresh") {
+                            expect(self.view.hidePullRefreshCalled).to(beTrue())
+                        }
+
+                        it("clears the manual sync flag") {
+                            expect(self.subject.manualSync).to(beFalse())
+                        }
+
+                        it("does not display the initial load spinner") {
+                            expect(self.view.displaySpinnerCalled).to(beFalse())
                         }
                     }
                 }

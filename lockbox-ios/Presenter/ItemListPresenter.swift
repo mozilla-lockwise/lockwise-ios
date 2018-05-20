@@ -17,6 +17,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func displayEmptyStateMessaging()
     func hideEmptyStateMessaging()
     func dismissKeyboard()
+    func hidePullRefresh()
 }
 
 struct LoginListTextSort {
@@ -43,6 +44,8 @@ class ItemListPresenter {
     private var dataStore: DataStore
     private var itemListDisplayStore: ItemListDisplayStore
     private var disposeBag = DisposeBag()
+
+    var manualSync = false
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
         return Binder(self) { target, itemId in
@@ -84,6 +87,7 @@ class ItemListPresenter {
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            target.manualSync = true
             target.dataStoreActionHandler.invoke(.sync)
         }.asObserver()
     }()
@@ -270,7 +274,12 @@ extension ItemListPresenter {
                     }
 
                     if latest.1 == SyncState.Syncing {
-                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
+                        if !self.manualSync {
+                            self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
+                        }
+                    } else if self.manualSync {
+                        self.manualSync = false
+                        self.view?.hidePullRefresh()
                     }
 
                     if !latest.0.isEmpty {

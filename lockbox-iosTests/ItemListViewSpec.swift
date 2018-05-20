@@ -192,6 +192,21 @@ class ItemListViewSpec: QuickSpec {
                 }
             }
 
+            describe("pull to refresh") {
+                beforeEach {
+                    self.subject.tableView.refreshControl?.beginRefreshing()
+                    self.subject.hidePullRefresh()
+                }
+
+                it("is not nil") {
+                    expect(self.subject.tableView.refreshControl).toNot(beNil())
+                }
+
+                it("ends refreshing") {
+                    expect(self.subject.tableView.refreshControl?.isRefreshing).toEventually(beFalse())
+                }
+            }
+
             describe("tapping a row") {
                 let id = "fdssdfdfs"
                 let items = [
