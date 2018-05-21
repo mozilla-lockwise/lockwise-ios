@@ -18,6 +18,9 @@ let LockedScreen = "LockedScreen"
 let AccountSettingsMenu = "AccountSettingsMenu"
 let AutolockSettingsMenu = "AutolockSettingsMenu"
 
+let SortEntriesMenu = "SortEntriesMenu"
+
+
 class Action {
 
     static let FxATypeEmail = "FxATypeEmail"
@@ -28,6 +31,11 @@ class Action {
     static let OpenSettingsMenu = "OpenSettingsMenu"
 
     static let LockNow = "LockNow"
+
+    static let DisconnectFirefoxLockbox = "DisconnectFirefoxLockbox"
+    static let DisconnectFirefoxLockboxCancel = "DisconnectFirefoxLockboxCancel"
+
+    static let ChangeEntriesOrder = "ChangeEntriesOrder"
 }
 
 @objcMembers
@@ -53,6 +61,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(WelcomeScreen) { screenState in
+        // Adding temporary a sleep here because now Get Start buttons appears always when relaunching the app, bug or design??
+        sleep(3)
         if (app.buttons["Get Started"].exists) {
             screenState.tap(app.buttons["Get Started"], to: FxASigninScreen)
         } else {
@@ -79,6 +89,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.fxaPassword = userState.fxaPassword!
         }
         screenState.tap(app.webViews.links["Create an account"], to: FxCreateAccount)
+
+        screenState.noop(to: LockboxMainPage)
     }
 
     map.addScreenState(FxCreateAccount) { screenState in
@@ -87,7 +99,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LockboxMainPage) { screenState in
         screenState.tap(app.buttons["preferences"], to: SettingsMenu)
+
+        screenState.gesture(forAction: Action.ChangeEntriesOrder, transitionTo: SortEntriesMenu) { userState in
+            if (app.buttons["A-Z"].exists) {
+                app.buttons["A-Z"].tap()
+            } else {
+                app.buttons["Recent"].tap()
+            }
+        }
+
         screenState.dismissOnUse = true
+    }
+
+    map.addScreenState(SortEntriesMenu) { screenState in
+        screenState.backAction = cancelBackAction
     }
 
     map.addScreenState(SettingsMenu) { screenState in
@@ -108,6 +133,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(AccountSettingsMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
         screenState.dismissOnUse = true
+
+        screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: WelcomeScreen) { userState in
+            app.buttons["Disconnect Firefox Lockbox"].tap()
+            app.buttons["Disconnect"].tap()
+        }
+        screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: AccountSettingsMenu) { userState in
+            app.buttons["Disconnect Firefox Lockbox"].tap()
+            app.buttons["Cancel"].tap()
+        }
+
     }
 
     map.addScreenState(AutolockSettingsMenu) { screenState in
