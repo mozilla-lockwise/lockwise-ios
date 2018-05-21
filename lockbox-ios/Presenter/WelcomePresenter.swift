@@ -10,6 +10,7 @@ import CoreGraphics
 
 protocol WelcomeViewProtocol: class {
     var loginButtonPressed: ControlEvent<Void> { get }
+    var learnMorePressed: ControlEvent<Void> { get }
     var loginButtonHidden: AnyObserver<Bool> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
@@ -100,6 +101,12 @@ class WelcomePresenter {
                 })
                 .disposed(by: self.disposeBag)
 
+        self.view?.learnMorePressed
+            .subscribe(onNext: { _ in
+                self.routeActionHandler.invoke(LoginRouteAction.learnMore)
+            })
+            .disposed(by: self.disposeBag)
+
         self.userInfoActionHandler.invoke(.load)
     }
 
@@ -120,7 +127,6 @@ class WelcomePresenter {
                 }
                 .subscribe(onNext: { [weak self] _ in
                     self?.dataStoreActionHandler.invoke(.unlock)
-                    self?.routeActionHandler.invoke(MainRouteAction.list)
                 })
                 .disposed(by: self.disposeBag)
     }

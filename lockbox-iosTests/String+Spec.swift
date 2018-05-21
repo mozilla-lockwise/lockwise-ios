@@ -23,5 +23,13 @@ class StringSpec: QuickSpec {
                 expect(subject.sha256withBase64URL()).to(equal("sQso4JtDJmbacP2IVO2N73-OmbJL5h-GGkeWOjQSbgg"))
             }
         }
+
+        describe("titleFromHostname") {
+            it("removes http://, https://, www. when they occur at the beginning of a string") {
+                expect("www.bats.com".titleFromHostname()).to(equal("bats.com"))
+                expect("https://hey.http://.com".titleFromHostname()).to(equal("hey.http://.com"))
+                expect("http://www.maps.com".titleFromHostname()).to(equal("maps.com"))
+            }
+        }
     }
 }

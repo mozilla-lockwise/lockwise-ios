@@ -10,8 +10,8 @@ import RxDataSources
 typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
 enum LoginListCellConfiguration {
-    case Search
-    case Item(title: String, username: String, guid: String?)
+    case Search(cancelHidden: Observable<Bool>, text: Observable<String>)
+    case Item(title: String, username: String, guid: String)
     case ListPlaceholder
 }
 
@@ -20,8 +20,8 @@ extension LoginListCellConfiguration: IdentifiableType {
         switch self {
         case .Search:
             return "search"
-        case .Item(let title, _, _):
-            return title
+        case .Item(_, _, let guid):
+            return guid
         case .ListPlaceholder:
             return "placeholder"
         }
@@ -117,18 +117,6 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
-    func displayFilterCancelButton() {
-        if let cell = self.getFilterCell() {
-            cell.cancelButton.isHidden = false
-        }
-    }
-
-    func hideFilterCancelButton() {
-        if let cell = self.getFilterCell() {
-            cell.cancelButton.isHidden = true
-        }
-    }
-
     private func getFilterCell() -> FilterCell? {
         return self.tableView.cellForRow(at: [0, 0]) as? FilterCell
     }
@@ -142,7 +130,7 @@ extension ItemListView {
 
                     var retCell: UITableViewCell
                     switch cellConfiguration {
-                    case .Search:
+                    case .Search(let cancelHidden, let text):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
                               let presenter = self.presenter else {
                             fatalError("couldn't find the right cell or presenter!")
@@ -154,7 +142,21 @@ extension ItemListView {
                                 .bind(to: presenter.filterTextObserver)
                                 .disposed(by: cell.disposeBag)
 
-                        cell.cancelButton.rx.tap.bind(to: presenter.filterCancelObserver).disposed(by: cell.disposeBag)
+                        cell.cancelButton.rx.tap
+                                .bind(to: presenter.filterCancelObserver)
+                                .disposed(by: cell.disposeBag)
+
+                        cell.filterTextField.rx.controlEvent(.editingDidEnd)
+                                .bind(to: presenter.editEndedObserver)
+                                .disposed(by: cell.disposeBag)
+
+                        cancelHidden
+                                .bind(to: cell.cancelButton.rx.isHidden)
+                                .disposed(by: cell.disposeBag)
+
+                        text
+                                .bind(to: cell.filterTextField.rx.text)
+                                .disposed(by: cell.disposeBag)
 
                         let borderView = UIView()
                         borderView.frame = CGRect(x: 0, y: 0, width: 1, height: cell.frame.height)

@@ -41,6 +41,11 @@ class AutoLockStore {
                 .filterByType(class: LifecycleAction.self)
                 .subscribe(self.lifecycleAction)
                 .disposed(by: self.disposeBag)
+
+        self.userDefaults.onAutoLockTime.subscribe(onNext: { _ in
+            self.stopTimer()
+            self.setupTimer()
+        }).disposed(by: self.disposeBag)
     }
 
     private func lifecycleAction(evt: Event<LifecycleAction>) {

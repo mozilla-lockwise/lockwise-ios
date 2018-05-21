@@ -58,19 +58,18 @@ class RootPresenter {
 
         Observable.combineLatest(self.dataStore.locked, self.dataStore.syncState)
                 .do(onNext: { (latest: (Bool, SyncState)) in
-                    if latest.0 {
+                    if latest.1 == .NotSyncable {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                     }
                 })
-                .filter {
-                    !$0.0
-                }
-                .map {
-                    $0.1
-                }
-                .subscribe(onNext: { state in
-                    if state == .NotSyncable {
+                .filter { $0.1 != .NotSyncable }
+                .map { $0.0 }
+                .distinctUntilChanged()
+                .subscribe(onNext: { locked in
+                    if locked {
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    } else {
+                        self.routeActionHandler.invoke(MainRouteAction.list)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -119,6 +118,10 @@ class RootPresenter {
             case .fxa:
                 if !view.topViewIs(FxAView.self) {
                     view.pushLoginView(view: .fxa)
+                }
+            case .learnMore:
+                if !view.topViewIs(FxAView.self) {
+                    view.pushLoginView(view: .learnMore)
                 }
             }
         }.asObserver()
