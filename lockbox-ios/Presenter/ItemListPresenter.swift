@@ -246,7 +246,7 @@ extension ItemListPresenter {
                         itemSortObservable,
                         syncStateObservable
                 )
-                .map { (latest: ([Login], ItemListFilterAction, ItemListSortingAction, SyncState)) -> LoginListTextSort in
+                .map { (latest: ([Login], ItemListFilterAction, ItemListSortingAction, SyncState)) -> LoginListTextSort in // swiftlint:disable:this line_length
                     return LoginListTextSort(
                             logins: latest.0,
                             text: latest.1.filteringText,
