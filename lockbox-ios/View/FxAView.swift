@@ -39,7 +39,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
     private func styleNavigationBar() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: Constant.string.cancel,
+                title: Constant.string.close,
                 style: .plain,
                 target: nil,
                 action: nil
