@@ -37,14 +37,16 @@ _all commits on all branches and pull requests are automatically built_
 
 _all `master` branch builds are automatically uploaded from buddybuild_
 
-1. Browse to [TestFlight > Builds > iOS][3]
+1. Browse to [TestFlight > Builds > iOS][3] in iTunes Connect
 2. Find the desired build number to distribute
 3. Provide [export compliance responses](export-compliance.md)
   - this makes the build immediately available to "internal" iTunes Connect users
-4. Add at least one other "Group" of "external" testers to the build
+4. Copy the release notes for this release and add them to the "Test Details"
+5. Add at least one other "Group" of "external" testers to the build
   - after review, this will make it available for all those "external" testers
   - example: "lockbox-dev" which includes our other non-iTunes Connect engineers
   - example: "Product" which includes other product and content Mozillians
+  - example: "Cohort A" which includes the first round of volunteers to test
 
 ## Distributing through the App Store (release)
 
