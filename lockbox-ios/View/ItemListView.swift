@@ -269,10 +269,11 @@ extension ItemListView {
 
     private var sortingButton: UIButton {
         let button = UIButton()
-        button.adjustsImageWhenHighlighted = false
-
         let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
+        let tintedSortingImage = sortingImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         button.setImage(sortingImage, for: .normal)
+        button.setImage(tintedSortingImage, for: .selected)
+        button.setImage(tintedSortingImage, for: .highlighted)
         button.setTitle(Constant.string.aToZ, for: .normal)
 
         button.contentHorizontalAlignment = .left
