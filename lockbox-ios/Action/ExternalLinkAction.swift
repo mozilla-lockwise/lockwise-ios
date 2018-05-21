@@ -9,7 +9,7 @@ import UIKit
 protocol LinkAction: Action {}
 
 struct ExternalLinkAction: LinkAction {
-    let url: String
+    let baseURLString: String
 }
 
 enum SettingLinkAction: LinkAction {
@@ -24,7 +24,7 @@ enum SettingLinkAction: LinkAction {
 
 extension ExternalLinkAction: Equatable {
     static func ==(lhs: ExternalLinkAction, rhs: ExternalLinkAction) -> Bool {
-        return lhs.url == rhs.url
+        return lhs.baseURLString == rhs.baseURLString
     }
 }
 
@@ -46,7 +46,7 @@ class LinkActionHandler: ActionHandler {
 
     func invoke(_ action: LinkAction) {
         if let externalLink = action as? ExternalLinkAction {
-            self.openUrl(string: externalLink.url)
+            self.openUrl(string: externalLink.baseURLString)
         } else if let settingLink = action as? SettingLinkAction {
             self.openSettings(settingLink)
         }

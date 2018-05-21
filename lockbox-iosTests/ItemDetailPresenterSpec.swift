@@ -293,7 +293,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         it("dispatches the externalLink action") {
                             expect(self.externalLinkHandler.invokedAction).notTo(beNil())
                             let action = self.externalLinkHandler.invokedAction as! ExternalLinkAction
-                            expect(action).to(equal(ExternalLinkAction(url: webAddress)))
+                            expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
                         }
                     }
                 }

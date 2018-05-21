@@ -71,7 +71,7 @@ class ItemDetailPresenter {
                         .take(1)
                         .subscribe(onNext: { item in
                             if let origin = item?.hostname {
-                                target.externalLinkActionHandler.invoke(ExternalLinkAction(url: origin))
+                                target.externalLinkActionHandler.invoke(ExternalLinkAction(baseURLString: origin))
                             }
                         })
                         .disposed(by: target.disposeBag)
