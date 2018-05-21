@@ -55,7 +55,6 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803915" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="lcM-sN-0rK" firstAttribute="leading" secondItem="1WP-Gl-N6y" secondAttribute="leading" id="3wo-s3-hbU"/>
                             <constraint firstItem="lcM-sN-0rK" firstAttribute="bottom" secondItem="1WP-Gl-N6y" secondAttribute="bottom" id="O54-5g-1Sa"/>
