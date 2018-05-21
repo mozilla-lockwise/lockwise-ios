@@ -18,10 +18,15 @@ class BiometryManagerSpec: QuickSpec {
     class FakeLAContext: LAContext {
         var evaluateReason: String?
         var evaluateReply: ((Bool, Error?) -> Void)?
+        var canEvaluatePolicyStub: Bool!
 
         override func evaluatePolicy(_ policy: LAPolicy, localizedReason: String, reply: @escaping (Bool, Error?) -> Void) {
             self.evaluateReason = localizedReason
             self.evaluateReply = reply
+        }
+
+        override func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool {
+            return self.canEvaluatePolicyStub
         }
     }
 
@@ -47,6 +52,7 @@ class BiometryManagerSpec: QuickSpec {
 
                 describe("when the app can evaluate owner authentication") {
                     beforeEach {
+                        self.context.canEvaluatePolicyStub = true
                         self.subject.authenticateWithMessage(message)
                                 .asObservable()
                                 .subscribe(voidObserver)
@@ -77,6 +83,31 @@ class BiometryManagerSpec: QuickSpec {
                             expect(voidObserver.events.first!.value.error).to(matchError(error))
                         }
                     }
+                }
+
+                describe("when the app cannot evaluate owner authentication") {
+                    beforeEach {
+                        beforeEach {
+                            self.context.canEvaluatePolicyStub = false
+                            self.subject.authenticateWithMessage(message)
+                                    .asObservable()
+                                    .subscribe(voidObserver)
+                                    .disposed(by: self.disposeBag)
+                        }
+
+                        it("passes the error to the observer") {
+                            expect(voidObserver.events.first!.value.error).to(matchError(LocalError.LAError))
+                        }
+                    }
+                }
+            }
+
+            describe("deviceAuthenticationAvailable") {
+                it("returns the value of canEvaluatePolicy") {
+                    self.context.canEvaluatePolicyStub = true
+                    expect(self.subject.deviceAuthenticationAvailable).to(beTrue())
+                    self.context.canEvaluatePolicyStub = false
+                    expect(self.subject.deviceAuthenticationAvailable).to(beFalse())
                 }
             }
         }

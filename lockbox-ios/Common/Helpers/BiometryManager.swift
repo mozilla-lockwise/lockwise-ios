@@ -13,6 +13,10 @@ enum LocalError: Error {
 class BiometryManager {
     private let context: LAContext
 
+    var deviceAuthenticationAvailable: Bool {
+        return self.context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+    }
+
     init(context: LAContext = LAContext()) {
         self.context = context
     }
