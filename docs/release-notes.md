@@ -11,7 +11,7 @@ This build DOES include:
 - searching and sorting items
 - user-friendly item titles to help with readability
 - showing/hiding passwords
-- coping usernames and passwords to the pasteboard (which expire after 60 seconds)
+- copying usernames and passwords to the pasteboard (which expire after 60 seconds)
 - opening web addresses in your preferred web browser
 - Telemetry for event tracking (no personally-identifiable information is collected).
 
@@ -32,7 +32,7 @@ Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find an
 
 _Date: 2018-05-14_
 
-This build DOES include: signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox; automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data; searching and sorting items; showing/hiding passwords; coping usernames and passwords to the pasteboard (which expire after 60 seconds); opening web addresses in your preferred web browser; Telemetry for event tracking (no personally-identifiable information is collected).
+This build DOES include: signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox; automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data; searching and sorting items; showing/hiding passwords; copying usernames and passwords to the pasteboard (which expire after 60 seconds); opening web addresses in your preferred web browser; Telemetry for event tracking (no personally-identifiable information is collected).
 
 This build DOES NOT include: user-friendly item titles (#193); links to real FAQ content (#172 and #340); proper visual placeholders when an initial sync is occurring (#233) or when no items are found (#44).
 
