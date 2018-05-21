@@ -71,15 +71,16 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
 
         let leftButton = UIButton()
         leftButton.setTitle(Constant.string.settingsTitle, for: .normal)
+        leftButton.setTitleColor(.white, for: .normal)
+        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
+        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
+
         let backImage = UIImage(named: "back")
         leftButton.setImage(backImage, for: .normal)
         leftButton.adjustsImageWhenHighlighted = false
 
         leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
-
-        leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
+        leftButton.sizeToFit()
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
