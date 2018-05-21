@@ -378,12 +378,23 @@ extension DataStore {
     }
 
     private func setInitialLockState() {
-        let lockedValue = self.keychainWrapper.bool(forKey: lockedKey) ?? false
-        if lockedValue {
-            self.storageStateSubject.onNext(.Locked)
-        } else {
-            self.storageStateSubject.onNext(.Unprepared)
-            self.keychainWrapper.set(false, forKey: lockedKey)
+        guard profile.hasSyncableAccount() else {
+            if !profile.hasAccount() {
+                // first run.
+                self.storageStateSubject.onNext(.Unprepared)
+                self.keychainWrapper.set(false, forKey: lockedKey)
+            } else {
+                self.storageStateSubject.onNext(.Preparing)
+            }
+            return
+        }
+
+        if let lockedValue = self.keychainWrapper.bool(forKey: lockedKey) {
+            if lockedValue {
+                self.storageStateSubject.onNext(.Locked)
+            } else {
+                self.storageStateSubject.onNext(.Unlocked)
+            }
         }
     }
 }
