@@ -16,7 +16,7 @@ struct Constant {
 
     struct color {
         static let cellBorderGrey = UIColor(hex: 0xC8C7CC)
-        static let viewBackground = UIColor(hex: 0xEFEFF4)
+        static let viewBackground = UIColor(hex: 0xEDEDF0)
         static let lightGrey = UIColor(hex: 0xEFEFEF)
         static let lockBoxBlue = UIColor(hex: 0x0060DF)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
