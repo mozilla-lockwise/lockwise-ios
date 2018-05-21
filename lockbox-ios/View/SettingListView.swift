@@ -32,7 +32,7 @@ class SettingListView: UIViewController {
 
 override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setupNavbar()
+        self.setupNavBar()
         self.styleTableViewBackground()
     }
 
@@ -104,7 +104,7 @@ extension SettingListView {
         }
     }
 
-    private func setupNavbar() {
+    private func setupNavBar() {
         self.navigationItem.title = Constant.string.settingsTitle
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [

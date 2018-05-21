@@ -28,7 +28,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
         self.configureWebView()
         self.webView.navigationDelegate = self
         self.view = self.webView
-        self.styleNavigationBar()
+        self.setupNavBar()
 
         self.presenter?.onViewReady()
     }
@@ -37,7 +37,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
         self.webView.load(urlRequest)
     }
 
-    private func styleNavigationBar() {
+    private func setupNavBar() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
                 title: Constant.string.close,
                 style: .plain,

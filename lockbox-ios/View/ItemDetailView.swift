@@ -56,7 +56,7 @@ class ItemDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constant.color.viewBackground
-        self.setupNavigation()
+        self.setupNavBar()
         self.styleTableBackground()
         self.setupDataSource()
         self.setupDelegate()
@@ -82,7 +82,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
-    fileprivate func setupNavigation() {
+    fileprivate func setupNavBar() {
         let leftButton = UIButton()
         leftButton.adjustsImageWhenHighlighted = false
 

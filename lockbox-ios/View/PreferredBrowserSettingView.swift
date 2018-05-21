@@ -31,7 +31,7 @@ class PreferredBrowserSettingView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setupNavbar()
+        self.setupNavBar()
         self.setupFooter()
     }
 
@@ -48,7 +48,7 @@ class PreferredBrowserSettingView: UITableViewController {
 }
 
 extension PreferredBrowserSettingView {
-    private func setupNavbar() {
+    private func setupNavBar() {
         navigationItem.title = Constant.string.settingsBrowser
     }
 

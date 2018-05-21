@@ -61,7 +61,7 @@ class ItemListView: UIViewController {
         view.backgroundColor = Constant.color.viewBackground
         self.setupRefresh()
         self.styleTableViewBackground()
-        self.styleNavigationBar()
+        self.setupNavBar()
         self.setupDataSource()
         self.setupDelegate()
         self.presenter?.onViewReady()
@@ -230,7 +230,7 @@ extension ItemListView {
 
 // view styling
 extension ItemListView {
-    fileprivate func styleNavigationBar() {
+    fileprivate func setupNavBar() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 

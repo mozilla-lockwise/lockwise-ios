@@ -27,7 +27,7 @@ class StaticURLWebView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.styleNavigationBar()
+        self.setupNavBar()
 
         self.view = webView
 
@@ -36,7 +36,7 @@ class StaticURLWebView: UIViewController {
         }
     }
 
-    private func styleNavigationBar() {
+    private func setupNavBar() {
         self.navigationItem.title = self.navTitle
     }
 }
