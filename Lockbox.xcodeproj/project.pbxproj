@@ -837,7 +837,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0900;
 				LastUpgradeCheck = 0930;
-				ORGANIZATIONNAME = "Sasha Heinen";
+				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					7D1B1AC31F99028D00C1F5FF = {
 						CreatedOnToolsVersion = 9.0;
