@@ -56,7 +56,7 @@ class ItemDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Constant.color.viewBackground
-        self.setupNavigation()
+        self.setupNavBar()
         self.styleTableBackground()
         self.setupDataSource()
         self.setupDelegate()
@@ -82,12 +82,13 @@ extension ItemDetailView: ItemDetailViewProtocol {
 
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
-    fileprivate func setupNavigation() {
+    fileprivate func setupNavBar() {
         let leftButton = UIButton()
-        leftButton.adjustsImageWhenHighlighted = false
-
         let leftImage = UIImage(named: "back")?.withRenderingMode(.alwaysTemplate)
+        let tintedLeftImage = leftImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         leftButton.setImage(leftImage, for: .normal)
+        leftButton.setImage(tintedLeftImage, for: .selected)
+        leftButton.setImage(tintedLeftImage, for: .highlighted)
         leftButton.setTitle(Constant.string.back, for: .normal)
 
         leftButton.contentHorizontalAlignment = .left
@@ -96,7 +97,9 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         leftButton.setTitleColor(.white, for: .normal)
         leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
         leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
         leftButton.tintColor = .white
+        leftButton.sizeToFit()
 
         leftButton.addConstraint(NSLayoutConstraint(
             item: leftButton,
@@ -113,6 +116,12 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .always
         }
+
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
 
         if let presenter = self.presenter {
             leftButton.rx.tap

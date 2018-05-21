@@ -43,7 +43,7 @@ class WelcomeView: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.setupNavbar()
+        self.setupNavBar()
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
@@ -53,7 +53,7 @@ class WelcomeView: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    private func setupNavbar() {
+    private func setupNavBar() {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,

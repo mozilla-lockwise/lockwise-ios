@@ -31,7 +31,7 @@ class AutoLockSettingView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setupNavbar()
+        self.setupNavBar()
         self.setupFooter()
     }
 
@@ -54,7 +54,7 @@ class AutoLockSettingView: UITableViewController {
 }
 
 extension AutoLockSettingView {
-    private func setupNavbar() {
+    private func setupNavBar() {
         navigationItem.title = Constant.string.settingsAutoLock
     }
 

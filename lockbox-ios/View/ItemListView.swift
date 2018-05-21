@@ -61,7 +61,7 @@ class ItemListView: UIViewController {
         view.backgroundColor = Constant.color.viewBackground
         self.setupRefresh()
         self.styleTableViewBackground()
-        self.styleNavigationBar()
+        self.setupNavBar()
         self.setupDataSource()
         self.setupDelegate()
         self.presenter?.onViewReady()
@@ -230,7 +230,7 @@ extension ItemListView {
 
 // view styling
 extension ItemListView {
-    fileprivate func styleNavigationBar() {
+    fileprivate func setupNavBar() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 
@@ -269,10 +269,11 @@ extension ItemListView {
 
     private var sortingButton: UIButton {
         let button = UIButton()
-        button.adjustsImageWhenHighlighted = false
-
         let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
+        let tintedSortingImage = sortingImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         button.setImage(sortingImage, for: .normal)
+        button.setImage(tintedSortingImage, for: .selected)
+        button.setImage(tintedSortingImage, for: .highlighted)
         button.setTitle(Constant.string.aToZ, for: .normal)
 
         button.contentHorizontalAlignment = .left
@@ -292,7 +293,7 @@ extension ItemListView {
                 toItem: nil,
                 attribute: .notAnAttribute,
                 multiplier: 1.0,
-                constant: 100)
+                constant: 50)
         )
         return button
     }

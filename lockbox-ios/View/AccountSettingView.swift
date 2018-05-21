@@ -70,16 +70,21 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
         ]
 
         let leftButton = UIButton()
-        leftButton.setTitle(Constant.string.settingsTitle, for: .normal)
-        leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
-
-        let backImage = UIImage(named: "back")
+        let backImage = UIImage(named: "back")?.withRenderingMode(.alwaysTemplate)
+        let tintedBackImage = backImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         leftButton.setImage(backImage, for: .normal)
-        leftButton.adjustsImageWhenHighlighted = false
+        leftButton.setImage(tintedBackImage, for: .selected)
+        leftButton.setImage(tintedBackImage, for: .highlighted)
+        leftButton.setTitle(Constant.string.settingsTitle, for: .normal)
 
+        leftButton.contentHorizontalAlignment = .left
+        leftButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
+        leftButton.setTitleColor(.white, for: .normal)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
+        leftButton.tintColor = .white
         leftButton.sizeToFit()
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
