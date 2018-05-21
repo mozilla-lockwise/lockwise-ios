@@ -50,12 +50,19 @@ _all `master` branch builds are automatically uploaded from buddybuild_
 
 ## Distributing through the App Store (release)
 
-1. Browse to iTunes Connect
-2. ???
-3. Profit
+1. Browse to the [App Store][4] section in iTunes Connect
+2. Confirm the "App Information" details are accurate and complete
+3. Confirm the "Pricing and Availability" details are accurate and complete
+4. Browse to the "iOS App" section to "Prepare for Submission"
+  - provide the version information (keywords, URLs, promotional screenshots)
+  - select the corresponding build number for the App Store release
+  - set the release instructions (manually, immediately, on a date)
+5. Save and "Submit for Review"
+6. ???
 
 ---
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
 [2]: https://developer.apple.com/testflight/testers/
 [3]: https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds
+[4]: https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270
