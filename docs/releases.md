@@ -17,6 +17,21 @@ _all commits on all branches and pull requests are automatically built_
 2. Open [buddybuild][1] from a mobile device and browse to the build
 3. Alternatively, add an email address to the "Deployments" email list(s)
   - this is expected to be a small group of contributors and Mozillians
+  
+## Preparing a Release (for TestFlight or App Store)
+
+- Update the release notes under `docs/release-notes.md`
+  - create a pull request to collaborate and get approval
+  - determine the next build number and include it in release notes
+  - merge the release notes to `master` branch
+  - this will result in a release build matching the build number provided
+- Create a tag from `master` matching the format: `major.minor.build`
+  - for example: `1.0.1189`
+  - push the tag to GitHub and create a corresponding "Release" on GitHub.com
+  - copy the release notes to the "Release" on GitHub
+  - download the `.ipa` from buddybuild and attach it to the Release on GitHub
+- Hopefully by now the build has been uploaded to iTunes Connect
+- Browse to iTunes Connect and continue the "Distributing..." instructions
 
 ## Distributing Builds through TestFlight (release)
 
