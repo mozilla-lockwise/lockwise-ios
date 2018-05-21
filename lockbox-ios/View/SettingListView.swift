@@ -23,6 +23,7 @@ class SettingListView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Constant.color.viewBackground
         self.setupDataSource()
         self.setupDelegate()
         self.setupSignOutButton()
