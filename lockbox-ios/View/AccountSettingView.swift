@@ -25,6 +25,7 @@ class AccountSettingView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = Constant.color.viewBackground
         self.setupUnlinkAccountButton()
         self.setupNavBar()
         self.presenter?.onViewReady()
