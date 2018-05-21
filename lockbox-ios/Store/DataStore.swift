@@ -48,11 +48,12 @@ enum SyncState: Equatable {
 }
 
 enum LoginStoreState: Equatable {
-    case Unprepared, Locked, Unlocked, Errored(cause: LoginStoreError)
+    case Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
 
     public static func ==(lhs: LoginStoreState, rhs: LoginStoreState) -> Bool {
         switch (lhs, rhs) {
         case (Unprepared, Unprepared): return true
+        case (Preparing, Preparing): return true
         case (Locked, Locked): return true
         case (Unlocked, Unlocked): return true
         case (Errored, Errored): return true
@@ -296,18 +297,38 @@ extension DataStore {
     }
 
     private func updateSyncState(from notification: Notification) {
-        let state: SyncState
-        switch notification.name {
-        case NotificationNames.FirefoxAccountVerified:
-            state = .ReadyToSync
-        case NotificationNames.ProfileDidStartSyncing:
-            state = .Syncing
-        case NotificationNames.ProfileDidFinishSyncing:
-            state = .Synced
+        Observable.combineLatest(self.storageState.take(1), self.syncState.take(1))
+            .subscribe(onNext: { latest in
+                self.update(storageState: latest.0, syncState: latest.1, from: notification)
+            })
+            .disposed(by: self.disposeBag)
+    }
+
+    private func update(storageState: LoginStoreState, syncState: SyncState, from notification: Notification) {
+        // NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
+        // Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+        switch (storageState, syncState, notification.name) {
+        case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
+            storageStateSubject.onNext(.Preparing)
+        case (.Preparing, _, NotificationNames.ProfileDidStartSyncing):
+            // we're retrying: we haven't been able to verify up til now.
+            break
+        case (.Preparing, _, NotificationNames.FirefoxAccountVerified):
+            // we've verified the account for the first time.
+            syncSubject.onNext(.Syncing)
+        case (_, _, NotificationNames.ProfileDidStartSyncing):
+            // fall through for the locked and unlocked states.
+            syncSubject.onNext(.Syncing)
+        case (.Preparing, .Syncing, NotificationNames.ProfileDidFinishSyncing):
+            // end of first time sync
+            storageStateSubject.onNext(.Unlocked)
+            syncSubject.onNext(.Synced)
+        case (_, _, NotificationNames.ProfileDidFinishSyncing):
+            // end of all syncs
+            syncSubject.onNext(.Synced)
         default:
-            return
+            print("Unexpected state combination: \(storageState) | \(syncState), \(notification.name)")
         }
-        self.syncSubject.onNext(state)
     }
 
     private func updateList() {
