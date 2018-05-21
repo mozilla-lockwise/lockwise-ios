@@ -123,7 +123,7 @@ extension ItemListView: ItemListViewProtocol {
 }
 
 extension ItemListView {
-    fileprivate func setupDataSource() {
+    fileprivate func setupDataSource() { // swiftlint:disable:this function_body_length
         self.dataSource = RxTableViewSectionedAnimatedDataSource<ItemSectionModel>(
                 configureCell: { dataSource, tableView, path, _ in
                     let cellConfiguration = dataSource[path]

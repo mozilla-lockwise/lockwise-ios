@@ -116,7 +116,7 @@ class WelcomePresenter {
                 .map { $0.0 }
                 .flatMap { [weak self] latest -> Single<Void> in
                     if let target = self {
-                        return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
+                        return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder) // swiftlint:disable:this line_length
                                 .catchError { _ in
                                     // ignore errors from local authentication
                                     return Observable.never().asSingle()
