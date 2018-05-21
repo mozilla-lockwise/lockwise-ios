@@ -150,7 +150,7 @@ extension ItemDetailPresenter {
         if passwordDisplayed {
             passwordText = itemPassword
         } else {
-            passwordText = itemPassword.replacingOccurrences(of: "[^\\s]", with: "•", options: .regularExpression)
+            passwordText = String(repeating: "•", count: itemPassword.count)
         }
 
         let sectionModels = [
