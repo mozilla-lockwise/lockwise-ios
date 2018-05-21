@@ -85,7 +85,6 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
         leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
         leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
         leftButton.tintColor = .white
-        leftButton.translatesAutoresizingMaskIntoConstraints = false
         leftButton.sizeToFit()
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
