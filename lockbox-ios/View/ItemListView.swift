@@ -224,18 +224,6 @@ extension ItemListView {
             refreshControl.rx.controlEvent(.valueChanged)
                 .bind(to: presenter.refreshObserver)
                 .disposed(by: self.disposeBag)
-
-            let button = UIButton(type: .custom)
-            button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
-            button.setTitle(Constant.string.yourLockbox, for: .normal)
-            button.setTitleColor(.white, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-
-            button.rx.tap
-                    .bind(to: presenter.refreshObserver)
-                    .disposed(by: self.disposeBag)
-
-            self.navigationItem.titleView = button
         }
     }
 }
@@ -245,6 +233,12 @@ extension ItemListView {
     fileprivate func styleNavigationBar() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
+        self.navigationItem.title = Constant.string.yourLockbox
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
 
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
