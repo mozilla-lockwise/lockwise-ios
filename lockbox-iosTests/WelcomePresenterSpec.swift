@@ -206,10 +206,9 @@ class WelcomePresenterSpec: QuickSpec {
                                 self.biometryManager.fakeAuthResponse.onNext(())
                             }
 
-                            it("unlocks the application & routes to the list") {
+                            it("unlocks the application") {
                                 expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
-                                expect(argument).to(equal(MainRouteAction.list))
+                                expect(self.routeActionHandler.invokeArgument).to(beNil())
                             }
                         }
 
@@ -263,10 +262,9 @@ class WelcomePresenterSpec: QuickSpec {
                                 self.biometryManager.fakeAuthResponse.onNext(())
                             }
 
-                            it("unlocks the application & routes to the list") {
+                            it("unlocks the application") {
                                 expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                let argument = self.routeActionHandler.invokeArgument as! MainRouteAction
-                                expect(argument).to(equal(MainRouteAction.list))
+                                expect(self.routeActionHandler.invokeArgument).to(beNil())
                             }
                         }
 
@@ -281,7 +279,6 @@ class WelcomePresenterSpec: QuickSpec {
                             }
                         }
                     }
-
                 }
             }
         }
