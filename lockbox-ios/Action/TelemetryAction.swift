@@ -38,6 +38,9 @@ enum TelemetryEventObject: String {
     case settingsAccount = "settings_account"
     case settingsFaq = "settings_faq"
     case settingsProvideFeedback = "settings_provide_feedback"
+    case loginWelcome = "login_welcome"
+    case loginFxa = "login_fxa"
+    case loginLearnMore = "login_learn_more"
 }
 
 enum ExtraKey: String {
@@ -80,6 +83,13 @@ class TelemetryActionHandler: ActionHandler {
                     value: action.value,
                     extras: action.extras
             )
+            print (    // I added this print statement
+              TelemetryEventCategory.action.rawValue,
+              action.eventMethod.rawValue,
+              action.eventObject.rawValue,
+              action.value,
+              action.extras
+            );
         }.asObserver()
     }()
 }

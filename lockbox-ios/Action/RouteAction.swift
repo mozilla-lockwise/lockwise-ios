@@ -25,6 +25,31 @@ enum LoginRouteAction: RouteAction {
     case learnMore
 }
 
+extension LoginRouteAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .show
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self {
+        case .welcome:
+            return .loginWelcome
+        case .fxa:
+            return .loginFxa
+        case .learnMore:
+            return .loginLearnMore
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+      return nil
+    }
+}
+
 enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
