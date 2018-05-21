@@ -84,22 +84,21 @@ extension ItemDetailView: ItemDetailViewProtocol {
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavBar() {
         let leftButton = UIButton()
-        leftButton.adjustsImageWhenHighlighted = false
-
         let leftImage = UIImage(named: "back")?.withRenderingMode(.alwaysTemplate)
         let tintedLeftImage = leftImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         leftButton.setImage(leftImage, for: .normal)
         leftButton.setImage(tintedLeftImage, for: .selected)
         leftButton.setImage(tintedLeftImage, for: .highlighted)
         leftButton.setTitle(Constant.string.back, for: .normal)
-        leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
-        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
-        leftButton.tintColor = .white
 
         leftButton.contentHorizontalAlignment = .left
         leftButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
+        leftButton.setTitleColor(.white, for: .normal)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
+        leftButton.tintColor = .white
         leftButton.sizeToFit()
 
         leftButton.addConstraint(NSLayoutConstraint(
