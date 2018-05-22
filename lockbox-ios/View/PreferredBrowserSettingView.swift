@@ -48,17 +48,6 @@ class PreferredBrowserSettingView: UITableViewController {
 }
 
 extension PreferredBrowserSettingView {
-//    private func setupNavbar() {
-//        self.navigationItem.title = Constant.string.settingsBrowser
-//        self.navigationController?.navigationBar.titleTextAttributes = [
-//            NSAttributedStringKey.foregroundColor: UIColor.white,
-//            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
-//        ]
-//
-//        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
-//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-//    }
-
     private func setupFooter() {
         self.tableView.tableFooterView = UIView()
     }
