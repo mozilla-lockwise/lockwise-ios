@@ -23,7 +23,7 @@ class SettingListView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constant.color.viewBackground
+        self.view.backgroundColor = Constant.color.viewBackground
         self.setupDataSource()
         self.setupDelegate()
         self.setupSignOutButton()
@@ -45,6 +45,10 @@ override func viewWillAppear(_ animated: Bool) {
 extension SettingListView: SettingListViewProtocol {
     public var onSignOut: ControlEvent<Void> {
         return self.signOutButton.rx.tap
+    }
+
+    public var hideLockNow: AnyObserver<Bool> {
+        return self.signOutButton.rx.isHidden.asObserver()
     }
 
     func bind(items: Driver<[SettingSectionModel]>) {
