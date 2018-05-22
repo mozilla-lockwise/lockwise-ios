@@ -90,10 +90,10 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeExternalLinkActionHandler: ExternalLinkActionHandler {
-        var invokedAction: ExternalLinkAction?
+    class FakeExternalLinkActionHandler: LinkActionHandler {
+        var invokedAction: LinkAction?
 
-        override func invoke(_ action: ExternalLinkAction) {
+        override func invoke(_ action: LinkAction) {
             self.invokedAction = action
         }
     }
@@ -292,7 +292,8 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the externalLink action") {
                             expect(self.externalLinkHandler.invokedAction).notTo(beNil())
-                            expect(self.externalLinkHandler.invokedAction).to(equal(ExternalLinkAction(url: webAddress)))
+                            let action = self.externalLinkHandler.invokedAction as! ExternalLinkAction
+                            expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
                         }
                     }
                 }

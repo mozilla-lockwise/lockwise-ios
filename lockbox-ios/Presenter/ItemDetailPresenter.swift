@@ -25,7 +25,7 @@ class ItemDetailPresenter {
     private var dataStoreActionHandler: DataStoreActionHandler
     private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
-    private var externalLinkActionHandler: ExternalLinkActionHandler
+    private var externalLinkActionHandler: LinkActionHandler
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -71,7 +71,7 @@ class ItemDetailPresenter {
                         .take(1)
                         .subscribe(onNext: { item in
                             if let origin = item?.hostname {
-                                target.externalLinkActionHandler.invoke(ExternalLinkAction(url: origin))
+                                target.externalLinkActionHandler.invoke(ExternalLinkAction(baseURLString: origin))
                             }
                         })
                         .disposed(by: target.disposeBag)
@@ -87,7 +87,7 @@ class ItemDetailPresenter {
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
          itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared,
-         externalLinkActionHandler: ExternalLinkActionHandler = ExternalLinkActionHandler.shared) {
+         externalLinkActionHandler: LinkActionHandler = LinkActionHandler.shared) {
         self.view = view
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
