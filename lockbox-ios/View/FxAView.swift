@@ -12,7 +12,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     internal var presenter: FxAPresenter?
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
-    private var url: URL?
+    private var url: URL!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -104,8 +104,10 @@ extension FxAView: WKScriptMessageHandler {
         // Note that this exploit wouldn't be possible if we were using WebChannels; see
         // https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/WebChannel.jsm
         let origin = message.frameInfo.securityOrigin
-        guard origin.`protocol` == self.url?.scheme && origin.host == self.url?.host && origin.port == (self.url?.port ?? 0) else { // swiftlint:disable:this line_length
-            print("Ignoring message - \(origin) does not match expected origin \(self.url?.origin)")
+        guard origin.`protocol` == self.url.scheme,
+              origin.host == self.url.host,
+              origin.port == (self.url.port ?? 0) else {
+            print("Ignoring message - \(origin) does not match expected origin \(self.url.origin)")
             return
         }
 
