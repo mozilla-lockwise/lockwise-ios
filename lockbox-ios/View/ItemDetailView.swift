@@ -89,6 +89,12 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .always
         }
+        
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
 
         if let presenter = self.presenter {
             leftButton.rx.tap
