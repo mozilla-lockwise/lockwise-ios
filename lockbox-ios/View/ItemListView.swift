@@ -265,10 +265,11 @@ extension ItemListView {
     private var prefButton: UIButton {
         let button = UIButton()
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
-        let tintedPrefImage = prefImage?.tinted(Constant.color.lightGrey)
+        let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         button.setImage(prefImage, for: .normal)
         button.setImage(tintedPrefImage, for: .selected)
         button.setImage(tintedPrefImage, for: .highlighted)
+        button.setImage(tintedPrefImage, for: .disabled)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
