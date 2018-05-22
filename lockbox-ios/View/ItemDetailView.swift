@@ -83,31 +83,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
-        let leftButton = UIButton()
-        leftButton.adjustsImageWhenHighlighted = false
-
-        let leftImage = UIImage(named: "back")?.withRenderingMode(.alwaysTemplate)
-        leftButton.setImage(leftImage, for: .normal)
-        leftButton.setTitle(Constant.string.back, for: .normal)
-
-        leftButton.contentHorizontalAlignment = .left
-        leftButton.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
-        leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
-        leftButton.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
-        leftButton.tintColor = .white
-
-        leftButton.addConstraint(NSLayoutConstraint(
-            item: leftButton,
-            attribute: .width,
-            relatedBy: .equal,
-            toItem: nil,
-            attribute: .notAnAttribute,
-            multiplier: 1.0,
-            constant: 100)
-        )
-
+        let leftButton = UIButton(title: Constant.string.back, imageName: "back")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if #available(iOS 11.0, *) {

@@ -39,7 +39,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
     private func styleNavigationBar() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: Constant.string.cancel,
+                title: Constant.string.close,
                 style: .plain,
                 target: nil,
                 action: nil
@@ -56,7 +56,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
         if let presenter = self.presenter {
             self.navigationItem.leftBarButtonItem!.rx.tap
-                    .bind(to: presenter.onCancel)
+                    .bind(to: presenter.onClose)
                     .disposed(by: self.disposeBag)
         }
     }
