@@ -1,5 +1,35 @@
 # Release Notes
 
+## 1.0 (Build 12?????????)
+
+What's NEW? We polished the interface (colors!), squashed some bugs (lock timer!), and improved the experience for those users (unsafely!) using a device without a passcode. If your app appears empty, there are two good reasons and we know about them. Read on...
+
+This build DOES include:
+
+- signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox
+- automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data
+- searching and sorting items
+- user-friendly item titles to help with readability
+- showing/hiding passwords
+- copying usernames and passwords to the pasteboard (which expire after 60 seconds)
+- opening web addresses in your preferred web browser
+- meaningful instructions when you have no items found
+- Telemetry for event tracking (no personally-identifiable information is collected)
+
+This build DOES NOT include:
+
+- creating, updating or deleting entries (that's intentional)
+- a few more links to real FAQ content and instructions (#172)
+- an alert when we're stuck waiting on you to confirm your Firefox Accounts sign in (#417)
+
+Some KNOWN ISSUES include:
+
+- you sign in and receive a "confirmation" email but we don't alert you, thus your list appears empty or broken (#417)
+- if you delete the app and re-install it, your app may crash once (#374)
+
+Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+
+
 ## 1.0 (Build 1189)
 
 What's NEW? We squashed a bunch of bugs (timed locking works much better now) and added a few improvements (user-friendly titles and a sync indicator that doesn't interrupt you). To recap...
