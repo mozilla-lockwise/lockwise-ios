@@ -44,6 +44,7 @@ class AutoLockStore {
 
         self.dispatcher.register
                 .filter { action -> Bool in
+                    // future user interaction actions will need to get added to this list
                     action is MainRouteAction ||
                             action is SettingRouteAction ||
                             action is CopyConfirmationDisplayAction ||
