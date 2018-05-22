@@ -36,9 +36,11 @@ extension UIButton {
             self.setImage(tintedImage, for: .highlighted)
             self.setImage(tintedImage, for: .disabled)
 
+            self.contentHorizontalAlignment = .left
             self.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
         }
 
+        self.tintColor = .white
         self.sizeToFit()
     }
 }
