@@ -297,7 +297,8 @@ extension DataStore {
     }
 
     private func updateSyncState(from notification: Notification) {
-        Observable.combineLatest(self.storageState.take(1), self.syncState.take(1))
+        Observable.combineLatest(self.storageState, self.syncState)
+            .take(1)
             .subscribe(onNext: { latest in
                 self.update(storageState: latest.0, syncState: latest.1, from: notification)
             })
@@ -305,8 +306,19 @@ extension DataStore {
     }
 
     private func update(storageState: LoginStoreState, syncState: SyncState, from notification: Notification) {
-        // NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
-        // Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+        // LoginStoreState: Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+        //      Store state goes from:
+        //          * Unprepared to Preparing when a valid username and password are detected.
+        //          * Preparing to Unlocked when first sync (including email confirmation) has finished.
+        //          * Unlocked to Locked on locking (not sync related).
+
+        // SyncState: NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
+        //      Sync state goes from:
+        //          * NotSyncable to Syncing after email confirmation.
+        //          * Anything to Syncing at the start of sync after the first syncing starts
+        //          * Syncing to Synced after all syncs.
+        //
+        //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
         switch (storageState, syncState, notification.name) {
         case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
             storageStateSubject.onNext(.Preparing)
