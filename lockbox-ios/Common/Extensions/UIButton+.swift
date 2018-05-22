@@ -30,7 +30,7 @@ extension UIButton {
         if let name = imageName {
             let backImage = UIImage(named: name)?.withRenderingMode(.alwaysTemplate)
             let tintedImage = backImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
-            
+
             self.setImage(backImage, for: .normal)
             self.setImage(tintedImage, for: .selected)
             self.setImage(tintedImage, for: .highlighted)
