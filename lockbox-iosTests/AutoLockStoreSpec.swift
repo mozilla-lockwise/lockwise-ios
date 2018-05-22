@@ -10,19 +10,29 @@ import RxSwift
 
 @testable import Lockbox
 
+enum AutoLockStoreSpecSharedExample: String {
+    case TimerReset, TimerNotReset
+}
+
+enum AutoLockStoreSpecContext: String {
+    case Action
+}
+
 class AutoLockStoreSpec: QuickSpec {
 
     class FakeDispatcher: Dispatcher {
+        let registerStub = PublishSubject<Action>()
 
+        override var register: Observable<Action> {
+            return self.registerStub.asObservable()
+        }
     }
 
     class FakeDataStore: DataStore {
         var lockedStub = PublishSubject<Bool>()
 
         override var locked: Observable<Bool> {
-            get {
-                return self.lockedStub.asObservable()
-            }
+            return self.lockedStub.asObservable()
         }
     }
 
@@ -60,7 +70,7 @@ class AutoLockStoreSpec: QuickSpec {
                 describe("with auto lock setting on OnAppExit") {
                     beforeEach {
                         self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        self.dispatcher.dispatch(action: LifecycleAction.background)
+                        self.dispatcher.registerStub.onNext(LifecycleAction.background)
                     }
 
                     it("locks app") {
@@ -73,7 +83,7 @@ class AutoLockStoreSpec: QuickSpec {
                     beforeEach {
                         self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
                         self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        self.dispatcher.dispatch(action: LifecycleAction.background)
+                        self.dispatcher.registerStub.onNext(LifecycleAction.background)
                     }
 
                     it("does not lock app") {
@@ -129,45 +139,111 @@ class AutoLockStoreSpec: QuickSpec {
                 }
             }
 
-            describe("onAutoLockTime change") {
+            describe("on any user interaction") {
                 var fireDate: TimeInterval?
 
                 beforeEach {
                     self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                    self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .FiveMinutes))
                     fireDate = self.subject.timer?.fireDate.timeIntervalSince1970
                 }
 
-                describe("to Never") {
-                    beforeEach {
-                        self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                describe("autolocksetting specifically") {
+                    describe("to Never") {
+                        beforeEach {
+                            self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .Never))
+                        }
+
+                        it("stops the timer") {
+                            expect(self.subject.timer?.isValid).to(beFalse())
+                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        }
                     }
 
-                    it("stops the timer") {
-                        expect(self.subject.timer?.isValid).to(beFalse())
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                    describe("to OnAppExit") {
+                        beforeEach {
+                            self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .OnAppExit))
+                        }
+
+                        it("stops the timer") {
+                            expect(self.subject.timer?.isValid).to(beFalse())
+                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        }
+                    }
+
+                    describe("to different time interval") {
+                        beforeEach {
+                            self.userDefaults.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .OneHour))
+                        }
+
+                        it("restarts the timer") {
+                            expect(self.subject.timer).toNot(beNil())
+                            let newFireDate = self.subject.timer?.fireDate.timeIntervalSince1970
+                            expect(newFireDate).toNot(equal(fireDate))
+                        }
                     }
                 }
 
-                describe("to OnAppExit") {
-                    beforeEach {
-                        self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                describe("miscellaneous actions") {
+                    sharedExamples(AutoLockStoreSpecSharedExample.TimerReset.rawValue) { context in
+                        it("resets the timer") {
+                            let action = context()[AutoLockStoreSpecContext.Action.rawValue] as! Action
+                            self.dispatcher.registerStub.onNext(action)
+                            expect(self.subject.timer).toNot(beNil())
+                            let newFireDate = self.subject.timer?.fireDate.timeIntervalSince1970
+                            expect(newFireDate).toNot(equal(fireDate))
+                        }
                     }
 
-                    it("stops the timer") {
-                        expect(self.subject.timer?.isValid).to(beFalse())
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: MainRouteAction.list]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: SettingRouteAction.list]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: CopyConfirmationDisplayAction(field: CopyField.username)]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: ExternalLinkAction(url: "www.butts.com")]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: ItemListSortingAction.alphabetically]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: ItemDetailDisplayAction.togglePassword(displayed: true)]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: SettingAction.preferredBrowser(browser: .Focus)]
                     }
                 }
 
-                describe("to different time interval") {
-                    beforeEach {
-                        self.userDefaults.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                describe("non-user-interaction actions") {
+                    sharedExamples(AutoLockStoreSpecSharedExample.TimerNotReset.rawValue) { context in
+                        it("does not reset the timer") {
+                            let action = context()[AutoLockStoreSpecContext.Action.rawValue] as! Action
+                            self.dispatcher.registerStub.onNext(action)
+                            expect(self.subject.timer).toNot(beNil())
+                            let newFireDate = self.subject.timer?.fireDate.timeIntervalSince1970
+                            expect(newFireDate).to(equal(fireDate))
+                        }
                     }
 
-                    it("restarts the timer") {
-                        expect(self.subject.timer).toNot(beNil())
-                        let newFireDate = self.subject.timer?.fireDate.timeIntervalSince1970
-                        expect(newFireDate).toNot(equal(fireDate))
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerNotReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: DataStoreAction.lock]
+                    }
+
+                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerNotReset.rawValue) {
+                        [AutoLockStoreSpecContext.Action.rawValue: UserInfoAction.load]
                     }
                 }
             }
