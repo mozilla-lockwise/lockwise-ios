@@ -23,8 +23,9 @@ extension UIButton {
 
         self.setTitle(title, for: .normal)
         self.setTitleColor(.white, for: .normal)
-        self.setTitleColor(Constant.color.lightGrey, for: .selected)
-        self.setTitleColor(Constant.color.lightGrey, for: .highlighted)
+        self.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
+        self.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
+        self.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
 
         if let name = imageName {
             let backImage = UIImage(named: name)
