@@ -276,6 +276,17 @@ extension ItemListView {
 
     private var sortingButton: UIButton {
         let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
+        // custom width constraint so "Recent" fits on small iPhone SE screen
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addConstraint(NSLayoutConstraint(
+            item: button,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1.0,
+            constant: 60)
+        )
         return button
     }
 }
