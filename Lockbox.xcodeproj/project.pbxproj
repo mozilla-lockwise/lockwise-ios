@@ -20,6 +20,7 @@
 		391233892092155300CB0233 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 391233882092155300CB0233 /* FxASignIn.js */; };
 		39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
 		39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
+		4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */; };
 		4C7F3C7D20B3C32A00C4C414 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7F3C7C20B3C32A00C4C414 /* UIButton+.swift */; };
 		7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */; };
 		7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */; };
@@ -226,6 +227,7 @@
 		39B1508820878E42007497E5 /* Deferred.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Deferred.framework; path = Carthage/Build/iOS/Deferred.framework; sourceTree = "<group>"; };
 		39DB3677208E2A800026DA92 /* Account.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Account.framework; path = Carthage/Build/iOS/Account.framework; sourceTree = "<group>"; };
 		39DB367D208E2F8F0026DA92 /* FxA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxA.framework; path = Carthage/Build/iOS/FxA.framework; sourceTree = "<group>"; };
+		4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Spec.swift"; sourceTree = "<group>"; };
 		4C7F3C7C20B3C32A00C4C414 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		7AA5404248F72FC87CC4978B /* Date+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		7AA5406822AB67B669BAF89B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
@@ -677,6 +679,7 @@
 		7D1B1AC51F99028D00C1F5FF /* lockbox-iosTests */ = {
 			isa = PBXGroup;
 			children = (
+				4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */,
 				7DA4C6892028F86E00B61DD8 /* ItemListPresenterSpec.swift */,
 				7DA4C6872028F86E00B61DD8 /* ItemListViewSpec.swift */,
 				7DA4C6882028F86E00B61DD8 /* UIViewController+Spec.swift */,
@@ -1035,6 +1038,7 @@
 				7AA545D1DBB719E27B782966 /* ItemListDisplayActionSpec.swift in Sources */,
 				7AA54850D6DE1CD66D8C43AE /* UserInfoActionSpec.swift in Sources */,
 				7AA54E2C7C6639BCA7C37A1F /* AccountSettingPresenterSpec.swift in Sources */,
+				4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */,
 				7AA541ED07A75F27A211819B /* AccountSettingViewSpec.swift in Sources */,
 				D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */,
 				7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */,
