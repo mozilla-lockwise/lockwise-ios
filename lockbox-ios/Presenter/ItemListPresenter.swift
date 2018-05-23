@@ -13,9 +13,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func bind(items: Driver<[ItemSectionModel]>)
     func bind(sortingButtonTitle: Driver<String>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
-    var tableViewInteractionEnabled: AnyObserver<Bool> { get }
-    func displayEmptyStateMessaging()
-    func hideEmptyStateMessaging()
+    var tableViewScrollEnabled: AnyObserver<Bool> { get }
     func dismissKeyboard()
 }
 
@@ -121,11 +119,26 @@ class ItemListPresenter {
         }.asObserver()
     }()
 
+    lazy private var learnMoreObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(MainRouteAction.learnMore)
+        }.asObserver()
+    }()
+
+    lazy private var emptyPlaceholderItems = [
+        ItemSectionModel(model: 0, items: self.searchItem +
+                [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
+        )
+    ]
+
     lazy private var syncPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.ListPlaceholder])
+        ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.SyncListPlaceholder])
     ]
 
     lazy private var searchItem: [LoginListCellConfiguration] = {
+        let enabledObservable = self.dataStore.list
+                .map { !$0.isEmpty }
+
         let emptyTextObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListFilterAction.self)
                 .map { $0.filteringText.isEmpty }
@@ -143,6 +156,7 @@ class ItemListPresenter {
                 .map { $0.filteringText }
 
         return [LoginListCellConfiguration.Search(
+                enabled: enabledObservable,
                 cancelHidden: cancelHiddenObservable,
                 text: externalTextChangeObservable
         )]
@@ -163,8 +177,6 @@ class ItemListPresenter {
     }
 
     func onViewReady() {
-        let itemListObservable = self.placeholderComputingItemListObservable()
-
         let itemSortObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListSortingAction.self)
 
@@ -172,7 +184,7 @@ class ItemListPresenter {
                 .filterByType(class: ItemListFilterAction.self)
 
         let listDriver = self.createItemListDriver(
-                loginListObservable: itemListObservable,
+                loginListObservable: self.dataStore.list,
                 filterTextObservable: filterTextObservable,
                 itemSortObservable: itemSortObservable,
                 syncStateObservable: self.dataStore.syncState
@@ -201,13 +213,25 @@ class ItemListPresenter {
             return
         }
 
-        let enableObservable = Observable.combineLatest(self.dataStore.syncState, self.dataStore.list)
-                .map {
-                    $0.0 != SyncState.Syncing && !$0.1.isEmpty
-                }
+        let enableObservable = self.dataStore.list.map { !$0.isEmpty }
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
-        enableObservable.bind(to: view.tableViewInteractionEnabled).disposed(by: self.disposeBag)
+        enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
+
+        // when this observable emits an event, the spinner gets dismissed
+        let hideSpinnerObservable = self.dataStore.syncState
+                .filter { $0 == SyncState.Synced }
+                .map { _ in return () }
+                .asDriver(onErrorJustReturn: ())
+
+        self.dataStore.syncState
+                .asDriver(onErrorJustReturn: SyncState.Synced)
+                .drive(onNext: { latest in
+                    if latest == SyncState.Syncing {
+                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
+                    }
+                })
+                .disposed(by: self.disposeBag)
     }
 }
 
@@ -236,6 +260,10 @@ extension ItemListPresenter {
                         return self.syncPlaceholderItems
                     }
 
+                    if latest.syncState == .Synced && latest.logins.isEmpty {
+                        return self.emptyPlaceholderItems
+                    }
+
                     let sortedFilteredItems = self.filterItemsForText(latest.text, items: latest.logins)
                             .sorted { lhs, rhs -> Bool in
                                 switch latest.sortingOption {
@@ -249,41 +277,6 @@ extension ItemListPresenter {
                     return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems))]
                 }
                 .asDriver(onErrorJustReturn: [])
-    }
-
-    private func placeholderComputingItemListObservable() -> Observable<[Login]> {
-        // when this observable emits an event, the spinner gets dismissed
-        let hideSpinnerObservable = self.dataStore.syncState
-                .filter {
-                    $0 == SyncState.Synced
-                }
-                .map { _ in
-                    return ()
-                }
-                .asDriver(onErrorJustReturn: ())
-
-        return Observable.combineLatest(self.dataStore.list, self.dataStore.syncState)
-                .asDriver(onErrorJustReturn: ([], SyncState.Synced))
-                .do(onNext: { latest in
-                    if latest.0.isEmpty && latest.1 == SyncState.Synced {
-                        self.view?.displayEmptyStateMessaging()
-                    }
-
-                    if latest.1 == SyncState.Syncing {
-                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
-                    }
-
-                    if !latest.0.isEmpty {
-                        self.view?.hideEmptyStateMessaging()
-                    }
-                })
-                .asObservable()
-                .filter { latest in
-                    return !(latest.0.isEmpty && latest.1 == SyncState.Synced)
-                }
-                .map {
-                    $0.0
-                }
     }
 
     fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {

@@ -78,7 +78,7 @@ class RootView: UIViewController, RootViewProtocol {
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
         case .learnMore:
-            self.currentViewController?.pushViewController(StaticURLWebView(url: Constant.app.learnMoreURL,
+            self.currentViewController?.pushViewController(StaticURLWebView(url: Constant.app.useLockboxFAQ,
                                                                           title: Constant.string.learnMore),
                                                            animated: true)
         }
@@ -93,6 +93,12 @@ class RootView: UIViewController, RootViewProtocol {
                 itemDetailView.itemId = id
                 self.currentViewController?.pushViewController(itemDetailView, animated: true)
             }
+        case .learnMore:
+            self.currentViewController?.pushViewController(
+                    StaticURLWebView(
+                            url: Constant.app.enableSyncFAQ,
+                            title: Constant.string.learnMore),
+                    animated: true)
         }
     }
 

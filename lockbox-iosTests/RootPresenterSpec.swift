@@ -525,6 +525,51 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
+
+                        describe(".learnMore") {
+                            describe("if the top view is not already the static url web view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("does not start the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("checks for the static url webview & tells the view to show the detail view") {
+                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
+                                    expect(self.view.pushMainViewArgument)
+                                            .to(equal(MainRouteAction.learnMore))
+                                }
+                            }
+
+                            describe("if the top view is already the static url web view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("does not start the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("checks for the DetailView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
+                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+                            }
+                        }
                     }
 
                     describe("if the main stack is not already displayed") {
@@ -617,6 +662,51 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the DetailView & nothing happens") {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
+                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                }
+                            }
+                        }
+
+                        describe(".learnMore") {
+                            describe("if the top view is not already the static url webview") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the staticurlwebview & tells the view to show the loginview") {
+                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
+                                    expect(self.view.pushMainViewArgument)
+                                            .to(equal(MainRouteAction.learnMore))
+                                }
+                            }
+
+                            describe("if the top view is already the static url webview") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the main stack") {
+                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the DetailView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument).to(beNil())
                                 }
                             }
