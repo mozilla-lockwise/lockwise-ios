@@ -72,4 +72,10 @@ class PreferredBrowserSettingPresenter {
 
         view?.bind(items: driver)
     }
+
+    lazy private(set) var onSettingsTap: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(SettingRouteAction.list)
+            }.asObserver()
+    }()
 }

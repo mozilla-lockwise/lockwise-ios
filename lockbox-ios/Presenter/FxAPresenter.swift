@@ -28,7 +28,7 @@ class FxAPresenter {
 
     private var disposeBag = DisposeBag()
 
-    public var onCancel: AnyObserver<Void> {
+    public var onClose: AnyObserver<Void> {
         return Binder(self) { target, _ in
             target.routeActionHandler.invoke(LoginRouteAction.welcome)
         }.asObserver()

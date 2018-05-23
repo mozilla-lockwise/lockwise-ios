@@ -69,33 +69,21 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
             NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
         ]
 
-        let leftButton = UIButton()
-        leftButton.setTitle(Constant.string.settingsTitle, for: .normal)
-        leftButton.setTitleColor(.white, for: .normal)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .selected)
-        leftButton.setTitleColor(Constant.color.lightGrey, for: .highlighted)
-
-        let backImage = UIImage(named: "back")
-        leftButton.setImage(backImage, for: .normal)
-        leftButton.adjustsImageWhenHighlighted = false
-
-        leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
-        leftButton.sizeToFit()
-
+        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {
             leftButton.rx.tap
-                    .bind(to: presenter.onSettingsTap)
-                    .disposed(by: self.disposeBag)
+                .bind(to: presenter.onSettingsTap)
+                .disposed(by: self.disposeBag)
 
             self.navigationController?.interactivePopGestureRecognizer?.delegate = self
             self.navigationController?.interactivePopGestureRecognizer?.rx.event
-                    .map { _ -> Void in
-                        return ()
-                    }
-                    .bind(to: presenter.onSettingsTap)
-                    .disposed(by: self.disposeBag)
+                .map { _ -> Void in
+                    return ()
+                }
+                .bind(to: presenter.onSettingsTap)
+                .disposed(by: self.disposeBag)
         }
     }
 }

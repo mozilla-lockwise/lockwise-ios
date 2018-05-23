@@ -269,37 +269,24 @@ extension ItemListView {
         button.setImage(prefImage, for: .normal)
         button.setImage(tintedPrefImage, for: .selected)
         button.setImage(tintedPrefImage, for: .highlighted)
+        button.setImage(tintedPrefImage, for: .disabled)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
 
     private var sortingButton: UIButton {
-        let button = UIButton()
-        button.adjustsImageWhenHighlighted = false
-
-        let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
-        button.setImage(sortingImage, for: .normal)
-        button.setTitle(Constant.string.aToZ, for: .normal)
-
-        button.contentHorizontalAlignment = .left
-        button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
-        button.setTitleColor(.white, for: .normal)
-        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
-        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
-        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
-        button.tintColor = .white
+        let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
+        // custom width constraint so "Recent" fits on small iPhone SE screen
         button.translatesAutoresizingMaskIntoConstraints = false
-
         button.addConstraint(NSLayoutConstraint(
-                item: button,
-                attribute: .width,
-                relatedBy: .equal,
-                toItem: nil,
-                attribute: .notAnAttribute,
-                multiplier: 1.0,
-                constant: 100)
+            item: button,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1.0,
+            constant: 60)
         )
         return button
     }

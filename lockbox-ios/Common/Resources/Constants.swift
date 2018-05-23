@@ -24,6 +24,8 @@ struct Constant {
         static let kebabBlue = UIColor(hex: 0x003EAA)
         static let settingsHeader = UIColor(hex: 0x737373)
         static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
+        static let buttonTitleColorNormalState = UIColor.white
+        static let buttonTitleColorOtherState = UIColor(white: 1.0, alpha: 0.6)
     }
 
     struct fxa {
@@ -38,6 +40,7 @@ struct Constant {
         static let aToZ = NSLocalizedString("a_to_z", value: "A-Z", comment: "Label for the button allowing users to sort an entry list alphabetically")
         static let back = NSLocalizedString("back", value: "Back", comment: "Back button title")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
+        static let close = NSLocalizedString("close", value: "Close", comment: "Close button title")
         static let unlink = NSLocalizedString("unlink", value: "Disconnect", comment: "Unlink aka Disconnect button title")
         static let done = NSLocalizedString("done", value: "Done", comment: "Text on button to close settings")
         static let confirmDialogTitle = NSLocalizedString("confirm_dialog_title", value: "Disconnect Firefox Lockbox?", comment: "Confirm dialog title")
