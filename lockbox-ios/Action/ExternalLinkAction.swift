@@ -6,18 +6,30 @@ import Foundation
 import RxSwift
 import UIKit
 
-struct ExternalLinkAction: Action {
-    let url: String
+protocol LinkAction: Action {}
+
+struct ExternalLinkAction: LinkAction {
+    let baseURLString: String
+}
+
+enum SettingLinkAction: LinkAction {
+    case touchIDPasscode
+
+    func toString() -> String {
+        switch self {
+        case .touchIDPasscode: return "App-Prefs:root=TOUCHID_PASSCODE"
+        }
+    }
 }
 
 extension ExternalLinkAction: Equatable {
     static func ==(lhs: ExternalLinkAction, rhs: ExternalLinkAction) -> Bool {
-        return lhs.url == rhs.url
+        return lhs.baseURLString == rhs.baseURLString
     }
 }
 
-class ExternalLinkActionHandler: ActionHandler {
-    static let shared = ExternalLinkActionHandler()
+class LinkActionHandler: ActionHandler {
+    static let shared = LinkActionHandler()
     private let disposeBag = DisposeBag()
 
     private let dispatcher: Dispatcher
@@ -32,8 +44,12 @@ class ExternalLinkActionHandler: ActionHandler {
         self.userDefaults = userDefaults
     }
 
-    func invoke(_ action: ExternalLinkAction) {
-        self.openUrl(string: action.url)
+    func invoke(_ action: LinkAction) {
+        if let externalLink = action as? ExternalLinkAction {
+            self.openUrl(string: externalLink.baseURLString)
+        } else if let settingLink = action as? SettingLinkAction {
+            self.openSettings(settingLink)
+        }
     }
 
     private func openUrl(string url: String) {
@@ -43,6 +59,13 @@ class ExternalLinkActionHandler: ActionHandler {
                 latest.openUrl(url: url, application: self.application)
             })
             .disposed(by: self.disposeBag)
+    }
+
+    private func openSettings(_ action: SettingLinkAction) {
+        if let settingsURL = URL(string: action.toString()),
+           self.application.canOpenURL(settingsURL) {
+            self.application.open(settingsURL, options: [:], completionHandler: nil)
+        }
     }
 }
 

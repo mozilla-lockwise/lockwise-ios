@@ -48,11 +48,12 @@ enum SyncState: Equatable {
 }
 
 enum LoginStoreState: Equatable {
-    case Unprepared, Locked, Unlocked, Errored(cause: LoginStoreError)
+    case Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
 
     public static func ==(lhs: LoginStoreState, rhs: LoginStoreState) -> Bool {
         switch (lhs, rhs) {
         case (Unprepared, Unprepared): return true
+        case (Preparing, Preparing): return true
         case (Locked, Locked): return true
         case (Unlocked, Unlocked): return true
         case (Errored, Errored): return true
@@ -296,18 +297,50 @@ extension DataStore {
     }
 
     private func updateSyncState(from notification: Notification) {
-        let state: SyncState
-        switch notification.name {
-        case NotificationNames.FirefoxAccountVerified:
-            state = .ReadyToSync
-        case NotificationNames.ProfileDidStartSyncing:
-            state = .Syncing
-        case NotificationNames.ProfileDidFinishSyncing:
-            state = .Synced
+        Observable.combineLatest(self.storageState, self.syncState)
+            .take(1)
+            .subscribe(onNext: { latest in
+                self.update(storageState: latest.0, syncState: latest.1, from: notification)
+            })
+            .disposed(by: self.disposeBag)
+    }
+
+    private func update(storageState: LoginStoreState, syncState: SyncState, from notification: Notification) {
+        // LoginStoreState: Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+        //      Store state goes from:
+        //          * Unprepared to Preparing when a valid username and password are detected.
+        //          * Preparing to Unlocked when first sync (including email confirmation) has finished.
+        //          * Unlocked to Locked on locking (not sync related).
+
+        // SyncState: NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
+        //      Sync state goes from:
+        //          * NotSyncable to Syncing after email confirmation.
+        //          * Anything to Syncing at the start of sync after the first syncing starts
+        //          * Syncing to Synced after all syncs.
+        //
+        //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
+        switch (storageState, syncState, notification.name) {
+        case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
+            storageStateSubject.onNext(.Preparing)
+        case (.Preparing, _, NotificationNames.ProfileDidStartSyncing):
+            // we're retrying: we haven't been able to verify up til now.
+            break
+        case (.Preparing, _, NotificationNames.FirefoxAccountVerified):
+            // we've verified the account for the first time.
+            syncSubject.onNext(.Syncing)
+        case (_, _, NotificationNames.ProfileDidStartSyncing):
+            // fall through for the locked and unlocked states.
+            syncSubject.onNext(.Syncing)
+        case (.Preparing, .Syncing, NotificationNames.ProfileDidFinishSyncing):
+            // end of first time sync
+            storageStateSubject.onNext(.Unlocked)
+            syncSubject.onNext(.Synced)
+        case (_, _, NotificationNames.ProfileDidFinishSyncing):
+            // end of all syncs
+            syncSubject.onNext(.Synced)
         default:
-            return
+            print("Unexpected state combination: \(storageState) | \(syncState), \(notification.name)")
         }
-        self.syncSubject.onNext(state)
     }
 
     private func updateList() {
@@ -357,12 +390,23 @@ extension DataStore {
     }
 
     private func setInitialLockState() {
-        let lockedValue = self.keychainWrapper.bool(forKey: lockedKey) ?? false
-        if lockedValue {
-            self.storageStateSubject.onNext(.Locked)
-        } else {
-            self.storageStateSubject.onNext(.Unprepared)
-            self.keychainWrapper.set(false, forKey: lockedKey)
+        guard profile.hasSyncableAccount() else {
+            if !profile.hasAccount() {
+                // first run.
+                self.storageStateSubject.onNext(.Unprepared)
+                self.keychainWrapper.set(false, forKey: lockedKey)
+            } else {
+                self.storageStateSubject.onNext(.Preparing)
+            }
+            return
+        }
+
+        if let lockedValue = self.keychainWrapper.bool(forKey: lockedKey) {
+            if lockedValue {
+                self.storageStateSubject.onNext(.Locked)
+            } else {
+                self.storageStateSubject.onNext(.Unlocked)
+            }
         }
     }
 }

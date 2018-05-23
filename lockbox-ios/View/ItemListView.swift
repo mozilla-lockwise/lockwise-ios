@@ -10,9 +10,10 @@ import RxDataSources
 typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
 enum LoginListCellConfiguration {
-    case Search(cancelHidden: Observable<Bool>, text: Observable<String>)
+    case Search(enabled: Observable<Bool>, cancelHidden: Observable<Bool>, text: Observable<String>)
     case Item(title: String, username: String, guid: String)
-    case ListPlaceholder
+    case SyncListPlaceholder
+    case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -22,8 +23,10 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "search"
         case .Item(_, _, let guid):
             return guid
-        case .ListPlaceholder:
-            return "placeholder"
+        case .SyncListPlaceholder:
+            return "syncplaceholder"
+        case .EmptyListPlaceholder:
+            return "emptyplaceholder"
         }
     }
 }
@@ -34,7 +37,8 @@ extension LoginListCellConfiguration: Equatable {
         case (.Search, .Search): return true
         case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
             return lhTitle == rhTitle && lhUsername == rhUsername
-        case (.ListPlaceholder, .ListPlaceholder): return true
+        case (.SyncListPlaceholder, .SyncListPlaceholder): return true
+        case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
         default:
             return false
         }
@@ -83,8 +87,8 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
-    var tableViewInteractionEnabled: AnyObserver<Bool> {
-        return self.tableView.rx.isUserInteractionEnabled.asObserver()
+    var tableViewScrollEnabled: AnyObserver<Bool> {
+        return self.tableView.rx.isScrollEnabled.asObserver()
     }
 
     var sortingButtonEnabled: AnyObserver<Bool>? {
@@ -93,22 +97,6 @@ extension ItemListView: ItemListViewProtocol {
         }
 
         return nil
-    }
-
-    func displayEmptyStateMessaging() {
-        self.tableView.isScrollEnabled = false
-
-        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
-            button.isHidden = true
-        }
-    }
-
-    func hideEmptyStateMessaging() {
-        self.tableView.isScrollEnabled = true
-
-        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
-            button.isHidden = false
-        }
     }
 
     func dismissKeyboard() {
@@ -130,11 +118,14 @@ extension ItemListView {
 
                     var retCell: UITableViewCell
                     switch cellConfiguration {
-                    case .Search(let cancelHidden, let text):
+                    case .Search(let enabled, let cancelHidden, let text):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
                               let presenter = self.presenter else {
                             fatalError("couldn't find the right cell or presenter!")
                         }
+                        enabled
+                                .bind(to: cell.rx.isUserInteractionEnabled)
+                                .disposed(by: cell.disposeBag)
 
                         cell.filterTextField.rx.text
                                 .orEmpty
@@ -173,10 +164,20 @@ extension ItemListView {
                         cell.detailLabel.text = username
 
                         retCell = cell
-                    case .ListPlaceholder:
+                    case .SyncListPlaceholder:
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistplaceholder") else {
                             fatalError("couldn't find the right cell!")
                         }
+
+                        retCell = cell
+                    case .EmptyListPlaceholder(let learnMoreObserver):
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder") as? EmptyPlaceholderCell else { // swiftlint:disable:this line_length
+                            fatalError("couldn't find the right cell!")
+                        }
+
+                        cell.learnMoreButton.rx.tap
+                                .bind(to: learnMoreObserver)
+                                .disposed(by: cell.disposeBag)
 
                         retCell = cell
                     }
@@ -231,6 +232,12 @@ extension ItemListView {
 // view styling
 extension ItemListView {
     fileprivate func styleNavigationBar() {
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 
@@ -262,37 +269,24 @@ extension ItemListView {
         button.setImage(prefImage, for: .normal)
         button.setImage(tintedPrefImage, for: .selected)
         button.setImage(tintedPrefImage, for: .highlighted)
+        button.setImage(tintedPrefImage, for: .disabled)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }
 
     private var sortingButton: UIButton {
-        let button = UIButton()
-        button.adjustsImageWhenHighlighted = false
-
-        let sortingImage = UIImage(named: "down-caret")?.withRenderingMode(.alwaysTemplate)
-        button.setImage(sortingImage, for: .normal)
-        button.setTitle(Constant.string.aToZ, for: .normal)
-
-        button.contentHorizontalAlignment = .left
-        button.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -20)
-        button.setTitleColor(.white, for: .normal)
-        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .highlighted)
-        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .selected)
-        button.setTitleColor(UIColor(white: 1.0, alpha: 0.6), for: .disabled)
-        button.tintColor = .white
+        let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
+        // custom width constraint so "Recent" fits on small iPhone SE screen
         button.translatesAutoresizingMaskIntoConstraints = false
-
         button.addConstraint(NSLayoutConstraint(
-                item: button,
-                attribute: .width,
-                relatedBy: .equal,
-                toItem: nil,
-                attribute: .notAnAttribute,
-                multiplier: 1.0,
-                constant: 100)
+            item: button,
+            attribute: .width,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .notAnAttribute,
+            multiplier: 1.0,
+            constant: 60)
         )
         return button
     }

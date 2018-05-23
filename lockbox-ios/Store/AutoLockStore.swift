@@ -42,10 +42,21 @@ class AutoLockStore {
                 .subscribe(self.lifecycleAction)
                 .disposed(by: self.disposeBag)
 
-        self.userDefaults.onAutoLockTime.subscribe(onNext: { _ in
-            self.stopTimer()
-            self.setupTimer()
-        }).disposed(by: self.disposeBag)
+        self.dispatcher.register
+                .filter { action -> Bool in
+                    // future user interaction actions will need to get added to this list
+                    action is MainRouteAction ||
+                            action is SettingRouteAction ||
+                            action is CopyConfirmationDisplayAction ||
+                            action is ExternalLinkAction ||
+                            action is ItemListDisplayAction ||
+                            action is ItemDetailDisplayAction ||
+                            action is SettingAction
+                }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.resetTimer()
+                })
+                .disposed(by: self.disposeBag)
     }
 
     private func lifecycleAction(evt: Event<LifecycleAction>) {
@@ -59,6 +70,11 @@ class AutoLockStore {
                     })
                     .disposed(by: self.disposeBag)
         }
+    }
+
+    private func resetTimer() {
+        self.stopTimer()
+        self.setupTimer()
     }
 
     private func setupTimer() {

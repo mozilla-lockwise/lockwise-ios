@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="EJh-kX-2nu">
-                                    <rect key="frame" x="0.0" y="385" width="375" height="0.29999999999999999"/>
+                                    <rect key="frame" x="0.0" y="685" width="375" height="0.29999999999999999"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66042751736111116" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
@@ -157,6 +157,62 @@
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="emptylistplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="emptylistplaceholder" rowHeight="300" id="Zwa-yR-CR7" customClass="EmptyPlaceholderCell" customModule="Lockbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="385" width="375" height="300"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zwa-yR-CR7" id="6wL-a0-kfc">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="VhK-mU-PRG">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smh-ku-Ub5">
+                                                    <rect key="frame" x="47.5" y="182" width="280" height="62.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="280" id="WcY-qh-pBg"/>
+                                                    </constraints>
+                                                    <string key="text">Firefox Lockbox lets you access passwords you've already saved to Firefox. To view your entries here, you'll need to sign in and sync with Firefox for desktop.</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="0.45098039215686275" green="0.45098039215686275" blue="0.45098039215686275" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQB-Vr-ObR">
+                                                    <rect key="frame" x="127.5" y="249" width="120" height="16"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="gx1-Wz-pTz"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="90" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <state key="normal" title="Learn more" image="arrowhead-right-16">
+                                                        <color key="titleColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No entries found." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gQr-4J-xpv">
+                                                    <rect key="frame" x="128.5" y="156" width="118.5" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="aQB-Vr-ObR" secondAttribute="bottom" constant="35" id="1do-h0-Fuk"/>
+                                                <constraint firstItem="Smh-ku-Ub5" firstAttribute="top" secondItem="gQr-4J-xpv" secondAttribute="bottom" constant="8" id="7Cu-XJ-hbx"/>
+                                                <constraint firstItem="gQr-4J-xpv" firstAttribute="centerX" secondItem="6wL-a0-kfc" secondAttribute="centerX" id="8nz-30-ipo"/>
+                                                <constraint firstItem="VhK-mU-PRG" firstAttribute="top" secondItem="6wL-a0-kfc" secondAttribute="top" id="Kve-cu-S7y"/>
+                                                <constraint firstItem="aQB-Vr-ObR" firstAttribute="top" secondItem="Smh-ku-Ub5" secondAttribute="bottom" constant="4" id="Lx5-kS-Uv8"/>
+                                                <constraint firstItem="gQr-4J-xpv" firstAttribute="top" secondItem="VhK-mU-PRG" secondAttribute="bottom" constant="28" id="OIH-9t-9NB"/>
+                                                <constraint firstItem="aQB-Vr-ObR" firstAttribute="centerX" secondItem="6wL-a0-kfc" secondAttribute="centerX" id="OW6-RF-hOZ"/>
+                                                <constraint firstItem="VhK-mU-PRG" firstAttribute="leading" secondItem="6wL-a0-kfc" secondAttribute="leading" id="ayd-bm-UEz"/>
+                                                <constraint firstItem="Smh-ku-Ub5" firstAttribute="centerX" secondItem="6wL-a0-kfc" secondAttribute="centerX" id="voa-Oa-Jub"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.92941176470588238" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <outlet property="learnMoreButton" destination="aQB-Vr-ObR" id="rtw-oq-uuY"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -178,6 +234,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrowhead-right-16" width="16" height="16"/>
+        <image name="empty-list-placeholder" width="375" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
         <image name="search" width="16" height="16"/>
     </resources>
