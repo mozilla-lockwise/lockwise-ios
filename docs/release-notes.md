@@ -1,6 +1,6 @@
 # Release Notes
 
-## 1.0 (Build 12?????????)
+## 1.0 (Build 1280)
 
 What's NEW? We polished the interface (colors!), squashed some bugs (lock timer!), and improved the experience for those users (unsafely!) using a device without a passcode. If your app appears empty, there is one good reason and we're working on it but check your email for a confirmation link.
 
