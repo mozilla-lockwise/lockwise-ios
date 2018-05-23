@@ -2,7 +2,7 @@
 
 ## 1.0 (Build 12?????????)
 
-What's NEW? We polished the interface (colors!), squashed some bugs (lock timer!), and improved the experience for those users (unsafely!) using a device without a passcode. If your app appears empty, there are two good reasons and we know about them. Read on...
+What's NEW? We polished the interface (colors!), squashed some bugs (lock timer!), and improved the experience for those users (unsafely!) using a device without a passcode. If your app appears empty, there is one good reason and we're working on it but check your email for a confirmation link.
 
 This build DOES include:
 
@@ -18,17 +18,11 @@ This build DOES include:
 
 This build DOES NOT include:
 
-- creating, updating or deleting entries (that's intentional)
-- a few more links to real FAQ content and instructions (#172)
 - an alert when we're stuck waiting on you to confirm your Firefox Accounts sign in (#417)
-
-Some KNOWN ISSUES include:
-
-- you sign in and receive a "confirmation" email but we don't alert you, thus your list appears empty or broken (#417)
-- if you delete the app and re-install it, your app may crash once (#374)
+- a few more links to real FAQ content and instructions (#172)
+- creating, updating or deleting entries (that's intentional)
 
 Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
-
 
 ## 1.0 (Build 1189)
 
