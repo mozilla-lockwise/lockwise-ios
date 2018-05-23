@@ -11,7 +11,7 @@ struct Constant {
         static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
-        static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-lockbox"
+        static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-firefox-lockbox"
         static let enableSyncFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-enable-sync-on-firefox"
         static let editExistingEntriesFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-edit-existing-entries"
     }
