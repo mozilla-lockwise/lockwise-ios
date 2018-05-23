@@ -24,6 +24,8 @@ struct Constant {
         static let kebabBlue = UIColor(hex: 0x003EAA)
         static let settingsHeader = UIColor(hex: 0x737373)
         static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
+        static let buttonTitleColorNormalState = UIColor.white
+        static let buttonTitleColorOtherState = UIColor(white: 1.0, alpha: 0.6)
     }
 
     struct fxa {
