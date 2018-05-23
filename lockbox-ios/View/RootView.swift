@@ -93,10 +93,10 @@ class RootView: UIViewController, RootViewProtocol {
                 itemDetailView.itemId = id
                 self.currentViewController?.pushViewController(itemDetailView, animated: true)
             }
-        case .learnMore:
+        case .faqLink(let url):
             self.currentViewController?.pushViewController(
                     StaticURLWebView(
-                            url: Constant.app.enableSyncFAQ,
+                            url: url,
                             title: Constant.string.learnMore),
                     animated: true)
         }

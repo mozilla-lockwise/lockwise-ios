@@ -57,6 +57,11 @@ class RouteActionSpec: QuickSpec {
                             .notTo(equal(MainRouteAction.detail(itemId: "fsdsdf")))
                 }
 
+                it("faqlink is equal dpending on the URL") {
+                    expect(MainRouteAction.faqLink(urlString: "www.meow.com")).to(equal(MainRouteAction.faqLink(urlString: "www.meow.com")))
+                    expect(MainRouteAction.faqLink(urlString: "www.woof.com")).notTo(equal(MainRouteAction.faqLink(urlString: "www.meow.com")))
+                }
+
                 it("detail action and list action are never equal") {
                     expect(MainRouteAction.detail(itemId: "sfddfs")).notTo(equal(MainRouteAction.list))
                 }

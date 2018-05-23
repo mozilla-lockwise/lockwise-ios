@@ -136,7 +136,7 @@ class RootViewSpec: QuickSpec {
                 describe("learnMore") {
                     beforeEach {
                         self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.pushMainView(view: .learnMore)
+                        self.subject.pushMainView(view: .faqLink(urlString: Constant.app.enableSyncFAQ))
                     }
 
                     it("makes a detailview the top view") {

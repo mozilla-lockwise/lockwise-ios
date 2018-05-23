@@ -125,7 +125,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.learnMore)
+            target.routeActionHandler.invoke(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
         }.asObserver()
     }()
 

@@ -42,6 +42,7 @@ class ItemDetailView: UIViewController {
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var learnHowToEditButton: UIButton!
     var itemId: String = ""
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -55,9 +56,8 @@ class ItemDetailView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constant.color.viewBackground
+        self.view.backgroundColor = Constant.color.viewBackground
         self.setupNavigation()
-        self.styleTableBackground()
         self.setupDataSource()
         self.setupDelegate()
         self.presenter?.onViewReady()
@@ -65,6 +65,10 @@ class ItemDetailView: UIViewController {
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
+    var learnHowToEditTapped: Observable<Void> {
+        return self.learnHowToEditButton.rx.tap.asObservable()
+    }
+
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
         if let dataSource = self.dataSource {
             itemDetail
@@ -108,12 +112,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     }
                     .bind(to: presenter.onCancel)
                     .disposed(by: self.disposeBag)
-        }
-    }
-
-    fileprivate func styleTableBackground() {
-        if let disclaimerView = Bundle.main.loadNibNamed("EntryEditDisclaimer", owner: self)?[0] as? UIView {
-            self.tableView.backgroundView = disclaimerView
         }
     }
 

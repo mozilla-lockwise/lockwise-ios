@@ -26,7 +26,7 @@ enum TelemetryEventObject: String {
     case app = "app"
     case entryList = "entry_list"
     case entryDetail = "entry_detail"
-    case entryListLearnMore = "entry_list_learn_more"
+    case learnMore = "learn_more"
     case revealPassword = "reveal_password"
     case entryCopyUsernameButton = "entry_copy_username_button"
     case entryCopyPasswordButton = "entry_copy_password_button"

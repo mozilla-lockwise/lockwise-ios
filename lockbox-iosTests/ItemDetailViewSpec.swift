@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxTest
 
 @testable import Lockbox
 
@@ -43,6 +44,8 @@ class ItemDetailViewSpec: QuickSpec {
     }
 
     private var presenter: FakeItemDetailPresenter!
+    private let scheduler = TestScheduler(initialClock: 0)
+    private let disposeBag = DisposeBag()
     var subject: ItemDetailView!
 
     override func spec() {
@@ -158,6 +161,21 @@ class ItemDetailViewSpec: QuickSpec {
 
                 it("informs the presenter") {
                     expect(self.presenter.onCancelActionDispatched).to(beTrue())
+                }
+            }
+
+            describe("tapping learnHowToEdit button") {
+                var voidObserver = self.scheduler.createObserver(Void.self)
+
+                beforeEach {
+                    voidObserver = self.scheduler.createObserver(Void.self)
+
+                    self.subject.learnHowToEditTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
+                    self.subject.learnHowToEditButton.sendActions(for: .touchUpInside)
+                }
+
+                it("informs any observers") {
+                    expect(voidObserver.events.count).to(equal(1))
                 }
             }
 

@@ -13,6 +13,7 @@ struct Constant {
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
         static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-lockbox"
         static let enableSyncFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-enable-sync-on-firefox"
+        static let editExistingEntriesFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-edit-existing-entries"
     }
 
     struct color {
@@ -84,7 +85,7 @@ struct Constant {
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
         static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Firefox Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
-        static let notUsingPasscode = NSLocalizedString("not_using_passcode", value: "You're not using a passcode.", comment:"Title for dialog box with passcode setting information")
+        static let notUsingPasscode = NSLocalizedString("not_using_passcode", value: "You're not using a passcode.", comment: "Title for dialog box with passcode setting information")
         static let passcodeInformation = NSLocalizedString("passcode_info", value: "You should use a passcode to lock your iPhone. Without a passcode, anyone who has your iPhone can access the information saved here.", comment: "Informative text about the ")
         static let skip = NSLocalizedString("skip", value: "Skip", comment: "Label for button allowing users to skip setting passcode or biometrics on device")
         static let setPasscode = NSLocalizedString("set_passcode", value: "Set Passcode", comment: "Label for button allowing users to go to passcode settings")

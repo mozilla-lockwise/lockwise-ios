@@ -572,7 +572,7 @@ class RootPresenterSpec: QuickSpec {
                             describe("if the top view is not already the static url web view") {
                                 beforeEach {
                                     self.view.topViewIsVar = false
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
                                 }
 
                                 it("dismisses any modals") {
@@ -587,14 +587,14 @@ class RootPresenterSpec: QuickSpec {
                                 it("checks for the static url webview & tells the view to show the detail view") {
                                     expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument)
-                                            .to(equal(MainRouteAction.learnMore))
+                                            .to(equal(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ)))
                                 }
                             }
 
                             describe("if the top view is already the static url web view") {
                                 beforeEach {
                                     self.view.topViewIsVar = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
                                 }
 
                                 it("dismisses any modals") {
@@ -709,11 +709,11 @@ class RootPresenterSpec: QuickSpec {
                             }
                         }
 
-                        describe(".learnMore") {
+                        describe(".faqLink(urlString: Constant.app.enableSyncFAQ") {
                             describe("if the top view is not already the static url webview") {
                                 beforeEach {
                                     self.view.topViewIsVar = false
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
                                 }
 
                                 it("dismisses any modals") {
@@ -728,14 +728,14 @@ class RootPresenterSpec: QuickSpec {
                                 it("checks for the staticurlwebview & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
                                     expect(self.view.pushMainViewArgument)
-                                            .to(equal(MainRouteAction.learnMore))
+                                            .to(equal(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ)))
                                 }
                             }
 
                             describe("if the top view is already the static url webview") {
                                 beforeEach {
                                     self.view.topViewIsVar = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.learnMore)
+                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
                                 }
 
                                 it("dismisses any modals") {
