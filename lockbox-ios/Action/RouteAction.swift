@@ -67,6 +67,7 @@ enum SettingRouteAction: RouteAction {
     case list
     case provideFeedback
     case faq
+    case privacy
     case account
     case autoLock
     case preferredBrowser
@@ -85,6 +86,8 @@ extension SettingRouteAction: TelemetryAction {
             return .settingsProvideFeedback
         case .faq:
             return .settingsFaq
+        case .privacy:
+            return .settingsPrivacy
         case .account:
             return .settingsAccount
         case .autoLock:

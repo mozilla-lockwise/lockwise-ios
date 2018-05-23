@@ -119,6 +119,9 @@ class RootView: UIViewController, RootViewProtocol {
         case .faq:
             settingNavController?.pushViewController(
                 StaticURLWebView(url: Constant.app.faqURL, title: Constant.string.settingsFaq), animated: true)
+        case .privacy:
+            settingNavController?.pushViewController(
+                StaticURLWebView(url: Constant.app.privacyURL, title: Constant.string.settingsPrivacy), animated: true)
         case .provideFeedback:
             settingNavController?.pushViewController(
                 StaticURLWebView(url: Constant.app.provideFeedbackURL,

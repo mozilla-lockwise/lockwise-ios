@@ -185,6 +185,8 @@ class RootPresenter {
                 }
             case .faq:
                 view.pushSettingView(view: .faq)
+            case .privacy:
+                view.pushSettingView(view: .privacy)
             case .provideFeedback:
                 view.pushSettingView(view: .provideFeedback)
             }

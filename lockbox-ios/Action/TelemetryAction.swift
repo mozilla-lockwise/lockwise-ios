@@ -38,6 +38,7 @@ enum TelemetryEventObject: String {
     case settingsRecordUsageData = "settings_record_usage_data"
     case settingsAccount = "settings_account"
     case settingsFaq = "settings_faq"
+    case settingsPrivacy = "settings_privacy_link"
     case settingsProvideFeedback = "settings_provide_feedback"
 }
 

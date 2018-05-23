@@ -206,6 +206,16 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.modalViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
+
+                describe("privacy policy") {
+                    beforeEach {
+                        self.subject.pushSettingView(view: .privacy)
+                    }
+
+                    it("makes the privacy policy view the top view of the modal stack") {
+                        expect(self.subject.modalViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
             }
         }
     }

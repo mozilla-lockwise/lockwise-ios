@@ -10,6 +10,7 @@ struct Constant {
     struct app {
         static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
         static let faqURL = "https://lockbox.firefox.com/faq.html"
+        static let privacyURL = "https://lockbox.firefox.com/privacy.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
         static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-firefox-lockbox"
         static let enableSyncFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-enable-sync-on-firefox"
@@ -65,6 +66,7 @@ struct Constant {
         static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
         static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
         static let settingsFaq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
+        static let settingsPrivacy = NSLocalizedString("settings.privacy", value: "Privacy Policy", comment: "Title for Privacy Policy web view")
         static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")

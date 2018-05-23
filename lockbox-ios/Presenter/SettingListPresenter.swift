@@ -111,7 +111,7 @@ extension SettingListPresenter {
 
         let usageDataSetting = SwitchSettingCellConfiguration(
                 text: Constant.string.settingsUsageData,
-                routeAction: SettingRouteAction.faq,
+                routeAction: SettingRouteAction.privacy,
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
