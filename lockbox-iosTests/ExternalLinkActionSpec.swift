@@ -70,30 +70,42 @@ class ExternalLinkActionSpec: QuickSpec {
                 }
             }
 
-            describe("ExternalLinkActionHandler") {
-                var subject: ExternalLinkActionHandler!
+            describe("LinkActionHandler") {
+                var subject: LinkActionHandler!
 
                 beforeEach {
-                    subject = ExternalLinkActionHandler(dispatcher: Dispatcher.shared, application: self.application, userDefaults: self.userDefaults)
+                    subject = LinkActionHandler(dispatcher: Dispatcher.shared, application: self.application, userDefaults: self.userDefaults)
                 }
 
-                describe("openUrl") {
+                describe("invoke external link") {
                     it("opens safari with deeplink") {
                         self.userDefaults.set(PreferredBrowserSetting.Safari.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
-                        subject.invoke(ExternalLinkAction(url: self.testUrl))
+                        subject.invoke(ExternalLinkAction(baseURLString: self.testUrl))
                         expect(self.application.openArgument?.absoluteString).to(equal(self.testUrl))
                     }
 
                     it("does not call open on changes to preferred browser setting") {
                         self.userDefaults.set(PreferredBrowserSetting.Firefox.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                         expect(self.application.openArgument).to(beNil())
-                        subject.invoke(ExternalLinkAction(url: self.testUrl))
+                        subject.invoke(ExternalLinkAction(baseURLString: self.testUrl))
                         expect(self.application.openArgument?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
                         self.application.openArgument = nil
                         self.userDefaults.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                         expect(self.application.openArgument).to(beNil())
-                        subject.invoke(ExternalLinkAction(url: self.testUrl))
+                        subject.invoke(ExternalLinkAction(baseURLString: self.testUrl))
                         expect(self.application.openArgument?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                    }
+                }
+
+                describe("open setting link") {
+                    beforeEach {
+                        subject.invoke(SettingLinkAction.touchIDPasscode)
+                    }
+
+                    it("opens the appropriate string value of the settings page") {
+                        let expectedURL = URL(string: "App-Prefs:root=TOUCHID_PASSCODE")
+                        expect(self.application.canOpenURLArgument).to(equal(expectedURL))
+                        expect(self.application.openArgument).to(equal(expectedURL))
                     }
                 }
             }

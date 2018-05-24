@@ -88,9 +88,9 @@ class FxAPresenterSpec: QuickSpec {
                 }
             }
 
-            describe("onCancel") {
+            describe("onClose") {
                 beforeEach {
-                    self.subject.onCancel.onNext(())
+                    self.subject.onClose.onNext(())
                 }
 
                 it("routes back to login") {

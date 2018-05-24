@@ -120,7 +120,7 @@ class RootPresenter {
                     view.pushLoginView(view: .fxa)
                 }
             case .learnMore:
-                if !view.topViewIs(FxAView.self) {
+                if !view.topViewIs(StaticURLWebView.self) {
                     view.pushLoginView(view: .learnMore)
                 }
             }
@@ -147,6 +147,10 @@ class RootPresenter {
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
+                }
+            case .learnMore:
+                if !view.topViewIs(StaticURLWebView.self) {
+                    view.pushMainView(view: .learnMore)
                 }
             }
         }.asObserver()

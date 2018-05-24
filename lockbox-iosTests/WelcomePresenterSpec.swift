@@ -8,6 +8,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxTest
+import UIKit
 import CoreGraphics
 import LocalAuthentication
 
@@ -20,6 +21,10 @@ class WelcomePresenterSpec: QuickSpec {
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
+        var alertControllerButtons: [AlertActionButtonConfiguration]?
+        var alertControllerTitle: String?
+        var alertControllerMessage: String?
+        var alertControllerStyle: UIAlertControllerStyle?
 
         var loginButtonPressed: ControlEvent<Void> {
             return ControlEvent<Void>(events: fakeLoginButtonPress.asObservable())
@@ -39,6 +44,16 @@ class WelcomePresenterSpec: QuickSpec {
         var loginButtonHidden: AnyObserver<Bool> {
             return self.loginButtonHiddenStub.asObserver()
         }
+
+        func displayAlertController(buttons: [AlertActionButtonConfiguration],
+                                    title: String?,
+                                    message: String?,
+                                    style: UIAlertControllerStyle) {
+            self.alertControllerButtons = buttons
+            self.alertControllerTitle = title
+            self.alertControllerMessage = message
+            self.alertControllerStyle = style
+        }
     }
 
     class FakeRouteActionHandler: RouteActionHandler {
@@ -53,6 +68,14 @@ class WelcomePresenterSpec: QuickSpec {
         var invokeArgument: DataStoreAction?
 
         override func invoke(_ action: DataStoreAction) {
+            self.invokeArgument = action
+        }
+    }
+
+    class FakeLinkActionHandler: LinkActionHandler {
+        var invokeArgument: LinkAction?
+
+        override func invoke(_ action: LinkAction) {
             self.invokeArgument = action
         }
     }
@@ -84,16 +107,22 @@ class WelcomePresenterSpec: QuickSpec {
     class FakeBiometryManager: BiometryManager {
         var authMessage: String?
         var fakeAuthResponse = PublishSubject<Void>()
+        var deviceAuthAvailableStub: Bool!
 
         override func authenticateWithMessage(_ message: String) -> Single<Void> {
             self.authMessage = message
             return fakeAuthResponse.take(1).asSingle()
+        }
+
+        override var deviceAuthenticationAvailable: Bool {
+            return self.deviceAuthAvailableStub
         }
     }
 
     private var view: FakeWelcomeView!
     private var routeActionHandler: FakeRouteActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var linkActionHandler: FakeLinkActionHandler!
     private var userInfoStore: FakeUserInfoStore!
     private var dataStore: FakeDataStore!
     private var lifecycleStore: FakeLifecycleStore!
@@ -113,6 +142,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.linkActionHandler = FakeLinkActionHandler()
                 self.userInfoStore = FakeUserInfoStore()
                 self.dataStore = FakeDataStore()
                 self.lifecycleStore = FakeLifecycleStore()
@@ -121,6 +151,7 @@ class WelcomePresenterSpec: QuickSpec {
                         view: self.view,
                         routeActionHandler: self.routeActionHandler,
                         dataStoreActionHandler: self.dataStoreActionHandler,
+                        linkActionHandler: self.linkActionHandler,
                         userInfoStore: self.userInfoStore,
                         dataStore: self.dataStore,
                         lifecycleStore: self.lifecycleStore,
@@ -141,20 +172,60 @@ class WelcomePresenterSpec: QuickSpec {
                     }
 
                     it("hides the first time login button") {
-                      expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
+                        expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
                     }
                 }
 
                 describe("receiving a login button press") {
-                    beforeEach {
-                        self.subject.onViewReady()
-                        self.view.fakeLoginButtonPress.onNext(())
+                    describe("when the user has device authentication available") {
+                        beforeEach {
+                            self.biometryManager.deviceAuthAvailableStub = true
+                            self.subject.onViewReady()
+                            self.view.fakeLoginButtonPress.onNext(())
+                        }
+
+                        it("dispatches the fxa login route action") {
+                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                            let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                            expect(argument).to(equal(LoginRouteAction.fxa))
+                        }
                     }
 
-                    it("dispatches the fxa login route action") {
-                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                        expect(argument).to(equal(LoginRouteAction.fxa))
+                    describe("when the user does not have device authentication available") {
+                        beforeEach {
+                            self.biometryManager.deviceAuthAvailableStub = false
+                            self.subject.onViewReady()
+                            self.view.fakeLoginButtonPress.onNext(())
+                        }
+
+                        it("displays a directional / informative alert") {
+                            expect(self.view.alertControllerTitle).to(equal(Constant.string.notUsingPasscode))
+                            expect(self.view.alertControllerMessage).to(equal(Constant.string.passcodeInformation))
+                            expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
+                        }
+
+                        describe("tapping the Skip button") {
+                            beforeEach {
+                                self.view.alertControllerButtons![0].tapObserver!.onNext(())
+                            }
+
+                            it("dispatches the fxa login route action") {
+                                expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                                let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                                expect(argument).to(equal(LoginRouteAction.fxa))
+                            }
+                        }
+
+                        describe("tapping the set passcode button") {
+                            beforeEach {
+                                self.view.alertControllerButtons![1].tapObserver!.onNext(())
+                            }
+
+                            it("routes to the touchid / passcode settings page") {
+                                let action = self.linkActionHandler.invokeArgument as! SettingLinkAction
+                                expect(action).to(equal(SettingLinkAction.touchIDPasscode))
+                            }
+                        }
                     }
                 }
 

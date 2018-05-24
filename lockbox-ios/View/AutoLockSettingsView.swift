@@ -54,10 +54,6 @@ class AutoLockSettingView: UITableViewController {
 }
 
 extension AutoLockSettingView {
-    private func setupNavbar() {
-        navigationItem.title = Constant.string.settingsAutoLock
-    }
-
     private func setupFooter() {
         self.tableView.tableFooterView = UIView()
     }
@@ -94,6 +90,33 @@ extension AutoLockSettingView: AutoLockSettingViewProtocol {
             items
                     .drive(self.tableView.rx.items(dataSource: dataSource))
                     .disposed(by: self.disposeBag)
+        }
+    }
+}
+
+extension AutoLockSettingView: UIGestureRecognizerDelegate {
+    private func setupNavbar() {
+        self.navigationItem.title = Constant.string.settingsAutoLock
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
+
+        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
+
+        if let presenter = self.presenter {
+            leftButton.rx.tap
+                .bind(to: presenter.onSettingsTap)
+                .disposed(by: self.disposeBag)
+
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                .map { _ -> Void in
+                    return ()
+                }
+                .bind(to: presenter.onSettingsTap)
+                .disposed(by: self.disposeBag)
         }
     }
 }
