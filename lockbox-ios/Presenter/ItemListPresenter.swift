@@ -13,6 +13,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func bind(items: Driver<[ItemSectionModel]>)
     func bind(sortingButtonTitle: Driver<String>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
+    var settingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     func dismissKeyboard()
 }
@@ -217,7 +218,8 @@ class ItemListPresenter {
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
 
         guard let view = self.view,
-              let sortButtonObserver = view.sortingButtonEnabled else {
+              let sortButtonObserver = view.sortingButtonEnabled,
+              let settingButtonObserver = view.settingButtonEnabled else {
             return
         }
 
@@ -225,6 +227,9 @@ class ItemListPresenter {
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
+
+        let preparingObservable = self.dataStore.storageState.map { $0 != LoginStoreState.Preparing }
+        preparingObservable.bind(to: settingButtonObserver).disposed(by: self.disposeBag)
 
         // when this observable emits an event, the spinner gets dismissed
         let hideSpinnerObservable = self.dataStore.syncState

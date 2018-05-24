@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="EJh-kX-2nu">
-                                    <rect key="frame" x="0.0" y="985" width="375" height="0.29999999999999999"/>
+                                    <rect key="frame" x="0.0" y="1031" width="375" height="0.29999999999999999"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66042751736111116" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
@@ -214,63 +213,48 @@
                                             <outlet property="learnMoreButton" destination="aQB-Vr-ObR" id="rtw-oq-uuY"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="emptylistplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="preparingplaceholder" rowHeight="300" id="uLU-A3-JOv" userLabel="preparingplaceholder" customClass="EmptyPlaceholderCell" customModule="Lockbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="685" width="375" height="300"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="preparingplaceholder" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" indentationWidth="10" reuseIdentifier="preparingplaceholder" rowHeight="346" id="uLU-A3-JOv" userLabel="preparingplaceholder">
+                                        <rect key="frame" x="0.0" y="685" width="375" height="346"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uLU-A3-JOv" id="c86-fZ-K2X">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="346"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" ambiguous="YES" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="TqX-p1-Oh5">
-                                                    <rect key="frame" x="-20" y="0.0" width="414" height="128"/>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="752" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="ldf-oP-BRH">
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check your email for the verification link in order to view your entries." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtF-d0-Vui">
-                                                    <rect key="frame" x="47.5" y="212.5" width="280" height="31.5"/>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="751" insetsLayoutMarginsFromSafeArea="NO" image="preparing-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="eko-6t-BSK" userLabel="preparing-placeholder">
+                                                    <rect key="frame" x="88" y="136" width="139" height="80"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm your account." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zp4-eQ-2yd" userLabel="Confirm your account">
+                                                    <rect key="frame" x="111.5" y="232" width="152.5" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Check your email for the verification link in order to view your entries." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtF-d0-Vui">
+                                                    <rect key="frame" x="47" y="257.5" width="280" height="31.5"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="280" id="ckN-NB-UiS"/>
+                                                        <constraint firstAttribute="width" constant="280" id="Wgg-aL-HQC"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="0.45098039220000002" green="0.45098039220000002" blue="0.45098039220000002" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5q5-MU-cni">
-                                                    <rect key="frame" x="127.5" y="248.5" width="120" height="16"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="jHb-4e-PST"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                    <inset key="imageEdgeInsets" minX="90" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                    <state key="normal" title="Learn more" image="arrowhead-right-16">
-                                                        <color key="titleColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </state>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm your account." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zp4-eQ-2yd" userLabel="Confirm your account">
-                                                    <rect key="frame" x="111.5" y="186.5" width="152.5" height="18"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" image="preparing-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="eko-6t-BSK" userLabel="preparing-placeholder">
-                                                    <rect key="frame" x="118" y="46" width="139" height="128"/>
-                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="5q5-MU-cni" firstAttribute="top" secondItem="jtF-d0-Vui" secondAttribute="bottom" constant="4" id="34s-Ce-Twh"/>
-                                                <constraint firstItem="eko-6t-BSK" firstAttribute="top" secondItem="TqX-p1-Oh5" secondAttribute="centerY" constant="46" id="5e5-41-X6I"/>
-                                                <constraint firstItem="jtF-d0-Vui" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="Esc-JP-BfL"/>
-                                                <constraint firstItem="jtF-d0-Vui" firstAttribute="top" secondItem="zp4-eQ-2yd" secondAttribute="bottom" constant="8" id="JWF-o6-z7a"/>
-                                                <constraint firstItem="5q5-MU-cni" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="JWW-bj-NK6"/>
-                                                <constraint firstItem="zp4-eQ-2yd" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="KbB-Rf-NNW"/>
-                                                <constraint firstItem="eko-6t-BSK" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="leading" id="NLg-qL-SgF"/>
-                                                <constraint firstAttribute="bottom" secondItem="5q5-MU-cni" secondAttribute="bottom" constant="35" id="bCh-SP-Df2"/>
-                                                <constraint firstItem="zp4-eQ-2yd" firstAttribute="top" secondItem="eko-6t-BSK" secondAttribute="bottom" constant="28" id="jRO-2F-Cta"/>
+                                                <constraint firstAttribute="bottom" secondItem="jtF-d0-Vui" secondAttribute="bottom" constant="56.5" id="5rY-lN-iOw"/>
+                                                <constraint firstItem="jtF-d0-Vui" firstAttribute="top" secondItem="zp4-eQ-2yd" secondAttribute="bottom" constant="8" id="7cS-37-TMv"/>
+                                                <constraint firstItem="eko-6t-BSK" firstAttribute="top" secondItem="ldf-oP-BRH" secondAttribute="bottom" constant="8" id="JtE-iI-Wxi"/>
+                                                <constraint firstItem="jtF-d0-Vui" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="LYU-HT-ctq"/>
+                                                <constraint firstItem="ldf-oP-BRH" firstAttribute="top" secondItem="c86-fZ-K2X" secondAttribute="top" id="j2j-U5-z1J"/>
+                                                <constraint firstItem="ldf-oP-BRH" firstAttribute="leading" secondItem="c86-fZ-K2X" secondAttribute="leading" id="nVA-ia-cRs"/>
+                                                <constraint firstItem="zp4-eQ-2yd" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="oIq-99-LUI"/>
+                                                <constraint firstItem="eko-6t-BSK" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" constant="-30" id="ved-Tg-YO7"/>
+                                                <constraint firstItem="zp4-eQ-2yd" firstAttribute="top" secondItem="eko-6t-BSK" secondAttribute="bottom" constant="16" id="xNd-B6-koH"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="learnMoreButton" destination="5q5-MU-cni" id="k29-tE-Xm4"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

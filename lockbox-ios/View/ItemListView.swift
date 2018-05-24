@@ -103,6 +103,14 @@ extension ItemListView: ItemListViewProtocol {
         return nil
     }
 
+    var settingButtonEnabled: AnyObserver<Bool>? {
+        if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
+            return button.rx.isEnabled.asObserver()
+        }
+
+        return nil
+    }
+
     func dismissKeyboard() {
         if let cell = self.getFilterCell() {
             cell.filterTextField.resignFirstResponder()
@@ -185,7 +193,7 @@ extension ItemListView {
 
                         retCell = cell
                     case .PreparingPlaceholder:
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "preparingplaceholder") as? EmptyPlaceholderCell else { // swiftlint:disable:this line_length
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "preparingplaceholder") else {
                             fatalError("couldn't find the right cell!")
                         }
 
