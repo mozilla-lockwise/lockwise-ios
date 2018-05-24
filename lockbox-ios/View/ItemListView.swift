@@ -87,6 +87,10 @@ extension ItemListView: ItemListViewProtocol {
         return self.tableView.rx.isUserInteractionEnabled.asObserver()
     }
 
+    var pullToRefreshActive: AnyObserver<Bool> {
+        return self.tableView.refreshControl!.rx.isRefreshing.asObserver()
+    }
+
     var sortingButtonEnabled: AnyObserver<Bool>? {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             return button.rx.isEnabled.asObserver()
@@ -114,13 +118,6 @@ extension ItemListView: ItemListViewProtocol {
     func dismissKeyboard() {
         if let cell = self.getFilterCell() {
             cell.filterTextField.resignFirstResponder()
-        }
-    }
-
-    func hidePullRefresh() {
-        if let refreshControl = self.tableView.refreshControl,
-            refreshControl.isRefreshing {
-            refreshControl.endRefreshing()
         }
     }
 

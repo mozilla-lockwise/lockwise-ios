@@ -17,7 +17,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func displayEmptyStateMessaging()
     func hideEmptyStateMessaging()
     func dismissKeyboard()
-    func hidePullRefresh()
+    var pullToRefreshActive: AnyObserver<Bool> { get }
 }
 
 struct LoginListTextSort {
@@ -44,8 +44,6 @@ class ItemListPresenter {
     private var dataStore: DataStore
     private var itemListDisplayStore: ItemListDisplayStore
     private var disposeBag = DisposeBag()
-
-    var manualSync = false
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
         return Binder(self) { target, itemId in
@@ -87,7 +85,7 @@ class ItemListPresenter {
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.manualSync = true
+            target.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: true))
             target.dataStoreActionHandler.invoke(.sync)
         }.asObserver()
     }()
@@ -200,15 +198,37 @@ class ItemListPresenter {
         self.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
 
-        guard let view = self.view,
-              let sortButtonObserver = view.sortingButtonEnabled else {
-            return
+        guard let view = self.view else { return }
+
+        let syncingObserver = self.dataStore.syncState.map {(syncState: SyncState) -> Bool in
+            return syncState == .Syncing
         }
+
+        let isManualRefreshObserver = self.itemListDisplayStore.listDisplay
+                .filterByType(class: PullToRefreshAction.self)
+
+        Observable.combineLatest(syncingObserver, isManualRefreshObserver)
+            .map { (latest: (Bool, PullToRefreshAction)) -> Bool in
+                let isSyncing = latest.0
+                let isManualSync = latest.1.refreshing
+                return isSyncing && isManualSync
+        }.bind(to: view.pullToRefreshActive)
+            .disposed(by: self.disposeBag)
+
+        self.dataStore.syncState.filter { (syncState: SyncState) -> Bool in
+                return syncState == .Synced
+            }.subscribe(onNext: { (_) in
+                self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+            }).disposed(by: self.disposeBag)
 
         let enableObservable = Observable.combineLatest(self.dataStore.syncState, self.dataStore.list)
                 .map {
                     $0.0 != SyncState.Syncing && !$0.1.isEmpty
                 }
+
+        guard let sortButtonObserver = view.sortingButtonEnabled else {
+            return
+        }
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewInteractionEnabled).disposed(by: self.disposeBag)
@@ -266,20 +286,22 @@ extension ItemListPresenter {
                 }
                 .asDriver(onErrorJustReturn: ())
 
-        return Observable.combineLatest(self.dataStore.list, self.dataStore.syncState)
-                .asDriver(onErrorJustReturn: ([], SyncState.Synced))
+        let isManualRefreshObserver = self.itemListDisplayStore.listDisplay
+
+        return Observable.combineLatest(self.dataStore.list, self.dataStore.syncState, isManualRefreshObserver)
+                .asDriver(onErrorJustReturn: ([], SyncState.Synced, PullToRefreshAction(refreshing: false)))
                 .do(onNext: { latest in
                     if latest.0.isEmpty && latest.1 == SyncState.Synced {
                         self.view?.displayEmptyStateMessaging()
                     }
 
-                    if latest.1 == SyncState.Syncing {
-                        if !self.manualSync {
-                            self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
-                        }
-                    } else if self.manualSync {
-                        self.manualSync = false
-                        self.view?.hidePullRefresh()
+                    var isManualSync = false
+                    if let action = latest.2 as? PullToRefreshAction {
+                        isManualSync = action.refreshing
+                    }
+
+                    if latest.1 == SyncState.Syncing && !isManualSync {
+                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
                     }
 
                     if !latest.0.isEmpty {
