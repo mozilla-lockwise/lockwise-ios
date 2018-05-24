@@ -120,5 +120,31 @@ class RouteActionSpec: QuickSpec {
                 }
             }
         }
+
+        describe("LoginRouteAction") {
+            describe("telemetry") {
+                it("event method is equal to show") {
+                    expect(SettingRouteAction.list.eventMethod).to(equal(TelemetryEventMethod.show))
+                }
+
+                it("event object is equal to the login view shown") {
+                    expect(LoginRouteAction.welcome.eventObject).to(equal(TelemetryEventObject.loginWelcome))
+                    expect(LoginRouteAction.fxa.eventObject).to(equal(TelemetryEventObject.loginFxa))
+                    expect(LoginRouteAction.learnMore.eventObject).to(equal(TelemetryEventObject.loginLearnMore))
+                }
+
+                it("returns nil as the value") {
+                    expect(LoginRouteAction.welcome.value).to(beNil())
+                    expect(LoginRouteAction.fxa.value).to(beNil())
+                    expect(LoginRouteAction.learnMore.value).to(beNil())
+                }
+
+                it("returns nil as for the extras") {
+                  expect(LoginRouteAction.welcome.extras).to(beNil())
+                  expect(LoginRouteAction.fxa.extras).to(beNil())
+                  expect(LoginRouteAction.learnMore.extras).to(beNil())
+                }
+            }
+        }
     }
 }

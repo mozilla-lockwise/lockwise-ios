@@ -39,6 +39,9 @@ enum TelemetryEventObject: String {
     case settingsAccount = "settings_account"
     case settingsFaq = "settings_faq"
     case settingsProvideFeedback = "settings_provide_feedback"
+    case loginWelcome = "login_welcome"
+    case loginFxa = "login_fxa"
+    case loginLearnMore = "login_learn_more"
 }
 
 enum ExtraKey: String {
