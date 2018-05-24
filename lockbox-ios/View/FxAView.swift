@@ -12,6 +12,7 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
     internal var presenter: FxAPresenter?
     private var webView: WKWebView
     private var disposeBag = DisposeBag()
+    private var url: URL?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -39,6 +40,12 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if self.url == nil {
+            self.url = webView.url
+        }
     }
 }
 
@@ -77,11 +84,14 @@ extension FxAView: WKScriptMessageHandler {
         // message is the same as the origin of the URL we initially loaded in this web view.
         // Note that this exploit wouldn't be possible if we were using WebChannels; see
         // https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/WebChannel.jsm
-        //   let origin = message.frameInfo.securityOrigin
-        //   guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
-        //   print("Ignoring message - \(origin) does not match expected origin \(url.origin)")
-        //   return
-        //  }
+        let origin = message.frameInfo.securityOrigin
+        guard let url = self.url,
+              origin.`protocol` == url.scheme,
+              origin.host == url.host,
+              origin.port == (url.port ?? 0) else {
+            print("Ignoring message - \(origin) does not match expected origin \(self.url?.origin)")
+            return
+        }
 
         if message.name == "accountsCommandHandler" {
             let body = JSON(message.body)
