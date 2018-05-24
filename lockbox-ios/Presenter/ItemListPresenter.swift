@@ -22,6 +22,7 @@ struct LoginListTextSort {
     let text: String
     let sortingOption: ItemListSortingAction
     let syncState: SyncState
+    let storeState: LoginStoreState
 }
 
 extension LoginListTextSort: Equatable {
@@ -131,6 +132,12 @@ class ItemListPresenter {
         )
     ]
 
+    lazy private var preparingPlaceholderItems = [
+        ItemSectionModel(model: 0, items: self.searchItem +
+            [LoginListCellConfiguration.PreparingPlaceholder]
+        )
+    ]
+
     lazy private var syncPlaceholderItems = [
         ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.SyncListPlaceholder])
     ]
@@ -187,7 +194,8 @@ class ItemListPresenter {
                 loginListObservable: self.dataStore.list,
                 filterTextObservable: filterTextObservable,
                 itemSortObservable: itemSortObservable,
-                syncStateObservable: self.dataStore.syncState
+                syncStateObservable: self.dataStore.syncState,
+                storageStateObservable: self.dataStore.storageState
         )
 
         self.view?.bind(items: listDriver)
@@ -239,19 +247,22 @@ extension ItemListPresenter {
     fileprivate func createItemListDriver(loginListObservable: Observable<[Login]>,
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<ItemListSortingAction>,
-                                          syncStateObservable: Observable<SyncState>) -> Driver<[ItemSectionModel]> {
+                                          syncStateObservable: Observable<SyncState>,
+                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
         return Observable.combineLatest(
                         loginListObservable,
                         filterTextObservable,
                         itemSortObservable,
-                        syncStateObservable
+                        syncStateObservable,
+                        storageStateObservable
                 )
-                .map { (latest: ([Login], ItemListFilterAction, ItemListSortingAction, SyncState)) -> LoginListTextSort in // swiftlint:disable:this line_length
+            .map { (latest: ([Login], ItemListFilterAction, ItemListSortingAction, SyncState, LoginStoreState)) -> LoginListTextSort in // swiftlint:disable:this line_length
                     return LoginListTextSort(
                             logins: latest.0,
                             text: latest.1.filteringText,
                             sortingOption: latest.2,
-                            syncState: latest.3
+                            syncState: latest.3,
+                            storeState: latest.4
                     )
                 }
                 .distinctUntilChanged()
@@ -262,6 +273,10 @@ extension ItemListPresenter {
 
                     if latest.syncState == .Synced && latest.logins.isEmpty {
                         return self.emptyPlaceholderItems
+                    }
+
+                    if latest.storeState == .Preparing {
+                        return self.preparingPlaceholderItems
                     }
 
                     let sortedFilteredItems = self.filterItemsForText(latest.text, items: latest.logins)

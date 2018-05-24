@@ -181,8 +181,7 @@ class DataStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        self.setInitialSyncState()
-        self.setInitialLockState()
+        self.setInitialState()
     }
 
     public func get(_ id: String) -> Observable<Login?> {
@@ -267,14 +266,25 @@ extension DataStore {
     }
 
     public func unlock() {
-        self.profile.reopen()
+        func performUnlock() {
+            self.profile.reopen()
 
-        self.profile.syncManager?.beginTimedSyncs()
+            self.profile.syncManager?.beginTimedSyncs()
 
-        self.profile.syncManager.syncEverything(why: .startup)
+            self.profile.syncManager.syncEverything(why: .startup)
 
-        self.storageStateSubject.onNext(.Unlocked)
-        self.keychainWrapper.set(false, forKey: lockedKey)
+            self.storageStateSubject.onNext(.Unlocked)
+            self.keychainWrapper.set(false, forKey: lockedKey)
+        }
+
+        self.storageState
+            .take(1)
+            .subscribe(onNext: {
+                if $0 == .Locked {
+                    performUnlock()
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 
@@ -377,19 +387,7 @@ extension DataStore {
         self.fxaLoginHelper.application(UIApplication.shared, didLoadProfile: profile)
     }
 
-    private func setInitialSyncState() {
-        let state: SyncState
-        if !self.profile.hasSyncableAccount() {
-            state = .NotSyncable
-        } else {
-            state = .ReadyToSync
-        }
-
-        self.syncSubject.onNext(state)
-        self.updateList()
-    }
-
-    private func setInitialLockState() {
+    private func setInitialState() {
         guard profile.hasSyncableAccount() else {
             if !profile.hasAccount() {
                 // first run.
@@ -398,9 +396,10 @@ extension DataStore {
             } else {
                 self.storageStateSubject.onNext(.Preparing)
             }
+            self.syncSubject.onNext(.NotSyncable)
             return
         }
-
+        self.syncSubject.onNext(.ReadyToSync)
         if let lockedValue = self.keychainWrapper.bool(forKey: lockedKey) {
             if lockedValue {
                 self.storageStateSubject.onNext(.Locked)
