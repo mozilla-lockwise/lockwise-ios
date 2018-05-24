@@ -94,6 +94,8 @@
         
             <li><a class="toctree-l4" href="#distributing-builds-through-buddybuild-branch-release">Distributing Builds through buddybuild (branch / release)</a></li>
         
+            <li><a class="toctree-l4" href="#preparing-a-release-for-testflight-or-app-store">Preparing a Release (for TestFlight or App Store)</a></li>
+        
             <li><a class="toctree-l4" href="#distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</a></li>
         
             <li><a class="toctree-l4" href="#distributing-through-the-app-store-release">Distributing through the App Store (release)</a></li>
@@ -149,8 +151,8 @@
 <p>Some assumptions:</p>
 <ul>
 <li><code>master</code> is the default branch and is production-ready</li>
-<li>commits made to master are built and pass in <a href="https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85">buddybuild</a></li>
-<li>all builds are sent to iTunes Connect, with the same buddybuild build number</li>
+<li>commits made to <code>master</code> are built and pass in <a href="https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85">buddybuild</a></li>
+<li>all <code>master</code> builds are sent to iTunes Connect, with the same buddybuild build number</li>
 <li>iTunes Connect has <a href="https://developer.apple.com/testflight/testers/">"internal" testers</a> (mobile devs, product integrity)</li>
 <li>thus, iTunes Connect and TestFlight can have <a href="https://developer.apple.com/testflight/testers/">"external" testers</a> which we add manually</li>
 <li>currently, no plans exist for "external" users to include anyone outside of Mozilla</li>
@@ -158,28 +160,51 @@
 <h2 id="distributing-builds-through-buddybuild-branch-release">Distributing Builds through buddybuild (branch / release)</h2>
 <p><em>all commits on all branches and pull requests are automatically built</em></p>
 <ol>
-<li>Push to the GitHub branch</li>
+<li>Push to the git branch available on GitHub.com and open a pull request</li>
 <li>Open <a href="https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85">buddybuild</a> from a mobile device and browse to the build</li>
 <li>Alternatively, add an email address to the "Deployments" email list(s)</li>
 <li>this is expected to be a small group of contributors and Mozillians</li>
 </ol>
+<h2 id="preparing-a-release-for-testflight-or-app-store">Preparing a Release (for TestFlight or App Store)</h2>
+<ul>
+<li>Update the release notes under <code>docs/release-notes.md</code></li>
+<li>create a pull request to collaborate and get approval</li>
+<li>determine the next build number and include it in release notes</li>
+<li>merge the release notes to <code>master</code> branch</li>
+<li>this will result in a release build matching the build number provided</li>
+<li>Create a tag from <code>master</code> matching the format: <code>major.minor.build</code></li>
+<li>for example: <code>1.0.1189</code></li>
+<li>push the tag to GitHub and create a corresponding "Release" on GitHub.com</li>
+<li>copy the release notes to the "Release" on GitHub</li>
+<li>download the <code>.ipa</code> from buddybuild and attach it to the Release on GitHub</li>
+<li>Hopefully by now the build has been uploaded to iTunes Connect</li>
+<li>Browse to iTunes Connect and continue the "Distributing..." instructions</li>
+</ul>
 <h2 id="distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</h2>
 <p><em>all <code>master</code> branch builds are automatically uploaded from buddybuild</em></p>
 <ol>
-<li>Browse to <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds">TestFlight &gt; Builds &gt; iOS</a></li>
+<li>Browse to <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds">TestFlight &gt; Builds &gt; iOS</a> in iTunes Connect</li>
 <li>Find the desired build number to distribute</li>
 <li>Provide <a href="export-compliance.md">export compliance responses</a></li>
 <li>this makes the build immediately available to "internal" iTunes Connect users</li>
+<li>Copy the release notes for this release and add them to the "Test Details"</li>
 <li>Add at least one other "Group" of "external" testers to the build</li>
 <li>after review, this will make it available for all those "external" testers</li>
 <li>example: "lockbox-dev" which includes our other non-iTunes Connect engineers</li>
 <li>example: "Product" which includes other product and content Mozillians</li>
+<li>example: "Cohort A" which includes the first round of volunteers to test</li>
 </ol>
 <h2 id="distributing-through-the-app-store-release">Distributing through the App Store (release)</h2>
 <ol>
-<li>Browse to iTunes Connect</li>
+<li>Browse to the <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270">App Store</a> section in iTunes Connect</li>
+<li>Confirm the "App Information" details are accurate and complete</li>
+<li>Confirm the "Pricing and Availability" details are accurate and complete</li>
+<li>Browse to the "iOS App" section to "Prepare for Submission"</li>
+<li>provide the version information (keywords, URLs, promotional screenshots)</li>
+<li>select the corresponding build number for the App Store release</li>
+<li>set the release instructions (manually, immediately, on a date)</li>
+<li>Save and "Submit for Review"</li>
 <li>???</li>
-<li>Profit</li>
 </ol>
 <hr />
               
