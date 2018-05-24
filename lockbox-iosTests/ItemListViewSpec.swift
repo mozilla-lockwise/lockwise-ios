@@ -89,7 +89,7 @@ class ItemListViewSpec: QuickSpec {
                 let item2Title = "sum item"
                 let item2Username = "meh"
                 let items = [
-                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
+                    LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                     LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs"),
                     LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads")
                 ]
@@ -163,41 +163,12 @@ class ItemListViewSpec: QuickSpec {
                 }
             }
 
-            describe("displayEmptyStateMessaging") {
-                beforeEach {
-                    self.subject.displayEmptyStateMessaging()
-                }
-
-                it("hides the left bar button item") {
-                    expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beTrue())
-                }
-
-                it("disables scrolling") {
-                    expect(self.subject.tableView.isScrollEnabled).to(beFalse())
-                }
-            }
-
-            describe("hideEmptyStateMessaging") {
-                beforeEach {
-                    self.subject.displayEmptyStateMessaging()
-                    self.subject.hideEmptyStateMessaging()
-                }
-
-                it("shows the left bar button item") {
-                    expect(self.subject.navigationItem.leftBarButtonItem!.customView!.isHidden).to(beFalse())
-                }
-
-                it("enables scrolling") {
-                    expect(self.subject.tableView.isScrollEnabled).to(beTrue())
-                }
-            }
-
             describe("tapping a row") {
                 let id = "fdssdfdfs"
                 let items = [
-                    LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")),
+                    LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                     LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id),
-                    LoginListCellConfiguration.ListPlaceholder
+                    LoginListCellConfiguration.SyncListPlaceholder
                 ]
 
                 beforeEach {
@@ -273,11 +244,12 @@ class ItemListViewSpec: QuickSpec {
 
             describe("FilterCell") {
                 var cell: FilterCell!
+                let enabledStub = PublishSubject<Bool>()
                 let cancelStub = PublishSubject<Bool>()
                 let textStub = PublishSubject<String>()
 
                 beforeEach {
-                    let array = [LoginListCellConfiguration.Search(cancelHidden: cancelStub.asObservable(), text: textStub.asObservable())]
+                    let array = [LoginListCellConfiguration.Search(enabled: enabledStub.asObservable(), cancelHidden: cancelStub.asObservable(), text: textStub.asObservable())]
                     self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: array)]))
                     cell = self.subject.tableView.dataSource!.tableView(
                         self.subject.tableView,
@@ -291,6 +263,13 @@ class ItemListViewSpec: QuickSpec {
                     cell.prepareForReuse()
 
                     expect(cell.disposeBag === disposeBag).notTo(beTrue())
+                }
+
+                it("binds the enabled observable to the cell itself") {
+                    enabledStub.onNext(true)
+                    expect(cell.isUserInteractionEnabled).to(beTrue())
+                    enabledStub.onNext(false)
+                    expect(cell.isUserInteractionEnabled).to(beFalse())
                 }
 
                 it("binds the hidden observable to the cancel button") {
@@ -324,16 +303,19 @@ class ItemListViewSpec: QuickSpec {
 
         describe("LoginListCellConfiguration") {
             describe("IdentifiableType") {
-                it("uses either the item title or just returns `search`") {
-                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just("")).identity).to(equal("search"))
+                it("uses either the item title or just returns a static string") {
+                    expect(LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")).identity).to(equal("search"))
                     let guid = "sfsdsdffsd"
                     expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: guid).identity).to(equal(guid))
+                    expect(LoginListCellConfiguration.SyncListPlaceholder.identity).to(equal("syncplaceholder"))
+                    let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
+                    expect(LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver).identity).to(equal("emptyplaceholder"))
                 }
             }
 
             describe("equality") {
                 it("search is always the same as search") {
-                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(false), text: Observable.just(""))).to(equal(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just(""))))
+                    expect(LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(false), text: Observable.just(""))).to(equal(LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just(""))))
                 }
 
                 it("items are the same if the titles & usernames are the same") {
@@ -344,7 +326,7 @@ class ItemListViewSpec: QuickSpec {
                 }
 
                 it("search and item are never the same") {
-                    expect(LoginListCellConfiguration.Search(cancelHidden: Observable.just(true), text: Observable.just(""))).notTo(equal(LoginListCellConfiguration.Item(title: "", username: "", guid: "qwqw")))
+                    expect(LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just(""))).notTo(equal(LoginListCellConfiguration.Item(title: "", username: "", guid: "qwqw")))
                 }
             }
         }

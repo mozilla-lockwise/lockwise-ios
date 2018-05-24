@@ -48,10 +48,6 @@ class PreferredBrowserSettingView: UITableViewController {
 }
 
 extension PreferredBrowserSettingView {
-    private func setupNavbar() {
-        navigationItem.title = Constant.string.settingsBrowser
-    }
-
     private func setupFooter() {
         self.tableView.tableFooterView = UIView()
     }
@@ -91,6 +87,33 @@ extension PreferredBrowserSettingView: PreferredBrowserSettingViewProtocol {
         if let dataSource = dataSource {
             items
                 .drive(self.tableView.rx.items(dataSource: dataSource))
+                .disposed(by: self.disposeBag)
+        }
+    }
+}
+
+extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
+    private func setupNavbar() {
+        self.navigationItem.title = Constant.string.settingsBrowser
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
+
+        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
+
+        if let presenter = self.presenter {
+            leftButton.rx.tap
+                .bind(to: presenter.onSettingsTap)
+                .disposed(by: self.disposeBag)
+
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                .map { _ -> Void in
+                    return ()
+                }
+                .bind(to: presenter.onSettingsTap)
                 .disposed(by: self.disposeBag)
         }
     }

@@ -117,7 +117,7 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushMainView(view: .list)
                     }
 
-                    it("makes a loginview the top view") {
+                    it("makes a listview the top view") {
                         expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
                     }
                 }
@@ -130,6 +130,17 @@ class RootViewSpec: QuickSpec {
 
                     it("makes a detailview the top view") {
                         expect(self.subject.topViewIs(ItemDetailView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
+
+                describe("learnMore") {
+                    beforeEach {
+                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.pushMainView(view: .learnMore)
+                    }
+
+                    it("makes a detailview the top view") {
+                        expect(self.subject.topViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
             }

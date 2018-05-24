@@ -90,10 +90,10 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeExternalLinkActionHandler: ExternalLinkActionHandler {
-        var invokedAction: ExternalLinkAction?
+    class FakeExternalLinkActionHandler: LinkActionHandler {
+        var invokedAction: LinkAction?
 
-        override func invoke(_ action: ExternalLinkAction) {
+        override func invoke(_ action: LinkAction) {
             self.invokedAction = action
         }
     }
@@ -292,7 +292,8 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the externalLink action") {
                             expect(self.externalLinkHandler.invokedAction).notTo(beNil())
-                            expect(self.externalLinkHandler.invokedAction).to(equal(ExternalLinkAction(url: webAddress)))
+                            let action = self.externalLinkHandler.invokedAction as! ExternalLinkAction
+                            expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
                         }
                     }
                 }
@@ -316,7 +317,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             describe(".onViewReady") {
-                let item = Login(guid: "sdfsdfdfs", hostname: "www.cats.com", username: "meow", password: "iluvkats")
+                let item = Login(guid: "sdfsdfdfs", hostname: "www.cats.com", username: "meow", password: "iluv kats")
 
                 beforeEach {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
@@ -386,7 +387,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
-                        expect(passwordSection.value).to(equal("••••••••"))
+                        expect(passwordSection.value).to(equal("•••••••••"))
                         expect(passwordSection.password).to(beTrue())
                     }
                 }

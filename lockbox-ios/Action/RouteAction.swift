@@ -53,6 +53,7 @@ extension LoginRouteAction: TelemetryAction {
 enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
+    case learnMore
 }
 
 extension MainRouteAction: TelemetryAction {
@@ -66,6 +67,8 @@ extension MainRouteAction: TelemetryAction {
             return .entryList
         case .detail:
             return .entryDetail
+        case .learnMore:
+            return .entryListLearnMore
         }
     }
 
@@ -79,6 +82,8 @@ extension MainRouteAction: TelemetryAction {
             return nil
         case .detail(let itemId):
             return [ExtraKey.itemid.rawValue: itemId]
+        case .learnMore:
+            return nil
         }
     }
 }
@@ -131,6 +136,8 @@ extension MainRouteAction: Equatable {
             return true
         case (.detail(let lhId), .detail(let rhId)):
             return lhId == rhId
+        case (.learnMore, .learnMore):
+            return true
         default:
             return false
         }
