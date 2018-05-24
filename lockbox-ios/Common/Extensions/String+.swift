@@ -20,7 +20,7 @@ extension String {
         return self
                 .replacingOccurrences(of: "^http://", with: "", options: .regularExpression)
                 .replacingOccurrences(of: "^https://", with: "", options: .regularExpression)
-                .replacingOccurrences(of: "^www.", with: "", options: .regularExpression)
+                .replacingOccurrences(of: "^www\\d*\\.", with: "", options: .regularExpression)
     }
 
     private func sha256(_ data: Data) -> Data? {
