@@ -83,13 +83,6 @@ class TelemetryActionHandler: ActionHandler {
                     value: action.value,
                     extras: action.extras
             )
-            print (    // I added this print statement
-              TelemetryEventCategory.action.rawValue,
-              action.eventMethod.rawValue,
-              action.eventObject.rawValue,
-              action.value,
-              action.extras
-            );
         }.asObserver()
     }()
 }
