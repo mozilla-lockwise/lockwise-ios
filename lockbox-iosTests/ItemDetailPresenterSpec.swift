@@ -450,11 +450,16 @@ class ItemDetailPresenterSpec: QuickSpec {
                     beforeEach {
                         self.view.learnHowToEditStub.onNext(())
                     }
-                    
+
                     it("dispatches the faq link action") {
                         expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
-                        expect(argument).to(equal(MainRouteAction.faqLink(urlString: Constant.app.editExistingEntriesFAQ)))
+                        let argument = self.routeActionHandler.routeActionArgument as! ExternalWebsiteRouteAction
+                        expect(argument).to(equal(
+                                        ExternalWebsiteRouteAction(
+                                                urlString: Constant.app.editExistingEntriesFAQ,
+                                                title: Constant.string.faq,
+                                                returnRoute: MainRouteAction.detail(itemId: self.view.itemId))
+                                ))
                     }
                 }
             }

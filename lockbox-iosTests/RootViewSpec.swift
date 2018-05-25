@@ -62,10 +62,10 @@ class RootViewSpec: QuickSpec {
                     }
                 }
 
-                describe("displaying the setting stack") {
+                describe("displaying an initialized navigation controller") {
                     beforeEach {
                         self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.startModalStack(SettingNavigationController.self)
+                        self.subject.startModalStack(SettingNavigationController())
                     }
 
                     it("returns true") {
@@ -132,29 +132,11 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(ItemDetailView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
-
-                describe("learnMore") {
-                    beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.pushMainView(view: .faqLink(urlString: Constant.app.enableSyncFAQ))
-                    }
-
-                    it("makes a detailview the top view") {
-                        expect(self.subject.topViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
-                    }
-                }
             }
 
             describe("pushing settings views") {
                 beforeEach {
-                    self.subject.startMainStack(MainNavigationController.self)
-
-                    expect(self.subject.mainStackIs(MainNavigationController.self)).toEventually(beTrue())
-                    self.subject.startModalStack(SettingNavigationController.self)
-                }
-
-                afterEach {
-                    self.subject.pushMainView(view: .list)
+                    self.subject.startMainStack(SettingNavigationController.self)
                 }
 
                 describe("list") {
@@ -163,7 +145,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the list view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(SettingListView.self)).to(beTrue())
+                        expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
                     }
                 }
 
@@ -173,7 +155,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the account view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(AccountSettingView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(AccountSettingView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
 
@@ -183,27 +165,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the autolock view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
-                    }
-                }
-
-                describe("provide feedback") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .provideFeedback)
-                    }
-
-                    it("makes the web view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
-                    }
-                }
-
-                describe("faq") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .faq)
-                    }
-
-                    it("makes the faq view the top view of the modal stack") {
-                        expect(self.subject.modalViewIs(StaticURLWebView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
             }

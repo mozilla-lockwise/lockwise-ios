@@ -142,8 +142,15 @@ class ItemDetailPresenter {
 
         self.view?.learnHowToEditTapped
                 .subscribe { _ in
+                    guard let itemID = self.view?.itemId else {
+                        return
+                    }
+
                     self.routeActionHandler.invoke(
-                            MainRouteAction.faqLink(urlString: Constant.app.editExistingEntriesFAQ)
+                            ExternalWebsiteRouteAction(
+                                    urlString: Constant.app.editExistingEntriesFAQ,
+                                    title: Constant.string.faq,
+                                    returnRoute: MainRouteAction.detail(itemId: itemID))
                     )
                 }
                 .disposed(by: self.disposeBag)

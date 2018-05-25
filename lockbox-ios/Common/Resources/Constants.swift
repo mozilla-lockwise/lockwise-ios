@@ -65,7 +65,7 @@ struct Constant {
         static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
         static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
         static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
-        static let settingsFaq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
+        static let faq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
         static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")

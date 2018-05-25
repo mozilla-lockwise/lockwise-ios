@@ -57,11 +57,6 @@ class RouteActionSpec: QuickSpec {
                             .notTo(equal(MainRouteAction.detail(itemId: "fsdsdf")))
                 }
 
-                it("faqlink is equal dpending on the URL") {
-                    expect(MainRouteAction.faqLink(urlString: "www.meow.com")).to(equal(MainRouteAction.faqLink(urlString: "www.meow.com")))
-                    expect(MainRouteAction.faqLink(urlString: "www.woof.com")).notTo(equal(MainRouteAction.faqLink(urlString: "www.meow.com")))
-                }
-
                 it("detail action and list action are never equal") {
                     expect(MainRouteAction.detail(itemId: "sfddfs")).notTo(equal(MainRouteAction.list))
                 }
@@ -99,8 +94,6 @@ class RouteActionSpec: QuickSpec {
 
                 it("event object is equal to the setting view shown") {
                     expect(SettingRouteAction.list.eventObject).to(equal(TelemetryEventObject.settingsList))
-                    expect(SettingRouteAction.provideFeedback.eventObject).to(equal(TelemetryEventObject.settingsProvideFeedback))
-                    expect(SettingRouteAction.faq.eventObject).to(equal(TelemetryEventObject.settingsFaq))
                     expect(SettingRouteAction.account.eventObject).to(equal(TelemetryEventObject.settingsAccount))
                     expect(SettingRouteAction.autoLock.eventObject).to(equal(TelemetryEventObject.settingsAutolock))
                     expect(SettingRouteAction.preferredBrowser.eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
@@ -108,8 +101,6 @@ class RouteActionSpec: QuickSpec {
 
                 it("returns nil as the value") {
                     expect(SettingRouteAction.list.value).to(beNil())
-                    expect(SettingRouteAction.provideFeedback.value).to(beNil())
-                    expect(SettingRouteAction.faq.value).to(beNil())
                     expect(SettingRouteAction.account.value).to(beNil())
                     expect(SettingRouteAction.autoLock.value).to(beNil())
                     expect(SettingRouteAction.preferredBrowser.value).to(beNil())
@@ -117,8 +108,6 @@ class RouteActionSpec: QuickSpec {
 
                 it("returns nil as for the extras") {
                     expect(SettingRouteAction.list.extras).to(beNil())
-                    expect(SettingRouteAction.provideFeedback.extras).to(beNil())
-                    expect(SettingRouteAction.faq.extras).to(beNil())
                     expect(SettingRouteAction.account.extras).to(beNil())
                     expect(SettingRouteAction.autoLock.extras).to(beNil())
                     expect(SettingRouteAction.preferredBrowser.extras).to(beNil())
@@ -148,6 +137,23 @@ class RouteActionSpec: QuickSpec {
                   expect(LoginRouteAction.welcome.extras).to(beNil())
                   expect(LoginRouteAction.fxa.extras).to(beNil())
                   expect(LoginRouteAction.learnMore.extras).to(beNil())
+                }
+            }
+        }
+
+        describe("ExternalWebsiteRouteAction") {
+            describe("equality") {
+                it("actions are equal when the title and URL string are equal") {
+                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list))
+                            .to(equal(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list))
+                            .to(equal(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: SettingRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list))
+                            .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.meow.com", title: "blah", returnRoute: SettingRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "woof", returnRoute: MainRouteAction.list))
+                            .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: SettingRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "woof", returnRoute: MainRouteAction.list))
+                            .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.meow.com", title: "blah", returnRoute: SettingRouteAction.list)))
                 }
             }
         }

@@ -29,7 +29,7 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
-    lazy private(set) var onSettingCellTapped: AnyObserver<SettingRouteAction?> = {
+    lazy private(set) var onSettingCellTapped: AnyObserver<RouteAction?> = {
         return Binder(self) { target, action in
             guard let routeAction = action else {
                 return
@@ -91,10 +91,16 @@ extension SettingListPresenter {
         var supportSettingSection = SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsProvideFeedback,
-                    routeAction: SettingRouteAction.provideFeedback),
+                    routeAction: ExternalWebsiteRouteAction(
+                            urlString: Constant.app.provideFeedbackURL,
+                            title: Constant.string.settingsProvideFeedback,
+                            returnRoute: SettingRouteAction.list)),
             SettingCellConfiguration(
-                    text: Constant.string.settingsFaq,
-                    routeAction: SettingRouteAction.faq)
+                    text: Constant.string.faq,
+                    routeAction: ExternalWebsiteRouteAction(
+                            urlString: Constant.app.faqURL,
+                            title: Constant.string.faq,
+                            returnRoute: SettingRouteAction.list))
         ])
 
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
@@ -119,7 +125,10 @@ extension SettingListPresenter {
 
         let usageDataSetting = SwitchSettingCellConfiguration(
                 text: Constant.string.settingsUsageData,
-                routeAction: SettingRouteAction.faq,
+                routeAction: ExternalWebsiteRouteAction(
+                        urlString: Constant.app.faqURL,
+                        title: Constant.string.faq,
+                        returnRoute: SettingRouteAction.list),
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(

@@ -19,10 +19,21 @@ class RouteActionHandler: ActionHandler {
 
 protocol RouteAction: Action { }
 
+struct ExternalWebsiteRouteAction: RouteAction {
+    let urlString: String
+    let title: String
+    let returnRoute: RouteAction
+}
+
+extension ExternalWebsiteRouteAction: Equatable {
+    static func ==(lhs: ExternalWebsiteRouteAction, rhs: ExternalWebsiteRouteAction) -> Bool {
+        return lhs.urlString == rhs.urlString && lhs.title == rhs.title
+    }
+}
+
 enum LoginRouteAction: RouteAction {
     case welcome
     case fxa
-    case learnMore
 }
 
 extension LoginRouteAction: TelemetryAction {
@@ -53,7 +64,6 @@ extension LoginRouteAction: TelemetryAction {
 enum MainRouteAction: RouteAction {
     case list
     case detail(itemId: String)
-    case faqLink(urlString: String)
 }
 
 extension MainRouteAction: TelemetryAction {
@@ -67,8 +77,6 @@ extension MainRouteAction: TelemetryAction {
             return .entryList
         case .detail:
             return .entryDetail
-        case .faqLink:
-            return .learnMore
         }
     }
 
@@ -82,16 +90,12 @@ extension MainRouteAction: TelemetryAction {
             return nil
         case .detail(let itemId):
             return [ExtraKey.itemid.rawValue: itemId]
-        case .faqLink:
-            return nil
         }
     }
 }
 
 enum SettingRouteAction: RouteAction {
     case list
-    case provideFeedback
-    case faq
     case account
     case autoLock
     case preferredBrowser
@@ -106,10 +110,6 @@ extension SettingRouteAction: TelemetryAction {
         switch self {
         case .list:
             return .settingsList
-        case .provideFeedback:
-            return .settingsProvideFeedback
-        case .faq:
-            return .settingsFaq
         case .account:
             return .settingsAccount
         case .autoLock:
@@ -136,8 +136,6 @@ extension MainRouteAction: Equatable {
             return true
         case (.detail(let lhId), .detail(let rhId)):
             return lhId == rhId
-        case (.faqLink(let lhURL), .faqLink(let rhURL)):
-            return lhURL == rhURL
         default:
             return false
         }

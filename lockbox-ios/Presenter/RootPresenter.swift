@@ -14,7 +14,7 @@ protocol RootViewProtocol: class {
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
 
     func startMainStack<T: UINavigationController>(_ type: T.Type)
-    func startModalStack<T: UINavigationController>(_ type: T.Type)
+    func startModalStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
 
     func pushLoginView(view: LoginRouteAction)
@@ -103,6 +103,15 @@ class RootPresenter {
                 .asDriver(onErrorJustReturn: .list)
                 .drive(self.showSetting)
                 .disposed(by: self.disposeBag)
+
+        self.routeStore.onRoute
+                .filterByType(class: ExternalWebsiteRouteAction.self)
+                .asDriver(onErrorJustReturn: ExternalWebsiteRouteAction(
+                        urlString: "",
+                        title: "Error",
+                        returnRoute: MainRouteAction.list))
+                .drive(self.showExternalWebsite)
+                .disposed(by: self.disposeBag)
     }
 
     lazy private var showLogin: AnyObserver<LoginRouteAction> = { [unowned self] in
@@ -125,10 +134,6 @@ class RootPresenter {
             case .fxa:
                 if !view.topViewIs(FxAView.self) {
                     view.pushLoginView(view: .fxa)
-                }
-            case .learnMore:
-                if !view.topViewIs(StaticURLWebView.self) {
-                    view.pushLoginView(view: .learnMore)
                 }
             }
         }.asObserver()
@@ -155,10 +160,6 @@ class RootPresenter {
                 if !view.topViewIs(ItemDetailView.self) {
                     view.pushMainView(view: .detail(itemId: id))
                 }
-            case .faqLink(let url):
-                if !view.topViewIs(StaticURLWebView.self) {
-                    view.pushMainView(view: .faqLink(urlString: url))
-                }
             }
         }.asObserver()
     }()
@@ -169,33 +170,48 @@ class RootPresenter {
                 return
             }
 
-            if !view.modalStackIs(SettingNavigationController.self) {
-                view.startModalStack(SettingNavigationController.self)
+            view.dismissModals()
+
+            if !view.mainStackIs(SettingNavigationController.self) {
+                view.startMainStack(SettingNavigationController.self)
             }
 
             switch settingAction {
             case .list:
-                if !view.modalViewIs(SettingListView.self) {
+                if !view.topViewIs(SettingListView.self) {
                     view.pushSettingView(view: .list)
                 }
             case .account:
-                if !view.modalViewIs(AccountSettingView.self) {
+                if !view.topViewIs(AccountSettingView.self) {
                     view.pushSettingView(view: .account)
                 }
             case .autoLock:
-                if !view.modalViewIs(AutoLockSettingView.self) {
+                if !view.topViewIs(AutoLockSettingView.self) {
                     view.pushSettingView(view: .autoLock)
                 }
             case .preferredBrowser:
-                if !view.modalViewIs(PreferredBrowserSettingView.self) {
+                if !view.topViewIs(PreferredBrowserSettingView.self) {
                     view.pushSettingView(view: .preferredBrowser)
                 }
-            case .faq:
-                view.pushSettingView(view: .faq)
-            case .provideFeedback:
-                view.pushSettingView(view: .provideFeedback)
+            }
+        }.asObserver()
+    }()
+
+    lazy private var showExternalWebsite: AnyObserver<ExternalWebsiteRouteAction> = { [unowned self] in
+        return Binder(self) { target, externalSiteAction in
+            guard let view = target.view else {
+                return
             }
 
+            if !view.modalStackIs(ExternalWebsiteNavigationController.self) {
+                view.startModalStack(
+                        ExternalWebsiteNavigationController(
+                                urlString: externalSiteAction.urlString,
+                                title: externalSiteAction.title,
+                                returnRoute: externalSiteAction.returnRoute
+                        )
+                )
+            }
         }.asObserver()
     }()
 }

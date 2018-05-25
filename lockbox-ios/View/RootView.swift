@@ -63,8 +63,8 @@ class RootView: UIViewController, RootViewProtocol {
         self.currentViewController = type.init()
     }
 
-    func startModalStack<T: UINavigationController>(_ type: T.Type) {
-        self.currentViewController?.present(type.init(), animated: true)
+    func startModalStack<T: UINavigationController>(_ navigationController: T) {
+        self.currentViewController?.present(navigationController, animated: true)
     }
 
     func dismissModals() {
@@ -77,10 +77,6 @@ class RootView: UIViewController, RootViewProtocol {
             self.currentViewController?.popToRootViewController(animated: true)
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
-        case .learnMore:
-            self.currentViewController?.pushViewController(StaticURLWebView(url: Constant.app.useLockboxFAQ,
-                                                                          title: Constant.string.learnMore),
-                                                           animated: true)
         }
     }
 
@@ -93,36 +89,21 @@ class RootView: UIViewController, RootViewProtocol {
                 itemDetailView.itemId = id
                 self.currentViewController?.pushViewController(itemDetailView, animated: true)
             }
-        case .faqLink(let url):
-            self.currentViewController?.pushViewController(
-                    StaticURLWebView(
-                            url: url,
-                            title: Constant.string.learnMore),
-                    animated: true)
         }
     }
 
     func pushSettingView(view: SettingRouteAction) {
-        let settingNavController = (self.currentViewController?.presentedViewController as? UINavigationController)
-
         switch view {
         case .list:
-            settingNavController?.popToRootViewController(animated: true)
+            self.currentViewController?.popToRootViewController(animated: true)
         case .account:
             if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView { // swiftlint:disable:this line_length
-                settingNavController?.pushViewController(accountSettingView, animated: true)
+                self.currentViewController?.pushViewController(accountSettingView, animated: true)
             }
         case .autoLock:
-            settingNavController?.pushViewController(AutoLockSettingView(), animated: true)
+            self.currentViewController?.pushViewController(AutoLockSettingView(), animated: true)
         case .preferredBrowser:
-            settingNavController?.pushViewController(PreferredBrowserSettingView(), animated: true)
-        case .faq:
-            settingNavController?.pushViewController(
-                StaticURLWebView(url: Constant.app.faqURL, title: Constant.string.settingsFaq), animated: true)
-        case .provideFeedback:
-            settingNavController?.pushViewController(
-                StaticURLWebView(url: Constant.app.provideFeedbackURL,
-                                title: Constant.string.settingsProvideFeedback), animated: true)
+            self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: true)
         }
     }
 

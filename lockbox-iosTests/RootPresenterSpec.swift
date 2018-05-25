@@ -26,7 +26,7 @@ class RootPresenterSpec: QuickSpec {
         var modalStackIsVar: Bool!
 
         var startMainStackArgument: UINavigationController.Type?
-        var startModalStackArgument: UINavigationController.Type?
+        var startModalStackArgument: UINavigationController?
         var dismissModalCalled: Bool = false
 
         var pushLoginViewRouteArgument: LoginRouteAction?
@@ -57,8 +57,8 @@ class RootPresenterSpec: QuickSpec {
             self.startMainStackArgument = type
         }
 
-        func startModalStack<T: UINavigationController>(_ type: T.Type) {
-            self.startModalStackArgument = type
+        func startModalStack<T: UINavigationController>(_ navigationController: T) {
+            self.startModalStackArgument = navigationController
         }
 
         func dismissModals() {
@@ -567,51 +567,6 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
-
-                        describe(".learnMore") {
-                            describe("if the top view is not already the static url web view") {
-                                beforeEach {
-                                    self.view.topViewIsVar = false
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
-                                }
-
-                                it("dismisses any modals") {
-                                    expect(self.view.dismissModalCalled).to(beTrue())
-                                }
-
-                                it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument).to(beNil())
-                                }
-
-                                it("checks for the static url webview & tells the view to show the detail view") {
-                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument)
-                                            .to(equal(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ)))
-                                }
-                            }
-
-                            describe("if the top view is already the static url web view") {
-                                beforeEach {
-                                    self.view.topViewIsVar = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
-                                }
-
-                                it("dismisses any modals") {
-                                    expect(self.view.dismissModalCalled).to(beTrue())
-                                }
-
-                                it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument).to(beNil())
-                                }
-
-                                it("checks for the DetailView & nothing happens") {
-                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(beNil())
-                                }
-                            }
-                        }
                     }
 
                     describe("if the main stack is not already displayed") {
@@ -708,99 +663,54 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
-
-                        describe(".faqLink(urlString: Constant.app.enableSyncFAQ") {
-                            describe("if the top view is not already the static url webview") {
-                                beforeEach {
-                                    self.view.topViewIsVar = false
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
-                                }
-
-                                it("dismisses any modals") {
-                                    expect(self.view.dismissModalCalled).to(beTrue())
-                                }
-
-                                it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
-                                }
-
-                                it("checks for the staticurlwebview & tells the view to show the loginview") {
-                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument)
-                                            .to(equal(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ)))
-                                }
-                            }
-
-                            describe("if the top view is already the static url webview") {
-                                beforeEach {
-                                    self.view.topViewIsVar = true
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.faqLink(urlString: Constant.app.enableSyncFAQ))
-                                }
-
-                                it("dismisses any modals") {
-                                    expect(self.view.dismissModalCalled).to(beTrue())
-                                }
-
-                                it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
-                                }
-
-                                it("checks for the DetailView & nothing happens") {
-                                    expect(self.view.topViewIsArgument === StaticURLWebView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(beNil())
-                                }
-                            }
-                        }
                     }
                 }
 
                 describe("SettingRouteActions") {
                     describe("if the setting stack is already displayed") {
                         beforeEach {
-                            self.view.modalStackIsVar = true
+                            self.view.mainStackIsVar = true
                         }
 
                         describe(".list") {
                             describe("when the top view is the list view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = true
+                                    self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument).to(beNil())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
 
                             describe("when the top view is not the list view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = false
+                                    self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument).to(beNil())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
@@ -809,42 +719,42 @@ class RootPresenterSpec: QuickSpec {
                         describe(".account") {
                             describe("when the top view is the account view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = true
+                                    self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.account)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument).to(beNil())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
 
                             describe("when the top view is not the account view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = false
+                                    self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.account)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
                             }
@@ -853,42 +763,42 @@ class RootPresenterSpec: QuickSpec {
                         describe(".preferredBrowser") {
                             describe("when the top view is the preferred browser view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = true
+                                    self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
 
                             describe("when the top view is not the preferred browser view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = false
+                                    self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("does not start the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
                                 }
                             }
@@ -897,48 +807,48 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("if the setting stack is not already displayed") {
                         beforeEach {
-                            self.view.modalStackIsVar = false
+                            self.view.mainStackIsVar = false
                         }
 
                         describe(".list") {
                             describe("when the top view is the list view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = true
+                                    self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
 
                             describe("when the top view is not the list view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = false
+                                    self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === SettingListView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
                                 }
                             }
@@ -947,42 +857,42 @@ class RootPresenterSpec: QuickSpec {
                         describe(".account") {
                             describe("when the top view is the account view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = true
+                                    self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.account)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
 
                             describe("when the top view is not the account view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = false
+                                    self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.account)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === AccountSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
                                 }
                             }
@@ -991,47 +901,51 @@ class RootPresenterSpec: QuickSpec {
                         describe(".preferredBrowser") {
                             describe("when the top view is the preferred browser view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = true
+                                    self.view.topViewIsVar = true
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(beNil())
                                 }
                             }
 
                             describe("when the top view is not the preferred browser view") {
                                 beforeEach {
-                                    self.view.modalViewIsVar = false
+                                    self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(SettingRouteAction.preferredBrowser)
                                 }
 
-                                it("dismisses no modals") {
-                                    expect(self.view.dismissModalCalled).to(beFalse())
+                                it("dismisses modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
                                 }
 
                                 it("starts the setting stack") {
-                                    expect(self.view.modalStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startModalStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
-                                    expect(self.view.modalViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
+                                    expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
                                     expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
                                 }
                             }
                         }
                     }
+                }
+
+                describe("ExternalWebsiteRouteActions") {
+
                 }
 
                 describe("telemetry") {
@@ -1059,7 +973,6 @@ class RootPresenterSpec: QuickSpec {
                             expect(self.telemetryActionHandler.telemetryListener.events.count).to(equal(0))
                         }
                     }
-
                 }
 
                 describe("Auto Lock Timer") {
