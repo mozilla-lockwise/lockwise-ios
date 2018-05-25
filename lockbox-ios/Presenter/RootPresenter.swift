@@ -56,25 +56,27 @@ class RootPresenter {
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
 
-        Observable.combineLatest(self.dataStore.storageState, self.dataStore.syncState)
-                .do(onNext: { latest in
-                    if latest.0 == .Unprepared {
+        self.dataStore.storageState
+            .subscribe(onNext: { storageState in
+                    switch storageState {
+                    case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    } else if latest.0 == .Preparing {
+                    case .Preparing, .Unlocked:
                         self.routeActionHandler.invoke(MainRouteAction.list)
-                    }
-                })
-                .filter { $0.1 != .NotSyncable }
-                .map { $0.0 }
-                .distinctUntilChanged()
-                .subscribe(onNext: { storeState in
-                    if storeState == .Locked {
+                    default:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    } else {
-                        self.routeActionHandler.invoke(MainRouteAction.list)
                     }
                 })
                 .disposed(by: self.disposeBag)
+
+        self.dataStore.syncState
+            .distinctUntilChanged()
+            .subscribe(onNext: { syncState in
+                if syncState == .NotSyncable {
+                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         self.startTelemetry()
         self.checkAutoLockTimer()
