@@ -112,7 +112,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(SortEntriesMenu) { screenState in
-        screenState.backAction = cancelBackAction
+        //screenState.backAction = cancelBackAction
+        screenState.noop(to: LockboxMainPage)
     }
 
     map.addScreenState(SettingsMenu) { screenState in

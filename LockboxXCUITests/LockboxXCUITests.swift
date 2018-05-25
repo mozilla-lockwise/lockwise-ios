@@ -4,7 +4,10 @@
 
 import XCTest
 
-let passwordTestAccount = "IIJWKtOR"
+let emailTestAccountLogins = "test-7012e53d0d@restmail.net"
+let passwordTestAccountLogins = "UJJofTHO"
+let emailTestAccountNoLogins = "test-e47278deb2@restmail.net"
+let passwordTestAccountNoLogins = "IIJWKtOR"
 
 class LockboxXCUITests: BaseTestCase {
 
@@ -22,7 +25,7 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.webViews.staticTexts["Valid email required"])
 
-        userState.fxaUsername = "-e47278deb2@restmail.net"
+        userState.fxaUsername = "-7012e53d0d@restmail.net"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.webViews.staticTexts["Valid password required"])
@@ -38,7 +41,7 @@ class LockboxXCUITests: BaseTestCase {
         app.webViews.secureTextFields["Password"].typeText("\u{0008}")
 
         // Enter valid password and tap on Sign In
-        userState.fxaPassword = passwordTestAccount
+        userState.fxaPassword = passwordTestAccountLogins
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxALogInSuccessfully)
 
@@ -58,7 +61,7 @@ class LockboxXCUITests: BaseTestCase {
         // Go back to Lockbox main page view
         app.buttons["Settings"].tap()
         app.buttons["Done"].tap()
-        sleep(7)
+        sleep(5)
         waitforExistence(app.tables.cells.images["search"])
         // Just to check that the logins are shown, the table should have more than the cell for search
         XCTAssertNotEqual(app.tables.cells.count, 1)
@@ -100,8 +103,8 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.DisconnectFirefoxLockbox)
         waitforExistence(app.buttons["Get Started"])
         app.buttons["Get Started"].tap()
-        userState.fxaPassword = passwordTestAccount
-        waitforExistence(app.staticTexts["test-e47278deb2@restmail.net"])
+        userState.fxaPassword = passwordTestAccountLogins
+        waitforExistence(app.staticTexts["test-7012e53d0d@restmail.net"])
         navigator.nowAt(FxASigninScreen)
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
@@ -111,7 +114,9 @@ class LockboxXCUITests: BaseTestCase {
     func test5SortEntries() {
         navigator.goto(LockboxMainPage)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
+        sleep(3)
         navigator.performAction(Action.ChangeEntriesOrder)
+        sleep(1)
         waitforExistence(app.staticTexts["Sort Entries"])
         XCTAssertTrue(app.buttons["Alphabetically"].exists)
         XCTAssertTrue(app.buttons["Recently Used"].exists)
@@ -119,5 +124,29 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         XCTAssertTrue(app.buttons["Recent"].exists)
         // Pending to create more entries and check that the order is actually changed
+    }
+
+    func test6NoSavedLogins() {
+        // Disconnect from previous account
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        app.buttons["Get Started"].tap()
+        waitforExistence(app.webViews.staticTexts[emailTestAccountLogins])
+        print(app.debugDescription)
+        app.webViews.links["Use a different account"].tap()
+        sleep(3)
+
+        navigator.nowAt(FxASigninScreen)
+        waitforExistence(app.webViews.textFields["Email"])
+
+        // Connect with new account without logins
+        userState.fxaUsername = emailTestAccountNoLogins
+        userState.fxaPassword = passwordTestAccountNoLogins
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATypePassword)
+        navigator.performAction(Action.FxALogInSuccessfully)
+        waitforExistence(app.navigationBars["Firefox Lockbox"])
+        app.navigationBars["Firefox Lockbox"].tap()
+        waitforExistence(app.images["empty-list-placeholder"])
+        XCTAssertTrue(app.staticTexts["No entries found."].exists)
     }
 }
