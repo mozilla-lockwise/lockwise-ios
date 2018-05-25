@@ -16,6 +16,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     var settingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     func dismissKeyboard()
+    var pullToRefreshActive: AnyObserver<Bool>? { get }
 }
 
 struct LoginListTextSort {
@@ -84,6 +85,7 @@ class ItemListPresenter {
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            target.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: true))
             target.dataStoreActionHandler.invoke(.sync)
         }.asObserver()
     }()
@@ -216,12 +218,36 @@ class ItemListPresenter {
 
         self.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
+        self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
 
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
               let settingButtonObserver = view.settingButtonEnabled else {
             return
+         }
+
+        let syncingObserver = self.dataStore.syncState.map {(syncState: SyncState) -> Bool in
+            return syncState == .Syncing
         }
+
+        let isManualRefreshObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: PullToRefreshAction.self)
+
+        if let pullToRefreshActive = view.pullToRefreshActive {
+            Observable.combineLatest(syncingObserver, isManualRefreshObservable)
+                .map { (latest: (Bool, PullToRefreshAction)) -> Bool in
+                    let isSyncing = latest.0
+                    let isManualSync = latest.1.refreshing
+                    return isSyncing && isManualSync
+            }.bind(to: pullToRefreshActive)
+                .disposed(by: self.disposeBag)
+        }
+
+        self.dataStore.syncState.filter {(syncState: SyncState) -> Bool in
+            return syncState == .Synced
+        }.subscribe(onNext: { (_) in
+            self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+        }).disposed(by: self.disposeBag)
 
         let enableObservable = self.dataStore.list.map { !$0.isEmpty }
 
@@ -237,10 +263,10 @@ class ItemListPresenter {
                 .map { _ in return () }
                 .asDriver(onErrorJustReturn: ())
 
-        self.dataStore.syncState
-                .asDriver(onErrorJustReturn: SyncState.Synced)
+        Observable.combineLatest(self.dataStore.syncState, isManualRefreshObservable)
+                .asDriver(onErrorJustReturn: (SyncState.Synced, PullToRefreshAction(refreshing: false)))
                 .drive(onNext: { latest in
-                    if latest == SyncState.Syncing {
+                    if latest.0 == SyncState.Syncing && !latest.1.refreshing {
                         self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
                     }
                 })

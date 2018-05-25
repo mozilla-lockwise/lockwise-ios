@@ -95,6 +95,10 @@ extension ItemListView: ItemListViewProtocol {
         return self.tableView.rx.isScrollEnabled.asObserver()
     }
 
+    var pullToRefreshActive: AnyObserver<Bool>? {
+        return self.tableView.refreshControl!.rx.isRefreshing.asObserver()
+    }
+
     var sortingButtonEnabled: AnyObserver<Bool>? {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             return button.rx.isEnabled.asObserver()
@@ -232,17 +236,11 @@ extension ItemListView {
 
     fileprivate func setupRefresh() {
         if let presenter = self.presenter {
-            let button = UIButton(type: .custom)
-            button.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
-            button.setTitle(Constant.string.yourLockbox, for: .normal)
-            button.setTitleColor(.white, for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-
-            button.rx.tap
-                    .bind(to: presenter.refreshObserver)
-                    .disposed(by: self.disposeBag)
-
-            self.navigationItem.titleView = button
+            let refreshControl = UIRefreshControl()
+            self.tableView.refreshControl = refreshControl
+            refreshControl.rx.controlEvent(.valueChanged)
+                .bind(to: presenter.refreshObserver)
+                .disposed(by: self.disposeBag)
         }
     }
 }
@@ -258,6 +256,12 @@ extension ItemListView {
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
+        self.navigationItem.title = Constant.string.yourLockbox
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+        ]
 
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never

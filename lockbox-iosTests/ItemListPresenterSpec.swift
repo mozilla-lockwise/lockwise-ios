@@ -23,6 +23,7 @@ class ItemListPresenterSpec: QuickSpec {
         let disposeBag = DisposeBag()
         var dismissKeyboardCalled = false
         var displaySpinnerCalled = false
+        var pullToRefreshObserver: TestableObserver<Bool>!
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -59,6 +60,10 @@ class ItemListPresenterSpec: QuickSpec {
         func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
             self.displaySpinnerCalled = true
             dismiss.drive(self.dismissSpinnerObserver).disposed(by: bag)
+        }
+
+        var pullToRefreshActive: AnyObserver<Bool>? {
+            return self.pullToRefreshObserver?.asObserver()
         }
     }
 
@@ -127,6 +132,7 @@ class ItemListPresenterSpec: QuickSpec {
                 self.view.settingButtonEnableObserver = self.scheduler.createObserver(Bool.self)
                 self.view.tableViewScrollObserver = self.scheduler.createObserver(Bool.self)
                 self.view.dismissSpinnerObserver = self.scheduler.createObserver(Void.self)
+                self.view.pullToRefreshObserver = self.scheduler.createObserver(Bool.self)
 
                 self.subject = ItemListPresenter(
                         view: self.view,
@@ -149,6 +155,7 @@ class ItemListPresenterSpec: QuickSpec {
                     describe("when the datastore is still syncing & prepared") {
                         beforeEach {
                             self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: false))
                             self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
 
@@ -178,6 +185,7 @@ class ItemListPresenterSpec: QuickSpec {
                         describe("once the datastore is synced") {
                             beforeEach {
                                 self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: false))
                             }
 
                             it("dismisses the spinner") {
@@ -220,7 +228,40 @@ class ItemListPresenterSpec: QuickSpec {
                             }
                         }
                     }
-                    
+
+                    describe("manual sync") {
+                        describe("started") {
+                            beforeEach {
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: true))
+                                self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                            }
+
+                            it("tells the view to show pull to refresh") {
+                                expect(self.view.pullToRefreshObserver.events.last!.value.element).to(beTrue())
+                            }
+
+                            it("does not display the initial load spinner") {
+                                expect(self.view.displaySpinnerCalled).to(beFalse())
+                            }
+                        }
+
+                        describe("finishes") {
+                            beforeEach {
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: true))
+                                self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                            }
+
+                            it("resets the refreshing action") {
+                                let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! PullToRefreshAction
+                                expect(action.refreshing).to(beFalse())
+                            }
+
+                            it("tells the view to hide pull to refresh") {
+                                expect(self.view.pullToRefreshObserver.events.last!.value.element).to(beFalse())
+                            }
+                        }
+                    }
+      
                     describe("when the datastore is preparing") {
                         beforeEach {
                             self.dataStore.syncStateStub.onNext(SyncState.NotSyncable)

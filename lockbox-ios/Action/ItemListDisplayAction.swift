@@ -18,6 +18,10 @@ struct ItemListFilterEditAction: ItemListDisplayAction {
     let editing: Bool
 }
 
+struct PullToRefreshAction: ItemListDisplayAction {
+    let refreshing: Bool
+}
+
 class ItemListDisplayActionHandler: ActionHandler {
     static let shared = ItemListDisplayActionHandler()
     private let dispatcher: Dispatcher
