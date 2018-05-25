@@ -259,6 +259,8 @@ class ItemListPresenterSpec: QuickSpec {
                             it("tells the view to hide pull to refresh") {
                                 expect(self.view.pullToRefreshObserver.events.last!.value.element).to(beFalse())
                             }
+                        }
+                    }
       
                     describe("when the datastore is preparing") {
                         beforeEach {
