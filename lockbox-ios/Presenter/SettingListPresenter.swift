@@ -126,7 +126,7 @@ extension SettingListPresenter {
         let usageDataSetting = SwitchSettingCellConfiguration(
                 text: Constant.string.settingsUsageData,
                 routeAction: ExternalWebsiteRouteAction(
-                        urlString: Constant.app.faqURL,
+                        urlString: Constant.app.privacyURL,
                         title: Constant.string.faq,
                         returnRoute: SettingRouteAction.list),
                 isOn: usageDataEnabled,
