@@ -148,6 +148,7 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.images["empty-list-placeholder"])
         XCTAssertTrue(app.staticTexts["No entries found."].exists)
         navigator.performAction(Action.DisconnectFirefoxLockbox)
+        waitforExistence(app.buttons["Get Started"])
         app.buttons["Get Started"].tap()
         waitforExistence(app.webViews.staticTexts[emailTestAccountNoLogins])
         app.webViews.links["Use a different account"].tap()
