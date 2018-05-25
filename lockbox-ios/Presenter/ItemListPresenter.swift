@@ -251,10 +251,6 @@ class ItemListPresenter {
 
         let enableObservable = self.dataStore.list.map { !$0.isEmpty }
 
-        guard let sortButtonObserver = view.sortingButtonEnabled else {
-            return
-        }
-
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
 
