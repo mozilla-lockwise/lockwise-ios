@@ -196,6 +196,7 @@ class DataStore {
 
 extension DataStore {
     public func login(_ data: JSON) {
+        self.storageStateSubject.onNext(.Preparing)
         self.fxaLoginHelper.application(UIApplication.shared, didReceiveAccountJSON: data)
     }
 }
@@ -232,6 +233,7 @@ extension DataStore {
             self.profile = profileFactory(true)
             self.initializeProfile()
             self.syncSubject.onNext(.NotSyncable)
+            self.storageStateSubject.onNext(.Unprepared)
         }
 
         self.keychainWrapper.removeObject(forKey: lockedKey)
