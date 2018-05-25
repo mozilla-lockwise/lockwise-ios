@@ -11,6 +11,7 @@ import LocalAuthentication
 protocol SettingListViewProtocol: class {
     func bind(items: Driver<[SettingSectionModel]>)
     var onSignOut: ControlEvent<Void> { get }
+    var hideLockNow: AnyObserver<Bool> { get }
 }
 
 class SettingListPresenter {
@@ -19,6 +20,7 @@ class SettingListPresenter {
     private let settingActionHandler: SettingActionHandler
     private let dataStoreActionHandler: DataStoreActionHandler
     private let userDefaults: UserDefaults
+    private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
 
     lazy private(set) var onDone: AnyObserver<Void> = {
@@ -47,12 +49,14 @@ class SettingListPresenter {
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         userDefaults: UserDefaults = UserDefaults.standard) {
+         userDefaults: UserDefaults = UserDefaults.standard,
+         biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.routeActionHandler = routeActionHandler
         self.settingActionHandler = settingActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.userDefaults = userDefaults
+        self.biometryManager = biometryManager
     }
 
     func onViewReady() {
@@ -73,6 +77,8 @@ class SettingListPresenter {
                     self.routeActionHandler.invoke(LoginRouteAction.welcome)
                 }
                 .disposed(by: self.disposeBag)
+
+        self.view?.hideLockNow.onNext(!self.biometryManager.deviceAuthenticationAvailable)
     }
 }
 
@@ -97,11 +103,13 @@ extension SettingListPresenter {
                     routeAction: SettingRouteAction.account)
         ])
 
-        let autoLockSetting = SettingCellConfiguration(
-                text: Constant.string.settingsAutoLock,
-                routeAction: SettingRouteAction.autoLock)
-        autoLockSetting.detailText = autoLock?.toString()
-        applicationConfigurationSection.items.append(autoLockSetting)
+        if self.biometryManager.deviceAuthenticationAvailable {
+            let autoLockSetting = SettingCellConfiguration(
+                    text: Constant.string.settingsAutoLock,
+                    routeAction: SettingRouteAction.autoLock)
+            autoLockSetting.detailText = autoLock?.toString()
+            applicationConfigurationSection.items.append(autoLockSetting)
+        }
 
         let preferredBrowserSetting = SettingCellConfiguration(
                 text: Constant.string.settingsBrowser,

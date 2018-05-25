@@ -34,6 +34,7 @@ class RootPresenter {
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
+    fileprivate let biometryManager: BiometryManager
 
     init(view: RootViewProtocol,
          dispatcher: Dispatcher = Dispatcher.shared,
@@ -44,7 +45,8 @@ class RootPresenter {
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared
+         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
+         biometryManager: BiometryManager = BiometryManager()
     ) {
         self.view = view
         self.routeStore = routeStore
@@ -55,6 +57,7 @@ class RootPresenter {
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
+        self.biometryManager = biometryManager
 
         self.dataStore.storageState
             .subscribe(onNext: { storageState in
@@ -211,6 +214,10 @@ extension RootPresenter {
     }
 
     fileprivate func checkAutoLockTimer() {
+        guard self.biometryManager.deviceAuthenticationAvailable else {
+            return
+        }
+
         self.userDefaults.onAutoLockTime
                 .take(1)
                 .subscribe(onNext: { autoLockSetting in

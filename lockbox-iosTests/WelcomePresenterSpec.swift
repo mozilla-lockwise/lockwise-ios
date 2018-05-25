@@ -247,8 +247,9 @@ class WelcomePresenterSpec: QuickSpec {
 
                     describe("when the profileinfo has an email address") {
                         beforeEach {
-                            self.dataStore.fakeLocked.onNext(true)
+                            self.biometryManager.deviceAuthAvailableStub = true
                             self.subject.onViewReady()
+                            self.dataStore.fakeLocked.onNext(true)
                             self.userInfoStore.fakeProfileInfo.onNext(ProfileInfo.Builder().email(email).build())
                         }
 
@@ -257,48 +258,63 @@ class WelcomePresenterSpec: QuickSpec {
                             expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
                         }
 
-                        it("begins authentication with the profileInfo email") {
-                            expect(self.biometryManager.authMessage).to(equal(email))
+                        describe("when device authentication is available") {
+                            it("begins authentication with the profileInfo email") {
+                                expect(self.biometryManager.authMessage).to(equal(email))
+                            }
+
+                            describe("foregrounding actions") {
+                                beforeEach {
+                                    self.biometryManager.authMessage = nil
+                                    self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                                }
+
+                                it("starts authentication again") {
+                                    expect(self.biometryManager.authMessage).to(equal(email))
+                                }
+                            }
+
+                            describe("successful authentication") {
+                                beforeEach {
+                                    self.biometryManager.fakeAuthResponse.onNext(())
+                                }
+
+                                it("unlocks the application") {
+                                    expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                }
+                            }
+
+                            describe("unsuccessful authentication") {
+                                beforeEach {
+                                    self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                }
+
+                                it("does nothing") {
+                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                    expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                }
+                            }
                         }
 
-                        describe("foregrounding actions") {
+                        describe("when device authentication is not available") {
                             beforeEach {
-                                self.biometryManager.authMessage = nil
+                                self.biometryManager.deviceAuthAvailableStub = false
                                 self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
                             }
 
-                            it("starts authentication again") {
-                                expect(self.biometryManager.authMessage).to(equal(email))
-                            }
-                        }
-
-                        describe("successful authentication") {
-                            beforeEach {
-                                self.biometryManager.fakeAuthResponse.onNext(())
-                            }
-
-                            it("unlocks the application") {
+                            it("unlocks the device blindly") {
                                 expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
                                 expect(self.routeActionHandler.invokeArgument).to(beNil())
-                            }
-                        }
-
-                        describe("unsuccessful authentication") {
-                            beforeEach {
-                                self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
-                            }
-
-                            it("does nothing") {
-                                expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
                             }
                         }
                     }
 
                     describe("when the profileinfo does not exist") {
                         beforeEach {
-                            self.dataStore.fakeLocked.onNext(true)
+                            self.biometryManager.deviceAuthAvailableStub = true
                             self.subject.onViewReady()
+                            self.dataStore.fakeLocked.onNext(true)
                             self.userInfoStore.fakeProfileInfo.onNext(nil)
                         }
 
@@ -307,46 +323,54 @@ class WelcomePresenterSpec: QuickSpec {
                             expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
                         }
 
-                        it("begins authentication with the placeholder string") {
-                            expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
-                        }
-
-                        describe("foregrounding actions") {
-                            beforeEach {
-                                self.biometryManager.authMessage = nil
-                                self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
-                            }
-
-                            it("starts authentication again") {
+                        describe("when device authentication is available") {
+                            it("begins authentication with the placeholder string") {
                                 expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
                             }
 
-                            it("starts auth again for subsequent foregrounding actions") {
-                                self.biometryManager.authMessage = nil
-                                self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
-                                expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                            describe("foregrounding actions") {
+                                beforeEach {
+                                    self.biometryManager.authMessage = nil
+                                    self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
+                                }
+
+                                it("starts authentication again") {
+                                    expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                                }
+                            }
+
+                            describe("successful authentication") {
+                                beforeEach {
+                                    self.biometryManager.fakeAuthResponse.onNext(())
+                                }
+
+                                it("unlocks the application") {
+                                    expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                }
+                            }
+
+                            describe("unsuccessful authentication") {
+                                beforeEach {
+                                    self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                }
+
+                                it("does nothing") {
+                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                    expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                }
                             }
                         }
 
-                        describe("successful authentication") {
+                        describe("when device authentication is not available") {
                             beforeEach {
-                                self.biometryManager.fakeAuthResponse.onNext(())
+                                self.biometryManager.deviceAuthAvailableStub = false
+                                self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
                             }
 
-                            it("unlocks the application") {
+                            it("unlocks the device blindly") {
                                 expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
                                 expect(self.routeActionHandler.invokeArgument).to(beNil())
-                            }
-                        }
-
-                        describe("unsuccessful authentication") {
-                            beforeEach {
-                                self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
-                            }
-
-                            it("does nothing") {
-                                expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
                             }
                         }
                     }
