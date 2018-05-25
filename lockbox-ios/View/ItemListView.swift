@@ -91,7 +91,7 @@ extension ItemListView: ItemListViewProtocol {
         return self.tableView.rx.isScrollEnabled.asObserver()
     }
 
-    var pullToRefreshActive: AnyObserver<Bool> {
+    var pullToRefreshActive: AnyObserver<Bool>? {
         return self.tableView.refreshControl!.rx.isRefreshing.asObserver()
     }
 
