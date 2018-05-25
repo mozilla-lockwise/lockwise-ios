@@ -14,6 +14,7 @@ enum LoginListCellConfiguration {
     case Item(title: String, username: String, guid: String)
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
+    case PreparingPlaceholder
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -27,6 +28,8 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "syncplaceholder"
         case .EmptyListPlaceholder:
             return "emptyplaceholder"
+        case .PreparingPlaceholder:
+            return "preparingplaceholder"
         }
     }
 }
@@ -39,6 +42,7 @@ extension LoginListCellConfiguration: Equatable {
             return lhTitle == rhTitle && lhUsername == rhUsername
         case (.SyncListPlaceholder, .SyncListPlaceholder): return true
         case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
+        case (.PreparingPlaceholder, .PreparingPlaceholder): return true
         default:
             return false
         }
@@ -97,6 +101,14 @@ extension ItemListView: ItemListViewProtocol {
 
     var sortingButtonEnabled: AnyObserver<Bool>? {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            return button.rx.isEnabled.asObserver()
+        }
+
+        return nil
+    }
+
+    var settingButtonEnabled: AnyObserver<Bool>? {
+        if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
             return button.rx.isEnabled.asObserver()
         }
 
@@ -182,6 +194,12 @@ extension ItemListView {
                         cell.learnMoreButton.rx.tap
                                 .bind(to: learnMoreObserver)
                                 .disposed(by: cell.disposeBag)
+
+                        retCell = cell
+                    case .PreparingPlaceholder:
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "preparingplaceholder") else {
+                            fatalError("couldn't find the right cell!")
+                        }
 
                         retCell = cell
                     }

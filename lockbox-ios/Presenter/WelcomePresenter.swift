@@ -159,15 +159,19 @@ extension WelcomePresenter {
                 .filter { $0.1 }
                 .map { $0.0 }
                 .flatMap { [weak self] latest -> Single<Void> in
-                    if let target = self {
-                        return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder) // swiftlint:disable:this line_length
-                                .catchError { _ in
-                                    // ignore errors from local authentication
-                                    return Observable.never().asSingle()
-                                }
+                    guard let target = self else {
+                        return Observable.never().asSingle()
                     }
 
-                    return Observable.never().asSingle()
+                    if !target.biometryManager.deviceAuthenticationAvailable {
+                        return Single.just(())
+                    }
+
+                    return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder) // swiftlint:disable:this line_length
+                            .catchError { _ in
+                                // ignore errors from local authentication
+                                return Observable.never().asSingle()
+                            }
                 }
                 .subscribe(onNext: { [weak self] _ in
                     self?.dataStoreActionHandler.invoke(.unlock)

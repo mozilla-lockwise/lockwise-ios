@@ -15,6 +15,7 @@ class SettingsPresenterSpec: QuickSpec {
     class FakeSettingsView: SettingListViewProtocol {
         var itemsObserver: TestableObserver<[SettingSectionModel]>!
         var fakeButtonPress = PublishSubject<Void>()
+        var lockNowObserver: TestableObserver<Bool>!
 
         private let disposeBag = DisposeBag()
 
@@ -24,6 +25,10 @@ class SettingsPresenterSpec: QuickSpec {
 
         var onSignOut: ControlEvent<Void> {
             return ControlEvent(events: fakeButtonPress.asObservable())
+        }
+
+        var hideLockNow: AnyObserver<Bool> {
+            return self.lockNowObserver.asObserver()
         }
     }
 
@@ -51,10 +56,19 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeBiometryManager: BiometryManager {
+        var deviceAuthAvailableStub: Bool!
+
+        override var deviceAuthenticationAvailable: Bool {
+            return self.deviceAuthAvailableStub
+        }
+    }
+
     private var view: FakeSettingsView!
     private var routeActionHandler: FakeRouteActionHandler!
     private var settingActionHandler: FakeSettingActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
 
@@ -65,48 +79,91 @@ class SettingsPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeSettingsView()
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
+                self.view.lockNowObserver = self.scheduler.createObserver(Bool.self)
 
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.settingActionHandler = FakeSettingActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
                         routeActionHandler: self.routeActionHandler,
                         settingActionHandler: self.settingActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler)
+                        dataStoreActionHandler: self.dataStoreActionHandler,
+                        biometryManager: self.biometryManager)
             }
 
             describe("onViewReady") {
-                describe("onSignOut") {
+                describe("when device auth is available") {
                     beforeEach {
-                        self.subject.onViewReady()
-                        self.view.fakeButtonPress.onNext(())
+                        self.biometryManager.deviceAuthAvailableStub = true
                     }
 
-                    it("locks the application and routes to the login flow") {
-                        expect(self.dataStoreActionHandler.actionArgument).to(equal(DataStoreAction.lock))
-                        let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
-                        expect(argument).to(equal(LoginRouteAction.welcome))
+                    it("shows the lock now button") {
+                        self.subject.onViewReady()
+                        expect(self.view.lockNowObserver.events.last!.value.element).to(beFalse())
+                    }
+
+                    describe("onSignOut") {
+                        beforeEach {
+                            self.subject.onViewReady()
+                            self.view.fakeButtonPress.onNext(())
+                        }
+
+                        it("locks the application and routes to the login flow") {
+                            expect(self.dataStoreActionHandler.actionArgument).to(equal(DataStoreAction.lock))
+                            let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
+                            expect(argument).to(equal(LoginRouteAction.welcome))
+                        }
+                    }
+
+                    describe("detail values on view modules") {
+                        beforeEach {
+                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                            self.subject.onViewReady()
+                        }
+
+                        it("sets detail value for autolock") {
+                            let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
+                            expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))
+                        }
+
+                        it("sets detail value for preferred browser") {
+                            let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
+                            expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                        }
                     }
                 }
 
-                describe("detail values on view modules") {
+                describe("when device auth is not available") {
                     beforeEach {
-                        UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                        self.biometryManager.deviceAuthAvailableStub = false
+                    }
+
+                    it("hides the Lock Now button") {
                         self.subject.onViewReady()
+                        expect(self.view.lockNowObserver.events.last!.value.element).to(beTrue())
                     }
 
-                    it("sets detail value for autolock") {
-                        let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
-                        expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))
-                    }
+                    describe("detail values on view modules") {
+                        beforeEach {
+                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                            self.subject.onViewReady()
+                        }
 
-                    it("sets detail value for preferred browser") {
-                        let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
-                        expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                        it("does not show autolock") {
+                            expect(self.view.itemsObserver.events.last!.value.element![1].items.count).to(equal(2))
+                        }
+
+                        it("sets detail value for preferred browser") {
+                            let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
+                            expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                        }
                     }
                 }
+
             }
 
             describe("onUsageDataSettingChanged") {

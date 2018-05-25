@@ -34,6 +34,7 @@ class RootPresenter {
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
+    fileprivate let biometryManager: BiometryManager
 
     init(view: RootViewProtocol,
          dispatcher: Dispatcher = Dispatcher.shared,
@@ -44,7 +45,8 @@ class RootPresenter {
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared
+         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
+         biometryManager: BiometryManager = BiometryManager()
     ) {
         self.view = view
         self.routeStore = routeStore
@@ -55,24 +57,29 @@ class RootPresenter {
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
+        self.biometryManager = biometryManager
 
-        Observable.combineLatest(self.dataStore.locked, self.dataStore.syncState)
-                .do(onNext: { (latest: (Bool, SyncState)) in
-                    if latest.1 == .NotSyncable {
+        self.dataStore.storageState
+            .subscribe(onNext: { storageState in
+                    switch storageState {
+                    case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    }
-                })
-                .filter { $0.1 != .NotSyncable }
-                .map { $0.0 }
-                .distinctUntilChanged()
-                .subscribe(onNext: { locked in
-                    if locked {
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    } else {
+                    case .Preparing, .Unlocked:
                         self.routeActionHandler.invoke(MainRouteAction.list)
+                    default:
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
                     }
                 })
                 .disposed(by: self.disposeBag)
+
+        self.dataStore.syncState
+            .distinctUntilChanged()
+            .subscribe(onNext: { syncState in
+                if syncState == .NotSyncable {
+                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         self.startTelemetry()
         self.checkAutoLockTimer()
@@ -207,6 +214,10 @@ extension RootPresenter {
     }
 
     fileprivate func checkAutoLockTimer() {
+        guard self.biometryManager.deviceAuthenticationAvailable else {
+            return
+        }
+
         self.userDefaults.onAutoLockTime
                 .take(1)
                 .subscribe(onNext: { autoLockSetting in

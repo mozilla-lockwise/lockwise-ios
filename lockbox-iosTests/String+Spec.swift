@@ -29,6 +29,10 @@ class StringSpec: QuickSpec {
                 expect("www.bats.com".titleFromHostname()).to(equal("bats.com"))
                 expect("https://hey.http://.com".titleFromHostname()).to(equal("hey.http://.com"))
                 expect("http://www.maps.com".titleFromHostname()).to(equal("maps.com"))
+                expect("http://www2.stuff.example".titleFromHostname()).to(equal("stuff.example"))
+                expect("http://www12345.stuff.example".titleFromHostname()).to(equal("stuff.example"))
+                expect("http://www2api.stuff.example".titleFromHostname()).to(equal("www2api.stuff.example"))
+                expect("http://www-api.maps.com".titleFromHostname()).to(equal("www-api.maps.com"))
             }
         }
     }

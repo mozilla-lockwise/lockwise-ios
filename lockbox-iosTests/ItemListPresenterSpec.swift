@@ -16,6 +16,7 @@ class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var sortButtonEnableObserver: TestableObserver<Bool>!
+        var settingButtonEnableObserver: TestableObserver<Bool>!
         var tableViewScrollObserver: TestableObserver<Bool>!
         var sortingButtonTitleObserver: TestableObserver<String>!
         var dismissSpinnerObserver: TestableObserver<Void>!
@@ -46,6 +47,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         var sortingButtonEnabled: AnyObserver<Bool>? {
             return self.sortButtonEnableObserver.asObserver()
+        }
+
+        var settingButtonEnabled: AnyObserver<Bool>? {
+            return self.settingButtonEnableObserver.asObserver()
         }
 
         var tableViewScrollEnabled: AnyObserver<Bool> {
@@ -81,6 +86,7 @@ class ItemListPresenterSpec: QuickSpec {
     class FakeDataStore: DataStore {
         var itemListStub = PublishSubject<[Login]>()
         var syncStateStub = PublishSubject<SyncState>()
+        var storageStateStub = PublishSubject<LoginStoreState>()
 
         override var list: Observable<[Login]> {
             return self.itemListStub.asObservable()
@@ -88,6 +94,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         override var syncState: Observable<SyncState> {
             return self.syncStateStub.asObservable()
+        }
+
+        override var storageState: Observable<LoginStoreState> {
+            return self.storageStateStub.asObservable()
         }
     }
 
@@ -119,6 +129,7 @@ class ItemListPresenterSpec: QuickSpec {
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
                 self.view.sortButtonEnableObserver = self.scheduler.createObserver(Bool.self)
+                self.view.settingButtonEnableObserver = self.scheduler.createObserver(Bool.self)
                 self.view.tableViewScrollObserver = self.scheduler.createObserver(Bool.self)
                 self.view.dismissSpinnerObserver = self.scheduler.createObserver(Void.self)
                 self.view.pullToRefreshObserver = self.scheduler.createObserver(Bool.self)
@@ -137,18 +148,23 @@ class ItemListPresenterSpec: QuickSpec {
                     beforeEach {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
+                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
                     }
 
-                    describe("when the datastore is still syncing") {
+                    describe("when the datastore is still syncing & prepared") {
                         beforeEach {
                             self.dataStore.syncStateStub.onNext(SyncState.Syncing)
-                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: false))
+                            self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
 
                         it("tells the view to display the spinner") {
                             expect(self.view.displaySpinnerCalled).to(beTrue())
+                        }
+
+                        it("enables the setting button") {
+                            expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beTrue())
                         }
 
                         it("pushes the search field and placeholder image to the itemlist") {
@@ -243,11 +259,30 @@ class ItemListPresenterSpec: QuickSpec {
                             it("tells the view to hide pull to refresh") {
                                 expect(self.view.pullToRefreshObserver.events.last!.value.element).to(beFalse())
                             }
+      
+                    describe("when the datastore is preparing") {
+                        beforeEach {
+                            self.dataStore.syncStateStub.onNext(SyncState.NotSyncable)
+                            self.dataStore.storageStateStub.onNext(LoginStoreState.Preparing)
+                        }
+
+                        it("displays the email confirmation placeholder") {
+                            let expectedItemConfigurations = [
+                                LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
+                                LoginListCellConfiguration.PreparingPlaceholder
+                            ]
+                            expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                            let configuration = self.view.itemsObserver.events.last!.value.element!
+                            expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                        }
+
+                        it("disables the setting button") {
+                            expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beFalse())
                         }
                     }
                 }
 
-                describe("when the datastore pushes a populated list of items") {
+                describe("when the datastore pushes a populated list of items & is prepared") {
                     let webAddress1 = "http://meow"
                     let webAddress2 = "http://aaaaaa"
                     let username = "cats@cats.com"
@@ -266,6 +301,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                        self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                     }
 
                     it("tells the view to display the items in alphabetic order by title") {
@@ -278,6 +314,10 @@ class ItemListPresenterSpec: QuickSpec {
                         expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
                         let configuration = self.view.itemsObserver.events.first!.value.element!
                         expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                    }
+
+                    it("enables the setting button") {
+                        expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beTrue())
                     }
 
                     describe("when text is entered into the search bar") {

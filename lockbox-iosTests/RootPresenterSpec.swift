@@ -89,6 +89,7 @@ class RootPresenterSpec: QuickSpec {
     class FakeDataStore: DataStore {
         let lockedSubject = PublishSubject<Bool>()
         let syncSubject = PublishSubject<SyncState>()
+        let storageStateSubject = PublishSubject<LoginStoreState>()
 
         override var locked: Observable<Bool> {
             return self.lockedSubject.asObservable()
@@ -96,6 +97,10 @@ class RootPresenterSpec: QuickSpec {
 
         override var syncState: Observable<SyncState> {
             return self.syncSubject.asObservable()
+        }
+
+        override var storageState: Observable<LoginStoreState> {
+            return self.storageStateSubject.asObservable()
         }
     }
 
@@ -136,6 +141,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeBiometryManager: BiometryManager {
+        var deviceAuthAvailableStub: Bool!
+
+        override var deviceAuthenticationAvailable: Bool {
+            return self.deviceAuthAvailableStub
+        }
+    }
+
     private var view: FakeRootView!
     private var routeStore: FakeRouteStore!
     private var dataStore: FakeDataStore!
@@ -143,6 +156,7 @@ class RootPresenterSpec: QuickSpec {
     private var routeActionHandler: FakeRouteActionHandler!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var biometryManager: FakeBiometryManager!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -156,7 +170,9 @@ class RootPresenterSpec: QuickSpec {
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.biometryManager = FakeBiometryManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
+                self.biometryManager.deviceAuthAvailableStub = true
 
                 self.subject = RootPresenter(
                         view: self.view,
@@ -164,13 +180,42 @@ class RootPresenterSpec: QuickSpec {
                         dataStore: self.dataStore,
                         telemetryStore: self.telemetryStore,
                         routeActionHandler: self.routeActionHandler,
-                        telemetryActionHandler: self.telemetryActionHandler
+                        telemetryActionHandler: self.telemetryActionHandler,
+                        biometryManager: self.biometryManager
                 )
+            }
+
+            describe("when the datastore state changes, regardless of synced state") {
+                it("routes to the welcome view") {
+                    self.dataStore.storageStateSubject.onNext(.Unprepared)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the list view") {
+                    self.dataStore.storageStateSubject.onNext(.Preparing)
+                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
+                }
+
+                it("routes to the welcome view") {
+                    self.dataStore.storageStateSubject.onNext(.Locked)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the list view") {
+                    self.dataStore.storageStateSubject.onNext(.Unlocked)
+                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
+                }
             }
 
             describe("when the datastore is locked, regardless of synced state") {
                 beforeEach {
-                    self.dataStore.lockedSubject.onNext(true)
+                    self.dataStore.storageStateSubject.onNext(.Locked)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
                 }
 
                 it("routes to the welcome view") {
@@ -217,20 +262,17 @@ class RootPresenterSpec: QuickSpec {
                 describe("any other sync state value") {
                     it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
 
                     it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.Syncing)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
 
                     it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.Synced)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
                 }
             }
@@ -1021,37 +1063,82 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 describe("Auto Lock Timer") {
-                    describe(".OnAppExit") {
-                        it("sets the visual lock") {
-                            UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            _ = self.getPresenter()
-                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                    describe("when device authentication is available") {
+                        beforeEach {
+                            self.biometryManager.deviceAuthAvailableStub = true
+                        }
+                        describe(".OnAppExit") {
+                            it("sets the visual lock") {
+                                UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                            }
+                        }
+
+                        describe(".Never") {
+                            it("unlocks the visual lock") {
+                                UserDefaults.standard.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.unlock))
+                            }
+                        }
+
+                        describe("is a timed value") {
+                            it("stored timer value has expired") {
+                                UserDefaults.standard.set(AutoLockSetting.OneMinute.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                                UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                            }
+
+                            it("stored timer value has not expired") {
+                                UserDefaults.standard.set(AutoLockSetting.TwelveHours.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                                UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                            }
                         }
                     }
 
-                    describe(".Never") {
-                        it("unlocks the visual lock") {
-                            UserDefaults.standard.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            _ = self.getPresenter()
-                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.unlock))
-                        }
-                    }
-
-                    describe("is a timed value") {
-                        it("stored timer value has expired") {
-                            UserDefaults.standard.set(AutoLockSetting.OneMinute.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
-                            UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
-                            _ = self.getPresenter()
-                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                    describe("when device authentication is not available") {
+                        beforeEach {
+                            self.biometryManager.deviceAuthAvailableStub = false
                         }
 
-                        it("stored timer value has not expired") {
-                            UserDefaults.standard.set(AutoLockSetting.TwelveHours.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
-                            UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
-                            _ = self.getPresenter()
-                            expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                        describe(".OnAppExit") {
+                            it("sets the visual lock") {
+                                UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(beNil())
+                            }
+                        }
+
+                        describe(".Never") {
+                            it("unlocks the visual lock") {
+                                UserDefaults.standard.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(beNil())
+                            }
+                        }
+
+                        describe("is a timed value") {
+                            it("stored timer value has expired") {
+                                UserDefaults.standard.set(AutoLockSetting.OneMinute.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                                UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(beNil())
+                            }
+
+                            it("stored timer value has not expired") {
+                                UserDefaults.standard.set(AutoLockSetting.TwelveHours.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                                let d = Calendar.current.date(byAdding: Calendar.Component.hour, value: -1, to: Date())
+                                UserDefaults.standard.set(d?.timeIntervalSince1970, forKey: SettingKey.autoLockTimerDate.rawValue)
+                                _ = self.getPresenter()
+                                expect(self.dataStoreActionHandler.action).to(beNil())
+                            }
                         }
                     }
                 }
@@ -1067,7 +1154,8 @@ class RootPresenterSpec: QuickSpec {
                 telemetryStore: self.telemetryStore,
                 routeActionHandler: self.routeActionHandler,
                 dataStoreActionHandler: self.dataStoreActionHandler,
-                telemetryActionHandler: self.telemetryActionHandler
+                telemetryActionHandler: self.telemetryActionHandler,
+                biometryManager: self.biometryManager
         )
     }
 }

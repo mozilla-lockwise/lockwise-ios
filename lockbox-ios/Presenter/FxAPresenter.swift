@@ -61,7 +61,6 @@ extension FxAPresenter {
             .subscribe(onNext: { [weak self] syncState in
                 if syncState == .NotSyncable {
                     self?.dataStoreActionHandler.invoke(.initialize(blob: data))
-                    self?.routeActionHandler.invoke(MainRouteAction.list)
                 }
             }).disposed(by: disposeBag)
     }
