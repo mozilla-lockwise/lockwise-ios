@@ -84,56 +84,124 @@ class ItemListViewSpec: QuickSpec {
             }
 
             describe(".bind(items:)") {
-                let item1Title = "item1"
-                let item1Username = "bleh"
-                let item2Title = "sum item"
-                let item2Username = "meh"
-                let items = [
-                    LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
-                    LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs"),
-                    LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads")
-                ]
+                describe("typical login items") {
+                    let item1Title = "item1"
+                    let item1Username = "bleh"
+                    let item2Title = "sum item"
+                    let item2Username = "meh"
+                    let items = [
+                        LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
+                        LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs"),
+                        LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads")
+                    ]
 
-                beforeEach {
-                    self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: items)]))
+                    beforeEach {
+                        self.subject.bind(items: Driver.just([ItemSectionModel(model: 0, items: items)]))
+                    }
+
+                    it("configures the number of rows correctly") {
+                        expect(self.subject.tableView.dataSource!.tableView(self.subject.tableView, numberOfRowsInSection: 0))
+                                .to(equal(items.count))
+                    }
+
+                    it("configures the search cell correctly") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as! FilterCell
+
+                        let filterText = "yum"
+                        cell.filterTextField.text = filterText
+                        cell.filterTextField.sendActions(for: .valueChanged)
+
+                        expect(self.presenter.fakeFilterTextObserver.events.last!.value.element).to(equal(filterText))
+                    }
+
+                    it("configures cells correctly when the item has a username and a title") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 1, section: 0)
+                        ) as! ItemListCell
+
+                        expect(cell.titleLabel!.text).to(equal(item1Title))
+                        expect(cell.detailLabel!.text).to(equal(item1Username))
+                    }
+
+                    it("configures cells correctly when the item has no username and a title") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 2, section: 0)
+                        ) as! ItemListCell
+
+                        expect(cell.titleLabel!.text).to(equal(item2Title))
+                        expect(cell.detailLabel!.text).to(equal(item2Username))
+                    }
                 }
 
-                it("configures the number of rows correctly") {
-                    expect(self.subject.tableView.dataSource!.tableView(self.subject.tableView, numberOfRowsInSection: 0))
-                            .to(equal(items.count))
+                describe("syncing list placeholder") {
+                    beforeEach {
+                        self.subject.bind(items: Driver.just(
+                                        [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.SyncListPlaceholder])]
+                                ))
+                    }
+
+                    it("configures the sync list placeholder") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        )
+
+                        expect(cell).notTo(beNil())
+                    }
                 }
 
-                it("configures the search cell correctly") {
-                    let cell = self.subject.tableView.dataSource!.tableView(
-                            self.subject.tableView,
-                            cellForRowAt: IndexPath(row: 0, section: 0)
-                    ) as! FilterCell
+                describe("empty list placeholder") {
+                    var learnMoreObserver = self.scheduler.createObserver(Void.self)
 
-                    let filterText = "yum"
-                    cell.filterTextField.text = filterText
-                    cell.filterTextField.sendActions(for: .valueChanged)
+                    beforeEach {
+                        learnMoreObserver = self.scheduler.createObserver(Void.self)
 
-                    expect(self.presenter.fakeFilterTextObserver.events.last!.value.element).to(equal(filterText))
+                        self.subject.bind(items: Driver.just(
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: learnMoreObserver.asObserver())])]
+                        ))
+                    }
+
+                    it("configures the empty list placeholder") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as? EmptyPlaceholderCell
+
+                        expect(cell).notTo(beNil())
+                    }
+
+                    it("configures the learn more button") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as! EmptyPlaceholderCell
+
+                        cell.learnMoreButton.sendActions(for: .touchUpInside)
+
+                        expect(learnMoreObserver.events.count).to(equal(1))
+                    }
                 }
 
-                it("configures cells correctly when the item has a username and a title") {
-                    let cell = self.subject.tableView.dataSource!.tableView(
-                            self.subject.tableView,
-                            cellForRowAt: IndexPath(row: 1, section: 0)
-                    ) as! ItemListCell
+                describe("preparing placeholder") {
+                    beforeEach {
+                        self.subject.bind(items: Driver.just(
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.PreparingPlaceholder])]
+                        ))
+                    }
 
-                    expect(cell.titleLabel!.text).to(equal(item1Title))
-                    expect(cell.detailLabel!.text).to(equal(item1Username))
-                }
+                    it("configures the empty list placeholder") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        )
 
-                it("configures cells correctly when the item has no username and a title") {
-                    let cell = self.subject.tableView.dataSource!.tableView(
-                            self.subject.tableView,
-                            cellForRowAt: IndexPath(row: 2, section: 0)
-                    ) as! ItemListCell
-
-                    expect(cell.titleLabel!.text).to(equal(item2Title))
-                    expect(cell.detailLabel!.text).to(equal(item2Username))
+                        expect(cell).notTo(beNil())
+                    }
                 }
             }
 
@@ -158,6 +226,18 @@ class ItemListViewSpec: QuickSpec {
 
                 it("changes the corresponding property on the sorting button") {
                     let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+
+                    expect(button.isEnabled).to(beFalse())
+                }
+            }
+
+            describe("new events to the sortingButtonEnabled observer") {
+                beforeEach {
+                    Observable.just(false).bind(to: self.subject.settingButtonEnabled!).disposed(by: self.disposeBag)
+                }
+
+                it("changes the corresponding property on the sorting button") {
+                    let button = self.subject.navigationItem.rightBarButtonItem!.customView as! UIButton
 
                     expect(button.isEnabled).to(beFalse())
                 }

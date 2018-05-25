@@ -89,6 +89,7 @@ class RootPresenterSpec: QuickSpec {
     class FakeDataStore: DataStore {
         let lockedSubject = PublishSubject<Bool>()
         let syncSubject = PublishSubject<SyncState>()
+        let storageStateSubject = PublishSubject<LoginStoreState>()
 
         override var locked: Observable<Bool> {
             return self.lockedSubject.asObservable()
@@ -96,6 +97,10 @@ class RootPresenterSpec: QuickSpec {
 
         override var syncState: Observable<SyncState> {
             return self.syncSubject.asObservable()
+        }
+
+        override var storageState: Observable<LoginStoreState> {
+            return self.storageStateSubject.asObservable()
         }
     }
 
@@ -180,9 +185,37 @@ class RootPresenterSpec: QuickSpec {
                 )
             }
 
+            describe("when the datastore state changes, regardless of synced state") {
+                it("routes to the welcome view") {
+                    self.dataStore.storageStateSubject.onNext(.Unprepared)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the list view") {
+                    self.dataStore.storageStateSubject.onNext(.Preparing)
+                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
+                }
+
+                it("routes to the welcome view") {
+                    self.dataStore.storageStateSubject.onNext(.Locked)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
+                }
+
+                it("routes to the list view") {
+                    self.dataStore.storageStateSubject.onNext(.Unlocked)
+                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
+                }
+            }
+
             describe("when the datastore is locked, regardless of synced state") {
                 beforeEach {
-                    self.dataStore.lockedSubject.onNext(true)
+                    self.dataStore.storageStateSubject.onNext(.Locked)
+                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
                 }
 
                 it("routes to the welcome view") {
@@ -229,20 +262,17 @@ class RootPresenterSpec: QuickSpec {
                 describe("any other sync state value") {
                     it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
 
                     it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.Syncing)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
 
                     it("routes to the list") {
                         self.dataStore.syncSubject.onNext(.Synced)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
+                        expect(self.routeActionHandler.invokeArgument).to(beNil())
                     }
                 }
             }

@@ -59,23 +59,27 @@ class RootPresenter {
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
-        Observable.combineLatest(self.dataStore.locked, self.dataStore.syncState)
-                .do(onNext: { (latest: (Bool, SyncState)) in
-                    if latest.1 == .NotSyncable {
+        self.dataStore.storageState
+            .subscribe(onNext: { storageState in
+                    switch storageState {
+                    case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    }
-                })
-                .filter { $0.1 != .NotSyncable }
-                .map { $0.0 }
-                .distinctUntilChanged()
-                .subscribe(onNext: { locked in
-                    if locked {
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    } else {
+                    case .Preparing, .Unlocked:
                         self.routeActionHandler.invoke(MainRouteAction.list)
+                    default:
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
                     }
                 })
                 .disposed(by: self.disposeBag)
+
+        self.dataStore.syncState
+            .distinctUntilChanged()
+            .subscribe(onNext: { syncState in
+                if syncState == .NotSyncable {
+                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         self.startTelemetry()
         self.checkAutoLockTimer()
