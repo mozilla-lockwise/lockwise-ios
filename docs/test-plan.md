@@ -2,6 +2,8 @@
 
 _Test plan for [Firefox Lockbox for iOS][1]_
 
+See also: [https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan](https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan)
+
 ## Overview
 
 Firefox Lockbox for iOS is a new mobile iOS app developed with a pre-defined set of P1 "must have" requirements and a target release at the end of June in the Apple App Store and in Test Pilot.
