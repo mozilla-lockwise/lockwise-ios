@@ -9,6 +9,7 @@ enum SettingAction: Action {
     case reset
     case preferredBrowser(browser: PreferredBrowserSetting)
     case recordUsageData(enabled: Bool)
+    case itemListSort(sort: ItemListSortSetting)
 }
 
 extension SettingAction: TelemetryAction {
@@ -26,6 +27,8 @@ extension SettingAction: TelemetryAction {
             return .settingsReset
         case .recordUsageData:
             return .settingsRecordUsageData
+        case .itemListSort:
+            return .settingsItemListSort
         }
     }
 
@@ -42,7 +45,10 @@ extension SettingAction: TelemetryAction {
         case .recordUsageData(let enabled):
             let enabledString = String(enabled)
             return enabledString
-      }
+        case .itemListSort(let sort):
+            return sort == .alphabetically ?
+                ItemListSortSetting.alphabetically.rawValue : ItemListSortSetting.recentlyUsed.rawValue
+        }
   }
 
     var extras: [String: Any?]? {
@@ -59,6 +65,8 @@ extension SettingAction: Equatable {
             return lhBrowser == rhBrowser
         case (.recordUsageData(let lhEnabled), .recordUsageData(let rhEnabled)):
             return lhEnabled == rhEnabled
+        case (.itemListSort(let lhSort), .itemListSort(let rhSort)):
+            return lhSort == rhSort
         case (.reset, .reset):
             return true
         default:
@@ -68,7 +76,7 @@ extension SettingAction: Equatable {
 }
 
 enum SettingKey: String {
-    case autoLockTime, preferredBrowser, recordUsageData, autoLockTimerDate
+    case autoLockTime, preferredBrowser, recordUsageData, autoLockTimerDate, itemListSort
 }
 
 class SettingActionHandler: ActionHandler {
@@ -97,6 +105,10 @@ class SettingActionHandler: ActionHandler {
                                   forKey: SettingKey.preferredBrowser.rawValue)
             self.userDefaults.set(Constant.setting.defaultRecordUsageData,
                                   forKey: SettingKey.recordUsageData.rawValue)
+            self.userDefaults.set(Constant.setting.defaultItemListSort.rawValue,
+                                  forKey: SettingKey.itemListSort.rawValue)
+        case .itemListSort(let sort):
+            self.userDefaults.set(sort.rawValue, forKey: SettingKey.itemListSort.rawValue)
         }
 
         // purely for telemetry, no app functionality depends on this

@@ -124,3 +124,17 @@ enum AutoLockSetting: String {
         }
     }
 }
+
+enum ItemListSortSetting: String {
+    case alphabetically
+    case recentlyUsed
+
+    func asAction() -> ItemListSortingAction {
+        switch (self) {
+        case .alphabetically:
+            return ItemListSortingAction.alphabetically
+        case .recentlyUsed:
+            return ItemListSortingAction.recentlyUsed
+        }
+    }
+}

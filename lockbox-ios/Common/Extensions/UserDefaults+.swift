@@ -26,4 +26,9 @@ extension UserDefaults {
     var onRecordUsageData: Observable<Bool> {
         return self.on(setting: .recordUsageData, type: Bool.self)
     }
+
+    var onItemListSort: Observable<ItemListSortSetting> {
+        return self.on(setting: .itemListSort, type: String.self)
+            .map { ItemListSortSetting(rawValue: $0) ?? Constant.setting.defaultItemListSort}
+    }
 }

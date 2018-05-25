@@ -43,6 +43,7 @@ class ItemListPresenter {
     private var dataStoreActionHandler: DataStoreActionHandler
     private var dataStore: DataStore
     private var itemListDisplayStore: ItemListDisplayStore
+    private var userDefaults: UserDefaults
     private var disposeBag = DisposeBag()
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
@@ -177,13 +178,15 @@ class ItemListPresenter {
          itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
-         itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared) {
+         itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
+         userDefaults: UserDefaults = UserDefaults.standard) {
         self.view = view
         self.routeActionHandler = routeActionHandler
         self.itemListDisplayActionHandler = itemListDisplayActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
+        self.userDefaults = userDefaults
     }
 
     func onViewReady() {
@@ -216,7 +219,14 @@ class ItemListPresenter {
 
         self.view?.bind(sortingButtonTitle: itemSortTextDriver)
 
-        self.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
+        self.userDefaults.onItemListSort
+            .take(1)
+            .subscribe({ (latest: Event<ItemListSortSetting>) in
+                if let setting = latest.element {
+                    self.itemListDisplayActionHandler.invoke(setting.asAction())
+                }
+            })
+            .disposed(by: self.disposeBag)
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
         self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
 
