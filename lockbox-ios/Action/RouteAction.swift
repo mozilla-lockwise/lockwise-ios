@@ -47,8 +47,6 @@ extension LoginRouteAction: TelemetryAction {
             return .loginWelcome
         case .fxa:
             return .loginFxa
-        case .learnMore:
-            return .loginLearnMore
         }
     }
 
