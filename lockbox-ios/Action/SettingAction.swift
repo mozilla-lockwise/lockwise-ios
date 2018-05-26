@@ -115,3 +115,17 @@ class SettingActionHandler: ActionHandler {
         self.dispatcher.dispatch(action: action)
     }
 }
+
+enum ItemListSortSetting: String {
+    case alphabetically
+    case recentlyUsed
+
+    func asAction() -> ItemListSortingAction {
+        switch (self) {
+        case .alphabetically:
+            return ItemListSortingAction.alphabetically
+        case .recentlyUsed:
+            return ItemListSortingAction.recentlyUsed
+        }
+    }
+}

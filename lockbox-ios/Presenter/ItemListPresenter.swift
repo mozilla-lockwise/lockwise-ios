@@ -44,6 +44,7 @@ class ItemListPresenter {
     private var dataStore: DataStore
     private var itemListDisplayStore: ItemListDisplayStore
     private var userDefaults: UserDefaults
+    private var settingActionHandler: SettingActionHandler
     private var disposeBag = DisposeBag()
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
@@ -115,12 +116,14 @@ class ItemListPresenter {
     lazy private var alphabeticSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
+            target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically))
         }.asObserver()
     }()
 
     lazy private var recentlyUsedSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.itemListDisplayActionHandler.invoke(ItemListSortingAction.recentlyUsed)
+            target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed))
         }.asObserver()
     }()
 
@@ -179,7 +182,8 @@ class ItemListPresenter {
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard) {
+         userDefaults: UserDefaults = UserDefaults.standard,
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
         self.view = view
         self.routeActionHandler = routeActionHandler
         self.itemListDisplayActionHandler = itemListDisplayActionHandler
@@ -187,6 +191,7 @@ class ItemListPresenter {
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaults = userDefaults
+        self.settingActionHandler = settingActionHandler
     }
 
     func onViewReady() {
@@ -219,14 +224,7 @@ class ItemListPresenter {
 
         self.view?.bind(sortingButtonTitle: itemSortTextDriver)
 
-        self.userDefaults.onItemListSort
-            .take(1)
-            .subscribe({ (latest: Event<ItemListSortSetting>) in
-                if let setting = latest.element {
-                    self.itemListDisplayActionHandler.invoke(setting.asAction())
-                }
-            })
-            .disposed(by: self.disposeBag)
+        self.itemListDisplayActionHandler.invoke(Constant.setting.defaultItemListSort.asAction())
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
         self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
 
@@ -281,6 +279,15 @@ class ItemListPresenter {
                     }
                 })
                 .disposed(by: self.disposeBag)
+
+        self.userDefaults.onItemListSort
+            .take(1)
+            .subscribe({ (latest: Event<ItemListSortSetting>) in
+                if let setting = latest.element {
+                    self.itemListDisplayActionHandler.invoke(setting.asAction())
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 
