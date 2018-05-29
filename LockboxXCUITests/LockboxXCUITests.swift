@@ -12,7 +12,7 @@ let passwordTestAccountNoLogins = "IIJWKtOR"
 class LockboxXCUITests: BaseTestCase {
 
     func test1LoginWithSavedLogins() {
-        navigator.goto(FxASigninScreen)
+        navigator.goto(Screen.FxASigninScreen)
         waitforExistence(app.webViews.textFields["Email"])
 
         // Try tapping on Sign In, no fields filled in
@@ -46,16 +46,20 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxALogInSuccessfully)
 
         // App should start showing the main page
+        // Instead of waiting we could pull down to refresh to force the logins appear and so the buttons are available
+        sleep(8)
+        //app.staticTexts["Confirm your account."].swipeDown()
         waitforExistence(app.navigationBars["Firefox Lockbox"])
+        waitforNoExistence(app.staticTexts["Confirm your account."])
         XCTAssertTrue(app.navigationBars.buttons["A-Z"].exists)
-        XCTAssertTrue(app.navigationBars.buttons["Firefox Lockbox"].exists)
+        XCTAssertTrue(app.navigationBars["Firefox Lockbox"].exists)
         XCTAssertTrue(app.navigationBars.buttons["preferences"].exists)
 
         // Go to Settings to disable the AutoLock
         // This is a temporary workaround needed to run other tests after this one until defining a tearDown
-        navigator.goto(SettingsMenu)
+        navigator.goto(Screen.SettingsMenu)
         waitforExistence(app.navigationBars["Settings"])
-        navigator.goto(AutolockSettingsMenu)
+        navigator.goto(Screen.AutolockSettingsMenu)
 
         app.cells.staticTexts["Never"].tap()
         // Go back to Lockbox main page view
@@ -76,8 +80,10 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     // More tests to be added once the app is stable when re-launching and tearDown is defined according to app's behaviour
+    /*
     func test2SettingsAccountUI() {
-        navigator.goto(AccountSettingsMenu)
+        waitforExistence(app.navigationBars["Firefox Lockbox"])
+        navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["Account"])
 
         // Some checks can be done here to be sure the Account UI is fine
@@ -86,7 +92,7 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func test3SettingOpenWebSitesIn() {
-        navigator.goto(OpenSitesInMenu)
+        navigator.goto(Screen.OpenSitesInMenu)
         waitforExistence(app.navigationBars["Open Websites in"])
         XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Firefox Focus"].exists)
@@ -105,24 +111,22 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Get Started"].tap()
         userState.fxaPassword = passwordTestAccountLogins
         waitforExistence(app.staticTexts["test-7012e53d0d@restmail.net"])
-        navigator.nowAt(FxASigninScreen)
+        navigator.nowAt(Screen.FxASigninScreen)
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
     }
 
     func test5SortEntries() {
-        navigator.goto(LockboxMainPage)
+        navigator.goto(Screen.LockboxMainPage)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
-        sleep(3)
-        navigator.performAction(Action.ChangeEntriesOrder)
-        sleep(1)
-        waitforExistence(app.staticTexts["Sort Entries"])
-        XCTAssertTrue(app.buttons["Alphabetically"].exists)
-        XCTAssertTrue(app.buttons["Recently Used"].exists)
-        app.buttons["Recently Used"].tap()
+        navigator.performAction(Action.SelectRecentOrder)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         XCTAssertTrue(app.buttons["Recent"].exists)
+        navigator.goto(Screen.SortEntriesMenu)
+        navigator.performAction(Action.SelectAlphabeticalOrder)
+        waitforExistence(app.navigationBars["Firefox Lockbox"])
+        XCTAssertTrue(app.buttons["A-Z"].exists)
         // Pending to create more entries and check that the order is actually changed
     }
 
@@ -134,7 +138,7 @@ class LockboxXCUITests: BaseTestCase {
         app.webViews.links["Use a different account"].tap()
         sleep(3)
 
-        navigator.nowAt(FxASigninScreen)
+        navigator.nowAt(Screen.FxASigninScreen)
         waitforExistence(app.webViews.textFields["Email"])
 
         // Connect with new account without logins
@@ -146,12 +150,6 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         app.navigationBars["Firefox Lockbox"].tap()
         waitforExistence(app.images["empty-list-placeholder"])
-        XCTAssertTrue(app.staticTexts["No entries found."].exists)
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-        waitforExistence(app.buttons["Get Started"])
-        app.buttons["Get Started"].tap()
-        waitforExistence(app.webViews.staticTexts[emailTestAccountNoLogins])
-        app.webViews.links["Use a different account"].tap()
-        waitforExistence(app.webViews.textFields["Email"])
-    }
+        XCTAssertTrue(app.staticTexts["Confirm your account."].exists)
+    }*/
 }

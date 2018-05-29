@@ -6,23 +6,23 @@ import Foundation
 import MappaMundi
 import XCTest
 
-let WelcomeScreen = "WelcomeScreen"
-let LockboxMainPage = "LockboxMainPage"
-let SettingsMenu = "SettingsMenu"
+class Screen {
+    static let WelcomeScreen = "WelcomeScreen"
+    static let LockboxMainPage = "LockboxMainPage"
+    static let SettingsMenu = "SettingsMenu"
 
-let FxASigninScreen = "FxASigninScreen"
-let FxCreateAccount = "FxCreateAccount"
+    static let FxASigninScreen = "FxASigninScreen"
+    static let FxCreateAccount = "FxCreateAccount"
 
-let OpenSitesInMenu = "OpenSitesInMenu"
-let LockedScreen = "LockedScreen"
-let AccountSettingsMenu = "AccountSettingsMenu"
-let AutolockSettingsMenu = "AutolockSettingsMenu"
+    static let OpenSitesInMenu = "OpenSitesInMenu"
+    static let LockedScreen = "LockedScreen"
+    static let AccountSettingsMenu = "AccountSettingsMenu"
+    static let AutolockSettingsMenu = "AutolockSettingsMenu"
 
-let SortEntriesMenu = "SortEntriesMenu"
-
+    static let SortEntriesMenu = "SortEntriesMenu"
+}
 
 class Action {
-
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
@@ -36,41 +36,38 @@ class Action {
     static let DisconnectFirefoxLockboxCancel = "DisconnectFirefoxLockboxCancel"
 
     static let ChangeEntriesOrder = "ChangeEntriesOrder"
+    static let SelectAlphabeticalOrder = "SelectAlphabeticalOrder"
+    static let SelectRecentOrder = "SelectRecentOrder"
 }
 
 @objcMembers
-class FxUserState: MMUserState {
+class LockboxUserState: MMUserState {
     required init() {
         super.init()
-        initialScreenState = WelcomeScreen
+        initialScreenState = Screen.WelcomeScreen
     }
 
     var fxaUsername: String? = nil
     var fxaPassword: String? = nil
 }
 
-func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<FxUserState> {
-    let map = MMScreenGraph(for: test, with: FxUserState.self)
+func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<LockboxUserState> {
+    let map = MMScreenGraph(for: test, with: LockboxUserState.self)
 
     let navigationControllerBackAction = {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
     }
 
-    let cancelBackAction = {
+    let fxaViewCancelButton = {
         app.navigationBars["Lockbox.FxAView"].buttons["Cancel"].tap()
     }
 
-    map.addScreenState(WelcomeScreen) { screenState in
-        // Adding temporary a sleep here because now Get Start buttons appears always when relaunching the app, bug or design??
-        sleep(3)
-        if (app.buttons["Get Started"].exists) {
-            screenState.tap(app.buttons["Get Started"], to: FxASigninScreen)
-        } else {
-            screenState.noop(to: LockboxMainPage)
-        }
+    map.addScreenState(Screen.WelcomeScreen) { screenState in
+            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreen)
+            screenState.noop(to: Screen.LockboxMainPage)
     }
 
-    map.addScreenState(FxASigninScreen) { screenState in
+    map.addScreenState(Screen.FxASigninScreen) { screenState in
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             app.webViews.textFields["Email"].tap()
             app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
@@ -83,76 +80,76 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.webViews.buttons["Sign in"].tap()
         }
 
-        screenState.gesture(forAction: Action.FxALogInSuccessfully, transitionTo: LockboxMainPage) { userState in
+        screenState.gesture(forAction: Action.FxALogInSuccessfully, transitionTo: Screen.LockboxMainPage) { userState in
             app.webViews.buttons["Sign in"].tap()
             userState.fxaUsername = userState.fxaUsername!
             userState.fxaPassword = userState.fxaPassword!
         }
-        screenState.tap(app.webViews.links["Create an account"], to: FxCreateAccount)
+        screenState.tap(app.webViews.links["Create an account"], to: Screen.FxCreateAccount)
 
-        screenState.noop(to: LockboxMainPage)
+        screenState.noop(to: Screen.LockboxMainPage)
     }
 
-    map.addScreenState(FxCreateAccount) { screenState in
+    map.addScreenState(Screen.FxCreateAccount) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(LockboxMainPage) { screenState in
-        screenState.tap(app.buttons["preferences"], to: SettingsMenu)
+    map.addScreenState(Screen.LockboxMainPage) { screenState in
+        screenState.tap(app.buttons["preferences"], to: Screen.SettingsMenu)
 
-        screenState.gesture(forAction: Action.ChangeEntriesOrder, transitionTo: SortEntriesMenu) { userState in
-            if (app.buttons["A-Z"].exists) {
-                app.buttons["A-Z"].tap()
-            } else {
-                app.buttons["Recent"].tap()
-            }
+        screenState.tap(app.buttons.firstMatch, to: Screen.SortEntriesMenu)
+    }
+
+    map.addScreenState(Screen.SortEntriesMenu) { screenState in
+        screenState.gesture(forAction: Action.SelectAlphabeticalOrder, transitionTo: Screen.LockboxMainPage) { userState in
+            app.buttons["Alphabetically"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectRecentOrder, transitionTo: Screen.LockboxMainPage) { userState in
+            app.buttons["Recently Used"].tap()
         }
 
-        screenState.dismissOnUse = true
+        screenState.backAction = {
+            app.sheets["Sort Entries"].buttons["Cancel"].tap()
+        }
+        screenState.noop(to: Screen.LockboxMainPage)
     }
 
-    map.addScreenState(SortEntriesMenu) { screenState in
-        //screenState.backAction = cancelBackAction
-        screenState.noop(to: LockboxMainPage)
-    }
+    map.addScreenState(Screen.SettingsMenu) { screenState in
+        screenState.tap(app.tables.cells.staticTexts["Open Websites in"], to: Screen.OpenSitesInMenu)
+        screenState.tap(app.tables.cells.staticTexts["Account"], to: Screen.AccountSettingsMenu)
+        screenState.tap(app.tables.cells.staticTexts["Auto Lock"], to: Screen.AutolockSettingsMenu)
 
-    map.addScreenState(SettingsMenu) { screenState in
-        screenState.tap(app.tables.cells.staticTexts["Open Websites in"], to: OpenSitesInMenu)
-        screenState.tap(app.tables.cells.staticTexts["Account"], to: AccountSettingsMenu)
-        screenState.tap(app.tables.cells.staticTexts["Auto Lock"], to: AutolockSettingsMenu)
-
-        screenState.gesture(forAction: Action.LockNow, transitionTo: LockedScreen) { userState in
+        screenState.gesture(forAction: Action.LockNow, transitionTo: Screen.LockedScreen) { userState in
             app.buttons["Lock Now"].tap()
         }
         screenState.dismissOnUse = true
     }
 
-    map.addScreenState(OpenSitesInMenu) { screenState in
+    map.addScreenState(Screen.OpenSitesInMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(AccountSettingsMenu) { screenState in
+    map.addScreenState(Screen.AccountSettingsMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
         screenState.dismissOnUse = true
 
-        screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: WelcomeScreen) { userState in
+        screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: Screen.WelcomeScreen) { userState in
             app.buttons["Disconnect Firefox Lockbox"].tap()
             app.buttons["Disconnect"].tap()
         }
-        screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: AccountSettingsMenu) { userState in
+        screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: Screen.AccountSettingsMenu) { userState in
             app.buttons["Disconnect Firefox Lockbox"].tap()
             app.buttons["Cancel"].tap()
         }
-
     }
 
-    map.addScreenState(AutolockSettingsMenu) { screenState in
+    map.addScreenState(Screen.AutolockSettingsMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
         screenState.dismissOnUse = true
     }
 
-    map.addScreenState(LockedScreen) { screenState in
-        screenState.backAction = navigationControllerBackAction
+    map.addScreenState(Screen.LockedScreen) { screenState in
+        //screenState.backAction = navigationControllerBackAction
     }
 
     return map

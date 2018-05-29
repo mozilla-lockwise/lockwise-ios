@@ -6,9 +6,9 @@ import MappaMundi
 import XCTest
 
 class BaseTestCase: XCTestCase {
-    var navigator: MMNavigator<FxUserState>!
+    var navigator: MMNavigator<LockboxUserState>!
     let app =  XCUIApplication()
-    var userState: FxUserState!
+    var userState: LockboxUserState!
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
