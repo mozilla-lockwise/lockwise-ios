@@ -90,6 +90,11 @@ struct Constant {
         static let passcodeInformation = NSLocalizedString("passcode_info", value: "You should use a passcode to lock your iPhone. Without a passcode, anyone who has your iPhone can access the information saved here.", comment: "Informative text about the ")
         static let skip = NSLocalizedString("skip", value: "Skip", comment: "Label for button allowing users to skip setting passcode or biometrics on device")
         static let setPasscode = NSLocalizedString("set_passcode", value: "Set Passcode", comment: "Label for button allowing users to go to passcode settings")
+        static let sortOptionsAccessibilityID = NSLocalizedString("sorting_options", value: "Select options for sorting your list of entries (currently %@)", comment: "Accessibility identifier for the sorting options button")
+        static let settingsAccessibilityID = NSLocalizedString("settings_button", value: "Settings", comment: "Accessibility identifier for the settings button")
+        static let websiteCellAccessibilityLabel = NSLocalizedString("website_accessibility_instructions", value: "Web address: double tap to open in browser %@", comment: "Accessibility label and instructions for web address section of entry details")
+        static let usernameCellAccessibilityLabel = NSLocalizedString("username_accessibility_instructions", value: "Username: double tap to copy %@", comment: "Accessibility label and instructions for username section of entry details")
+        static let passwordCellAccessibilityLabel = NSLocalizedString("password_accessibility_instructions", value: "Password: double tap to copy %@", comment: "Accessibility label and instructions for password section of entry details")
     }
 
     struct number {

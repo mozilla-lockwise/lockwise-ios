@@ -12,13 +12,15 @@ typealias ItemDetailSectionModel = AnimatableSectionModel<Int, ItemDetailCellCon
 struct ItemDetailCellConfiguration {
     let title: String
     let value: String
+    let accessibilityLabel: String
     let password: Bool
     let size: CGFloat
     let valueFontColor: UIColor
 
-    init(title: String, value: String, password: Bool, size: CGFloat, valueFontColor: UIColor = UIColor.black) {
+    init(title: String, value: String, accessibilityLabel: String, password: Bool, size: CGFloat, valueFontColor: UIColor = UIColor.black) {
         self.title = title
         self.value = value
+        self.accessibilityLabel = accessibilityLabel
         self.password = password
         self.size = size
         self.valueFontColor = valueFontColor
@@ -127,6 +129,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
                     cell.valueLabel.font = cell.valueLabel.font.withSize(cellConfiguration.size)
                     cell.valueLabel.textColor = cellConfiguration.valueFontColor
+
+                    cell.accessibilityLabel = cellConfiguration.accessibilityLabel
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 

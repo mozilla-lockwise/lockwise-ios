@@ -35,6 +35,7 @@ extension UIViewController: StatusAlertView {
             self.view.addSubview(temporaryAlertView)
 
             self.animateAlertIn(temporaryAlertView) { _ in
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, message)
                 self.animateAlertOut(temporaryAlertView, delay: timeout)
             }
         }

@@ -51,6 +51,7 @@
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhp-Pp-rfw">
                                                     <rect key="frame" x="327" y="-4" width="43" height="52"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Reveal password in plaintext"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="reveal-eye"/>
                                                     <state key="selected" image="hide-eye"/>
