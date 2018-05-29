@@ -211,7 +211,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
-                        [AutoLockStoreSpecContext.Action.rawValue: ExternalLinkAction(baseURLString: "www.butts.com")]
+                        [AutoLockStoreSpecContext.Action.rawValue: ExternalLinkAction(baseURLString: "www.example.com")]
                     }
 
                     itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {

@@ -203,7 +203,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let username = "some username"
 
                             beforeEach {
-                                let item = Login(guid: "fsdfds", hostname: "www.butts.com", username: username, password: "meow")
+                                let item = Login(guid: "fsdfds", hostname: "www.example.com", username: username, password: "meow")
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -247,7 +247,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let password = "some password"
 
                             beforeEach {
-                                let item = Login(guid: "sdfdsf", hostname: "www.butts.com", username: "", password: password)
+                                let item = Login(guid: "sdfdsf", hostname: "www.example.com", username: "", password: password)
                                 self.dataStore.onItemStub.onNext(item)
                             }
 

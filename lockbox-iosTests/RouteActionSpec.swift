@@ -141,15 +141,15 @@ class RouteActionSpec: QuickSpec {
         describe("ExternalWebsiteRouteAction") {
             describe("equality") {
                 it("actions are equal when the title and URL string are equal") {
-                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list))
-                            .to(equal(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list)))
-                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list))
-                            .to(equal(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: SettingRouteAction.list)))
-                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: MainRouteAction.list))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: MainRouteAction.list))
+                            .to(equal(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: MainRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: MainRouteAction.list))
+                            .to(equal(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: SettingRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: MainRouteAction.list))
                             .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.meow.com", title: "blah", returnRoute: SettingRouteAction.list)))
-                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "woof", returnRoute: MainRouteAction.list))
-                            .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "blah", returnRoute: SettingRouteAction.list)))
-                    expect(ExternalWebsiteRouteAction(urlString: "www.butts.com", title: "woof", returnRoute: MainRouteAction.list))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "woof", returnRoute: MainRouteAction.list))
+                            .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: SettingRouteAction.list)))
+                    expect(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "woof", returnRoute: MainRouteAction.list))
                             .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.meow.com", title: "blah", returnRoute: SettingRouteAction.list)))
                 }
             }
