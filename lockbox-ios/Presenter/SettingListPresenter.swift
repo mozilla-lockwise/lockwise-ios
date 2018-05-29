@@ -127,7 +127,7 @@ extension SettingListPresenter {
                 text: Constant.string.settingsUsageData,
                 routeAction: ExternalWebsiteRouteAction(
                         urlString: Constant.app.privacyURL,
-                        title: Constant.string.faq,
+                        title: Constant.string.learnMore,
                         returnRoute: SettingRouteAction.list),
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
