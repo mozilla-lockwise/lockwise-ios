@@ -237,8 +237,11 @@ class WelcomePresenterSpec: QuickSpec {
 
                     it("dispatches the learn more route action") {
                         expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                        expect(argument).to(equal(LoginRouteAction.learnMore))
+                        let argument = self.routeActionHandler.invokeArgument as! ExternalWebsiteRouteAction
+                        expect(argument).to(equal(ExternalWebsiteRouteAction(
+                                urlString: Constant.app.useLockboxFAQ,
+                                title: Constant.string.learnMore,
+                                returnRoute: LoginRouteAction.welcome)))
                     }
                 }
 

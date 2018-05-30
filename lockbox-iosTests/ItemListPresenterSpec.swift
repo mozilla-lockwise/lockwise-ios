@@ -222,8 +222,11 @@ class ItemListPresenterSpec: QuickSpec {
 
                                 it("routes to the learn more view") {
                                     expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                                    let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
-                                    expect(argument).to(equal(MainRouteAction.learnMore))
+                                    let argument = self.routeActionHandler.invokeActionArgument as! ExternalWebsiteRouteAction
+                                    expect(argument).to(equal(ExternalWebsiteRouteAction(
+                                            urlString: Constant.app.enableSyncFAQ,
+                                            title: Constant.string.faq,
+                                            returnRoute: MainRouteAction.list)))
                                 }
                             }
                         }

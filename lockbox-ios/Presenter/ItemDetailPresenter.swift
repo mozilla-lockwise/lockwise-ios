@@ -10,6 +10,7 @@ import Storage
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
     var itemId: String { get }
+    var learnHowToEditTapped: Observable<Void> { get }
     func bind(titleText: Driver<String>)
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
 }
@@ -137,6 +138,21 @@ class ItemDetailPresenter {
                     let message = String(format: Constant.string.fieldNameCopied, fieldName)
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
                 })
+                .disposed(by: self.disposeBag)
+
+        self.view?.learnHowToEditTapped
+                .subscribe { _ in
+                    guard let itemID = self.view?.itemId else {
+                        return
+                    }
+
+                    self.routeActionHandler.invoke(
+                            ExternalWebsiteRouteAction(
+                                    urlString: Constant.app.editExistingEntriesFAQ,
+                                    title: Constant.string.faq,
+                                    returnRoute: MainRouteAction.detail(itemId: itemID))
+                    )
+                }
                 .disposed(by: self.disposeBag)
     }
 }

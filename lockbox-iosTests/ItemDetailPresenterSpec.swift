@@ -17,10 +17,15 @@ class ItemDetailPresenterSpec: QuickSpec {
         fileprivate(set) var itemId: String = "somefakeitemidinhere"
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
+        let learnHowToEditStub = PublishSubject<Void>()
         var tempAlertMessage: String?
         var tempAlertTimeout: TimeInterval?
 
         private let disposeBag = DisposeBag()
+
+        var learnHowToEditTapped: Observable<Void> {
+            return self.learnHowToEditStub.asObservable()
+        }
 
         func bind(titleText: Driver<String>) {
             titleText
@@ -198,7 +203,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let username = "some username"
 
                             beforeEach {
-                                let item = Login(guid: "fsdfds", hostname: "www.butts.com", username: username, password: "meow")
+                                let item = Login(guid: "fsdfds", hostname: "www.example.com", username: username, password: "meow")
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -242,7 +247,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let password = "some password"
 
                             beforeEach {
-                                let item = Login(guid: "sdfdsf", hostname: "www.butts.com", username: "", password: password)
+                                let item = Login(guid: "sdfdsf", hostname: "www.example.com", username: "", password: password)
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -438,6 +443,23 @@ class ItemDetailPresenterSpec: QuickSpec {
                         self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .username))
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
+                    }
+                }
+
+                describe("onLearnHowToEditTapped") {
+                    beforeEach {
+                        self.view.learnHowToEditStub.onNext(())
+                    }
+
+                    it("dispatches the faq link action") {
+                        expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
+                        let argument = self.routeActionHandler.routeActionArgument as! ExternalWebsiteRouteAction
+                        expect(argument).to(equal(
+                                        ExternalWebsiteRouteAction(
+                                                urlString: Constant.app.editExistingEntriesFAQ,
+                                                title: Constant.string.faq,
+                                                returnRoute: MainRouteAction.detail(itemId: self.view.itemId))
+                                ))
                     }
                 }
             }

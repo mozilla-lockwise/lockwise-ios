@@ -125,7 +125,10 @@ class ItemListPresenter {
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.learnMore)
+            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                    urlString: Constant.app.enableSyncFAQ,
+                    title: Constant.string.faq,
+                    returnRoute: MainRouteAction.list))
         }.asObserver()
     }()
 

@@ -112,7 +112,10 @@ class WelcomePresenter {
 
         self.view?.learnMorePressed
             .subscribe(onNext: { _ in
-                self.routeActionHandler.invoke(LoginRouteAction.learnMore)
+                self.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                        urlString: Constant.app.useLockboxFAQ,
+                        title: Constant.string.learnMore,
+                        returnRoute: LoginRouteAction.welcome))
             })
             .disposed(by: self.disposeBag)
 

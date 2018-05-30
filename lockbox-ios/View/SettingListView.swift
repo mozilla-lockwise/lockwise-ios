@@ -100,7 +100,7 @@ extension SettingListView {
     private func setupDelegate() {
         if let presenter = self.presenter {
             self.tableView.rx.itemSelected
-                    .map { path -> SettingRouteAction? in
+                    .map { path -> RouteAction? in
                         return self.dataSource?[path].routeAction
                     }
                     .bind(to: presenter.onSettingCellTapped)
@@ -147,12 +147,12 @@ extension SettingListView {
 
 class SettingCellConfiguration {
     var text: String
-    var routeAction: SettingRouteAction?
+    var routeAction: RouteAction?
     var enabled: Bool = true
     var detailText: String?
     var subtitle: NSAttributedString?
 
-    init(text: String, routeAction: SettingRouteAction?) {
+    init(text: String, routeAction: RouteAction?) {
         self.text = text
         self.routeAction = routeAction
     }
@@ -178,7 +178,7 @@ extension SettingCellConfiguration: IdentifiableType {
 
 extension SettingCellConfiguration: Equatable {
     static func ==(lhs: SettingCellConfiguration, rhs: SettingCellConfiguration) -> Bool {
-        return lhs.text == rhs.text && lhs.routeAction == rhs.routeAction
+        return lhs.text == rhs.text
     }
 }
 
@@ -186,7 +186,7 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
 
     var onChanged: AnyObserver<Bool>
-    init(text: String, routeAction: SettingRouteAction?, isOn: Bool = false, onChanged: AnyObserver<Bool>) {
+    init(text: String, routeAction: RouteAction?, isOn: Bool = false, onChanged: AnyObserver<Bool>) {
         self.isOn = isOn
         self.onChanged = onChanged
         super.init(text: text, routeAction: routeAction)
