@@ -18,9 +18,14 @@ class WelcomePresenterSpec: QuickSpec {
     class FakeWelcomeView: WelcomeViewProtocol {
         var fakeFxAButtonPress = PublishSubject<Void>()
         var fakeLoginButtonPress = PublishSubject<Void>()
+        var fakeBiometricButtonPress = PublishSubject<Void>()
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
+        var biometricButtonHiddenStub: TestableObserver<Bool>!
+        var biometricLabelHiddenStub: TestableObserver<Bool>!
+        var biometricImageNameStub: TestableObserver<String>!
+        var biometricButtonTitleStub: TestableObserver<String?>!
         var alertControllerButtons: [AlertActionButtonConfiguration]?
         var alertControllerTitle: String?
         var alertControllerMessage: String?
@@ -34,6 +39,10 @@ class WelcomePresenterSpec: QuickSpec {
             return ControlEvent<Void>(events: fakeFxAButtonPress.asObservable())
         }
 
+        var biometricButtonPressed: ControlEvent<Void> {
+            return ControlEvent<Void>(events: fakeBiometricButtonPress.asObservable())
+        }
+
         var firstTimeLoginMessageHidden: AnyObserver<Bool> {
             return self.firstTimeMessageHiddenStub.asObserver()
         }
@@ -43,6 +52,22 @@ class WelcomePresenterSpec: QuickSpec {
 
         var loginButtonHidden: AnyObserver<Bool> {
             return self.loginButtonHiddenStub.asObserver()
+        }
+
+        var biometricButtonHidden: AnyObserver<Bool> {
+            return self.biometricButtonHiddenStub.asObserver()
+        }
+
+        var biometricButtonTitleHidden: AnyObserver<Bool> {
+            return self.biometricLabelHiddenStub.asObserver()
+        }
+
+        var biometricButtonImageName: AnyObserver<String> {
+            return self.biometricImageNameStub.asObserver()
+        }
+
+        var biometricButtonTitle: AnyObserver<String?> {
+            return self.biometricButtonTitleStub.asObserver()
         }
 
         func displayAlertController(buttons: [AlertActionButtonConfiguration],
@@ -139,6 +164,10 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view.firstTimeMessageHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.firstTimeLearnMoreHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.loginButtonHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.biometricButtonHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.biometricLabelHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.biometricImageNameStub = self.scheduler.createObserver(String.self)
+                self.view.biometricButtonTitleStub = self.scheduler.createObserver(String?.self)
 
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
@@ -169,10 +198,12 @@ class WelcomePresenterSpec: QuickSpec {
                     it("shows the first time login message and the fxa login button") {
                         expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beFalse())
                         expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beFalse())
+                        expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
                     }
 
-                    it("hides the first time login button") {
-                        expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
+                    it("hides the biometrics login button and label") {
+                        expect(self.view.biometricButtonHiddenStub.events.last!.value.element).to(beTrue())
+                        expect(self.view.biometricLabelHiddenStub.events.last!.value.element).to(beTrue())
                     }
                 }
 
@@ -246,7 +277,7 @@ class WelcomePresenterSpec: QuickSpec {
                 }
 
                 describe("when the device is locked") {
-                    let email = "butts@butts.com"
+                    let email = "example@example.com"
 
                     describe("when the profileinfo has an email address") {
                         beforeEach {
@@ -259,43 +290,76 @@ class WelcomePresenterSpec: QuickSpec {
                         it("hides the first time login message and the fxa login button") {
                             expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
+                            expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+
+                        it("shows the biometrics login button and label") {
+                            expect(self.view.biometricButtonHiddenStub.events.last!.value.element).to(beFalse())
+                            expect(self.view.biometricLabelHiddenStub.events.last!.value.element).to(beFalse())
                         }
 
                         describe("when device authentication is available") {
-                            it("begins authentication with the profileInfo email") {
-                                expect(self.biometryManager.authMessage).to(equal(email))
-                            }
-
                             describe("foregrounding actions") {
                                 beforeEach {
-                                    self.biometryManager.authMessage = nil
                                     self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
                                 }
 
-                                it("starts authentication again") {
+                                it("starts authentication") {
                                     expect(self.biometryManager.authMessage).to(equal(email))
                                 }
+
+                                describe("successful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onNext(())
+                                    }
+
+                                    it("unlocks the application") {
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                    }
+                                }
+
+                                describe("unsuccessful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                    }
+
+                                    it("does nothing") {
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                    }
+                                }
                             }
 
-                            describe("successful authentication") {
+                            describe("pressing the biometrics button") {
                                 beforeEach {
-                                    self.biometryManager.fakeAuthResponse.onNext(())
+                                    self.view.fakeBiometricButtonPress.onNext(())
                                 }
 
-                                it("unlocks the application") {
-                                    expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                }
-                            }
-
-                            describe("unsuccessful authentication") {
-                                beforeEach {
-                                    self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                it("starts authentication") {
+                                    expect(self.biometryManager.authMessage).to(equal(email))
                                 }
 
-                                it("does nothing") {
-                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                    expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                describe("successful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onNext(())
+                                    }
+
+                                    it("unlocks the application") {
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                    }
+                                }
+
+                                describe("unsuccessful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                    }
+
+                                    it("does nothing") {
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                    }
                                 }
                             }
                         }
@@ -324,43 +388,76 @@ class WelcomePresenterSpec: QuickSpec {
                         it("hides the first time login message and the fxa login button") {
                             expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
+                            expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                        }
+
+                        it("shows the biometrics login button and label") {
+                            expect(self.view.biometricButtonHiddenStub.events.last!.value.element).to(beFalse())
+                            expect(self.view.biometricLabelHiddenStub.events.last!.value.element).to(beFalse())
                         }
 
                         describe("when device authentication is available") {
-                            it("begins authentication with the placeholder string") {
-                                expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
-                            }
-
                             describe("foregrounding actions") {
                                 beforeEach {
-                                    self.biometryManager.authMessage = nil
                                     self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
                                 }
 
-                                it("starts authentication again") {
+                                it("starts authentication") {
                                     expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
                                 }
+
+                                describe("successful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onNext(())
+                                    }
+
+                                    it("unlocks the application") {
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                    }
+                                }
+
+                                describe("unsuccessful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                    }
+
+                                    it("does nothing") {
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                    }
+                                }
                             }
 
-                            describe("successful authentication") {
+                            describe("pressing the biometrics button") {
                                 beforeEach {
-                                    self.biometryManager.fakeAuthResponse.onNext(())
+                                    self.view.fakeBiometricButtonPress.onNext(())
                                 }
 
-                                it("unlocks the application") {
-                                    expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                }
-                            }
-
-                            describe("unsuccessful authentication") {
-                                beforeEach {
-                                    self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                it("starts authentication") {
+                                    expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
                                 }
 
-                                it("does nothing") {
-                                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                    expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                describe("successful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onNext(())
+                                    }
+
+                                    it("unlocks the application") {
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                    }
+                                }
+
+                                describe("unsuccessful authentication") {
+                                    beforeEach {
+                                        self.biometryManager.fakeAuthResponse.onError(NSError(domain: "localauthentication", code: -1))
+                                    }
+
+                                    it("does nothing") {
+                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                    }
                                 }
                             }
                         }

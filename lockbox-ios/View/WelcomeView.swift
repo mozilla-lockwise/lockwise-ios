@@ -12,6 +12,8 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var fxASigninButton: UIButton!
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!
+    @IBOutlet internal weak var biometricButton: UIButton!
+    @IBOutlet internal weak var biometricTitle: UILabel!
 
     @IBOutlet private weak var oceanView: UIImageView!
 
@@ -76,6 +78,10 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.fxASigninButton.rx.tap
     }
 
+    public var biometricButtonPressed: ControlEvent<Void> {
+        return self.biometricButton.rx.tap
+    }
+
     public var loginButtonHidden: AnyObserver<Bool> {
         return self.fxASigninButton.rx.isHidden.asObserver()
     }
@@ -90,5 +96,24 @@ extension WelcomeView: WelcomeViewProtocol {
 
     public var firstTimeLearnMoreHidden: AnyObserver<Bool> {
         return self.learnMore.rx.isHidden.asObserver()
+    }
+
+    public var biometricButtonHidden: AnyObserver<Bool> {
+        return self.biometricButton.rx.isHidden.asObserver()
+    }
+
+    public var biometricButtonTitleHidden: AnyObserver<Bool> {
+        return self.biometricTitle.rx.isHidden.asObserver()
+    }
+
+    public var biometricButtonTitle: AnyObserver<String?> {
+        return self.biometricTitle.rx.text.asObserver()
+    }
+
+    public var biometricButtonImageName: AnyObserver<String> {
+        return Binder(self) { target, imageName in
+            let image = UIImage(named: imageName)
+            target.biometricButton.setImage(image, for: .normal)
+        }.asObserver()
     }
 }
