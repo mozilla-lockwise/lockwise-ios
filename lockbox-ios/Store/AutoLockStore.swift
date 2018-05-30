@@ -63,11 +63,7 @@ class AutoLockStore {
         if evt.element == .background {
             self.userDefaults.onAutoLockTime
                     .take(1)
-                    .subscribe(onNext: { (latest: AutoLockSetting) in
-                        if latest == AutoLockSetting.OnAppExit {
-                            self.lockApp()
-                        }
-                    })
+                    .subscribe(onNext: { (latest: AutoLockSetting) in })
                     .disposed(by: self.disposeBag)
         }
     }
@@ -94,9 +90,8 @@ class AutoLockStore {
                         self.setTimer(seconds: 60 * 60 * 24)
                     case .Never:
                         self.stopTimer()
-                    case .OnAppExit:
-                        return
                     }
+                    return
                 })
                 .disposed(by: self.disposeBag)
     }

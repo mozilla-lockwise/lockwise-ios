@@ -67,18 +67,6 @@ class AutoLockStoreSpec: QuickSpec {
             }
 
             describe("backgrounding app") {
-                describe("with auto lock setting on OnAppExit") {
-                    beforeEach {
-                        self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        self.dispatcher.registerStub.onNext(LifecycleAction.background)
-                    }
-
-                    it("locks app") {
-                        expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
-                    }
-                }
-
                 describe("with auto lock setting on never") {
                     beforeEach {
                         self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
@@ -118,13 +106,6 @@ class AutoLockStoreSpec: QuickSpec {
                         expect(self.subject.timer?.isValid).to(beFalsy())
                         expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
-
-                    it("doesn't set timer for AutoLockSetting.OnAppExit") {
-                        self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        self.dataStore.lockedStub.onNext(false)
-                        expect(self.subject.timer?.isValid).to(beFalsy())
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
-                    }
                 }
 
                 describe("to lock") {
@@ -153,18 +134,6 @@ class AutoLockStoreSpec: QuickSpec {
                         beforeEach {
                             self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
                             self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .Never))
-                        }
-
-                        it("stops the timer") {
-                            expect(self.subject.timer?.isValid).to(beFalse())
-                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
-                        }
-                    }
-
-                    describe("to OnAppExit") {
-                        beforeEach {
-                            self.userDefaults.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .OnAppExit))
                         }
 
                         it("stops the timer") {
