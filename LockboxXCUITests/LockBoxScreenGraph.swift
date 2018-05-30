@@ -31,6 +31,7 @@ class Action {
     static let OpenSettingsMenu = "OpenSettingsMenu"
 
     static let LockNow = "LockNow"
+    static let SendUsageData = "SendUsageData"
 
     static let DisconnectFirefoxLockbox = "DisconnectFirefoxLockbox"
     static let DisconnectFirefoxLockboxCancel = "DisconnectFirefoxLockboxCancel"
@@ -56,6 +57,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     let navigationControllerBackAction = {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+    }
+
+    let settingsBackAction = {
+        app.buttons["Done"].tap()
     }
 
     let fxaViewCancelButton = {
@@ -86,8 +91,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.fxaPassword = userState.fxaPassword!
         }
         screenState.tap(app.webViews.links["Create an account"], to: Screen.FxCreateAccount)
-
-        screenState.noop(to: Screen.LockboxMainPage)
     }
 
     map.addScreenState(Screen.FxCreateAccount) { screenState in
@@ -95,9 +98,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.LockboxMainPage) { screenState in
-        screenState.tap(app.buttons["preferences"], to: Screen.SettingsMenu)
-
-        screenState.tap(app.buttons.firstMatch, to: Screen.SortEntriesMenu)
+        screenState.tap(app.buttons["settings.button"], to: Screen.SettingsMenu)
+        screenState.tap(app.buttons["sorting.button"], to: Screen.SortEntriesMenu)
     }
 
     map.addScreenState(Screen.SortEntriesMenu) { screenState in
@@ -111,7 +113,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = {
             app.sheets["Sort Entries"].buttons["Cancel"].tap()
         }
-        screenState.noop(to: Screen.LockboxMainPage)
     }
 
     map.addScreenState(Screen.SettingsMenu) { screenState in
@@ -119,10 +120,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells.staticTexts["Account"], to: Screen.AccountSettingsMenu)
         screenState.tap(app.tables.cells.staticTexts["Auto Lock"], to: Screen.AutolockSettingsMenu)
 
-        screenState.gesture(forAction: Action.LockNow, transitionTo: Screen.LockedScreen) { userState in
-            app.buttons["Lock Now"].tap()
+        screenState.gesture(forAction: Action.SendUsageData) { userState in
+            app.switches["sendUsageData.switch"].tap()
         }
-        screenState.dismissOnUse = true
+
+        screenState.gesture(forAction: Action.LockNow) { userState in
+            app.buttons["lockNow.button"].tap()
+        }
+        // Back action tapping on Done Button
+        screenState.backAction = settingsBackAction
     }
 
     map.addScreenState(Screen.OpenSitesInMenu) { screenState in
@@ -131,14 +137,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(Screen.AccountSettingsMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
-        screenState.dismissOnUse = true
 
         screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: Screen.WelcomeScreen) { userState in
-            app.buttons["Disconnect Firefox Lockbox"].tap()
+            app.buttons["disconnectFirefoxLockbox.button"].tap()
             app.buttons["Disconnect"].tap()
         }
         screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: Screen.AccountSettingsMenu) { userState in
-            app.buttons["Disconnect Firefox Lockbox"].tap()
+            app.buttons["disconnectFirefoxLockbox.button"].tap()
             app.buttons["Cancel"].tap()
         }
     }
@@ -146,10 +151,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(Screen.AutolockSettingsMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
         screenState.dismissOnUse = true
-    }
-
-    map.addScreenState(Screen.LockedScreen) { screenState in
-        //screenState.backAction = navigationControllerBackAction
     }
 
     return map
