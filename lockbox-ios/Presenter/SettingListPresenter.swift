@@ -138,13 +138,22 @@ extension SettingListPresenter {
                 string: Constant.string.learnMore,
                 attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
-        usageDataSetting.accessibilityActions = [UIAccessibilityCustomAction(name: Constant.string.learnMore, target: self, selector: #selector(self.learnMoreTapped))]
+        usageDataSetting.accessibilityActions = [
+            UIAccessibilityCustomAction(
+                    name: Constant.string.learnMore,
+                    target: self,
+                    selector: #selector(self.learnMoreTapped))]
         supportSettingSection.items.append(usageDataSetting)
 
         return [supportSettingSection, applicationConfigurationSection]
     }
 
     @objc private func learnMoreTapped() {
-        self.onSettingCellTapped.onNext(SettingRouteAction.faq)
+        self.onSettingCellTapped.onNext(
+                ExternalWebsiteRouteAction(
+                        urlString: Constant.app.faqURL,
+                        title: Constant.string.faq,
+                        returnRoute: SettingRouteAction.list
+                ))
     }
 }
