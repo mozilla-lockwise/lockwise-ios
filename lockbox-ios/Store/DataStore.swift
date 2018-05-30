@@ -408,6 +408,9 @@ extension DataStore {
             } else {
                 self.storageStateSubject.onNext(.Unlocked)
             }
+        } else {
+            self.keychainWrapper.set(false, forKey: lockedKey)
+            self.storageStateSubject.onNext(.Unlocked)
         }
     }
 }
