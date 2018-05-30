@@ -59,14 +59,7 @@ class AutoLockStore {
                 .disposed(by: self.disposeBag)
     }
 
-    private func lifecycleAction(evt: Event<LifecycleAction>) {
-        if evt.element == .background {
-            self.userDefaults.onAutoLockTime
-                    .take(1)
-                    .subscribe(onNext: { (latest: AutoLockSetting) in })
-                    .disposed(by: self.disposeBag)
-        }
-    }
+    private func lifecycleAction(evt: Event<LifecycleAction>) {}
 
     private func resetTimer() {
         self.stopTimer()

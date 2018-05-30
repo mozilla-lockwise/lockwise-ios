@@ -264,7 +264,7 @@ class ItemListPresenterSpec: QuickSpec {
                             }
                         }
                     }
-      
+
                     describe("when the datastore is preparing") {
                         beforeEach {
                             self.dataStore.syncStateStub.onNext(SyncState.NotSyncable)
