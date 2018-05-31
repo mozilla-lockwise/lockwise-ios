@@ -352,16 +352,19 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
                         expect(webAddressSection.value).to(equal(item.hostname))
+                        expect(webAddressSection.accessibilityLabel).to(equal(String(format: Constant.string.websiteCellAccessibilityLabel, item.hostname)))
                         expect(webAddressSection.password).to(beFalse())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
                         expect(usernameSection.value).to(equal(item.username))
+                        expect(usernameSection.accessibilityLabel).to(equal(String(format: Constant.string.usernameCellAccessibilityLabel, item.username!)))
                         expect(usernameSection.password).to(beFalse())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
                         expect(passwordSection.value).to(equal(item.password))
+                        expect(passwordSection.accessibilityLabel).to(equal(String(format: Constant.string.passwordCellAccessibilityLabel, item.password)))
                         expect(passwordSection.password).to(beTrue())
                     }
                 }

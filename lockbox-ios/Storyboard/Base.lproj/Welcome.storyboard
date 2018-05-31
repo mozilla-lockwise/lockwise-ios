@@ -31,6 +31,9 @@
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-2v-Rbb" userLabel="Lockbox">
                                 <rect key="frame" x="72.5" y="267" width="230" height="28"/>
+                                <accessibility key="accessibilityConfiguration" label="Firefox Lockbox">
+                                    <bool key="isElement" value="YES"/>
+                                </accessibility>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="aRw-PY-7Xc"/>
                                 </constraints>

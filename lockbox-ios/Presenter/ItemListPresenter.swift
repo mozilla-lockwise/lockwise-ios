@@ -189,7 +189,7 @@ class ItemListPresenter {
         self.itemListDisplayStore = itemListDisplayStore
     }
 
-    func onViewReady() {
+    func onViewReady() { // swiftlint:disable:this function_body_length
         let itemSortObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListSortingAction.self)
 
@@ -282,7 +282,7 @@ extension ItemListPresenter {
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<ItemListSortingAction>,
                                           syncStateObservable: Observable<SyncState>,
-                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> { // swiftlint:disable:this line_length
         return Observable.combineLatest(
                         loginListObservable,
                         filterTextObservable,
