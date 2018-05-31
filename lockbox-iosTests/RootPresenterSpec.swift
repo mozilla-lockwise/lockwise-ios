@@ -980,13 +980,6 @@ class RootPresenterSpec: QuickSpec {
                         beforeEach {
                             self.biometryManager.deviceAuthAvailableStub = true
                         }
-                        describe(".OnAppExit") {
-                            it("sets the visual lock") {
-                                UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                                _ = self.getPresenter()
-                                expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
-                            }
-                        }
 
                         describe(".Never") {
                             it("unlocks the visual lock") {
@@ -1018,14 +1011,6 @@ class RootPresenterSpec: QuickSpec {
                     describe("when device authentication is not available") {
                         beforeEach {
                             self.biometryManager.deviceAuthAvailableStub = false
-                        }
-
-                        describe(".OnAppExit") {
-                            it("sets the visual lock") {
-                                UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                                _ = self.getPresenter()
-                                expect(self.dataStoreActionHandler.action).to(beNil())
-                            }
                         }
 
                         describe(".Never") {

@@ -238,8 +238,6 @@ extension RootPresenter {
                 .take(1)
                 .subscribe(onNext: { autoLockSetting in
                     switch autoLockSetting {
-                    case .OnAppExit:
-                        self.dataStoreActionHandler.invoke(.lock)
                     case .Never:
                         self.dataStoreActionHandler.invoke(.unlock)
                     default:
