@@ -22,7 +22,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
 struct LoginListTextSort {
     let logins: [Login]
     let text: String
-    let sortingOption: ItemListSortingAction
+    let sortingOption: ItemListSortSetting
     let syncState: SyncState
     let storeState: LoginStoreState
 }
@@ -115,14 +115,12 @@ class ItemListPresenter {
 
     lazy private var alphabeticSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
             target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically))
         }.asObserver()
     }()
 
     lazy private var recentlyUsedSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.itemListDisplayActionHandler.invoke(ItemListSortingAction.recentlyUsed)
             target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed))
         }.asObserver()
     }()
@@ -198,8 +196,7 @@ class ItemListPresenter {
     }
 
     func onViewReady() { // swiftlint:disable:this function_body_length
-        let itemSortObservable = self.itemListDisplayStore.listDisplay
-                .filterByType(class: ItemListSortingAction.self)
+        let itemSortObservable = self.userDefaults.onItemListSort
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListFilterAction.self)
@@ -227,7 +224,6 @@ class ItemListPresenter {
 
         self.view?.bind(sortingButtonTitle: itemSortTextDriver)
 
-        self.itemListDisplayActionHandler.invoke(Constant.setting.defaultItemListSort.asAction())
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
         self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
 
@@ -282,22 +278,13 @@ class ItemListPresenter {
                     }
                 })
                 .disposed(by: self.disposeBag)
-
-        self.userDefaults.onItemListSort
-            .take(1)
-            .subscribe({ (latest: Event<ItemListSortSetting>) in
-                if let setting = latest.element {
-                    self.itemListDisplayActionHandler.invoke(setting.asAction())
-                }
-            })
-            .disposed(by: self.disposeBag)
     }
 }
 
 extension ItemListPresenter {
     fileprivate func createItemListDriver(loginListObservable: Observable<[Login]>,
                                           filterTextObservable: Observable<ItemListFilterAction>,
-                                          itemSortObservable: Observable<ItemListSortingAction>,
+                                          itemSortObservable: Observable<ItemListSortSetting>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> { // swiftlint:disable:this line_length
         return Observable.combineLatest(
@@ -307,7 +294,7 @@ extension ItemListPresenter {
                         syncStateObservable,
                         storageStateObservable
                 )
-            .map { (latest: ([Login], ItemListFilterAction, ItemListSortingAction, SyncState, LoginStoreState)) -> LoginListTextSort in // swiftlint:disable:this line_length
+            .map { (latest: ([Login], ItemListFilterAction, ItemListSortSetting, SyncState, LoginStoreState)) -> LoginListTextSort in // swiftlint:disable:this line_length
                     return LoginListTextSort(
                             logins: latest.0,
                             text: latest.1.filteringText,
