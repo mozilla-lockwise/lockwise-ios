@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxCocoa
 import RxDataSources
+import RxTest
 
 @testable import Lockbox
 
@@ -43,6 +44,8 @@ class ItemDetailViewSpec: QuickSpec {
     }
 
     private var presenter: FakeItemDetailPresenter!
+    private let scheduler = TestScheduler(initialClock: 0)
+    private let disposeBag = DisposeBag()
     var subject: ItemDetailView!
 
     override func spec() {
@@ -80,6 +83,7 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.webAddress,
                                 value: "www.meow.com",
+                                accessibilityLabel: "something accessible",
                                 password: false,
                                 size: 16,
                                 valueFontColor: Constant.color.lockBoxBlue)
@@ -88,11 +92,13 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.username,
                                 value: "tanya",
+                                accessibilityLabel: "something else accessible",
                                 password: false,
                                 size: 16),
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
+                                accessibilityLabel: "something else accessible",
                                 password: true,
                                 size: 16)
                     ]),
@@ -100,6 +106,7 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.notes,
                                 value: "some long note about whatever thing yeahh",
+                                accessibilityLabel: "something else accessible",
                                 password: false,
                                 size: 14)
                     ])
@@ -135,6 +142,10 @@ class ItemDetailViewSpec: QuickSpec {
                 it("sets the font color for web address") {
                     expect((self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell).valueLabel.textColor).to(equal(Constant.color.lockBoxBlue))
                 }
+
+                it("sets the passed accessibility label for every cell") {
+                    expect(self.subject.tableView.cellForRow(at: [0, 0])?.accessibilityLabel).to(equal("something accessible"))
+                }
             }
 
             describe("title text") {
@@ -161,12 +172,28 @@ class ItemDetailViewSpec: QuickSpec {
                 }
             }
 
+            describe("tapping learnHowToEdit button") {
+                var voidObserver = self.scheduler.createObserver(Void.self)
+
+                beforeEach {
+                    voidObserver = self.scheduler.createObserver(Void.self)
+
+                    self.subject.learnHowToEditTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
+                    self.subject.learnHowToEditButton.sendActions(for: .touchUpInside)
+                }
+
+                it("informs any observers") {
+                    expect(voidObserver.events.count).to(equal(1))
+                }
+            }
+
             describe("tapping a password reveal button") {
                 let sectionModelWithJustPassword = [
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
+                                accessibilityLabel: "something accessible",
                                 password: true,
                                 size: 16)
                     ])
@@ -191,6 +218,7 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
+                                accessibilityLabel: "something accessible",
                                 password: true,
                                 size: 16)
                     ])
@@ -217,6 +245,7 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
+                                accessibilityLabel: "something accessible",
                                 password: true,
                                 size: 16)
                     ])
@@ -241,7 +270,7 @@ class ItemDetailViewSpec: QuickSpec {
         describe("ItemDetailViewCellConfiguration") {
             describe("IdentifiableType") {
                 let title = "meow"
-                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", password: false, size: 16)
+                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", accessibilityLabel: "something accessible", password: false, size: 16)
 
                 it("uses the title as the identity string") {
                     expect(cellConfig.identity).to(equal(title))
@@ -253,11 +282,13 @@ class ItemDetailViewSpec: QuickSpec {
                     expect(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
+                            accessibilityLabel: "something accessible",
                             password: false,
                             size: 16)
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
+                            accessibilityLabel: "something accessible",
                             password: false,
                             size: 16)
                     ))
@@ -265,11 +296,13 @@ class ItemDetailViewSpec: QuickSpec {
                     expect(ItemDetailCellConfiguration(
                             title: "woof",
                             value: "cats",
+                            accessibilityLabel: "something accessible",
                             password: false,
                             size: 16)
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
+                            accessibilityLabel: "something accessible",
                             password: false,
                             size: 16)
                     ))
@@ -277,11 +310,13 @@ class ItemDetailViewSpec: QuickSpec {
                     expect(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "dogs",
+                            accessibilityLabel: "something accessible",
                             password: false,
                             size: 16)
                     ).notTo(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
+                            accessibilityLabel: "something accessible",
                             password: false,
                             size: 16)
                     ))

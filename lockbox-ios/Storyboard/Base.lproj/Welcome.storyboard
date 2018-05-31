@@ -31,6 +31,9 @@
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-2v-Rbb" userLabel="Lockbox">
                                 <rect key="frame" x="72.5" y="267" width="230" height="28"/>
+                                <accessibility key="accessibilityConfiguration" label="Firefox Lockbox">
+                                    <bool key="isElement" value="YES"/>
+                                </accessibility>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="aRw-PY-7Xc"/>
                                 </constraints>
@@ -74,8 +77,8 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="136" y="550" width="103" height="18"/>
+                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
+                                <rect key="frame" x="140.5" y="550" width="94" height="18"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -85,19 +88,37 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mPb-Vk-M6I">
+                                <rect key="frame" x="167.5" y="402" width="40" height="40"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="tintColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" image="fingerprint">
+                                    <color key="titleColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign in with Touch ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Oi-9g-zHp">
+                                <rect key="frame" x="128" y="450" width="118.5" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="mPb-Vk-M6I" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="3qr-PW-NiL"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="5w6-4I-b3t"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="8gy-fK-aY4"/>
+                            <constraint firstItem="3Oi-9g-zHp" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="ELq-jL-y6V"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="leading" secondItem="Zs6-ts-YH0" secondAttribute="leading" id="KIj-hv-llI"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
                             <constraint firstItem="JTP-OD-6TF" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Nf8-HW-nnV"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG"/>
+                            <constraint firstItem="mPb-Vk-M6I" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" constant="80" id="Y7e-ig-IXc"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
                             <constraint firstAttribute="bottom" secondItem="4k3-9F-Bvv" secondAttribute="bottom" id="aGi-Kj-ckL"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="top" secondItem="Zs6-ts-YH0" secondAttribute="top" id="aZr-YV-g8U"/>
                             <constraint firstAttribute="trailing" secondItem="4k3-9F-Bvv" secondAttribute="trailing" id="dQQ-8g-Mhl"/>
+                            <constraint firstItem="3Oi-9g-zHp" firstAttribute="top" secondItem="mPb-Vk-M6I" secondAttribute="bottom" constant="8" id="e1y-Dz-kN5"/>
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="hez-iz-r81"/>
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="73" id="htJ-IO-AQJ"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="ehm-2v-Rbb" secondAttribute="bottom" constant="5" id="ieo-1p-rxW"/>
@@ -111,6 +132,8 @@
                     </view>
                     <connections>
                         <outlet property="accessLockboxMessage" destination="xyY-bk-Xw8" id="GG2-Fn-0Dz"/>
+                        <outlet property="biometricButton" destination="mPb-Vk-M6I" id="iTH-cC-Q99"/>
+                        <outlet property="biometricTitle" destination="3Oi-9g-zHp" id="MKq-im-Dtv"/>
                         <outlet property="fxASigninButton" destination="cuz-yd-F4J" id="Fwi-eS-e53"/>
                         <outlet property="learnMore" destination="JTP-OD-6TF" id="AUR-8T-44D"/>
                         <outlet property="oceanView" destination="4k3-9F-Bvv" id="dlf-79-jBs"/>
@@ -123,6 +146,7 @@
     </scenes>
     <resources>
         <image name="arrowhead-right-16" width="16" height="16"/>
+        <image name="fingerprint" width="40" height="40"/>
         <image name="lockbox-title" width="224" height="28"/>
         <image name="nessie" width="476" height="194"/>
     </resources>

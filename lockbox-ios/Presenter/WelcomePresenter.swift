@@ -11,9 +11,14 @@ import CoreGraphics
 protocol WelcomeViewProtocol: class, AlertControllerView {
     var loginButtonPressed: ControlEvent<Void> { get }
     var learnMorePressed: ControlEvent<Void> { get }
+    var biometricButtonPressed: ControlEvent<Void> { get }
     var loginButtonHidden: AnyObserver<Bool> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
+    var biometricButtonHidden: AnyObserver<Bool> { get }
+    var biometricButtonTitleHidden: AnyObserver<Bool> { get }
+    var biometricButtonImageName: AnyObserver<String> { get }
+    var biometricButtonTitle: AnyObserver<String?> { get }
 }
 
 struct LockedEnabled {
@@ -61,44 +66,8 @@ class WelcomePresenter {
     }
 
     func onViewReady() {
-        let lockedObservable = self.dataStore.locked.distinctUntilChanged()
-
-        if let view = self.view {
-            lockedObservable
-                    .bind(to: view.firstTimeLoginMessageHidden)
-                    .disposed(by: self.disposeBag)
-
-            lockedObservable
-                    .bind(to: view.firstTimeLearnMoreHidden)
-                    .disposed(by: self.disposeBag)
-
-            lockedObservable
-                    .bind(to: view.loginButtonHidden)
-                    .disposed(by: self.disposeBag)
-        }
-
-        let lifecycleObservable = self.lifecycleStore.lifecycleFilter
-                .filter { action -> Bool in
-            return action == LifecycleAction.foreground
-        }
-
-        let lifecycleMindingLockedObservable = Observable.combineLatest(
-                        self.userInfoStore.profileInfo,
-                        self.dataStore.locked.distinctUntilChanged(),
-                        lifecycleObservable
-                )
-                .map {
-                    ($0.0, $0.1)
-                }
-
-        self.handleBiometrics(lifecycleMindingLockedObservable)
-
-        let standardLockedObservable = Observable.combineLatest(
-                self.userInfoStore.profileInfo,
-                self.dataStore.locked.distinctUntilChanged()
-        )
-
-        self.handleBiometrics(standardLockedObservable)
+        self.setupDisplay()
+        self.setupBiometricLaunchers()
 
         self.view?.loginButtonPressed
                 .subscribe(onNext: { [weak self] _ in
@@ -112,11 +81,58 @@ class WelcomePresenter {
 
         self.view?.learnMorePressed
             .subscribe(onNext: { _ in
-                self.routeActionHandler.invoke(LoginRouteAction.learnMore)
+                self.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                        urlString: Constant.app.useLockboxFAQ,
+                        title: Constant.string.learnMore,
+                        returnRoute: LoginRouteAction.welcome))
             })
             .disposed(by: self.disposeBag)
 
         self.userInfoActionHandler.invoke(.load)
+    }
+
+    private func setupBiometricLaunchers() {
+        let imageName: String
+        let title: String
+        if self.biometryManager.deviceAuthenticationAvailable &&
+                   !(self.biometryManager.usesFaceID || self.biometryManager.usesTouchID) {
+            imageName = "unlock"
+            title = Constant.string.unlockPIN
+        } else if self.biometryManager.usesFaceID {
+            imageName = "face"
+            title = Constant.string.unlockFaceID
+        } else {
+            imageName = "fingerprint"
+            title = Constant.string.unlockTouchID
+        }
+
+        self.view?.biometricButtonImageName.onNext(imageName)
+        self.view?.biometricButtonTitle.onNext(title)
+
+        let lifecycleObservable = self.lifecycleStore.lifecycleFilter
+                .filter { action -> Bool in
+            return action == LifecycleAction.foreground
+        }
+
+        let lifecycleMindingLockedObservable = Observable.combineLatest(
+                        self.userInfoStore.profileInfo,
+                        self.dataStore.locked.distinctUntilChanged(),
+                        lifecycleObservable
+                )
+                .map { ($0.0, $0.1) }
+
+        self.handleBiometrics(lifecycleMindingLockedObservable)
+
+        guard let view = self.view else { return }
+
+        let biometricButtonTapObservable = Observable.combineLatest(
+                    self.userInfoStore.profileInfo,
+                    self.dataStore.locked.distinctUntilChanged(),
+                    view.biometricButtonPressed.asObservable()
+                )
+                .map { ($0.0, $0.1) }
+
+        self.handleBiometrics(biometricButtonTapObservable)
     }
 }
 
@@ -176,6 +192,34 @@ extension WelcomePresenter {
                 .subscribe(onNext: { [weak self] _ in
                     self?.dataStoreActionHandler.invoke(.unlock)
                 })
+                .disposed(by: self.disposeBag)
+    }
+
+    private func setupDisplay() {
+        let lockedObservable = self.dataStore.locked.distinctUntilChanged()
+
+        guard let view = self.view else { return }
+
+        lockedObservable
+                .bind(to: view.firstTimeLoginMessageHidden)
+                .disposed(by: self.disposeBag)
+
+        lockedObservable
+                .bind(to: view.firstTimeLearnMoreHidden)
+                .disposed(by: self.disposeBag)
+
+        lockedObservable
+                .bind(to: view.loginButtonHidden)
+                .disposed(by: self.disposeBag)
+
+        lockedObservable
+                .map { !$0 }
+                .bind(to: view.biometricButtonHidden)
+                .disposed(by: self.disposeBag)
+
+        lockedObservable
+                .map { !$0 }
+                .bind(to: view.biometricButtonTitleHidden)
                 .disposed(by: self.disposeBag)
     }
 }

@@ -89,7 +89,7 @@ extension FxAView: WKScriptMessageHandler {
               origin.`protocol` == url.scheme,
               origin.host == url.host,
               origin.port == (url.port ?? 0) else {
-            print("Ignoring message - \(origin) does not match expected origin \(self.url?.origin)")
+            print("Ignoring message - \(origin) does not match expected origin \(self.url?.origin ?? "")")
             return
         }
 

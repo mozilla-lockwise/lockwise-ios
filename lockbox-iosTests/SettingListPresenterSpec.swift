@@ -200,17 +200,16 @@ class SettingsPresenterSpec: QuickSpec {
             }
 
             describe("onSettingCellTapped") {
+                let routeActionStub = PublishSubject<RouteAction?>()
                 describe("when the cell has a route action") {
                     let action = SettingRouteAction.account
 
                     beforeEach {
-                        let settingRouteObservable = self.scheduler.createColdObservable([next(50, action)])
-
-                        settingRouteObservable
+                        routeActionStub.asObservable()
                                 .bind(to: self.subject.onSettingCellTapped)
                                 .disposed(by: self.disposeBag)
 
-                        self.scheduler.start()
+                        routeActionStub.onNext(action)
                     }
 
                     it("invokes the setting route action") {
@@ -221,7 +220,7 @@ class SettingsPresenterSpec: QuickSpec {
 
                 describe("when the cell did not have a route action") {
                     beforeEach {
-                        let settingRouteObservable: Observable<SettingRouteAction?> = self.scheduler.createColdObservable([next(50, nil)]).asObservable()
+                        let settingRouteObservable: Observable<RouteAction?> = self.scheduler.createColdObservable([next(50, nil)]).asObservable()
 
                         settingRouteObservable
                                 .bind(to: self.subject.onSettingCellTapped)

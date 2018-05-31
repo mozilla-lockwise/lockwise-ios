@@ -29,7 +29,7 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
-    lazy private(set) var onSettingCellTapped: AnyObserver<SettingRouteAction?> = {
+    lazy private(set) var onSettingCellTapped: AnyObserver<RouteAction?> = {
         return Binder(self) { target, action in
             guard let routeAction = action else {
                 return
@@ -44,6 +44,23 @@ class SettingListPresenter {
             target.settingActionHandler.invoke(SettingAction.recordUsageData(enabled: enabled))
         }.asObserver()
     }()
+
+    private var staticSupportSettingSection: SettingSectionModel {
+        return SettingSectionModel(model: 0, items: [
+            SettingCellConfiguration(
+                    text: Constant.string.settingsProvideFeedback,
+                    routeAction: ExternalWebsiteRouteAction(
+                            urlString: Constant.app.provideFeedbackURL,
+                            title: Constant.string.settingsProvideFeedback,
+                            returnRoute: SettingRouteAction.list)),
+            SettingCellConfiguration(
+                    text: Constant.string.faq,
+                    routeAction: ExternalWebsiteRouteAction(
+                            urlString: Constant.app.faqURL,
+                            title: Constant.string.faq,
+                            returnRoute: SettingRouteAction.list))
+        ])
+    }
 
     init(view: SettingListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
@@ -88,15 +105,6 @@ extension SettingListPresenter {
             preferredBrowser: PreferredBrowserSetting,
             usageDataEnabled: Bool) -> [SettingSectionModel] {
 
-        var supportSettingSection = SettingSectionModel(model: 0, items: [
-            SettingCellConfiguration(
-                    text: Constant.string.settingsProvideFeedback,
-                    routeAction: SettingRouteAction.provideFeedback),
-            SettingCellConfiguration(
-                    text: Constant.string.settingsFaq,
-                    routeAction: SettingRouteAction.faq)
-        ])
-
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsAccount,
@@ -119,7 +127,10 @@ extension SettingListPresenter {
 
         let usageDataSetting = SwitchSettingCellConfiguration(
                 text: Constant.string.settingsUsageData,
-                routeAction: SettingRouteAction.faq,
+                routeAction: ExternalWebsiteRouteAction(
+                        urlString: Constant.app.privacyURL,
+                        title: Constant.string.learnMore,
+                        returnRoute: SettingRouteAction.list),
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
@@ -129,8 +140,24 @@ extension SettingListPresenter {
                 string: Constant.string.learnMore,
                 attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
+        usageDataSetting.accessibilityActions = [
+            UIAccessibilityCustomAction(
+                    name: Constant.string.learnMore,
+                    target: self,
+                    selector: #selector(self.learnMoreTapped))]
+
+        var supportSettingSection = self.staticSupportSettingSection
         supportSettingSection.items.append(usageDataSetting)
 
         return [supportSettingSection, applicationConfigurationSection]
+    }
+
+    @objc private func learnMoreTapped() {
+        self.onSettingCellTapped.onNext(
+                ExternalWebsiteRouteAction(
+                        urlString: Constant.app.faqURL,
+                        title: Constant.string.faq,
+                        returnRoute: SettingRouteAction.list
+                ))
     }
 }

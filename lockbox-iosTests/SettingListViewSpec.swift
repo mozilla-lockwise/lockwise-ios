@@ -16,7 +16,7 @@ class SettingListViewSpec: QuickSpec {
     class FakeSettingsPresenter: SettingListPresenter {
         var onViewReadyCalled = false
         var onDoneActionDispatched = false
-        var settingCellStub: TestableObserver<SettingRouteAction?>!
+        var settingCellStub: TestableObserver<RouteAction?>!
         var usageDataCellStub: TestableObserver<Bool>!
 
         override func onViewReady() {
@@ -29,7 +29,7 @@ class SettingListViewSpec: QuickSpec {
             }.asObserver()
         }
 
-        override var onSettingCellTapped: AnyObserver<SettingRouteAction?> {
+        override var onSettingCellTapped: AnyObserver<RouteAction?> {
             return self.settingCellStub.asObserver()
         }
 
@@ -48,7 +48,7 @@ class SettingListViewSpec: QuickSpec {
             beforeEach {
                 self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as! SettingListView
                 self.presenter = FakeSettingsPresenter(view: self.subject)
-                self.presenter.settingCellStub = self.scheduler.createObserver(SettingRouteAction?.self)
+                self.presenter.settingCellStub = self.scheduler.createObserver(RouteAction?.self)
                 self.presenter.usageDataCellStub = self.scheduler.createObserver(Bool.self)
                 self.subject.presenter = self.presenter
 
@@ -64,8 +64,8 @@ class SettingListViewSpec: QuickSpec {
                     let configDriver = PublishSubject<[SettingSectionModel]>()
                     let sectionModels = [
                         SettingSectionModel(model: 0, items: [
-                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
-                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
+                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.list),
+                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.list)
                             ]),
                         SettingSectionModel(model: 1, items: [
                             SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
@@ -104,7 +104,7 @@ class SettingListViewSpec: QuickSpec {
                     let sectionModels = [
                         SettingSectionModel(model: 0, items: [
                             SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
-                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.faq)
+                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.list)
                             ]),
                         SettingSectionModel(model: 1, items: [
                             SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
@@ -121,7 +121,8 @@ class SettingListViewSpec: QuickSpec {
                     }
 
                     it("tells the presenter with the appropriate action") {
-                        expect(self.presenter.settingCellStub.events.first!.value.element!).to(equal(SettingRouteAction.account))
+                        let action = self.presenter.settingCellStub.events.first!.value.element as! SettingRouteAction
+                        expect(action).to(equal(SettingRouteAction.account))
                     }
                 }
 
@@ -172,10 +173,10 @@ class SettingListViewSpec: QuickSpec {
 
         describe("SettingCellConfiguration") {
             describe("equality") {
-                it("SettingCellConfigurations are equal when the text and route actions are equal") {
+                it("SettingCellConfigurations are equal when the text is equal") {
                     expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
                     expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
-                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
                     expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
                 }
             }

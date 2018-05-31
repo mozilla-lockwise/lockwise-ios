@@ -129,7 +129,10 @@ class ItemListPresenter {
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.learnMore)
+            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                    urlString: Constant.app.enableSyncFAQ,
+                    title: Constant.string.faq,
+                    returnRoute: MainRouteAction.list))
         }.asObserver()
     }()
 
@@ -194,7 +197,7 @@ class ItemListPresenter {
         self.settingActionHandler = settingActionHandler
     }
 
-    func onViewReady() {
+    func onViewReady() { // swiftlint:disable:this function_body_length
         let itemSortObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListSortingAction.self)
 
@@ -296,7 +299,7 @@ extension ItemListPresenter {
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<ItemListSortingAction>,
                                           syncStateObservable: Observable<SyncState>,
-                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> { // swiftlint:disable:this line_length
         return Observable.combineLatest(
                         loginListObservable,
                         filterTextObservable,

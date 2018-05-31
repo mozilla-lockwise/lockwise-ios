@@ -2,6 +2,8 @@
 
 _Test plan for [Firefox Lockbox for iOS][1]_
 
+See also: [https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan](https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan)
+
 ## Overview
 
 Firefox Lockbox for iOS is a new mobile iOS app developed with a pre-defined set of P1 "must have" requirements and a target release at the end of June in the Apple App Store and in Test Pilot.
@@ -55,6 +57,31 @@ Mozilla Product Integrity provides embedded QA to work with the team throughout 
   - 08 View password
   - 09 Account management
   - 10 Support
+  
+## Accessibility
+
+There are a number of best practices and accessibility features available to iOS developers and we intend to build and test for:
+
+## 1. VoiceOver support
+
+The reading of on-screen interface items and objects. Testing for:
+
+- All on-screen navigation and button titles are read
+- All on-screen alerts and popovers (interrupting the interface) are read
+- All labels and text elements on screen are read
+- Interaction elements like input boxes and filters have meaningful instructions
+- Links to open websites are clearly indicated and read
+
+## 2. User interface design
+
+The interface is legible and tappable by designing and testing for:
+
+- adequate color contrasts (e.g.: no light text on light background)
+- button and input sizes (e.g.: large enough to tap into easily and consistently)
+- text sizes follow system adjustment (i.e. respect "Larger Text" setting)
+
+**MVP Testing and Results documented at:**  
+https://github.com/mozilla-lockbox/lockbox-ios/issues/441
   
 ### Out of Scope
 

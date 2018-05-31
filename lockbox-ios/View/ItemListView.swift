@@ -88,6 +88,14 @@ extension ItemListView: ItemListViewProtocol {
             sortingButtonTitle
                     .drive(button.rx.title())
                     .disposed(by: self.disposeBag)
+
+            sortingButtonTitle
+                    .drive(onNext: { title in
+                        button.accessibilityLabel = String(
+                                format: Constant.string.sortOptionsAccessibilityID,
+                                title)
+                    })
+                    .disposed(by: self.disposeBag)
         }
     }
 
@@ -287,6 +295,7 @@ extension ItemListView {
     private var prefButton: UIButton {
         let button = UIButton()
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
+        button.accessibilityLabel = Constant.string.settingsAccessibilityID
         let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
         button.setImage(prefImage, for: .normal)
         button.setImage(tintedPrefImage, for: .selected)

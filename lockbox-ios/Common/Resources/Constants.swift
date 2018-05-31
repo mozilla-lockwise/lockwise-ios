@@ -10,9 +10,11 @@ struct Constant {
     struct app {
         static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
         static let faqURL = "https://lockbox.firefox.com/faq.html"
+        static let privacyURL = "https://lockbox.firefox.com/privacy.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
-        static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-lockbox"
+        static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-firefox-lockbox"
         static let enableSyncFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-enable-sync-on-firefox"
+        static let editExistingEntriesFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-edit-existing-entries"
     }
 
     struct color {
@@ -51,8 +53,9 @@ struct Constant {
         static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
         static let recent = NSLocalizedString("recent", value: "Recent", comment: "Button title when entries list is sorted by most recently used entry")
         static let recentlyUsed = NSLocalizedString("recently_used", value: "Recently Used", comment: "Label for the option sheet action allowing users to sort an entry list by the most recently used entries")
-        static let signInFaceID = NSLocalizedString("signin_with_faceid", value: "Sign in with Face ID", comment: "Label for the button to unlock the device using Face ID")
-        static let signInTouchID = NSLocalizedString("signin_with_touchid", value: "Sign in with Touch ID", comment: "Label for the button to unlock the device using Touch ID")
+        static let unlockFaceID = NSLocalizedString("unlock_with_faceid", value: "Unlock with Face ID", comment: "Label for the button to unlock the device using Face ID")
+        static let unlockTouchID = NSLocalizedString("unlock_with_touchid", value: "Unlock with Touch ID", comment: "Label for the button to unlock the device using Touch ID")
+        static let unlockPIN = NSLocalizedString("unlock_with_pin", value: "Unlock with Passcode", comment: "Label for the button to unlock the device using a device passcode")
         static let sortEntries = NSLocalizedString("sort_entries", value: "Sort Entries", comment: "Title for the option sheet allowing users to sort entries")
         static let unnamedEntry = NSLocalizedString("unnamed_entry", value: "unnamed entry", comment: "Placeholder text for when there is no entry name")
         static let username = NSLocalizedString("username", value: "Username", comment: "Section title text for username on the item detail screen")
@@ -64,11 +67,10 @@ struct Constant {
         static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
         static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
         static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
-        static let settingsFaq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
+        static let faq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
         static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
         static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")
-        static let autoLockOnAppExit = NSLocalizedString("settings.autoLock.onAppExit", value: "On app exit", comment: "On app exit auto lock setting")
         static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
         static let autoLockFiveMinutes = NSLocalizedString("settings.autoLock.fiveMinutes", value: "5 minutes", comment: "5 minutes auto lock setting")
         static let autoLockThirtyMinutes = NSLocalizedString("settings.autoLock.thirtyMinutes", value: "30 minutes", comment: "30 minutes auto lock setting")
@@ -84,10 +86,18 @@ struct Constant {
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
         static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Firefox Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
-        static let notUsingPasscode = NSLocalizedString("not_using_passcode", value: "You're not using a passcode.", comment:"Title for dialog box with passcode setting information")
+        static let notUsingPasscode = NSLocalizedString("not_using_passcode", value: "You're not using a passcode.", comment: "Title for dialog box with passcode setting information")
         static let passcodeInformation = NSLocalizedString("passcode_info", value: "You should use a passcode to lock your iPhone. Without a passcode, anyone who has your iPhone can access the information saved here.", comment: "Informative text about the ")
         static let skip = NSLocalizedString("skip", value: "Skip", comment: "Label for button allowing users to skip setting passcode or biometrics on device")
         static let setPasscode = NSLocalizedString("set_passcode", value: "Set Passcode", comment: "Label for button allowing users to go to passcode settings")
+        static let sortOptionsAccessibilityID = NSLocalizedString("sorting_options", value: "Select options for sorting your list of entries (currently %@)", comment: "Accessibility identifier for the sorting options button")
+        static let settingsAccessibilityID = NSLocalizedString("settings_button", value: "Settings", comment: "Accessibility identifier for the settings button")
+        static let websiteCellAccessibilityLabel = NSLocalizedString("website_accessibility_instructions", value: "Web address: double tap to open in browser %@", comment: "Accessibility label and instructions for web address section of entry details")
+        static let usernameCellAccessibilityLabel = NSLocalizedString("username_accessibility_instructions", value: "Username: double tap to copy %@", comment: "Accessibility label and instructions for username section of entry details")
+        static let passwordCellAccessibilityLabel = NSLocalizedString("password_accessibility_instructions", value: "Password: double tap to copy %@", comment: "Accessibility label and instructions for password section of entry details")
+        static let syncingYourEntries = NSLocalizedString("syncing_entries", value: "Syncing your entries", comment: "Label and accessibility callout for syncing your entries spinner and HUD")
+        static let doneSyncingYourEntries = NSLocalizedString("syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
+        static let installBrowserAccessibilityLabel = NSLocalizedString("install_browser_prompt", value: "%@ disabled, install this browser to make it available", comment: "Accessibility instructions for disabled web browser options")
     }
 
     struct number {

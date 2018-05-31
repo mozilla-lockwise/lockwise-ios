@@ -13,6 +13,22 @@ enum LocalError: Error {
 class BiometryManager {
     private let context: LAContext
 
+    var usesFaceID: Bool {
+        if #available(iOS 11.0, *) {
+            return self.usesBiometric(.faceID)
+        }
+
+        return false
+    }
+
+    var usesTouchID: Bool {
+        if #available(iOS 11.0, *) {
+            return self.usesBiometric(.touchID)
+        }
+
+        return self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+    }
+
     var deviceAuthenticationAvailable: Bool {
         return self.context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
     }
@@ -37,5 +53,14 @@ class BiometryManager {
         }
 
         return Single.error(LocalError.LAError)
+    }
+
+    @available(iOS 11.0, *)
+    private func usesBiometric(_ biometry: LABiometryType) -> Bool {
+        if self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
+            return self.context.biometryType == biometry
+        }
+
+        return false
     }
 }

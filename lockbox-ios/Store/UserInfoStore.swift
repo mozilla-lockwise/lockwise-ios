@@ -97,7 +97,6 @@ extension UserInfoStore {
 }
 
 enum AutoLockSetting: String {
-    case OnAppExit
     case OneMinute
     case FiveMinutes
     case OneHour
@@ -107,8 +106,6 @@ enum AutoLockSetting: String {
 
     func toString() -> String {
         switch self {
-        case .OnAppExit:
-            return Constant.string.autoLockOnAppExit
         case .FiveMinutes:
             return Constant.string.autoLockFiveMinutes
         case .Never:
