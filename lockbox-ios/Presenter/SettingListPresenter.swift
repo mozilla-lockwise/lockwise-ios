@@ -45,6 +45,23 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
+    private var staticSupportSettingSection: SettingSectionModel {
+        return SettingSectionModel(model: 0, items: [
+            SettingCellConfiguration(
+                    text: Constant.string.settingsProvideFeedback,
+                    routeAction: ExternalWebsiteRouteAction(
+                            urlString: Constant.app.provideFeedbackURL,
+                            title: Constant.string.settingsProvideFeedback,
+                            returnRoute: SettingRouteAction.list)),
+            SettingCellConfiguration(
+                    text: Constant.string.faq,
+                    routeAction: ExternalWebsiteRouteAction(
+                            urlString: Constant.app.faqURL,
+                            title: Constant.string.faq,
+                            returnRoute: SettingRouteAction.list))
+        ])
+    }
+
     init(view: SettingListViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
@@ -88,21 +105,6 @@ extension SettingListPresenter {
             preferredBrowser: PreferredBrowserSetting,
             usageDataEnabled: Bool) -> [SettingSectionModel] {
 
-        var supportSettingSection = SettingSectionModel(model: 0, items: [
-            SettingCellConfiguration(
-                    text: Constant.string.settingsProvideFeedback,
-                    routeAction: ExternalWebsiteRouteAction(
-                            urlString: Constant.app.provideFeedbackURL,
-                            title: Constant.string.settingsProvideFeedback,
-                            returnRoute: SettingRouteAction.list)),
-            SettingCellConfiguration(
-                    text: Constant.string.faq,
-                    routeAction: ExternalWebsiteRouteAction(
-                            urlString: Constant.app.faqURL,
-                            title: Constant.string.faq,
-                            returnRoute: SettingRouteAction.list))
-        ])
-
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsAccount,
@@ -138,8 +140,24 @@ extension SettingListPresenter {
                 string: Constant.string.learnMore,
                 attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
+        usageDataSetting.accessibilityActions = [
+            UIAccessibilityCustomAction(
+                    name: Constant.string.learnMore,
+                    target: self,
+                    selector: #selector(self.learnMoreTapped))]
+
+        var supportSettingSection = self.staticSupportSettingSection
         supportSettingSection.items.append(usageDataSetting)
 
         return [supportSettingSection, applicationConfigurationSection]
+    }
+
+    @objc private func learnMoreTapped() {
+        self.onSettingCellTapped.onNext(
+                ExternalWebsiteRouteAction(
+                        urlString: Constant.app.faqURL,
+                        title: Constant.string.faq,
+                        returnRoute: SettingRouteAction.list
+                ))
     }
 }

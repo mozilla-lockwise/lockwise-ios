@@ -35,6 +35,7 @@ extension UIViewController: StatusAlertView {
             self.view.addSubview(temporaryAlertView)
 
             self.animateAlertIn(temporaryAlertView) { _ in
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, message)
                 self.animateAlertOut(temporaryAlertView, delay: timeout)
             }
         }
@@ -71,9 +72,13 @@ extension UIViewController: SpinnerAlertView {
 
             spinnerAlertView.activityIndicatorView.startAnimating()
             self.animateAlertIn(spinnerAlertView)
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Constant.string.syncingYourEntries)
 
             dismiss
                     .drive(onNext: { _ in
+                        UIAccessibilityPostNotification(
+                                UIAccessibilityAnnouncementNotification,
+                                Constant.string.doneSyncingYourEntries)
                         self.animateAlertOut(spinnerAlertView)
                     })
                     .disposed(by: bag)

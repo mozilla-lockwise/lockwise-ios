@@ -70,6 +70,7 @@ extension SettingListView {
 
                 cell.textLabel?.text = cellConfiguration.text
                 cell.selectionStyle = UITableViewCellSelectionStyle.none
+                cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
 
                 if cellConfiguration.subtitle != nil {
                     cell.detailTextLabel?.attributedText = cellConfiguration.subtitle
@@ -151,6 +152,7 @@ class SettingCellConfiguration {
     var enabled: Bool = true
     var detailText: String?
     var subtitle: NSAttributedString?
+    var accessibilityActions: [UIAccessibilityCustomAction]?
 
     init(text: String, routeAction: RouteAction?) {
         self.text = text

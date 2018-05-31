@@ -64,6 +64,10 @@ extension PreferredBrowserSettingView {
                 if !cellConfiguration.enabled {
                     cell.isUserInteractionEnabled = false
                     cell.textLabel?.isEnabled = false
+                    cell.accessibilityLabel = String(
+                            format: Constant.string.installBrowserAccessibilityLabel,
+                            cellConfiguration.text
+                    )
                 }
 
                 return cell
