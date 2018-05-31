@@ -76,7 +76,9 @@ extension UIViewController: SpinnerAlertView {
 
             dismiss
                     .drive(onNext: { _ in
-                        UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Constant.string.doneSyncingYourEntries)
+                        UIAccessibilityPostNotification(
+                                UIAccessibilityAnnouncementNotification,
+                                Constant.string.doneSyncingYourEntries)
                         self.animateAlertOut(spinnerAlertView)
                     })
                     .disposed(by: bag)

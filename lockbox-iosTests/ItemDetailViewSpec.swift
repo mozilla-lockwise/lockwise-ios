@@ -92,13 +92,13 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.username,
                                 value: "tanya",
-                                accessibilityLabel: "something accessible",
+                                accessibilityLabel: "something else accessible",
                                 password: false,
                                 size: 16),
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
-                                accessibilityLabel: "something accessible",
+                                accessibilityLabel: "something else accessible",
                                 password: true,
                                 size: 16)
                     ]),
@@ -106,7 +106,7 @@ class ItemDetailViewSpec: QuickSpec {
                         ItemDetailCellConfiguration(
                                 title: Constant.string.notes,
                                 value: "some long note about whatever thing yeahh",
-                                accessibilityLabel: "something accessible",
+                                accessibilityLabel: "something else accessible",
                                 password: false,
                                 size: 14)
                     ])

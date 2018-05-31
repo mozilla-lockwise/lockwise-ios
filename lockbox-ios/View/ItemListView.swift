@@ -91,7 +91,9 @@ extension ItemListView: ItemListViewProtocol {
 
             sortingButtonTitle
                     .drive(onNext: { title in
-                        button.accessibilityLabel = String(format: Constant.string.sortOptionsAccessibilityID, title) // swiftlint:ignore:this line_length
+                        button.accessibilityLabel = String(
+                                format: Constant.string.sortOptionsAccessibilityID,
+                                title)
                     })
                     .disposed(by: self.disposeBag)
         }

@@ -191,7 +191,9 @@ extension ItemDetailPresenter {
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
-                        accessibilityLabel: String(format: Constant.string.passwordCellAccessibilityLabel, passwordText),
+                        accessibilityLabel: String(
+                            format: Constant.string.passwordCellAccessibilityLabel,
+                            passwordText),
                         password: true,
                         size: 16)
             ])

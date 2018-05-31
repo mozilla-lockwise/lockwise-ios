@@ -17,7 +17,12 @@ struct ItemDetailCellConfiguration {
     let size: CGFloat
     let valueFontColor: UIColor
 
-    init(title: String, value: String, accessibilityLabel: String, password: Bool, size: CGFloat, valueFontColor: UIColor = UIColor.black) {
+    init(title: String,
+         value: String,
+         accessibilityLabel: String,
+         password: Bool,
+         size: CGFloat,
+         valueFontColor: UIColor = UIColor.black) {
         self.title = title
         self.value = value
         self.accessibilityLabel = accessibilityLabel

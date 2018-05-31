@@ -97,6 +97,7 @@ struct Constant {
         static let passwordCellAccessibilityLabel = NSLocalizedString("password_accessibility_instructions", value: "Password: double tap to copy %@", comment: "Accessibility label and instructions for password section of entry details")
         static let syncingYourEntries = NSLocalizedString("syncing_entries", value: "Syncing your entries", comment: "Label and accessibility callout for syncing your entries spinner and HUD")
         static let doneSyncingYourEntries = NSLocalizedString("syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
+        static let installBrowserAccessibilityLabel = NSLocalizedString("install_browser_prompt", value: "%@ disabled, install this browser to make it available", comment: "Accessibility instructions for disabled web browser options")
     }
 
     struct number {
