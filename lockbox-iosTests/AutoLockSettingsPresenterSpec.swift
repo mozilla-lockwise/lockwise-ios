@@ -69,7 +69,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
                     }
                 }
                 expect(settings.count).to(be(1))
-                expect(settings[0].items.count).to(be(7))
+                expect(settings[0].items.count).to(be(6))
             } else {
                 fail("settings not set in onViewReady")
             }

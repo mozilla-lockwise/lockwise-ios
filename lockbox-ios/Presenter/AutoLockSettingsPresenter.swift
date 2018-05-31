@@ -19,8 +19,6 @@ class AutoLockSettingPresenter {
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOnAppExit, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.OnAppExit),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOneMinute, isChecked: false,
                                           valueWhenChecked: AutoLockSetting.OneMinute),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockFiveMinutes, isChecked: false,
