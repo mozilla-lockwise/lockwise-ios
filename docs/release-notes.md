@@ -1,5 +1,24 @@
 # Release Notes
 
+## 1.0 (Build 1387)
+
+This version will be submitted to the App Store! 
+
+What's NEW? Fixes to unlocking mechanisms, all links are linked up, and improved accessibility.
+
+Features and functionality include:
+
+- signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox
+- automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data
+- searching and sorting items
+- pull to manually refresh your list of items
+- user-friendly item titles to help with readability
+- showing/hiding passwords
+- copying usernames and passwords to the pasteboard (which expire after 60 seconds)
+- opening web addresses in your preferred web browser
+- meaningful instructions when you need to confirm your sign in, or if you have no items
+- Telemetry for event tracking (no personally-identifiable information is collected)
+
 ## 1.0 (Build 1343)
 
 What's NEW? We added pull-to-refresh in the list view, a state that tells you if we're waiting on you to click a confirmation link in your email, and slightly better "pretty" title logic.
