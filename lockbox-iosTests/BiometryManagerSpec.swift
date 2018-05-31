@@ -28,6 +28,11 @@ class BiometryManagerSpec: QuickSpec {
         override func canEvaluatePolicy(_ policy: LAPolicy, error: NSErrorPointer) -> Bool {
             return self.canEvaluatePolicyStub
         }
+
+        @available(iOS 11.0, *)
+        override var biometryType: LABiometryType {
+            return biometryTypeStub
+        }
     }
 
     private var context: FakeLAContext!
@@ -42,72 +47,158 @@ class BiometryManagerSpec: QuickSpec {
                 self.subject = BiometryManager(context: self.context)
             }
 
-            describe("authenticateWithMessage") {
-                let message = "tjacobson@yahoo.com"
-                var voidObserver = self.scheduler.createObserver(Void.self)
-
-                beforeEach {
-                    voidObserver = self.scheduler.createObserver(Void.self)
-                }
-
-                describe("when the app can evaluate owner authentication") {
+            describe("usesFaceId") {
+                describe("when the app can evaluate deviceOwnerAuthenticationWithBiometrics") {
                     beforeEach {
                         self.context.canEvaluatePolicyStub = true
-                        self.subject.authenticateWithMessage(message)
-                                .asObservable()
-                                .subscribe(voidObserver)
-                                .disposed(by: self.disposeBag)
                     }
 
-                    it("passes the message to the policy evaluation") {
-                        expect(self.context.evaluateReason).to(equal(message))
-                    }
-
-                    describe("when the authentication succeeds") {
+                    describe("when the biometry type is faceID") {
                         beforeEach {
-                            self.context.evaluateReply!(true, nil)
+                            if #available(iOS 11.0, *) {
+                                biometryTypeStub = .faceID
+                            }
                         }
 
-                        it("pushes a void event to the observer") {
-                            expect(voidObserver.events.first!.value.element).notTo(beNil())
+                        it("returns true") {
+                            if #available(iOS 11.0, *) {
+                                expect(self.subject.usesFaceID).to(beTrue())
+                            } else {
+                                expect(self.subject.usesFaceID).to(beFalse())
+                            }
                         }
                     }
 
-                    describe("when the authentication fails") {
-                        let error = NSError(domain: "localauthentication", code: -1)
+                    describe("when the biometry type is not faceID") {
                         beforeEach {
-                            self.context.evaluateReply!(false, error)
+                            if #available(iOS 11.0, *) {
+                                biometryTypeStub = .touchID
+                            }
                         }
 
-                        it("pushes the error to the observer") {
-                            expect(voidObserver.events.first!.value.error).to(matchError(error))
+                        it("returns false") {
+                            expect(self.subject.usesFaceID).to(beFalse())
                         }
                     }
                 }
 
-                describe("when the app cannot evaluate owner authentication") {
+                describe("when the app cannot evaluate deviceOwnerAuthenticationWithBiometrics") {
                     beforeEach {
+                        self.context.canEvaluatePolicyStub = false
+                    }
+
+                    it("returns false") {
+                        expect(self.subject.usesFaceID).to(beFalse())
+                    }
+                }
+            }
+
+            describe("usesTouchId") {
+                describe("when the app can evaluate deviceOwnerAuthenticationWithBiometrics") {
+                    beforeEach {
+                        self.context.canEvaluatePolicyStub = true
+                    }
+
+                    describe("when the biometry type is touchID") {
                         beforeEach {
-                            self.context.canEvaluatePolicyStub = false
+                            if #available(iOS 11.0, *) {
+                                biometryTypeStub = .touchID
+                            }
+                        }
+
+                        it("returns true") {
+                            if #available(iOS 11.0, *) {
+                                expect(self.subject.usesTouchID).to(beTrue())
+                            } else {
+                                expect(self.subject.usesTouchID).to(beTrue())
+                            }
+                        }
+                    }
+
+                    describe("when the biometry type is not touchID") {
+                        beforeEach {
+                            if #available(iOS 11.0, *) {
+                                biometryTypeStub = .faceID
+                            }
+                        }
+
+                        it("returns false") {
+                            if #available(iOS 11.0, *) {
+                                expect(self.subject.usesTouchID).to(beFalse())
+                            } else {
+                                expect(self.subject.usesTouchID).to(beTrue())
+                            }
+                        }
+                    }
+                }
+
+                describe("authenticateWithMessage") {
+                    let message = "tjacobson@yahoo.com"
+                    var voidObserver = self.scheduler.createObserver(Void.self)
+
+                    beforeEach {
+                        voidObserver = self.scheduler.createObserver(Void.self)
+                    }
+
+                    describe("when the app can evaluate owner authentication") {
+                        beforeEach {
+                            self.context.canEvaluatePolicyStub = true
                             self.subject.authenticateWithMessage(message)
                                     .asObservable()
                                     .subscribe(voidObserver)
                                     .disposed(by: self.disposeBag)
                         }
 
-                        it("passes the error to the observer") {
-                            expect(voidObserver.events.first!.value.error).to(matchError(LocalError.LAError))
+                        it("passes the message to the policy evaluation") {
+                            expect(self.context.evaluateReason).to(equal(message))
+                        }
+
+                        describe("when the authentication succeeds") {
+                            beforeEach {
+                                self.context.evaluateReply!(true, nil)
+                            }
+
+                            it("pushes a void event to the observer") {
+                                expect(voidObserver.events.first!.value.element).notTo(beNil())
+                            }
+                        }
+
+                        describe("when the authentication fails") {
+                            let error = NSError(domain: "localauthentication", code: -1)
+                            beforeEach {
+                                self.context.evaluateReply!(false, error)
+                            }
+
+                            it("pushes the error to the observer") {
+                                expect(voidObserver.events.first!.value.error).to(matchError(error))
+                            }
+                        }
+                    }
+
+                    describe("when the app cannot evaluate owner authentication") {
+                        beforeEach {
+                            beforeEach {
+                                self.context.canEvaluatePolicyStub = false
+                                self.subject.authenticateWithMessage(message)
+                                        .asObservable()
+                                        .subscribe(voidObserver)
+                                        .disposed(by: self.disposeBag)
+                            }
+
+                            it("passes the error to the observer") {
+                                expect(voidObserver.events.first!.value.error).to(matchError(LocalError.LAError))
+                            }
                         }
                     }
                 }
-            }
 
-            describe("deviceAuthenticationAvailable") {
-                it("returns the value of canEvaluatePolicy") {
-                    self.context.canEvaluatePolicyStub = true
-                    expect(self.subject.deviceAuthenticationAvailable).to(beTrue())
-                    self.context.canEvaluatePolicyStub = false
-                    expect(self.subject.deviceAuthenticationAvailable).to(beFalse())
+                describe("deviceAuthenticationAvailable") {
+                    it("returns the value of canEvaluatePolicy") {
+                        self.context.canEvaluatePolicyStub = true
+                        expect(self.subject.deviceAuthenticationAvailable).to(beTrue())
+                        self.context.canEvaluatePolicyStub = false
+                        expect(self.subject.deviceAuthenticationAvailable).to(beFalse())
+                    }
                 }
             }
         }

@@ -83,8 +83,50 @@ class WelcomeViewSpec: QuickSpec {
                     self.subject.loginButtonHidden.onNext(true)
                 }
 
-                it("updates the hidden value of the biometric auth button accordingly") {
+                it("updates the hidden value of the login button accordingly") {
                     expect(self.subject.fxASigninButton.isHidden).to(beTrue())
+                }
+            }
+
+            describe("biometricButtonHidden") {
+                beforeEach {
+                    self.subject.biometricButtonHidden.onNext(true)
+                }
+
+                it("updates the hidden value of the biometric auth button accordingly") {
+                    expect(self.subject.biometricButton.isHidden).to(beTrue())
+                }
+            }
+
+            describe("biometricTitleHidden") {
+                beforeEach {
+                    self.subject.biometricButtonTitleHidden.onNext(true)
+                }
+
+                it("updates the hidden value of the biometric auth button accordingly") {
+                    expect(self.subject.biometricTitle.isHidden).to(beTrue())
+                }
+            }
+
+            describe("biometricButtonTitle") {
+                let title = "unfox your firelock foxbox"
+
+                beforeEach {
+                    self.subject.biometricButtonTitle.onNext(title)
+                }
+
+                it("updates the title text of the biometric button title") {
+                    expect(self.subject.biometricTitle.text).to(equal(title))
+                }
+            }
+
+            describe("biometricImageName") {
+                beforeEach {
+                    self.subject.biometricButtonImageName.onNext("face")
+                }
+
+                it("updates the title text of the biometric button title") {
+                    expect(self.subject.biometricButton.image(for: .normal)).to(equal(UIImage(named: "face")))
                 }
             }
         }
