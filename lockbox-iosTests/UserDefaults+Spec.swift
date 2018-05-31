@@ -28,9 +28,9 @@ class UserDefaultSpec: QuickSpec {
             }
 
             it("pushes new values for the SettingKey to observers") {
-                UserDefaults.standard.set(AutoLockSetting.OnAppExit.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
 
-                expect(autoLockSettingObserver.events.last!.value.element).to(equal(AutoLockSetting.OnAppExit))
+                expect(autoLockSettingObserver.events.last!.value.element).to(equal(AutoLockSetting.OneHour))
             }
 
             it("pushes the default value when a meaningless autolock time is set") {
