@@ -92,8 +92,20 @@ class WelcomePresenter {
     }
 
     private func setupBiometricLaunchers() {
-        let imageName = self.biometryManager.usesFaceID ? "face" : "fingerprint"
-        let title = self.biometryManager.usesFaceID ? Constant.string.unlockFaceID : Constant.string.unlockTouchID
+        let imageName: String
+        let title: String
+        if self.biometryManager.deviceAuthenticationAvailable &&
+                   !(self.biometryManager.usesFaceID || self.biometryManager.usesTouchID) {
+            imageName = "unlock"
+            title = Constant.string.unlockPIN
+        } else if self.biometryManager.usesFaceID {
+            imageName = "face"
+            title = Constant.string.unlockFaceID
+        } else {
+            imageName = "fingerprint"
+            title = Constant.string.unlockTouchID
+        }
+
         self.view?.biometricButtonImageName.onNext(imageName)
         self.view?.biometricButtonTitle.onNext(title)
 

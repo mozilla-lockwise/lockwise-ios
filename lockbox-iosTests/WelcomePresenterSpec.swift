@@ -133,6 +133,8 @@ class WelcomePresenterSpec: QuickSpec {
         var authMessage: String?
         var fakeAuthResponse = PublishSubject<Void>()
         var deviceAuthAvailableStub: Bool!
+        var touchIDStub: Bool = false
+        var faceIDStub: Bool = false
 
         override func authenticateWithMessage(_ message: String) -> Single<Void> {
             self.authMessage = message
@@ -141,6 +143,14 @@ class WelcomePresenterSpec: QuickSpec {
 
         override var deviceAuthenticationAvailable: Bool {
             return self.deviceAuthAvailableStub
+        }
+
+        override var usesTouchID: Bool {
+            return self.touchIDStub
+        }
+
+        override var usesFaceID: Bool {
+            return self.faceIDStub
         }
     }
 
@@ -191,6 +201,7 @@ class WelcomePresenterSpec: QuickSpec {
             describe("onViewReady") {
                 describe("when the device is unlocked (first time login)") {
                     beforeEach {
+                        self.biometryManager.deviceAuthAvailableStub = true
                         self.dataStore.fakeLocked.onNext(false)
                         self.subject.onViewReady()
                     }
@@ -262,6 +273,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                 describe("receiving a learn more button press") {
                     beforeEach {
+                        self.biometryManager.deviceAuthAvailableStub = true
                         self.subject.onViewReady()
                         self.view.fakeFxAButtonPress.onNext(())
                     }
@@ -471,6 +483,46 @@ class WelcomePresenterSpec: QuickSpec {
                             it("unlocks the device blindly") {
                                 expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
                                 expect(self.routeActionHandler.invokeArgument).to(beNil())
+                            }
+                        }
+                    }
+
+                    describe("biometrics button title and image") {
+                        describe("when device authentication is available but toucHID and faceID are not") {
+                            beforeEach {
+                                self.biometryManager.deviceAuthAvailableStub = true
+                                self.subject.onViewReady()
+                            }
+
+                            it("displays the PIN prompt and image") {
+                                expect(self.view.biometricImageNameStub.events.last!.value.element).to(equal("unlock"))
+                                expect(self.view.biometricButtonTitleStub.events.last!.value.element).to(equal(Constant.string.unlockPIN))
+                            }
+                        }
+
+                        describe("when touchID is available") {
+                            beforeEach {
+                                self.biometryManager.deviceAuthAvailableStub = true
+                                self.biometryManager.touchIDStub = true
+                                self.subject.onViewReady()
+                            }
+
+                            it("displays the touch ID prompt and image") {
+                                expect(self.view.biometricImageNameStub.events.last!.value.element).to(equal("fingerprint"))
+                                expect(self.view.biometricButtonTitleStub.events.last!.value.element).to(equal(Constant.string.unlockTouchID))
+                            }
+                        }
+
+                        describe("when faceID is available") {
+                            beforeEach {
+                                self.biometryManager.deviceAuthAvailableStub = true
+                                self.biometryManager.faceIDStub = true
+                                self.subject.onViewReady()
+                            }
+
+                            it("displays the face ID prompt and image") {
+                                expect(self.view.biometricImageNameStub.events.last!.value.element).to(equal("face"))
+                                expect(self.view.biometricButtonTitleStub.events.last!.value.element).to(equal(Constant.string.unlockFaceID))
                             }
                         }
                     }
