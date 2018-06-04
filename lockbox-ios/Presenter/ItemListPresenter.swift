@@ -181,18 +181,18 @@ class ItemListPresenter {
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
+         userDefaults: UserDefaults = UserDefaults.standard) {
         self.view = view
         self.routeActionHandler = routeActionHandler
         self.itemListDisplayActionHandler = itemListDisplayActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
+        self.settingActionHandler = settingActionHandler
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaults = userDefaults
-        self.settingActionHandler = settingActionHandler
     }
 
     func onViewReady() { // swiftlint:disable:this function_body_length

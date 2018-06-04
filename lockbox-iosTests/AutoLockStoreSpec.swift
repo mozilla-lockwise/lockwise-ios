@@ -184,10 +184,6 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
-                        [AutoLockStoreSpecContext.Action.rawValue: ItemListSortingAction.alphabetically]
-                    }
-
-                    itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
                         [AutoLockStoreSpecContext.Action.rawValue: ItemDetailDisplayAction.togglePassword(displayed: true)]
                     }
 
