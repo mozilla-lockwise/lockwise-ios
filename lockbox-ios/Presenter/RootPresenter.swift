@@ -64,10 +64,10 @@ class RootPresenter {
                     switch storageState {
                     case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    case .Preparing, .Unlocked:
+                    case .Unlocked:
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                        break
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -134,6 +134,10 @@ class RootPresenter {
             case .fxa:
                 if !view.topViewIs(FxAView.self) {
                     view.pushLoginView(view: .fxa)
+                }
+            case .onboardingConfirmation:
+                if !view.topViewIs(OnboardingConfirmationView.self) {
+                    view.pushLoginView(view: .onboardingConfirmation)
                 }
             }
         }.asObserver()

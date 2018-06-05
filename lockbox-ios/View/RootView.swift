@@ -77,6 +77,10 @@ class RootView: UIViewController, RootViewProtocol {
             self.currentViewController?.popToRootViewController(animated: true)
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
+        case .onboardingConfirmation:
+            if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView { // swiftlint:disable:this line_length
+                self.currentViewController?.pushViewController(onboardingConfirmationView, animated: true)
+            }
         }
     }
 

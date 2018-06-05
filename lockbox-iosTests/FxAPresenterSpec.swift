@@ -11,6 +11,7 @@ import RxTest
 
 @testable import Lockbox
 import Account
+import SwiftyJSON
 
 class FxAPresenterSpec: QuickSpec {
     class FakeFxAView: FxAViewProtocol {

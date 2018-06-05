@@ -34,6 +34,7 @@ extension ExternalWebsiteRouteAction: Equatable {
 enum LoginRouteAction: RouteAction {
     case welcome
     case fxa
+    case onboardingConfirmation
 }
 
 extension LoginRouteAction: TelemetryAction {
@@ -47,6 +48,8 @@ extension LoginRouteAction: TelemetryAction {
             return .loginWelcome
         case .fxa:
             return .loginFxa
+        case .onboardingConfirmation:
+            return .loginOnboardingConfirmation
         }
     }
 

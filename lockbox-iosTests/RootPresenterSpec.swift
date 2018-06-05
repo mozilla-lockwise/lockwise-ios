@@ -194,8 +194,7 @@ class RootPresenterSpec: QuickSpec {
 
                 it("routes to the list view") {
                     self.dataStore.storageStateSubject.onNext(.Preparing)
-                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                    expect(arg).to(equal(MainRouteAction.list))
+                    expect(self.routeActionHandler.invokeArgument).to(beNil())
                 }
 
                 it("routes to the welcome view") {
@@ -375,6 +374,50 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
+
+                        describe(".onboardingConfirmation") {
+                            describe("if the top view is not already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.onboardingConfirmation)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("does not start the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("checks for the onboardingconfirmationview & tells the view to show the onboardingconfirmation") {
+                                    expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.onboardingConfirmation))
+                                }
+                            }
+
+                            describe("if the top view is already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.onboardingConfirmation)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("does not start the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("checks for the FxAView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                }
+                            }
+                        }
                     }
 
                     describe("if the login stack is not already displayed") {
@@ -465,6 +508,50 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the FxAView & nothing happens") {
                                     expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                }
+                            }
+                        }
+
+                        describe(".onboardingConfirmation") {
+                            describe("if the top view is not already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.onboardingConfirmation)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the onboardingconfirmationview & tells the view to show the it") {
+                                    expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.onboardingConfirmation))
+                                }
+                            }
+
+                            describe("if the top view is already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.onboardingConfirmation)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the onboardingconfimrationview & nothing happens") {
+                                    expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
                                     expect(self.view.pushLoginViewRouteArgument).to(beNil())
                                 }
                             }
