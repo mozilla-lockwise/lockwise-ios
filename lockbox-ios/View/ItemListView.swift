@@ -66,7 +66,7 @@ class ItemListView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Constant.color.viewBackground
+        self.view.backgroundColor = Constant.color.viewBackground
         self.setupRefresh()
         self.styleTableViewBackground()
         self.styleNavigationBar()
@@ -135,7 +135,7 @@ extension ItemListView: ItemListViewProtocol {
 }
 
 extension ItemListView {
-    fileprivate func setupDataSource() { // swiftlint:disable:this function_body_length
+    fileprivate func setupDataSource() {
         self.dataSource = RxTableViewSectionedAnimatedDataSource<ItemSectionModel>(
                 configureCell: { dataSource, tableView, path, _ in
                     let cellConfiguration = dataSource[path]
@@ -157,26 +157,13 @@ extension ItemListView {
                                 .bind(to: presenter.filterTextObserver)
                                 .disposed(by: cell.disposeBag)
 
-                        cell.cancelButton.rx.tap
-                                .bind(to: presenter.filterCancelObserver)
-                                .disposed(by: cell.disposeBag)
-
-                        cell.filterTextField.rx.controlEvent(.editingDidEnd)
-                                .bind(to: presenter.editEndedObserver)
-                                .disposed(by: cell.disposeBag)
-
-                        cancelHidden
-                                .bind(to: cell.cancelButton.rx.isHidden)
-                                .disposed(by: cell.disposeBag)
-
-                        text
-                                .bind(to: cell.filterTextField.rx.text)
-                                .disposed(by: cell.disposeBag)
-
-                        let borderView = UIView()
-                        borderView.frame = CGRect(x: 0, y: 0, width: 1, height: cell.frame.height)
-                        borderView.backgroundColor = Constant.color.cellBorderGrey
-                        cell.cancelButton.addSubview(borderView)
+                        self.configureFilterCell(
+                                cell,
+                                presenter: presenter,
+                                enabled: enabled,
+                                cancelHidden: cancelHidden,
+                                text: text
+                        )
 
                         retCell = cell
                     case .Item(let title, let username, _):
@@ -247,8 +234,8 @@ extension ItemListView {
             let refreshControl = UIRefreshControl()
             self.tableView.refreshControl = refreshControl
             refreshControl.rx.controlEvent(.valueChanged)
-                .bind(to: presenter.refreshObserver)
-                .disposed(by: self.disposeBag)
+                    .bind(to: presenter.refreshObserver)
+                    .disposed(by: self.disposeBag)
         }
     }
 }
@@ -311,14 +298,72 @@ extension ItemListView {
         // custom width constraint so "Recent" fits on small iPhone SE screen
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addConstraint(NSLayoutConstraint(
-            item: button,
-            attribute: .width,
-            relatedBy: .equal,
-            toItem: nil,
-            attribute: .notAnAttribute,
-            multiplier: 1.0,
-            constant: 60)
+                item: button,
+                attribute: .width,
+                relatedBy: .equal,
+                toItem: nil,
+                attribute: .notAnAttribute,
+                multiplier: 1.0,
+                constant: 60)
         )
         return button
+    }
+
+    fileprivate func configureFilterCell(_ cell: FilterCell,
+                                         presenter: ItemListPresenter,
+                                         enabled: Observable<Bool>,
+                                         cancelHidden: Observable<Bool>,
+                                         text: Observable<String>) {
+        cell.accessibilityCustomActions = [
+            UIAccessibilityCustomAction(name: "Edit text", target: self, selector: #selector(editFilterCell)),
+            UIAccessibilityCustomAction(name: Constant.string.cancel, target: self, selector: #selector(accessibleCancel))
+        ]
+
+        enabled
+                .bind(to: cell.rx.isUserInteractionEnabled)
+                .disposed(by: cell.disposeBag)
+
+        cell.filterTextField.rx.text
+                .orEmpty
+                .asObservable()
+                .bind(to: presenter.filterTextObserver)
+                .disposed(by: cell.disposeBag)
+
+        cell.cancelButton.rx.tap
+                .bind(to: presenter.filterCancelObserver)
+                .disposed(by: cell.disposeBag)
+
+        cell.filterTextField.rx.controlEvent(.editingDidEnd)
+                .bind(to: presenter.editEndedObserver)
+                .disposed(by: cell.disposeBag)
+
+        cancelHidden
+                .bind(to: cell.cancelButton.rx.isHidden)
+                .disposed(by: cell.disposeBag)
+
+        cancelHidden
+                .subscribe(onNext: { hidden in
+                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                })
+                .disposed(by: cell.disposeBag)
+
+        text
+                .bind(to: cell.filterTextField.rx.text)
+                .disposed(by: cell.disposeBag)
+
+        let borderView = UIView()
+        borderView.frame = CGRect(x: 0, y: 0, width: 1, height: cell.frame.height)
+        borderView.backgroundColor = Constant.color.cellBorderGrey
+        cell.cancelButton.addSubview(borderView)
+    }
+
+    @objc private func accessibleCancel() {
+        self.presenter?.filterCancelObserver.onNext(())
+    }
+
+    @objc private func editFilterCell() {
+        if let cell = self.getFilterCell() {
+            cell.filterTextField.becomeFirstResponder()
+        }
     }
 }
