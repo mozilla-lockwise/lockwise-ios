@@ -46,7 +46,7 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                 beforeEach {
                     self.subject.onViewReady()
                 }
-                
+
                 describe("onFinishButtonTapped") {
                     beforeEach {
                         self.view.finishTapStub.onNext(())
@@ -57,6 +57,22 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                         let action = self.routeActionHandler.invokeArgument as! MainRouteAction
                         expect(action).to(equal(MainRouteAction.list))
                     }
+                }
+            }
+
+            describe("onEncryptionLink") {
+                beforeEach {
+                    self.subject.onEncryptionLinkTapped()
+                }
+
+                it("routes to the external webview") {
+                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
+                    let action = self.routeActionHandler.invokeArgument as! ExternalWebsiteRouteAction
+                    expect(action).to(equal(
+                            ExternalWebsiteRouteAction(
+                                    urlString: Constant.app.securityFAQ,
+                                    title: Constant.string.faq,
+                                    returnRoute: LoginRouteAction.onboardingConfirmation)))
                 }
             }
         }

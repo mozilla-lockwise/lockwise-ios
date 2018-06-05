@@ -9,6 +9,7 @@ import RxCocoa
 class OnboardingConfirmationView: UIViewController {
     internal var presenter: OnboardingConfirmationPresenter?
     @IBOutlet weak var finishButton: UIButton!
+    @IBOutlet weak var encryptionTextView: UITextView!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -17,10 +18,7 @@ class OnboardingConfirmationView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.finishButton.layer.cornerRadius = 5
-        self.finishButton.clipsToBounds = true
-
+        self.styleButtonsAndText()
         self.presenter?.onViewReady()
     }
 
@@ -38,5 +36,38 @@ class OnboardingConfirmationView: UIViewController {
 extension OnboardingConfirmationView: OnboardingConfirmationViewProtocol {
     var finishButtonTapped: Observable<Void> {
         return self.finishButton.rx.tap.asObservable()
+    }
+}
+
+extension OnboardingConfirmationView: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        self.presenter?.onEncryptionLinkTapped()
+        return false
+    }
+}
+
+extension OnboardingConfirmationView {
+    private func styleButtonsAndText() {
+        self.finishButton.layer.cornerRadius = 5
+        self.finishButton.clipsToBounds = true
+
+        if let encryptionText = self.encryptionTextView.text {
+            self.encryptionTextView.delegate = self
+            let text = NSMutableAttributedString(string: encryptionText)
+            let range = text.mutableString.range(of: Constant.string.onboardingSecurityPostfix)
+            text.addAttributes([
+                NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15.0)
+            ], range: NSMakeRange(0, text.length))
+
+            text.addAttributes(
+                    [
+                        NSAttributedStringKey.link: NSString(string: Constant.app.securityFAQ),
+                        NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue
+                    ],
+                    range: range
+            )
+
+            self.encryptionTextView.attributedText = text
+        }
     }
 }

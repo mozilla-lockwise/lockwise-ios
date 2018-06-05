@@ -14,9 +14,14 @@ import RxTest
 class OnboardingConfirmationViewSpec: QuickSpec {
     class FakeOnboardingConfPresenter: OnboardingConfirmationPresenter {
         var onViewReadyCalled = false
+        var onEncryptionLinkCalled = false
 
         override func onViewReady() {
             self.onViewReadyCalled = true
+        }
+
+        override func onEncryptionLinkTapped() {
+            self.onEncryptionLinkCalled = true
         }
     }
 
@@ -54,6 +59,19 @@ class OnboardingConfirmationViewSpec: QuickSpec {
 
                 it("tells observers when button tapped") {
                     expect(voidObserver.events.count).to(equal(1))
+                }
+            }
+
+            describe("textViewURL") {
+                beforeEach {
+                    self.subject.textView(
+                            self.subject.encryptionTextView,
+                            shouldInteractWith: URL(string: Constant.app.securityFAQ)!,
+                            in: NSMakeRange(33, 18))
+                }
+
+                it("tells the presenter") {
+                    expect(self.presenter.onEncryptionLinkCalled).to(beTrue())
                 }
             }
         }

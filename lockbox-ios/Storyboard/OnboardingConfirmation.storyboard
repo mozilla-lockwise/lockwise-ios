@@ -71,7 +71,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="anP-8K-MP2">
-                                <rect key="frame" x="53" y="329.5" width="250" height="50"/>
+                                <rect key="frame" x="53" y="329.5" width="250" height="55"/>
                                 <subviews>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-security" translatesAutoresizingMaskIntoConstraints="NO" id="eQV-Fs-Zzb">
                                         <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
@@ -79,32 +79,40 @@
                                             <constraint firstAttribute="width" constant="40" id="XVz-Zw-eXk"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nC3-KR-jiv">
-                                        <rect key="frame" x="52" y="2" width="198" height="39"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o0t-1T-rrA">
+                                        <rect key="frame" x="52" y="0.0" width="198" height="55"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <attributedString key="attributedText">
-                                            <fragment content="Sync between devices with secure 256-bit encryption">
+                                            <fragment content="Sync between devices with secure ">
                                                 <attributes>
-                                                    <font key="NSFont" metaFont="system" size="15"/>
-                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="3" tighteningFactorForTruncation="0.0"/>
+                                                    <font key="NSFont" size="15" name=".AppleSystemUIFont"/>
+                                                </attributes>
+                                            </fragment>
+                                            <fragment content="256-bit encryption">
+                                                <attributes>
+                                                    <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <font key="NSFont" size="15" name=".AppleSystemUIFont"/>
                                                 </attributes>
                                             </fragment>
                                         </attributedString>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                    </textView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="nC3-KR-jiv" firstAttribute="leading" secondItem="eQV-Fs-Zzb" secondAttribute="trailing" constant="12" id="0RY-Xm-d4B"/>
                                     <constraint firstAttribute="width" constant="250" id="5pu-hA-Lw6"/>
+                                    <constraint firstItem="o0t-1T-rrA" firstAttribute="leading" secondItem="eQV-Fs-Zzb" secondAttribute="trailing" constant="12" id="63d-5V-r0F"/>
+                                    <constraint firstItem="o0t-1T-rrA" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="top" id="Ibq-fL-CnD"/>
                                     <constraint firstItem="eQV-Fs-Zzb" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="top" id="K3O-iZ-Tgl"/>
-                                    <constraint firstAttribute="height" constant="50" id="Rs8-YB-esU"/>
-                                    <constraint firstItem="nC3-KR-jiv" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="top" constant="2" id="f5b-91-4bL"/>
-                                    <constraint firstAttribute="trailing" secondItem="nC3-KR-jiv" secondAttribute="trailing" id="rnv-k4-bfi"/>
+                                    <constraint firstAttribute="height" constant="55" id="Rs8-YB-esU"/>
+                                    <constraint firstAttribute="bottom" secondItem="o0t-1T-rrA" secondAttribute="bottom" id="cCo-am-6is"/>
+                                    <constraint firstAttribute="trailing" secondItem="o0t-1T-rrA" secondAttribute="trailing" id="e3Z-aP-85A"/>
                                     <constraint firstItem="eQV-Fs-Zzb" firstAttribute="leading" secondItem="anP-8K-MP2" secondAttribute="leading" id="ueS-kM-Ytu"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2G-1m-pMw">
-                                <rect key="frame" x="53" y="421.5" width="250" height="50"/>
+                                <rect key="frame" x="53" y="426.5" width="250" height="50"/>
                                 <subviews>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-convenience" translatesAutoresizingMaskIntoConstraints="NO" id="mx9-SP-qEc">
                                         <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
@@ -154,6 +162,7 @@
                         <viewLayoutGuide key="safeArea" id="faL-BK-34o"/>
                     </view>
                     <connections>
+                        <outlet property="encryptionTextView" destination="o0t-1T-rrA" id="9by-hj-Ot7"/>
                         <outlet property="finishButton" destination="GdN-75-tz4" id="1zS-W1-6zE"/>
                     </connections>
                 </viewController>
