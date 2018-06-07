@@ -253,12 +253,19 @@ extension ItemListPresenter {
                                           itemSortObservable: Observable<ItemListSortSetting>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> { // swiftlint:disable:this line_length
+        let throttledListObservable = loginListObservable
+                .throttle(1.0, scheduler: ConcurrentMainScheduler.instance)
+        let throttledSyncStateObservable = syncStateObservable
+                .throttle(2.0, scheduler: ConcurrentMainScheduler.instance)
+        let throttledStorageStateObservable = storageStateObservable
+                .throttle(2.0, scheduler: ConcurrentMainScheduler.instance)
+
         return Observable.combineLatest(
-                        loginListObservable,
+                        throttledListObservable,
                         filterTextObservable,
                         itemSortObservable,
-                        syncStateObservable,
-                        storageStateObservable
+                        throttledSyncStateObservable,
+                        throttledStorageStateObservable
                 )
             .map { (latest: ([Login], ItemListFilterAction, ItemListSortSetting, SyncState, LoginStoreState)) -> LoginListTextSort in // swiftlint:disable:this line_length
                     return LoginListTextSort(
@@ -296,7 +303,6 @@ extension ItemListPresenter {
                     return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems))]
                 }
                 .asDriver(onErrorJustReturn: [])
-                .throttle(2.0)
     }
 
     fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {
