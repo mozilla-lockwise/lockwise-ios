@@ -36,6 +36,11 @@ extension LoginListTextSort: Equatable {
     }
 }
 
+struct SyncStateManual {
+    let syncState: SyncState
+    let manualSync: Bool
+}
+
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
     private var routeActionHandler: RouteActionHandler
@@ -153,7 +158,7 @@ class ItemListPresenter {
 
     lazy private var preparingPlaceholderItems = [
         ItemSectionModel(model: 0, items: self.searchItem +
-            [LoginListCellConfiguration.PreparingPlaceholder]
+                [LoginListCellConfiguration.PreparingPlaceholder]
         )
     ]
 
@@ -206,7 +211,7 @@ class ItemListPresenter {
         self.userDefaults = userDefaults
     }
 
-    func onViewReady() { // swiftlint:disable:this function_body_length
+    func onViewReady() {
         let itemSortObservable = self.userDefaults.onItemListSort
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
@@ -221,69 +226,20 @@ class ItemListPresenter {
         )
 
         self.view?.bind(items: listDriver)
-
-        let itemSortTextDriver = itemSortObservable
-                .asDriver(onErrorJustReturn: .alphabetically)
-                .map { itemSortAction -> String in
-                    switch itemSortAction {
-                    case .alphabetically:
-                        return Constant.string.aToZ
-                    case .recentlyUsed:
-                        return Constant.string.recent
-                    }
-                }
-
-        self.view?.bind(sortingButtonTitle: itemSortTextDriver)
+        self.setupSpinnerDisplay()
 
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
-              let settingButtonObserver = view.settingButtonEnabled else {
-            return
-         }
+              let settingButtonObserver = view.settingButtonEnabled,
+              let pullToRefreshActiveObserver = view.pullToRefreshActive else { return }
 
-        let syncingObserver = self.dataStore.syncState
-                .map {  $0 == .Syncing }
-
-        let isManualRefreshObservable = self.itemListDisplayStore.listDisplay
-                .filterByType(class: PullToRefreshAction.self)
-
-        if let pullToRefreshActive = view.pullToRefreshActive {
-            Observable.combineLatest(syncingObserver, isManualRefreshObservable)
-                    .map { $0.0 && $0.1.refreshing }
-                    .bind(to: pullToRefreshActive)
-                    .disposed(by: self.disposeBag)
-        }
-
-        self.dataStore.syncState
-                .filter { $0 == .Synced }
-                .subscribe(onNext: { _ in
-                    self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
-                })
-                .disposed(by: self.disposeBag)
-
-        let enableObservable = self.dataStore.list.map { !$0.isEmpty }
-
-        enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
-        enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
-
-        let preparingObservable = self.dataStore.storageState.map { $0 != LoginStoreState.Preparing }
-        preparingObservable.bind(to: settingButtonObserver).disposed(by: self.disposeBag)
-
-        // when this observable emits an event, the spinner gets dismissed
-        let hideSpinnerObservable = self.dataStore.syncState
-                .filter { $0 == SyncState.Synced }
-                .map { _ in return () }
-                .asDriver(onErrorJustReturn: ())
-
-        Observable.combineLatest(self.dataStore.syncState, isManualRefreshObservable)
-                .debug()
-                .asDriver(onErrorJustReturn: (SyncState.Synced, PullToRefreshAction(refreshing: false)))
-                .drive(onNext: { latest in
-                    if (latest.0 == SyncState.Syncing || latest.0 == SyncState.ReadyToSync) && !latest.1.refreshing {
-                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
-                    }
-                })
-                .disposed(by: self.disposeBag)
+        self.setupPullToRefresh(pullToRefreshActiveObserver)
+        self.setupButtonBehavior(
+                view: view,
+                itemSortObservable: itemSortObservable,
+                sortButtonObserver: sortButtonObserver,
+                settingButtonObserver: settingButtonObserver
+        )
 
         self.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
@@ -340,6 +296,7 @@ extension ItemListPresenter {
                     return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems))]
                 }
                 .asDriver(onErrorJustReturn: [])
+                .throttle(2.0)
     }
 
     fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {
@@ -368,5 +325,77 @@ extension ItemListPresenter {
                         $0 || $1
                     }
         }
+    }
+}
+
+extension ItemListPresenter {
+    fileprivate func setupSpinnerDisplay() {
+        // when this observable emits an event, the spinner gets dismissed
+        let hideSpinnerObservable = self.dataStore.syncState
+                .filter { $0 == SyncState.Synced }
+                .map { _ in return () }
+                .asDriver(onErrorJustReturn: ())
+
+        let isManualRefreshObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: PullToRefreshAction.self)
+
+        Observable.combineLatest(self.dataStore.syncState, isManualRefreshObservable)
+                .map { SyncStateManual(syncState: $0.0, manualSync: $0.1.refreshing) }
+                .asDriver(onErrorJustReturn: SyncStateManual(syncState: .Synced, manualSync: false))
+                .throttle(2.0)
+                .drive(onNext: { latest in
+                    if (latest.syncState == SyncState.Syncing || latest.syncState == SyncState.ReadyToSync)
+                               && !latest.manualSync {
+                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
+                    }
+                })
+                .disposed(by: self.disposeBag)
+    }
+
+    fileprivate func setupPullToRefresh(_ pullToRefreshActive: AnyObserver<Swift.Bool>) {
+        let syncingObserver = self.dataStore.syncState
+                .map { $0 == .Syncing }
+
+        let isManualRefreshObservable = self.itemListDisplayStore.listDisplay
+                .filterByType(class: PullToRefreshAction.self)
+
+        Observable.combineLatest(syncingObserver, isManualRefreshObservable)
+                .map { $0.0 && $0.1.refreshing }
+                .bind(to: pullToRefreshActive)
+                .disposed(by: self.disposeBag)
+
+        self.dataStore.syncState
+                .filter { $0 == .Synced }
+                .subscribe(onNext: { _ in
+                    self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+                })
+                .disposed(by: self.disposeBag)
+    }
+
+    fileprivate func setupButtonBehavior(
+            view: ItemListViewProtocol,
+            itemSortObservable: Observable<ItemListSortingAction>,
+            sortButtonObserver: AnyObserver<Bool>,
+            settingButtonObserver: AnyObserver<Bool>) {
+        let itemSortTextDriver = itemSortObservable
+                .asDriver(onErrorJustReturn: .alphabetically)
+                .map { itemSortAction -> String in
+                    switch itemSortAction {
+                    case .alphabetically:
+                        return Constant.string.aToZ
+                    case .recentlyUsed:
+                        return Constant.string.recent
+                    }
+                }
+
+        view.bind(sortingButtonTitle: itemSortTextDriver)
+
+        let enableObservable = self.dataStore.list.map { !$0.isEmpty }
+
+        enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
+        enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
+
+        let preparingObservable = self.dataStore.storageState.map { $0 != LoginStoreState.Preparing }
+        preparingObservable.bind(to: settingButtonObserver).disposed(by: self.disposeBag)
     }
 }
