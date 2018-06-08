@@ -83,6 +83,14 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeSettingActionHandler: SettingActionHandler {
+        var invokeActionArgument: SettingAction?
+
+        override func invoke(_ action: SettingAction) {
+            self.invokeActionArgument = action
+        }
+    }
+
     class FakeDataStore: DataStore {
         var itemListStub = PublishSubject<[Login]>()
         var syncStateStub = PublishSubject<SyncState>()
@@ -112,10 +120,12 @@ class ItemListPresenterSpec: QuickSpec {
     private var view: FakeItemListView!
     private var routeActionHandler: FakeRouteActionHandler!
     private var itemListDisplayActionHandler: FakeItemListDisplayActionHandler!
+    private var settingActionHandler: FakeSettingActionHandler!
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
+    private let userDefaults = UserDefaults.standard
     var subject: ItemListPresenter!
 
     override func spec() {
@@ -124,6 +134,7 @@ class ItemListPresenterSpec: QuickSpec {
                 self.view = FakeItemListView()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.itemListDisplayActionHandler = FakeItemListDisplayActionHandler()
+                self.settingActionHandler = FakeSettingActionHandler()
                 self.dataStore = FakeDataStore()
                 self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
@@ -138,8 +149,10 @@ class ItemListPresenterSpec: QuickSpec {
                         view: self.view,
                         routeActionHandler: self.routeActionHandler,
                         itemListDisplayActionHandler: self.itemListDisplayActionHandler,
+                        settingActionHandler: self.settingActionHandler,
                         dataStore: self.dataStore,
-                        itemListDisplayStore: self.itemListDisplayStore
+                        itemListDisplayStore: self.itemListDisplayStore,
+                        userDefaults: self.userDefaults
                 )
             }
 
@@ -149,7 +162,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
+                        self.userDefaults.set(ItemListSortSetting.alphabetically.rawValue, forKey: SettingKey.itemListSort.rawValue)
                     }
 
                     describe("when the datastore is still syncing & prepared") {
@@ -304,7 +317,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext(items)
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.alphabetically)
+                        self.userDefaults.set(ItemListSortSetting.alphabetically.rawValue, forKey: SettingKey.itemListSort.rawValue)
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
                         self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                     }
@@ -364,7 +377,7 @@ class ItemListPresenterSpec: QuickSpec {
                     xdescribe("when sorting method switches to recently used") {
                         // pended until it's possible to construct Logins with recently_used dates
                         beforeEach {
-                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListSortingAction.recentlyUsed)
+                            self.userDefaults.set(ItemListSortSetting.recentlyUsed.rawValue, forKey: SettingKey.itemListSort.rawValue)
                         }
 
                         it("pushes the new configuration with the items") {
@@ -571,9 +584,10 @@ class ItemListPresenterSpec: QuickSpec {
                         self.view.displayOptionSheetButtons![0].tapObserver!.onNext(())
                     }
 
-                    it("dispatches the alphabetically ItemListSortingAction") {
-                        let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListSortingAction
-                        expect(action).to(equal(ItemListSortingAction.alphabetically))
+                    it("dispatches the alphabetically ItemListSortSetting SettingAction") {
+                        let action = self.settingActionHandler.invokeActionArgument as SettingAction?
+                        expect(action).notTo(beNil())
+                        expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically)))
                     }
                 }
 
@@ -582,9 +596,10 @@ class ItemListPresenterSpec: QuickSpec {
                         self.view.displayOptionSheetButtons![1].tapObserver!.onNext(())
                     }
 
-                    it("dispatches the alphabetically ItemListSortingAction") {
-                        let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListSortingAction
-                        expect(action).to(equal(ItemListSortingAction.recentlyUsed))
+                    it("dispatches the recently used ItemListSortSetting SettingAction") {
+                        let action = self.settingActionHandler.invokeActionArgument as SettingAction?
+                        expect(action).notTo(beNil())
+                        expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed)))
                     }
                 }
             }

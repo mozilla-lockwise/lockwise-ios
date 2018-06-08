@@ -117,5 +117,6 @@ struct Constant {
         static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
         static let defaultPreferredBrowser = PreferredBrowserSetting.Safari
         static let defaultRecordUsageData = true
+        static let defaultItemListSort = ItemListSortSetting.alphabetically
     }
 }

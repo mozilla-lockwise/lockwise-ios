@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -28,18 +28,15 @@
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="filtercell" rowHeight="44" id="hEu-cd-CNd" customClass="FilterCell" customModule="Lockbox" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="filtercell" rowHeight="44" id="hEu-cd-CNd" customClass="FilterCell" customModule="Lockbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hEu-cd-CNd" id="0wm-do-QXQ">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="ClX-iU-pch">
-                                                    <rect key="frame" x="16" y="14" width="16" height="16"/>
-                                                </imageView>
                                                 <textField opaque="NO" contentMode="center" horizontalHuggingPriority="249" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your entries" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DEF-qU-5KB">
-                                                    <rect key="frame" x="40" y="0.0" width="247" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="44" id="fe1-O9-xUl"/>
                                                     </constraints>
@@ -66,12 +63,10 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ClX-iU-pch" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="1QS-QH-YGz"/>
-                                                <constraint firstItem="DEF-qU-5KB" firstAttribute="leading" secondItem="ClX-iU-pch" secondAttribute="trailing" constant="8" id="2sW-JE-5Ml"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="top" secondItem="0wm-do-QXQ" secondAttribute="top" id="6ZC-ox-wiZ"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="6ul-W4-dcn"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="height" secondItem="0wm-do-QXQ" secondAttribute="height" id="Bw6-Nb-6As"/>
-                                                <constraint firstItem="ClX-iU-pch" firstAttribute="leading" secondItem="0wm-do-QXQ" secondAttribute="leading" constant="16" id="LM8-cK-tpK"/>
+                                                <constraint firstItem="DEF-qU-5KB" firstAttribute="leading" secondItem="0wm-do-QXQ" secondAttribute="leading" id="DUG-MR-L7y"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="leading" secondItem="DEF-qU-5KB" secondAttribute="trailing" constant="10" id="Ucz-Bm-DYa"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="XIp-62-hZo"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="trailing" secondItem="0wm-do-QXQ" secondAttribute="trailing" id="aGy-iM-bvS"/>
@@ -83,6 +78,9 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.92951178550720215" green="0.92919707298278809" blue="0.94118726253509521" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <accessibility key="accessibilityConfiguration">
+                                            <bool key="isElement" value="YES"/>
+                                        </accessibility>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <outlet property="cancelButton" destination="JtN-An-cj9" id="akd-xw-NCE"/>
@@ -217,7 +215,7 @@
                                         <rect key="frame" x="0.0" y="685" width="375" height="346"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uLU-A3-JOv" id="c86-fZ-K2X">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="346"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="345.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="752" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="ldf-oP-BRH">
@@ -227,13 +225,13 @@
                                                     <rect key="frame" x="88" y="136" width="139" height="80"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm your account." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zp4-eQ-2yd" userLabel="Confirm your account">
-                                                    <rect key="frame" x="111.5" y="232" width="152.5" height="18"/>
+                                                    <rect key="frame" x="111.5" y="232" width="152.5" height="17.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Check your email for the verification link in order to view your entries." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtF-d0-Vui">
-                                                    <rect key="frame" x="47" y="257.5" width="280" height="31.5"/>
+                                                    <rect key="frame" x="47" y="257" width="280" height="31.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="Wgg-aL-HQC"/>
                                                     </constraints>
@@ -281,6 +279,5 @@
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
         <image name="preparing-placeholder" width="139" height="80"/>
-        <image name="search" width="16" height="16"/>
     </resources>
 </document>
