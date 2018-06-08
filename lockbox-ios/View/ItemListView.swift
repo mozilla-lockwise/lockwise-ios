@@ -301,6 +301,7 @@ extension ItemListView {
         button.setImage(tintedPrefImage, for: .selected)
         button.setImage(tintedPrefImage, for: .highlighted)
         button.setImage(tintedPrefImage, for: .disabled)
+        button.contentEdgeInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 0.0)
         button.tintColor = .white
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
