@@ -42,13 +42,13 @@ class ItemListDisplayStoreSpec: QuickSpec {
                             .subscribe(displayObserver)
                             .disposed(by: self.disposeBag)
 
-                    self.dispatcher.fakeRegistration.onNext(ItemListSortingAction.alphabetically)
+                    self.dispatcher.fakeRegistration.onNext(ItemListFilterAction(filteringText: "asdf"))
                 }
 
                 it("pushes dispatched route actions to observers") {
                     expect(displayObserver.events.last).notTo(beNil())
-                    let element = displayObserver.events.last!.value.element as! ItemListSortingAction
-                    expect(element).to(equal(ItemListSortingAction.alphabetically))
+                    let element = displayObserver.events.last!.value.element as! ItemListFilterAction
+                    expect(element.filteringText).to(equal("asdf"))
                 }
 
                 it("pushes new actions to observers") {

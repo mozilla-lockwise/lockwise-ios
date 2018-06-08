@@ -10,10 +10,6 @@ struct ItemListFilterAction: ItemListDisplayAction {
     let filteringText: String
 }
 
-enum ItemListSortingAction: ItemListDisplayAction {
-    case alphabetically, recentlyUsed
-}
-
 struct ItemListFilterEditAction: ItemListDisplayAction {
     let editing: Bool
 }

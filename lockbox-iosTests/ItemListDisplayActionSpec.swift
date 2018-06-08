@@ -30,13 +30,13 @@ class ItemListDisplayActionSpec: QuickSpec {
 
             describe("invoke") {
                 beforeEach {
-                    self.subject.invoke(ItemListSortingAction.recentlyUsed)
+                    self.subject.invoke(ItemListFilterAction(filteringText: "asdf"))
                 }
 
                 it("dispatches actions to the dispatcher") {
                     expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                    let argument = self.dispatcher.actionTypeArgument as! ItemListSortingAction
-                    expect(argument).to(equal(ItemListSortingAction.recentlyUsed))
+                    let argument = self.dispatcher.actionTypeArgument as! ItemListFilterAction
+                    expect(argument.filteringText).to(equal("asdf"))
                 }
             }
         }

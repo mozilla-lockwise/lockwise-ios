@@ -37,6 +37,7 @@ enum TelemetryEventObject: String {
     case settingsPreferredBrowser = "settings_preferred_browser"
     case settingsRecordUsageData = "settings_record_usage_data"
     case settingsAccount = "settings_account"
+    case settingsItemListSort = "settings_item_list_sort"
     case settingsFaq = "settings_faq"
     case settingsProvideFeedback = "settings_provide_feedback"
     case loginWelcome = "login_welcome"
