@@ -314,6 +314,14 @@ extension ItemListView {
                                          enabled: Observable<Bool>,
                                          cancelHidden: Observable<Bool>,
                                          text: Observable<String>) {
+        let searchImage = UIImage(named: "search")
+        let searchImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40.0, height: cell.frame.height))
+        searchImageView.contentMode = .center
+        searchImageView.image = searchImage
+
+        cell.filterTextField.leftView = searchImageView
+        cell.filterTextField.leftViewMode = .always
+
         cell.accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: "Edit text", target: self, selector: #selector(editFilterCell)),
             UIAccessibilityCustomAction(name: Constant.string.cancel, target: self, selector: #selector(accessibleCancel))
@@ -342,7 +350,7 @@ extension ItemListView {
                 .disposed(by: cell.disposeBag)
 
         cancelHidden
-                .subscribe(onNext: { hidden in
+                .subscribe(onNext: { _ in
                     UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
                 })
                 .disposed(by: cell.disposeBag)

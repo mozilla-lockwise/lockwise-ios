@@ -35,11 +35,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="search" translatesAutoresizingMaskIntoConstraints="NO" id="ClX-iU-pch">
-                                                    <rect key="frame" x="16" y="14" width="16" height="16"/>
-                                                </imageView>
                                                 <textField opaque="NO" contentMode="center" horizontalHuggingPriority="249" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your entries" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DEF-qU-5KB">
-                                                    <rect key="frame" x="40" y="0.0" width="247" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="44" id="fe1-O9-xUl"/>
                                                     </constraints>
@@ -66,12 +63,10 @@
                                                 </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="ClX-iU-pch" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="1QS-QH-YGz"/>
-                                                <constraint firstItem="DEF-qU-5KB" firstAttribute="leading" secondItem="ClX-iU-pch" secondAttribute="trailing" constant="8" id="2sW-JE-5Ml"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="top" secondItem="0wm-do-QXQ" secondAttribute="top" id="6ZC-ox-wiZ"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="6ul-W4-dcn"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="height" secondItem="0wm-do-QXQ" secondAttribute="height" id="Bw6-Nb-6As"/>
-                                                <constraint firstItem="ClX-iU-pch" firstAttribute="leading" secondItem="0wm-do-QXQ" secondAttribute="leading" constant="16" id="LM8-cK-tpK"/>
+                                                <constraint firstItem="DEF-qU-5KB" firstAttribute="leading" secondItem="0wm-do-QXQ" secondAttribute="leading" id="DUG-MR-L7y"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="leading" secondItem="DEF-qU-5KB" secondAttribute="trailing" constant="10" id="Ucz-Bm-DYa"/>
                                                 <constraint firstItem="DEF-qU-5KB" firstAttribute="centerY" secondItem="0wm-do-QXQ" secondAttribute="centerY" id="XIp-62-hZo"/>
                                                 <constraint firstItem="JtN-An-cj9" firstAttribute="trailing" secondItem="0wm-do-QXQ" secondAttribute="trailing" id="aGy-iM-bvS"/>
@@ -284,6 +279,5 @@
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
         <image name="preparing-placeholder" width="139" height="80"/>
-        <image name="search" width="16" height="16"/>
     </resources>
 </document>
