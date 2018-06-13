@@ -51,6 +51,7 @@ class ItemDetailView: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var learnHowToEditButton: UIButton!
     var itemId: String = ""
+    let longPress = UILongPressGestureRecognizer()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -139,6 +140,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
+                    cell.addGestureRecognizer(self.longPress)
+
                     if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
 
@@ -170,6 +173,15 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     }
                     .bind(to: presenter.onCellTapped)
                     .disposed(by: self.disposeBag)
+
+            longPress.rx.event.map({ a -> String? in
+                if let cell = a.view as? ItemDetailCell {
+                    return cell.titleLabel?.text
+                }
+                return nil
+            })
+            .bind(to: presenter.onCellTapped)
+            .disposed(by: self.disposeBag)
         }
     }
 }
