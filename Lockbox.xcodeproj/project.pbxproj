@@ -126,11 +126,6 @@
 		7D2D2F0B20C5A8B300339D9B /* OnboardingConfirmation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */; };
 		7D302BE81FD7106B00D2FD4B /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; };
 		7D302BE91FD7108300D2FD4B /* RxBlocking.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920231FB131FB00709575 /* libcrypto.a */; };
-		7D3920281FB131FB00709575 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920241FB131FB00709575 /* libssl.a */; };
-		7D3920291FB131FB00709575 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920251FB131FB00709575 /* libjansson.a */; };
-		7D39202A1FB131FB00709575 /* libcjose.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920261FB131FB00709575 /* libcjose.a */; };
-		7D39202C1FB215EB00709575 /* KeyManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D39202B1FB215EB00709575 /* KeyManagerSpec.swift */; };
 		7D440889201786E4001873F6 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D440888201786E4001873F6 /* WelcomeView.swift */; };
 		7D44088B201786F1001873F6 /* WelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D44088A201786F1001873F6 /* WelcomePresenter.swift */; };
 		7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D44088C20178713001873F6 /* WelcomePresenterSpec.swift */; };
@@ -146,6 +141,7 @@
 		7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
 		7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6FB87A204F00E2005E23AA /* StatusAlert.swift */; };
+		7D73BD7020D3135E0075D1CE /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D73BD6F20D3135E0075D1CE /* FxAClient.framework */; };
 		7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */; };
 		7D7AD94B204EFBA4002D35EE /* StatusAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */; };
 		7DA4C6832028F84800B61DD8 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6802028F84800B61DD8 /* ItemListView.swift */; };
@@ -154,10 +150,6 @@
 		7DA4C68E2028F99500B61DD8 /* ItemListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6892028F86E00B61DD8 /* ItemListPresenterSpec.swift */; };
 		7DA4C68F2028F99800B61DD8 /* UIViewController+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6882028F86E00B61DD8 /* UIViewController+Spec.swift */; };
 		7DA4C6932028FB0900B61DD8 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6902028FB0900B61DD8 /* UIColor+.swift */; };
-		7DBF9B2D1FB22EB000A53364 /* libcjose.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920261FB131FB00709575 /* libcjose.a */; };
-		7DBF9B2E1FB22EB000A53364 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920231FB131FB00709575 /* libcrypto.a */; };
-		7DBF9B2F1FB22EB000A53364 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920251FB131FB00709575 /* libjansson.a */; };
-		7DBF9B301FB22EB000A53364 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D3920241FB131FB00709575 /* libssl.a */; };
 		7DC3899C20B600820057929D /* ItemDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC3899E20B600820057929D /* ItemDetail.storyboard */; };
 		7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC75D7B206AD01C007CDDBB /* AccountSetting.storyboard */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
@@ -268,7 +260,6 @@
 		7AA5422EFD1C3BB23F8C6811 /* BiometryManagerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryManagerSpec.swift; sourceTree = "<group>"; };
 		7AA54247F60B5BDC1BA90AD4 /* CopyConfirmationDisplayStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyConfirmationDisplayStore.swift; sourceTree = "<group>"; };
 		7AA542656FC3BE06479C929A /* UIViewController+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
-		7AA5429D9DF4FAE7E3290C8E /* KeyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyManager.swift; sourceTree = "<group>"; };
 		7AA542A3362BE85B313A88B8 /* UIImage+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		7AA542B3E1A27FC2B8806363 /* String+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Spec.swift"; sourceTree = "<group>"; };
 		7AA542CB670BA12339305AC7 /* TelemetryStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryStoreSpec.swift; sourceTree = "<group>"; };
@@ -363,11 +354,6 @@
 		7D1D2F0920AA39710011BFC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
 		7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OnboardingConfirmation.storyboard; sourceTree = "<group>"; };
 		7D320B3420360F9000891F73 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
-		7D3920231FB131FB00709575 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = "lockbox-ios/binaries/libcrypto.a"; sourceTree = "<group>"; };
-		7D3920241FB131FB00709575 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = "lockbox-ios/binaries/libssl.a"; sourceTree = "<group>"; };
-		7D3920251FB131FB00709575 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = "lockbox-ios/binaries/libjansson.a"; sourceTree = "<group>"; };
-		7D3920261FB131FB00709575 /* libcjose.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcjose.a; path = "lockbox-ios/binaries/libcjose.a"; sourceTree = "<group>"; };
-		7D39202B1FB215EB00709575 /* KeyManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyManagerSpec.swift; sourceTree = "<group>"; };
 		7D440888201786E4001873F6 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WelcomeView.swift; path = "lockbox-ios/View/WelcomeView.swift"; sourceTree = SOURCE_ROOT; };
 		7D44088A201786F1001873F6 /* WelcomePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WelcomePresenter.swift; path = "lockbox-ios/Presenter/WelcomePresenter.swift"; sourceTree = SOURCE_ROOT; };
 		7D44088C20178713001873F6 /* WelcomePresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomePresenterSpec.swift; sourceTree = "<group>"; };
@@ -382,6 +368,7 @@
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D5F1D7F20866A9400688DEA /* RxGesture.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxGesture.framework; path = Carthage/Build/iOS/RxGesture.framework; sourceTree = "<group>"; };
 		7D6FB87A204F00E2005E23AA /* StatusAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAlert.swift; sourceTree = "<group>"; };
+		7D73BD6F20D3135E0075D1CE /* FxAClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxAClient.framework; path = Carthage/Build/iOS/FxAClient.framework; sourceTree = "<group>"; };
 		7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatusAlert.xib; sourceTree = "<group>"; };
 		7D92DAF220586FBA00195A1B /* RxOptional.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxOptional.framework; path = Carthage/Build/iOS/RxOptional.framework; sourceTree = "<group>"; };
 		7D9D64921F9F8EE300279C39 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
@@ -444,10 +431,6 @@
 				7D1B1ACF1F9902A800C1F5FF /* Quick.framework in Frameworks */,
 				7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */,
 				7D302BE81FD7106B00D2FD4B /* RxBlocking.framework in Frameworks */,
-				7DBF9B2D1FB22EB000A53364 /* libcjose.a in Frameworks */,
-				7DBF9B2E1FB22EB000A53364 /* libcrypto.a in Frameworks */,
-				7DBF9B2F1FB22EB000A53364 /* libjansson.a in Frameworks */,
-				7DBF9B301FB22EB000A53364 /* libssl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,10 +445,6 @@
 				7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */,
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
-				7D3920271FB131FB00709575 /* libcrypto.a in Frameworks */,
-				7D3920281FB131FB00709575 /* libssl.a in Frameworks */,
-				7D3920291FB131FB00709575 /* libjansson.a in Frameworks */,
-				7D39202A1FB131FB00709575 /* libcjose.a in Frameworks */,
 				391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */,
 				391233682090E52800CB0233 /* Account.framework in Frameworks */,
 				3912337C2090E5E200CB0233 /* Storage.framework in Frameworks */,
@@ -476,6 +455,7 @@
 				391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */,
 				39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */,
 				391233782090E5A300CB0233 /* Shared.framework in Frameworks */,
+				7D73BD7020D3135E0075D1CE /* FxAClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,7 +551,6 @@
 		7AA545D81CFDA7E54485C845 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				7AA5429D9DF4FAE7E3290C8E /* KeyManager.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
 			);
 			path = Helpers;
@@ -693,6 +672,7 @@
 			isa = PBXGroup;
 			children = (
 				2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */,
+				7D73BD6F20D3135E0075D1CE /* FxAClient.framework */,
 				391233832090E63000CB0233 /* Alamofire.framework */,
 				391233802090E60A00CB0233 /* XCGLogger.framework */,
 				3912337A2090E5E200CB0233 /* Storage.framework */,
@@ -705,10 +685,6 @@
 				7DEA1C4120362E09008AD7C4 /* Differentiator.framework */,
 				7D320B3420360F9000891F73 /* RxDataSources.framework */,
 				D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */,
-				7D3920261FB131FB00709575 /* libcjose.a */,
-				7D3920231FB131FB00709575 /* libcrypto.a */,
-				7D3920251FB131FB00709575 /* libjansson.a */,
-				7D3920241FB131FB00709575 /* libssl.a */,
 				7DF469C91F9F8FDA00375C74 /* RxTest.framework */,
 				7DF469C71F9F8FD500375C74 /* RxBlocking.framework */,
 				7DF469C31F9F8F8000375C74 /* RxSwift.framework */,
@@ -730,7 +706,6 @@
 				7D44088D20178713001873F6 /* WelcomeViewSpec.swift */,
 				7D1B1AC81F99028D00C1F5FF /* Info.plist */,
 				7D1B1AD31F9902C600C1F5FF /* DataStoreActionSpec.swift */,
-				7D39202B1FB215EB00709575 /* KeyManagerSpec.swift */,
 				7AA542B3E1A27FC2B8806363 /* String+Spec.swift */,
 				7AA541A2CBD1A142812687CE /* Data+Spec.swift */,
 				7AA544DC0DBB5D050BD54806 /* FxAPresenterSpec.swift */,
@@ -888,7 +863,6 @@
 			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Firefox Lockbox" */;
 			buildPhases = (
 				7D651D68203CE50700BD9B6E /* ShellScript */,
-				7DCB3F2C208699930043ADCE /* ShellScript */,
 				7D5F1D792086693F00688DEA /* ShellScript */,
 				7D5DF86F1F87F2600039B23E /* Sources */,
 				7D5DF8701F87F2600039B23E /* Frameworks */,
@@ -1030,6 +1004,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/FxAUtils.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Shared.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
@@ -1050,6 +1025,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAUtils.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Shared.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAClient.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1067,19 +1043,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
-		};
-		7DCB3F2C208699930043ADCE /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "case \"${TARGET_BUILD_DIR}\" in\n*\"iphonesimulator\")\necho \"No need to remove archs\"\n;;\n*)\nAPP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\nSTRIPARCHS=\"x86_64 i386\"\nfor t in $STRIPARCHS\ndo\n\nif find \"$APP_PATH\" -name '*.a' -exec lipo -info {} \\; | grep $t ; then\nfind \"$APP_PATH\" -name '*.a' -exec lipo -remove $t {} -output {}2 \\; -exec rm {} \\; -exec mv {}2 {} \\; ;\nfi\n\ndone\n;;\nesac";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1100,7 +1063,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DA4C68D2028F99200B61DD8 /* ItemListViewSpec.swift in Sources */,
-				7D39202C1FB215EB00709575 /* KeyManagerSpec.swift in Sources */,
 				D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */,
 				7D1B1AD41F9902C600C1F5FF /* DataStoreActionSpec.swift in Sources */,
 				7D44088F20178713001873F6 /* WelcomeViewSpec.swift in Sources */,
@@ -1178,7 +1140,6 @@
 				7AA54C6D0A4BEB2C3900424F /* Data+.swift in Sources */,
 				7AA5475B74B7DF69096101CE /* UIViewController+.swift in Sources */,
 				7D44088B201786F1001873F6 /* WelcomePresenter.swift in Sources */,
-				7AA54EFFC095AB3BC0BD1437 /* KeyManager.swift in Sources */,
 				7AA54CB0835678A0038E5424 /* RouteAction.swift in Sources */,
 				7AA548263012DE1D03950DE0 /* RouteStore.swift in Sources */,
 				7AA54E83D68AA39FB3A895AF /* RootPresenter.swift in Sources */,

@@ -6,6 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import UIKit
+import FxAClient
 
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
@@ -35,6 +36,8 @@ class RootPresenter {
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
+
+    var fxa: FirefoxAccount?
 
     init(view: RootViewProtocol,
          dispatcher: Dispatcher = Dispatcher.shared,

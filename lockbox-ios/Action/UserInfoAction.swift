@@ -6,11 +6,10 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxOptional
-import Account
-import FxAUtils
+import FxAClient
 
 enum UserInfoAction: Action {
-    case profileInfo(info: ProfileInfo)
+    case profileInfo(info: Profile)
     case load
     case clear
 }
@@ -35,28 +34,8 @@ class UserInfoActionHandler: ActionHandler {
     fileprivate var dispatcher: Dispatcher
     fileprivate let disposeBag = DisposeBag()
 
-    init(dispatcher: Dispatcher = Dispatcher.shared,
-         notificationCenter: NotificationCenter = NotificationCenter.default) {
+    init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
-
-        notificationCenter.rx
-                .notification(NotificationNames.FirefoxAccountProfileChanged)
-                .map { notification -> FirefoxAccount.FxAProfile? in
-                    let account = notification.object as? FirefoxAccount
-                    return account?.fxaProfile
-                }
-                .filterNil()
-                .map { profile -> ProfileInfo in
-                    return ProfileInfo.Builder()
-                            .email(profile.email)
-                            .avatar(profile.avatar.url)
-                            .displayName(profile.displayName)
-                            .build()
-                }
-                .subscribe(onNext: { profile in
-                    self.dispatcher.dispatch(action: UserInfoAction.profileInfo(info: profile))
-                })
-                .disposed(by: self.disposeBag)
     }
 
     func invoke(_ action: UserInfoAction) {

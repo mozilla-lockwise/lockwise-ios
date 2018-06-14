@@ -33,9 +33,8 @@ struct Constant {
     }
 
     struct fxa {
+        static let redirectURI = "https://lockbox.firefox.com/fxa/ios-redirect.html"
         static let clientID = "98adfa37698f255b"
-        static let oauthHost = "oauth.accounts.firefox.com"
-        static let profileHost = "profile.accounts.firefox.com"
     }
 
     struct string {

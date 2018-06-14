@@ -4,11 +4,9 @@
 
 import Foundation
 import WebKit
-import FxAUtils
 import RxSwift
 import RxCocoa
-import SwiftyJSON
-import Account
+import FxAClient
 
 protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
@@ -27,6 +25,8 @@ class FxAPresenter {
     fileprivate let dataStore: DataStore
 
     private var disposeBag = DisposeBag()
+
+    var fxa: FirefoxAccount?
 
     public var onClose: AnyObserver<Void> {
         return Binder(self) { target, _ in
@@ -48,22 +48,52 @@ class FxAPresenter {
     }
 
     func onViewReady() {
-        self.view?.loadRequest(URLRequest(url: ProductionFirefoxAccountConfiguration().signInURL))
-    }
-}
+        do {
+            let config = try FxAConfig.custom(content_base: "https://accounts.firefox.com")
+            self.fxa = try FirefoxAccount(config: config, clientId: Constant.fxa.clientID)
 
-// Extensions and enums to support logging in via remote commmand.
-extension FxAPresenter {
-    // The user has signed in to a Firefox Account.  We're done!
-    func onLogin(_ data: JSON) {
-        self.dataStore.syncState
-            .take(1)
-            .subscribe(onNext: { [weak self] syncState in
-                if syncState == .NotSyncable {
-                    self?.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: true))
-                    self?.routeActionHandler.invoke(LoginRouteAction.onboardingConfirmation)
-                    self?.dataStoreActionHandler.invoke(.initialize(blob: data))
-                }
-            }).disposed(by: disposeBag)
+            guard let url = try self.fxa?.beginOAuthFlow(
+                    redirectURI: Constant.fxa.redirectURI,
+                    scopes: [
+                        "profile",
+                        "https://identity.mozilla.com/apps/oldsync",
+                        "https://identity.mozilla.com/apps/lockbox"],
+                    wantsKeys: true) else { return }
+
+            self.view?.loadRequest(URLRequest(url: url))
+        } catch {
+            print(error)
+        }
+    }
+
+    func matchingRedirectURLReceived(_ components: URLComponents) {
+        var dic = [String: String]()
+        components.queryItems?.forEach {
+            dic[$0.name] = $0.value
+        }
+        guard let code = dic["code"], let state = dic["state"] else { return }
+
+        var oauthInfo: OAuthInfo?
+        do {
+            oauthInfo = try self.fxa?.completeOAuthFlow(code: code, state: state)
+        } catch {
+            print(error)
+        }
+
+        var profile: Profile?
+        do {
+            profile = try self.fxa?.getProfile()
+            if profile != nil {
+                UserInfoActionHandler.shared.invoke(UserInfoAction.profileInfo(info: profile))
+            }
+        } catch {
+            print(error)
+        }
+
+        if let accessToken = oauthInfo?.accessToken,
+           let keys = oauthInfo?.keys {
+            print("access_token: " + accessToken)
+            print("keysJWE: " + keys)
+        }
     }
 }
