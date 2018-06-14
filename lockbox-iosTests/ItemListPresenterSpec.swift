@@ -542,6 +542,10 @@ class ItemListPresenterSpec: QuickSpec {
                         let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
                         expect(argument).to(equal(MainRouteAction.detail(itemId: id)))
                     }
+
+                    it("dismisses the keyboard") {
+                        expect(self.view.dismissKeyboardCalled).to(beTrue())
+                    }
                 }
 
                 describe("when the item does not have an id") {
