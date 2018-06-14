@@ -24,6 +24,7 @@ class ItemListPresenterSpec: QuickSpec {
         var dismissKeyboardCalled = false
         var displaySpinnerCalled = false
         var pullToRefreshObserver: TestableObserver<Bool>!
+        var scrollToTopCalled = false
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -64,6 +65,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         var pullToRefreshActive: AnyObserver<Bool>? {
             return self.pullToRefreshObserver?.asObserver()
+        }
+
+        func scrollToTop() {
+            self.scrollToTopCalled = true
         }
     }
 
@@ -589,6 +594,10 @@ class ItemListPresenterSpec: QuickSpec {
                         expect(action).notTo(beNil())
                         expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically)))
                     }
+
+                    it("tells the view to scroll to top") {
+                        expect(self.view.scrollToTopCalled).to(beTrue())
+                    }
                 }
 
                 describe("tapping recently used") {
@@ -600,6 +609,10 @@ class ItemListPresenterSpec: QuickSpec {
                         let action = self.settingActionHandler.invokeActionArgument as SettingAction?
                         expect(action).notTo(beNil())
                         expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed)))
+                    }
+
+                    it("tells the view to scroll to top") {
+                        expect(self.view.scrollToTopCalled).to(beTrue())
                     }
                 }
             }
