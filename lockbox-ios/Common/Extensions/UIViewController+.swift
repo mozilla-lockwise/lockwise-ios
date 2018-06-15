@@ -14,6 +14,18 @@ struct AlertActionButtonConfiguration {
     let title: String
     let tapObserver: AnyObserver<Void>?
     let style: UIAlertActionStyle
+    let checked: Bool
+
+    init(title: String, tapObserver: AnyObserver<Void>?, style: UIAlertActionStyle) {
+        self.init(title: title, tapObserver: tapObserver, style: style, checked: false)
+    }
+
+    init(title: String, tapObserver: AnyObserver<Void>?, style: UIAlertActionStyle, checked: Bool) {
+        self.title = title
+        self.tapObserver = tapObserver
+        self.style = style
+        self.checked = checked
+    }
 }
 
 protocol AlertControllerView {
@@ -54,6 +66,8 @@ extension UIViewController: AlertControllerView {
                 buttonConfig.tapObserver?.onNext(())
                 buttonConfig.tapObserver?.onCompleted()
             }
+
+            action.setValue(buttonConfig.checked, forKey: "checked")
 
             alertController.addAction(action)
         }

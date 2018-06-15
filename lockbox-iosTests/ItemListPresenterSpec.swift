@@ -575,6 +575,8 @@ class ItemListPresenterSpec: QuickSpec {
                 it("tells the view to display an option sheet") {
                     expect(self.view.displayOptionSheetButtons).notTo(beNil())
                     expect(self.view.displayOptionSheetTitle).notTo(beNil())
+                    expect(self.view.displayOptionSheetButtons?.first?.checked).to(beTrue())
+                    expect(self.view.displayOptionSheetButtons?[1].checked).to(beFalse())
 
                     expect(self.view.displayOptionSheetTitle).to(equal(Constant.string.sortEntries))
                 }
