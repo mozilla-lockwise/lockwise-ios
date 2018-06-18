@@ -9,5 +9,6 @@ class SettingNavigationController: UINavigationController {
         let settingListView = UIStoryboard(name: "SettingList", bundle: .main)
                 .instantiateViewController(withIdentifier: "settinglist")
         self.init(rootViewController: settingListView)
+        self.view.backgroundColor = UIColor.white
     }
 }
