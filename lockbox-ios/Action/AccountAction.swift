@@ -8,19 +8,16 @@ import RxCocoa
 import RxOptional
 import FxAClient
 
-enum UserInfoAction: Action {
-    case profileInfo(info: Profile)
-    case load
+enum AccountAction: Action {
+    case oauthRedirect(url: URL)
     case clear
 }
 
-extension UserInfoAction: Equatable {
-    static func ==(lhs: UserInfoAction, rhs: UserInfoAction) -> Bool {
+extension AccountAction: Equatable {
+    static func ==(lhs: AccountAction, rhs: AccountAction) -> Bool {
         switch (lhs, rhs) {
-        case (.profileInfo(let lhInfo), .profileInfo(let rhInfo)):
-            return lhInfo == rhInfo
-        case (.load, .load):
-            return true
+        case (.oauthRedirect(let lhURL), .oauthRedirect(let rhURL)):
+            return lhURL == rhURL
         case (.clear, .clear):
             return true
         default:
@@ -29,8 +26,8 @@ extension UserInfoAction: Equatable {
     }
 }
 
-class UserInfoActionHandler: ActionHandler {
-    static let shared = UserInfoActionHandler()
+class AccountActionHandler: ActionHandler {
+    static let shared = AccountActionHandler()
     fileprivate var dispatcher: Dispatcher
     fileprivate let disposeBag = DisposeBag()
 
@@ -38,7 +35,7 @@ class UserInfoActionHandler: ActionHandler {
         self.dispatcher = dispatcher
     }
 
-    func invoke(_ action: UserInfoAction) {
+    func invoke(_ action: AccountAction) {
         self.dispatcher.dispatch(action: action)
     }
 }

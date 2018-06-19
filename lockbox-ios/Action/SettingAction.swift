@@ -120,3 +120,29 @@ enum ItemListSortSetting: String {
     case alphabetically
     case recentlyUsed
 }
+
+enum AutoLockSetting: String {
+    case OneMinute
+    case FiveMinutes
+    case OneHour
+    case TwelveHours
+    case TwentyFourHours
+    case Never
+
+    func toString() -> String {
+        switch self {
+        case .FiveMinutes:
+            return Constant.string.autoLockFiveMinutes
+        case .Never:
+            return Constant.string.autoLockNever
+        case .OneHour:
+            return Constant.string.autoLockOneHour
+        case .OneMinute:
+            return Constant.string.autoLockOneMinute
+        case .TwelveHours:
+            return Constant.string.autoLockTwelveHours
+        case .TwentyFourHours:
+            return Constant.string.autoLockTwentyFourHours
+        }
+    }
+}

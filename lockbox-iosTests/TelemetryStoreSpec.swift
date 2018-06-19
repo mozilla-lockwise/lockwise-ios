@@ -58,7 +58,7 @@ class TelemetryStoreSpec: QuickSpec {
                 }
 
                 it("does not pass through non-ItemDetailDisplayActions") {
-                    self.dispatcher.fakeRegistration.onNext(UserInfoAction.load)
+                    self.dispatcher.fakeRegistration.onNext(AccountAction.clear)
 
                     expect(telemetryObserver.events.count).to(equal(0))
                 }

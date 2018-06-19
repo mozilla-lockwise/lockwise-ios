@@ -33,18 +33,10 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeSettingActionHandler: SettingActionHandler {
-        var invokeArgument: SettingAction?
+    class FakeAccountActionHandler: AccountActionHandler {
+        var invokeArgument: AccountAction?
 
-        override func invoke(_ action: SettingAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
+        override func invoke(_ action: AccountAction) {
             self.invokeArgument = action
         }
     }
@@ -57,10 +49,18 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeAccountStore: AccountStore {
+        let loginURLStub = PublishSubject<URL>()
+
+        override var loginURL: Observable<URL> {
+            return self.loginURLStub.asObservable()
+        }
+    }
+
     private var view: FakeFxAView!
-    private var settingActionHandler: FakeSettingActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var accountActionHandler: FakeAccountActionHandler!
     private var routeActionHandler: FakeRouteActionHandler!
+    private var accountStore: FakeAccountStore!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -68,14 +68,14 @@ class FxAPresenterSpec: QuickSpec {
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
-                self.settingActionHandler = FakeSettingActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.accountActionHandler = FakeAccountActionHandler()
                 self.routeActionHandler = FakeRouteActionHandler()
+                self.accountStore = FakeAccountStore()
                 self.subject = FxAPresenter(
                         view: self.view,
-                        settingActionHandler: self.settingActionHandler,
+                        accountActionHandler: self.accountActionHandler,
                         routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler
+                        accountStore: self.accountStore
                 )
             }
 
@@ -85,7 +85,10 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("tells the view to load the login URL") {
-                    expect(self.view.loadRequestArgument?.url).to(equal(ProductionFirefoxAccountConfiguration().signInURL))
+                    let url = URL(string: "https://www.mozilla.org")!
+                    self.accountStore.loginURLStub.onNext(url)
+
+                    expect(self.view.loadRequestArgument).to(equal(URLRequest(url: url)))
                 }
             }
 

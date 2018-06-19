@@ -7,6 +7,7 @@ import RxSwift
 import RxCocoa
 import RxOptional
 import CoreGraphics
+import FxAClient
 
 protocol WelcomeViewProtocol: class, AlertControllerView {
     var loginButtonPressed: ControlEvent<Void> { get }
@@ -36,9 +37,9 @@ class WelcomePresenter {
 
     private let routeActionHandler: RouteActionHandler
     private let dataStoreActionHandler: DataStoreActionHandler
-    private let userInfoActionHandler: UserInfoActionHandler
+    private let userInfoActionHandler: AccountActionHandler
     private let linkActionHandler: LinkActionHandler
-    private let userInfoStore: UserInfoStore
+    private let accountStore: AccountStore
     private let dataStore: DataStore
     private let lifecycleStore: LifecycleStore
     private let biometryManager: BiometryManager
@@ -47,9 +48,9 @@ class WelcomePresenter {
     init(view: WelcomeViewProtocol,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared,
+         userInfoActionHandler: AccountActionHandler = AccountActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
-         userInfoStore: UserInfoStore = UserInfoStore.shared,
+         accountStore: AccountStore = AccountStore.shared,
          dataStore: DataStore = DataStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
@@ -58,7 +59,7 @@ class WelcomePresenter {
         self.dataStoreActionHandler = dataStoreActionHandler
         self.userInfoActionHandler = userInfoActionHandler
         self.linkActionHandler = linkActionHandler
-        self.userInfoStore = userInfoStore
+        self.accountStore = accountStore
         self.dataStore = dataStore
         self.lifecycleStore = lifecycleStore
         self.biometryManager = biometryManager
@@ -86,8 +87,6 @@ class WelcomePresenter {
                         returnRoute: LoginRouteAction.welcome))
             })
             .disposed(by: self.disposeBag)
-
-        self.userInfoActionHandler.invoke(.load)
     }
 
     private func setupBiometricLaunchers() {
@@ -97,7 +96,7 @@ class WelcomePresenter {
         }
 
         let lifecycleMindingLockedObservable = Observable.combineLatest(
-                        self.userInfoStore.profileInfo,
+                        self.accountStore.profile,
                         self.dataStore.locked.distinctUntilChanged(),
                         lifecycleObservable
                 )
@@ -108,7 +107,7 @@ class WelcomePresenter {
         guard let view = self.view else { return }
 
         let biometricButtonTapObservable = Observable.combineLatest(
-                    self.userInfoStore.profileInfo,
+                    self.accountStore.profile,
                     self.dataStore.locked.distinctUntilChanged(),
                     view.unlockButtonPressed.asObservable()
                 )
@@ -152,7 +151,7 @@ extension WelcomePresenter {
                 style: .alert)
     }
 
-    private func handleBiometrics(_ infoLockedObservable: Observable<(ProfileInfo?, Bool)>) {
+    private func handleBiometrics(_ infoLockedObservable: Observable<(Profile?, Bool)>) {
         infoLockedObservable
                 .filter { $0.1 }
                 .map { $0.0 }

@@ -11,6 +11,7 @@ import RxTest
 import UIKit
 import CoreGraphics
 import LocalAuthentication
+import FxAClient
 
 @testable import Lockbox
 
@@ -101,11 +102,11 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoStore: UserInfoStore {
-        var fakeProfileInfo = PublishSubject<ProfileInfo?>()
+    class FakeAccountStore: AccountStore {
+        var fakeProfile = PublishSubject<Profile?>()
 
-        override var profileInfo: Observable<ProfileInfo?> {
-            return self.fakeProfileInfo.asObservable()
+        override var profile: Observable<Profile?> {
+            return self.fakeProfile.asObservable()
         }
     }
 
@@ -154,7 +155,7 @@ class WelcomePresenterSpec: QuickSpec {
     private var routeActionHandler: FakeRouteActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var linkActionHandler: FakeLinkActionHandler!
-    private var userInfoStore: FakeUserInfoStore!
+    private var accountStore: FakeAccountStore!
     private var dataStore: FakeDataStore!
     private var lifecycleStore: FakeLifecycleStore!
     private var biometryManager: FakeBiometryManager!
@@ -164,7 +165,7 @@ class WelcomePresenterSpec: QuickSpec {
 
     override func spec() {
 
-        describe("LoginPresenter") {
+        describe("WelcomePresenter") {
             beforeEach {
                 self.view = FakeWelcomeView()
                 self.view.firstTimeMessageHiddenStub = self.scheduler.createObserver(Bool.self)
@@ -177,7 +178,7 @@ class WelcomePresenterSpec: QuickSpec {
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.linkActionHandler = FakeLinkActionHandler()
-                self.userInfoStore = FakeUserInfoStore()
+                self.accountStore = FakeAccountStore()
                 self.dataStore = FakeDataStore()
                 self.lifecycleStore = FakeLifecycleStore()
                 self.biometryManager = FakeBiometryManager()
@@ -186,7 +187,7 @@ class WelcomePresenterSpec: QuickSpec {
                         routeActionHandler: self.routeActionHandler,
                         dataStoreActionHandler: self.dataStoreActionHandler,
                         linkActionHandler: self.linkActionHandler,
-                        userInfoStore: self.userInfoStore,
+                        accountStore: self.accountStore,
                         dataStore: self.dataStore,
                         lifecycleStore: self.lifecycleStore,
                         biometryManager: self.biometryManager
@@ -391,7 +392,7 @@ class WelcomePresenterSpec: QuickSpec {
                             self.biometryManager.deviceAuthAvailableStub = true
                             self.subject.onViewReady()
                             self.dataStore.fakeLocked.onNext(true)
-                            self.userInfoStore.fakeProfileInfo.onNext(nil)
+                            self.accountStore.fakeProfile.onNext(nil)
                         }
 
                         it("hides the first time login message and the fxa login button") {

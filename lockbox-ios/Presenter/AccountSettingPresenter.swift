@@ -13,15 +13,15 @@ protocol AccountSettingViewProtocol: class, AlertControllerView {
 
 class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
-    let userInfoStore: UserInfoStore
+    let accountStore: AccountStore
     let routeActionHandler: RouteActionHandler
     let dataStoreActionHandler: DataStoreActionHandler
-    let userInfoActionHandler: UserInfoActionHandler
+    let accountActionHandler: AccountActionHandler
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dataStoreActionHandler.invoke(.reset)
-            target.userInfoActionHandler.invoke(.clear)
+            target.accountActionHandler.invoke(.clear)
         }.asObserver()
     }()
 
@@ -47,33 +47,31 @@ class AccountSettingPresenter {
     }()
 
     init(view: AccountSettingViewProtocol,
-         userInfoStore: UserInfoStore = UserInfoStore.shared,
+         accountStore: AccountStore = AccountStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared
+         accountActionHandler: AccountActionHandler = AccountActionHandler.shared
     ) {
         self.view = view
-        self.userInfoStore = userInfoStore
+        self.accountStore = accountStore
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
-        self.userInfoActionHandler = userInfoActionHandler
+        self.accountActionHandler = accountActionHandler
     }
 
     func onViewReady() {
-        let profileInfoObservable = self.userInfoStore.profileInfo
+        let profileObservable = self.accountStore.profile
                 .filterNil()
 
-        let displayNameDriver = profileInfoObservable
-                .map {
-                    $0.displayName ?? $0.email
-                }
+        let displayNameDriver = profileObservable
+                .map { $0.email }
                 .asDriver(onErrorJustReturn: "")
 
         self.view?.bind(displayName: displayNameDriver)
 
-        let avatarImageDriver = profileInfoObservable
+        let avatarImageDriver = profileObservable
                 .flatMap { info -> Observable<Data?> in
-                    guard let avatarURL = info.avatar else {
+                    guard let avatarURL = URL(string: info.avatar) else {
                         return Observable.just(nil)
                     }
 
@@ -84,7 +82,5 @@ class AccountSettingPresenter {
                 .filterNil()
 
         self.view?.bind(avatarImage: avatarImageDriver)
-
-        self.userInfoActionHandler.invoke(.load)
     }
 }

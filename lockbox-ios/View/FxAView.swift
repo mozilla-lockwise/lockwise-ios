@@ -6,6 +6,7 @@ import WebKit
 import UIKit
 import RxSwift
 import RxCocoa
+import SwiftyJSON
 import FxAClient
 
 class FxAView: UIViewController {
@@ -57,9 +58,8 @@ extension FxAView: WKNavigationDelegate {
            let expectedRedirectURL = URL(string: Constant.fxa.redirectURI) {
             if navigationURL.scheme == expectedRedirectURL.scheme &&
                        navigationURL.host == expectedRedirectURL.host &&
-                       navigationURL.path == expectedRedirectURL.path,
-               let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true) {
-                self.presenter?.matchingRedirectURLReceived(components)
+                       navigationURL.path == expectedRedirectURL.path {
+               self.presenter?.matchingRedirectURLReceived(navigationURL)
                 decisionHandler(.cancel)
                 return
             }

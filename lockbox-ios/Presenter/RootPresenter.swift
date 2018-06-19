@@ -30,7 +30,7 @@ class RootPresenter {
     fileprivate let routeStore: RouteStore
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
-    fileprivate let autoLockStore: AutoLockStore
+    fileprivate let accountStore: AccountStore
     fileprivate let userDefaults: UserDefaults
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
@@ -44,7 +44,7 @@ class RootPresenter {
          routeStore: RouteStore = RouteStore.shared,
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
-         autoLockStore: AutoLockStore = AutoLockStore.shared,
+         accountStore: AccountStore = AccountStore.shared,
          userDefaults: UserDefaults = UserDefaults.standard,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
@@ -55,13 +55,26 @@ class RootPresenter {
         self.routeStore = routeStore
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
-        self.autoLockStore = autoLockStore
+        self.accountStore = accountStore
         self.userDefaults = userDefaults
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
+        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
+            .bind { latest in
+                    if let oauthInfo = latest.0,
+                        let profile = latest.1 {
+                        self.dataStoreActionHandler.invoke(.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                    } else {
+                        self.routeActionHandler.invoke(MainRouteAction.list)
+                    }
+                }
+                .disposed(by: self.disposeBag)
+
+        // I think some of the datastore-based routing can go away but it's a little too much
+        // to do this evening :p
         self.dataStore.storageState
             .subscribe(onNext: { storageState in
                     switch storageState {

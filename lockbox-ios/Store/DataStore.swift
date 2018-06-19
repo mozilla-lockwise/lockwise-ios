@@ -2,7 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Account
 import Foundation
+import FxAClient
 import FxAUtils
 import RxSwift
 import RxCocoa
@@ -76,7 +78,7 @@ public enum LoginStoreError: Error {
     case Locked
 }
 
-public typealias ProfileFactory = (_ reset: Bool) -> Profile
+public typealias ProfileFactory = (_ reset: Bool) -> FxAUtils.Profile
 
 private let defaultProfileFactory: ProfileFactory = { reset in
     BrowserProfile(localName: "lockbox-profile", clear: reset)
@@ -84,6 +86,7 @@ private let defaultProfileFactory: ProfileFactory = { reset in
 
 class DataStore {
     public static let shared = DataStore()
+
     private let disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[Login]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
@@ -92,7 +95,8 @@ class DataStore {
     private let fxaLoginHelper: FxALoginHelper
     private let profileFactory: ProfileFactory
     private let keychainWrapper: KeychainWrapper
-    private var profile: Profile
+    private var profile: FxAUtils.Profile
+    private let dispatcher: Dispatcher
 
     public var list: Observable<[Login]> {
         return self.listSubject.asObservable()
@@ -118,6 +122,7 @@ class DataStore {
         self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper
 
+        self.dispatcher = dispatcher
         self.profile = profileFactory(false)
         self.initializeProfile()
         self.registerNotificationCenter()
@@ -126,8 +131,8 @@ class DataStore {
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
                     switch action {
-                    case let .initialize(blob:data):
-                        self.login(data)
+                    case .updateCredentials(let oauthInfo, let fxaProfile):
+                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile)
                     case .reset:
                         self.reset()
                     case .sync:
@@ -197,6 +202,29 @@ extension DataStore {
     public func login(_ data: JSON) {
         self.storageStateSubject.onNext(.Preparing)
         self.fxaLoginHelper.application(UIApplication.shared, didReceiveAccountJSON: data)
+    }
+}
+
+extension DataStore {
+    public func updateCredentials(_ oauthInfo: OAuthInfo, fxaProfile: FxAClient.Profile) {
+        guard let keysString = oauthInfo.keys else {
+            return
+        }
+
+        let keys = JSON(parseJSON: keysString)
+        let scopedKey = keys[Constant.fxa.scope]
+
+        guard let account = profile.getAccount() else {
+            _ = fxaLoginHelper.application(UIApplication.shared,
+                                           email: fxaProfile.email,
+                                           accessToken: oauthInfo.accessToken,
+                                           oauthKeys: scopedKey)
+            return
+        }
+
+        if let oauthInfoKey = OAuthInfoKey(from: scopedKey) {
+            account.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
+        }
     }
 }
 
@@ -329,6 +357,7 @@ extension DataStore {
         switch (storageState, syncState, notification.name) {
         case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
             storageStateSubject.onNext(.Preparing)
+            syncSubject.onNext(.Syncing)
         case (.Preparing, _, NotificationNames.ProfileDidStartSyncing):
             // we're retrying: we haven't been able to verify up til now.
             break

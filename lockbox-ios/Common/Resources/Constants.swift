@@ -35,6 +35,7 @@ struct Constant {
     struct fxa {
         static let redirectURI = "https://lockbox.firefox.com/fxa/ios-redirect.html"
         static let clientID = "98adfa37698f255b"
+        static let scope = "https://identity.mozilla.com/apps/oldsync"
     }
 
     struct string {
