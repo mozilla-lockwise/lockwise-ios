@@ -19,11 +19,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Firefox Lockbox" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1X7-W0-IdI">
-                                <rect key="frame" x="47.5" y="120" width="280" height="57.5"/>
+                                <rect key="frame" x="47.5" y="120" width="280" height="63.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="UEQ-zs-kt8"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="24"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -39,7 +39,7 @@
                                 </state>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ILz-8a-YAs">
-                                <rect key="frame" x="53" y="237.5" width="270" height="50"/>
+                                <rect key="frame" x="53" y="243.5" width="270" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afK-Kw-Hqs">
                                         <rect key="frame" x="52" y="2" width="218" height="39"/>
@@ -72,7 +72,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="anP-8K-MP2">
-                                <rect key="frame" x="53" y="329.5" width="250" height="55"/>
+                                <rect key="frame" x="53" y="335.5" width="250" height="55"/>
                                 <subviews>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-security" translatesAutoresizingMaskIntoConstraints="NO" id="eQV-Fs-Zzb">
                                         <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
@@ -113,7 +113,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2G-1m-pMw">
-                                <rect key="frame" x="53" y="426.5" width="250" height="50"/>
+                                <rect key="frame" x="53" y="432.5" width="250" height="50"/>
                                 <subviews>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-convenience" translatesAutoresizingMaskIntoConstraints="NO" id="mx9-SP-qEc">
                                         <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
