@@ -542,6 +542,10 @@ class ItemListPresenterSpec: QuickSpec {
                         let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
                         expect(argument).to(equal(MainRouteAction.detail(itemId: id)))
                     }
+
+                    it("dismisses the keyboard") {
+                        expect(self.view.dismissKeyboardCalled).to(beTrue())
+                    }
                 }
 
                 describe("when the item does not have an id") {
@@ -575,6 +579,8 @@ class ItemListPresenterSpec: QuickSpec {
                 it("tells the view to display an option sheet") {
                     expect(self.view.displayOptionSheetButtons).notTo(beNil())
                     expect(self.view.displayOptionSheetTitle).notTo(beNil())
+                    expect(self.view.displayOptionSheetButtons?.first?.checked).to(beTrue())
+                    expect(self.view.displayOptionSheetButtons?[1].checked).to(beFalse())
 
                     expect(self.view.displayOptionSheetTitle).to(equal(Constant.string.sortEntries))
                 }
