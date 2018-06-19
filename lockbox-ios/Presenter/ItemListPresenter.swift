@@ -98,22 +98,29 @@ class ItemListPresenter {
 
     lazy private(set) var sortingButtonObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.view?.displayAlertController(buttons: [
-                AlertActionButtonConfiguration(
-                        title: Constant.string.alphabetically,
-                        tapObserver: target.alphabeticSortObserver,
-                        style: .default),
-                AlertActionButtonConfiguration(
-                        title: Constant.string.recentlyUsed,
-                        tapObserver: target.recentlyUsedSortObserver,
-                        style: .default),
-                AlertActionButtonConfiguration(
-                        title: Constant.string.cancel,
-                        tapObserver: nil,
-                        style: .cancel)],
-                    title: Constant.string.sortEntries,
-                    message: nil,
-                    style: .actionSheet)
+            self.userDefaults.onItemListSort
+                .take(1)
+                .subscribe(onNext: { evt in
+                let latest = evt
+                target.view?.displayAlertController(buttons: [
+                    AlertActionButtonConfiguration(
+                            title: Constant.string.alphabetically,
+                            tapObserver: target.alphabeticSortObserver,
+                            style: .default,
+                            checked: latest == ItemListSortSetting.alphabetically),
+                    AlertActionButtonConfiguration(
+                            title: Constant.string.recentlyUsed,
+                            tapObserver: target.recentlyUsedSortObserver,
+                            style: .default,
+                            checked: latest == ItemListSortSetting.recentlyUsed),
+                    AlertActionButtonConfiguration(
+                            title: Constant.string.cancel,
+                            tapObserver: nil,
+                            style: .cancel)],
+                        title: Constant.string.sortEntries,
+                        message: nil,
+                        style: .actionSheet)
+            }).disposed(by: self.disposeBag)
         }.asObserver()
     }()
 
