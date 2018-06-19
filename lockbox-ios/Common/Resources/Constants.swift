@@ -12,9 +12,10 @@ struct Constant {
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let privacyURL = "https://lockbox.firefox.com/privacy.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input"
-        static let useLockboxFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-use-firefox-lockbox"
-        static let enableSyncFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-enable-sync-on-firefox"
-        static let editExistingEntriesFAQ = "https://lockbox.firefox.com/faq.html#how-do-i-edit-existing-entries"
+        static let useLockboxFAQ = faqURL + "#how-do-i-use-firefox-lockbox"
+        static let enableSyncFAQ = faqURL + "#how-do-i-enable-sync-on-firefox"
+        static let editExistingEntriesFAQ = faqURL + "#how-do-i-edit-existing-entries"
+        static let securityFAQ = faqURL + "#what-security-technology-does-firefox-lockbox-use"
     }
 
     struct color {
@@ -98,6 +99,7 @@ struct Constant {
         static let syncingYourEntries = NSLocalizedString("syncing_entries", value: "Syncing your entries", comment: "Label and accessibility callout for syncing your entries spinner and HUD")
         static let doneSyncingYourEntries = NSLocalizedString("syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
         static let installBrowserAccessibilityLabel = NSLocalizedString("install_browser_prompt", value: "%@ disabled, install this browser to make it available", comment: "Accessibility instructions for disabled web browser options")
+        static let onboardingSecurityPostfix = NSLocalizedString("onboarding.encryption", value: "256-bit encryption", comment: "Name of link to algorithm used by Lockbox for encryption")
     }
 
     struct number {

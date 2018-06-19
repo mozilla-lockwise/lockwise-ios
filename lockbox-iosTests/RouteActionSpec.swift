@@ -124,6 +124,7 @@ class RouteActionSpec: QuickSpec {
                 it("event object is equal to the login view shown") {
                     expect(LoginRouteAction.welcome.eventObject).to(equal(TelemetryEventObject.loginWelcome))
                     expect(LoginRouteAction.fxa.eventObject).to(equal(TelemetryEventObject.loginFxa))
+                    expect(LoginRouteAction.onboardingConfirmation.eventObject).to(equal(TelemetryEventObject.loginOnboardingConfirmation))
                 }
 
                 it("returns nil as the value") {

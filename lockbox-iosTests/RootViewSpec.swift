@@ -96,6 +96,17 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(FxAView.self)).toEventually(beTrue(), timeout: 20)
                     }
                 }
+
+                describe("onboardingConfirmation") {
+                    beforeEach {
+                        self.subject.startMainStack(LoginNavigationController.self)
+                        self.subject.pushLoginView(view: LoginRouteAction.onboardingConfirmation)
+                    }
+
+                    it("makes the onboardingconfirmation the top view") {
+                        expect(self.subject.topViewIs(OnboardingConfirmationView.self)).toEventually(beTrue(), timeout: 20)
+                    }
+                }
             }
 
             describe("displaying main stack after login stack") {
