@@ -140,8 +140,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
-                    cell.addGestureRecognizer(self.longPress)
-
                     if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
 
@@ -163,6 +161,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
     fileprivate func setupDelegate() {
         if let presenter = self.presenter {
+            self.tableView.addGestureRecognizer(self.longPress)
+
             self.tableView.rx.itemSelected
                     .map { path -> String? in
                         guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
@@ -174,9 +174,12 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     .bind(to: presenter.onCellTapped)
                     .disposed(by: self.disposeBag)
 
-            longPress.rx.event.map({ a -> String? in
-                if let cell = a.view as? ItemDetailCell {
-                    return cell.titleLabel?.text
+            longPress.rx.event.map({ gesture -> String? in
+                let loc = gesture.location(in: self.tableView)
+                if let path = self.tableView.indexPathForRow(at: loc) {
+                    if let cell = self.tableView.cellForRow(at: path) as? ItemDetailCell {
+                        return cell.titleLabel?.text
+                    }
                 }
                 return nil
             })
