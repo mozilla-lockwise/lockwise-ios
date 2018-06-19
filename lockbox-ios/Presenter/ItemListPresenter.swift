@@ -53,6 +53,10 @@ class ItemListPresenter {
                 return
             }
 
+            if let view = target.view {
+                view.dismissKeyboard()
+            }
+
             target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
         }.asObserver()
     }()
