@@ -71,6 +71,7 @@ extension SettingListView {
                 cell.textLabel?.text = cellConfiguration.text
                 cell.selectionStyle = UITableViewCellSelectionStyle.none
                 cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
+                cell.accessibilityIdentifier = cellConfiguration.text
 
                 if cellConfiguration.subtitle != nil {
                     cell.detailTextLabel?.attributedText = cellConfiguration.subtitle

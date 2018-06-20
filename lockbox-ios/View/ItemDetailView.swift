@@ -137,6 +137,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.valueLabel.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
+                    cell.accessibilityIdentifier = cellConfiguration.title
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 
