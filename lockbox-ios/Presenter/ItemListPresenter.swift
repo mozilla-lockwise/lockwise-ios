@@ -241,7 +241,6 @@ class ItemListPresenter {
                 settingButtonObserver: settingButtonObserver
         )
 
-        self.itemListDisplayActionHandler.invoke(ItemListSortingAction.alphabetically)
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
         self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
     }
@@ -380,7 +379,7 @@ extension ItemListPresenter {
 
     fileprivate func setupButtonBehavior(
             view: ItemListViewProtocol,
-            itemSortObservable: Observable<ItemListSortingAction>,
+            itemSortObservable: Observable<ItemListSortSetting>,
             sortButtonObserver: AnyObserver<Bool>,
             settingButtonObserver: AnyObserver<Bool>) {
         let itemSortTextDriver = itemSortObservable
