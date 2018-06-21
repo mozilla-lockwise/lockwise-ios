@@ -1,5 +1,24 @@
 # Release Notes
 
+## 1.1 (Build 1473)
+
+The last version was approved for the App Store! So we fixed some bugs and did a little more. We will submit another version for the public release shortly so please keep testing and help us make sure this is still stable.
+
+What's NEW? Improved accessibility, better indicators and buttons, list sorting bug fixes, and a new "welcome" screen on first run.
+
+Features and functionality include:
+
+- signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox
+- automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data
+- searching and sorting items
+- pull to manually refresh your list of items
+- user-friendly item titles to help with readability
+- showing/hiding passwords
+- copying usernames and passwords to the pasteboard (which expire after 60 seconds)
+- opening web addresses in your preferred web browser
+- meaningful instructions when you need to confirm your sign in, or if you have no items
+- Telemetry for event tracking (no personally-identifiable information is collected)
+
 ## 1.0 (Build 1387)
 
 This version will be submitted to the App Store! 
