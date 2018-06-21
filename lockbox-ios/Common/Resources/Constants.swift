@@ -110,6 +110,7 @@ struct Constant {
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
         static let copyExpireTimeSecs = 60
+        static let minimumSpinnerHUDTime = TimeInterval(1.0)
     }
 
     struct setting {

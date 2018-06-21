@@ -216,16 +216,20 @@ class ItemListPresenterSpec: QuickSpec {
                                     LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                                     LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                 ]
-                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                                let configuration = self.view.itemsObserver.events.last!.value.element!
-                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).toEventually(equal(expectedItemConfigurations), timeout: 2.5)
                             }
 
                             describe("tapping the learnMore button in the empty list placeholder") {
                                 beforeEach {
-                                    let configuration = self.view.itemsObserver.events.last!.value.element!
+                                    let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
+                                    let expectedItemConfigurations = [
+                                        LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
+                                        LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
+                                    ]
+                                    expect(self.view.itemsObserver.events.last!.value.element!.first!.items).toEventually(equal(expectedItemConfigurations), timeout: 2.5)
 
-                                    let emptyListPlaceholder = configuration.first!.items[1] as! LoginListCellConfiguration
+                                    let configuration = self.view.itemsObserver.events.last!.value.element
+                                    let emptyListPlaceholder = configuration!.first!.items[1]
                                     if case let .EmptyListPlaceholder(learnMoreObserver) = emptyListPlaceholder {
                                         learnMoreObserver.onNext(())
                                     } else {

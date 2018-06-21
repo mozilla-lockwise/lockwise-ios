@@ -89,6 +89,7 @@ extension UIViewController: SpinnerAlertView {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Constant.string.syncingYourEntries)
 
             dismiss
+                    .delay(Constant.number.minimumSpinnerHUDTime)
                     .drive(onNext: { _ in
                         UIAccessibilityPostNotification(
                                 UIAccessibilityAnnouncementNotification,
