@@ -41,6 +41,9 @@
                                 <state key="normal" title="Disconnect Firefox Lockbox">
                                     <color key="titleColor" red="0.99718213081359863" green="0.2334609180688858" blue="0.1882847398519516" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="disconnectFirefoxLockbox.button"/>
+                                </userDefinedRuntimeAttributes>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This removes synced entries from Firefox Lockbox, but will not delete your entries from Firefox." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
                                 <rect key="frame" x="15" y="582" width="345" height="35"/>
@@ -60,6 +63,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="username.Label"/>
+                                </userDefinedRuntimeAttributes>
                             </label>
                         </subviews>
                         <constraints>

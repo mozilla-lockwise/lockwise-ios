@@ -281,6 +281,7 @@ extension ItemListView {
 
     private var prefButton: UIButton {
         let button = UIButton()
+        button.accessibilityIdentifier = "settings.button"
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         button.accessibilityLabel = Constant.string.settingsAccessibilityID
         let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
@@ -297,6 +298,7 @@ extension ItemListView {
     private var sortingButton: UIButton {
         let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
         // custom width constraint so "Recent" fits on small iPhone SE screen
+        button.accessibilityIdentifier = "sorting.button"
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addConstraint(NSLayoutConstraint(
                 item: button,

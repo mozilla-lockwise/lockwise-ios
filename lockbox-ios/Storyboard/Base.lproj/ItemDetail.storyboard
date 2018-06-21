@@ -56,6 +56,9 @@
                                                     <state key="normal" image="reveal-eye"/>
                                                     <state key="selected" image="hide-eye"/>
                                                     <state key="highlighted" image="hide-eye"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="reveal.button"/>
+                                                    </userDefinedRuntimeAttributes>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -85,6 +88,9 @@
                                 <state key="normal" title="Learn how to edit this entry" image="arrowhead-right-16">
                                     <color key="titleColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="learnEditEntry.button"/>
+                                </userDefinedRuntimeAttributes>
                             </button>
                         </subviews>
                         <constraints>
