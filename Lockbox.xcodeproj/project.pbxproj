@@ -74,6 +74,7 @@
 		7AA548BBE384D40397D26E9B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA546C351E7D7C7DE3BEF0C /* RootView.swift */; };
 		7AA5493A70D5B26D3FF1808B /* StaticURLPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA545D5E7A7EB65733B8A8A /* StaticURLPresenter.swift */; };
 		7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA545A802C0592A820AD230 /* Date+Spec.swift */; };
+		7AA54A18A8CB61CD8D086821 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CF29E6B76D6894A841E /* SnapshotHelper.swift */; };
 		7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA545A7472772984D517CB0 /* ErrorActionSpec.swift */; };
 		7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA547106248ADBADAF76239 /* ItemDetailCell.swift */; };
 		7AA54AA7964A1C95FDB7AA6E /* UserDefaults+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA546618500E909B1E98632 /* UserDefaults+Spec.swift */; };
@@ -329,6 +330,7 @@
 		7AA54C72B63B2B4C8200F3F8 /* RootPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootPresenterSpec.swift; sourceTree = "<group>"; };
 		7AA54C7A277D5D7C03F4F453 /* MainNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainNavigationController.swift; sourceTree = "<group>"; };
 		7AA54CDEA56C47263160AD0E /* Dispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatcher.swift; sourceTree = "<group>"; };
+		7AA54CF29E6B76D6894A841E /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		7AA54D3C8D454F79BD580AAF /* UserDefaults+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
 		7AA54D4E439D76B910034E2A /* ErrorAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorAction.swift; sourceTree = "<group>"; };
 		7AA54DC6857783DACB5DA3EC /* ExternalWebsiteNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalWebsiteNavigationController.swift; sourceTree = "<group>"; };
@@ -489,6 +491,7 @@
 				2C2EC55620ADA85A00AF8C44 /* Info.plist */,
 				2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */,
 				2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */,
+				7AA54CF29E6B76D6894A841E /* SnapshotHelper.swift */,
 			);
 			path = LockboxXCUITests;
 			sourceTree = "<group>";
@@ -1090,6 +1093,7 @@
 				2C2EC55520ADA85A00AF8C44 /* LockboxXCUITests.swift in Sources */,
 				2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */,
 				2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */,
+				7AA54A18A8CB61CD8D086821 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

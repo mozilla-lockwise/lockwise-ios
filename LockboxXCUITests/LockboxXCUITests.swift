@@ -10,6 +10,7 @@ let passwordTestAccountLogins = "FRCuQaPm"
 class LockboxXCUITests: BaseTestCase {
 
     func test1LoginWithSavedLogins() {
+        snapshot("01Welcome" + CONTENT_SIZE)
         navigator.goto(Screen.FxASigninScreen)
         waitforExistence(app.webViews.textFields["Email"])
 
@@ -18,12 +19,12 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.webViews.staticTexts["Valid email required"])
 
         // Try incorrect Email then correct and tap on Sign In
-        userState.fxaUsername = "test"
+        userState.fxaUsername = "sasha"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.webViews.staticTexts["Valid email required"])
 
-        userState.fxaUsername = "-b62feb2ed6@restmail.net"
+        userState.fxaUsername = "+test1@mozilla.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.webViews.staticTexts["Valid password required"])
@@ -45,8 +46,9 @@ class LockboxXCUITests: BaseTestCase {
 
         // App should start showing the main page
         // Instead of waiting we could pull down to refresh to force the logins appear and so the buttons are available
-        waitforExistence(app.buttons["Finish"])
-        app.buttons["Finish"].tap()
+        waitforExistence(app.buttons["finish.button"])
+        app.buttons["finish.button"].tap()
+        sleep(8)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         XCTAssertTrue(app.buttons["sorting.button"].exists)
 
@@ -55,6 +57,7 @@ class LockboxXCUITests: BaseTestCase {
 
         XCTAssertTrue(app.navigationBars["Firefox Lockbox"].exists)
         XCTAssertTrue(app.navigationBars.buttons["Settings"].exists)
+        snapshot("02EntryList" + CONTENT_SIZE)
 
         // Go to Settings to disable the AutoLock
         // This is a temporary workaround needed to run other tests after this one until defining a tearDown
@@ -81,6 +84,8 @@ class LockboxXCUITests: BaseTestCase {
 
     func test2SettingsAccountUI() {
         waitforExistence(app.navigationBars["Firefox Lockbox"])
+        snapshot("03Settings" + CONTENT_SIZE)
+
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["Account"])
         // Some checks can be done here to be sure the Account UI is fine
@@ -131,8 +136,8 @@ class LockboxXCUITests: BaseTestCase {
         // In small screens it is necessary to dismiss the keyboard
         app.buttons["Done"].tap()
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.buttons["Finish"])
-        app.buttons["Finish"].tap()
+        waitforExistence(app.buttons["finish.button"])
+        app.buttons["finish.button"].tap()
         waitforExistence(app.navigationBars["Firefox Lockbox"])
     }
 

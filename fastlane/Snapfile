@@ -1,0 +1,14 @@
+# Uncomment the lines below you want to change by removing the # in the beginning
+
+# A list of devices you want to take the screenshots from
+devices([
+  "iPhone 8"
+])
+
+languages([
+  "en-US",
+  "de-DE"
+])
+
+# The name of the scheme which contains the UI Tests
+scheme "uispecs"

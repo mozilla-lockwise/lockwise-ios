@@ -5,6 +5,8 @@
 import MappaMundi
 import XCTest
 
+let CONTENT_SIZE = "UICTContentSizeCategoryL"
+
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<LockboxUserState>!
     let app =  XCUIApplication()
@@ -18,6 +20,8 @@ class BaseTestCase: XCTestCase {
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
+        setupSnapshot(app)
+        app.launchArguments += [ "-UIPreferredContentSizeCategoryName", CONTENT_SIZE ]
         app.launch()
         setUpScreenGraph()
     }
