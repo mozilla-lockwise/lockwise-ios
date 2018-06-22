@@ -31,7 +31,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="44" id="Vkm-HP-o1P"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <state key="normal" title="Lock Now">
                                                 <color key="titleColor" red="0.92210751769999999" green="0.34308279600000002" blue="0.25726911990000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             </state>

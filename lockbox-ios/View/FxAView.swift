@@ -164,6 +164,7 @@ class LeakAvoider: NSObject, WKScriptMessageHandler {
 extension FxAView: UIGestureRecognizerDelegate {
     fileprivate func setupNavBar() {
         let leftButton = UIButton(title: Constant.string.close, imageName: nil)
+        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if #available(iOS 11.0, *) {

@@ -258,10 +258,6 @@ extension ItemListView {
 extension ItemListView {
     fileprivate func styleNavigationBar() {
         self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
-        ]
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
@@ -269,7 +265,7 @@ extension ItemListView {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
         ]
 
         if #available(iOS 11.0, *) {
@@ -296,6 +292,10 @@ extension ItemListView {
     private var prefButton: UIButton {
         let button = UIButton()
         button.accessibilityIdentifier = "settings.button"
+        if #available(iOS 11.0, *) {
+            button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        }
+
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         button.accessibilityLabel = Constant.string.settingsAccessibilityID
         let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
@@ -311,9 +311,13 @@ extension ItemListView {
 
     private var sortingButton: UIButton {
         let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         // custom width constraint so "Recent" fits on small iPhone SE screen
         button.accessibilityIdentifier = "sorting.button"
         button.translatesAutoresizingMaskIntoConstraints = false
+        if #available(iOS 11.0, *) {
+            button.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        }
         button.addConstraint(NSLayoutConstraint(
                 item: button,
                 attribute: .width,
@@ -335,6 +339,9 @@ extension ItemListView {
         let searchImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40.0, height: cell.frame.height))
         searchImageView.contentMode = .center
         searchImageView.image = searchImage
+        if #available(iOS 11.0, *) {
+            searchImageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        }
 
         cell.filterTextField.leftView = searchImageView
         cell.filterTextField.leftViewMode = .always

@@ -73,6 +73,9 @@ extension SettingListView {
                 cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
                 cell.accessibilityIdentifier = cellConfiguration.text
 
+                cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+                cell.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: .caption2)
+
                 if cellConfiguration.subtitle != nil {
                     cell.detailTextLabel?.attributedText = cellConfiguration.subtitle
                     cell.detailTextLabel?.numberOfLines = 0
@@ -116,7 +119,7 @@ extension SettingListView {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
         ]
 
         if #available(iOS 11.0, *) {
@@ -127,7 +130,10 @@ extension SettingListView {
                 style: .plain,
                 target: nil,
                 action: nil)
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .body)
+        ], for: .normal)
 
         if let presenter = presenter {
             navigationItem.rightBarButtonItem?.rx.tap

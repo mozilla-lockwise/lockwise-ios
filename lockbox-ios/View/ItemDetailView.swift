@@ -96,6 +96,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
         let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if #available(iOS 11.0, *) {
