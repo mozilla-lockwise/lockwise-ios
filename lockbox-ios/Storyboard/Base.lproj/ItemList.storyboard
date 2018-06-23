@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="EJh-kX-2nu">
-                                    <rect key="frame" x="0.0" y="1031" width="375" height="0.29999999999999999"/>
+                                    <rect key="frame" x="0.0" y="1331" width="375" height="0.29999999999999999"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66042751736111116" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
@@ -36,7 +36,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="center" horizontalHuggingPriority="249" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your entries" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DEF-qU-5KB">
-                                                    <rect key="frame" x="40" y="0.0" width="287" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="filterEntries.textField"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="44" id="fe1-O9-xUl"/>
@@ -214,8 +214,59 @@
                                             <outlet property="learnMoreButton" destination="aQB-Vr-ObR" id="rtw-oq-uuY"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="noresultsplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="noresultsplaceholder" rowHeight="300" id="k0g-dg-N0G" customClass="NoResultsCell" customModule="Lockbox" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="685" width="375" height="300"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="k0g-dg-N0G" id="CRM-Km-Zcb">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see more entries here, you'll need to save them to Firefox for desktop." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpV-eG-grp">
+                                                    <rect key="frame" x="47.5" y="56" width="280" height="31.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="280" id="gFp-Ms-L2p"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="0.45098039220000002" green="0.45098039220000002" blue="0.45098039220000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
+                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="161.5"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XXw-4F-3gz"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="90" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <state key="normal" title="Learn more" image="arrowhead-right-16">
+                                                        <color key="titleColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No matching entries." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qZc-w1-SRT">
+                                                    <rect key="frame" x="116.5" y="30" width="142.5" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5gN-a0-N6V" firstAttribute="centerX" secondItem="CRM-Km-Zcb" secondAttribute="centerX" id="0AY-Tb-Pk2"/>
+                                                <constraint firstItem="qZc-w1-SRT" firstAttribute="centerX" secondItem="CRM-Km-Zcb" secondAttribute="centerX" id="3Lg-YO-zXq"/>
+                                                <constraint firstItem="JpV-eG-grp" firstAttribute="top" secondItem="qZc-w1-SRT" secondAttribute="bottom" constant="8" id="N96-1f-aJa"/>
+                                                <constraint firstItem="qZc-w1-SRT" firstAttribute="top" secondItem="CRM-Km-Zcb" secondAttribute="top" constant="30" id="SXi-MY-ROe"/>
+                                                <constraint firstItem="5gN-a0-N6V" firstAttribute="top" secondItem="JpV-eG-grp" secondAttribute="bottom" constant="15" id="eco-Sw-LZX"/>
+                                                <constraint firstItem="JpV-eG-grp" firstAttribute="centerX" secondItem="CRM-Km-Zcb" secondAttribute="centerX" id="qbU-gW-BOo"/>
+                                                <constraint firstAttribute="bottom" secondItem="5gN-a0-N6V" secondAttribute="bottom" constant="35" id="qph-D4-OMm"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <outlet property="learnMoreButton" destination="5gN-a0-N6V" id="WTm-PM-Xqd"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="preparingplaceholder" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" indentationWidth="10" reuseIdentifier="preparingplaceholder" rowHeight="346" id="uLU-A3-JOv" userLabel="preparingplaceholder">
-                                        <rect key="frame" x="0.0" y="685" width="375" height="346"/>
+                                        <rect key="frame" x="0.0" y="985" width="375" height="346"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uLU-A3-JOv" id="c86-fZ-K2X">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="345.5"/>

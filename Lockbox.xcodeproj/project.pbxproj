@@ -186,6 +186,7 @@
 		D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */; };
 		D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */; };
 		D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */; };
+		D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -422,6 +423,7 @@
 		D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsViewSpec.swift; sourceTree = "<group>"; };
 		D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingView.swift; sourceTree = "<group>"; };
 		D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenter.swift; sourceTree = "<group>"; };
+		D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResultsCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -582,6 +584,7 @@
 				7AA54B0FC602D0A79D87D3BD /* FilterCell.swift */,
 				D83CBE2B2085488D008245A7 /* SettingCell.swift */,
 				7AA54B659468B5C0D7C3E353 /* EmptyPlaceholderCell.swift */,
+				D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -1202,6 +1205,7 @@
 				7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */,
 				D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */,
+				D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift in Sources */,
 				7AA547376945C001B151491A /* ItemDetailAction.swift in Sources */,
 				7AA54EC7A9CA9BBD57AFEAF9 /* FilterCell.swift in Sources */,
 				7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */,

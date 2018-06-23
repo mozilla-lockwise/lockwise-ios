@@ -15,6 +15,7 @@ enum LoginListCellConfiguration {
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
     case PreparingPlaceholder
+    case NoResults(learnMoreObserver: AnyObserver<Void>)
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -30,6 +31,8 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "emptyplaceholder"
         case .PreparingPlaceholder:
             return "preparingplaceholder"
+        case .NoResults:
+            return "noresultsplaceholder"
         }
     }
 }
@@ -43,6 +46,7 @@ extension LoginListCellConfiguration: Equatable {
         case (.SyncListPlaceholder, .SyncListPlaceholder): return true
         case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
         case (.PreparingPlaceholder, .PreparingPlaceholder): return true
+        case (.NoResults, .NoResults): return true
         default:
             return false
         }
@@ -195,6 +199,16 @@ extension ItemListView {
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "preparingplaceholder") else {
                             fatalError("couldn't find the right cell!")
                         }
+
+                        retCell = cell
+                    case .NoResults(let learnMoreObserver):
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder") as? NoResultsCell else {
+                            fatalError("couldn't find the no results cell")
+                        }
+
+                        cell.learnMoreButton.rx.tap
+                            .bind(to: learnMoreObserver)
+                            .disposed(by: cell.disposeBag)
 
                         retCell = cell
                     }

@@ -156,6 +156,12 @@ class ItemListPresenter {
         )
     ]
 
+    lazy private var noResultsPlaceholderItems = [
+        ItemSectionModel(model: 0, items: self.searchItem +
+                [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreObserver)]
+        )
+    ]
+
     lazy private var preparingPlaceholderItems = [
         ItemSectionModel(model: 0, items: self.searchItem +
                 [LoginListCellConfiguration.PreparingPlaceholder]
@@ -298,6 +304,10 @@ extension ItemListPresenter {
                                     return lhs.timeLastUsed > rhs.timeLastUsed
                                 }
                             }
+
+                    if sortedFilteredItems.count == 0 {
+                        return self.noResultsPlaceholderItems
+                    }
 
                     return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems))]
                 }
