@@ -376,6 +376,24 @@ class ItemListPresenterSpec: QuickSpec {
                                 expect(configuration.first!.items).to(equal(expectedItemConfigurations))
                             }
                         }
+
+                        describe("when there are no results") {
+                            beforeEach {
+                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "blahblahblah"))
+                            }
+
+                            it("updates the view with the appropriate items") {
+                                let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
+                                let expectedItemConfigurations = [
+                                    LoginListCellConfiguration.Search(enabled: Observable.just(true), cancelHidden: Observable.just(true), text: Observable.just("")),
+                                    LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver)
+                                ]
+
+                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                let configuration = self.view.itemsObserver.events.last!.value.element!
+                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                            }
+                        }
                     }
 
                     xdescribe("when sorting method switches to recently used") {

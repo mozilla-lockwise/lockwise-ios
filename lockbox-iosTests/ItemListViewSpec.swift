@@ -203,6 +203,36 @@ class ItemListViewSpec: QuickSpec {
                         expect(cell).notTo(beNil())
                     }
                 }
+
+                describe("no results palceholder") {
+                    var learnMoreObserver = self.scheduler.createObserver(Void.self)
+
+                    beforeEach {
+                        learnMoreObserver = self.scheduler.createObserver(Void.self)
+                        self.subject.bind(items: Driver.just(
+                            [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: learnMoreObserver.asObserver())])]))
+                    }
+
+                    it("configures the no results placeholder") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 0, section: 0)
+                        )
+
+                        expect(cell).notTo(beNil())
+                    }
+
+                    it("configures the learn more button") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as! NoResultsCell
+
+                        cell.learnMoreButton.sendActions(for: .touchUpInside)
+
+                        expect(learnMoreObserver.events.count).to(equal(1))
+                    }
+                }
             }
 
             describe("bind(sortingButtonTitle:)") {
