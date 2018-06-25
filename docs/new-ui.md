@@ -14,3 +14,7 @@ Have you tried using VoiceOver to access your feature? Do all important and / or
 ## Localization
 
 Does your feature have strings? They should probably go in `Constants.swift` (more recommendations tbd on localization infrastructure for Lockbox)
+
+## User Defaults
+
+Are you adding a new value to `UserDefaults`? Is there an upgrade path for users that don't have the value yet?
