@@ -81,6 +81,11 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
+        if userDefaults.value(forKey: SettingKey.itemListSort.rawValue) == nil {
+            self.userDefaults.set(Constant.setting.defaultItemListSort.rawValue,
+                    forKey: SettingKey.itemListSort.rawValue)
+        }
+
         self.startTelemetry()
         self.checkAutoLockTimer()
     }

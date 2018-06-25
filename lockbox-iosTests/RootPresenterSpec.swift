@@ -185,6 +185,26 @@ class RootPresenterSpec: QuickSpec {
                 )
             }
 
+            describe("when the user is missing the itemlistsort setting") {
+                beforeEach {
+                    UserDefaults.standard.removeObject(forKey: SettingKey.itemListSort.rawValue)
+
+                    self.subject = RootPresenter(
+                            view: self.view,
+                            routeStore: self.routeStore,
+                            dataStore: self.dataStore,
+                            telemetryStore: self.telemetryStore,
+                            routeActionHandler: self.routeActionHandler,
+                            telemetryActionHandler: self.telemetryActionHandler,
+                            biometryManager: self.biometryManager
+                    )
+                }
+
+                it("sets the key") {
+                    expect(UserDefaults.standard.object(forKey: SettingKey.itemListSort.rawValue) as! String).to(equal(Constant.setting.defaultItemListSort.rawValue))
+                }
+            }
+
             describe("when the datastore state changes, regardless of synced state") {
                 it("routes to the welcome view") {
                     self.dataStore.storageStateSubject.onNext(.Unprepared)
