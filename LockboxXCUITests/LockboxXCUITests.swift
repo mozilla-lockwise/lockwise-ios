@@ -19,12 +19,12 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.webViews.staticTexts["Valid email required"])
 
         // Try incorrect Email then correct and tap on Sign In
-        userState.fxaUsername = "sasha"
+        userState.fxaUsername = "test"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.webViews.staticTexts["Valid email required"])
 
-        userState.fxaUsername = "+test1@mozilla.com"
+        userState.fxaUsername = "-b62feb2ed6@restmail.net"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.webViews.staticTexts["Valid password required"])
