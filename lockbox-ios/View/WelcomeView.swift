@@ -44,32 +44,15 @@ class WelcomeView: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.setupNavbar()
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
-    private func setupNavbar() {
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
-        ]
-
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .never
-        }
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done,
-                                                            style: .plain,
-                                                            target: nil,
-                                                            action: nil)
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.white
-    }
 }
 
 extension WelcomeView: WelcomeViewProtocol {
