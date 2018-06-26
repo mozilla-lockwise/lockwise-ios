@@ -144,6 +144,7 @@ extension SettingListView {
     }
 
     fileprivate func setupSignOutButton() {
+        self.signOutButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.signOutButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
         self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
     }
