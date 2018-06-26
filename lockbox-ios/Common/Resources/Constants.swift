@@ -25,7 +25,6 @@ struct Constant {
         static let lightGrey = UIColor(hex: 0xEFEFEF)
         static let lockBoxBlue = UIColor(hex: 0x0060DF)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
-        static let kebabBlue = UIColor(hex: 0x003EAA)
         static let settingsHeader = UIColor(hex: 0x737373)
         static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
         static let buttonTitleColorNormalState = UIColor.white

@@ -90,7 +90,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="learnEditEntry.button"/>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FgQ-ab-RJt">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" translatesAutoresizingMaskIntoConstraints="NO" id="FgQ-ab-RJt">
                                 <rect key="frame" x="273.5" y="625" width="8" height="16"/>
                                 <color key="tintColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -117,6 +117,7 @@
                         <viewLayoutGuide key="safeArea" id="3Hr-tN-JYo"/>
                     </view>
                     <connections>
+                        <outlet property="learnHowToEditArrow" destination="FgQ-ab-RJt" id="vTo-m1-x3M"/>
                         <outlet property="learnHowToEditButton" destination="YaD-WB-pbb" id="Q4A-iK-H3O"/>
                         <outlet property="tableView" destination="4I2-rO-7Qh" id="ymG-U6-G22"/>
                     </connections>

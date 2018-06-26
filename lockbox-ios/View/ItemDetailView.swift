@@ -47,6 +47,7 @@ class ItemDetailView: UIViewController {
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var learnHowToEditButton: UIButton!
+    @IBOutlet private weak var learnHowToEditArrow: UIImageView!
     var itemId: String = ""
     let longPress = UILongPressGestureRecognizer()
 
@@ -62,6 +63,7 @@ class ItemDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
+        self.learnHowToEditArrow.tintColor = Constant.color.lockBoxBlue
         self.setupNavigation()
         self.setupDataSource()
         self.setupDelegate()
