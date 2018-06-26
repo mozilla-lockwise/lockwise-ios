@@ -150,9 +150,24 @@ class ItemListPresenter {
         }.asObserver()
     }()
 
+    lazy private var learnMoreNewEntriesObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                urlString: Constant.app.createNewEntriesFAQ,
+                title: Constant.string.faq,
+                returnRoute: MainRouteAction.list))
+        }.asObserver()
+    }()
+
     lazy private var emptyPlaceholderItems = [
         ItemSectionModel(model: 0, items: self.searchItem +
                 [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
+        )
+    ]
+
+    lazy private var noResultsPlaceholderItems = [
+        ItemSectionModel(model: 0, items: self.searchItem +
+                [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
         )
     ]
 
@@ -298,6 +313,10 @@ extension ItemListPresenter {
                                     return lhs.timeLastUsed > rhs.timeLastUsed
                                 }
                             }
+
+                    if sortedFilteredItems.count == 0 {
+                        return self.noResultsPlaceholderItems
+                    }
 
                     return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems))]
                 }
