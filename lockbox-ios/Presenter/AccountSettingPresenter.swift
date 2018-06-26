@@ -5,6 +5,7 @@
 import Foundation
 import RxCocoa
 import RxSwift
+import WebKit
 
 protocol AccountSettingViewProtocol: class, AlertControllerView {
     func bind(avatarImage: Driver<Data>)
@@ -17,9 +18,14 @@ class AccountSettingPresenter {
     let routeActionHandler: RouteActionHandler
     let dataStoreActionHandler: DataStoreActionHandler
     let userInfoActionHandler: UserInfoActionHandler
+    let webKitDataStore: WKWebsiteDataStore
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            target.webKitDataStore.removeData(
+                ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
+                modifiedSince: Date.distantPast,
+                completionHandler: { })
             target.dataStoreActionHandler.invoke(.reset)
             target.userInfoActionHandler.invoke(.clear)
         }.asObserver()
@@ -50,13 +56,15 @@ class AccountSettingPresenter {
          userInfoStore: UserInfoStore = UserInfoStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared
+         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared,
+         webKitDataStore: WKWebsiteDataStore = WKWebsiteDataStore.default()
     ) {
         self.view = view
         self.userInfoStore = userInfoStore
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.userInfoActionHandler = userInfoActionHandler
+        self.webKitDataStore = webKitDataStore
     }
 
     func onViewReady() {
