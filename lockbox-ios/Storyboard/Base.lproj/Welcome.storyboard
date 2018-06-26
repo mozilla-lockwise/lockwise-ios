@@ -27,10 +27,10 @@
                                 <rect key="frame" x="0.0" y="174" width="375" height="493"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
-                                <rect key="frame" x="-50.5" y="0.0" width="476" height="194"/>
+                                <rect key="frame" x="-51" y="0.0" width="476" height="194"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-2v-Rbb" userLabel="Lockbox">
-                                <rect key="frame" x="72.5" y="267" width="230" height="28"/>
+                                <rect key="frame" x="73" y="267" width="230" height="28"/>
                                 <accessibility key="accessibilityConfiguration" label="Firefox Lockbox">
                                     <bool key="isElement" value="YES"/>
                                 </accessibility>
@@ -39,9 +39,8 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Take your passwords everywhere" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
-                                <rect key="frame" x="87" y="300" width="200" height="22"/>
+                                <rect key="frame" x="91.5" y="300" width="191" height="22"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="IYN-CR-Y5B"/>
                                     <constraint firstAttribute="height" constant="22" id="kYE-ff-ndG"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="FiraSans-Italic" family="Fira Sans" pointSize="13"/>
@@ -49,7 +48,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
-                                <rect key="frame" x="30" y="410" width="315" height="45"/>
+                                <rect key="frame" x="30" y="402" width="315" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VuQ-t5-UWT"/>
@@ -64,7 +63,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="37" y="495" width="300" height="50"/>
+                                <rect key="frame" x="37" y="478" width="300" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="1Z8-yX-Sl3"/>
                                     <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
@@ -81,7 +80,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="140.5" y="550" width="94" height="18"/>
+                                <rect key="frame" x="141" y="533" width="94" height="18"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -92,7 +91,7 @@
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mPb-Vk-M6I">
-                                <rect key="frame" x="167.5" y="402" width="40" height="40"/>
+                                <rect key="frame" x="168" y="402" width="40" height="40"/>
                                 <accessibility key="accessibilityConfiguration" identifier="biometric.button"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="tintColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -101,7 +100,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign in with Touch ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Oi-9g-zHp">
-                                <rect key="frame" x="128" y="450" width="118.5" height="14.5"/>
+                                <rect key="frame" x="128" y="450" width="119" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -116,7 +115,7 @@
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
                             <constraint firstItem="JTP-OD-6TF" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Nf8-HW-nnV"/>
-                            <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG"/>
+                            <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="80" id="WWA-h0-rTG"/>
                             <constraint firstItem="mPb-Vk-M6I" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" constant="80" id="Y7e-ig-IXc"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
                             <constraint firstAttribute="bottom" secondItem="4k3-9F-Bvv" secondAttribute="bottom" id="aGi-Kj-ckL"/>
@@ -128,8 +127,9 @@
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="ehm-2v-Rbb" secondAttribute="bottom" constant="5" id="ieo-1p-rxW"/>
                             <constraint firstItem="JTP-OD-6TF" firstAttribute="top" secondItem="xyY-bk-Xw8" secondAttribute="bottom" constant="5" id="jv8-4Y-uqi"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cuz-yd-F4J" secondAttribute="trailing" constant="20" id="uoc-MO-hF7"/>
-                            <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="40" id="v7E-My-ZJE"/>
+                            <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="30" id="v7E-My-ZJE"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="vVj-mn-ajo"/>
+                            <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" secondItem="3Oi-9g-zHp" secondAttribute="bottom" constant="13" id="vw6-dX-fgD"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="-20" id="yDD-xq-H1w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="31L-bn-Z4L"/>
