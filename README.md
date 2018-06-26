@@ -25,6 +25,8 @@ This project is governed by a [Code Of Conduct][coc-link].
 This module is licensed under the [Mozilla Public License,
 version 2.0][license-link].
 
+Note that some test fixtures use source code from third-party services, and are not subject to this license.
+
 [buddybuild-image]: https://dashboard.buddybuild.com/api/statusImage?appID=5a0ddb736e19370001034f85&branch=master&build=latest
 [buddybuild-link]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85/build/latest?branch=master
 [codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockbox/lockbox-ios.svg

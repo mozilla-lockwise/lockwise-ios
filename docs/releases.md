@@ -17,7 +17,7 @@ _all commits on all branches and pull requests are automatically built_
 2. Open [buddybuild][1] from a mobile device and browse to the build
 3. Alternatively, add an email address to the "Deployments" email list(s)
   - this is expected to be a small group of contributors and Mozillians
-  
+
 ## Preparing a Release (for TestFlight or App Store)
 
 - Update the release notes under `docs/release-notes.md`
@@ -60,9 +60,19 @@ _all `master` branch builds are automatically uploaded from buddybuild_
 5. Save and "Submit for Review"
 6. ???
 
+## Taking screenshots for new releases
+
+Screenshots are automated via Fastlane. To get Fastlane, run `brew cask install fastlane`. From there, you will be able to run `fastlane snapshot` in the root directory of the project to run the screenshot task.
+
+Configuration:
+- [languages] Update / add desired locales to `fastlane/Snapfile`
+- [devices] Update / add desired device sizes to `fastlane/Snapfile`
+- [text size][5] Update the `CONTENT_SIZE` variable in `LockboxXCUITests/BaseTestCase.swift`
+
 ---
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
 [2]: https://developer.apple.com/testflight/testers/
 [3]: https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds
 [4]: https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270
+[5]: https://stackoverflow.com/questions/38316591/how-to-test-dynamic-type-larger-font-sizes-in-ios-simulator

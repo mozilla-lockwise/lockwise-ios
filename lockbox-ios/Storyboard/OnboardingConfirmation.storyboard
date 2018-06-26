@@ -30,6 +30,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4">
                                 <rect key="frame" x="40" y="584" width="295" height="48"/>
                                 <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration" identifier="finish.button"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="UMK-pk-Gqs"/>
                                 </constraints>
