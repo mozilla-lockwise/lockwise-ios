@@ -21,6 +21,7 @@ class WelcomePresenterSpec: QuickSpec {
         var fakeBiometricButtonPress = PublishSubject<Void>()
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
+        var firstTimeLearnMoreArrowHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
         var biometricButtonHiddenStub: TestableObserver<Bool>!
         var biometricLabelHiddenStub: TestableObserver<Bool>!
@@ -46,8 +47,13 @@ class WelcomePresenterSpec: QuickSpec {
         var firstTimeLoginMessageHidden: AnyObserver<Bool> {
             return self.firstTimeMessageHiddenStub.asObserver()
         }
+
         var firstTimeLearnMoreHidden: AnyObserver<Bool> {
             return self.firstTimeLearnMoreHiddenStub.asObserver()
+        }
+
+        var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> {
+            return self.firstTimeLearnMoreArrowHiddenStub.asObserver()
         }
 
         var loginButtonHidden: AnyObserver<Bool> {
@@ -173,6 +179,7 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view = FakeWelcomeView()
                 self.view.firstTimeMessageHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.firstTimeLearnMoreHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.firstTimeLearnMoreArrowHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.loginButtonHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.biometricButtonHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.biometricLabelHiddenStub = self.scheduler.createObserver(Bool.self)
@@ -210,6 +217,7 @@ class WelcomePresenterSpec: QuickSpec {
                         expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beFalse())
                         expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beFalse())
                         expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beFalse())
+                        expect(self.view.firstTimeLearnMoreArrowHiddenStub.events.last!.value.element).to(beFalse())
                     }
 
                     it("hides the biometrics login button and label") {
@@ -303,6 +311,7 @@ class WelcomePresenterSpec: QuickSpec {
                             expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
                             expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                            expect(self.view.firstTimeLearnMoreArrowHiddenStub.events.last!.value.element).to(beTrue())
                         }
 
                         it("shows the biometrics login button and label") {
@@ -401,6 +410,7 @@ class WelcomePresenterSpec: QuickSpec {
                             expect(self.view.firstTimeMessageHiddenStub.events.last!.value.element).to(beTrue())
                             expect(self.view.loginButtonHiddenStub.events.last!.value.element).to(beTrue())
                             expect(self.view.firstTimeLearnMoreHiddenStub.events.last!.value.element).to(beTrue())
+                            expect(self.view.firstTimeLearnMoreArrowHiddenStub.events.last!.value.element).to(beTrue())
                         }
 
                         it("shows the biometrics login button and label") {

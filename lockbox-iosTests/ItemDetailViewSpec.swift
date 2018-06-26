@@ -85,7 +85,6 @@ class ItemDetailViewSpec: QuickSpec {
                                 value: "www.meow.com",
                                 accessibilityLabel: "something accessible",
                                 password: false,
-                                size: 16,
                                 valueFontColor: Constant.color.lockBoxBlue)
                     ]),
                     ItemDetailSectionModel(model: 1, items: [
@@ -93,22 +92,19 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.username,
                                 value: "tanya",
                                 accessibilityLabel: "something else accessible",
-                                password: false,
-                                size: 16),
+                                password: false),
                         ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something else accessible",
-                                password: true,
-                                size: 16)
+                                password: true)
                     ]),
                     ItemDetailSectionModel(model: 2, items: [
                         ItemDetailCellConfiguration(
                                 title: Constant.string.notes,
                                 value: "some long note about whatever thing yeahh",
                                 accessibilityLabel: "something else accessible",
-                                password: false,
-                                size: 14)
+                                password: false)
                     ])
                 ]
 
@@ -194,8 +190,7 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
-                                password: true,
-                                size: 16)
+                                password: true)
                     ])
                 ]
 
@@ -219,8 +214,7 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
-                                password: true,
-                                size: 16)
+                                password: true)
                     ])
                 ]
 
@@ -246,8 +240,7 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
-                                password: true,
-                                size: 16)
+                                password: true)
                     ])
                 ]
 
@@ -270,7 +263,7 @@ class ItemDetailViewSpec: QuickSpec {
         describe("ItemDetailViewCellConfiguration") {
             describe("IdentifiableType") {
                 let title = "meow"
-                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", accessibilityLabel: "something accessible", password: false, size: 16)
+                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", accessibilityLabel: "something accessible", password: false)
 
                 it("uses the title as the identity string") {
                     expect(cellConfig.identity).to(equal(title))
@@ -283,42 +276,36 @@ class ItemDetailViewSpec: QuickSpec {
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
-                            size: 16)
+                            password: false)
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
-                            size: 16)
+                            password: false)
                     ))
 
                     expect(ItemDetailCellConfiguration(
                             title: "woof",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
-                            size: 16)
+                            password: false)
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
-                            size: 16)
+                            password: false)
                     ))
 
                     expect(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "dogs",
                             accessibilityLabel: "something accessible",
-                            password: false,
-                            size: 16)
+                            password: false)
                     ).notTo(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
-                            size: 16)
+                            password: false)
                     ))
                 }
             }

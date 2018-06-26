@@ -81,6 +81,7 @@ extension SettingListView {
                     cell.detailTextLabel?.numberOfLines = 0
                 } else if cellConfiguration.detailText != nil {
                     cell.detailTextLabel?.text = cellConfiguration.detailText
+                    cell.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: .body)
                 }
 
                 if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {

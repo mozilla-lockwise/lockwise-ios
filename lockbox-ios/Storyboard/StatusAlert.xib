@@ -28,13 +28,13 @@
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.89696596746575341" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="6dX-h5-s50" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="71.5" id="2dJ-lq-NOU"/>
-                <constraint firstItem="6dX-h5-s50" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="24.5" id="Q0L-ed-8Xi"/>
+                <constraint firstItem="6dX-h5-s50" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" id="Q0L-ed-8Xi"/>
                 <constraint firstItem="6dX-h5-s50" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="i5V-AI-GTb"/>
                 <constraint firstItem="hbg-mx-lXA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jDw-px-It3"/>
                 <constraint firstItem="6dX-h5-s50" firstAttribute="top" secondItem="hbg-mx-lXA" secondAttribute="bottom" constant="9.5" id="lLX-Gi-gas"/>
                 <constraint firstItem="hbg-mx-lXA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="nLs-fZ-jnl"/>
                 <constraint firstAttribute="bottom" secondItem="6dX-h5-s50" secondAttribute="bottom" constant="28" id="vgh-3g-qoo"/>
-                <constraint firstAttribute="trailing" secondItem="6dX-h5-s50" secondAttribute="trailing" constant="24.5" id="yN3-8M-9z0"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6dX-h5-s50" secondAttribute="trailing" id="yN3-8M-9z0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

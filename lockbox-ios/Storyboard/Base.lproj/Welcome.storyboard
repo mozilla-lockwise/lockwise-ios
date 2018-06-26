@@ -55,14 +55,14 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="138" y="530" width="99" height="20"/>
+                                <rect key="frame" x="146" y="532" width="83" height="32"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="4" maxX="0.0" maxY="2"/>
-                                <state key="normal" title="Learn more" image="arrowhead-right-16">
+                                <state key="normal" title="Learn more">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
@@ -82,14 +82,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="59.5" y="489" width="255.5" height="36"/>
+                                <rect key="frame" x="59.5" y="489" width="255.5" height="38"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <color key="textColor" red="0.93730175495147705" green="0.93717384338378906" blue="0.94118618965148926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVE-e1-PIT">
+                                <rect key="frame" x="232" y="540" width="8" height="16"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="16" id="OMw-3E-xHo"/>
+                                    <constraint firstAttribute="width" constant="8" id="vTO-ss-iyl"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="mPb-Vk-M6I" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="3qr-PW-NiL"/>
+                            <constraint firstItem="DVE-e1-PIT" firstAttribute="centerY" secondItem="JTP-OD-6TF" secondAttribute="centerY" id="4Fd-OK-C8l"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="5w6-4I-b3t"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="8gy-fK-aY4"/>
                             <constraint firstItem="3Oi-9g-zHp" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="ELq-jL-y6V"/>
@@ -99,6 +108,7 @@
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Zs6-ts-YH0" secondAttribute="leading" constant="20" id="Lok-go-dPW"/>
                             <constraint firstItem="JTP-OD-6TF" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Nf8-HW-nnV"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="31L-bn-Z4L" secondAttribute="leading" constant="40" id="PtJ-5h-oE8"/>
+                            <constraint firstItem="DVE-e1-PIT" firstAttribute="leading" secondItem="JTP-OD-6TF" secondAttribute="trailing" constant="3" id="R6f-H7-Ez9"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG"/>
                             <constraint firstItem="mPb-Vk-M6I" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" constant="80" id="Y7e-ig-IXc"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
@@ -126,6 +136,7 @@
                         <outlet property="biometricTitle" destination="3Oi-9g-zHp" id="MKq-im-Dtv"/>
                         <outlet property="fxASigninButton" destination="cuz-yd-F4J" id="Fwi-eS-e53"/>
                         <outlet property="learnMore" destination="JTP-OD-6TF" id="AUR-8T-44D"/>
+                        <outlet property="learnMoreImage" destination="DVE-e1-PIT" id="dJv-2d-Bok"/>
                         <outlet property="oceanView" destination="4k3-9F-Bvv" id="dlf-79-jBs"/>
                     </connections>
                 </viewController>
@@ -135,7 +146,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrowhead-right-16" width="16" height="16"/>
+        <image name="arrow-right" width="12" height="22"/>
         <image name="fingerprint" width="40" height="40"/>
         <image name="lockbox-title" width="224" height="28"/>
         <image name="nessie" width="476" height="194"/>
