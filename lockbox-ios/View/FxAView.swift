@@ -34,6 +34,11 @@ class FxAView: UIViewController, FxAViewProtocol, WKNavigationDelegate {
         self.presenter?.onViewReady()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+
     func loadRequest(_ urlRequest: URLRequest) {
         self.webView.load(urlRequest)
     }
