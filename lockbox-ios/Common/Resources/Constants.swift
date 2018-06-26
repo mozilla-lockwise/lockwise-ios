@@ -16,6 +16,7 @@ struct Constant {
         static let enableSyncFAQ = faqURL + "#how-do-i-enable-sync-on-firefox"
         static let editExistingEntriesFAQ = faqURL + "#how-do-i-edit-existing-entries"
         static let securityFAQ = faqURL + "#what-security-technology-does-firefox-lockbox-use"
+        static let createNewEntriesFAQ = faqURL + "#how-do-i-create-new-entries"
     }
 
     struct color {

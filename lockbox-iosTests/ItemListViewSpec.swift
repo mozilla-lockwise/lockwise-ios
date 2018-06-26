@@ -204,7 +204,7 @@ class ItemListViewSpec: QuickSpec {
                     }
                 }
 
-                describe("no results palceholder") {
+                describe("no results placeholder") {
                     var learnMoreObserver = self.scheduler.createObserver(Void.self)
 
                     beforeEach {
