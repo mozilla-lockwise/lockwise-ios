@@ -14,20 +14,17 @@ struct ItemDetailCellConfiguration {
     let value: String
     let accessibilityLabel: String
     let password: Bool
-    let size: CGFloat
     let valueFontColor: UIColor
 
     init(title: String,
          value: String,
          accessibilityLabel: String,
          password: Bool,
-         size: CGFloat,
          valueFontColor: UIColor = UIColor.black) {
         self.title = title
         self.value = value
         self.accessibilityLabel = accessibilityLabel
         self.password = password
-        self.size = size
         self.valueFontColor = valueFontColor
     }
 }
@@ -134,7 +131,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.titleLabel.text = cellConfiguration.title
                     cell.valueLabel.text = cellConfiguration.value
 
-                    cell.valueLabel.font = cell.valueLabel.font.withSize(cellConfiguration.size)
                     cell.valueLabel.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
@@ -143,7 +139,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.revealButton.isHidden = !cellConfiguration.password
 
                     if cellConfiguration.password {
-                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
+                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
 
                         if let presenter = self.presenter {
                             cell.revealButton.rx.tap

@@ -178,7 +178,6 @@ extension ItemDetailPresenter {
                         value: hostname,
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
                         password: false,
-                        size: 16,
                         valueFontColor: Constant.color.lockBoxBlue)
             ]),
             ItemDetailSectionModel(model: 1, items: [
@@ -186,16 +185,14 @@ extension ItemDetailPresenter {
                         title: Constant.string.username,
                         value: username,
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
-                        password: false,
-                        size: 16),
+                        password: false),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
                         accessibilityLabel: String(
                             format: Constant.string.passwordCellAccessibilityLabel,
                             passwordText),
-                        password: true,
-                        size: 16)
+                        password: true)
             ])
         ]
 

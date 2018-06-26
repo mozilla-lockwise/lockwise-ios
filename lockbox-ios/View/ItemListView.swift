@@ -339,9 +339,6 @@ extension ItemListView {
         let searchImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40.0, height: cell.frame.height))
         searchImageView.contentMode = .center
         searchImageView.image = searchImage
-        if #available(iOS 11.0, *) {
-            searchImageView.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        }
 
         cell.filterTextField.leftView = searchImageView
         cell.filterTextField.leftViewMode = .always
