@@ -81,7 +81,6 @@ public typealias ProfileFactory = (_ reset: Bool) -> Profile
 private let defaultProfileFactory: ProfileFactory = { reset in
     BrowserProfile(localName: "lockbox-profile", clear: reset)
 }
-private let lockedKey = "application_locked_state"
 
 class DataStore {
     public static let shared = DataStore()
@@ -236,8 +235,6 @@ extension DataStore {
             self.storageStateSubject.onNext(.Unprepared)
         }
 
-        self.keychainWrapper.removeObject(forKey: lockedKey)
-
         stopSyncing() >>== disconnect >>== deleteAll >>== resetProfile
     }
 }
@@ -256,7 +253,6 @@ extension DataStore {
 
         func finalShutdown() {
             self.profile.shutdown()
-            self.keychainWrapper.set(true, forKey: lockedKey)
         }
         self.storageStateSubject.onNext(.Locked)
 
@@ -270,7 +266,6 @@ extension DataStore {
     public func unlock() {
         func performUnlock() {
             self.storageStateSubject.onNext(.Unlocked)
-            self.keychainWrapper.set(false, forKey: lockedKey)
 
             self.profile.reopen()
 
@@ -394,7 +389,6 @@ extension DataStore {
             if !profile.hasAccount() {
                 // first run.
                 self.storageStateSubject.onNext(.Unprepared)
-                self.keychainWrapper.set(false, forKey: lockedKey)
             } else {
                 self.storageStateSubject.onNext(.Preparing)
             }
@@ -406,6 +400,7 @@ extension DataStore {
     }
 
     private func handleLock() {
+        // default to locked state
         self.storageStateSubject.onNext(.Locked)
 
         UserDefaults.standard.onAutoLockTime
@@ -427,16 +422,5 @@ extension DataStore {
                     }
                 })
                 .disposed(by: self.disposeBag)
-//
-//        if let lockedValue = self.keychainWrapper.bool(forKey: lockedKey) {
-//            if lockedValue {
-//                self.storageStateSubject.onNext(.Locked)
-//            } else {
-//                self.storageStateSubject.onNext(.Unlocked)
-//            }
-//        } else {
-//            self.keychainWrapper.set(false, forKey: lockedKey)
-//            self.storageStateSubject.onNext(.Unlocked)
-//        }
     }
 }
