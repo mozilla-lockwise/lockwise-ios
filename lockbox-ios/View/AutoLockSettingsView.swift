@@ -45,7 +45,7 @@ class AutoLockSettingView: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 13.0, weight: UIFont.Weight.regular)
+        cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         cell.textLabel?.text = Constant.string.autoLockHeader
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.textLabel?.numberOfLines = 0

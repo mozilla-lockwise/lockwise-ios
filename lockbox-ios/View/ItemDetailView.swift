@@ -14,20 +14,17 @@ struct ItemDetailCellConfiguration {
     let value: String
     let accessibilityLabel: String
     let password: Bool
-    let size: CGFloat
     let valueFontColor: UIColor
 
     init(title: String,
          value: String,
          accessibilityLabel: String,
          password: Bool,
-         size: CGFloat,
          valueFontColor: UIColor = UIColor.black) {
         self.title = title
         self.value = value
         self.accessibilityLabel = accessibilityLabel
         self.password = password
-        self.size = size
         self.valueFontColor = valueFontColor
     }
 }
@@ -50,6 +47,7 @@ class ItemDetailView: UIViewController {
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var learnHowToEditButton: UIButton!
+    @IBOutlet private weak var learnHowToEditArrow: UIImageView!
     var itemId: String = ""
     let longPress = UILongPressGestureRecognizer()
 
@@ -65,6 +63,7 @@ class ItemDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
+        self.learnHowToEditArrow.tintColor = Constant.color.lockBoxBlue
         self.setupNavigation()
         self.setupDataSource()
         self.setupDelegate()
@@ -96,6 +95,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
         let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if #available(iOS 11.0, *) {
@@ -133,7 +133,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.titleLabel.text = cellConfiguration.title
                     cell.valueLabel.text = cellConfiguration.value
 
-                    cell.valueLabel.font = cell.valueLabel.font.withSize(cellConfiguration.size)
                     cell.valueLabel.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
@@ -142,7 +141,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.revealButton.isHidden = !cellConfiguration.password
 
                     if cellConfiguration.password {
-                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: cellConfiguration.size)
+                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
 
                         if let presenter = self.presenter {
                             cell.revealButton.rx.tap

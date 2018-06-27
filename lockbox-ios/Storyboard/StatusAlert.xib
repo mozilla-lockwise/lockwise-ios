@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -15,9 +15,9 @@
             <rect key="frame" x="0.0" y="0.0" width="145" height="114"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="Password copied" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dX-h5-s50">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Password copied" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="145" translatesAutoresizingMaskIntoConstraints="NO" id="6dX-h5-s50">
                     <rect key="frame" x="24.5" y="71.5" width="96" height="14.5"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                     <color key="textColor" red="0.91092252731323242" green="0.91161435842514038" blue="0.9110296368598938" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -27,10 +27,14 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.89696596746575341" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="6dX-h5-s50" secondAttribute="bottom" constant="28" id="JYQ-EI-F5s"/>
+                <constraint firstItem="6dX-h5-s50" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="71.5" id="2dJ-lq-NOU"/>
+                <constraint firstItem="6dX-h5-s50" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" id="Q0L-ed-8Xi"/>
                 <constraint firstItem="6dX-h5-s50" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="i5V-AI-GTb"/>
                 <constraint firstItem="hbg-mx-lXA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jDw-px-It3"/>
+                <constraint firstItem="6dX-h5-s50" firstAttribute="top" secondItem="hbg-mx-lXA" secondAttribute="bottom" constant="9.5" id="lLX-Gi-gas"/>
                 <constraint firstItem="hbg-mx-lXA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="nLs-fZ-jnl"/>
+                <constraint firstAttribute="bottom" secondItem="6dX-h5-s50" secondAttribute="bottom" constant="28" id="vgh-3g-qoo"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6dX-h5-s50" secondAttribute="trailing" id="yN3-8M-9z0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

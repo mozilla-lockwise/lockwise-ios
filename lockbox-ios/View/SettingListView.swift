@@ -73,11 +73,15 @@ extension SettingListView {
                 cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
                 cell.accessibilityIdentifier = cellConfiguration.text
 
+                cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+                cell.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: .caption2)
+
                 if cellConfiguration.subtitle != nil {
                     cell.detailTextLabel?.attributedText = cellConfiguration.subtitle
                     cell.detailTextLabel?.numberOfLines = 0
                 } else if cellConfiguration.detailText != nil {
                     cell.detailTextLabel?.text = cellConfiguration.detailText
+                    cell.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: .body)
                 }
 
                 if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
@@ -116,7 +120,7 @@ extension SettingListView {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
         ]
 
         if #available(iOS 11.0, *) {
@@ -127,7 +131,10 @@ extension SettingListView {
                 style: .plain,
                 target: nil,
                 action: nil)
-        navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
+            NSAttributedStringKey.foregroundColor: UIColor.white,
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .body)
+        ], for: .normal)
 
         if let presenter = presenter {
             navigationItem.rightBarButtonItem?.rx.tap
@@ -137,6 +144,7 @@ extension SettingListView {
     }
 
     fileprivate func setupSignOutButton() {
+        self.signOutButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.signOutButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
         self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
     }

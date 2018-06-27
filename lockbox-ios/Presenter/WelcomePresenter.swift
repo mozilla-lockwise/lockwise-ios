@@ -15,6 +15,7 @@ protocol WelcomeViewProtocol: class, AlertControllerView {
     var loginButtonHidden: AnyObserver<Bool> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
+    var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> { get }
     var biometricButtonHidden: AnyObserver<Bool> { get }
     var biometricButtonTitleHidden: AnyObserver<Bool> { get }
     var biometricButtonImageName: AnyObserver<String> { get }
@@ -200,26 +201,29 @@ extension WelcomePresenter {
 
         guard let view = self.view else { return }
 
-        lockedObservable
-                .bind(to: view.firstTimeLoginMessageHidden)
-                .disposed(by: self.disposeBag)
+        let firstRunHiddenObservers = [
+            view.firstTimeLoginMessageHidden,
+            view.firstTimeLearnMoreHidden,
+            view.firstTimeLearnMoreArrowHidden,
+            view.loginButtonHidden
+        ]
 
-        lockedObservable
-                .bind(to: view.firstTimeLearnMoreHidden)
-                .disposed(by: self.disposeBag)
+        let lockScreenHiddenObservers = [
+            view.biometricButtonHidden,
+            view.biometricButtonTitleHidden
+        ]
 
-        lockedObservable
-                .bind(to: view.loginButtonHidden)
-                .disposed(by: self.disposeBag)
+        for observer in firstRunHiddenObservers {
+            lockedObservable
+                    .bind(to: observer)
+                    .disposed(by: self.disposeBag)
+        }
 
-        lockedObservable
-                .map { !$0 }
-                .bind(to: view.biometricButtonHidden)
-                .disposed(by: self.disposeBag)
-
-        lockedObservable
-                .map { !$0 }
-                .bind(to: view.biometricButtonTitleHidden)
-                .disposed(by: self.disposeBag)
+        for observer in lockScreenHiddenObservers {
+            lockedObservable
+                    .map { !$0 }
+                    .bind(to: observer)
+                    .disposed(by: self.disposeBag)
+        }
     }
 }

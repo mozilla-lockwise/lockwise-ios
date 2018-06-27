@@ -12,6 +12,7 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var fxASigninButton: UIButton!
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!
+    @IBOutlet internal weak var learnMoreImage: UIImageView!
     @IBOutlet internal weak var biometricButton: UIButton!
     @IBOutlet internal weak var biometricTitle: UILabel!
     @IBOutlet private weak var oceanView: UIImageView!
@@ -78,6 +79,10 @@ extension WelcomeView: WelcomeViewProtocol {
 
     public var firstTimeLearnMoreHidden: AnyObserver<Bool> {
         return self.learnMore.rx.isHidden.asObserver()
+    }
+    
+    public var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> {
+        return self.learnMoreImage.rx.isHidden.asObserver()
     }
 
     public var biometricButtonHidden: AnyObserver<Bool> {

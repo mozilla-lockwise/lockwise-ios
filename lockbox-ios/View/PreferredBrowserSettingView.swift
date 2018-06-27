@@ -57,6 +57,7 @@ extension PreferredBrowserSettingView {
             configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
                 let cell = SettingCell()
                 cell.textLabel?.text = cellConfiguration.text
+                cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
                 cell.accessoryType = cellConfiguration.isChecked ?
                     UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
                 cell.selectionStyle = UITableViewCellSelectionStyle.none
@@ -101,10 +102,11 @@ extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
         self.navigationItem.title = Constant.string.settingsBrowser
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
         ]
 
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
+        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {
