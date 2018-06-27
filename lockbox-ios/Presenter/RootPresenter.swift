@@ -87,7 +87,6 @@ class RootPresenter {
         }
 
         self.startTelemetry()
-        self.checkAutoLockTimer()
     }
 
     func onViewReady() {
@@ -228,38 +227,9 @@ class RootPresenter {
 extension RootPresenter {
     fileprivate func startTelemetry() {
         Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaults.onRecordUsageData)
-                .filter {
-                    $0.1
-                }
-                .map {
-                    $0.0
-                }
+                .filter { $0.1 }
+                .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
-                .disposed(by: self.disposeBag)
-    }
-
-    fileprivate func checkAutoLockTimer() {
-        guard self.biometryManager.deviceAuthenticationAvailable else {
-            return
-        }
-
-        self.userDefaults.onAutoLockTime
-                .take(1)
-                .subscribe(onNext: { autoLockSetting in
-                    switch autoLockSetting {
-                    case .Never:
-                        self.dataStoreActionHandler.invoke(.unlock)
-                    default:
-                        let date = NSDate(timeIntervalSince1970:
-                        self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue))
-
-                        if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
-                            self.dataStoreActionHandler.invoke(.unlock)
-                        } else {
-                            self.dataStoreActionHandler.invoke(.lock)
-                        }
-                    }
-                })
                 .disposed(by: self.disposeBag)
     }
 }

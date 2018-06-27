@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         _ = DataStore.shared
+        _ = AutoLockStore.shared
         return true
     }
 
