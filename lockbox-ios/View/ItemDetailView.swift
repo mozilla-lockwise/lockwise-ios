@@ -142,6 +142,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
                     if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
+                        cell.valueLabel.preferredMaxLayoutWidth = 250
 
                         if let presenter = self.presenter {
                             cell.revealButton.rx.tap
