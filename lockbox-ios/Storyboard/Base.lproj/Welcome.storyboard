@@ -62,25 +62,8 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="getStarted.button"/>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="37" y="478" width="300" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="1Z8-yX-Sl3"/>
-                                    <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
-                                </constraints>
-                                <attributedString key="attributedText">
-                                    <fragment content="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins.">
-                                        <attributes>
-                                            <color key="NSColor" red="0.93730175495147705" green="0.93717384338378906" blue="0.94118618965148926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                            <font key="NSFont" metaFont="system" size="15"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.1499999999999999" tighteningFactorForTruncation="0.0"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="141" y="533" width="94" height="18"/>
+                                <rect key="frame" x="141" y="619" width="94" height="18"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -105,6 +88,23 @@
                                 <color key="textColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
+                                <rect key="frame" x="38" y="564" width="300" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="1Z8-yX-Sl3"/>
+                                    <constraint firstAttribute="width" constant="300" id="pih-qx-4qt"/>
+                                </constraints>
+                                <attributedString key="attributedText">
+                                    <fragment content="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins.">
+                                        <attributes>
+                                            <color key="NSColor" red="0.93730175495147705" green="0.93717384338378906" blue="0.94118618965148926" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" metaFont="system" size="15"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.1499999999999999" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <constraints>
                             <constraint firstItem="mPb-Vk-M6I" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="3qr-PW-NiL"/>
@@ -125,11 +125,10 @@
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="hez-iz-r81"/>
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="73" id="htJ-IO-AQJ"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="ehm-2v-Rbb" secondAttribute="bottom" constant="5" id="ieo-1p-rxW"/>
-                            <constraint firstItem="JTP-OD-6TF" firstAttribute="top" secondItem="xyY-bk-Xw8" secondAttribute="bottom" constant="5" id="jv8-4Y-uqi"/>
+                            <constraint firstItem="JTP-OD-6TF" firstAttribute="bottom" secondItem="Zs6-ts-YH0" secondAttribute="bottom" constant="-30" id="jv8-4Y-uqi"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cuz-yd-F4J" secondAttribute="trailing" constant="20" id="uoc-MO-hF7"/>
-                            <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="30" id="v7E-My-ZJE"/>
+                            <constraint firstItem="xyY-bk-Xw8" firstAttribute="bottom" secondItem="JTP-OD-6TF" secondAttribute="top" constant="-5" id="v7E-My-ZJE"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="vVj-mn-ajo"/>
-                            <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" secondItem="3Oi-9g-zHp" secondAttribute="bottom" constant="13" id="vw6-dX-fgD"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="-20" id="yDD-xq-H1w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="31L-bn-Z4L"/>
