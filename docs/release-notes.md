@@ -1,27 +1,34 @@
 # Release Notes
 
+## 1.1 (Build 1539)
+
+_Date: 2018-07-27_
+
+In addition to the "no entries after upgrade" bug fix, we are putting finishing touches together before we submit to Apple for public release...
+
+What's NEW? Dynamic text size support, a "no entries found" state when no filter results, and Welcome screen layout fixes for iPhone SE.
+
+## 1.1 (Build 1490)
+
+_Date: 2018-06-21_
+
+**Did you upgrade last week and see an empty list? Sorry! We fixed that...**
+
+The last version was approved for the App Store! So we fixed some bugs and did a little more. We will submit another version for the public release shortly so please keep testing and help us make sure this is still stable.
+
+What's NEW? Improved accessibility, better indicators and buttons, list sorting bug fixes, and a new "welcome" screen on first run.
+
 ## 1.1 (Build 1473)
+
+_Date: 2018-05-31_
 
 The last version was approved for the App Store! So we fixed some bugs and did a little more. We will submit another version for the public release shortly so please keep testing and help us make sure this is still stable.
 
 What's NEW? Improved accessibility, better indicators and buttons, list sorting bug fixes, and a new "welcome" screen on first run.
 
-Features and functionality include:
-
-- signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox
-- automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data
-- searching and sorting items
-- pull to manually refresh your list of items
-- user-friendly item titles to help with readability
-- showing/hiding passwords
-- copying usernames and passwords to the pasteboard (which expire after 60 seconds)
-- opening web addresses in your preferred web browser
-- meaningful instructions when you need to confirm your sign in, or if you have no items
-- Telemetry for event tracking (no personally-identifiable information is collected)
-
 ## 1.0 (Build 1387)
 
-This version will be submitted to the App Store! 
+**This version will be submitted to the App Store!**
 
 What's NEW? Fixes to unlocking mechanisms, all links are linked up, and improved accessibility.
 
@@ -39,6 +46,8 @@ Features and functionality include:
 - Telemetry for event tracking (no personally-identifiable information is collected)
 
 ## 1.0 (Build 1343)
+
+_Date: 2018-05-25_
 
 What's NEW? We added pull-to-refresh in the list view, a state that tells you if we're waiting on you to click a confirmation link in your email, and slightly better "pretty" title logic.
 
@@ -64,6 +73,8 @@ Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find an
 
 ## 1.0 (Build 1280)
 
+_Date: 2018-05-23_
+
 What's NEW? We polished the interface (colors!), squashed some bugs (lock timer!), and improved the experience for those users (unsafely!) using a device without a passcode. If your app appears empty, there is one good reason and we're working on it but check your email for a confirmation link.
 
 This build DOES include:
@@ -87,6 +98,8 @@ This build DOES NOT include:
 Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1189)
+
+_Date: 2018-05-18_
 
 What's NEW? We squashed a bunch of bugs (timed locking works much better now) and added a few improvements (user-friendly titles and a sync indicator that doesn't interrupt you). To recap...
 
