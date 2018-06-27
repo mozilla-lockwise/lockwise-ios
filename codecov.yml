@@ -1,3 +1,4 @@
 ignore:
-    - "lockbox-iosTests/*"
+    - "LockboxXCUITests/*"
     - "lockbox-ios/Store/DataStore.swift"
+    - "lockbox-iosTests/*"
