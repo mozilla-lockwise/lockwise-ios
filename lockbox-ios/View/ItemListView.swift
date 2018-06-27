@@ -71,6 +71,7 @@ class ItemListView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
+        self.setNeedsStatusBarAppearanceUpdate()
         self.setupRefresh()
         self.styleTableViewBackground()
         self.styleNavigationBar()
