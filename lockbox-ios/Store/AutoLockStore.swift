@@ -28,18 +28,13 @@ class AutoLockStore {
         self.dataStoreActionHandler = dataStoreActionHandler
 
         self.dataStore.locked
-                .subscribe(onNext: { locked in
+                .subscribe(onNext: { [weak self] locked in
                     if locked {
-                        self.stopTimer()
+                        self?.stopTimer()
                     } else {
-                        self.setupTimer()
+                        self?.setupTimer()
                     }
                 })
-                .disposed(by: self.disposeBag)
-
-        self.dispatcher.register
-                .filterByType(class: LifecycleAction.self)
-                .subscribe(self.lifecycleAction)
                 .disposed(by: self.disposeBag)
 
         self.dispatcher.register
@@ -58,9 +53,9 @@ class AutoLockStore {
                 })
                 .disposed(by: self.disposeBag)
     }
+}
 
-    private func lifecycleAction(evt: Event<LifecycleAction>) {}
-
+extension AutoLockStore {
     private func resetTimer() {
         self.stopTimer()
         self.setupTimer()
