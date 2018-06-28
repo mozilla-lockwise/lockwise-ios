@@ -28,10 +28,7 @@ class WelcomeView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.fxASigninButton.layer.cornerRadius = 5
-        self.fxASigninButton.clipsToBounds = true
-
+        self.roundButtons()
         self.presenter?.onViewReady()
     }
 
@@ -91,5 +88,14 @@ extension WelcomeView: WelcomeViewProtocol {
 
     public var unlockButtonHidden: AnyObserver<Bool> {
         return self.unlockButton.rx.isHidden.asObserver()
+    }
+}
+
+extension WelcomeView {
+    private func roundButtons() {
+        self.fxASigninButton.layer.cornerRadius = 5
+        self.fxASigninButton.clipsToBounds = true
+        self.unlockButton.layer.cornerRadius = 5
+        self.unlockButton.clipsToBounds = true
     }
 }
