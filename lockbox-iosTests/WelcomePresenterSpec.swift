@@ -18,15 +18,13 @@ class WelcomePresenterSpec: QuickSpec {
     class FakeWelcomeView: WelcomeViewProtocol {
         var fakeFxAButtonPress = PublishSubject<Void>()
         var fakeLoginButtonPress = PublishSubject<Void>()
-        var fakeBiometricButtonPress = PublishSubject<Void>()
+        var fakeUnlockButtonPress = PublishSubject<Void>()
         var firstTimeMessageHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreArrowHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
-        var biometricButtonHiddenStub: TestableObserver<Bool>!
-        var biometricLabelHiddenStub: TestableObserver<Bool>!
-        var biometricImageNameStub: TestableObserver<String>!
-        var biometricButtonTitleStub: TestableObserver<String?>!
+        var unlockButtonHiddenStub: TestableObserver<Bool>!
+        var lockImageHiddenStub: TestableObserver<Bool>!
         var alertControllerButtons: [AlertActionButtonConfiguration]?
         var alertControllerTitle: String?
         var alertControllerMessage: String?
@@ -40,8 +38,8 @@ class WelcomePresenterSpec: QuickSpec {
             return ControlEvent<Void>(events: fakeFxAButtonPress.asObservable())
         }
 
-        var biometricButtonPressed: ControlEvent<Void> {
-            return ControlEvent<Void>(events: fakeBiometricButtonPress.asObservable())
+        var unlockButtonPressed: ControlEvent<Void> {
+            return ControlEvent<Void>(events: fakeUnlockButtonPress.asObservable())
         }
 
         var firstTimeLoginMessageHidden: AnyObserver<Bool> {
@@ -60,20 +58,12 @@ class WelcomePresenterSpec: QuickSpec {
             return self.loginButtonHiddenStub.asObserver()
         }
 
-        var biometricButtonHidden: AnyObserver<Bool> {
-            return self.biometricButtonHiddenStub.asObserver()
+        var unlockButtonHidden: AnyObserver<Bool> {
+            return self.unlockButtonHiddenStub.asObserver()
         }
 
-        var biometricButtonTitleHidden: AnyObserver<Bool> {
-            return self.biometricLabelHiddenStub.asObserver()
-        }
-
-        var biometricButtonImageName: AnyObserver<String> {
-            return self.biometricImageNameStub.asObserver()
-        }
-
-        var biometricButtonTitle: AnyObserver<String?> {
-            return self.biometricButtonTitleStub.asObserver()
+        var lockImageHidden: AnyObserver<Bool> {
+            return self.lockImageHiddenStub.asObserver()
         }
 
         func displayAlertController(buttons: [AlertActionButtonConfiguration],
@@ -181,10 +171,8 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view.firstTimeLearnMoreHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.firstTimeLearnMoreArrowHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.loginButtonHiddenStub = self.scheduler.createObserver(Bool.self)
-                self.view.biometricButtonHiddenStub = self.scheduler.createObserver(Bool.self)
-                self.view.biometricLabelHiddenStub = self.scheduler.createObserver(Bool.self)
-                self.view.biometricImageNameStub = self.scheduler.createObserver(String.self)
-                self.view.biometricButtonTitleStub = self.scheduler.createObserver(String?.self)
+                self.view.unlockButtonHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.lockImageHiddenStub = self.scheduler.createObserver(Bool.self)
 
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
@@ -221,8 +209,8 @@ class WelcomePresenterSpec: QuickSpec {
                     }
 
                     it("hides the biometrics login button and label") {
-                        expect(self.view.biometricButtonHiddenStub.events.last!.value.element).to(beTrue())
-                        expect(self.view.biometricLabelHiddenStub.events.last!.value.element).to(beTrue())
+                        expect(self.view.unlockButtonHiddenStub.events.last!.value.element).to(beTrue())
+                        expect(self.view.lockImageHiddenStub.events.last!.value.element).to(beTrue())
                     }
                 }
 
@@ -315,8 +303,8 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         it("shows the biometrics login button and label") {
-                            expect(self.view.biometricButtonHiddenStub.events.last!.value.element).to(beFalse())
-                            expect(self.view.biometricLabelHiddenStub.events.last!.value.element).to(beFalse())
+                            expect(self.view.unlockButtonHiddenStub.events.last!.value.element).to(beFalse())
+                            expect(self.view.lockImageHiddenStub.events.last!.value.element).to(beFalse())
                         }
 
                         describe("when device authentication is available") {
@@ -354,7 +342,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                             describe("pressing the biometrics button") {
                                 beforeEach {
-                                    self.view.fakeBiometricButtonPress.onNext(())
+                                    self.view.fakeUnlockButtonPress.onNext(())
                                 }
 
                                 it("starts authentication") {
@@ -414,8 +402,8 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         it("shows the biometrics login button and label") {
-                            expect(self.view.biometricButtonHiddenStub.events.last!.value.element).to(beFalse())
-                            expect(self.view.biometricLabelHiddenStub.events.last!.value.element).to(beFalse())
+                            expect(self.view.unlockButtonHiddenStub.events.last!.value.element).to(beFalse())
+                            expect(self.view.lockImageHiddenStub.events.last!.value.element).to(beFalse())
                         }
 
                         describe("when device authentication is available") {
@@ -451,9 +439,9 @@ class WelcomePresenterSpec: QuickSpec {
                                 }
                             }
 
-                            describe("pressing the biometrics button") {
+                            describe("pressing the unlock button") {
                                 beforeEach {
-                                    self.view.fakeBiometricButtonPress.onNext(())
+                                    self.view.fakeUnlockButtonPress.onNext(())
                                 }
 
                                 it("starts authentication") {
@@ -493,46 +481,6 @@ class WelcomePresenterSpec: QuickSpec {
                             it("unlocks the device blindly") {
                                 expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
                                 expect(self.routeActionHandler.invokeArgument).to(beNil())
-                            }
-                        }
-                    }
-
-                    describe("biometrics button title and image") {
-                        describe("when device authentication is available but toucHID and faceID are not") {
-                            beforeEach {
-                                self.biometryManager.deviceAuthAvailableStub = true
-                                self.subject.onViewReady()
-                            }
-
-                            it("displays the PIN prompt and image") {
-                                expect(self.view.biometricImageNameStub.events.last!.value.element).to(equal("unlock"))
-                                expect(self.view.biometricButtonTitleStub.events.last!.value.element).to(equal(Constant.string.unlockPIN))
-                            }
-                        }
-
-                        describe("when touchID is available") {
-                            beforeEach {
-                                self.biometryManager.deviceAuthAvailableStub = true
-                                self.biometryManager.touchIDStub = true
-                                self.subject.onViewReady()
-                            }
-
-                            it("displays the touch ID prompt and image") {
-                                expect(self.view.biometricImageNameStub.events.last!.value.element).to(equal("fingerprint"))
-                                expect(self.view.biometricButtonTitleStub.events.last!.value.element).to(equal(Constant.string.unlockTouchID))
-                            }
-                        }
-
-                        describe("when faceID is available") {
-                            beforeEach {
-                                self.biometryManager.deviceAuthAvailableStub = true
-                                self.biometryManager.faceIDStub = true
-                                self.subject.onViewReady()
-                            }
-
-                            it("displays the face ID prompt and image") {
-                                expect(self.view.biometricImageNameStub.events.last!.value.element).to(equal("face"))
-                                expect(self.view.biometricButtonTitleStub.events.last!.value.element).to(equal(Constant.string.unlockFaceID))
                             }
                         }
                     }

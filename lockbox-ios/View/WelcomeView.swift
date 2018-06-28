@@ -13,8 +13,8 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!
     @IBOutlet internal weak var learnMoreImage: UIImageView!
-    @IBOutlet internal weak var biometricButton: UIButton!
-    @IBOutlet internal weak var biometricTitle: UILabel!
+    @IBOutlet internal weak var lockImage: UIImageView!
+    @IBOutlet internal weak var unlockButton: UIButton!
     @IBOutlet private weak var oceanView: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -61,8 +61,8 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.fxASigninButton.rx.tap
     }
 
-    public var biometricButtonPressed: ControlEvent<Void> {
-        return self.biometricButton.rx.tap
+    public var unlockButtonPressed: ControlEvent<Void> {
+        return self.unlockButton.rx.tap
     }
 
     public var loginButtonHidden: AnyObserver<Bool> {
@@ -85,26 +85,11 @@ extension WelcomeView: WelcomeViewProtocol {
         return self.learnMoreImage.rx.isHidden.asObserver()
     }
 
-    public var biometricButtonHidden: AnyObserver<Bool> {
-        return self.biometricButton.rx.isHidden.asObserver()
+    public var lockImageHidden: AnyObserver<Bool> {
+        return self.lockImage.rx.isHidden.asObserver()
     }
 
-    public var biometricButtonTitleHidden: AnyObserver<Bool> {
-        return self.biometricTitle.rx.isHidden.asObserver()
-    }
-
-    public var biometricButtonTitle: AnyObserver<String?> {
-        return self.biometricTitle.rx.text.asObserver()
-    }
-
-    public var biometricButtonImageName: AnyObserver<String> {
-        return Binder(self) { target, imageName in
-            let image = UIImage(named: imageName)
-            let tintedImage = image?.tinted(Constant.color.buttonTitleColorOtherState)
-            target.biometricButton.setImage(image, for: .normal)
-            target.biometricButton.setImage(tintedImage, for: .selected)
-            target.biometricButton.setImage(tintedImage, for: .highlighted)
-            target.biometricButton.setImage(tintedImage, for: .disabled)
-        }.asObserver()
+    public var unlockButtonHidden: AnyObserver<Bool> {
+        return self.unlockButton.rx.isHidden.asObserver()
     }
 }
