@@ -17,6 +17,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     func dismissKeyboard()
     var pullToRefreshActive: AnyObserver<Bool>? { get }
+    func scrollToTop()
 }
 
 struct LoginListTextSort {
@@ -132,12 +133,20 @@ class ItemListPresenter {
     lazy private var alphabeticSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically))
+
+            if let view = self.view {
+                self.view?.scrollToTop()
+            }
         }.asObserver()
     }()
 
     lazy private var recentlyUsedSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed))
+            
+            if let view = self.view {
+                self.view?.scrollToTop()
+            }
         }.asObserver()
     }()
 

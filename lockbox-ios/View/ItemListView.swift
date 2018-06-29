@@ -134,6 +134,10 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
+    func scrollToTop() {
+        self.tableView.setContentOffset(.zero, animated: true)
+    }
+
     private func getFilterCell() -> FilterCell? {
         return self.tableView.cellForRow(at: [0, 0]) as? FilterCell
     }
