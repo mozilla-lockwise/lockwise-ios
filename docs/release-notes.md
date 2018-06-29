@@ -1,5 +1,38 @@
 # Release Notes
 
+## 1.1 (Build 1552)
+
+_Date: 2018-06-29_
+
+**This version was submitted to Apple.**
+
+EASY ACCESS
+
+- Firefox Lockbox makes it easy to access the passwords you already saved in Firefox across all your devices.
+- Get your passwords on your mobile device with one simple app
+- Auto import the passwords you already saved in the browser
+- One touch to copy your username and password to get into apps and websites
+- Open any website from the app to get into your accounts quickly
+
+PERSONAL TO YOU
+
+- Personalized features to keep your accounts safe and personal to just you, without added hurdles.
+- Your personal Firefox Account gets you access to all your browser saved logins
+- Use your face or touch to unlock the app (safe to just you)
+- Keep your passwords safe with an automatic timer which locks the app
+- Set the browser you want to open your website URLs
+
+TRUSTED
+
+- Firefox Lockbox is created by Mozilla the independent, non-profit who advocates for Internet privacy and protection for you and everyone.
+- Mozilla believes that individuals’ security and privacy on the Internet are fundamental and must not be treated as optional.
+
+## 1.1 (Build 1552)
+
+_Date: 2018-06-28_
+
+What's NEW? We fixed a few bugs around when the app automatically locks. Please test this out and continue using it before we submit to Apple.
+
 ## 1.1 (Build 1539)
 
 _Date: 2018-07-27_
