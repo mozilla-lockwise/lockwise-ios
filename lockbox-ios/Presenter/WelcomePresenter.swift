@@ -11,15 +11,13 @@ import CoreGraphics
 protocol WelcomeViewProtocol: class, AlertControllerView {
     var loginButtonPressed: ControlEvent<Void> { get }
     var learnMorePressed: ControlEvent<Void> { get }
-    var biometricButtonPressed: ControlEvent<Void> { get }
+    var unlockButtonPressed: ControlEvent<Void> { get }
     var loginButtonHidden: AnyObserver<Bool> { get }
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> { get }
-    var biometricButtonHidden: AnyObserver<Bool> { get }
-    var biometricButtonTitleHidden: AnyObserver<Bool> { get }
-    var biometricButtonImageName: AnyObserver<String> { get }
-    var biometricButtonTitle: AnyObserver<String?> { get }
+    var lockImageHidden: AnyObserver<Bool> { get }
+    var unlockButtonHidden: AnyObserver<Bool> { get }
 }
 
 struct LockedEnabled {
@@ -93,23 +91,6 @@ class WelcomePresenter {
     }
 
     private func setupBiometricLaunchers() {
-        let imageName: String
-        let title: String
-        if self.biometryManager.deviceAuthenticationAvailable &&
-                   !(self.biometryManager.usesFaceID || self.biometryManager.usesTouchID) {
-            imageName = "unlock"
-            title = Constant.string.unlockPIN
-        } else if self.biometryManager.usesFaceID {
-            imageName = "face"
-            title = Constant.string.unlockFaceID
-        } else {
-            imageName = "fingerprint"
-            title = Constant.string.unlockTouchID
-        }
-
-        self.view?.biometricButtonImageName.onNext(imageName)
-        self.view?.biometricButtonTitle.onNext(title)
-
         let lifecycleObservable = self.lifecycleStore.lifecycleFilter
                 .filter { action -> Bool in
             return action == LifecycleAction.foreground
@@ -129,7 +110,7 @@ class WelcomePresenter {
         let biometricButtonTapObservable = Observable.combineLatest(
                     self.userInfoStore.profileInfo,
                     self.dataStore.locked.distinctUntilChanged(),
-                    view.biometricButtonPressed.asObservable()
+                    view.unlockButtonPressed.asObservable()
                 )
                 .map { ($0.0, $0.1) }
 
@@ -209,8 +190,8 @@ extension WelcomePresenter {
         ]
 
         let lockScreenHiddenObservers = [
-            view.biometricButtonHidden,
-            view.biometricButtonTitleHidden
+            view.lockImageHidden,
+            view.unlockButtonHidden
         ]
 
         for observer in firstRunHiddenObservers {
