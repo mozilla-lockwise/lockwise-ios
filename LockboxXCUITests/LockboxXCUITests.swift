@@ -262,8 +262,8 @@ class LockboxXCUITests: BaseTestCase {
     func test9LockNowUnlock() {
         navigator.goto(Screen.LockboxMainPage)
         navigator.performAction(Action.LockNow)
-        waitforExistence(app.buttons["unlock.button"])
-        app.buttons["unlock.button"].tap()
+        waitforExistence(app.buttons["Unlock Firefox Lockbox"])
+        app.buttons["Unlock Firefox Lockbox"].tap()
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitforExistence(springboard.secureTextFields["Passcode field"])
         let passcodeInput = springboard.secureTextFields["Passcode field"]
