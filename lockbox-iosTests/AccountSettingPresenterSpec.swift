@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import RxCocoa
+import WebKit
 
 @testable import Lockbox
 
@@ -68,11 +69,36 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeWebKitDataStore: WKWebsiteDataStore {
+        var dataTypes: Set<String>?
+
+        override func removeData(ofTypes websiteDataTypes: Set<String>, modifiedSince date: Date, completionHandler: @escaping () -> Void) {
+            self.dataTypes = websiteDataTypes
+            completionHandler()
+        }
+
+        override func removeData(ofTypes dataTypes: Set<String>, for dataRecords: [WKWebsiteDataRecord], completionHandler: @escaping () -> Void) {
+            self.dataTypes = dataTypes
+            completionHandler()
+        }
+    }
+
+    class FakeCoder: NSCoder {
+        func decodeObjectForKey(key: String) -> Any {
+            return false
+        }
+
+        override func decodeBool(forKey key: String) -> Bool {
+            return true
+        }
+    }
+
     private var view: FakeAccountSettingView!
     private var userInfoStore: FakeUserInfoStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var userInfoActionHandler: FakeUserInfoActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var webKitDataStore: FakeWebKitDataStore!
     var subject: AccountSettingPresenter!
 
     private let disposeBag = DisposeBag()
@@ -90,12 +116,14 @@ class AccountSettingPresenterSpec: QuickSpec {
                 self.userInfoStore = FakeUserInfoStore()
                 self.userInfoActionHandler = FakeUserInfoActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.webKitDataStore = FakeWebKitDataStore(coder: FakeCoder())
                 self.subject = AccountSettingPresenter(
                         view: self.view,
                         userInfoStore: self.userInfoStore,
                         routeActionHandler: self.routeActionHandler,
                         dataStoreActionHandler: self.dataStoreActionHandler,
-                        userInfoActionHandler: self.userInfoActionHandler
+                        userInfoActionHandler: self.userInfoActionHandler,
+                        webKitDataStore: self.webKitDataStore
                 )
             }
 
@@ -190,6 +218,12 @@ class AccountSettingPresenterSpec: QuickSpec {
                     it("sends the clear & reset actions") {
                         expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.reset))
                         expect(self.userInfoActionHandler.invokeArgument).to(equal(UserInfoAction.clear))
+                    }
+
+                    it("clears cookies from webkit") {
+                        expect(self.webKitDataStore).toNot(beNil())
+                        expect(self.webKitDataStore.dataTypes).toNot(beNil())
+                        expect(self.webKitDataStore.dataTypes).to(equal(WKWebsiteDataStore.allWebsiteDataTypes()))
                     }
                 }
             }
