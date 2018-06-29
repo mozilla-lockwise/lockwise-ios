@@ -64,7 +64,7 @@ class RootPresenter {
                     switch storageState {
                     case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    case .Unlocked:
+                    case .Unlocked, .Preparing:
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
                         break
@@ -72,7 +72,9 @@ class RootPresenter {
                 })
                 .disposed(by: self.disposeBag)
 
-        self.dataStore.syncState
+        Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
+            .filter { $0.1 == LoginStoreState.Unprepared }
+            .map { $0.0 }
             .distinctUntilChanged()
             .subscribe(onNext: { syncState in
                 if syncState == .NotSyncable {

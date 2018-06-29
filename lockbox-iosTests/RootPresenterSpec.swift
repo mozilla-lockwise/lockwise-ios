@@ -214,7 +214,8 @@ class RootPresenterSpec: QuickSpec {
 
                 it("routes to the list view") {
                     self.dataStore.storageStateSubject.onNext(.Preparing)
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
+                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
                 }
 
                 it("routes to the welcome view") {
@@ -267,8 +268,9 @@ class RootPresenterSpec: QuickSpec {
                     self.dataStore.lockedSubject.onNext(false)
                 }
 
-                describe("when the datastore is not syncable") {
+                describe("when the datastore is not syncable and unprepared") {
                     beforeEach {
+                        self.dataStore.storageStateSubject.onNext(.Unprepared)
                         self.dataStore.syncSubject.onNext(.NotSyncable)
                     }
 
@@ -278,20 +280,33 @@ class RootPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("any other sync state value") {
+                describe("any other storage state + sync state value") {
                     it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
                         self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
 
                     it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
                         self.dataStore.syncSubject.onNext(.Syncing)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
 
                     it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
                         self.dataStore.syncSubject.onNext(.Synced)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
+                    }
+
+                    it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
+                        self.dataStore.syncSubject.onNext(.NotSyncable)
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
                 }
             }
