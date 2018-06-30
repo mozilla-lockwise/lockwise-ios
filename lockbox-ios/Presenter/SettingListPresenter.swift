@@ -150,7 +150,7 @@ extension SettingListPresenter {
         supportSettingSection.items.append(usageDataSetting)
 
         if let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            let appVersionSetting = SettingCellConfiguration(text: "App Version", routeAction: nil)
+            let appVersionSetting = SettingCellConfiguration(text: Constant.string.settingsAppVersion, routeAction: nil)
             appVersionSetting.detailText = appVersion
             supportSettingSection.items.append(appVersionSetting)
         }
