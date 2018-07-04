@@ -20,6 +20,8 @@ class Screen {
     static let AutolockSettingsMenu = "AutolockSettingsMenu"
 
     static let SortEntriesMenu = "SortEntriesMenu"
+
+    static let EntryDetails = "EntryDetails"
 }
 
 class Action {
@@ -39,6 +41,9 @@ class Action {
     static let ChangeEntriesOrder = "ChangeEntriesOrder"
     static let SelectAlphabeticalOrder = "SelectAlphabeticalOrder"
     static let SelectRecentOrder = "SelectRecentOrder"
+
+    static let RevealPassword = "RevealPassword"
+    static let OpenWebsite = "OpenWebsite"
 }
 
 @objcMembers
@@ -100,6 +105,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(Screen.LockboxMainPage) { screenState in
         screenState.tap(app.buttons["settings.button"], to: Screen.SettingsMenu)
         screenState.tap(app.buttons["sorting.button"], to: Screen.SortEntriesMenu)
+        screenState.tap(app.tables.cells.staticTexts.firstMatch, to: Screen.EntryDetails)
+    }
+
+    map.addScreenState(Screen.EntryDetails) { screenState in
+        screenState.gesture(forAction: Action.RevealPassword) { userState in
+            app.buttons["reveal.button"].tap()
+        }
+
+        screenState.gesture(forAction: Action.OpenWebsite) { userState in
+            app.cells["Web Address"].press(forDuration: 1)
+        }
+
     }
 
     map.addScreenState(Screen.SortEntriesMenu) { screenState in
