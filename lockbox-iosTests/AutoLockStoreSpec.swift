@@ -156,6 +156,17 @@ class AutoLockStoreSpec: QuickSpec {
                     }
                 }
 
+                describe("autolock pauses on going to an FAQ or feedback page") {
+                    beforeEach {
+                        let action = ExternalWebsiteRouteAction(urlString: "https://example.com", title: "Feedback form", returnRoute: SettingRouteAction.list)
+                        self.dispatcher.dispatch(action: action)
+                    }
+                    it("resets the timer, but does not clear the fireDate") {
+                        let newFireDate = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
+                        expect(newFireDate).to(equal(fireDate))
+                    }
+                }
+
                 describe("miscellaneous actions") {
                     sharedExamples(AutoLockStoreSpecSharedExample.TimerReset.rawValue) { context in
                         it("resets the timer") {
