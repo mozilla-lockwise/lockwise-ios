@@ -74,25 +74,33 @@ class LockboxXCUITests: BaseTestCase {
 
             let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
             let regexCode = "(code=[a-z0-9]{0,32}$?)"
+
             if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
-                uid = (responseString?.substring(with:rangeUid))
+                uid = String(responseString![rangeUid])
+            }
+            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
+                code = String(responseString![rangeCode])
             }
 
-            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
-                code = (responseString?.substring(with:rangeCode))
-            }
             if (code != nil && uid != nil) {
-                let finalCodeIndex = code.index(code.endIndex, offsetBy: -32)
-                let codeNumber = code[finalCodeIndex...]
-                let finalUidIndex = uid.index(uid.endIndex, offsetBy: -32)
-                let uidNumber = uid[finalUidIndex...]
+                let codeNumber = self.getPostValues(value: code)
+                let uidNumber = self.getPostValues(value: uid)
 
                 self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
                     done()
                 }
+            } else {
+                done()
             }
         }
         task.resume()
+    }
+
+    private func getPostValues(value: String) -> String {
+        // From the regExp it is necessary to get only the number to add it to a json and send in POST request
+        let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
+        let numberValue = value[finalNumberIndex...];
+        return String(numberValue)
     }
 
     func test0LoginWithSavedLogins() {
@@ -142,25 +150,17 @@ class LockboxXCUITests: BaseTestCase {
 
         XCTAssertTrue(app.navigationBars["Firefox Lockbox"].exists)
         XCTAssertTrue(app.navigationBars.buttons["Settings"].exists)
-
-        sleep(5)
-        var i = 0
-        repeat {
-            i = i+1
-        } while (app.staticTexts["Confirm your account."].exists == true && i < 8)
         // Check if the account is verified and if not, verify it
         if (app.staticTexts["Confirm your account."].exists) {
             let group = DispatchGroup()
             group.enter()
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 self?.verifyAccount() {
-                    sleep(7)
-                    // If we use the testing account there should be two entries after verifing
-                self?.waitforExistence((self?.app.tables.cells.staticTexts["iosmztest@gmail.com"])!, timeout: 15)
                     group.leave()
                 }
             }
             group.wait()
+            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 15)
         } else {
             // Account is still verified, check that entries are shown
             waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
@@ -221,7 +221,7 @@ class LockboxXCUITests: BaseTestCase {
         // Now check the clipboard
         if let userNameString = UIPasteboard.general.string {
             let value = app.cells["Username"].staticTexts.element(boundBy: 1).label
-            XCTAssertNotNil(userNameString)
+            XCTAssertNotNil(value)
             XCTAssertEqual(userNameString, value, "Url matches with the UIPasteboard")
         }
 
@@ -274,8 +274,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func test6SortEntries() {
         navigator.goto(Screen.LockboxMainPage)
-        sleep(5)
-        waitforExistence(app.navigationBars["Firefox Lockbox"])
+        waitforExistence(app.navigationBars["Firefox Lockbox"], timeout: 10)
         navigator.performAction(Action.SelectRecentOrder)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
@@ -321,7 +320,7 @@ class LockboxXCUITests: BaseTestCase {
         // There should not be any matches
         searchTextField.typeText("x")
         sleep(2)
-        print(app.debugDescription)
+
         let noMatches = app.tables.cells.count-1
         XCTAssertEqual(noMatches, 1)
         XCTAssertEqual(app.cells.staticTexts.element(boundBy: 1).label, "No matching entries.")
