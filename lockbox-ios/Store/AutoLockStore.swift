@@ -16,6 +16,7 @@ class AutoLockStore {
     private let userDefaults: UserDefaults
 
     var timer: Timer?
+    var paused: Bool = false
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
@@ -52,12 +53,19 @@ class AutoLockStore {
                     self?.resetTimer()
                 })
                 .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+            .filterByType(class: ExternalWebsiteRouteAction.self)
+            .subscribe(onNext: { [weak self] _ in
+                self?.pauseTimer()
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 
 extension AutoLockStore {
     private func resetTimer() {
-        self.stopTimer()
+        self.stopTimer(reset: !paused)
         self.setupTimer()
     }
 
@@ -86,7 +94,7 @@ extension AutoLockStore {
 
     private func setTimer(seconds: Int) {
         let timerValue = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
-        if timerValue != 0 && timerValue > Date().timeIntervalSince1970 {
+        if timerValue != 0 && timerValue < Date().timeIntervalSince1970 {
             self.timer = Timer(fireAt: Date(timeIntervalSince1970: timerValue),
                     interval: 0,
                     target: self,
@@ -104,6 +112,8 @@ extension AutoLockStore {
                     forKey: SettingKey.autoLockTimerDate.rawValue)
         }
 
+        paused = false
+
         if let timer = self.timer {
             DispatchQueue.main.async {
                 RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
@@ -111,12 +121,18 @@ extension AutoLockStore {
         }
     }
 
-    private func stopTimer() {
+    private func pauseTimer() {
+        paused = true
+        self.stopTimer(reset: !paused)
+    }
+
+    private func stopTimer(reset: Bool = true) {
         if let timer = self.timer {
             timer.invalidate()
         }
-
-        self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+        if reset {
+            self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+        }
     }
 
     @objc private func lockApp() {
