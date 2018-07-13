@@ -160,15 +160,6 @@ class SettingListViewSpec: QuickSpec {
                     expect(observer.events.count).to(equal(1))
                 }
             }
-
-            describe("hideLockNow") {
-                it("binds to lock now button") {
-                    self.subject.hideLockNow.onNext(true)
-                    expect(self.subject.signOutButton.isHidden).to(beTrue())
-                    self.subject.hideLockNow.onNext(false)
-                    expect(self.subject.signOutButton.isHidden).to(beFalse())
-                }
-            }
         }
 
         describe("SettingCellConfiguration") {

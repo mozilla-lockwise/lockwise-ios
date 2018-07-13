@@ -8,10 +8,9 @@ import RxCocoa
 import RxDataSources
 import LocalAuthentication
 
-protocol SettingListViewProtocol: class {
+protocol SettingListViewProtocol: class, AlertControllerView {
     func bind(items: Driver<[SettingSectionModel]>)
     var onSignOut: ControlEvent<Void> { get }
-    var hideLockNow: AnyObserver<Bool> { get }
 }
 
 class SettingListPresenter {
@@ -19,6 +18,7 @@ class SettingListPresenter {
     private let routeActionHandler: RouteActionHandler
     private let settingActionHandler: SettingActionHandler
     private let dataStoreActionHandler: DataStoreActionHandler
+    private let linkActionHandler: LinkActionHandler
     private let userDefaults: UserDefaults
     private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
@@ -45,6 +45,25 @@ class SettingListPresenter {
         }.asObserver()
     }()
 
+    private var setPasscodeButtonObserver: AnyObserver<Void> {
+        return Binder(self) { target, _ in
+            target.linkActionHandler.invoke(SettingLinkAction.touchIDPasscode)
+            }.asObserver()
+    }
+
+    private var passcodeButtonsConfiguration: [AlertActionButtonConfiguration] {
+        return [
+            AlertActionButtonConfiguration(
+                title: Constant.string.cancel,
+                tapObserver: nil,
+                style: .cancel),
+            AlertActionButtonConfiguration(
+                title: Constant.string.setPasscode,
+                tapObserver: self.setPasscodeButtonObserver,
+                style: .default)
+        ]
+    }
+
     private var staticSupportSettingSection: SettingSectionModel {
         return SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
@@ -66,12 +85,14 @@ class SettingListPresenter {
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          userDefaults: UserDefaults = UserDefaults.standard,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.routeActionHandler = routeActionHandler
         self.settingActionHandler = settingActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
+        self.linkActionHandler = linkActionHandler
         self.userDefaults = userDefaults
         self.biometryManager = biometryManager
     }
@@ -90,12 +111,18 @@ class SettingListPresenter {
 
         self.view?.onSignOut
                 .subscribe { _ in
-                    self.dataStoreActionHandler.invoke(.lock)
-                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    if self.biometryManager.deviceAuthenticationAvailable {
+                        self.dataStoreActionHandler.invoke(.lock)
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    } else {
+                        self.view?.displayAlertController(
+                            buttons: self.passcodeButtonsConfiguration,
+                            title: Constant.string.notUsingPasscode,
+                            message: Constant.string.passcodeDetailInformation,
+                            style: .alert)
+                    }
                 }
                 .disposed(by: self.disposeBag)
-
-        self.view?.hideLockNow.onNext(!self.biometryManager.deviceAuthenticationAvailable)
     }
 }
 

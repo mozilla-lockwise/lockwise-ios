@@ -26,10 +26,6 @@ class SettingsPresenterSpec: QuickSpec {
         var onSignOut: ControlEvent<Void> {
             return ControlEvent(events: fakeButtonPress.asObservable())
         }
-
-        var hideLockNow: AnyObserver<Bool> {
-            return self.lockNowObserver.asObserver()
-        }
     }
 
     class FakeRouteActionHandler: RouteActionHandler {

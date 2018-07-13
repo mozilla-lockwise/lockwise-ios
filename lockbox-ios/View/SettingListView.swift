@@ -47,10 +47,6 @@ extension SettingListView: SettingListViewProtocol {
         return self.signOutButton.rx.tap
     }
 
-    public var hideLockNow: AnyObserver<Bool> {
-        return self.signOutButton.rx.isHidden.asObserver()
-    }
-
     func bind(items: Driver<[SettingSectionModel]>) {
         if let dataSource = self.dataSource {
             items.drive(self.tableView.rx.items(dataSource: dataSource))
