@@ -76,6 +76,10 @@ extension AutoLockStore {
                     switch latest {
                     case .FiveMinutes:
                         self.setTimer(seconds: 60 * 5)
+                    case .FifteenMinutes:
+                        self.setTimer(seconds: 60 * 15)
+                    case .ThirtyMinutes:
+                        self.setTimer(seconds: 60 * 30)
                     case .OneHour:
                         self.setTimer(seconds: 60 * 60)
                     case .OneMinute:

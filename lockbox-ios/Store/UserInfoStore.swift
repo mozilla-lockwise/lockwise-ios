@@ -99,6 +99,8 @@ extension UserInfoStore {
 enum AutoLockSetting: String {
     case OneMinute
     case FiveMinutes
+    case FifteenMinutes
+    case ThirtyMinutes
     case OneHour
     case TwelveHours
     case TwentyFourHours
@@ -118,6 +120,10 @@ enum AutoLockSetting: String {
             return Constant.string.autoLockTwelveHours
         case .TwentyFourHours:
             return Constant.string.autoLockTwentyFourHours
+        case .FifteenMinutes:
+            return Constant.string.autoLockFifteenMinutes
+        case .ThirtyMinutes:
+            return Constant.string.autoLockThirtyMinutes
         }
     }
 }
