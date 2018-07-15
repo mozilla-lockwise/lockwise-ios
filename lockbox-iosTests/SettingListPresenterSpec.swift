@@ -13,9 +13,16 @@ import RxCocoa
 
 class SettingsPresenterSpec: QuickSpec {
     class FakeSettingsView: SettingListViewProtocol {
+
+        var displayAlertControllerCalled = false
+        var displayAlertControllerButtons: [AlertActionButtonConfiguration]?
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
+            displayAlertControllerCalled = true
+            displayAlertControllerButtons = buttons
+        }
+
         var itemsObserver: TestableObserver<[SettingSectionModel]>!
         var fakeButtonPress = PublishSubject<Void>()
-        var lockNowObserver: TestableObserver<Bool>!
 
         private let disposeBag = DisposeBag()
 
@@ -60,10 +67,18 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeLinkActionHandler: LinkActionHandler {
+        var actionArgument: LinkAction?
+        override func invoke(_ action: LinkAction) {
+            actionArgument = action
+        }
+    }
+
     private var view: FakeSettingsView!
     private var routeActionHandler: FakeRouteActionHandler!
     private var settingActionHandler: FakeSettingActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var linkActionHandler: FakeLinkActionHandler!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -75,17 +90,18 @@ class SettingsPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeSettingsView()
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
-                self.view.lockNowObserver = self.scheduler.createObserver(Bool.self)
-
+                
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.settingActionHandler = FakeSettingActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.linkActionHandler = FakeLinkActionHandler()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
                         routeActionHandler: self.routeActionHandler,
                         settingActionHandler: self.settingActionHandler,
                         dataStoreActionHandler: self.dataStoreActionHandler,
+                        linkActionHandler: self.linkActionHandler,
                         biometryManager: self.biometryManager)
             }
 
@@ -93,11 +109,6 @@ class SettingsPresenterSpec: QuickSpec {
                 describe("when device auth is available") {
                     beforeEach {
                         self.biometryManager.deviceAuthAvailableStub = true
-                    }
-
-                    it("shows the lock now button") {
-                        self.subject.onViewReady()
-                        expect(self.view.lockNowObserver.events.last!.value.element).to(beFalse())
                     }
 
                     describe("onSignOut") {
@@ -137,9 +148,25 @@ class SettingsPresenterSpec: QuickSpec {
                         self.biometryManager.deviceAuthAvailableStub = false
                     }
 
-                    it("hides the Lock Now button") {
-                        self.subject.onViewReady()
-                        expect(self.view.lockNowObserver.events.last!.value.element).to(beTrue())
+                    describe("onSignOut") {
+                        beforeEach {
+                            self.subject.onViewReady()
+                            self.view.fakeButtonPress.onNext(())
+                        }
+
+                        it("presents alert onSignOut") {
+                            expect(self.view.displayAlertControllerCalled).to(beTrue())
+                        }
+
+                        describe("on button tap") {
+                            beforeEach {
+                                self.view.displayAlertControllerButtons?.last?.tapObserver?.onNext(())
+                            }
+
+                            it("routes to set passcode") {
+                                expect(self.linkActionHandler.actionArgument as? SettingLinkAction).to(equal(SettingLinkAction.touchIDPasscode))
+                            }
+                        }
                     }
 
                     describe("detail values on view modules") {
