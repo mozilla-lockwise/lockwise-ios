@@ -59,7 +59,7 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
 
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 expect(settings.count).to(be(1))
-                expect(settings[0].items.count).to(be(4))
+                expect(settings[0].items.count).to(be(3))
 
                 for item in settings[0].items {
                     if item.valueWhenChecked as? PreferredBrowserSetting == PreferredBrowserSetting.Firefox {
