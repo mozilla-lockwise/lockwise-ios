@@ -87,6 +87,7 @@ struct Constant {
         static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
         static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
         static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve Firefox Lockbox for everyone. ", comment: "Setting for send usage data subtitle")
+        static let settingsAppVersion = NSLocalizedString("settings.appVersion", value: "App Version", comment: "App Version setting label")
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
         static let notUsingPasscode = NSLocalizedString("not_using_passcode", value: "You're not using a passcode.", comment: "Title for dialog box with passcode setting information")
         static let passcodeInformation = NSLocalizedString("passcode_info", value: "You should use a passcode to lock your iPhone. Without a passcode, anyone who has your iPhone can access the information saved here.", comment: "Informative text about the ")
