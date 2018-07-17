@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.1.1</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -25,6 +25,7 @@
 		<string>googlechrome</string>
 		<string>firefox</string>
 		<string>firefox-focus</string>
+		<string>firefox-klar</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

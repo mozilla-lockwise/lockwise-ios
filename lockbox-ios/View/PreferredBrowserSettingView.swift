@@ -16,7 +16,7 @@ class PreferredBrowserSettingView: UITableViewController {
     private var dataSource: RxTableViewSectionedReloadDataSource<PreferredBrowserSettingSectionModel>?
 
     init() {
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: UITableViewStyle.grouped)
         self.presenter = PreferredBrowserSettingPresenter(view: self)
         view.backgroundColor = Constant.color.viewBackground
     }

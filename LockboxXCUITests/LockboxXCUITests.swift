@@ -180,7 +180,6 @@ class LockboxXCUITests: BaseTestCase {
         navigator.goto(Screen.OpenSitesInMenu)
         waitforExistence(app.navigationBars["Open Websites in"])
         XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Firefox Focus"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
     }
