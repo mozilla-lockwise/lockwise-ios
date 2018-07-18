@@ -75,6 +75,7 @@ struct Constant {
         static let settingsBrowser = NSLocalizedString("settings.browser", value: "Open Websites in", comment: "Preferred Browser option in settings")
         static let autoLockOneMinute = NSLocalizedString("settings.autoLock.oneMinute", value: "1 minute", comment: "1 minute auto lock setting")
         static let autoLockFiveMinutes = NSLocalizedString("settings.autoLock.fiveMinutes", value: "5 minutes", comment: "5 minutes auto lock setting")
+        static let autoLockFifteenMinutes = NSLocalizedString("settings.autoLock.fifteenMinutes", value: "15 minutes", comment: "15 minutes auto lock setting")
         static let autoLockThirtyMinutes = NSLocalizedString("settings.autoLock.thirtyMinutes", value: "30 minutes", comment: "30 minutes auto lock setting")
         static let autoLockOneHour = NSLocalizedString("settings.autoLock.oneHour", value: "1 hour", comment: "1 hour auto lock setting")
         static let autoLockTwelveHours = NSLocalizedString("settings.autoLock.twelveHour", value: "12 hours", comment: "12 hours auto lock setting")
