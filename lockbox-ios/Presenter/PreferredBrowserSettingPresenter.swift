@@ -21,8 +21,6 @@ class PreferredBrowserSettingPresenter {
     lazy var initialSettings = [
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox,
                                           valueWhenChecked: PreferredBrowserSetting.Firefox),
-        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus,
-                                          valueWhenChecked: PreferredBrowserSetting.Focus),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserChrome,
                                           valueWhenChecked: PreferredBrowserSetting.Chrome),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari,
@@ -50,6 +48,10 @@ class PreferredBrowserSettingPresenter {
     }
 
     func onViewReady() {
+        if let browser = getInstalledFocusBrowser() {
+            self.initialSettings.insert(browser, at: 1)
+        }
+
         let driver = self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
             .filterNil()
             .map { value -> PreferredBrowserSetting? in
@@ -78,4 +80,16 @@ class PreferredBrowserSettingPresenter {
             target.routeActionHandler.invoke(SettingRouteAction.list)
             }.asObserver()
     }()
+
+    private func getInstalledFocusBrowser() -> CheckmarkSettingCellConfiguration? {
+        if PreferredBrowserSetting.Focus.canOpenBrowser() {
+            return CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus,
+                                                     valueWhenChecked: PreferredBrowserSetting.Focus)
+        } else if PreferredBrowserSetting.Klar.canOpenBrowser() {
+            return CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserKlar,
+                                                     valueWhenChecked: PreferredBrowserSetting.Klar)
+        }
+
+        return nil
+    }
 }

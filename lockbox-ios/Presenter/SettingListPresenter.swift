@@ -176,6 +176,12 @@ extension SettingListPresenter {
         var supportSettingSection = self.staticSupportSettingSection
         supportSettingSection.items.append(usageDataSetting)
 
+        if let appVersion = Constant.app.appVersion {
+            let appVersionSetting = SettingCellConfiguration(text: Constant.string.settingsAppVersion, routeAction: nil)
+            appVersionSetting.detailText = appVersion
+            supportSettingSection.items.append(appVersionSetting)
+        }
+
         return [supportSettingSection, applicationConfigurationSection]
     }
 
