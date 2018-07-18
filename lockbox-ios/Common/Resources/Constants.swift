@@ -92,6 +92,7 @@ struct Constant {
         static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
         static let notUsingPasscode = NSLocalizedString("not_using_passcode", value: "You're not using a passcode.", comment: "Title for dialog box with passcode setting information")
         static let passcodeInformation = NSLocalizedString("passcode_info", value: "You should use a passcode to lock your iPhone. Without a passcode, anyone who has your iPhone can access the information saved here.", comment: "Informative text about the ")
+        static let passcodeDetailInformation = NSLocalizedString("passcode_detail_information", value: "In order to lock Firefox Lockbox, a passcode must be set up on your device. Without a passcode, anyone who has your iPhone can access the information saved here.", comment: "Message for dialog box with passcode reminder")
         static let skip = NSLocalizedString("skip", value: "Skip", comment: "Label for button allowing users to skip setting passcode or biometrics on device")
         static let setPasscode = NSLocalizedString("set_passcode", value: "Set Passcode", comment: "Label for button allowing users to go to passcode settings")
         static let sortOptionsAccessibilityID = NSLocalizedString("sorting_options", value: "Select options for sorting your list of entries (currently %@)", comment: "Accessibility identifier for the sorting options button")
