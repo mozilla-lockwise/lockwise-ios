@@ -1,5 +1,22 @@
 # Release Notes
 
+## 1.1.1 (Build 1663)
+
+_Date: 2018-07-18_
+
+We made some changes to autolocking and want your help testing it! Please let us know if you find anything unexpected.
+
+We also added Klar as a browser option instead of Focus, when available. Can all you German users with Klar installed please make sure it works OK?
+
+We also show the app version number in the settings screen and add it the feedback survey so folks can easily tell us which version of the app they're using.
+
+Here's the full list of changes:
+
+- Added more autolock timer options: 15 and 30 minutes
+- The autolock timer now also pauses when viewing a webpage so it doesn't lock when submitting feedback or reading FAQs
+- You can pick Klar as your preferred browser (instead of Focus) if its available on your device
+- Updated the app icon to an improved version
+
 ## 1.1 (Build 1552)
 
 _Date: 2018-06-29_
