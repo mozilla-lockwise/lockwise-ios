@@ -12,7 +12,6 @@
 		2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */; };
 		2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */; };
 		391233682090E52800CB0233 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB3677208E2A800026DA92 /* Account.framework */; };
-		3912336A2090E52800CB0233 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
 		3912336E2090E52800CB0233 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB367D208E2F8F0026DA92 /* FxA.framework */; };
 		391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233712090E56E00CB0233 /* SwiftyJSON.framework */; };
 		391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */; };
@@ -477,7 +476,6 @@
 				391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */,
 				39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */,
 				391233782090E5A300CB0233 /* Shared.framework in Frameworks */,
-				3912336A2090E52800CB0233 /* Deferred.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,7 +911,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					2C2EC55120ADA85A00AF8C44 = {
