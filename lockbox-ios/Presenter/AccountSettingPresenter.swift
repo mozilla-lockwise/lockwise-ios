@@ -64,7 +64,7 @@ class AccountSettingPresenter {
                 .filterNil()
 
         let displayNameDriver = profileObservable
-                .map { $0.email }
+                .map { $0.displayName ?? $0.email }
                 .asDriver(onErrorJustReturn: "")
 
         self.view?.bind(displayName: displayNameDriver)

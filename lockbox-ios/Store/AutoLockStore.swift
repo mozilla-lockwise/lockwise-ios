@@ -74,6 +74,8 @@ extension AutoLockStore {
                 .take(1)
                 .subscribe(onNext: { (latest: AutoLockSetting) in
                     switch latest {
+                    case .OneMinute:
+                        self.setTimer(seconds: 60)
                     case .FiveMinutes:
                         self.setTimer(seconds: 60 * 5)
                     case .FifteenMinutes:
@@ -82,8 +84,6 @@ extension AutoLockStore {
                         self.setTimer(seconds: 60 * 30)
                     case .OneHour:
                         self.setTimer(seconds: 60 * 60)
-                    case .OneMinute:
-                        self.setTimer(seconds: 60)
                     case .TwelveHours:
                         self.setTimer(seconds: 60 * 60 * 12)
                     case .TwentyFourHours:

@@ -28,18 +28,25 @@ class AccountStore {
     private var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
 
-    private lazy var fxa: FirefoxAccount? = {
-        if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue),
-                let fxa = try? FirefoxAccount.fromJSON(state: accountJSON) {
-            return fxa
-        }
+    private lazy var fxa: Single<FirefoxAccount?> = {
+        return Single.create { observer in
+            if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue),
+               let fxa = try? FirefoxAccount.fromJSON(state: accountJSON) {
+                observer(.success(fxa))
+            }
 
-        if let config = try? FxAConfig.custom(content_base: "https://accounts.firefox.com"),
-              let fxa = try? FirefoxAccount(config: config, clientId: Constant.fxa.clientID) {
-            return fxa
-        }
+            FxAConfig.release { (config: FxAConfig?, _) in
+                if let config = config,
+                   let fxa = try? FirefoxAccount(
+                           config: config,
+                           clientId: Constant.fxa.clientID,
+                           redirectUri: Constant.fxa.redirectURI) {
+                    observer(.success(fxa))
+                }
+            }
 
-        return nil
+            return Disposables.create()
+        }
     }()
 
     public var loginURL: Observable<URL> {
@@ -78,34 +85,27 @@ class AccountStore {
 
 extension AccountStore {
     private func generateInitialURL() {
-        // TODO: it doesn't look like this library allows us to specify "signin" action?
-        // the page is defaulting to signup :(
-        if let url = try? self.fxa?.beginOAuthFlow(
-                redirectURI: Constant.fxa.redirectURI,
-                scopes: [
-                    "profile",
-                    "https://identity.mozilla.com/apps/oldsync",
-                    "https://identity.mozilla.com/apps/lockbox"],
-                wantsKeys: true),
-           url != nil {
-            self._loginURL.onNext(url!)
-        }
+        self.fxa.subscribe(onSuccess: { account in
+                    account?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
+                        if let url = url {
+                            self._loginURL.onNext(url)
+                        }
+                    }
+                })
+                .disposed(by: self.disposeBag)
     }
 
     private func populateInitialValues() {
-        if let oauthInfo = try? self.fxa?.getOAuthToken(scopes: ["profile",
-                                                                 "https://identity.mozilla.com/apps/oldsync",
-                                                                 "https://identity.mozilla.com/apps/lockbox"]) {
-            self._oauthInfo.onNext(oauthInfo)
-        } else {
-            self._oauthInfo.onNext(nil)
-        }
+        self.fxa.subscribe(onSuccess: { account in
+                    account?.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
+                        self._oauthInfo.onNext(info)
+                    }
 
-        if let profile = try? self.fxa?.getProfile() {
-            self._profile.onNext(profile)
-        } else {
-            self._profile.onNext(nil)
-        }
+                    account?.getProfile { (profile: Profile?, _) in
+                        self._profile.onNext(profile)
+                    }
+                })
+                .disposed(by: self.disposeBag)
     }
 
     private func clear() {
@@ -129,29 +129,23 @@ extension AccountStore {
         }
 
         guard let code = dic["code"],
-              let state = dic["state"],
-              let fxa = self.fxa,
-              let oauthInfo = try? fxa.completeOAuthFlow(code: code, state: state),
-              let accountJSON = try? fxa.toJSON() else {
-            self._oauthInfo.onNext(nil)
-            return
-        }
-        self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
-        self._oauthInfo.onNext(oauthInfo)
-
-        // leaving this for posterity / possible usefulness but it will get deleted....
-//        print("access_token: " + oauthInfo.accessToken)
-//        let keys = JSON(parseJSON: oauthInfo.keys)
-//        let scopedKey = keys[Constant.fxa.scope]
-//
-//        print("keysJWE: \(scopedKey)")
-//
-//        print("obtained scopes: " + oauthInfo.scopes.joined(separator: " "))
-
-        guard let fxaProfile = try? fxa.getProfile() else {
+              let state = dic["state"] else {
             return
         }
 
-        self._profile.onNext(fxaProfile)
+        self.fxa.subscribe(onSuccess: { account in
+                    account?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
+                        self._oauthInfo.onNext(info)
+
+                        if let accountJSON = try? account?.toJSON(), accountJSON != nil {
+                            self.keychainWrapper.set(accountJSON!, forKey: KeychainKey.accountJSON.rawValue)
+                        }
+                    }
+
+                    account?.getProfile { (profile: Profile?, _) in
+                        self._profile.onNext(profile)
+                    }
+                })
+                .disposed(by: self.disposeBag)
     }
 }

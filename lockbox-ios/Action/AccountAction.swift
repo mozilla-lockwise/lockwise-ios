@@ -9,6 +9,7 @@ import RxOptional
 import FxAClient
 
 enum AccountAction: Action {
+    // invoked when redirecting from a successful OAuth authentication
     case oauthRedirect(url: URL)
     case clear
 }

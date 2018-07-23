@@ -9,7 +9,6 @@ import UIKit
 struct Constant {
     struct app {
         static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let privacyURL = "https://lockbox.firefox.com/privacy.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
@@ -35,7 +34,10 @@ struct Constant {
     struct fxa {
         static let redirectURI = "https://lockbox.firefox.com/fxa/ios-redirect.html"
         static let clientID = "98adfa37698f255b"
-        static let scope = "https://identity.mozilla.com/apps/oldsync"
+        static let oldSyncScope = "https://identity.mozilla.com/apps/oldsync"
+        static let lockboxScope = "https://identity.mozilla.com/apps/lockbox"
+        static let profileScope = "profile"
+        static let scopes = [oldSyncScope, lockboxScope, profileScope]
     }
 
     struct string {

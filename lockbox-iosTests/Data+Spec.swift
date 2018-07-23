@@ -25,7 +25,7 @@ class DataSpec: QuickSpec {
             }
         }
 
-        describe("loadImageData") {
+        xdescribe("loadImageData") {
             describe("good URLs") {
                 var image: Data?
 

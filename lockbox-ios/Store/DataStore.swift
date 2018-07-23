@@ -212,7 +212,7 @@ extension DataStore {
         }
 
         let keys = JSON(parseJSON: keysString)
-        let scopedKey = keys[Constant.fxa.scope]
+        let scopedKey = keys[Constant.fxa.oldSyncScope]
 
         guard let account = profile.getAccount() else {
             _ = fxaLoginHelper.application(UIApplication.shared,
