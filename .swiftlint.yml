@@ -10,3 +10,4 @@ opt_in_rules:
   - opening_brace
   - trailing_semicolon
   - file_header
+line_length: 135

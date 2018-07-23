@@ -165,7 +165,7 @@ extension WelcomePresenter {
                         return Single.just(())
                     }
 
-                    return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder) // swiftlint:disable:this line_length
+                    return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
                             .catchError { _ in
                                 // ignore errors from local authentication
                                 return Observable.never().asSingle()

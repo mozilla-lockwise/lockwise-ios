@@ -172,7 +172,7 @@ extension ItemListView {
 
                         retCell = cell
                     case .Item(let title, let username, _):
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else { // swiftlint:disable:this line_length
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else {
                             fatalError("couldn't find the right cell!")
                         }
 
