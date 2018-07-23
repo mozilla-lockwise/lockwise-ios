@@ -11,3 +11,5 @@ opt_in_rules:
   - trailing_semicolon
   - file_header
 line_length: 135
+function_body_length: 
+  warning: 120
