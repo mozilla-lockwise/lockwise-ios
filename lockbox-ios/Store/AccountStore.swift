@@ -24,30 +24,11 @@ class AccountStore {
     private var keychainWrapper: KeychainWrapper
     private let disposeBag = DisposeBag()
 
+    private var fxa: FirefoxAccount?
+
     private var _loginURL = ReplaySubject<URL>.create(bufferSize: 1)
     private var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
-
-    private lazy var fxa: Single<FirefoxAccount?> = {
-        return Single.create { observer in
-            if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue),
-               let fxa = try? FirefoxAccount.fromJSON(state: accountJSON) {
-                observer(.success(fxa))
-            }
-
-            FxAConfig.release { (config: FxAConfig?, _) in
-                if let config = config,
-                   let fxa = try? FirefoxAccount(
-                           config: config,
-                           clientId: Constant.fxa.clientID,
-                           redirectUri: Constant.fxa.redirectURI) {
-                    observer(.success(fxa))
-                }
-            }
-
-            return Disposables.create()
-        }
-    }()
 
     public var loginURL: Observable<URL> {
         return _loginURL.asObservable()
@@ -78,34 +59,44 @@ class AccountStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        self.generateInitialURL()
-        self.populateInitialValues()
+        if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue) {
+            self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
+            self.generateInitialURL()
+            self.populateInitialValues()
+        } else {
+            FxAConfig.release { (config: FxAConfig?, _) in
+                if let config = config {
+                   self.fxa = try? FirefoxAccount(
+                           config: config,
+                           clientId: Constant.fxa.clientID,
+                           redirectUri: Constant.fxa.redirectURI)
+
+                    self.generateInitialURL()
+                    self.populateInitialValues()
+                }
+            }
+        }
+
     }
 }
 
 extension AccountStore {
     private func generateInitialURL() {
-        self.fxa.subscribe(onSuccess: { account in
-                    account?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
-                        if let url = url {
-                            self._loginURL.onNext(url)
-                        }
-                    }
-                })
-                .disposed(by: self.disposeBag)
+        self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
+            if let url = url {
+                self._loginURL.onNext(url)
+            }
+        }
     }
 
     private func populateInitialValues() {
-        self.fxa.subscribe(onSuccess: { account in
-                    account?.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
-                        self._oauthInfo.onNext(info)
-                    }
+        self.fxa?.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
+            self._oauthInfo.onNext(info)
+        }
 
-                    account?.getProfile { (profile: Profile?, _) in
-                        self._profile.onNext(profile)
-                    }
-                })
-                .disposed(by: self.disposeBag)
+        self.fxa?.getProfile { (profile: Profile?, _) in
+            self._profile.onNext(profile)
+        }
     }
 
     private func clear() {
@@ -133,19 +124,17 @@ extension AccountStore {
             return
         }
 
-        self.fxa.subscribe(onSuccess: { account in
-                    account?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
-                        self._oauthInfo.onNext(info)
+        self.fxa?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
+            self._oauthInfo.onNext(info)
 
-                        if let accountJSON = try? account?.toJSON(), accountJSON != nil {
-                            self.keychainWrapper.set(accountJSON!, forKey: KeychainKey.accountJSON.rawValue)
-                        }
-                    }
+            if let accountJSON = try? self.fxa?.toJSON(), accountJSON != nil {
+                self.keychainWrapper.set(accountJSON!, forKey: KeychainKey.accountJSON.rawValue)
+            }
 
-                    account?.getProfile { (profile: Profile?, _) in
-                        self._profile.onNext(profile)
-                    }
-                })
-                .disposed(by: self.disposeBag)
+            self.fxa?.getProfile { (profile: Profile?, _) in
+                self._profile.onNext(profile)
+            }
+        }
+
     }
 }

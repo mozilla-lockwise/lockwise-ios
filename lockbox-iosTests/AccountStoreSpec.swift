@@ -61,26 +61,17 @@ class AccountStoreSpec: QuickSpec {
                 )
             }
 
-            describe("loginURL") {
-                var urlObserver = self.scheduler.createObserver(URL.self)
-
-                beforeEach {
-                    urlObserver = self.scheduler.createObserver(URL.self)
-
-                    self.subject.loginURL
-                            .bind(to: urlObserver)
-                            .disposed(by: self.disposeBag)
-                }
-
+            xdescribe("loginURL") {
                 it("populates the loginURL for the Lockbox configuration on initialization") {
-                    FxAConfig.custom(content_base: "https://accounts.firefox.com") { config, error in
+                    let loginURL = try! self.subject.loginURL.toBlocking().first()!
+
+                    FxAConfig.release { config, _ in
                         guard let config = config else { return }
 
-                        let fxa = try? FirefoxAccount(config: config, clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
-                        fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
-                            expect(urlObserver.events.first!.value.element!.path).to(equal(url!.path))
+                        let fxa = try! FirefoxAccount(config: config, clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
+                        fxa.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
+                            expect(loginURL.path).to(equal(url!.path))
                         }
-
                     }
                 }
             }
@@ -88,32 +79,24 @@ class AccountStoreSpec: QuickSpec {
             describe("profile") {
                 describe("when the keychain has a valid fxa account") {
                     beforeEach {
-                        self.keychainManager.retrieveResult[KeychainKey.accountJSON.rawValue] = "{\"schema_version\":\"V1\",\"client_id\":\"98adfa37698f255b\",\"config\":{\"content_url\":\"https://accounts.firefox.com\",\"auth_url\":\"https://api.accounts.firefox.com/\",\"oauth_url\":\"https://oauth.accounts.firefox.com/\",\"profile_url\":\"https://profile.accounts.firefox.com/\",\"token_server_endpoint_url\":\"https://token.services.mozilla.com/1.0/sync/1.5\",\"authorization_endpoint\":\"https://accounts.firefox.com/authorization\",\"issuer\":\"https://accounts.firefox.com\",\"jwks_uri\":\"https://oauth.accounts.firefox.com/v1/jwks\",\"token_endpoint\":\"https://oauth.accounts.firefox.com/v1/token\",\"userinfo_endpoint\":\"https://profile.accounts.firefox.com/v1/profile\"},\"login_state\":\"Unknown\",\"oauth_cache\":{\"profile https://identity.mozilla.com/apps/oldsync https://identity.mozilla.com/apps/lockbox\":{\"access_token\":\"42e4bacc8affd23a4ae264fd59ae8ec4a58d5af03b1215daa9cd940f6f80bd9e\",\"keys\":\"{\\\"https://identity.mozilla.com/apps/oldsync\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/oldsync\\\",\\\"k\\\":\\\"VEZDYJ3Jd1Ui0ZVtW8pPHD6LZ48Jd30p-y-PLQQYa0PRcMZtiM6zJO4_I2lxEg__qkxXldPyLiM5PYY9VBD64w\\\",\\\"kid\\\":\\\"1519160140602-WMF1HOhJbtMVueuy3tV4vA\\\"},\\\"https://identity.mozilla.com/apps/lockbox\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/lockbox\\\",\\\"k\\\":\\\"oGGfsZk8xMXtBzGzy2WY3QGPNOTer0VGIC3Uyz9Jy9w\\\",\\\"kid\\\":\\\"1519160141-YqmShzWPQhHp0RNiZs25zg\\\"}}\",\"refresh_token\":\"fd417de6f90683a046070450ead9844a095bee5df934cc0fe3455bd2d41d394a\",\"expires_at\":1531864458,\"scopes\":[\"profile\",\"https://identity.mozilla.com/apps/oldsync\",\"https://identity.mozilla.com/apps/lockbox\"]}}}"
+                        self.keychainManager.retrieveResult[KeychainKey.accountJSON.rawValue] = "{\"schema_version\":\"V1\",\"client_id\":\"98adfa37698f255b\",\"redirect_uri\":\"https://lockbox.firefox.com/fxa/ios-redirect.html\",\"config\":{\"content_url\":\"https://accounts.firefox.com\",\"auth_url\":\"https://api.accounts.firefox.com/\",\"oauth_url\":\"https://oauth.accounts.firefox.com/\",\"profile_url\":\"https://profile.accounts.firefox.com/\",\"token_server_endpoint_url\":\"https://token.services.mozilla.com/1.0/sync/1.5\",\"authorization_endpoint\":\"https://accounts.firefox.com/authorization\",\"issuer\":\"https://accounts.firefox.com\",\"jwks_uri\":\"https://oauth.accounts.firefox.com/v1/jwks\",\"token_endpoint\":\"https://oauth.accounts.firefox.com/v1/token\",\"userinfo_endpoint\":\"https://profile.accounts.firefox.com/v1/profile\"},\"oauth_cache\":{\"https://identity.mozilla.com/apps/oldsync https://identity.mozilla.com/apps/lockbox profile\":{\"access_token\":\"abd1a1e02fc7afa5ddcba9e5d768297e2c883ff3926ee075bca226067a944685\",\"keys\":\"{\\\"https://identity.mozilla.com/apps/oldsync\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/oldsync\\\",\\\"k\\\":\\\"VEZDYJ3Jd1Ui0ZVtW8pPHD6LZ48Jd30p-y-PLQQYa0PRcMZtiM6zJO4_I2lxEg__qkxXldPyLiM5PYY9VBD64w\\\",\\\"kid\\\":\\\"1519160140602-WMF1HOhJbtMVueuy3tV4vA\\\"},\\\"https://identity.mozilla.com/apps/lockbox\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/lockbox\\\",\\\"k\\\":\\\"oGGfsZk8xMXtBzGzy2WY3QGPNOTer0VGIC3Uyz9Jy9w\\\",\\\"kid\\\":\\\"1519160141-YqmShzWPQhHp0RNiZs25zg\\\"}}\",\"refresh_token\":\"2b5a070455ba24cdc2ce7bb7ce43aef5b6e0b28bc6cd76b0083a50604e1bba00\",\"expires_at\":1533664155,\"scopes\":[\"https://identity.mozilla.com/apps/oldsync\",\"https://identity.mozilla.com/apps/lockbox\",\"profile\"]}}}"
 
                         self.subject = AccountStore(
                                 dispatcher: self.dispatcher,
                                 keychainWrapper: self.keychainManager
                         )
-
                     }
 
-                    xit("pushes a non-nil profile") {
+                    it("pushes a non-nil profile") {
                         // can't check anything more detailed because we can't construct FxAClient.Profile
-                        let profile = try? self.subject.profile.toBlocking().first()
+                        let profile = try! self.subject.profile.toBlocking().first()
                         expect(profile).notTo(beNil())
                     }
                 }
 
                 describe("when the keychain does not have a valid fxa account") {
-                    beforeEach {
-                        self.subject = AccountStore(
-                                dispatcher: self.dispatcher,
-                                keychainWrapper: self.keychainManager
-                        )
-                    }
-
                     it("pushes a nil profile") {
-                        let profile = try? self.subject.profile.toBlocking().first()
+                        let profile = try! self.subject.profile.toBlocking().first()!
                         expect(profile).to(beNil())
                     }
                 }
@@ -122,7 +105,7 @@ class AccountStoreSpec: QuickSpec {
             describe("oauthInfo") {
                 describe("when the keychain has a valid fxa account") {
                     beforeEach {
-                        self.keychainManager.retrieveResult[KeychainKey.accountJSON.rawValue] = "{\"schema_version\":\"V1\",\"client_id\":\"98adfa37698f255b\",\"config\":{\"content_url\":\"https://accounts.firefox.com\",\"auth_url\":\"https://api.accounts.firefox.com/\",\"oauth_url\":\"https://oauth.accounts.firefox.com/\",\"profile_url\":\"https://profile.accounts.firefox.com/\",\"token_server_endpoint_url\":\"https://token.services.mozilla.com/1.0/sync/1.5\",\"authorization_endpoint\":\"https://accounts.firefox.com/authorization\",\"issuer\":\"https://accounts.firefox.com\",\"jwks_uri\":\"https://oauth.accounts.firefox.com/v1/jwks\",\"token_endpoint\":\"https://oauth.accounts.firefox.com/v1/token\",\"userinfo_endpoint\":\"https://profile.accounts.firefox.com/v1/profile\"},\"login_state\":\"Unknown\",\"oauth_cache\":{\"profile https://identity.mozilla.com/apps/oldsync https://identity.mozilla.com/apps/lockbox\":{\"access_token\":\"42e4bacc8affd23a4ae264fd59ae8ec4a58d5af03b1215daa9cd940f6f80bd9e\",\"keys\":\"{\\\"https://identity.mozilla.com/apps/oldsync\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/oldsync\\\",\\\"k\\\":\\\"VEZDYJ3Jd1Ui0ZVtW8pPHD6LZ48Jd30p-y-PLQQYa0PRcMZtiM6zJO4_I2lxEg__qkxXldPyLiM5PYY9VBD64w\\\",\\\"kid\\\":\\\"1519160140602-WMF1HOhJbtMVueuy3tV4vA\\\"},\\\"https://identity.mozilla.com/apps/lockbox\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/lockbox\\\",\\\"k\\\":\\\"oGGfsZk8xMXtBzGzy2WY3QGPNOTer0VGIC3Uyz9Jy9w\\\",\\\"kid\\\":\\\"1519160141-YqmShzWPQhHp0RNiZs25zg\\\"}}\",\"refresh_token\":\"fd417de6f90683a046070450ead9844a095bee5df934cc0fe3455bd2d41d394a\",\"expires_at\":1531864458,\"scopes\":[\"profile\",\"https://identity.mozilla.com/apps/oldsync\",\"https://identity.mozilla.com/apps/lockbox\"]}}}"
+                        self.keychainManager.retrieveResult[KeychainKey.accountJSON.rawValue] = "{\"schema_version\":\"V1\",\"client_id\":\"98adfa37698f255b\",\"redirect_uri\":\"https://lockbox.firefox.com/fxa/ios-redirect.html\",\"config\":{\"content_url\":\"https://accounts.firefox.com\",\"auth_url\":\"https://api.accounts.firefox.com/\",\"oauth_url\":\"https://oauth.accounts.firefox.com/\",\"profile_url\":\"https://profile.accounts.firefox.com/\",\"token_server_endpoint_url\":\"https://token.services.mozilla.com/1.0/sync/1.5\",\"authorization_endpoint\":\"https://accounts.firefox.com/authorization\",\"issuer\":\"https://accounts.firefox.com\",\"jwks_uri\":\"https://oauth.accounts.firefox.com/v1/jwks\",\"token_endpoint\":\"https://oauth.accounts.firefox.com/v1/token\",\"userinfo_endpoint\":\"https://profile.accounts.firefox.com/v1/profile\"},\"oauth_cache\":{\"https://identity.mozilla.com/apps/oldsync https://identity.mozilla.com/apps/lockbox profile\":{\"access_token\":\"abd1a1e02fc7afa5ddcba9e5d768297e2c883ff3926ee075bca226067a944685\",\"keys\":\"{\\\"https://identity.mozilla.com/apps/oldsync\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/oldsync\\\",\\\"k\\\":\\\"VEZDYJ3Jd1Ui0ZVtW8pPHD6LZ48Jd30p-y-PLQQYa0PRcMZtiM6zJO4_I2lxEg__qkxXldPyLiM5PYY9VBD64w\\\",\\\"kid\\\":\\\"1519160140602-WMF1HOhJbtMVueuy3tV4vA\\\"},\\\"https://identity.mozilla.com/apps/lockbox\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/lockbox\\\",\\\"k\\\":\\\"oGGfsZk8xMXtBzGzy2WY3QGPNOTer0VGIC3Uyz9Jy9w\\\",\\\"kid\\\":\\\"1519160141-YqmShzWPQhHp0RNiZs25zg\\\"}}\",\"refresh_token\":\"2b5a070455ba24cdc2ce7bb7ce43aef5b6e0b28bc6cd76b0083a50604e1bba00\",\"expires_at\":1533664155,\"scopes\":[\"https://identity.mozilla.com/apps/oldsync\",\"https://identity.mozilla.com/apps/lockbox\",\"profile\"]}}}"
 
                         self.subject = AccountStore(
                                 dispatcher: self.dispatcher,
@@ -130,16 +113,16 @@ class AccountStoreSpec: QuickSpec {
                         )
                     }
 
-                    xit("pushes a non-nil oauthinfo") {
+                    it("pushes a non-nil oauthinfo") {
                         // can't check anything more detailed because we can't construct FxAClient.Profile
-                        let oauthInfo = try? self.subject.oauthInfo.toBlocking().first()
+                        let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()
                         expect(oauthInfo).notTo(beNil())
                     }
                 }
 
                 describe("when the keychain does not have a valid fxa account") {
-                    xit("pushes a nil oauthinfo") {
-                        let oauthInfo = try? self.subject.oauthInfo.toBlocking().first()
+                    it("pushes a nil oauthinfo") {
+                        let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()!
                         expect(oauthInfo).to(beNil())
                     }
                 }

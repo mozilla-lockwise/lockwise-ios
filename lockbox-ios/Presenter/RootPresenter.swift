@@ -67,14 +67,10 @@ class RootPresenter {
                     if let oauthInfo = latest.0,
                         let profile = latest.1 {
                         self.dataStoreActionHandler.invoke(.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
-                    } else {
-                        self.routeActionHandler.invoke(MainRouteAction.list)
                     }
                 }
                 .disposed(by: self.disposeBag)
 
-        // I think some of the datastore-based routing can go away but it's a little too much
-        // to do this evening :p
         self.dataStore.storageState
             .subscribe(onNext: { storageState in
                     switch storageState {
