@@ -212,12 +212,6 @@ class RootPresenterSpec: QuickSpec {
                     expect(arg).to(equal(LoginRouteAction.welcome))
                 }
 
-                it("routes to the list view") {
-                    self.dataStore.storageStateSubject.onNext(.Preparing)
-                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                    expect(arg).to(equal(MainRouteAction.list))
-                }
-
                 it("routes to the welcome view") {
                     self.dataStore.storageStateSubject.onNext(.Locked)
                     let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
