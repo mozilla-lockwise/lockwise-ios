@@ -55,5 +55,6 @@ class FxAPresenter {
 extension FxAPresenter {
     func matchingRedirectURLReceived(_ navigationURL: URL) {
         self.accountActionHandler.invoke(.oauthRedirect(url: navigationURL))
+        self.routeActionHandler.invoke(LoginRouteAction.onboardingConfirmation)
     }
 }

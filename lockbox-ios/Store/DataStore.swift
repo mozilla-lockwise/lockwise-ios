@@ -50,12 +50,11 @@ enum SyncState: Equatable {
 }
 
 enum LoginStoreState: Equatable {
-    case Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+    case Unprepared, Locked, Unlocked, Errored(cause: LoginStoreError)
 
     public static func ==(lhs: LoginStoreState, rhs: LoginStoreState) -> Bool {
         switch (lhs, rhs) {
         case (Unprepared, Unprepared): return true
-        case (Preparing, Preparing): return true
         case (Locked, Locked): return true
         case (Unlocked, Unlocked): return true
         case (Errored, Errored): return true
@@ -195,13 +194,6 @@ class DataStore {
                         return item.guid == id
                     }.first
                 }.asObservable()
-    }
-}
-
-extension DataStore {
-    public func login(_ data: JSON) {
-        self.storageStateSubject.onNext(.Preparing)
-        self.fxaLoginHelper.application(UIApplication.shared, didReceiveAccountJSON: data)
     }
 }
 
@@ -356,21 +348,10 @@ extension DataStore {
         //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
         switch (storageState, syncState, notification.name) {
         case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
-            storageStateSubject.onNext(.Preparing)
-            syncSubject.onNext(.Syncing)
-        case (.Preparing, _, NotificationNames.ProfileDidStartSyncing):
-            // we're retrying: we haven't been able to verify up til now.
-            break
-        case (.Preparing, _, NotificationNames.FirefoxAccountVerified):
-            // we've verified the account for the first time.
             syncSubject.onNext(.Syncing)
         case (_, _, NotificationNames.ProfileDidStartSyncing):
             // fall through for the locked and unlocked states.
             syncSubject.onNext(.Syncing)
-        case (.Preparing, .Syncing, NotificationNames.ProfileDidFinishSyncing):
-            // end of first time sync
-            storageStateSubject.onNext(.Unlocked)
-            syncSubject.onNext(.Synced)
         case (_, _, NotificationNames.ProfileDidFinishSyncing):
             // end of all syncs
             syncSubject.onNext(.Synced)
@@ -418,9 +399,8 @@ extension DataStore {
             if !profile.hasAccount() {
                 // first run.
                 self.storageStateSubject.onNext(.Unprepared)
-            } else {
-                self.storageStateSubject.onNext(.Preparing)
             }
+
             self.syncSubject.onNext(.NotSyncable)
             return
         }

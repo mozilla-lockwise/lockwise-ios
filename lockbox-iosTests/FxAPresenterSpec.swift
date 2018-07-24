@@ -103,6 +103,20 @@ class FxAPresenterSpec: QuickSpec {
                     expect(argument).to(equal(LoginRouteAction.welcome))
                 }
             }
+
+            describe("matchingRedirectURLReceived") {
+                let url = URL(string: "https://www.mozilla.com")!
+
+                beforeEach {
+                    self.subject.matchingRedirectURLReceived(url)
+                }
+
+                it("invokes the oauth redirect and routes to onboarding") {
+                    expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.oauthRedirect(url: url)))
+                    let routeAction = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    expect(routeAction).to(equal(LoginRouteAction.onboardingConfirmation))
+                }
+            }
         }
     }
 }

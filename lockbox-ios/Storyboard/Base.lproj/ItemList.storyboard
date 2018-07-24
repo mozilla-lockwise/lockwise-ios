@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -22,7 +22,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="EJh-kX-2nu">
-                                    <rect key="frame" x="0.0" y="1331" width="375" height="0.29999999999999999"/>
+                                    <rect key="frame" x="0.0" y="985" width="375" height="0.29999999999999999"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66042751736111116" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
@@ -219,7 +219,7 @@
                                         <rect key="frame" x="0.0" y="685" width="375" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="k0g-dg-N0G" id="CRM-Km-Zcb">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="299.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see more entries here, you'll need to save them to Firefox for desktop." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpV-eG-grp">
@@ -232,7 +232,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
-                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="161.5"/>
+                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="162"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XXw-4F-3gz"/>
@@ -266,49 +266,6 @@
                                             <outlet property="learnMoreButton" destination="5gN-a0-N6V" id="WTm-PM-Xqd"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="preparingplaceholder" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" indentationWidth="10" reuseIdentifier="preparingplaceholder" rowHeight="346" id="uLU-A3-JOv" userLabel="preparingplaceholder">
-                                        <rect key="frame" x="0.0" y="985" width="375" height="346"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uLU-A3-JOv" id="c86-fZ-K2X">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="345.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="752" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="ldf-oP-BRH">
-                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
-                                                </imageView>
-                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="751" insetsLayoutMarginsFromSafeArea="NO" image="preparing-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="eko-6t-BSK" userLabel="preparing-placeholder">
-                                                    <rect key="frame" x="88" y="136" width="139" height="80"/>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Confirm your account." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zp4-eQ-2yd" userLabel="Confirm your account">
-                                                    <rect key="frame" x="111.5" y="232.5" width="152.5" height="18"/>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                                    <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Check your email for the verification link in order to view your entries." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jtF-d0-Vui">
-                                                    <rect key="frame" x="47" y="258" width="280" height="30.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="280" id="Wgg-aL-HQC"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                                    <color key="textColor" red="0.45098039220000002" green="0.45098039220000002" blue="0.45098039220000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="jtF-d0-Vui" secondAttribute="bottom" constant="56.5" id="5rY-lN-iOw"/>
-                                                <constraint firstItem="jtF-d0-Vui" firstAttribute="top" secondItem="zp4-eQ-2yd" secondAttribute="bottom" constant="8" id="7cS-37-TMv"/>
-                                                <constraint firstItem="eko-6t-BSK" firstAttribute="top" secondItem="ldf-oP-BRH" secondAttribute="bottom" constant="8" id="JtE-iI-Wxi"/>
-                                                <constraint firstItem="jtF-d0-Vui" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="LYU-HT-ctq"/>
-                                                <constraint firstItem="ldf-oP-BRH" firstAttribute="top" secondItem="c86-fZ-K2X" secondAttribute="top" id="j2j-U5-z1J"/>
-                                                <constraint firstItem="ldf-oP-BRH" firstAttribute="leading" secondItem="c86-fZ-K2X" secondAttribute="leading" id="nVA-ia-cRs"/>
-                                                <constraint firstItem="zp4-eQ-2yd" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" id="oIq-99-LUI"/>
-                                                <constraint firstItem="eko-6t-BSK" firstAttribute="centerX" secondItem="c86-fZ-K2X" secondAttribute="centerX" constant="-30" id="ved-Tg-YO7"/>
-                                                <constraint firstItem="zp4-eQ-2yd" firstAttribute="top" secondItem="eko-6t-BSK" secondAttribute="bottom" constant="16" id="xNd-B6-koH"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -333,6 +290,5 @@
         <image name="arrowhead-right-16" width="16" height="16"/>
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
-        <image name="preparing-placeholder" width="139" height="80"/>
     </resources>
 </document>

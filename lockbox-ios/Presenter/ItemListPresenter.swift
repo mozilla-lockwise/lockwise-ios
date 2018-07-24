@@ -13,7 +13,6 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func bind(items: Driver<[ItemSectionModel]>)
     func bind(sortingButtonTitle: Driver<String>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
-    var settingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     func dismissKeyboard()
     var pullToRefreshActive: AnyObserver<Bool>? { get }
@@ -171,12 +170,6 @@ class ItemListPresenter {
         )
     ]
 
-    lazy private var preparingPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem +
-                [LoginListCellConfiguration.PreparingPlaceholder]
-        )
-    ]
-
     lazy private var syncPlaceholderItems = [
         ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.SyncListPlaceholder])
     ]
@@ -245,15 +238,13 @@ class ItemListPresenter {
 
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
-              let settingButtonObserver = view.settingButtonEnabled,
               let pullToRefreshActiveObserver = view.pullToRefreshActive else { return }
 
         self.setupPullToRefresh(pullToRefreshActiveObserver)
         self.setupButtonBehavior(
                 view: view,
                 itemSortObservable: itemSortObservable,
-                sortButtonObserver: sortButtonObserver,
-                settingButtonObserver: settingButtonObserver
+                sortButtonObserver: sortButtonObserver
         )
 
         self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
@@ -298,10 +289,6 @@ extension ItemListPresenter {
 
                     if latest.syncState == .Synced && latest.logins.isEmpty {
                         return self.emptyPlaceholderItems
-                    }
-
-                    if latest.storeState == .Preparing {
-                        return self.preparingPlaceholderItems
                     }
 
                     let sortedFilteredItems = self.filterItemsForText(latest.text, items: latest.logins)
@@ -399,8 +386,7 @@ extension ItemListPresenter {
     fileprivate func setupButtonBehavior(
             view: ItemListViewProtocol,
             itemSortObservable: Observable<ItemListSortSetting>,
-            sortButtonObserver: AnyObserver<Bool>,
-            settingButtonObserver: AnyObserver<Bool>) {
+            sortButtonObserver: AnyObserver<Bool>) {
         let itemSortTextDriver = itemSortObservable
                 .asDriver(onErrorJustReturn: .alphabetically)
                 .map { itemSortAction -> String in
@@ -418,8 +404,5 @@ extension ItemListPresenter {
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
-
-        let preparingObservable = self.dataStore.storageState.map { $0 != LoginStoreState.Preparing }
-        preparingObservable.bind(to: settingButtonObserver).disposed(by: self.disposeBag)
     }
 }

@@ -16,7 +16,6 @@ class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var sortButtonEnableObserver: TestableObserver<Bool>!
-        var settingButtonEnableObserver: TestableObserver<Bool>!
         var tableViewScrollObserver: TestableObserver<Bool>!
         var sortingButtonTitleObserver: TestableObserver<String>!
         var dismissSpinnerObserver: TestableObserver<Void>!
@@ -47,10 +46,6 @@ class ItemListPresenterSpec: QuickSpec {
 
         var sortingButtonEnabled: AnyObserver<Bool>? {
             return self.sortButtonEnableObserver.asObserver()
-        }
-
-        var settingButtonEnabled: AnyObserver<Bool>? {
-            return self.settingButtonEnableObserver.asObserver()
         }
 
         var tableViewScrollEnabled: AnyObserver<Bool> {
@@ -140,7 +135,6 @@ class ItemListPresenterSpec: QuickSpec {
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
                 self.view.sortButtonEnableObserver = self.scheduler.createObserver(Bool.self)
-                self.view.settingButtonEnableObserver = self.scheduler.createObserver(Bool.self)
                 self.view.tableViewScrollObserver = self.scheduler.createObserver(Bool.self)
                 self.view.dismissSpinnerObserver = self.scheduler.createObserver(Void.self)
                 self.view.pullToRefreshObserver = self.scheduler.createObserver(Bool.self)
@@ -174,10 +168,6 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("tells the view to display the spinner") {
                             expect(self.view.displaySpinnerCalled).to(beTrue())
-                        }
-
-                        it("enables the setting button") {
-                            expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beTrue())
                         }
 
                         it("pushes the search field and placeholder image to the itemlist") {
@@ -281,27 +271,6 @@ class ItemListPresenterSpec: QuickSpec {
                             }
                         }
                     }
-
-                    describe("when the datastore is preparing") {
-                        beforeEach {
-                            self.dataStore.syncStateStub.onNext(SyncState.NotSyncable)
-                            self.dataStore.storageStateStub.onNext(LoginStoreState.Preparing)
-                        }
-
-                        it("displays the email confirmation placeholder") {
-                            let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
-                                LoginListCellConfiguration.PreparingPlaceholder
-                            ]
-                            expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                            let configuration = self.view.itemsObserver.events.last!.value.element!
-                            expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                        }
-
-                        it("disables the setting button") {
-                            expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beFalse())
-                        }
-                    }
                 }
 
                 describe("when the datastore pushes a populated list of items & is prepared") {
@@ -336,10 +305,6 @@ class ItemListPresenterSpec: QuickSpec {
                         expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
                         let configuration = self.view.itemsObserver.events.first!.value.element!
                         expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                    }
-
-                    it("enables the setting button") {
-                        expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beTrue())
                     }
 
                     describe("when text is entered into the search bar") {
@@ -421,7 +386,7 @@ class ItemListPresenterSpec: QuickSpec {
                         let textObserver = self.scheduler.createObserver(String.self)
 
                         beforeEach {
-                            let searchCellConfig = self.view.itemsObserver.events.first!.value.element![0].items[0] as! LoginListCellConfiguration
+                            let searchCellConfig = self.view.itemsObserver.events.first!.value.element![0].items[0]
                             if case let .Search(enabled: enabledObservable, cancelHidden: cancelObservable, text: textObservable) = searchCellConfig {
                                 enabledObservable
                                         .bind(to: enabledObserver)
