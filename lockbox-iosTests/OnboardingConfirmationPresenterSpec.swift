@@ -21,9 +21,14 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
 
     class FakeRouteActionHandler: RouteActionHandler {
         var invokeArgument: RouteAction?
+        var onboardingStatusArgument: OnboardingStatusAction?
 
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
+        }
+        
+        override func invoke(_ action: OnboardingStatusAction) {
+            self.onboardingStatusArgument = action
         }
     }
 
@@ -56,6 +61,10 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                         expect(self.routeActionHandler.invokeArgument).notTo(beNil())
                         let action = self.routeActionHandler.invokeArgument as! MainRouteAction
                         expect(action).to(equal(MainRouteAction.list))
+                    }
+
+                    it("finishes onboarding") {
+                        expect(self.routeActionHandler.onboardingStatusArgument).to(equal(OnboardingStatusAction(onboardingInProgress: false)))
                     }
                 }
             }

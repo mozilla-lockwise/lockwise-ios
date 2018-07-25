@@ -34,12 +34,18 @@ class RouteStoreSpec: QuickSpec {
 
             describe("onRoute") {
                 var routeObserver = self.scheduler.createObserver(RouteAction.self)
+                var onboardingStatusObserver = self.scheduler.createObserver(Bool.self)
 
                 beforeEach {
                     routeObserver = self.scheduler.createObserver(RouteAction.self)
+                    onboardingStatusObserver = self.scheduler.createObserver(Bool.self)
 
                     self.subject.onRoute
                             .subscribe(routeObserver)
+                            .disposed(by: self.disposeBag)
+
+                    self.subject.onboarding
+                            .subscribe(onboardingStatusObserver)
                             .disposed(by: self.disposeBag)
 
                     self.dispatcher.fakeRegistration.onNext(LoginRouteAction.fxa)
@@ -49,6 +55,11 @@ class RouteStoreSpec: QuickSpec {
                     expect(routeObserver.events.last).notTo(beNil())
                     let element = routeObserver.events.last!.value.element as! LoginRouteAction
                     expect(element).to(equal(LoginRouteAction.fxa))
+                }
+
+                it("pushes dispatched onboardingstatus actions to observers") {
+                    self.dispatcher.fakeRegistration.onNext(OnboardingStatusAction(onboardingInProgress: true))
+                    expect(onboardingStatusObserver.events.last!.value.element).to(beTrue())
                 }
 
                 it("pushes new actions to observers") {
