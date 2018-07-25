@@ -4,14 +4,14 @@ Some assumptions:
 
 - `master` is the default branch and is production-ready
 - commits made to `master` are built and pass in [buddybuild][1]
-- all `master` builds are sent to iTunes Connect, with the same buddybuild build number
-- iTunes Connect has ["internal" testers][2] (mobile devs, product integrity)
-  - thus, iTunes Connect and TestFlight can have ["external" testers][2] which we add manually
-  - currently, no plans exist for "external" users to include anyone outside of Mozilla
 - `production` is our public release branch and may not match `master`
   - ideally, `production` will perfectly reproduce master
   - but if `master` is in an un-releasable state, we cherry-pick commits to this branch
   - this is an exception rather than the preferred maintenance method
+- all `master` and `production` builds are sent to iTunes Connect, with the same buddybuild build number
+- iTunes Connect has ["internal" testers][2] (mobile devs, product integrity)
+  - thus, iTunes Connect and TestFlight can have ["external" testers][2] which we add manually
+  - currently, no plans exist for "external" users to include anyone outside of Mozilla
 
 ## Distributing Builds through buddybuild (branch / release)
 
@@ -61,7 +61,7 @@ _similar to above, but requires explicit cherry-pick commits on `production` bra
 
 ## Distributing Builds through TestFlight (release)
 
-_all `master` branch builds are automatically uploaded from buddybuild, `production` must be triggered manually_
+_all `master` and `production` branch builds are automatically uploaded from buddybuild to iTunes Connect_
 
 1. Browse to [TestFlight > Builds > iOS][3] in iTunes Connect
 2. Find the desired build number to distribute
