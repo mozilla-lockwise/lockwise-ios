@@ -164,7 +164,6 @@ class WelcomePresenterSpec: QuickSpec {
     var subject: WelcomePresenter!
 
     override func spec() {
-
         describe("WelcomePresenter") {
             beforeEach {
                 self.view = FakeWelcomeView()
@@ -288,7 +287,8 @@ class WelcomePresenterSpec: QuickSpec {
                 describe("when the device is locked") {
                     let email = "example@example.com"
 
-                    describe("when the profileinfo has an email address") {
+                    // TODO: remove pended spec when mozilla/application-services#133 is resolved
+                    xdescribe("when the profileinfo has an email address") {
                         beforeEach {
                             self.biometryManager.deviceAuthAvailableStub = true
                             self.subject.onViewReady()
@@ -316,7 +316,7 @@ class WelcomePresenterSpec: QuickSpec {
                                 }
 
                                 it("starts authentication") {
-//                                    expect(self.biometryManager.authMessage).to(equal(email))
+                                    expect(self.biometryManager.authMessage).to(equal(email))
                                 }
 
                                 describe("successful authentication") {
@@ -348,7 +348,7 @@ class WelcomePresenterSpec: QuickSpec {
                                 }
 
                                 it("starts authentication") {
-//                                    expect(self.biometryManager.authMessage).to(equal(email))
+                                    expect(self.biometryManager.authMessage).to(equal(email))
                                 }
 
                                 describe("successful authentication") {
