@@ -15,4 +15,4 @@ line_length: 135
 file_length:
   warning: 450
 function_body_length: 
-  warning: 120
+  warning: 60
