@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ // swiftlint:disable line_length
 
 import UIKit
 
@@ -78,7 +79,7 @@ class RootView: UIViewController, RootViewProtocol {
         case .fxa:
             self.currentViewController?.pushViewController(FxAView(), animated: true)
         case .onboardingConfirmation:
-            if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView { // swiftlint:disable:this line_length
+            if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
                 self.currentViewController?.pushViewController(onboardingConfirmationView, animated: true)
             }
         }
@@ -89,7 +90,7 @@ class RootView: UIViewController, RootViewProtocol {
         case .list:
             self.currentViewController?.popToRootViewController(animated: true)
         case .detail(let id):
-            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView { // swiftlint:disable:this line_length
+            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
                 itemDetailView.itemId = id
                 self.currentViewController?.pushViewController(itemDetailView, animated: true)
             }
@@ -101,7 +102,7 @@ class RootView: UIViewController, RootViewProtocol {
         case .list:
             self.currentViewController?.popToRootViewController(animated: true)
         case .account:
-            if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView { // swiftlint:disable:this line_length
+            if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView {
                 self.currentViewController?.pushViewController(accountSettingView, animated: true)
             }
         case .autoLock:
