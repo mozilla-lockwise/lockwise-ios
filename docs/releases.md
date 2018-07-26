@@ -4,7 +4,11 @@ Some assumptions:
 
 - `master` is the default branch and is production-ready
 - commits made to `master` are built and pass in [buddybuild][1]
-- all `master` builds are sent to iTunes Connect, with the same buddybuild build number
+- `production` is our public release branch and may not match `master`
+  - ideally, `production` will perfectly reproduce master
+  - but if `master` is in an un-releasable state, we cherry-pick commits to this branch
+  - this is an exception rather than the preferred maintenance method
+- all `master` and `production` builds are sent to iTunes Connect, with the same buddybuild build number
 - iTunes Connect has ["internal" testers][2] (mobile devs, product integrity)
   - thus, iTunes Connect and TestFlight can have ["external" testers][2] which we add manually
   - currently, no plans exist for "external" users to include anyone outside of Mozilla
@@ -20,22 +24,44 @@ _all commits on all branches and pull requests are automatically built_
 
 ## Preparing a Release (for TestFlight or App Store)
 
-- Update the release notes under `docs/release-notes.md`
+1. Update the release notes under `docs/release-notes.md`
   - create a pull request to collaborate and get approval
   - determine the next build number and include it in release notes
   - merge the release notes to `master` branch
   - this will result in a release build matching the build number provided
-- Create a tag from `master` matching the format: `major.minor.build`
-  - for example: `1.0.1189`
-  - push the tag to GitHub and create a corresponding "Release" on GitHub.com
+2. Create and merge a pull request _from_ `master` _to_ `production` so it tracks the release
+  - https://github.com/mozilla-lockbox/lockbox-ios/compare/production...master
+3. Create a tag from `production` matching the format: `major.minor.patch.build`
+  - for example: `1.2.1399` is major version 1.2, (buddybuild) build 1399
+  - for example: `1.3.1.1624` is major version 1.3 with 1 patch release, (buddybuild) build 1624
+4. push the tag to GitHub and create a corresponding "Release" on GitHub.com
   - copy the release notes to the "Release" on GitHub
   - download the `.ipa` from buddybuild and attach it to the Release on GitHub
-- Hopefully by now the build has been uploaded to iTunes Connect
-- Browse to iTunes Connect and continue the "Distributing..." instructions
+5. Hopefully by now the build has been uploaded to iTunes Connect
+6. Browse to iTunes Connect and continue the "Distributing..." instructions
+
+### In Case of Emergency (Release)
+
+_similar to above, but requires explicit cherry-pick commits on `production` branch when `master` branch is not in a release-able state_
+
+1. Merge the emergency changes or fixes or features to default `master` branch as usual
+2. Update the release notes
+3. Create and merge a pull request _up to and including_ the last release-able commit on `master` to `production`
+4. Then `git cherry-pick` each additional commit from `master` to be included in the release
+  - thus skipping or avoiding the non-release-able commits
+5. Push the resulting `production` branch to GitHub.com
+6. Create a tag from `production` matching the format: `major.minor.patch.build`
+  - for example: `1.3.1.1624`
+7. Push the tag to GitHub and create a corresponding "Release" on GitHub.com
+  - copy the release notes to the "Release" on GitHub
+8. Browse to buddybuild and find the desired `production` branch build to distribute
+  - download the `.ipa` from buddybuild and attach it to the Release on GitHub
+9. From the buddybuild's build "Deploy" tab, select the "Upload to iTunes Connect" link
+10. Browse to iTunes Connect to find the build and continue the "Distributing..." instructions
 
 ## Distributing Builds through TestFlight (release)
 
-_all `master` branch builds are automatically uploaded from buddybuild_
+_all `master` and `production` branch builds are automatically uploaded from buddybuild to iTunes Connect_
 
 1. Browse to [TestFlight > Builds > iOS][3] in iTunes Connect
 2. Find the desired build number to distribute

@@ -60,8 +60,9 @@ extension FxAPresenter {
             .take(1)
             .subscribe(onNext: { [weak self] syncState in
                 if syncState == .NotSyncable {
-                    self?.dataStoreActionHandler.invoke(.initialize(blob: data))
+                    self?.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: true))
                     self?.routeActionHandler.invoke(LoginRouteAction.onboardingConfirmation)
+                    self?.dataStoreActionHandler.invoke(.initialize(blob: data))
                 }
             }).disposed(by: disposeBag)
     }

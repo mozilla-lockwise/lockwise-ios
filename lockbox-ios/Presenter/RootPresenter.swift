@@ -64,7 +64,7 @@ class RootPresenter {
                     switch storageState {
                     case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    case .Unlocked:
+                    case .Unlocked, .Preparing:
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
                         break
@@ -72,7 +72,9 @@ class RootPresenter {
                 })
                 .disposed(by: self.disposeBag)
 
-        self.dataStore.syncState
+        Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
+            .filter { $0.1 == LoginStoreState.Unprepared }
+            .map { $0.0 }
             .distinctUntilChanged()
             .subscribe(onNext: { syncState in
                 if syncState == .NotSyncable {
@@ -86,6 +88,7 @@ class RootPresenter {
                     forKey: SettingKey.itemListSort.rawValue)
         }
 
+        self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
     }
 
@@ -96,13 +99,17 @@ class RootPresenter {
                 .drive(showLogin)
                 .disposed(by: disposeBag)
 
-        self.routeStore.onRoute
+        Observable.combineLatest(self.routeStore.onRoute, self.routeStore.onboarding)
+                .filter { !$0.1 }
+                .map { $0.0 }
                 .filterByType(class: MainRouteAction.self)
                 .asDriver(onErrorJustReturn: .list)
                 .drive(showList)
                 .disposed(by: disposeBag)
 
-        self.routeStore.onRoute
+        Observable.combineLatest(self.routeStore.onRoute, self.routeStore.onboarding)
+                .filter { !$0.1 }
+                .map { $0.0 }
                 .filterByType(class: SettingRouteAction.self)
                 .asDriver(onErrorJustReturn: .list)
                 .drive(self.showSetting)

@@ -110,7 +110,7 @@ class DataStore {
         return self.storageStateSubject.asObservable()
     }
 
-    init(dispatcher: Dispatcher = Dispatcher.shared, // swiftlint:disable:this function_body_length
+    init(dispatcher: Dispatcher = Dispatcher.shared,
          profileFactory: @escaping ProfileFactory = defaultProfileFactory,
          fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard) {

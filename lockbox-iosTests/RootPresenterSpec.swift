@@ -80,9 +80,14 @@ class RootPresenterSpec: QuickSpec {
 
     class FakeRouteStore: RouteStore {
         let onRouteSubject = PublishSubject<RouteAction>()
+        let onboardingSubject = PublishSubject<Bool>()
 
         override var onRoute: Observable<RouteAction> {
             return onRouteSubject.asObservable()
+        }
+
+        override var onboarding: Observable<Bool> {
+            return self.onboardingSubject.asObservable()
         }
     }
 
@@ -212,11 +217,6 @@ class RootPresenterSpec: QuickSpec {
                     expect(arg).to(equal(LoginRouteAction.welcome))
                 }
 
-                it("routes to the list view") {
-                    self.dataStore.storageStateSubject.onNext(.Preparing)
-                    expect(self.routeActionHandler.invokeArgument).to(beNil())
-                }
-
                 it("routes to the welcome view") {
                     self.dataStore.storageStateSubject.onNext(.Locked)
                     let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
@@ -267,8 +267,9 @@ class RootPresenterSpec: QuickSpec {
                     self.dataStore.lockedSubject.onNext(false)
                 }
 
-                describe("when the datastore is not syncable") {
+                describe("when the datastore is not syncable and unprepared") {
                     beforeEach {
+                        self.dataStore.storageStateSubject.onNext(.Unprepared)
                         self.dataStore.syncSubject.onNext(.NotSyncable)
                     }
 
@@ -278,20 +279,33 @@ class RootPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("any other sync state value") {
+                describe("any other storage state + sync state value") {
                     it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
                         self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
 
                     it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
                         self.dataStore.syncSubject.onNext(.Syncing)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
 
                     it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
                         self.dataStore.syncSubject.onNext(.Synced)
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
+                    }
+
+                    it("routes to the list") {
+                        self.dataStore.storageStateSubject.onNext(.Unlocked)
+                        self.dataStore.syncSubject.onNext(.NotSyncable)
+                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                        expect(arg).to(equal(MainRouteAction.list))
                     }
                 }
             }
@@ -580,8 +594,22 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 describe("MainRouteActions") {
+                    describe("if onboarding is in process") {
+                        beforeEach {
+                            self.routeStore.onboardingSubject.onNext(true)
+                            self.routeStore.onRouteSubject.onNext(MainRouteAction.list)
+                        }
+
+                        it("does nothing") {
+                            expect(self.view.mainStackIsArgument).to(beNil())
+                            expect(self.view.topViewIsArgument).to(beNil())
+                            expect(self.view.pushMainViewArgument).to(beNil())
+                        }
+                    }
+
                     describe("if the main stack is already displayed") {
                         beforeEach {
+                            self.routeStore.onboardingSubject.onNext(false)
                             self.view.mainStackIsVar = true
                         }
 
@@ -678,6 +706,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("if the main stack is not already displayed") {
                         beforeEach {
+                            self.routeStore.onboardingSubject.onNext(false)
                             self.view.mainStackIsVar = false
                         }
 
@@ -774,8 +803,22 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 describe("SettingRouteActions") {
+                    describe("if onboarding is in process") {
+                        beforeEach {
+                            self.routeStore.onboardingSubject.onNext(true)
+                            self.routeStore.onRouteSubject.onNext(SettingRouteAction.list)
+                        }
+
+                        it("does nothing") {
+                            expect(self.view.mainStackIsArgument).to(beNil())
+                            expect(self.view.topViewIsArgument).to(beNil())
+                            expect(self.view.pushSettingViewArgument).to(beNil())
+                        }
+                    }
+
                     describe("if the setting stack is already displayed") {
                         beforeEach {
+                            self.routeStore.onboardingSubject.onNext(false)
                             self.view.mainStackIsVar = true
                         }
 
@@ -914,6 +957,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("if the setting stack is not already displayed") {
                         beforeEach {
+                            self.routeStore.onboardingSubject.onNext(false)
                             self.view.mainStackIsVar = false
                         }
 

@@ -1,5 +1,29 @@
 # Release Notes
 
+## 1.1.1 (Build 1716)
+
+_Date: 2018-07-26_
+
+It's been two weeks since our initial public launch, and one week since we opened up to all countries. Thanks to everyone's feedback we have some minor changes and bug fixes for you in this update.
+
+We made some changes to autolocking and want your help testing it! Please let us know if you find anything unexpected.
+
+We also added Klar as a browser option instead of Focus, when available. Can all you German users with Klar installed please make sure it works OK?
+
+Here's the full list of changes:
+
+- The autolock timer pauses when on a webpage so it doesn't lock when submitting feedback or reading FAQs
+- Updated the app icon to an improved version
+- You can pick Klar as your preferred browser (instead of Focus) if its available on your device
+- We added the app version to the settings screen and feedback survey so we can know what you're running
+- Fixed a visual bug on the "Preferred Browser" table
+- Added ability to "Lock Now" for users without a device passcode set
+- Added more autolock timer options: 15 and 30 minutes
+- Fixed a Firefox Account bug related to server configuration
+- Fixed it so you return to the "Confirm Your Email" state and screen even if your app fully quits instead of starting everything over
+
+Please note: we intentionally skipped from version 1.0 all the way to 1.1.1 for various reasons.
+
 ## 1.1.1 (Build 1663)
 
 _Date: 2018-07-18_

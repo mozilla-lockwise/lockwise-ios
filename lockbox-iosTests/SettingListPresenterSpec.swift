@@ -90,7 +90,7 @@ class SettingsPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeSettingsView()
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
-                
+
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.settingActionHandler = FakeSettingActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()

@@ -28,7 +28,7 @@ class RouteActionSpec: QuickSpec {
                 self.subject = RouteActionHandler(dispatcher: self.dispatcher)
             }
 
-            describe("invoke") {
+            describe("invoke(routeAction)") {
                 beforeEach {
                     self.subject.invoke(LoginRouteAction.fxa)
                 }
@@ -37,6 +37,18 @@ class RouteActionSpec: QuickSpec {
                     expect(self.dispatcher.actionTypeArgument).notTo(beNil())
                     let argument = self.dispatcher.actionTypeArgument as! LoginRouteAction
                     expect(argument).to(equal(LoginRouteAction.fxa))
+                }
+            }
+
+            describe("invoke(onboardingStatus)") {
+                beforeEach {
+                    self.subject.invoke(OnboardingStatusAction(onboardingInProgress: false))
+                }
+
+                it("dispatches actions to the dispatcher") {
+                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
+                    let argument = self.dispatcher.actionTypeArgument as! OnboardingStatusAction
+                    expect(argument).to(equal(OnboardingStatusAction(onboardingInProgress: false)))
                 }
             }
         }
@@ -152,6 +164,15 @@ class RouteActionSpec: QuickSpec {
                             .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "blah", returnRoute: SettingRouteAction.list)))
                     expect(ExternalWebsiteRouteAction(urlString: "www.example.com", title: "woof", returnRoute: MainRouteAction.list))
                             .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.meow.com", title: "blah", returnRoute: SettingRouteAction.list)))
+                }
+            }
+        }
+
+        describe("OnboardingStatusAction") {
+            describe("equality") {
+                it("actions are equal when onboardingInProgress is equal") {
+                    expect(OnboardingStatusAction(onboardingInProgress: true)).to(equal(OnboardingStatusAction(onboardingInProgress: true)))
+                    expect(OnboardingStatusAction(onboardingInProgress: false)).notTo(equal(OnboardingStatusAction(onboardingInProgress: true)))
                 }
             }
         }

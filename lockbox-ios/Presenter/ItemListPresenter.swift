@@ -266,7 +266,7 @@ extension ItemListPresenter {
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<ItemListSortSetting>,
                                           syncStateObservable: Observable<SyncState>,
-                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> { // swiftlint:disable:this line_length
+                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
         let throttledListObservable = loginListObservable
                 .throttle(1.0, scheduler: ConcurrentMainScheduler.instance)
         let throttledSyncStateObservable = syncStateObservable
@@ -281,7 +281,7 @@ extension ItemListPresenter {
                         throttledSyncStateObservable,
                         throttledStorageStateObservable
                 )
-            .map { (latest: ([Login], ItemListFilterAction, ItemListSortSetting, SyncState, LoginStoreState)) -> LoginListTextSort in // swiftlint:disable:this line_length
+            .map { (latest: ([Login], ItemListFilterAction, ItemListSortSetting, SyncState, LoginStoreState)) -> LoginListTextSort in
                     return LoginListTextSort(
                             logins: latest.0,
                             text: latest.1.filteringText,

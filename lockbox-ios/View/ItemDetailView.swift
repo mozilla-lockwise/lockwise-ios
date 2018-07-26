@@ -126,7 +126,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>(
                 configureCell: { _, tableView, _, cellConfiguration in
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemdetailcell") as? ItemDetailCell else { // swiftlint:disable:this line_length
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemdetailcell") as? ItemDetailCell else {
                         fatalError("couldn't find the right cell!")
                     }
 
