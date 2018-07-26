@@ -26,7 +26,7 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
         }
-        
+
         override func invoke(_ action: OnboardingStatusAction) {
             self.onboardingStatusArgument = action
         }
