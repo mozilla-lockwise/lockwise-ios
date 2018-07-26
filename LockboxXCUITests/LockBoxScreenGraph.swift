@@ -114,7 +114,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.OpenWebsite) { userState in
-            app.cells["Web Address"].press(forDuration: 1)
+            app.cells["webAddressItemDetail"].press(forDuration: 1)
         }
 
     }
@@ -133,9 +133,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.SettingsMenu) { screenState in
-        screenState.tap(app.tables.cells.staticTexts["Open Websites in"], to: Screen.OpenSitesInMenu)
-        screenState.tap(app.tables.cells.staticTexts["Account"], to: Screen.AccountSettingsMenu)
-        screenState.tap(app.tables.cells.staticTexts["Auto Lock"], to: Screen.AutolockSettingsMenu)
+        screenState.tap(app.tables.cells["openWebSitesInSettingOption"], to: Screen.OpenSitesInMenu)
+        screenState.tap(app.tables.cells["accountSettingOption"], to: Screen.AccountSettingsMenu)
+        screenState.tap(app.tables.cells["autoLockSettingOption"], to: Screen.AutolockSettingsMenu)
 
         screenState.gesture(forAction: Action.SendUsageData) { userState in
             app.switches["sendUsageData.switch"].tap()

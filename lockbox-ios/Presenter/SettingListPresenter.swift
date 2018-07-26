@@ -71,13 +71,15 @@ class SettingListPresenter {
                     routeAction: ExternalWebsiteRouteAction(
                             urlString: Constant.app.provideFeedbackURL,
                             title: Constant.string.settingsProvideFeedback,
-                            returnRoute: SettingRouteAction.list)),
+                            returnRoute: SettingRouteAction.list),
+                            accessibilityId: "sendFeedbackSettingOption"),
             SettingCellConfiguration(
                     text: Constant.string.faq,
                     routeAction: ExternalWebsiteRouteAction(
                             urlString: Constant.app.faqURL,
                             title: Constant.string.faq,
-                            returnRoute: SettingRouteAction.list))
+                            returnRoute: SettingRouteAction.list),
+                            accessibilityId: "faqSettingOption")
         ])
     }
 
@@ -135,20 +137,23 @@ extension SettingListPresenter {
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
             SettingCellConfiguration(
                     text: Constant.string.settingsAccount,
-                    routeAction: SettingRouteAction.account)
+                    routeAction: SettingRouteAction.account,
+                    accessibilityId: "accountSettingOption")
         ])
 
         if self.biometryManager.deviceAuthenticationAvailable {
             let autoLockSetting = SettingCellConfiguration(
                     text: Constant.string.settingsAutoLock,
-                    routeAction: SettingRouteAction.autoLock)
+                    routeAction: SettingRouteAction.autoLock,
+                    accessibilityId: "autoLockSettingOption")
             autoLockSetting.detailText = autoLock?.toString()
             applicationConfigurationSection.items.append(autoLockSetting)
         }
 
         let preferredBrowserSetting = SettingCellConfiguration(
                 text: Constant.string.settingsBrowser,
-                routeAction: SettingRouteAction.preferredBrowser)
+                routeAction: SettingRouteAction.preferredBrowser,
+                accessibilityId: "openWebSitesInSettingOption")
         preferredBrowserSetting.detailText = preferredBrowser.toString()
         applicationConfigurationSection.items.append(preferredBrowserSetting)
 
@@ -158,6 +163,7 @@ extension SettingListPresenter {
                         urlString: Constant.app.privacyURL,
                         title: Constant.string.learnMore,
                         returnRoute: SettingRouteAction.list),
+                accessibilityId: "usageDataSettingOption",
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
@@ -177,7 +183,8 @@ extension SettingListPresenter {
         supportSettingSection.items.append(usageDataSetting)
 
         if let appVersion = Constant.app.appVersion {
-            let appVersionSetting = SettingCellConfiguration(text: Constant.string.settingsAppVersion, routeAction: nil)
+            let appVersionSetting = SettingCellConfiguration(text: Constant.string.settingsAppVersion, routeAction: nil,
+                accessibilityId: "appVersionSettingOption")
             appVersionSetting.detailText = appVersion
             supportSettingSection.items.append(appVersionSetting)
         }

@@ -68,7 +68,7 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
         ]
-
+        self.navigationController?.navigationBar.accessibilityIdentifier = "accountSetting.navigationBar"
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
         leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)

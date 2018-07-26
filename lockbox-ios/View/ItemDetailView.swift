@@ -15,17 +15,20 @@ struct ItemDetailCellConfiguration {
     let accessibilityLabel: String
     let password: Bool
     let valueFontColor: UIColor
+    let accessibilityId: String
 
     init(title: String,
          value: String,
          accessibilityLabel: String,
          password: Bool,
-         valueFontColor: UIColor = UIColor.black) {
+         valueFontColor: UIColor = UIColor.black,
+         accessibilityId: String) {
         self.title = title
         self.value = value
         self.accessibilityLabel = accessibilityLabel
         self.password = password
         self.valueFontColor = valueFontColor
+        self.accessibilityId = accessibilityId
     }
 }
 
@@ -136,7 +139,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.valueLabel.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
-                    cell.accessibilityIdentifier = cellConfiguration.title
+                    cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
                     cell.revealButton.isHidden = !cellConfiguration.password
 

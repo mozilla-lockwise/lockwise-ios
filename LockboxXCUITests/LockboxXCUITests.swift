@@ -175,7 +175,7 @@ class LockboxXCUITests: BaseTestCase {
         snapshot("03Settings" + CONTENT_SIZE)
 
         navigator.goto(Screen.AccountSettingsMenu)
-        waitforExistence(app.navigationBars["Account"])
+        waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         // Some checks can be done here to be sure the Account UI is fine
         // To be uncommented once it is sure they appear, now it is not consistent in all run
         //XCTAssertTrue(app.images["avatar-placeholder"].exists, "The image placeholder does not appear")
@@ -185,7 +185,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func test2SettingOpenWebSitesIn() {
         navigator.goto(Screen.OpenSitesInMenu)
-        waitforExistence(app.navigationBars["Open Websites in"])
+        waitforExistence(app.navigationBars["openWebSitesIn.navigationBar"])
         XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
@@ -197,36 +197,36 @@ class LockboxXCUITests: BaseTestCase {
         navigator.goto(Screen.EntryDetails)
 
         // The fields appear
-        XCTAssertTrue(app.cells["Username"].exists)
-        XCTAssertTrue(app.cells["Password"].exists)
-        XCTAssertTrue(app.cells["Web Address"].exists)
+        XCTAssertTrue(app.cells["userNameItemDetail"].exists)
+        XCTAssertTrue(app.cells["passwordItemDetail"].exists)
+        XCTAssertTrue(app.cells["webAddressItemDetail"].exists)
 
         // The value in each field is correct
-        let userNameValue = app.cells["Username"].staticTexts.element(boundBy: 1).label
+        let userNameValue = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(userNameValue, "iosmztest@gmail.com")
 
-        let passwordValue = app.cells["Password"].staticTexts.element(boundBy: 1).label
+        let passwordValue = app.cells["passwordItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(passwordValue, "••••••••")
 
         // Check the reveal Button
         navigator.performAction(Action.RevealPassword)
 
-        let passwordValueReveal = app.cells["Password"].staticTexts.element(boundBy: 1).label
+        let passwordValueReveal = app.cells["passwordItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(passwordValueReveal, "test15mz")
 
         // Check the copy functionality with user name
-        let userNameField = app.cells["Username"]
+        let userNameField = app.cells["userNameItemDetail"]
         userNameField.press(forDuration: 1)
 
         // Now check the clipboard
         if let userNameString = UIPasteboard.general.string {
-            let value = app.cells["Username"].staticTexts.element(boundBy: 1).label
+            let value = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
             XCTAssertNotNil(value)
             XCTAssertEqual(userNameString, value, "Url matches with the UIPasteboard")
         }
 
         // Open website Web Address
-        let webAddressValue = app.cells["Web Address"].staticTexts.element(boundBy: 1).label
+        let webAddressValue = app.cells["webAddressItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(webAddressValue, "https://accounts.google.com")
 
         navigator.performAction(Action.OpenWebsite)
@@ -292,7 +292,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func test7ChangeDefaultAutolock() {
         navigator.goto(Screen.SettingsMenu)
-        waitforExistence(app.navigationBars["Settings"])
+        waitforExistence(app.navigationBars["settings.navigationBar"])
         navigator.goto(Screen.AutolockSettingsMenu)
 
         app.cells.staticTexts["Never"].tap()
