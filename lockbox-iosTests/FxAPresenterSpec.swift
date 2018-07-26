@@ -43,9 +43,14 @@ class FxAPresenterSpec: QuickSpec {
 
     class FakeRouteActionHandler: RouteActionHandler {
         var invokeArgument: RouteAction?
+        var onboardingArgument: OnboardingStatusAction?
 
         override func invoke(_ action: RouteAction) {
             self.invokeArgument = action
+        }
+
+        override func invoke(_ action: OnboardingStatusAction) {
+            self.onboardingArgument = action
         }
     }
 
@@ -111,10 +116,11 @@ class FxAPresenterSpec: QuickSpec {
                     self.subject.matchingRedirectURLReceived(url)
                 }
 
-                it("invokes the oauth redirect and routes to onboarding") {
+                it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
                     expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.oauthRedirect(url: url)))
                     let routeAction = self.routeActionHandler.invokeArgument as! LoginRouteAction
                     expect(routeAction).to(equal(LoginRouteAction.onboardingConfirmation))
+                    expect(self.routeActionHandler.onboardingArgument!.onboardingInProgress).to(beTrue())
                 }
             }
         }

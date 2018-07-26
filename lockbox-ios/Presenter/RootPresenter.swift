@@ -76,7 +76,7 @@ class RootPresenter {
                     switch storageState {
                     case .Unprepared, .Locked:
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    case .Unlocked, .Preparing:
+                    case .Unlocked:
                         self.routeActionHandler.invoke(MainRouteAction.list)
                     default:
                         break

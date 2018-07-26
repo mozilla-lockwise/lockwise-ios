@@ -54,7 +54,8 @@ class FxAPresenter {
 // Extensions and enums to support logging in via remote commmand.
 extension FxAPresenter {
     func matchingRedirectURLReceived(_ navigationURL: URL) {
-        self.accountActionHandler.invoke(.oauthRedirect(url: navigationURL))
+        self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: true))
         self.routeActionHandler.invoke(LoginRouteAction.onboardingConfirmation)
+        self.accountActionHandler.invoke(.oauthRedirect(url: navigationURL))
     }
 }
