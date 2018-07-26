@@ -154,7 +154,11 @@
 <ul>
 <li><code>master</code> is the default branch and is production-ready</li>
 <li>commits made to <code>master</code> are built and pass in <a href="https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85">buddybuild</a></li>
-<li>all <code>master</code> builds are sent to iTunes Connect, with the same buddybuild build number</li>
+<li><code>production</code> is our public release branch and may not match <code>master</code></li>
+<li>ideally, <code>production</code> will perfectly reproduce master</li>
+<li>but if <code>master</code> is in an un-releasable state, we cherry-pick commits to this branch</li>
+<li>this is an exception rather than the preferred maintenance method</li>
+<li>all <code>master</code> and <code>production</code> builds are sent to iTunes Connect, with the same buddybuild build number</li>
 <li>iTunes Connect has <a href="https://developer.apple.com/testflight/testers/">"internal" testers</a> (mobile devs, product integrity)</li>
 <li>thus, iTunes Connect and TestFlight can have <a href="https://developer.apple.com/testflight/testers/">"external" testers</a> which we add manually</li>
 <li>currently, no plans exist for "external" users to include anyone outside of Mozilla</li>
@@ -168,22 +172,43 @@
 <li>this is expected to be a small group of contributors and Mozillians</li>
 </ol>
 <h2 id="preparing-a-release-for-testflight-or-app-store">Preparing a Release (for TestFlight or App Store)</h2>
-<ul>
+<ol>
 <li>Update the release notes under <code>docs/release-notes.md</code></li>
 <li>create a pull request to collaborate and get approval</li>
 <li>determine the next build number and include it in release notes</li>
 <li>merge the release notes to <code>master</code> branch</li>
 <li>this will result in a release build matching the build number provided</li>
-<li>Create a tag from <code>master</code> matching the format: <code>major.minor.build</code></li>
-<li>for example: <code>1.0.1189</code></li>
+<li>Create and merge a pull request <em>from</em> <code>master</code> <em>to</em> <code>production</code> so it tracks the release</li>
+<li>https://github.com/mozilla-lockbox/lockbox-ios/compare/production...master</li>
+<li>Create a tag from <code>production</code> matching the format: <code>major.minor.patch.build</code></li>
+<li>for example: <code>1.2.1399</code> is major version 1.2, (buddybuild) build 1399</li>
+<li>for example: <code>1.3.1.1624</code> is major version 1.3 with 1 patch release, (buddybuild) build 1624</li>
 <li>push the tag to GitHub and create a corresponding "Release" on GitHub.com</li>
 <li>copy the release notes to the "Release" on GitHub</li>
 <li>download the <code>.ipa</code> from buddybuild and attach it to the Release on GitHub</li>
 <li>Hopefully by now the build has been uploaded to iTunes Connect</li>
 <li>Browse to iTunes Connect and continue the "Distributing..." instructions</li>
-</ul>
+</ol>
+<h3 id="in-case-of-emergency-release">In Case of Emergency (Release)</h3>
+<p><em>similar to above, but requires explicit cherry-pick commits on <code>production</code> branch when <code>master</code> branch is not in a release-able state</em></p>
+<ol>
+<li>Merge the emergency changes or fixes or features to default <code>master</code> branch as usual</li>
+<li>Update the release notes</li>
+<li>Create and merge a pull request <em>up to and including</em> the last release-able commit on <code>master</code> to <code>production</code></li>
+<li>Then <code>git cherry-pick</code> each additional commit from <code>master</code> to be included in the release</li>
+<li>thus skipping or avoiding the non-release-able commits</li>
+<li>Push the resulting <code>production</code> branch to GitHub.com</li>
+<li>Create a tag from <code>production</code> matching the format: <code>major.minor.patch.build</code></li>
+<li>for example: <code>1.3.1.1624</code></li>
+<li>Push the tag to GitHub and create a corresponding "Release" on GitHub.com</li>
+<li>copy the release notes to the "Release" on GitHub</li>
+<li>Browse to buddybuild and find the desired <code>production</code> branch build to distribute</li>
+<li>download the <code>.ipa</code> from buddybuild and attach it to the Release on GitHub</li>
+<li>From the buddybuild's build "Deploy" tab, select the "Upload to iTunes Connect" link</li>
+<li>Browse to iTunes Connect to find the build and continue the "Distributing..." instructions</li>
+</ol>
 <h2 id="distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</h2>
-<p><em>all <code>master</code> branch builds are automatically uploaded from buddybuild</em></p>
+<p><em>all <code>master</code> and <code>production</code> branch builds are automatically uploaded from buddybuild to iTunes Connect</em></p>
 <ol>
 <li>Browse to <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds">TestFlight &gt; Builds &gt; iOS</a> in iTunes Connect</li>
 <li>Find the desired build number to distribute</li>
