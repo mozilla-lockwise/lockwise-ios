@@ -15,6 +15,10 @@ class RouteActionHandler: ActionHandler {
     func invoke(_ action: RouteAction) {
         self.dispatcher.dispatch(action: action)
     }
+
+    func invoke(_ action: OnboardingStatusAction) {
+        self.dispatcher.dispatch(action: action)
+    }
 }
 
 protocol RouteAction: Action { }
@@ -140,5 +144,15 @@ extension MainRouteAction: Equatable {
         default:
             return false
         }
+    }
+}
+
+struct OnboardingStatusAction: Action {
+    var onboardingInProgress: Bool
+}
+
+extension OnboardingStatusAction: Equatable {
+    static func ==(lhs: OnboardingStatusAction, rhs: OnboardingStatusAction) -> Bool {
+        return lhs.onboardingInProgress == rhs.onboardingInProgress
     }
 }

@@ -24,6 +24,7 @@ class OnboardingConfirmationPresenter {
         self.view?.finishButtonTapped
                 .subscribe(onNext: { _ in
                     self.routeActionHandler.invoke(MainRouteAction.list)
+                    self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: false))
                 })
                 .disposed(by: self.disposeBag)
     }
