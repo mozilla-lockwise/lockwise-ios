@@ -242,9 +242,11 @@ class LockboxXCUITests: BaseTestCase {
                 }
             }
             group.wait()
+            waitforNoExistence(app.staticTexts["Confirm your account."], timeoutValue: 5)
             waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 20)
         } else {
             // Account is still verified, check that entries are shown
+            waitforNoExistence(app.staticTexts["Confirm your account."], timeoutValue: 5)
             waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
             XCTAssertNotEqual(app.tables.cells.count, 1)
             XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
@@ -253,9 +255,9 @@ class LockboxXCUITests: BaseTestCase {
 
     func testMainScreen() {
         preTestStatus()
+        checkIfAccountIsVerified()
         // Check how to order the entries
         navigator.nowAt(Screen.LockboxMainPage)
-        sleep(5)
         navigator.performAction(Action.SelectRecentOrder)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
@@ -273,6 +275,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func testSettingsMainPage() {
         preTestStatus()
+        checkIfAccountIsVerified()
         navigator.nowAt(Screen.LockboxMainPage)
 
         // Check the Lock Now button
@@ -302,6 +305,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func testDifferentSettings() {
         preTestStatus()
+        checkIfAccountIsVerified()
         navigator.nowAt(Screen.LockboxMainPage)
 
         // Check the Account Setting
@@ -347,6 +351,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func testEntryDetail() {
         preTestStatus()
+        checkIfAccountIsVerified()
         navigator.nowAt(Screen.LockboxMainPage)
 
         // Check the Entry Detail View and its details
