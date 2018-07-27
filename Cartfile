@@ -7,4 +7,4 @@ github "mozilla-mobile/telemetry-ios"
 github "jrendel/SwiftKeychainWrapper" ~> 3.0
 github "mozilla-mobile/MappaMundi" "master"
 github "mozilla/application-services" "0.2.1"
-github "mozilla-lockbox/lockbox-ios-fxa-sync" "044d84bfbe44e6fb43e4b7737cf551ca77a918da"
+github "mozilla-lockbox/lockbox-ios-fxa-sync" "eb219aa047c2a8b2fd93e5517c9e5ec79e7e07bf"
