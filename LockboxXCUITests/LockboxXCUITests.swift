@@ -82,7 +82,8 @@ class LockboxXCUITests: BaseTestCase {
                 code = String(responseString![rangeCode])
             }
 
-            if (code != nil && uid != nil) {
+            if let code = code,
+                let uid = uid {
                 let codeNumber = self.getPostValues(value: code)
                 let uidNumber = self.getPostValues(value: uid)
 
@@ -151,7 +152,7 @@ class LockboxXCUITests: BaseTestCase {
         XCTAssertTrue(app.navigationBars["firefoxLockbox.navigationBar"].exists)
         XCTAssertTrue(app.navigationBars.buttons["Settings"].exists)
         // Check if the account is verified and if not, verify it
-        if (app.staticTexts["Confirm your account."].exists) {
+        if (app.staticTexts["confirmYourAccount.label"].exists) {
             let group = DispatchGroup()
             group.enter()
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -309,22 +310,19 @@ class LockboxXCUITests: BaseTestCase {
         searchTextField.tap()
         searchTextField.typeText("a")
         // There should be two matches
-        let twoMatches = app.tables.cells.count-1
+        let twoMatches = app.tables.cells.count - 1
         XCTAssertEqual(twoMatches, 2)
 
         // There should be one match
         searchTextField.typeText("cc")
-        let oneMatches = app.tables.cells.count-1
+        let oneMatches = app.tables.cells.count - 1
         XCTAssertEqual(oneMatches, 1)
 
         // There should not be any matches
         searchTextField.typeText("x")
-        sleep(2)
-
-        let noMatches = app.tables.cells.count-1
+        waitforExistence(app.cells.staticTexts["noMatchingEntries.label"])
+        let noMatches = app.tables.cells.count - 1
         XCTAssertEqual(noMatches, 1)
-        XCTAssertEqual(app.cells.staticTexts.element(boundBy: 1).label, "No matching entries.")
-
 
         // Tap on cacel
         app.buttons["cancelFilterTextEntry.button"].tap()
