@@ -126,8 +126,8 @@ extension AccountStore {
         self.fxa?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
             self._oauthInfo.onNext(info)
 
-            if let accountJSON = try? self.fxa?.toJSON(), accountJSON != nil {
-                self.keychainWrapper.set(accountJSON!, forKey: KeychainKey.accountJSON.rawValue)
+            if let opt = try? self.fxa?.toJSON(), let accountJSON = opt {
+                self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
 
             self.fxa?.getProfile { (profile: Profile?, _) in
