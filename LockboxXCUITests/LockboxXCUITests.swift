@@ -121,38 +121,34 @@ class LockboxXCUITests: BaseTestCase {
 
     private func preTestStatus() {
         // App can start with user logged out, user logged out (email saved), user logged in
+        // if user logged in, log out
         if (app.navigationBars["Firefox Lockbox"].exists) {
             disconnectAccount()
             logInAgain()
-        } else if (app.staticTexts[emailTestAccountLogins].exists){
-            app.webViews.links["Use a different account"].tap()
-            waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        } else if (app.buttons["getStarted.button"].exists) {
+            // User logged out but emal remembered
+            app.buttons["getStarted.button"].tap()
+            waitforExistence(app.webViews.secureTextFields["Password"])
+            if (app.staticTexts[emailTestAccountLogins].exists) {
+                app.webViews.links["Use a different account"].tap()
+                waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+                logInAgain()
+            } else {
+            // Starting like first time
             logInAgain()
-        } else {
-            firstLogin()
+            }
         }
     }
 
     private func logInAgain() {
         navigator.nowAt(Screen.FxASigninScreen)
         enterDataAndTapOnSignIn()
-        sleep(5)
-        checkIfAccountIsVerified()
-        waitForMainPage()
-    }
-
-    private func firstLogin() {
-        navigator.goto(Screen.FxASigninScreen)
-        waitforExistence(app.webViews.secureTextFields["Password"])
-
-        enterDataAndTapOnSignIn()
-        sleep(5)
-        // Check if the account is verified and if not, verify it
         checkIfAccountIsVerified()
         waitForMainPage()
     }
 
     private func enterDataAndTapOnSignIn() {
+        waitforExistence(app.webViews.secureTextFields["Password"])
         userState.fxaUsername = emailTestAccountLogins
         navigator.performAction(Action.FxATypeEmail)
         userState.fxaPassword = passwordTestAccountLogins
@@ -161,6 +157,7 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.buttons["finish.button"])
         app.buttons["finish.button"].tap()
+        waitForMainPage()
     }
 
     private func waitForMainPage() {
@@ -172,12 +169,16 @@ class LockboxXCUITests: BaseTestCase {
         if (app.navigationBars["Firefox Lockbox"].exists) {
             disconnectAccount()
             navigator.nowAt(Screen.FxASigninScreen)
-        } else if (app.staticTexts[emailTestAccountLogins].exists){
-            app.webViews.links["Use a different account"].tap()
-            waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-            navigator.nowAt(Screen.FxASigninScreen)
-        } else {
-            navigator.goto(Screen.FxASigninScreen)
+        } else if (app.buttons["getStarted.button"].exists){
+            app.buttons["getStarted.button"].tap()
+            waitforExistence(app.webViews.secureTextFields["Password"])
+            if(app.staticTexts[emailTestAccountLogins].exists) {
+                app.webViews.links["Use a different account"].tap()
+                waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+                navigator.nowAt(Screen.FxASigninScreen)
+            } else {
+                navigator.nowAt(Screen.FxASigninScreen)
+            }
         }
         snapshot("01Welcome" + CONTENT_SIZE)
         waitforExistence(app.webViews.textFields["Email"])
