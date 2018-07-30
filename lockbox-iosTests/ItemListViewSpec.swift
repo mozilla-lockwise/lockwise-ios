@@ -187,23 +187,6 @@ class ItemListViewSpec: QuickSpec {
                     }
                 }
 
-                describe("preparing placeholder") {
-                    beforeEach {
-                        self.subject.bind(items: Driver.just(
-                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.PreparingPlaceholder])]
-                        ))
-                    }
-
-                    it("configures the empty list placeholder") {
-                        let cell = self.subject.tableView.dataSource!.tableView(
-                                self.subject.tableView,
-                                cellForRowAt: IndexPath(row: 0, section: 0)
-                        )
-
-                        expect(cell).notTo(beNil())
-                    }
-                }
-
                 describe("no results placeholder") {
                     var learnMoreObserver = self.scheduler.createObserver(Void.self)
 
@@ -256,18 +239,6 @@ class ItemListViewSpec: QuickSpec {
 
                 it("changes the corresponding property on the sorting button") {
                     let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
-
-                    expect(button.isEnabled).to(beFalse())
-                }
-            }
-
-            describe("new events to the sortingButtonEnabled observer") {
-                beforeEach {
-                    Observable.just(false).bind(to: self.subject.settingButtonEnabled!).disposed(by: self.disposeBag)
-                }
-
-                it("changes the corresponding property on the sorting button") {
-                    let button = self.subject.navigationItem.rightBarButtonItem!.customView as! UIButton
 
                     expect(button.isEnabled).to(beFalse())
                 }

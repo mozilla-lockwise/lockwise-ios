@@ -2,7 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Account
 import Foundation
+import FxAClient
 import FxAUtils
 import RxSwift
 import RxCocoa
@@ -48,12 +50,11 @@ enum SyncState: Equatable {
 }
 
 enum LoginStoreState: Equatable {
-    case Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+    case Unprepared, Locked, Unlocked, Errored(cause: LoginStoreError)
 
     public static func ==(lhs: LoginStoreState, rhs: LoginStoreState) -> Bool {
         switch (lhs, rhs) {
         case (Unprepared, Unprepared): return true
-        case (Preparing, Preparing): return true
         case (Locked, Locked): return true
         case (Unlocked, Unlocked): return true
         case (Errored, Errored): return true
@@ -76,7 +77,7 @@ public enum LoginStoreError: Error {
     case Locked
 }
 
-public typealias ProfileFactory = (_ reset: Bool) -> Profile
+public typealias ProfileFactory = (_ reset: Bool) -> FxAUtils.Profile
 
 private let defaultProfileFactory: ProfileFactory = { reset in
     BrowserProfile(localName: "lockbox-profile", clear: reset)
@@ -84,6 +85,7 @@ private let defaultProfileFactory: ProfileFactory = { reset in
 
 class DataStore {
     public static let shared = DataStore()
+
     private let disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[Login]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
@@ -92,7 +94,8 @@ class DataStore {
     private let fxaLoginHelper: FxALoginHelper
     private let profileFactory: ProfileFactory
     private let keychainWrapper: KeychainWrapper
-    private var profile: Profile
+    private var profile: FxAUtils.Profile
+    private let dispatcher: Dispatcher
 
     public var list: Observable<[Login]> {
         return self.listSubject.asObservable()
@@ -118,6 +121,7 @@ class DataStore {
         self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper
 
+        self.dispatcher = dispatcher
         self.profile = profileFactory(false)
         self.initializeProfile()
         self.registerNotificationCenter()
@@ -126,8 +130,8 @@ class DataStore {
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
                     switch action {
-                    case let .initialize(blob:data):
-                        self.login(data)
+                    case .updateCredentials(let oauthInfo, let fxaProfile):
+                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile)
                     case .reset:
                         self.reset()
                     case .sync:
@@ -194,9 +198,25 @@ class DataStore {
 }
 
 extension DataStore {
-    public func login(_ data: JSON) {
-        self.storageStateSubject.onNext(.Preparing)
-        self.fxaLoginHelper.application(UIApplication.shared, didReceiveAccountJSON: data)
+    public func updateCredentials(_ oauthInfo: OAuthInfo, fxaProfile: FxAClient.Profile) {
+        guard let keysString = oauthInfo.keys else {
+            return
+        }
+
+        let keys = JSON(parseJSON: keysString)
+        let scopedKey = keys[Constant.fxa.oldSyncScope]
+
+        guard let account = profile.getAccount() else {
+            _ = fxaLoginHelper.application(UIApplication.shared,
+                                           email: fxaProfile.email,
+                                           accessToken: oauthInfo.accessToken,
+                                           oauthKeys: scopedKey)
+            return
+        }
+
+        if let oauthInfoKey = OAuthInfoKey(from: scopedKey) {
+            account.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
+        }
     }
 }
 
@@ -328,20 +348,10 @@ extension DataStore {
         //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
         switch (storageState, syncState, notification.name) {
         case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
-            storageStateSubject.onNext(.Preparing)
-        case (.Preparing, _, NotificationNames.ProfileDidStartSyncing):
-            // we're retrying: we haven't been able to verify up til now.
-            break
-        case (.Preparing, _, NotificationNames.FirefoxAccountVerified):
-            // we've verified the account for the first time.
             syncSubject.onNext(.Syncing)
         case (_, _, NotificationNames.ProfileDidStartSyncing):
             // fall through for the locked and unlocked states.
             syncSubject.onNext(.Syncing)
-        case (.Preparing, .Syncing, NotificationNames.ProfileDidFinishSyncing):
-            // end of first time sync
-            storageStateSubject.onNext(.Unlocked)
-            syncSubject.onNext(.Synced)
         case (_, _, NotificationNames.ProfileDidFinishSyncing):
             // end of all syncs
             syncSubject.onNext(.Synced)
@@ -389,9 +399,8 @@ extension DataStore {
             if !profile.hasAccount() {
                 // first run.
                 self.storageStateSubject.onNext(.Unprepared)
-            } else {
-                self.storageStateSubject.onNext(.Preparing)
             }
+
             self.syncSubject.onNext(.NotSyncable)
             return
         }

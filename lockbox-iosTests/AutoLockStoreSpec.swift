@@ -219,7 +219,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     itBehavesLike(AutoLockStoreSpecSharedExample.TimerNotReset.rawValue) {
-                        [AutoLockStoreSpecContext.Action.rawValue: UserInfoAction.load]
+                        [AutoLockStoreSpecContext.Action.rawValue: AccountAction.clear]
                     }
                 }
             }
