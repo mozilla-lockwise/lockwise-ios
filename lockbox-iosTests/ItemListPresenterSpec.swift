@@ -195,9 +195,9 @@ class ItemListPresenterSpec: QuickSpec {
                                 expect(self.view.dismissSpinnerObserver.events.count).to(equal(1))
                             }
 
-                            it("keeps the sorting button and the tableviewscroll disabled") {
-                                expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beFalse())
-                                expect(self.view.tableViewScrollObserver.events.last!.value.element).to(beFalse())
+                            it("enables the sorting button and the tableviewscroll") {
+                                expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beTrue())
+                                expect(self.view.tableViewScrollObserver.events.last!.value.element).to(beTrue())
                             }
 
                             it("displays the emptylist placeholder") {
