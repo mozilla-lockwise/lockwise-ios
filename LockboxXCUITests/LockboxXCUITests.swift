@@ -47,11 +47,13 @@ class LockboxXCUITests: BaseTestCase {
             app.buttons["getStarted.button"].tap()
             waitforExistence(app.webViews.secureTextFields["Password"])
             if (app.staticTexts[emailTestAccountLogins].exists) {
-                app.webViews.links["Use a different account"].tap()
+                navigator.nowAt(Screen.FxASigninScreenSavedUser)
+                navigator.performAction(Action.DisconnectUser)
                 waitforExistence(app.webViews.textFields["Email"], timeout: 10)
                 logInFxAcc()
             } else {
             // Starting like first time
+            navigator.nowAt(Screen.FxASigninScreen)
             logInFxAcc()
             }
         }
@@ -65,9 +67,8 @@ class LockboxXCUITests: BaseTestCase {
             app.buttons["getStarted.button"].tap()
             waitforExistence(app.webViews.secureTextFields["Password"])
             if(app.staticTexts[emailTestAccountLogins].exists) {
-                app.webViews.links["Use a different account"].tap()
-                waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-                navigator.nowAt(Screen.FxASigninScreen)
+                navigator.nowAt(Screen.FxASigninScreenSavedUser)
+                navigator.performAction(Action.DisconnectUser)
             } else {
                 navigator.nowAt(Screen.FxASigninScreen)
             }

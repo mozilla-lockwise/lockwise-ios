@@ -13,6 +13,7 @@ class Screen {
 
     static let FxASigninScreen = "FxASigninScreen"
     static let FxCreateAccount = "FxCreateAccount"
+    static let FxASigninScreenSavedUser = "FxASigninScreenSavedUser"
 
     static let OpenSitesInMenu = "OpenSitesInMenu"
     static let LockedScreen = "LockedScreen"
@@ -27,6 +28,7 @@ class Action {
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
     static let FxALogInSuccessfully = "FxALogInSuccessfully"
+    static let DisconnectUser = "DisconnectUser"
 
     static let OpenSettingsMenu = "OpenSettingsMenu"
 
@@ -50,6 +52,7 @@ class LockboxUserState: MMUserState {
 
     var fxaUsername: String? = nil
     var fxaPassword: String? = nil
+    var savedUser = false
 }
 
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<LockboxUserState> {
@@ -68,8 +71,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.WelcomeScreen) { screenState in
-            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreen)
+            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreen, if: "savedUser = false")
+
+            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreenSavedUser, if: "savedUser = true")
+
             screenState.noop(to: Screen.LockboxMainPage)
+    }
+
+    map.addScreenState(Screen.FxASigninScreenSavedUser) { screenState in
+        screenState.gesture(forAction: Action.DisconnectUser, transitionTo: Screen.FxASigninScreen) { userState in
+            app.webViews.links["Use a different account"].tap()
+        }
     }
 
     map.addScreenState(Screen.FxASigninScreen) { screenState in
@@ -141,6 +153,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: Screen.WelcomeScreen) { userState in
             app.buttons["disconnectFirefoxLockbox.button"].tap()
             app.buttons["Disconnect"].tap()
+            userState.savedUser = !userState.savedUser
         }
         screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: Screen.AccountSettingsMenu) { userState in
             app.buttons["disconnectFirefoxLockbox.button"].tap()
@@ -180,14 +193,14 @@ extension BaseTestCase {
     func disconnectAccount() {
         navigator.performAction(Action.DisconnectFirefoxLockbox)
         waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        waitforExistence(app.staticTexts[emailTestAccountLogins])
-        app.webViews.links["Use a different account"].tap()
+        userState.savedUser = true
+        navigator.goto(Screen.FxASigninScreenSavedUser)
+        navigator.performAction(Action.DisconnectUser)
         waitforExistence(app.webViews.textFields["Email"], timeout: 10)
     }
 
     func logInFxAcc() {
-        navigator.nowAt(Screen.FxASigninScreen)
+        //navigator.nowAt(Screen.FxASigninScreen)
         enterDataAndTapOnSignIn()
         checkIfAccountIsVerified()
         waitForMainPage()
