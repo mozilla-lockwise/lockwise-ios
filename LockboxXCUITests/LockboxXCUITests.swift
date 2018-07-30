@@ -32,91 +32,8 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     override func tearDown() {
-        navigator.goto(Screen.LockboxMainPage)
         disconnectAccount()
         super.tearDown()
-    }
-
-    private func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
-        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
-        let restUrl = URL(string: postEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-
-        request.httpMethod = "POST"
-
-        let jsonObject: [String: Any] = ["uid": uid, "code":code]
-        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
-        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-        if let json = json {
-            print("json \(json)")
-        }
-        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
-
-        request.httpBody = jsonData
-        print("json \(jsonData!)")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("error:", error)
-                return
-            }
-            done()
-        }
-        task.resume()
-    }
-
-    private func verifyAccount(done: @escaping () -> ()) {
-        // GET to EndPoint/mail/test-9876@restmail.net
-        let restUrl = URL(string: getEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.httpMethod = "GET"
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if(error != nil) {
-                print("Error: \(error ?? "Get Error" as! Error)")
-            }
-            let responseString = String(data: data!, encoding: .utf8)
-            print("responseString = \(String(describing: responseString))")
-
-            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
-            let regexCode = "(code=[a-z0-9]{0,32}$?)"
-            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
-                uid = String(responseString![rangeUid])
-            }
-
-            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
-                code = String(responseString![rangeCode])
-            }
-
-            if (code != nil && uid != nil) {
-                let codeNumber = self.getPostValues(value: code)
-                let uidNumber = self.getPostValues(value: uid)
-
-                self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
-                    done()
-                }
-            } else {
-                done()
-            }
-        }
-        task.resume()
-    }
-
-    private func getPostValues(value: String) -> String {
-        // From the regExp it is necessary to get only the number to add it to a json and send in POST request
-        let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
-        let numberValue = value[finalNumberIndex...];
-        return String(numberValue)
-    }
-
-    private func disconnectAccount() {
-        navigator.nowAt(Screen.LockboxMainPage)
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        waitforExistence(app.staticTexts[emailTestAccountLogins])
-        app.webViews.links["Use a different account"].tap()
-        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
     }
 
     private func preTestStatus() {
@@ -124,7 +41,7 @@ class LockboxXCUITests: BaseTestCase {
         // if user logged in, log out
         if (app.navigationBars["Firefox Lockbox"].exists) {
             disconnectAccount()
-            logInAgain()
+            logInFxAcc()
         } else if (app.buttons["getStarted.button"].exists) {
             // User logged out but emal remembered
             app.buttons["getStarted.button"].tap()
@@ -132,37 +49,12 @@ class LockboxXCUITests: BaseTestCase {
             if (app.staticTexts[emailTestAccountLogins].exists) {
                 app.webViews.links["Use a different account"].tap()
                 waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-                logInAgain()
+                logInFxAcc()
             } else {
             // Starting like first time
-            logInAgain()
+            logInFxAcc()
             }
         }
-    }
-
-    private func logInAgain() {
-        navigator.nowAt(Screen.FxASigninScreen)
-        enterDataAndTapOnSignIn()
-        checkIfAccountIsVerified()
-        waitForMainPage()
-    }
-
-    private func enterDataAndTapOnSignIn() {
-        waitforExistence(app.webViews.secureTextFields["Password"])
-        userState.fxaUsername = emailTestAccountLogins
-        navigator.performAction(Action.FxATypeEmail)
-        userState.fxaPassword = passwordTestAccountLogins
-        navigator.performAction(Action.FxATypePassword)
-
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.buttons["finish.button"])
-        app.buttons["finish.button"].tap()
-        waitForMainPage()
-    }
-
-    private func waitForMainPage() {
-        waitforExistence(app.navigationBars["Firefox Lockbox"])
-        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
     }
 
     func testLogin() {
@@ -232,32 +124,10 @@ class LockboxXCUITests: BaseTestCase {
         checkIfAccountIsVerified()
     }
 
-    private func checkIfAccountIsVerified() {
-        if (app.staticTexts["Confirm your account."].exists) {
-            let group = DispatchGroup()
-            group.enter()
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.verifyAccount() {
-                    group.leave()
-                }
-            }
-            group.wait()
-            waitforNoExistence(app.staticTexts["Confirm your account."], timeoutValue: 5)
-            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 20)
-        } else {
-            // Account is still verified, check that entries are shown
-            waitforNoExistence(app.staticTexts["Confirm your account."], timeoutValue: 5)
-            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
-            XCTAssertNotEqual(app.tables.cells.count, 1)
-            XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
-        }
-    }
-
     func testMainScreen() {
         preTestStatus()
         checkIfAccountIsVerified()
         // Check how to order the entries
-        navigator.nowAt(Screen.LockboxMainPage)
         navigator.performAction(Action.SelectRecentOrder)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
@@ -276,7 +146,6 @@ class LockboxXCUITests: BaseTestCase {
     func testSettingsMainPage() {
         preTestStatus()
         checkIfAccountIsVerified()
-        navigator.nowAt(Screen.LockboxMainPage)
 
         // Check the Lock Now button
         navigator.goto(Screen.LockboxMainPage)
@@ -306,7 +175,6 @@ class LockboxXCUITests: BaseTestCase {
     func testDifferentSettings() {
         preTestStatus()
         checkIfAccountIsVerified()
-        navigator.nowAt(Screen.LockboxMainPage)
 
         // Check the Account Setting
         waitforExistence(app.navigationBars["Firefox Lockbox"])
@@ -352,7 +220,6 @@ class LockboxXCUITests: BaseTestCase {
     func testEntryDetail() {
         preTestStatus()
         checkIfAccountIsVerified()
-        navigator.nowAt(Screen.LockboxMainPage)
 
         // Check the Entry Detail View and its details
         waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
