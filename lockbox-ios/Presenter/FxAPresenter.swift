@@ -20,7 +20,6 @@ struct LockedSyncState {
 class FxAPresenter {
     private weak var view: FxAViewProtocol?
     fileprivate let dispatcher: Dispatcher
-    fileprivate let accountActionHandler: AccountActionHandler
     fileprivate let accountStore: AccountStore
 
     private var disposeBag = DisposeBag()
@@ -33,12 +32,10 @@ class FxAPresenter {
 
     init(view: FxAViewProtocol,
          dispatcher: Dispatcher = .shared,
-         accountActionHandler: AccountActionHandler = AccountActionHandler.shared,
          accountStore: AccountStore = AccountStore.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
-        self.accountActionHandler = accountActionHandler
         self.accountStore = accountStore
     }
 
@@ -56,6 +53,6 @@ extension FxAPresenter {
     func matchingRedirectURLReceived(_ navigationURL: URL) {
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: true))
         self.dispatcher.dispatch(action: LoginRouteAction.onboardingConfirmation)
-        self.accountActionHandler.invoke(.oauthRedirect(url: navigationURL))
+        self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
     }
 }

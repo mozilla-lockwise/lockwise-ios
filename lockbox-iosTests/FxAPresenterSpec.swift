@@ -41,14 +41,6 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeAccountActionHandler: AccountActionHandler {
-        var invokeArgument: AccountAction?
-
-        override func invoke(_ action: AccountAction) {
-            self.invokeArgument = action
-        }
-    }
-
     class FakeAccountStore: AccountStore {
         let loginURLStub = PublishSubject<URL>()
 
@@ -59,7 +51,6 @@ class FxAPresenterSpec: QuickSpec {
 
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
-    private var accountActionHandler: FakeAccountActionHandler!
     private var accountStore: FakeAccountStore!
     var subject: FxAPresenter!
 
@@ -69,12 +60,10 @@ class FxAPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeFxAView()
                 self.dispatcher = FakeDispatcher()
-                self.accountActionHandler = FakeAccountActionHandler()
                 self.accountStore = FakeAccountStore()
                 self.subject = FxAPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
-                        accountActionHandler: self.accountActionHandler,
                         accountStore: self.accountStore
                 )
             }
@@ -113,9 +102,7 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
-                    expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.oauthRedirect(url: url)))
-
-                    expect(self.dispatcher.dispatchedActions).to(haveCount(2))
+                    expect(self.dispatcher.dispatchedActions).to(haveCount(3))
 
                     expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(OnboardingStatusAction.self))
                     let onboardingAction = self.dispatcher.dispatchedActions[0] as! OnboardingStatusAction
@@ -124,6 +111,10 @@ class FxAPresenterSpec: QuickSpec {
                     expect(self.dispatcher.dispatchedActions[1]).to(beAnInstanceOf(LoginRouteAction.self))
                     let routeAction = self.dispatcher.dispatchedActions[1] as! LoginRouteAction
                     expect(routeAction).to(equal(.onboardingConfirmation))
+
+                    expect(self.dispatcher.dispatchedActions[2]).to(beAnInstanceOf(AccountAction.self))
+                    let accountAction = self.dispatcher.dispatchedActions[2] as! AccountAction
+                    expect(accountAction).to(equal(.oauthRedirect(url: url)))
                 }
             }
         }

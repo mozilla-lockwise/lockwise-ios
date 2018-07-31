@@ -22,29 +22,8 @@ class AccountActionSpec: QuickSpec {
     }
 
     private var dispatcher: FakeDispatcher!
-    var subject: AccountActionHandler!
 
     override func spec() {
-        describe("UserInfoActionHandler") {
-            beforeEach {
-                self.dispatcher = FakeDispatcher()
-                self.subject = AccountActionHandler(
-                        dispatcher: self.dispatcher
-                )
-            }
-
-            describe("invoke") {
-                beforeEach {
-                    self.subject.invoke(AccountAction.clear)
-                }
-
-                it("dispatches actions to the dispatcher") {
-                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                    let argument = self.dispatcher.actionTypeArgument as! AccountAction
-                    expect(argument).to(equal(AccountAction.clear))
-                }
-            }
-        }
 
         describe("AccountAction") {
             describe("equality") {

@@ -36,7 +36,6 @@ class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
     private let dispatcher: Dispatcher
-    private let userInfoActionHandler: AccountActionHandler
     private let linkActionHandler: LinkActionHandler
     private let accountStore: AccountStore
     private let dataStore: DataStore
@@ -46,7 +45,6 @@ class WelcomePresenter {
 
     init(view: WelcomeViewProtocol,
          dispatcher: Dispatcher = .shared,
-         userInfoActionHandler: AccountActionHandler = AccountActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          accountStore: AccountStore = AccountStore.shared,
          dataStore: DataStore = DataStore.shared,
@@ -54,7 +52,6 @@ class WelcomePresenter {
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.dispatcher = dispatcher
-        self.userInfoActionHandler = userInfoActionHandler
         self.linkActionHandler = linkActionHandler
         self.accountStore = accountStore
         self.dataStore = dataStore

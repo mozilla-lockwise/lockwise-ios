@@ -15,12 +15,11 @@ class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
     let dispatcher: Dispatcher
     let accountStore: AccountStore
-    let accountActionHandler: AccountActionHandler
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: DataStoreAction.reset)
-            target.accountActionHandler.invoke(.clear)
+            target.dispatcher.dispatch(action: AccountAction.clear)
         }.asObserver()
     }()
 
@@ -47,13 +46,11 @@ class AccountSettingPresenter {
 
     init(view: AccountSettingViewProtocol,
          dispatcher: Dispatcher = .shared,
-         accountStore: AccountStore = AccountStore.shared,
-         accountActionHandler: AccountActionHandler = AccountActionHandler.shared
+         accountStore: AccountStore = AccountStore.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
-        self.accountActionHandler = accountActionHandler
     }
 
     func onViewReady() {
