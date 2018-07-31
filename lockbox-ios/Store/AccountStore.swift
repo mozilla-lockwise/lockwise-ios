@@ -8,6 +8,7 @@ import RxCocoa
 import FxAClient
 import SwiftyJSON
 import SwiftKeychainWrapper
+import WebKit
 
 enum KeychainKey: String {
     // note: these additional keys are holdovers from the previous Lockbox-owned style of
@@ -22,6 +23,8 @@ class AccountStore {
 
     private var dispatcher: Dispatcher
     private var keychainWrapper: KeychainWrapper
+    private var urlCache: URLCache
+    private var webData: WKWebsiteDataStore
     private let disposeBag = DisposeBag()
 
     private var fxa: FirefoxAccount?
@@ -43,9 +46,14 @@ class AccountStore {
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         keychainWrapper: KeychainWrapper = KeychainWrapper.standard) {
+         keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
+         urlCache: URLCache = URLCache.shared,
+         webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
+    ) {
         self.dispatcher = dispatcher
         self.keychainWrapper = keychainWrapper
+        self.urlCache = urlCache
+        self.webData = webData
 
         self.dispatcher.register
                 .filterByType(class: AccountAction.self)
@@ -61,8 +69,8 @@ class AccountStore {
 
         if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue) {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
-            self.generateInitialURL()
-            self.populateInitialValues()
+            self.generateLoginURL()
+            self.populateAccountInformation()
         } else {
             FxAConfig.release { (config: FxAConfig?, _) in
                 if let config = config {
@@ -71,8 +79,8 @@ class AccountStore {
                            clientId: Constant.fxa.clientID,
                            redirectUri: Constant.fxa.redirectURI)
 
-                    self.generateInitialURL()
-                    self.populateInitialValues()
+                    self.generateLoginURL()
+                    self.populateAccountInformation()
                 }
             }
         }
@@ -80,7 +88,7 @@ class AccountStore {
 }
 
 extension AccountStore {
-    private func generateInitialURL() {
+    private func generateLoginURL() {
         self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
             if let url = url {
                 self._loginURL.onNext(url)
@@ -88,7 +96,7 @@ extension AccountStore {
         }
     }
 
-    private func populateInitialValues() {
+    private func populateAccountInformation() {
         self.fxa?.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
             self._oauthInfo.onNext(info)
         }
@@ -102,6 +110,12 @@ extension AccountStore {
         for identifier in KeychainKey.allValues {
             _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
         }
+
+        self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            self.webData.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records) { }
+        }
+
+        self.urlCache.removeAllCachedResponses()
 
         self._profile.onNext(nil)
         self._oauthInfo.onNext(nil)
