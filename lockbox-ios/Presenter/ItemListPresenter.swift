@@ -45,7 +45,6 @@ class ItemListPresenter {
     private let dispatcher: Dispatcher
     private let routeActionHandler: RouteActionHandler
     private let itemListDisplayActionHandler: ItemListDisplayActionHandler
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let dataStore: DataStore
     private let itemListDisplayStore: ItemListDisplayStore
     private let userDefaultStore: UserDefaultStore
@@ -96,7 +95,7 @@ class ItemListPresenter {
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: true))
-            target.dataStoreActionHandler.invoke(.sync)
+            target.dispatcher.dispatch(action: DataStoreAction.sync)
         }.asObserver()
     }()
 
@@ -205,7 +204,6 @@ class ItemListPresenter {
          dispatcher: Dispatcher = .shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
          userDefaultStore: UserDefaultStore = .shared) {
@@ -213,7 +211,6 @@ class ItemListPresenter {
         self.dispatcher = dispatcher
         self.routeActionHandler = routeActionHandler
         self.itemListDisplayActionHandler = itemListDisplayActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaultStore = userDefaultStore

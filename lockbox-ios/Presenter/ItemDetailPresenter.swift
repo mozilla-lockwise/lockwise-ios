@@ -19,11 +19,11 @@ let copyableFields = [Constant.string.username, Constant.string.password]
 
 class ItemDetailPresenter {
     weak var view: ItemDetailViewProtocol?
+    private var dispatcher: Dispatcher
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyConfirmationDisplayStore
     private var routeActionHandler: RouteActionHandler
-    private var dataStoreActionHandler: DataStoreActionHandler
     private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
     private var externalLinkActionHandler: LinkActionHandler
@@ -63,7 +63,7 @@ class ItemDetailPresenter {
                                 field = CopyField.password
                             }
 
-                            target.dataStoreActionHandler.invoke(.touch(id: itemId))
+                            target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
                             target.copyActionHandler.invoke(CopyAction(text: text, field: field, itemID: itemId))
                         })
                         .disposed(by: target.disposeBag)
@@ -81,20 +81,20 @@ class ItemDetailPresenter {
     }()
 
     init(view: ItemDetailViewProtocol,
+         dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
          copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
          itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared,
          externalLinkActionHandler: LinkActionHandler = LinkActionHandler.shared) {
         self.view = view
+        self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
         self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.copyActionHandler = copyActionHandler
         self.itemDetailActionHandler = itemDetailActionHandler
         self.externalLinkActionHandler = externalLinkActionHandler

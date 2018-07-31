@@ -27,13 +27,13 @@ class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
 
+    fileprivate let dispatcher: Dispatcher
     fileprivate let routeStore: RouteStore
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let accountStore: AccountStore
     fileprivate let userDefaultStore: UserDefaultStore
     fileprivate let routeActionHandler: RouteActionHandler
-    fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
 
@@ -47,18 +47,17 @@ class RootPresenter {
          accountStore: AccountStore = AccountStore.shared,
          userDefaultStore: UserDefaultStore = .shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
          biometryManager: BiometryManager = BiometryManager()
     ) {
         self.view = view
+        self.dispatcher = dispatcher
         self.routeStore = routeStore
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
         self.accountStore = accountStore
         self.userDefaultStore = userDefaultStore
         self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
@@ -66,7 +65,7 @@ class RootPresenter {
             .bind { latest in
                     if let oauthInfo = latest.0,
                         let profile = latest.1 {
-                        self.dataStoreActionHandler.invoke(.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
                     }
                 }
                 .disposed(by: self.disposeBag)

@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // This key will not be set on the first run of the application, only on subsequent runs.
         if UserDefaults.standard.string(forKey: PostFirstRunKey) == nil {
             AccountActionHandler.shared.invoke(.clear)
-            DataStoreActionHandler.shared.invoke(.reset)
+            Dispatcher.shared.dispatch(action: DataStoreAction.reset)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
         }
 

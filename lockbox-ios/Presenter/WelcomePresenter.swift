@@ -35,8 +35,8 @@ extension LockedEnabled: Equatable {
 class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
+    private let dispatcher: Dispatcher
     private let routeActionHandler: RouteActionHandler
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let userInfoActionHandler: AccountActionHandler
     private let linkActionHandler: LinkActionHandler
     private let accountStore: AccountStore
@@ -46,8 +46,8 @@ class WelcomePresenter {
     private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
+         dispatcher: Dispatcher = Dispatcher.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          userInfoActionHandler: AccountActionHandler = AccountActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          accountStore: AccountStore = AccountStore.shared,
@@ -55,8 +55,8 @@ class WelcomePresenter {
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
+        self.dispatcher = dispatcher
         self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.userInfoActionHandler = userInfoActionHandler
         self.linkActionHandler = linkActionHandler
         self.accountStore = accountStore
@@ -171,7 +171,7 @@ extension WelcomePresenter {
                             }
                 }
                 .subscribe(onNext: { [weak self] _ in
-                    self?.dataStoreActionHandler.invoke(.unlock)
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
                 })
                 .disposed(by: self.disposeBag)
     }

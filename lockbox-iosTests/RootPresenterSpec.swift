@@ -146,14 +146,6 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var action: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.action = action
-        }
-    }
-
     class FakeBiometryManager: BiometryManager {
         var deviceAuthAvailableStub: Bool!
 
@@ -169,7 +161,6 @@ class RootPresenterSpec: QuickSpec {
     private var userDefaultStore: FakeUserDefaultStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var biometryManager: FakeBiometryManager!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
@@ -184,7 +175,6 @@ class RootPresenterSpec: QuickSpec {
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.biometryManager = FakeBiometryManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
                 self.biometryManager.deviceAuthAvailableStub = true
@@ -1127,7 +1117,6 @@ class RootPresenterSpec: QuickSpec {
                 dataStore: self.dataStore,
                 telemetryStore: self.telemetryStore,
                 routeActionHandler: self.routeActionHandler,
-                dataStoreActionHandler: self.dataStoreActionHandler,
                 telemetryActionHandler: self.telemetryActionHandler,
                 biometryManager: self.biometryManager
         )

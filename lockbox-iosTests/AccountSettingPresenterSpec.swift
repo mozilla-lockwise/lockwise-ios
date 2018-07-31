@@ -37,6 +37,14 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchActoinArgument: Action?
+
+        override func dispatch(action: Action) {
+            self.dispatchActoinArgument = action
+        }
+    }
+
     class FakeAccountStore: AccountStore {
         let profileStub = PublishSubject<Profile?>()
 
@@ -61,19 +69,11 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.invokeArgument = action
-        }
-    }
-
     private var view: FakeAccountSettingView!
+    private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var accountActionHandler: FakeAccountActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     var subject: AccountSettingPresenter!
 
     private let disposeBag = DisposeBag()
@@ -86,16 +86,16 @@ class AccountSettingPresenterSpec: QuickSpec {
                 self.view.avatarImageDataObserver = self.scheduler.createObserver(Data.self)
                 self.view.displayNameObserver = self.scheduler.createObserver(String.self)
 
+                self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.accountStore = FakeAccountStore()
                 self.accountActionHandler = FakeAccountActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.subject = AccountSettingPresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
                         routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
                         accountActionHandler: self.accountActionHandler
                 )
             }
@@ -135,7 +135,8 @@ class AccountSettingPresenterSpec: QuickSpec {
                     }
 
                     it("sends the clear & reset actions") {
-                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.reset))
+                        let action = self.dispatcher.dispatchActoinArgument as! DataStoreAction
+                        expect(action).to(equal(DataStoreAction.reset))
                         expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.clear))
                     }
                 }

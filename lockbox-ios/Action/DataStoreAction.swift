@@ -39,18 +39,3 @@ extension DataStoreAction: Equatable {
         }
     }
 }
-
-class DataStoreActionHandler: ActionHandler {
-    static let shared = DataStoreActionHandler()
-    private var dispatcher: Dispatcher
-
-    private let disposeBag = DisposeBag()
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ action: DataStoreAction) {
-        self.dispatcher.dispatch(action: action)
-    }
-}

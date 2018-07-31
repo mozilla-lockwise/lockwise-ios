@@ -17,7 +17,6 @@ class SettingListPresenter {
     weak private var view: SettingListViewProtocol?
     private let dispatcher: Dispatcher
     private let routeActionHandler: RouteActionHandler
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let linkActionHandler: LinkActionHandler
     private let userDefaultStore: UserDefaultStore
     private let biometryManager: BiometryManager
@@ -86,14 +85,12 @@ class SettingListPresenter {
     init(view: SettingListViewProtocol,
          dispatcher: Dispatcher = .shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          userDefaultStore: UserDefaultStore = .shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.dispatcher = dispatcher
         self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.linkActionHandler = linkActionHandler
         self.userDefaultStore = userDefaultStore
         self.biometryManager = biometryManager
@@ -118,7 +115,7 @@ class SettingListPresenter {
         self.view?.onSignOut
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
-                        self.dataStoreActionHandler.invoke(.lock)
+                        self.dispatcher.dispatch(action: DataStoreAction.lock)
                         self.routeActionHandler.invoke(LoginRouteAction.welcome)
                     } else {
                         self.view?.displayAlertController(

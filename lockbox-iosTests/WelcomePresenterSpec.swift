@@ -78,18 +78,18 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchActionArgument: Action?
+
+        override func dispatch(action: Action) {
+            self.dispatchActionArgument = action
+        }
+    }
+
     class FakeRouteActionHandler: RouteActionHandler {
         var invokeArgument: RouteAction?
 
         override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
             self.invokeArgument = action
         }
     }
@@ -152,8 +152,8 @@ class WelcomePresenterSpec: QuickSpec {
     }
 
     private var view: FakeWelcomeView!
+    private var dispatcher: FakeDispatcher!
     private var routeActionHandler: FakeRouteActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var linkActionHandler: FakeLinkActionHandler!
     private var accountStore: FakeAccountStore!
     private var dataStore: FakeDataStore!
@@ -174,8 +174,8 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view.unlockButtonHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.lockImageHiddenStub = self.scheduler.createObserver(Bool.self)
 
+                self.dispatcher = FakeDispatcher()
                 self.routeActionHandler = FakeRouteActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.linkActionHandler = FakeLinkActionHandler()
                 self.accountStore = FakeAccountStore()
                 self.dataStore = FakeDataStore()
@@ -183,8 +183,8 @@ class WelcomePresenterSpec: QuickSpec {
                 self.biometryManager = FakeBiometryManager()
                 self.subject = WelcomePresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
                         linkActionHandler: self.linkActionHandler,
                         accountStore: self.accountStore,
                         dataStore: self.dataStore,
@@ -325,7 +325,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                                        expect(action).to(equal(DataStoreAction.unlock))
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
                                     }
                                 }
@@ -337,7 +338,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                                     it("does nothing") {
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchActionArgument).to(beNil())
                                     }
                                 }
                             }
@@ -357,7 +358,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                                        expect(action).to(equal(DataStoreAction.unlock))
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
                                     }
                                 }
@@ -369,7 +371,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                                     it("does nothing") {
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchActionArgument).to(beNil())
                                     }
                                 }
                             }
@@ -382,7 +384,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("unlocks the device blindly") {
-                                expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                                expect(action).to(equal(DataStoreAction.unlock))
                                 expect(self.routeActionHandler.invokeArgument).to(beNil())
                             }
                         }
@@ -424,7 +427,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                                        expect(action).to(equal(DataStoreAction.unlock))
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
                                     }
                                 }
@@ -436,7 +440,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                                     it("does nothing") {
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchActionArgument).to(beNil())
                                     }
                                 }
                             }
@@ -456,7 +460,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                        let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                                        expect(action).to(equal(DataStoreAction.unlock))
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
                                     }
                                 }
@@ -468,7 +473,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                                     it("does nothing") {
                                         expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchActionArgument).to(beNil())
                                     }
                                 }
                             }
@@ -481,7 +486,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("unlocks the device blindly") {
-                                expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
+                                let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                                expect(action).to(equal(DataStoreAction.unlock))
                                 expect(self.routeActionHandler.invokeArgument).to(beNil())
                             }
                         }

@@ -13,14 +13,14 @@ protocol AccountSettingViewProtocol: class, AlertControllerView {
 
 class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
+    let dispatcher: Dispatcher
     let accountStore: AccountStore
     let routeActionHandler: RouteActionHandler
-    let dataStoreActionHandler: DataStoreActionHandler
     let accountActionHandler: AccountActionHandler
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.dataStoreActionHandler.invoke(.reset)
+            target.dispatcher.dispatch(action: DataStoreAction.reset)
             target.accountActionHandler.invoke(.clear)
         }.asObserver()
     }()
@@ -47,15 +47,15 @@ class AccountSettingPresenter {
     }()
 
     init(view: AccountSettingViewProtocol,
+         dispatcher: Dispatcher = Dispatcher.shared,
          accountStore: AccountStore = AccountStore.shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          accountActionHandler: AccountActionHandler = AccountActionHandler.shared
     ) {
         self.view = view
+        self.dispatcher = dispatcher
         self.accountStore = accountStore
         self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.accountActionHandler = accountActionHandler
     }
 

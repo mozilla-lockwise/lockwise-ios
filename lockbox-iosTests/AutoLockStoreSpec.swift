@@ -20,13 +20,18 @@ enum AutoLockStoreSpecContext: String {
 
 class AutoLockStoreSpec: QuickSpec {
 
-    class FakeDispatcher: Dispatcher {
-        let registerStub = PublishSubject<Action>()
+        class FakeDispatcher: Dispatcher {
+            let registerStub = PublishSubject<Action>()
+            var dispatchActionArgument: Action?
 
-        override var register: Observable<Action> {
-            return self.registerStub.asObservable()
+            override var register: Observable<Action> {
+                return self.registerStub.asObservable()
+            }
+
+            override func dispatch(action: Action) {
+                self.dispatchActionArgument = action
+            }
         }
-    }
 
     class FakeDataStore: DataStore {
         var lockedStub = PublishSubject<Bool>()
@@ -36,18 +41,9 @@ class AutoLockStoreSpec: QuickSpec {
         }
     }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var action: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.action = action
-        }
-    }
-
     var dispatcher: FakeDispatcher!
     var userDefaults: UserDefaults!
     var dataStore: FakeDataStore!
-    var dataStoreActionHandler: FakeDataStoreActionHandler!
 
     var subject: AutoLockStore!
 
@@ -55,14 +51,12 @@ class AutoLockStoreSpec: QuickSpec {
         describe("AutoLockStore") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.dataStore = FakeDataStore()
                 self.userDefaults = UserDefaults.standard
 
                 self.subject = AutoLockStore(
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
                         userDefaults: UserDefaults.standard)
             }
 
@@ -76,7 +70,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     it("locks the app") {
-                        expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                        expect(self.dispatcher.dispatchActionArgument as! DataStoreAction).to(equal(DataStoreAction.lock))
                         expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
@@ -89,7 +83,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     it("locks the app") {
-                        expect(self.dataStoreActionHandler.action).to(equal(.lock))
+                        expect(self.dispatcher.dispatchActionArgument as! DataStoreAction).to(equal(DataStoreAction.lock))
                         expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }

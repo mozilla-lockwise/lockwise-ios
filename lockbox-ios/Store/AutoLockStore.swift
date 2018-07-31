@@ -12,7 +12,6 @@ class AutoLockStore {
 
     private let dispatcher: Dispatcher
     private let dataStore: DataStore
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let userDefaults: UserDefaults
 
     var timer: Timer?
@@ -20,13 +19,11 @@ class AutoLockStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          userDefaults: UserDefaults = UserDefaults.standard
     ) {
         self.dispatcher = dispatcher
         self.userDefaults = userDefaults
         self.dataStore = dataStore
-        self.dataStoreActionHandler = dataStoreActionHandler
 
         self.dataStore.locked
                 .subscribe(onNext: { [weak self] locked in
@@ -152,7 +149,7 @@ extension AutoLockStore {
 
     @objc private func lockApp() {
         if !paused {
-            self.dataStoreActionHandler.invoke(.lock)
+            self.dispatcher.dispatch(action: DataStoreAction	.lock)
             self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
     }
