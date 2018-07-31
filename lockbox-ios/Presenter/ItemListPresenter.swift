@@ -400,7 +400,11 @@ extension ItemListPresenter {
 
         view.bind(sortingButtonTitle: itemSortTextDriver)
 
-        let enableObservable = self.dataStore.list.map { !$0.isEmpty }
+        let loginListEmptyObservable = self.dataStore.list.map { $0.isEmpty }
+        let isSyncingObservable = self.dataStore.syncState.map { $0 == .Syncing }
+        let enableObservable = isSyncingObservable.withLatestFrom(loginListEmptyObservable) { (isSyncing, isListEmpty) in
+          return !(isSyncing && isListEmpty)
+        }
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
