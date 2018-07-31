@@ -659,8 +659,6 @@
 			children = (
 				2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */,
 				7D73BD6F20D3135E0075D1CE /* FxAClient.framework */,
-				2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */,
-				7D73BD6F20D3135E0075D1CE /* FxAClient.framework */,
 				391233832090E63000CB0233 /* Alamofire.framework */,
 				391233802090E60A00CB0233 /* XCGLogger.framework */,
 				3912337A2090E5E200CB0233 /* Storage.framework */,
