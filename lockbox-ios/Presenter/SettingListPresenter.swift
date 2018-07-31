@@ -16,7 +16,6 @@ protocol SettingListViewProtocol: class, AlertControllerView {
 class SettingListPresenter {
     weak private var view: SettingListViewProtocol?
     private let dispatcher: Dispatcher
-    private let routeActionHandler: RouteActionHandler
     private let linkActionHandler: LinkActionHandler
     private let userDefaultStore: UserDefaultStore
     private let biometryManager: BiometryManager
@@ -24,7 +23,7 @@ class SettingListPresenter {
 
     lazy private(set) var onDone: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.list)
+            target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
     }()
 
@@ -34,7 +33,7 @@ class SettingListPresenter {
                 return
             }
 
-            target.routeActionHandler.invoke(routeAction)
+            target.dispatcher.dispatch(action: routeAction)
         }.asObserver()
     }()
 
@@ -84,13 +83,11 @@ class SettingListPresenter {
 
     init(view: SettingListViewProtocol,
          dispatcher: Dispatcher = .shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          userDefaultStore: UserDefaultStore = .shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.dispatcher = dispatcher
-        self.routeActionHandler = routeActionHandler
         self.linkActionHandler = linkActionHandler
         self.userDefaultStore = userDefaultStore
         self.biometryManager = biometryManager
@@ -116,7 +113,7 @@ class SettingListPresenter {
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
                         self.dispatcher.dispatch(action: DataStoreAction.lock)
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                     } else {
                         self.view?.displayAlertController(
                             buttons: self.passcodeButtonsConfiguration,

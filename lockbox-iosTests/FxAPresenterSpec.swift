@@ -22,6 +22,14 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
     class FakeNavigationAction: WKNavigationAction {
         private var fakeRequest: URLRequest
         override var request: URLRequest {
@@ -41,19 +49,6 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-        var onboardingArgument: OnboardingStatusAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
-        }
-
-        override func invoke(_ action: OnboardingStatusAction) {
-            self.onboardingArgument = action
-        }
-    }
-
     class FakeAccountStore: AccountStore {
         let loginURLStub = PublishSubject<URL>()
 
@@ -63,8 +58,8 @@ class FxAPresenterSpec: QuickSpec {
     }
 
     private var view: FakeFxAView!
+    private var dispatcher: FakeDispatcher!
     private var accountActionHandler: FakeAccountActionHandler!
-    private var routeActionHandler: FakeRouteActionHandler!
     private var accountStore: FakeAccountStore!
     var subject: FxAPresenter!
 
@@ -73,13 +68,13 @@ class FxAPresenterSpec: QuickSpec {
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
+                self.dispatcher = FakeDispatcher()
                 self.accountActionHandler = FakeAccountActionHandler()
-                self.routeActionHandler = FakeRouteActionHandler()
                 self.accountStore = FakeAccountStore()
                 self.subject = FxAPresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         accountActionHandler: self.accountActionHandler,
-                        routeActionHandler: self.routeActionHandler,
                         accountStore: self.accountStore
                 )
             }
@@ -103,9 +98,10 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("routes back to login") {
-                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                    let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(argument).to(equal(LoginRouteAction.welcome))
+                    expect(self.dispatcher.dispatchedActions).to(haveCount(1))
+                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(LoginRouteAction.self))
+                    let argument = self.dispatcher.dispatchedActions[0] as! LoginRouteAction
+                    expect(argument).to(equal(.welcome))
                 }
             }
 
@@ -118,9 +114,16 @@ class FxAPresenterSpec: QuickSpec {
 
                 it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
                     expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.oauthRedirect(url: url)))
-                    let routeAction = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(routeAction).to(equal(LoginRouteAction.onboardingConfirmation))
-                    expect(self.routeActionHandler.onboardingArgument!.onboardingInProgress).to(beTrue())
+
+                    expect(self.dispatcher.dispatchedActions).to(haveCount(2))
+
+                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(OnboardingStatusAction.self))
+                    let onboardingAction = self.dispatcher.dispatchedActions[0] as! OnboardingStatusAction
+                    expect(onboardingAction.onboardingInProgress).to(beTrue())
+
+                    expect(self.dispatcher.dispatchedActions[1]).to(beAnInstanceOf(LoginRouteAction.self))
+                    let routeAction = self.dispatcher.dispatchedActions[1] as! LoginRouteAction
+                    expect(routeAction).to(equal(.onboardingConfirmation))
                 }
             }
         }

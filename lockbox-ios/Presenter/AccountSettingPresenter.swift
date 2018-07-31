@@ -15,7 +15,6 @@ class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
     let dispatcher: Dispatcher
     let accountStore: AccountStore
-    let routeActionHandler: RouteActionHandler
     let accountActionHandler: AccountActionHandler
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
@@ -27,7 +26,7 @@ class AccountSettingPresenter {
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
         }.asObserver()
     }()
 
@@ -47,15 +46,13 @@ class AccountSettingPresenter {
     }()
 
     init(view: AccountSettingViewProtocol,
-         dispatcher: Dispatcher = Dispatcher.shared,
+         dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = AccountStore.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          accountActionHandler: AccountActionHandler = AccountActionHandler.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
-        self.routeActionHandler = routeActionHandler
         self.accountActionHandler = accountActionHandler
     }
 

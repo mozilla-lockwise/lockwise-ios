@@ -36,7 +36,6 @@ class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
     private let dispatcher: Dispatcher
-    private let routeActionHandler: RouteActionHandler
     private let userInfoActionHandler: AccountActionHandler
     private let linkActionHandler: LinkActionHandler
     private let accountStore: AccountStore
@@ -46,8 +45,7 @@ class WelcomePresenter {
     private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
-         dispatcher: Dispatcher = Dispatcher.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
+         dispatcher: Dispatcher = .shared,
          userInfoActionHandler: AccountActionHandler = AccountActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          accountStore: AccountStore = AccountStore.shared,
@@ -56,7 +54,6 @@ class WelcomePresenter {
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.dispatcher = dispatcher
-        self.routeActionHandler = routeActionHandler
         self.userInfoActionHandler = userInfoActionHandler
         self.linkActionHandler = linkActionHandler
         self.accountStore = accountStore
@@ -72,7 +69,7 @@ class WelcomePresenter {
         self.view?.loginButtonPressed
                 .subscribe(onNext: { [weak self] _ in
                     if self?.biometryManager.deviceAuthenticationAvailable ?? true {
-                        self?.routeActionHandler.invoke(LoginRouteAction.fxa)
+                        self?.dispatcher.dispatch(action: LoginRouteAction.fxa)
                     } else {
                         self?.launchPasscodePrompt()
                     }
@@ -81,7 +78,7 @@ class WelcomePresenter {
 
         self.view?.learnMorePressed
             .subscribe(onNext: { _ in
-                self.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                self.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                         urlString: Constant.app.useLockboxFAQ,
                         title: Constant.string.learnMore,
                         returnRoute: LoginRouteAction.welcome))
@@ -120,7 +117,7 @@ class WelcomePresenter {
 extension WelcomePresenter {
     private var skipButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(LoginRouteAction.fxa)
+            target.dispatcher.dispatch(action: LoginRouteAction.fxa)
         }.asObserver()
     }
 

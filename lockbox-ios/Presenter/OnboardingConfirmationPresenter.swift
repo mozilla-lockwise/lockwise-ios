@@ -11,26 +11,26 @@ protocol OnboardingConfirmationViewProtocol: class {
 
 class OnboardingConfirmationPresenter {
     private weak var view: OnboardingConfirmationViewProtocol?
-    private let routeActionHandler: RouteActionHandler
+    private let dispatcher: Dispatcher
     private let disposeBag = DisposeBag()
 
     init(view: OnboardingConfirmationViewProtocol,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared) {
+         dispatcher: Dispatcher = .shared) {
         self.view = view
-        self.routeActionHandler = routeActionHandler
+        self.dispatcher = dispatcher
     }
 
     func onViewReady() {
         self.view?.finishButtonTapped
                 .subscribe(onNext: { _ in
-                    self.routeActionHandler.invoke(MainRouteAction.list)
-                    self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: false))
+                    self.dispatcher.dispatch(action: MainRouteAction.list)
+                    self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
                 })
                 .disposed(by: self.disposeBag)
     }
 
     func onEncryptionLinkTapped() {
-        self.routeActionHandler.invoke(
+        self.dispatcher.dispatch(action:
                 ExternalWebsiteRouteAction(
                         urlString: Constant.app.securityFAQ,
                         title: Constant.string.faq,

@@ -37,19 +37,10 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
-        }
-    }
-
     var subject: PreferredBrowserSettingPresenter!
     var view: FakePreferredBrowserView!
     var dispatcher: FakeDispatcher!
     var userDefaultStore: FakeUserDefaultStore!
-    var routeActionHandler: FakeRouteActionHandler!
     var scheduler = TestScheduler(initialClock: 0)
 
     override func spec() {
@@ -57,12 +48,10 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
             self.view = FakePreferredBrowserView()
             self.dispatcher = FakeDispatcher()
             self.userDefaultStore = FakeUserDefaultStore()
-            self.routeActionHandler = FakeRouteActionHandler()
             self.subject = PreferredBrowserSettingPresenter(
                     view: self.view,
                     dispatcher: self.dispatcher,
-                    userDefaultStore: self.userDefaultStore,
-                    routeActionHandler: self.routeActionHandler
+                    userDefaultStore: self.userDefaultStore
             )
         }
 
@@ -90,7 +79,7 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
 
         it("onSettingsTap routes to settings") {
             self.subject.onSettingsTap.onNext(())
-            let route = self.routeActionHandler.routeActionArgument as! SettingRouteAction
+            let route = self.dispatcher.dispatchedActions.last as! SettingRouteAction
             expect(route).to(equal(SettingRouteAction.list))
         }
     }

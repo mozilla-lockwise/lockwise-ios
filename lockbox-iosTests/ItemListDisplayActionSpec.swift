@@ -22,7 +22,7 @@ class ItemListDisplayActionSpec: QuickSpec {
     var subject: ItemListDisplayActionHandler!
 
     override func spec() {
-        describe("RouteActionHandler") {
+        describe("ItemListDisplayActionHandler") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.subject = ItemListDisplayActionHandler(dispatcher: self.dispatcher)

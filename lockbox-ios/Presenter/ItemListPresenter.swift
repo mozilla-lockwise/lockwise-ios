@@ -43,7 +43,6 @@ struct SyncStateManual {
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
     private let dispatcher: Dispatcher
-    private let routeActionHandler: RouteActionHandler
     private let itemListDisplayActionHandler: ItemListDisplayActionHandler
     private let dataStore: DataStore
     private let itemListDisplayStore: ItemListDisplayStore
@@ -60,13 +59,13 @@ class ItemListPresenter {
                 view.dismissKeyboard()
             }
 
-            target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
+            target.dispatcher.dispatch(action: MainRouteAction.detail(itemId: id))
         }.asObserver()
     }()
 
     lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
         }.asObserver()
     }()
 
@@ -141,7 +140,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                     urlString: Constant.app.enableSyncFAQ,
                     title: Constant.string.faq,
                     returnRoute: MainRouteAction.list))
@@ -150,7 +149,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreNewEntriesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                 urlString: Constant.app.createNewEntriesFAQ,
                 title: Constant.string.faq,
                 returnRoute: MainRouteAction.list))
@@ -202,14 +201,12 @@ class ItemListPresenter {
 
     init(view: ItemListViewProtocol,
          dispatcher: Dispatcher = .shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
          userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
-        self.routeActionHandler = routeActionHandler
         self.itemListDisplayActionHandler = itemListDisplayActionHandler
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore

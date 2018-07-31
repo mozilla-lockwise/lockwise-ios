@@ -23,7 +23,6 @@ class ItemDetailPresenter {
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyConfirmationDisplayStore
-    private var routeActionHandler: RouteActionHandler
     private var copyActionHandler: CopyActionHandler
     private var itemDetailActionHandler: ItemDetailActionHandler
     private var externalLinkActionHandler: LinkActionHandler
@@ -37,7 +36,7 @@ class ItemDetailPresenter {
 
     lazy private(set) var onCancel: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.list)
+            target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
     }()
 
@@ -81,11 +80,10 @@ class ItemDetailPresenter {
     }()
 
     init(view: ItemDetailViewProtocol,
-         dispatcher: Dispatcher = Dispatcher.shared,
+         dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
          copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
          itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared,
          externalLinkActionHandler: LinkActionHandler = LinkActionHandler.shared) {
@@ -94,7 +92,6 @@ class ItemDetailPresenter {
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
-        self.routeActionHandler = routeActionHandler
         self.copyActionHandler = copyActionHandler
         self.itemDetailActionHandler = itemDetailActionHandler
         self.externalLinkActionHandler = externalLinkActionHandler
@@ -146,7 +143,7 @@ class ItemDetailPresenter {
                         return
                     }
 
-                    self.routeActionHandler.invoke(
+                    self.dispatcher.dispatch(action:
                             ExternalWebsiteRouteAction(
                                     urlString: Constant.app.editExistingEntriesFAQ,
                                     title: Constant.string.faq,

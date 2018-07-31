@@ -38,10 +38,10 @@ class AccountSettingPresenterSpec: QuickSpec {
     }
 
     class FakeDispatcher: Dispatcher {
-        var dispatchActoinArgument: Action?
+        var dispatchActionArgument: Action?
 
         override func dispatch(action: Action) {
-            self.dispatchActoinArgument = action
+            self.dispatchActionArgument = action
         }
     }
 
@@ -50,14 +50,6 @@ class AccountSettingPresenterSpec: QuickSpec {
 
         override var profile: Observable<Profile?> {
             return self.profileStub.asObservable()
-        }
-    }
-
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
         }
     }
 
@@ -72,7 +64,6 @@ class AccountSettingPresenterSpec: QuickSpec {
     private var view: FakeAccountSettingView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
-    private var routeActionHandler: FakeRouteActionHandler!
     private var accountActionHandler: FakeAccountActionHandler!
     var subject: AccountSettingPresenter!
 
@@ -88,14 +79,12 @@ class AccountSettingPresenterSpec: QuickSpec {
 
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.routeActionHandler = FakeRouteActionHandler()
                 self.accountStore = FakeAccountStore()
                 self.accountActionHandler = FakeAccountActionHandler()
                 self.subject = AccountSettingPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
-                        routeActionHandler: self.routeActionHandler,
                         accountActionHandler: self.accountActionHandler
                 )
             }
@@ -135,8 +124,8 @@ class AccountSettingPresenterSpec: QuickSpec {
                     }
 
                     it("sends the clear & reset actions") {
-                        let action = self.dispatcher.dispatchActoinArgument as! DataStoreAction
-                        expect(action).to(equal(DataStoreAction.reset))
+                        let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                        expect(action).to(equal(.reset))
                         expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.clear))
                     }
                 }
@@ -154,8 +143,8 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
 
                 it("sends the settings list action") {
-                    let argument = self.routeActionHandler.invokeArgument as! SettingRouteAction
-                    expect(argument).to(equal(SettingRouteAction.list))
+                    let argument = self.dispatcher.dispatchActionArgument as! SettingRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
         }

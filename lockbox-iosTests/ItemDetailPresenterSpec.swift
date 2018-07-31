@@ -71,11 +71,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
+    class FakeDispatcher: Dispatcher {
+        var dispatchActionArgument: Action?
 
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
+        override func dispatch(action: Action) {
+            self.dispatchActionArgument = action
         }
     }
 
@@ -104,10 +104,10 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     private var view: FakeItemDetailView!
+    private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
-    private var routeActionHandler: FakeRouteActionHandler!
     private var copyActionHandler: FakeCopyActionHandler!
     private var externalLinkHandler: FakeExternalLinkActionHandler!
     private var itemDetailActionHandler: FakeItemDetailActionHandler!
@@ -119,20 +119,20 @@ class ItemDetailPresenterSpec: QuickSpec {
         describe("ItemDetailPresenter") {
             beforeEach {
                 self.view = FakeItemDetailView()
+                self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
-                self.routeActionHandler = FakeRouteActionHandler()
                 self.copyActionHandler = FakeCopyActionHandler()
                 self.itemDetailActionHandler = FakeItemDetailActionHandler()
                 self.externalLinkHandler = FakeExternalLinkActionHandler()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
                         copyDisplayStore: self.copyDisplayStore,
-                        routeActionHandler: self.routeActionHandler,
                         copyActionHandler: self.copyActionHandler,
                         itemDetailActionHandler: self.itemDetailActionHandler,
                         externalLinkActionHandler: self.externalLinkHandler
@@ -176,9 +176,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("routes to the item list") {
-                    expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
-                    let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
-                    expect(argument).to(equal(MainRouteAction.list))
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let argument = self.dispatcher.dispatchActionArgument as! MainRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
 
@@ -455,8 +455,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("dispatches the faq link action") {
-                        expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.routeActionArgument as! ExternalWebsiteRouteAction
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                        let argument = self.dispatcher.dispatchActionArgument as! ExternalWebsiteRouteAction
                         expect(argument).to(equal(
                                         ExternalWebsiteRouteAction(
                                                 urlString: Constant.app.editExistingEntriesFAQ,

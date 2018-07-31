@@ -37,18 +37,9 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
-        }
-    }
-
     private var view: FakeAutoLockSettingsView!
     private var dispatcher: FakeDispatcher!
     private var userDefaultStore: FakeUserDefaultStore!
-    private var routeActionHandler: FakeRouteActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
 
     var subject: AutoLockSettingPresenter!
@@ -57,14 +48,12 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         beforeEach {
             self.view = FakeAutoLockSettingsView()
             self.dispatcher = FakeDispatcher()
-            self.routeActionHandler = FakeRouteActionHandler()
             self.userDefaultStore = FakeUserDefaultStore()
 
             self.subject = AutoLockSettingPresenter(
                     view: self.view,
                     dispatcher: self.dispatcher,
-                    userDefaultStore: self.userDefaultStore,
-                    routeActionHandler: self.routeActionHandler)
+                    userDefaultStore: self.userDefaultStore)
         }
 
         it("delivers updated values when autoLock setting changes") {

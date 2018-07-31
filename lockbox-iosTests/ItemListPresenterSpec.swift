@@ -70,14 +70,6 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeActionArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeActionArgument = action
-        }
-    }
-
     class FakeItemListDisplayActionHandler: ItemListDisplayActionHandler {
         var invokeActionArgument: [ItemListDisplayAction] = []
 
@@ -122,7 +114,6 @@ class ItemListPresenterSpec: QuickSpec {
 
     private var view: FakeItemListView!
     private var dispatcher: FakeDispatcher!
-    private var routeActionHandler: FakeRouteActionHandler!
     private var itemListDisplayActionHandler: FakeItemListDisplayActionHandler!
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
@@ -136,7 +127,6 @@ class ItemListPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeItemListView()
                 self.dispatcher = FakeDispatcher()
-                self.routeActionHandler = FakeRouteActionHandler()
                 self.itemListDisplayActionHandler = FakeItemListDisplayActionHandler()
                 self.dataStore = FakeDataStore()
                 self.itemListDisplayStore = FakeItemListDisplayStore()
@@ -151,7 +141,6 @@ class ItemListPresenterSpec: QuickSpec {
                 self.subject = ItemListPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
-                        routeActionHandler: self.routeActionHandler,
                         itemListDisplayActionHandler: self.itemListDisplayActionHandler,
                         dataStore: self.dataStore,
                         itemListDisplayStore: self.itemListDisplayStore,
@@ -237,8 +226,8 @@ class ItemListPresenterSpec: QuickSpec {
                                 }
 
                                 it("routes to the learn more view") {
-                                    expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                                    let argument = self.routeActionHandler.invokeActionArgument as! ExternalWebsiteRouteAction
+                                    expect(self.dispatcher.dispatchedActions).notTo(beEmpty())
+                                    let argument = self.dispatcher.dispatchedActions.last as! ExternalWebsiteRouteAction
                                     expect(argument).to(equal(ExternalWebsiteRouteAction(
                                             urlString: Constant.app.enableSyncFAQ,
                                             title: Constant.string.faq,
@@ -534,8 +523,8 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("tells the route action handler to display the detail view for the relevant item") {
-                        expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
+                        expect(self.dispatcher.dispatchedActions).notTo(beEmpty())
+                        let argument = self.dispatcher.dispatchedActions.last as! MainRouteAction
                         expect(argument).to(equal(MainRouteAction.detail(itemId: id)))
                     }
 
@@ -556,7 +545,7 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(self.routeActionHandler.invokeActionArgument).to(beNil())
+                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                     }
                 }
             }
@@ -619,7 +608,7 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the setting route action") {
-                    let action = self.routeActionHandler.invokeActionArgument as! SettingRouteAction
+                    let action = self.dispatcher.dispatchedActions.last as! SettingRouteAction
                     expect(action).to(equal(SettingRouteAction.list))
                 }
             }

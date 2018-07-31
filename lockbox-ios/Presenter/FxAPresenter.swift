@@ -19,26 +19,26 @@ struct LockedSyncState {
 
 class FxAPresenter {
     private weak var view: FxAViewProtocol?
+    fileprivate let dispatcher: Dispatcher
     fileprivate let accountActionHandler: AccountActionHandler
-    fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let accountStore: AccountStore
 
     private var disposeBag = DisposeBag()
 
     public var onClose: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(LoginRouteAction.welcome)
+            target.dispatcher.dispatch(action: LoginRouteAction.welcome)
         }.asObserver()
     }
 
     init(view: FxAViewProtocol,
+         dispatcher: Dispatcher = .shared,
          accountActionHandler: AccountActionHandler = AccountActionHandler.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          accountStore: AccountStore = AccountStore.shared
     ) {
         self.view = view
+        self.dispatcher = dispatcher
         self.accountActionHandler = accountActionHandler
-        self.routeActionHandler = routeActionHandler
         self.accountStore = accountStore
     }
 
@@ -54,8 +54,8 @@ class FxAPresenter {
 // Extensions and enums to support logging in via remote commmand.
 extension FxAPresenter {
     func matchingRedirectURLReceived(_ navigationURL: URL) {
-        self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: true))
-        self.routeActionHandler.invoke(LoginRouteAction.onboardingConfirmation)
+        self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: true))
+        self.dispatcher.dispatch(action: LoginRouteAction.onboardingConfirmation)
         self.accountActionHandler.invoke(.oauthRedirect(url: navigationURL))
     }
 }
