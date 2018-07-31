@@ -95,6 +95,11 @@ Configuration:
 - [devices] Update / add desired device sizes to `fastlane/Snapfile`
 - [text size][5] Update the `CONTENT_SIZE` variable in `LockboxXCUITests/BaseTestCase.swift`
 
+## Updating the version for a release
+
+- Once a version has been merged or released, the app version should be bumped
+- Update the value in `Common/Resources/Info.plist`, for example from `1.2` to `1.3`
+
 ---
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
