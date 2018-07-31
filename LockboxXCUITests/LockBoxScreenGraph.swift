@@ -11,7 +11,8 @@ class Screen {
     static let LockboxMainPage = "LockboxMainPage"
     static let SettingsMenu = "SettingsMenu"
 
-    static let FxASigninScreen = "FxASigninScreen"
+    static let FxASigninScreenEmail = "FxASigninScreenEmail"
+    static let FxASigninScreenPassword = "FxASigninScreenPassword"
     static let FxCreateAccount = "FxCreateAccount"
 
     static let OpenSitesInMenu = "OpenSitesInMenu"
@@ -73,30 +74,26 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.WelcomeScreen) { screenState in
-            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreen)
+            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreenEmail)
             screenState.noop(to: Screen.LockboxMainPage)
     }
 
-    map.addScreenState(Screen.FxASigninScreen) { screenState in
-        screenState.gesture(forAction: Action.FxATypeEmail) { userState in
+    map.addScreenState(Screen.FxASigninScreenEmail) { screenState in
+        screenState.gesture(forAction: Action.FxATypeEmail, transitionTo: Screen.FxASigninScreenPassword) { userState in
             app.webViews.textFields["Email"].tap()
             app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
+            app.webViews.buttons["Continue"].tap()
         }
+    }
+
+    map.addScreenState(Screen.FxASigninScreenPassword) { screenState in
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
             app.webViews.secureTextFields["Password"].tap()
             app.webViews.secureTextFields["Password"].typeText(userState.fxaPassword!)
-        }
-        screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
             app.webViews.buttons["Sign in"].tap()
         }
-
-        screenState.gesture(forAction: Action.FxALogInSuccessfully, transitionTo: Screen.LockboxMainPage) { userState in
-            app.webViews.buttons["Sign in"].tap()
-            userState.fxaUsername = userState.fxaUsername!
-            userState.fxaPassword = userState.fxaPassword!
-        }
-        screenState.tap(app.webViews.links["Create an account"], to: Screen.FxCreateAccount)
     }
+
 
     map.addScreenState(Screen.FxCreateAccount) { screenState in
         screenState.backAction = navigationControllerBackAction

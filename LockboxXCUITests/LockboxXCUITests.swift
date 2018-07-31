@@ -104,55 +104,21 @@ class LockboxXCUITests: BaseTestCase {
         return String(numberValue)
     }
 
-    func test0LoginWithSavedLogins() {
+    func test0LoginSuccessfully() {
         snapshot("01Welcome" + CONTENT_SIZE)
-        navigator.goto(Screen.FxASigninScreen)
-        waitforExistence(app.webViews.textFields["Email"])
-
-        // Try tapping on Sign In, no fields filled in
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Valid email required"])
-
-        // Try incorrect Email then correct and tap on Sign In
-        userState.fxaUsername = "test"
-        navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Valid email required"])
-
-        userState.fxaUsername = "-b62feb2ed6@restmail.net"
-        navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Valid password required"])
-
-        // Enter too short password
-        userState.fxaPassword = "ab"
-        navigator.performAction(Action.FxATypePassword)
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.webViews.staticTexts["Must be at least 8 characters"])
-
-        // Remove previous chars
-        app.webViews.secureTextFields["Password"].typeText("\u{0008}")
-        app.webViews.secureTextFields["Password"].typeText("\u{0008}")
-
-        // Enter valid password and tap on Sign In
         userState.fxaPassword = passwordTestAccountLogins
+        userState.fxaUsername = "test-b62feb2ed6@restmail.net"
+        navigator.goto(Screen.FxASigninScreenEmail)
+        waitforExistence(app.navigationBars["Lockbox.FxAView"])
+        waitforExistence(app.webViews.textFields["Email"])
+        navigator.performAction(Action.FxATypeEmail)
+        waitforExistence(app.webViews.secureTextFields["Password"])
         navigator.performAction(Action.FxATypePassword)
-        navigator.performAction(Action.FxALogInSuccessfully)
-
-        // App should start showing the main page
         waitforExistence(app.buttons["finish.button"])
         app.buttons["finish.button"].tap()
-
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        XCTAssertTrue(app.buttons["sorting.button"].exists)
-
-        let buttonLabelInitally = app.buttons["sorting.button"].label
-        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
-
-        XCTAssertTrue(app.navigationBars["firefoxLockbox.navigationBar"].exists)
-        XCTAssertTrue(app.navigationBars.buttons["Settings"].exists)
         // Check if the account is verified and if not, verify it
-        if (app.staticTexts["confirmYourAccount.label"].exists) {
+        if (app.staticTexts["Confirm your account."].exists) {
             let group = DispatchGroup()
             group.enter()
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -169,6 +135,10 @@ class LockboxXCUITests: BaseTestCase {
             XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
             snapshot("02EntryList" + CONTENT_SIZE)
         }
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        XCTAssertNotEqual(app.tables.cells.count, 1)
+        XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
+        snapshot("02EntryList" + CONTENT_SIZE)
     }
 
     func test1SettingsAccountUI() {
@@ -245,7 +215,7 @@ class LockboxXCUITests: BaseTestCase {
         // First Cancel disconnecting the account
         navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
         waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
-
+        /* This part is disabled until the OAuth new flow is clear and stable
         // Now disconnect the account
         navigator.performAction(Action.DisconnectFirefoxLockbox)
         waitforExistence(app.buttons["getStarted.button"])
@@ -259,7 +229,7 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnSignInButton)
         waitforExistence(app.buttons["finish.button"])
         app.buttons["finish.button"].tap()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])*/
     }
 
     func test5SendUsageDataSwitch() {
@@ -360,8 +330,9 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Disconnect"].tap()
         waitforExistence(app.buttons["getStarted.button"])
         app.buttons["getStarted.button"].tap()
+        /* This needs issue #588 to be fixed or clarified the expected behaviour
         waitforExistence(app.staticTexts[emailTestAccountLogins])
         app.webViews.links["Use a different account"].tap()
-        waitforExistence(app.webViews.textFields["Email"])
+        waitforExistence(app.webViews.textFields["Email"])*/
     }
 }
