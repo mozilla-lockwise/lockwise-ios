@@ -9,6 +9,7 @@ import RxTest
 import RxBlocking
 import FxAClient
 import SwiftKeychainWrapper
+import WebKit
 
 @testable import Lockbox
 
@@ -44,8 +45,17 @@ class AccountStoreSpec: QuickSpec {
         init() { super.init(serviceName: "blah") }
     }
 
+    class FakeURLCache: URLCache {
+        var removeCachedResponsesCalled = false
+
+        override func removeAllCachedResponses() {
+            self.removeCachedResponsesCalled = true
+        }
+    }
+
     private var dispatcher: FakeDispatcher!
     private var keychainManager: FakeKeychainManager!
+    private var urlCache: FakeURLCache!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: AccountStore!
@@ -55,9 +65,11 @@ class AccountStoreSpec: QuickSpec {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.keychainManager = FakeKeychainManager()
+                self.urlCache = FakeURLCache()
                 self.subject = AccountStore(
                         dispatcher: self.dispatcher,
-                        keychainWrapper: self.keychainManager
+                        keychainWrapper: self.keychainManager,
+                        urlCache: self.urlCache
                 )
             }
 
@@ -167,6 +179,14 @@ class AccountStoreSpec: QuickSpec {
                     for key in KeychainKey.allValues {
                         expect(self.keychainManager.removeArguments).to(contain(key.rawValue))
                     }
+                }
+
+                it("removes all cached URL responses") {
+                    expect(self.urlCache.removeCachedResponsesCalled).to(beTrue())
+                }
+
+                xit("fetches all available data records and removes them") {
+                    // can't subclass WKWebSiteDataStore sufficiently :(
                 }
             }
         }
