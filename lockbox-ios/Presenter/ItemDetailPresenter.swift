@@ -24,13 +24,12 @@ class ItemDetailPresenter {
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyConfirmationDisplayStore
     private var copyActionHandler: CopyActionHandler
-    private var itemDetailActionHandler: ItemDetailActionHandler
     private var externalLinkActionHandler: LinkActionHandler
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
-            target.itemDetailActionHandler.invoke(.togglePassword(displayed: revealed))
+            target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()
     }()
 
@@ -85,7 +84,6 @@ class ItemDetailPresenter {
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
          copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
          copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
-         itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared,
          externalLinkActionHandler: LinkActionHandler = LinkActionHandler.shared) {
         self.view = view
         self.dispatcher = dispatcher
@@ -93,10 +91,9 @@ class ItemDetailPresenter {
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
         self.copyActionHandler = copyActionHandler
-        self.itemDetailActionHandler = itemDetailActionHandler
         self.externalLinkActionHandler = externalLinkActionHandler
 
-        self.itemDetailActionHandler.invoke(.togglePassword(displayed: false))
+        self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
 
     func onViewReady() {

@@ -45,6 +45,14 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchActionArgument: Action?
+
+        override func dispatch(action: Action) {
+            self.dispatchActionArgument = action
+        }
+    }
+
     class FakeDataStore: DataStore {
         var onItemStub = PublishSubject<Login?>()
         var loginIDArg: String?
@@ -71,27 +79,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeDispatcher: Dispatcher {
-        var dispatchActionArgument: Action?
-
-        override func dispatch(action: Action) {
-            self.dispatchActionArgument = action
-        }
-    }
-
     class FakeCopyActionHandler: CopyActionHandler {
         var invokedAction: CopyAction?
 
         override func invoke(_ action: CopyAction) {
             self.invokedAction = action
-        }
-    }
-
-    class FakeItemDetailActionHandler: ItemDetailActionHandler {
-        var displayActionArgument: ItemDetailDisplayAction?
-
-        override func invoke(_ displayAction: ItemDetailDisplayAction) {
-            self.displayActionArgument = displayAction
         }
     }
 
@@ -110,7 +102,6 @@ class ItemDetailPresenterSpec: QuickSpec {
     private var itemDetailStore: FakeItemDetailStore!
     private var copyActionHandler: FakeCopyActionHandler!
     private var externalLinkHandler: FakeExternalLinkActionHandler!
-    private var itemDetailActionHandler: FakeItemDetailActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -124,7 +115,6 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
                 self.copyActionHandler = FakeCopyActionHandler()
-                self.itemDetailActionHandler = FakeItemDetailActionHandler()
                 self.externalLinkHandler = FakeExternalLinkActionHandler()
 
                 self.subject = ItemDetailPresenter(
@@ -134,15 +124,14 @@ class ItemDetailPresenterSpec: QuickSpec {
                         itemDetailStore: self.itemDetailStore,
                         copyDisplayStore: self.copyDisplayStore,
                         copyActionHandler: self.copyActionHandler,
-                        itemDetailActionHandler: self.itemDetailActionHandler,
                         externalLinkActionHandler: self.externalLinkHandler
                 )
             }
 
             it("starts the password display as hidden") {
-                expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                expect(self.itemDetailActionHandler.displayActionArgument)
-                        .to(equal(ItemDetailDisplayAction.togglePassword(displayed: false)))
+                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                let action = self.dispatcher.dispatchActionArgument as! ItemDetailDisplayAction
+                expect(action).to(equal(.togglePassword(displayed: false)))
             }
 
             describe("onPasswordToggle") {
@@ -158,9 +147,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the password action with the value") {
-                    expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                    expect(self.itemDetailActionHandler.displayActionArgument)
-                            .to(equal(ItemDetailDisplayAction.togglePassword(displayed: passwordRevealSelected)))
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let action = self.dispatcher.dispatchActionArgument as! ItemDetailDisplayAction
+                    expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
                 }
             }
 
