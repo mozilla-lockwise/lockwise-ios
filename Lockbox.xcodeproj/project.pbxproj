@@ -49,7 +49,6 @@
 		7AA5457DB74127B904E5A767 /* TelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA548F4166A1826238F6589 /* TelemetryStore.swift */; };
 		7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542B3E1A27FC2B8806363 /* String+Spec.swift */; };
 		7AA545ADA952B5C4ECF6D313 /* ItemDetailPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54304F17F52F8B2C3D8BD /* ItemDetailPresenterSpec.swift */; };
-		7AA545D1DBB719E27B782966 /* ItemListDisplayActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA541A676EEC9A2C4E3909B /* ItemListDisplayActionSpec.swift */; };
 		7AA545D6182E36466BC8256A /* CopyConfirmationDisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54247F60B5BDC1BA90AD4 /* CopyConfirmationDisplayStore.swift */; };
 		7AA5462CD711A33ACB5E48A2 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54BF70B374C370B51ECB9 /* UIView+.swift */; };
 		7AA5465C5FE10715567F5E83 /* LoginNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54321DB9E1203005B9F14 /* LoginNavigationController.swift */; };
@@ -252,7 +251,6 @@
 		7AA5410097B2C840B28B007E /* AccountSettingPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountSettingPresenter.swift; sourceTree = "<group>"; };
 		7AA54146E0C9269A0CE8D53A /* AccountStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
 		7AA541A2CBD1A142812687CE /* Data+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Spec.swift"; sourceTree = "<group>"; };
-		7AA541A676EEC9A2C4E3909B /* ItemListDisplayActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListDisplayActionSpec.swift; sourceTree = "<group>"; };
 		7AA541C0A078BB02BFD7EB0B /* RootPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootPresenter.swift; sourceTree = "<group>"; };
 		7AA54204B5AFD9672649ACF0 /* LoginNavigationControllerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		7AA5422EFD1C3BB23F8C6811 /* BiometryManagerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryManagerSpec.swift; sourceTree = "<group>"; };
@@ -722,7 +720,6 @@
 				D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */,
 				7AA545A802C0592A820AD230 /* Date+Spec.swift */,
 				7AA544F9FCD826257AD023E7 /* ItemListDisplayStoreSpec.swift */,
-				7AA541A676EEC9A2C4E3909B /* ItemListDisplayActionSpec.swift */,
 				7AA54FC2201512347C683533 /* AccountActionSpec.swift */,
 				D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
 				7AA540A0F78A75AF0296924E /* AccountSettingPresenterSpec.swift */,
@@ -1089,7 +1086,6 @@
 				D8783615207D303E00C19BC7 /* ExternalLinkActionSpec.swift in Sources */,
 				7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */,
 				7AA5469948A8AE091E024CC7 /* ItemListDisplayStoreSpec.swift in Sources */,
-				7AA545D1DBB719E27B782966 /* ItemListDisplayActionSpec.swift in Sources */,
 				7AA54850D6DE1CD66D8C43AE /* AccountActionSpec.swift in Sources */,
 				7AA54E2C7C6639BCA7C37A1F /* AccountSettingPresenterSpec.swift in Sources */,
 				4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */,
