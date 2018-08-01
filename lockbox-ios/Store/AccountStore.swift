@@ -97,11 +97,19 @@ extension AccountStore {
     }
 
     private func populateAccountInformation() {
-        self.fxa?.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
-            self._oauthInfo.onNext(info)
+        guard let fxa = self.fxa else {
+            return
         }
 
-        self.fxa?.getProfile { (profile: Profile?, _) in
+        fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
+            self._oauthInfo.onNext(info)
+
+            if let json = try? fxa.toJSON() {
+                self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
+            }
+        }
+
+        fxa.getProfile { (profile: Profile?, _) in
             self._profile.onNext(profile)
         }
     }
@@ -140,11 +148,15 @@ extension AccountStore {
         self.fxa?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
             self._oauthInfo.onNext(info)
 
-            if let opt = try? self.fxa?.toJSON(), let accountJSON = opt {
+            guard let fxa = self.fxa else {
+                return
+            }
+
+            if let accountJSON = try? fxa.toJSON() {
                 self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
 
-            self.fxa?.getProfile { (profile: Profile?, _) in
+            fxa.getProfile { (profile: Profile?, _) in
                 self._profile.onNext(profile)
             }
         }
