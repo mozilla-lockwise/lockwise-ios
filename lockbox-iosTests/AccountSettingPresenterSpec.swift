@@ -113,15 +113,11 @@ class AccountSettingPresenterSpec: QuickSpec {
                     }
 
                     it("sends the clear & reset actions") {
-                        expect(self.dispatcher.dispatchedActions).to(haveCount(2))
-
-                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                        let dataStoreAction = self.dispatcher.dispatchedActions[0] as! DataStoreAction
-                        expect(dataStoreAction).to(equal(.reset))
-
-                        expect(self.dispatcher.dispatchedActions[1]).to(beAnInstanceOf(AccountAction.self))
-                        let accountAction = self.dispatcher.dispatchedActions[1] as! AccountAction
+                        let accountAction = self.dispatcher.dispatchedActions.popLast() as! AccountAction
                         expect(accountAction).to(equal(.clear))
+
+                        let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                        expect(dataStoreAction).to(equal(.reset))
                     }
                 }
             }
@@ -138,10 +134,7 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
 
                 it("sends the settings list action") {
-                    expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-
-                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(SettingRouteAction.self))
-                    let argument = self.dispatcher.dispatchedActions[0] as! SettingRouteAction
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
                     expect(argument).to(equal(.list))
                 }
             }

@@ -87,9 +87,7 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("routes back to login") {
-                    expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(LoginRouteAction.self))
-                    let argument = self.dispatcher.dispatchedActions[0] as! LoginRouteAction
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                     expect(argument).to(equal(.welcome))
                 }
             }
@@ -102,19 +100,14 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
-                    expect(self.dispatcher.dispatchedActions).to(haveCount(3))
+                    let accountAction = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                    expect(accountAction).to(equal(.oauthRedirect(url: url)))
 
-                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(OnboardingStatusAction.self))
-                    let onboardingAction = self.dispatcher.dispatchedActions[0] as! OnboardingStatusAction
-                    expect(onboardingAction.onboardingInProgress).to(beTrue())
-
-                    expect(self.dispatcher.dispatchedActions[1]).to(beAnInstanceOf(LoginRouteAction.self))
-                    let routeAction = self.dispatcher.dispatchedActions[1] as! LoginRouteAction
+                    let routeAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                     expect(routeAction).to(equal(.onboardingConfirmation))
 
-                    expect(self.dispatcher.dispatchedActions[2]).to(beAnInstanceOf(AccountAction.self))
-                    let accountAction = self.dispatcher.dispatchedActions[2] as! AccountAction
-                    expect(accountAction).to(equal(.oauthRedirect(url: url)))
+                    let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
+                    expect(onboardingAction.onboardingInProgress).to(beTrue())
                 }
             }
         }

@@ -212,9 +212,7 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         it("dispatches the fxa login route action") {
-                            expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                            expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(LoginRouteAction.self))
-                            let argument = self.dispatcher.dispatchedActions[0] as! LoginRouteAction
+                            let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                             expect(argument).to(equal(.fxa))
                         }
                     }
@@ -238,9 +236,7 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the fxa login route action") {
-                                expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(LoginRouteAction.self))
-                                let argument = self.dispatcher.dispatchedActions[0] as! LoginRouteAction
+                                let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                                 expect(argument).to(equal(.fxa))
                             }
                         }
@@ -266,9 +262,7 @@ class WelcomePresenterSpec: QuickSpec {
                     }
 
                     it("dispatches the learn more route action") {
-                        expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(ExternalWebsiteRouteAction.self))
-                        let argument = self.dispatcher.dispatchedActions[0] as! ExternalWebsiteRouteAction
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                         expect(argument).to(equal(ExternalWebsiteRouteAction(
                                 urlString: Constant.app.useLockboxFAQ,
                                 title: Constant.string.learnMore,
@@ -317,8 +311,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                        let action = self.dispatcher.dispatchedActions[0] as! DataStoreAction
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                                         expect(action).to(equal(.unlock))
                                     }
                                 }
@@ -349,9 +342,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                                        let action = self.dispatcher.dispatchedActions[0] as! DataStoreAction
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                                         expect(action).to(equal(.unlock))
                                     }
                                 }
@@ -375,9 +366,7 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("unlocks the device blindly") {
-                                expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                                let action = self.dispatcher.dispatchedActions[0] as! DataStoreAction
+                                let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                                 expect(action).to(equal(.unlock))
                             }
                         }
@@ -419,9 +408,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                                        let action = self.dispatcher.dispatchedActions[0] as! DataStoreAction
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                                         expect(action).to(equal(.unlock))
                                     }
                                 }
@@ -452,9 +439,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                                        let action = self.dispatcher.dispatchedActions[0] as! DataStoreAction
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                                         expect(action).to(equal(.unlock))
                                     }
                                 }
@@ -478,9 +463,7 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("unlocks the device blindly") {
-                                expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                                expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                                let action = self.dispatcher.dispatchedActions[0] as! DataStoreAction
+                                let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                                 expect(action).to(equal(.unlock))
                             }
                         }

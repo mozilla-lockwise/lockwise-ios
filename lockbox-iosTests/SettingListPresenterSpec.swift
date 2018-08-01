@@ -117,13 +117,11 @@ class SettingListPresenterSpec: QuickSpec {
                         }
 
                         it("locks the application and routes to the login flow") {
-                            expect(self.dispatcher.dispatchedActions).to(haveCount(2))
-                            expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(DataStoreAction.self))
-                            let dataStoreAction = self.dispatcher.dispatchedActions[0] as! DataStoreAction
-                            expect(dataStoreAction).to(equal(.lock))
-                            expect(self.dispatcher.dispatchedActions[1]).to(beAnInstanceOf(LoginRouteAction.self))
-                            let loginRouteAction = self.dispatcher.dispatchedActions[1] as! LoginRouteAction
+                            let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                             expect(loginRouteAction).to(equal(.welcome))
+
+                            let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                            expect(dataStoreAction).to(equal(.lock))
                         }
                     }
 
@@ -222,9 +220,7 @@ class SettingListPresenterSpec: QuickSpec {
                 }
 
                 it("invokes the main list action") {
-                    expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(MainRouteAction.self))
-                    let argument = self.dispatcher.dispatchedActions[0] as! MainRouteAction
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
                     expect(argument).to(equal(.list))
                 }
             }
@@ -243,9 +239,7 @@ class SettingListPresenterSpec: QuickSpec {
                     }
 
                     it("invokes the setting route action") {
-                        expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(SettingRouteAction.self))
-                        let argument = self.dispatcher.dispatchedActions[0] as! SettingRouteAction
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
                         expect(argument).to(equal(action))
                     }
                 }

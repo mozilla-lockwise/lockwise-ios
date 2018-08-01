@@ -53,15 +53,11 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                     }
 
                     it("routes to the list and finishes onboarding") {
-                        expect(self.dispatcher.dispatchedActions).to(haveCount(2))
-
-                        expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(MainRouteAction.self))
-                        let mainRouteAction = self.dispatcher.dispatchedActions[0] as! MainRouteAction
-                        expect(mainRouteAction).to(equal(.list))
-
-                        expect(self.dispatcher.dispatchedActions[1]).to(beAnInstanceOf(OnboardingStatusAction.self))
-                        let onboardingStatusAction = self.dispatcher.dispatchedActions[1] as! OnboardingStatusAction
+                        let onboardingStatusAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
                         expect(onboardingStatusAction).to(equal(OnboardingStatusAction(onboardingInProgress: false)))
+
+                        let mainRouteAction = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
+                        expect(mainRouteAction).to(equal(.list))
                     }
                 }
             }
@@ -72,9 +68,7 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                 }
 
                 it("routes to the external webview") {
-                    expect(self.dispatcher.dispatchedActions).to(haveCount(1))
-                    expect(self.dispatcher.dispatchedActions[0]).to(beAnInstanceOf(ExternalWebsiteRouteAction.self))
-                    let action = self.dispatcher.dispatchedActions[0] as! ExternalWebsiteRouteAction
+                    let action = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                     expect(action).to(equal(
                             ExternalWebsiteRouteAction(
                                     urlString: Constant.app.securityFAQ,
