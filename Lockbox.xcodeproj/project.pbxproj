@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22336C7221111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */; };
 		2C2EC55520ADA85A00AF8C44 /* LockboxXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */; };
 		2C2EC56020ADAA8100AF8C44 /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */; };
 		2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */; };
@@ -221,6 +222,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenterSpec.swift; sourceTree = "<group>"; };
 		2C2EC55220ADA85A00AF8C44 /* LockboxXCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockboxXCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxXCUITests.swift; sourceTree = "<group>"; };
 		2C2EC55620ADA85A00AF8C44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -258,7 +260,6 @@
 		7AA542A3362BE85B313A88B8 /* UIImage+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		7AA542B3E1A27FC2B8806363 /* String+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Spec.swift"; sourceTree = "<group>"; };
 		7AA542CB670BA12339305AC7 /* TelemetryStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryStoreSpec.swift; sourceTree = "<group>"; };
-		7AA542F40F8228A322D4A1FB /* OnboardingConfirmationPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenterSpec.swift; sourceTree = "<group>"; };
 		7AA542F5012A5D2E954E030A /* Data+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+.swift"; sourceTree = "<group>"; };
 		7AA54304F17F52F8B2C3D8BD /* ItemDetailPresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailPresenterSpec.swift; sourceTree = "<group>"; };
 		7AA54321DB9E1203005B9F14 /* LoginNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginNavigationController.swift; sourceTree = "<group>"; };
@@ -684,6 +685,7 @@
 		7D1B1AC51F99028D00C1F5FF /* lockbox-iosTests */ = {
 			isa = PBXGroup;
 			children = (
+				22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */,
 				4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */,
 				7DA4C6892028F86E00B61DD8 /* ItemListPresenterSpec.swift */,
 				7DA4C6872028F86E00B61DD8 /* ItemListViewSpec.swift */,
@@ -738,7 +740,6 @@
 				D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */,
 				7AA54B2BAE0933D9BCD573D4 /* LifecycleStoreSpec.swift */,
 				7AA54DF673E124AA32EF8EBC /* OnboardingConfirmationViewSpec.swift */,
-				7AA542F40F8228A322D4A1FB /* OnboardingConfirmationPresenterSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1069,6 +1070,7 @@
 				7AA54DD6E3A60AC511C4D53A /* RouteActionSpec.swift in Sources */,
 				7DA4C68F2028F99800B61DD8 /* UIViewController+Spec.swift in Sources */,
 				7AA541388E228B6281F2A2E8 /* AccountStoreSpec.swift in Sources */,
+				22336C7221111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift in Sources */,
 				7AA54B2587BDE8D88215802C /* RootPresenterSpec.swift in Sources */,
 				7AA546E44E75EC392E1AF728 /* RootViewSpec.swift in Sources */,
 				D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */,
