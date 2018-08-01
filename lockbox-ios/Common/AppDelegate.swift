@@ -65,15 +65,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UITextField.appearance().tintColor = .black
 
-        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.startup)
+        Dispatcher.shared.dispatch(action: LifecycleAction.startup)
         return true
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.background)
+        Dispatcher.shared.dispatch(action: LifecycleAction.background)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.foreground)
+        Dispatcher.shared.dispatch(action: LifecycleAction.foreground)
     }
 }
