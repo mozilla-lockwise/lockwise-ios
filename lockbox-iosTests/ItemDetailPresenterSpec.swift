@@ -54,8 +54,15 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var onItemStub = PublishSubject<Login?>()
+        var onItemStub: PublishSubject<Login?>
         var loginIDArg: String?
+
+        init() {
+            self.onItemStub = PublishSubject<Login?>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override func get(_ id: String) -> Observable<Login?> {
             self.loginIDArg = id

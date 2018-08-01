@@ -34,7 +34,14 @@ class AutoLockStoreSpec: QuickSpec {
         }
 
     class FakeDataStore: DataStore {
-        var lockedStub = PublishSubject<Bool>()
+        let lockedStub: PublishSubject<Bool>
+
+        init() {
+            self.lockedStub = PublishSubject<Bool>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var locked: Observable<Bool> {
             return self.lockedStub.asObservable()

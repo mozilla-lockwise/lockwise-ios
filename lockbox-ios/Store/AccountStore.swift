@@ -32,6 +32,7 @@ class AccountStore {
     private var _loginURL = ReplaySubject<URL>.create(bufferSize: 1)
     private var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
+    private var _oldAccountPresence = ReplaySubject<Bool>.create(bufferSize: 1)
 
     public var loginURL: Observable<URL> {
         return _loginURL.asObservable()
@@ -43,6 +44,10 @@ class AccountStore {
 
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
+    }
+
+    public var hasOldAccountInformation: Observable<Bool> {
+        return _oldAccountPresence.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -63,6 +68,8 @@ class AccountStore {
                         self.oauthLogin(url)
                     case .clear:
                         self.clear()
+                    case .oauthSignInMessageRead:
+                        self.clearOldKeychainValues()
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -80,14 +87,28 @@ class AccountStore {
                            redirectUri: Constant.fxa.redirectURI)
 
                     self.generateLoginURL()
-                    self.populateAccountInformation()
                 }
+
+                self._oauthInfo.onNext(nil)
+                self._profile.onNext(nil)
             }
         }
+
+        self.checkOldAccount()
     }
 }
 
 extension AccountStore {
+    private func checkOldAccount() {
+        if self.keychainWrapper.string(forKey: KeychainKey.email.rawValue) != nil ||
+                self.keychainWrapper.string(forKey: KeychainKey.displayName.rawValue) != nil ||
+                self.keychainWrapper.string(forKey: KeychainKey.avatarURL.rawValue) != nil {
+            self._oldAccountPresence.onNext(true)
+        } else {
+            self._oldAccountPresence.onNext(false)
+        }
+    }
+
     private func generateLoginURL() {
         self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
             if let url = url {
@@ -127,6 +148,18 @@ extension AccountStore {
 
         self._profile.onNext(nil)
         self._oauthInfo.onNext(nil)
+    }
+
+    private func clearOldKeychainValues() {
+        for identifier in KeychainKey.allValues {
+            _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
+        }
+
+        self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            self.webData.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records) { }
+        }
+
+        self._oldAccountPresence.onNext(false)
     }
 
     private func oauthLogin(_ navigationURL: URL) {

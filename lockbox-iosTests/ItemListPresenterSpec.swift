@@ -71,9 +71,18 @@ class ItemListPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var itemListStub = PublishSubject<[Login]>()
-        var syncStateStub = PublishSubject<SyncState>()
-        var storageStateStub = PublishSubject<LoginStoreState>()
+        var itemListStub: PublishSubject<[Login]>
+        var syncStateStub: PublishSubject<SyncState>
+        var storageStateStub: PublishSubject<LoginStoreState>
+
+        init() {
+            self.itemListStub = PublishSubject<[Login]>()
+            self.syncStateStub = PublishSubject<SyncState>()
+            self.storageStateStub = PublishSubject<LoginStoreState>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var list: Observable<[Login]> {
             return self.itemListStub.asObservable()
@@ -193,7 +202,7 @@ class ItemListPresenterSpec: QuickSpec {
                                     LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                                     LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                 ]
-                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).toEventually(equal(expectedItemConfigurations), timeout: 2.5)
+                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
                             }
 
                             describe("tapping the learnMore button in the empty list placeholder") {
@@ -203,7 +212,7 @@ class ItemListPresenterSpec: QuickSpec {
                                         LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                                         LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                     ]
-                                    expect(self.view.itemsObserver.events.last!.value.element!.first!.items).toEventually(equal(expectedItemConfigurations), timeout: 2.5)
+                                    expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
 
                                     let configuration = self.view.itemsObserver.events.last!.value.element
                                     let emptyListPlaceholder = configuration!.first!.items[1]

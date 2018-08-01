@@ -12,6 +12,7 @@ enum AccountAction: Action {
     // invoked when redirecting from a successful OAuth authentication
     case oauthRedirect(url: URL)
     case clear
+    case oauthSignInMessageRead
 }
 
 extension AccountAction: Equatable {
@@ -20,6 +21,8 @@ extension AccountAction: Equatable {
         case (.oauthRedirect(let lhURL), .oauthRedirect(let rhURL)):
             return lhURL == rhURL
         case (.clear, .clear):
+            return true
+        case (.oauthSignInMessageRead, .oauthSignInMessageRead):
             return true
         default:
             return false

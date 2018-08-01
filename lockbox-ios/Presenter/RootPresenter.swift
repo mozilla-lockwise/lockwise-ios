@@ -24,6 +24,19 @@ protocol RootViewProtocol: class {
     func pushSettingView(view: SettingRouteAction)
 }
 
+struct OAuthProfile {
+    let oauthInfo: OAuthInfo?
+    let profile: Profile?
+}
+
+extension OAuthProfile: Equatable {
+    static func ==(lh: OAuthProfile, rh: OAuthProfile) -> Bool {
+        return// todo: update these when we can make profile and oauthinfo equatable
+                (lh.profile == nil) == (rh.profile == nil) &&
+                (lh.oauthInfo == nil) == (rh.oauthInfo == nil)
+    }
+}
+
 class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
@@ -59,38 +72,31 @@ class RootPresenter {
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
+        // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-            .bind { latest in
-                    if let oauthInfo = latest.0,
-                        let profile = latest.1 {
-                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                .map { OAuthProfile(oauthInfo: $0.0, profile: $0.1) }
+                .distinctUntilChanged()
+                .bind { latest in
+                    if let oauthInfo = latest.oauthInfo,
+                        let profile = latest.profile {
+                        self.dataStoreActionHandler.invoke(.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                    } else if latest.oauthInfo == nil && latest.profile == nil {
+                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                        self.dataStoreActionHandler.invoke(.reset)
                     }
                 }
                 .disposed(by: self.disposeBag)
 
-        self.dataStore.storageState
-            .subscribe(onNext: { storageState in
-                    switch storageState {
-                    case .Unprepared, .Locked:
-                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
-                    case .Unlocked:
-                        self.dispatcher.dispatch(action: MainRouteAction.list)
-                    default:
-                        break
-                    }
+        Observable.combineLatest(self.dataStore.locked, self.accountStore.hasOldAccountInformation, self.dataStore.storageState)
+                .filter { !$0.1 && $0.2 != LoginStoreState.Unprepared }
+                .map { $0.0 }
+                .distinctUntilChanged()
+                .subscribe(onNext: { locked in
+                    let route: RouteAction = locked ? LoginRouteAction.welcome : MainRouteAction.list
+
+                    self.routeActionHandler.invoke(route)
                 })
                 .disposed(by: self.disposeBag)
-
-        Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
-            .filter { $0.1 == LoginStoreState.Unprepared }
-            .map { $0.0 }
-            .distinctUntilChanged()
-            .subscribe(onNext: { syncState in
-                if syncState == .NotSyncable {
-                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
-                }
-            })
-            .disposed(by: self.disposeBag)
 
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()

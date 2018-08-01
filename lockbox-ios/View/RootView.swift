@@ -36,7 +36,9 @@ class RootView: UIViewController, RootViewProtocol {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        self.presenter = RootPresenter(view: self)
+        if !isRunningTest {
+            self.presenter = RootPresenter(view: self)
+        }
     }
 
     override func viewDidLoad() {
@@ -69,18 +71,18 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func dismissModals() {
-        self.currentViewController?.presentedViewController?.dismiss(animated: true, completion: nil)
+        self.currentViewController?.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
     }
 
     func pushLoginView(view: LoginRouteAction) {
         switch view {
         case .welcome:
-            self.currentViewController?.popToRootViewController(animated: true)
+            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
         case .fxa:
-            self.currentViewController?.pushViewController(FxAView(), animated: true)
+            self.currentViewController?.pushViewController(FxAView(), animated: !isRunningTest)
         case .onboardingConfirmation:
             if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
-                self.currentViewController?.pushViewController(onboardingConfirmationView, animated: true)
+                self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
             }
         }
     }
@@ -88,11 +90,11 @@ class RootView: UIViewController, RootViewProtocol {
     func pushMainView(view: MainRouteAction) {
         switch view {
         case .list:
-            self.currentViewController?.popToRootViewController(animated: true)
+            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
         case .detail(let id):
             if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
                 itemDetailView.itemId = id
-                self.currentViewController?.pushViewController(itemDetailView, animated: true)
+                self.currentViewController?.pushViewController(itemDetailView, animated: !isRunningTest)
             }
         }
     }
@@ -100,15 +102,15 @@ class RootView: UIViewController, RootViewProtocol {
     func pushSettingView(view: SettingRouteAction) {
         switch view {
         case .list:
-            self.currentViewController?.popToRootViewController(animated: true)
+            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
         case .account:
             if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView {
-                self.currentViewController?.pushViewController(accountSettingView, animated: true)
+                self.currentViewController?.pushViewController(accountSettingView, animated: !isRunningTest)
             }
         case .autoLock:
-            self.currentViewController?.pushViewController(AutoLockSettingView(), animated: true)
+            self.currentViewController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
         case .preferredBrowser:
-            self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: true)
+            self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
         }
     }
 

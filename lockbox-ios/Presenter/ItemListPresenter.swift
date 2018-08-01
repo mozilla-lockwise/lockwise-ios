@@ -249,12 +249,14 @@ extension ItemListPresenter {
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+        let listThrottle = isRunningTest ? 0.0 : 1.0
+        let stateThrottle = isRunningTest ? 0.0 : 2.0
         let throttledListObservable = loginListObservable
-                .throttle(1.0, scheduler: ConcurrentMainScheduler.instance)
+                .throttle(listThrottle, scheduler: ConcurrentMainScheduler.instance)
         let throttledSyncStateObservable = syncStateObservable
-                .throttle(2.0, scheduler: ConcurrentMainScheduler.instance)
+                .throttle(stateThrottle, scheduler: ConcurrentMainScheduler.instance)
         let throttledStorageStateObservable = storageStateObservable
-                .throttle(2.0, scheduler: ConcurrentMainScheduler.instance)
+                .throttle(stateThrottle, scheduler: ConcurrentMainScheduler.instance)
 
         return Observable.combineLatest(
                         throttledListObservable,

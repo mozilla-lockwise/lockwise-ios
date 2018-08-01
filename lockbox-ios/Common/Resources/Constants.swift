@@ -108,17 +108,20 @@ struct Constant {
         static let doneSyncingYourEntries = NSLocalizedString("syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
         static let installBrowserAccessibilityLabel = NSLocalizedString("install_browser_prompt", value: "%@ disabled, install this browser to make it available", comment: "Accessibility instructions for disabled web browser options")
         static let onboardingSecurityPostfix = NSLocalizedString("onboarding.encryption", value: "256-bit encryption", comment: "Name of link to algorithm used by Lockbox for encryption")
+        static let reauthenticationRequired = NSLocalizedString("reauth_required", value: "Reauthentication Required", comment: "Title of dialog box displayed when users need to reauthenticate")
+        static let appUpdateDisclaimer = NSLocalizedString("app_update_explanation", value: "Due to a recent app update, we will need you to sign in again. Apologies for the inconvenience.", comment: "Message in dialog box when users need to reauthenticate explaining application update")
+        static let continueText = NSLocalizedString("continue", value: "Continue", comment: "Button title when agreeing to proceed to access Lockbox.")
     }
 
     struct number {
-        static let displayStatusAlertLength = TimeInterval(1.5)
-        static let displayAlertFade = TimeInterval(0.3)
+        static let displayStatusAlertLength = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.5)
+        static let displayAlertFade = isRunningTest ? TimeInterval(0.0) : TimeInterval(0.3)
         static let displayAlertOpacity: CGFloat = 0.75
         static let displayAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
         static let copyExpireTimeSecs = 60
-        static let minimumSpinnerHUDTime = TimeInterval(1.0)
+        static let minimumSpinnerHUDTime = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.0)
     }
 
     struct setting {
