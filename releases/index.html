@@ -102,6 +102,8 @@
         
             <li><a class="toctree-l4" href="#taking-screenshots-for-new-releases">Taking screenshots for new releases</a></li>
         
+            <li><a class="toctree-l4" href="#updating-the-version-for-a-release">Updating the version for a release</a></li>
+        
         </ul>
     
 
@@ -239,6 +241,11 @@
 - [languages] Update / add desired locales to <code>fastlane/Snapfile</code>
 - [devices] Update / add desired device sizes to <code>fastlane/Snapfile</code>
 - <a href="https://stackoverflow.com/questions/38316591/how-to-test-dynamic-type-larger-font-sizes-in-ios-simulator">text size</a> Update the <code>CONTENT_SIZE</code> variable in <code>LockboxXCUITests/BaseTestCase.swift</code></p>
+<h2 id="updating-the-version-for-a-release">Updating the version for a release</h2>
+<ul>
+<li>Once a version has been merged or released, the app version should be bumped</li>
+<li>Update the value in <code>Common/Resources/Info.plist</code>, for example from <code>1.2</code> to <code>1.3</code></li>
+</ul>
 <hr />
               
             </div>
