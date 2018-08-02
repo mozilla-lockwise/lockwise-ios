@@ -13,6 +13,7 @@ class Screen {
 
     static let FxASigninScreen = "FxASigninScreen"
     static let FxCreateAccount = "FxCreateAccount"
+    static let FxASigninScreenSavedUser = "FxASigninScreenSavedUser"
 
     static let OpenSitesInMenu = "OpenSitesInMenu"
     static let LockedScreen = "LockedScreen"
@@ -27,6 +28,7 @@ class Action {
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
     static let FxALogInSuccessfully = "FxALogInSuccessfully"
+    static let DisconnectUser = "DisconnectUser"
 
     static let OpenSettingsMenu = "OpenSettingsMenu"
 
@@ -50,6 +52,7 @@ class LockboxUserState: MMUserState {
 
     var fxaUsername: String? = nil
     var fxaPassword: String? = nil
+    var savedUser = false
 }
 
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<LockboxUserState> {
@@ -68,8 +71,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.WelcomeScreen) { screenState in
-            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreen)
+            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreen, if: "savedUser = false")
+
+            screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreenSavedUser, if: "savedUser = true")
+
             screenState.noop(to: Screen.LockboxMainPage)
+    }
+
+    map.addScreenState(Screen.FxASigninScreenSavedUser) { screenState in
+        screenState.gesture(forAction: Action.DisconnectUser, transitionTo: Screen.FxASigninScreen) { userState in
+            app.webViews.links["Use a different account"].tap()
+        }
     }
 
     map.addScreenState(Screen.FxASigninScreen) { screenState in
@@ -141,6 +153,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: Screen.WelcomeScreen) { userState in
             app.buttons["disconnectFirefoxLockbox.button"].tap()
             app.buttons["Disconnect"].tap()
+            userState.savedUser = !userState.savedUser
         }
         screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: Screen.AccountSettingsMenu) { userState in
             app.buttons["disconnectFirefoxLockbox.button"].tap()
@@ -154,4 +167,136 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     return map
+}
+
+extension BaseTestCase {
+
+    func waitForMainPage() {
+        let app = XCUIApplication()
+        waitforExistence(app.navigationBars["Firefox Lockbox"])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
+    }
+
+    func enterDataAndTapOnSignIn() {
+        waitforExistence(app.webViews.secureTextFields["Password"])
+        userState.fxaUsername = emailTestAccountLogins
+        navigator.performAction(Action.FxATypeEmail)
+        userState.fxaPassword = passwordTestAccountLogins
+        navigator.performAction(Action.FxATypePassword)
+
+        navigator.performAction(Action.FxATapOnSignInButton)
+        waitforExistence(app.buttons["finish.button"])
+        app.buttons["finish.button"].tap()
+        waitForMainPage()
+    }
+
+    func disconnectAccount() {
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        waitforExistence(app.buttons["getStarted.button"])
+        userState.savedUser = true
+        navigator.goto(Screen.FxASigninScreenSavedUser)
+        navigator.performAction(Action.DisconnectUser)
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+    }
+
+    func logInFxAcc() {
+        //navigator.nowAt(Screen.FxASigninScreen)
+        enterDataAndTapOnSignIn()
+        checkIfAccountIsVerified()
+        waitForMainPage()
+    }
+
+    func checkIfAccountIsVerified() {
+        if (app.staticTexts["Confirm your account."].exists) {
+            let group = DispatchGroup()
+            group.enter()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.verifyAccount() {
+                    group.leave()
+                }
+            }
+            group.wait()
+            waitforNoExistence(app.staticTexts["Confirm your account."], timeoutValue: 5)
+            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 20)
+        } else {
+            // Account is still verified, check that entries are shown
+            waitforNoExistence(app.staticTexts["Confirm your account."], timeoutValue: 5)
+            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+            XCTAssertNotEqual(app.tables.cells.count, 1)
+            XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
+        }
+        navigator.nowAt(Screen.LockboxMainPage)
+    }
+
+    func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
+        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
+        let restUrl = URL(string: postEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+
+        request.httpMethod = "POST"
+
+        let jsonObject: [String: Any] = ["uid": uid, "code":code]
+        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
+        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+        if let json = json {
+            print("json \(json)")
+        }
+        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
+
+        request.httpBody = jsonData
+        print("json \(jsonData!)")
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("error:", error)
+                return
+            }
+            done()
+        }
+        task.resume()
+    }
+
+   func verifyAccount(done: @escaping () -> ()) {
+        // GET to EndPoint/mail/test-9876@restmail.net
+        let restUrl = URL(string: getEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if(error != nil) {
+                print("Error: \(error ?? "Get Error" as! Error)")
+            }
+            let responseString = String(data: data!, encoding: .utf8)
+            print("responseString = \(String(describing: responseString))")
+
+            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
+            let regexCode = "(code=[a-z0-9]{0,32}$?)"
+            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
+                uid = String(responseString![rangeUid])
+            }
+
+            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
+                code = String(responseString![rangeCode])
+            }
+
+            if (code != nil && uid != nil) {
+                let codeNumber = self.getPostValues(value: code)
+                let uidNumber = self.getPostValues(value: uid)
+
+                self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
+                    done()
+                }
+            } else {
+                done()
+            }
+        }
+        task.resume()
+    }
+
+    func getPostValues(value: String) -> String {
+        // From the regExp it is necessary to get only the number to add it to a json and send in POST request
+        let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
+        let numberValue = value[finalNumberIndex...];
+        return String(numberValue)
+    }
 }

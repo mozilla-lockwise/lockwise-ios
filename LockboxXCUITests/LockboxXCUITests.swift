@@ -31,71 +31,49 @@ class LockboxXCUITests: BaseTestCase {
         super.setUp()
     }
 
-    private func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
-        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
-        let restUrl = URL(string: postEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-
-        request.httpMethod = "POST"
-
-        let jsonObject: [String: Any] = ["uid": uid, "code":code]
-        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
-        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-        if let json = json {
-            print("json \(json)")
-        }
-        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
-
-        request.httpBody = jsonData
-        print("json \(jsonData!)")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("error:", error)
-                return
-            }
-            done()
-        }
-        task.resume()
+    override func tearDown() {
+        disconnectAccount()
+        super.tearDown()
     }
 
-    private func verifyAccount(done: @escaping () -> ()) {
-        // GET to EndPoint/mail/test-9876@restmail.net
-        let restUrl = URL(string: getEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.httpMethod = "GET"
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if(error != nil) {
-                print("Error: \(error ?? "Get Error" as! Error)")
-            }
-            let responseString = String(data: data!, encoding: .utf8)
-            print("responseString = \(String(describing: responseString))")
-
-            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
-            let regexCode = "(code=[a-z0-9]{0,32}$?)"
-            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
-                uid = (responseString?.substring(with:rangeUid))!
-            }
-
-            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
-                code = (responseString?.substring(with:rangeCode))!
-            }
-
-            let finalCodeIndex = code.index(code.endIndex, offsetBy: -32)
-            let codeNumber = code[finalCodeIndex...]
-            let finalUidIndex = uid.index(uid.endIndex, offsetBy: -32)
-            let uidNumber = uid[finalUidIndex...]
-            self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
-                done()
+    private func preTestStatus() {
+        // App can start with user logged out, user logged out (email saved), user logged in
+        // if user logged in, log out
+        if (app.navigationBars["Firefox Lockbox"].exists) {
+            disconnectAccount()
+            logInFxAcc()
+        } else if (app.buttons["getStarted.button"].exists) {
+            // User logged out but emal remembered
+            app.buttons["getStarted.button"].tap()
+            waitforExistence(app.webViews.secureTextFields["Password"])
+            if (app.staticTexts[emailTestAccountLogins].exists) {
+                navigator.nowAt(Screen.FxASigninScreenSavedUser)
+                navigator.performAction(Action.DisconnectUser)
+                waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+                logInFxAcc()
+            } else {
+            // Starting like first time
+            navigator.nowAt(Screen.FxASigninScreen)
+            logInFxAcc()
             }
         }
-        task.resume()
     }
 
-    func test1LoginWithSavedLogins() {
+    func testLogin() {
+        if (app.navigationBars["Firefox Lockbox"].exists) {
+            disconnectAccount()
+            navigator.nowAt(Screen.FxASigninScreen)
+        } else if (app.buttons["getStarted.button"].exists){
+            app.buttons["getStarted.button"].tap()
+            waitforExistence(app.webViews.secureTextFields["Password"])
+            if(app.staticTexts[emailTestAccountLogins].exists) {
+                navigator.nowAt(Screen.FxASigninScreenSavedUser)
+                navigator.performAction(Action.DisconnectUser)
+            } else {
+                navigator.nowAt(Screen.FxASigninScreen)
+            }
+        }
         snapshot("01Welcome" + CONTENT_SIZE)
-        navigator.goto(Screen.FxASigninScreen)
         waitforExistence(app.webViews.textFields["Email"])
 
         // Try tapping on Sign In, no fields filled in
@@ -144,50 +122,13 @@ class LockboxXCUITests: BaseTestCase {
 
         sleep(5)
         // Check if the account is verified and if not, verify it
-        if (app.staticTexts["Confirm your account."].exists) {
-            let group = DispatchGroup()
-            group.enter()
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.verifyAccount() {
-                    sleep(5)
-                    self.waitforExistence(self.app.staticTexts["No entries found."])
-                    group.leave()
-                }
-            }
-            group.wait()
-        } else {
-            // Account is still verified, check that entries are shown
-            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
-            XCTAssertNotEqual(app.tables.cells.count, 1)
-            XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
-        }
+        checkIfAccountIsVerified()
     }
 
-    func test2SettingsAccountUI() {
-        waitforExistence(app.navigationBars["Firefox Lockbox"])
-        snapshot("03Settings" + CONTENT_SIZE)
-
-        navigator.goto(Screen.AccountSettingsMenu)
-        waitforExistence(app.navigationBars["Account"])
-        // Some checks can be done here to be sure the Account UI is fine
-        // To be uncommented once it is sure they appear, now it is not consistent in all run
-        //XCTAssertTrue(app.images["avatar-placeholder"].exists, "The image placeholder does not appear")
-        XCTAssertTrue(app.staticTexts["username.Label"].exists)
-        XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
-    }
-
-    func test3SettingOpenWebSitesIn() {
-        navigator.goto(Screen.OpenSitesInMenu)
-        waitforExistence(app.navigationBars["Open Websites in"])
-        XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
-    }
-
-    func test4SortEntries() {
-        navigator.goto(Screen.LockboxMainPage)
-        sleep(5)
-        waitforExistence(app.navigationBars["Firefox Lockbox"])
+    func testMainScreen() {
+        preTestStatus()
+        checkIfAccountIsVerified()
+        // Check how to order the entries
         navigator.performAction(Action.SelectRecentOrder)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
@@ -203,62 +144,11 @@ class LockboxXCUITests: BaseTestCase {
         XCTAssertEqual(firstCellAlphabetically, "accounts.google.com")
     }
 
-    func test5SettingDisconnectAccount() {
-        // First Cancel disconnecting the account
-        navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
-        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
+    func testSettingsMainPage() {
+        preTestStatus()
+        checkIfAccountIsVerified()
 
-        // Now disconnect the account
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        userState.fxaPassword = passwordTestAccountLogins
-        waitforExistence(app.staticTexts[emailTestAccountLogins])
-        navigator.nowAt(Screen.FxASigninScreen)
-        navigator.performAction(Action.FxATypePassword)
-        // In small screens it is necessary to dismiss the keyboard
-        app.buttons["Done"].tap()
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.buttons["finish.button"])
-        app.buttons["finish.button"].tap()
-        waitforExistence(app.navigationBars["Firefox Lockbox"])
-    }
-
-    func test6SendUsageDataSwitch() {
-        navigator.goto(Screen.SettingsMenu)
-        // Disable the send usage data
-        navigator.performAction(Action.SendUsageData)
-        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "0")
-
-        // Enable it again
-        navigator.performAction(Action.SendUsageData)
-        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "1")
-    }
-
-    func test7EntryDetails() {
-        navigator.goto(Screen.LockboxMainPage)
-        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
-        app.tables.cells.staticTexts["iosmztest@gmail.com"].tap()
-        XCTAssertTrue(app.tables.cells.staticTexts["Web Address"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Username"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["iosmztest@gmail.com"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Password"].exists)
-    }
-
-    func test8ChangeDefaultAutolock() {
-        navigator.goto(Screen.SettingsMenu)
-        waitforExistence(app.navigationBars["Settings"])
-        navigator.goto(Screen.AutolockSettingsMenu)
-
-        app.cells.staticTexts["Never"].tap()
-        navigator.goto(Screen.LockboxMainPage)
-        // Send app to background and launch it
-        XCUIDevice.shared.press(.home)
-        app.activate()
-        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
-    }
-
-    func test9LockNowUnlock() {
+        // Check the Lock Now button
         navigator.goto(Screen.LockboxMainPage)
         navigator.performAction(Action.LockNow)
         waitforExistence(app.buttons["Unlock Firefox Lockbox"])
@@ -268,17 +158,80 @@ class LockboxXCUITests: BaseTestCase {
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("0000\r")
+        navigator.nowAt(Screen.LockboxMainPage)
         waitforExistence(app.navigationBars["Firefox Lockbox"])
-        disconnectAccount()
+
+        // Check the Send Data toggle
+        navigator.goto(Screen.SettingsMenu)
+        print(app.debugDescription)
+        // Disable the send usage data
+        navigator.performAction(Action.SendUsageData)
+        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "0")
+
+        // Enable it again
+        navigator.performAction(Action.SendUsageData)
+        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "1")
     }
 
-    private func disconnectAccount() {
-        navigator.nowAt(Screen.LockboxMainPage)
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        waitforExistence(app.staticTexts[emailTestAccountLogins])
-        app.webViews.links["Use a different account"].tap()
-        waitforExistence(app.webViews.textFields["Email"])
+    func testDifferentSettings() {
+        preTestStatus()
+        checkIfAccountIsVerified()
+
+        // Check the Account Setting
+        waitforExistence(app.navigationBars["Firefox Lockbox"])
+        snapshot("03Settings" + CONTENT_SIZE)
+
+        navigator.goto(Screen.AccountSettingsMenu)
+        waitforExistence(app.navigationBars["Account"])
+        // Some checks can be done here to be sure the Account UI is fine
+        // To be uncommented once it is sure they appear, now it is not consistent in all run
+        //XCTAssertTrue(app.images["avatar-placeholder"].exists, "The image placeholder does not appear")
+        XCTAssertTrue(app.staticTexts["username.Label"].exists)
+        XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
+
+        // Check that Cancel disconnecting the account works
+        navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
+        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
+
+        navigator.goto(Screen.SettingsMenu)
+
+        // Check the Autolock Setting
+        waitforExistence(app.navigationBars["Settings"])
+        navigator.goto(Screen.AutolockSettingsMenu)
+
+        app.cells.staticTexts["Never"].tap()
+        navigator.goto(Screen.LockboxMainPage)
+        // Send app to background and launch it
+        XCUIDevice.shared.press(.home)
+        app.activate()
+        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
+
+        navigator.goto(Screen.SettingsMenu)
+
+        // Check the OpenWebSites with Setting
+        navigator.goto(Screen.OpenSitesInMenu)
+        waitforExistence(app.navigationBars["Open Websites in"])
+        XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
+
+        navigator.goto(Screen.LockboxMainPage)
+    }
+
+    func testEntryDetail() {
+        preTestStatus()
+        checkIfAccountIsVerified()
+
+        // Check the Entry Detail View and its details
+        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
+        app.tables.cells.staticTexts["iosmztest@gmail.com"].tap()
+        print(app.debugDescription)
+        XCTAssertTrue(app.tables.cells.staticTexts["Web Address"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Username"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["iosmztest@gmail.com"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Password"].exists)
+
+        app.buttons["Back"].tap()
+        navigator.goto(Screen.LockboxMainPage)
     }
 }
