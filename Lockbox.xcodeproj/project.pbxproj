@@ -1339,16 +1339,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
@@ -1370,15 +1366,11 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
@@ -1528,14 +1520,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"${PROJECT_DIR}/lockbox-ios/binaries",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Firefox Lockbox";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
+				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
@@ -1566,14 +1556,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"${PROJECT_DIR}/lockbox-ios/binaries",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Firefox Lockbox";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
+				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.0;
@@ -1665,14 +1653,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"${PROJECT_DIR}/lockbox-ios/binaries",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Lockbox-Branch";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/binaries/** ${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
+				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
@@ -1691,7 +1677,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"ADHOC=1",
@@ -1700,10 +1685,7 @@
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/lockbox-ios/binaries",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
