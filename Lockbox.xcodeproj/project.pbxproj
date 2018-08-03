@@ -253,7 +253,6 @@
 		7AA541A676EEC9A2C4E3909B /* ItemListDisplayActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListDisplayActionSpec.swift; sourceTree = "<group>"; };
 		7AA541C0A078BB02BFD7EB0B /* RootPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootPresenter.swift; sourceTree = "<group>"; };
 		7AA54204B5AFD9672649ACF0 /* LoginNavigationControllerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginNavigationControllerSpec.swift; sourceTree = "<group>"; };
-		7AA5420714A76D776F035603 /* buddybuild_prebuild.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = buddybuild_prebuild.sh; sourceTree = "<group>"; };
 		7AA5422EFD1C3BB23F8C6811 /* BiometryManagerSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometryManagerSpec.swift; sourceTree = "<group>"; };
 		7AA54247F60B5BDC1BA90AD4 /* CopyConfirmationDisplayStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopyConfirmationDisplayStore.swift; sourceTree = "<group>"; };
 		7AA542656FC3BE06479C929A /* UIViewController+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+.swift"; sourceTree = "<group>"; };
@@ -762,7 +761,6 @@
 				7D1B1A8A1F98F86400C1F5FF /* Frameworks */,
 				7AA54E9846C5A9F801A7FE1C /* README.md */,
 				7AA54375CEA65C18E1EECFB4 /* bootstrap.sh */,
-				7AA5420714A76D776F035603 /* buddybuild_prebuild.sh */,
 				7AA546FD320F8F1431F20092 /* codecov.yml */,
 				7AA546C7687189844E3E3BBF /* mkdocs.yml */,
 				7AA549F525E77FA0FE9D9B54 /* buddybuild_postbuild.sh */,
