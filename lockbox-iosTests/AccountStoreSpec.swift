@@ -66,6 +66,8 @@ class AccountStoreSpec: QuickSpec {
                 self.dispatcher = FakeDispatcher()
                 self.keychainManager = FakeKeychainManager()
                 self.urlCache = FakeURLCache()
+                self.keychainManager.saveSuccess = true
+
                 self.subject = AccountStore(
                         dispatcher: self.dispatcher,
                         keychainWrapper: self.keychainManager,
@@ -126,7 +128,7 @@ class AccountStoreSpec: QuickSpec {
                     }
 
                     it("pushes a non-nil oauthinfo") {
-                        // can't check anything more detailed because we can't construct FxAClient.Profile
+                        // can't check anything more detailed because we can't construct FxAClient.OAuthInfo
                         let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()
                         expect(oauthInfo).notTo(beNil())
                     }
