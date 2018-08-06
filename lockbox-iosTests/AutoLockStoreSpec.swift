@@ -66,16 +66,30 @@ class AutoLockStoreSpec: QuickSpec {
                         userDefaults: UserDefaults.standard)
             }
 
-            describe("backgrounding app") {
-                describe("with auto lock setting on never") {
+            describe("foregrounding app") {
+                describe("when the app is on a webview") {
                     beforeEach {
-                        self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
-                        self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                        self.dispatcher.registerStub.onNext(LifecycleAction.background)
+                        self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: SettingKey.autoLockTimerDate.rawValue)
+                        self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        self.dispatcher.registerStub.onNext(ExternalWebsiteRouteAction(urlString: "www.mozilla.org", title: "moz", returnRoute: MainRouteAction.list))
+                        self.dispatcher.registerStub.onNext(LifecycleAction.foreground)
                     }
 
-                    it("does not lock app") {
-                        expect(self.dataStoreActionHandler.action).to(beNil())
+                    it("locks the app") {
+                        expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
+                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                    }
+                }
+
+                describe("when the app is not on a webview") {
+                    beforeEach {
+                        self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: SettingKey.autoLockTimerDate.rawValue)
+                        self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        self.dispatcher.registerStub.onNext(LifecycleAction.foreground)
+                    }
+
+                    it("locks the app") {
+                        expect(self.dataStoreActionHandler.action).to(equal(.lock))
                         expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }

@@ -55,11 +55,20 @@ class AutoLockStore {
                 .disposed(by: self.disposeBag)
 
         self.dispatcher.register
-            .filterByType(class: ExternalWebsiteRouteAction.self)
-            .subscribe(onNext: { [weak self] _ in
-                self?.pauseTimer()
-            })
-            .disposed(by: self.disposeBag)
+                .filterByType(class: ExternalWebsiteRouteAction.self)
+                .subscribe(onNext: { [weak self] _ in
+                    self?.pauseTimer()
+                })
+                .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+                .filterByType(class: LifecycleAction.self)
+                .filter { $0 == LifecycleAction.foreground }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.paused = false
+                    self?.setupTimer()
+                })
+                .disposed(by: self.disposeBag)
     }
 }
 
@@ -98,13 +107,15 @@ extension AutoLockStore {
 
     private func setTimer(seconds: Int) {
         let timerValue = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
-        if timerValue != 0 && timerValue < Date().timeIntervalSince1970 {
+        if timerValue != 0 && timerValue > Date().timeIntervalSince1970 {
             self.timer = Timer(fireAt: Date(timeIntervalSince1970: timerValue),
                     interval: 0,
                     target: self,
                     selector: #selector(lockApp),
                     userInfo: nil,
                     repeats: false)
+        } else if timerValue != 0 && timerValue <= Date().timeIntervalSince1970 {
+            self.lockApp()
         } else {
             self.timer = Timer(timeInterval: TimeInterval(seconds),
                     target: self,
@@ -140,7 +151,9 @@ extension AutoLockStore {
     }
 
     @objc private func lockApp() {
-        self.dataStoreActionHandler.invoke(.lock)
-        self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+        if !paused {
+            self.dataStoreActionHandler.invoke(.lock)
+            self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+        }
     }
 }
