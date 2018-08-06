@@ -1,25 +1,27 @@
-1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
+1. Install Xcode version 9.4.1
 
-2. Install Carthage
+2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
+
+3. Install Carthage
 
     ```
     brew update
     brew install carthage
     ```
 
-3. Clone the repository
+4. Clone the repository
 
     ```
     git clone https://github.com/mozilla-lockbox/lockbox-ios
     ```
 
-4. Pull in the project dependencies:
+5. Pull in the project dependencies:
 
     ```
     cd lockbox-ios
     sh ./bootstrap.sh
     ```
 
-5. Open `Lockbox.xcodeproj` in Xcode
+6. Open `Lockbox.xcodeproj` in Xcode
 
-6. Build/Run the `lockbox` scheme in Xcode
+7. Build/Run the `lockbox` scheme in Xcode
