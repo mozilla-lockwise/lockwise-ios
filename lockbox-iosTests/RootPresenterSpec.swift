@@ -206,7 +206,7 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 it("sets the key") {
-                    expect(UserDefaults.standard.object(forKey: SettingKey.itemListSort.rawValue) as! String).to(equal(Constant.setting.defaultItemListSort.rawValue))
+                    expect(UserDefaults.standard.object(forKey: SettingKey.itemListSort.rawValue) as? String).to(equal(Constant.setting.defaultItemListSort.rawValue))
                 }
             }
 
