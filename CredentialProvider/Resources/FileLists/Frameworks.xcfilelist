@@ -1,0 +1,14 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework
+$(SRCROOT)/Carthage/Build/iOS/RxDataSources.framework
+$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework
+$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework
+$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework
+$(SRCROOT)/Carthage/Build/iOS/Shared.framework
+$(SRCROOT)/Carthage/Build/iOS/Account.framework
+$(SRCROOT)/Carthage/Build/iOS/FxAUtils.framework
+$(SRCROOT)/Carthage/Build/iOS/Storage.framework
+$(SRCROOT)/Carthage/Build/iOS/RxOptional.framework

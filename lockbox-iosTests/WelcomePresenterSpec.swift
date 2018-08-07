@@ -29,7 +29,7 @@ class WelcomePresenterSpec: QuickSpec {
         var alertControllerButtons: [AlertActionButtonConfiguration]?
         var alertControllerTitle: String?
         var alertControllerMessage: String?
-        var alertControllerStyle: UIAlertControllerStyle?
+        var alertControllerStyle: UIAlertController.Style?
 
         var loginButtonPressed: ControlEvent<Void> {
             return ControlEvent<Void>(events: fakeLoginButtonPress.asObservable())
@@ -70,7 +70,7 @@ class WelcomePresenterSpec: QuickSpec {
         func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                     title: String?,
                                     message: String?,
-                                    style: UIAlertControllerStyle) {
+                                    style: UIAlertController.Style) {
             self.alertControllerButtons = buttons
             self.alertControllerTitle = title
             self.alertControllerMessage = message
@@ -254,7 +254,7 @@ class WelcomePresenterSpec: QuickSpec {
                         it("displays a directional / informative alert") {
                             expect(self.view.alertControllerTitle).to(equal(Constant.string.notUsingPasscode))
                             expect(self.view.alertControllerMessage).to(equal(Constant.string.passcodeInformation))
-                            expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
+                            expect(self.view.alertControllerStyle).to(equal(UIAlertController.Style.alert))
                         }
 
                         describe("tapping the Skip button") {

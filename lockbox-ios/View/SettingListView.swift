@@ -65,7 +65,7 @@ extension SettingListView {
                     reuseIdentifier: cellConfiguration.reuseIndicator)
 
                 cell.textLabel?.text = cellConfiguration.text
-                cell.selectionStyle = UITableViewCellSelectionStyle.none
+                cell.selectionStyle = UITableViewCell.SelectionStyle.none
                 cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
                 cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
@@ -172,12 +172,12 @@ class SettingCellConfiguration {
         return "\(self.cellStyle.rawValue)-setting-cell"
     }
 
-    var cellStyle: UITableViewCellStyle {
+    var cellStyle: UITableViewCell.CellStyle {
         if self.subtitle != nil {
-            return UITableViewCellStyle.subtitle
+            return UITableViewCell.CellStyle.subtitle
         }
 
-        return UITableViewCellStyle.value1
+        return UITableViewCell.CellStyle.value1
     }
 }
 

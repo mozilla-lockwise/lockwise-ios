@@ -8,6 +8,24 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
+import Shared
+
+enum LocalUserDefaultKey: String {
+    case preferredBrowser, recordUsageData, itemListSort
+
+    static var allValues: [LocalUserDefaultKey] = [.preferredBrowser, .recordUsageData, .itemListSort]
+
+    var defaultValue: Any? {
+        switch self {
+        case .itemListSort:
+            return Constant.setting.defaultItemListSort.rawValue
+        case .preferredBrowser:
+            return Constant.setting.defaultPreferredBrowser.rawValue
+        case .recordUsageData:
+            return Constant.setting.defaultRecordUsageData
+        }
+    }
+}
 
 enum KeychainKey: String {
     // note: these additional keys are holdovers from the previous Lockbox-owned style of
@@ -17,32 +35,19 @@ enum KeychainKey: String {
     static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
 }
 
-class AccountStore {
+class AccountStore: BaseAccountStore {
     static let shared = AccountStore()
 
-    private var dispatcher: Dispatcher
-    private var keychainWrapper: KeychainWrapper
-    private var urlCache: URLCache
-    private var webData: WKWebsiteDataStore
+    private let dispatcher: Dispatcher
+    private let urlCache: URLCache
+    private let webData: WKWebsiteDataStore
     private let disposeBag = DisposeBag()
 
-    private var fxa: FirefoxAccount?
-
     private var _loginURL = ReplaySubject<URL>.create(bufferSize: 1)
-    private var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
-    private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
     private var _oldAccountPresence = BehaviorRelay<Bool>(value: false)
 
     public var loginURL: Observable<URL> {
         return _loginURL.asObservable()
-    }
-
-    public var profile: Observable<Profile?> {
-        return _profile.asObservable()
-    }
-
-    public var oauthInfo: Observable<OAuthInfo?> {
-        return _oauthInfo.asObservable()
     }
 
     public var hasOldAccountInformation: Observable<Bool> {
@@ -50,15 +55,19 @@ class AccountStore {
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
+         localKeychainWrapper: KeychainWrapper = KeychainWrapper.standard,
+         sharedKeychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          urlCache: URLCache = URLCache.shared,
          webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
-    ) {
+        ) {
         self.dispatcher = dispatcher
-        self.keychainWrapper = keychainWrapper
         self.urlCache = urlCache
         self.webData = webData
 
+        super.init(localKeychainWrapper: localKeychainWrapper, sharedKeychainWrapper: sharedKeychainWrapper)
+    }
+
+    override func initialized() {
         self.dispatcher.register
                 .filterByType(class: AccountAction.self)
                 .subscribe(onNext: { action in
@@ -88,7 +97,7 @@ class AccountStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue) {
+        if let accountJSON = self.storedAccountJSON {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.generateLoginURL()
             self.populateAccountInformation()
@@ -119,27 +128,10 @@ extension AccountStore {
         }
     }
 
-    private func populateAccountInformation() {
-        guard let fxa = self.fxa else {
-            return
-        }
-
-        fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
-            self._oauthInfo.onNext(info)
-
-            if let json = try? fxa.toJSON() {
-                self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
-            }
-        }
-
-        fxa.getProfile { (profile: Profile?, _) in
-            self._profile.onNext(profile)
-        }
-    }
-
     private func clear() {
         for identifier in KeychainKey.allValues {
-            _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
+            _ = self.localKeychainWrapper.removeObject(forKey: identifier.rawValue)
+            _ = self.sharedKeychainWrapper.removeObject(forKey: identifier.rawValue)
         }
 
         self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
@@ -188,13 +180,12 @@ extension AccountStore {
             }
 
             if let accountJSON = try? fxa.toJSON() {
-                self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
+                self.sharedKeychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
 
             fxa.getProfile { (profile: Profile?, _) in
                 self._profile.onNext(profile)
             }
         }
-
     }
 }

@@ -30,16 +30,8 @@ extension UserDefaultKey {
     }
 }
 
-class UserDefaultStore {
+class UserDefaultStore: BaseUserDefaultStore {
     static let shared = UserDefaultStore()
-    private let disposeBag = DisposeBag()
-
-    private let dispatcher: Dispatcher
-    private let userDefaults: UserDefaults
-
-    public var autoLockTime: Observable<Setting.AutoLock> {
-        return self.userDefaults.onAutoLockTime
-    }
 
     public var preferredBrowser: Observable<Setting.PreferredBrowser> {
         return self.userDefaults.onPreferredBrowser
@@ -53,11 +45,7 @@ class UserDefaultStore {
         return self.userDefaults.onItemListSort
     }
 
-    init(dispatcher: Dispatcher = Dispatcher.shared,
-         userDefaults: UserDefaults = UserDefaults.standard) {
-        self.dispatcher = dispatcher
-        self.userDefaults = userDefaults
-
+    override func initialized() {
         self.dispatcher.register
                 .filterByType(class: SettingAction.self)
                 .subscribe(onNext: { action in
@@ -65,11 +53,11 @@ class UserDefaultStore {
                     case .autoLockTime(let timeout):
                         self.userDefaults.set(timeout.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                     case .preferredBrowser(let browser):
-                        self.userDefaults.set(browser.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
+                        self.userDefaults.set(browser.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
                     case .recordUsageData(let enabled):
-                        self.userDefaults.set(enabled, forKey: UserDefaultKey.recordUsageData.rawValue)
+                        self.userDefaults.set(enabled, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
                     case .itemListSort(let sort):
-                        self.userDefaults.set(sort.rawValue, forKey: UserDefaultKey.itemListSort.rawValue)
+                        self.userDefaults.set(sort.rawValue, forKey: LocalUserDefaultKey.itemListSort.rawValue)
                     case .reset:
                         self.restoreDefaults()
                     }
@@ -79,16 +67,20 @@ class UserDefaultStore {
         self.loadInitialValues()
     }
 
-    private func loadInitialValues() {
-        for key in UserDefaultKey.allValues {
+    override func loadInitialValues() {
+        super.loadInitialValues()
+
+        for key in LocalUserDefaultKey.allValues {
             if self.userDefaults.value(forKey: key.rawValue) == nil {
                 self.userDefaults.set(key.defaultValue, forKey: key.rawValue)
             }
         }
     }
 
-    private func restoreDefaults() {
-        for key in UserDefaultKey.allValues {
+    override func restoreDefaults() {
+        super.restoreDefaults()
+
+        for key in LocalUserDefaultKey.allValues {
             self.userDefaults.set(key.defaultValue, forKey: key.rawValue)
         }
     }

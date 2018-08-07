@@ -5,6 +5,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import SwiftKeychainWrapper
 
 class AutoLockStore {
     static let shared = AutoLockStore()
@@ -13,16 +14,19 @@ class AutoLockStore {
     private let dispatcher: Dispatcher
     private let dataStore: DataStore
     private let userDefaults: UserDefaults
+    private let keychainWrapper: KeychainWrapper
 
     var timer: Timer?
     var paused: Bool = false
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard
+         userDefaults: UserDefaults = .standard,
+         keychainWrapper: KeychainWrapper = KeychainWrapper(serviceName: "", accessGroup: Constant.app.group)
     ) {
         self.dispatcher = dispatcher
         self.userDefaults = userDefaults
+        self.keychainWrapper = keychainWrapper
         self.dataStore = dataStore
 
         self.dataStore.locked
@@ -80,22 +84,10 @@ extension AutoLockStore {
                 .take(1)
                 .subscribe(onNext: { (latest: Setting.AutoLock) in
                     switch latest {
-                    case .OneMinute:
-                        self.setTimer(seconds: 60)
-                    case .FiveMinutes:
-                        self.setTimer(seconds: 60 * 5)
-                    case .FifteenMinutes:
-                        self.setTimer(seconds: 60 * 15)
-                    case .ThirtyMinutes:
-                        self.setTimer(seconds: 60 * 30)
-                    case .OneHour:
-                        self.setTimer(seconds: 60 * 60)
-                    case .TwelveHours:
-                        self.setTimer(seconds: 60 * 60 * 12)
-                    case .TwentyFourHours:
-                        self.setTimer(seconds: 60 * 60 * 24)
                     case .Never:
                         self.stopTimer()
+                    default:
+                        self.setTimer(seconds: latest.seconds)
                     }
                     return
                 })
@@ -128,7 +120,7 @@ extension AutoLockStore {
 
         if let timer = self.timer {
             DispatchQueue.main.async {
-                RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
+                RunLoop.current.add(timer, forMode: RunLoop.Mode.default)
             }
         }
     }
@@ -149,7 +141,7 @@ extension AutoLockStore {
 
     @objc private func lockApp() {
         if !paused {
-            self.dispatcher.dispatch(action: DataStoreAction	.lock)
+            self.dispatcher.dispatch(action: DataStoreAction.lock)
             self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
     }
