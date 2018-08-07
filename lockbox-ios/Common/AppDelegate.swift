@@ -5,6 +5,7 @@
 import FxAUtils
 import UIKit
 import Telemetry
+import SwiftKeychainWrapper
 
 let PostFirstRunKey = "firstrun"
 
@@ -12,6 +13,8 @@ let PostFirstRunKey = "firstrun"
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+
+    let keychainWrapper = KeychainWrapper.standard
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
@@ -33,6 +36,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             AccountActionHandler.shared.invoke(.clear)
             DataStoreActionHandler.shared.invoke(.reset)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
+        }
+
+        let previousAppVersion = keychainWrapper.string(forKey: KeychainKey.appVersion.rawValue)
+        let newAppVersion = Constant.app.appVersion
+
+        if previousAppVersion == nil || previousAppVersion != newAppVersion {
+            if let newAppVersion = Constant.app.appVersion {
+                keychainWrapper.set(newAppVersion, forKey: KeychainKey.appVersion.rawValue)
+            }
         }
 
         let navBarImage = UIImage.createGradientImage(
