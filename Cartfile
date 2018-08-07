@@ -8,3 +8,4 @@ github "jrendel/SwiftKeychainWrapper" ~> 3.0
 github "mozilla-mobile/MappaMundi" "master"
 github "mozilla/application-services" "0.2.1"
 github "mozilla-lockbox/lockbox-ios-fxa-sync" "c41fac5a33519e8d9e7fdeb1a57a6ac231fdb832"
+github "adjust/ios_sdk" ~> 4.14.1

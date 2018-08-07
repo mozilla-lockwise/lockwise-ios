@@ -5,6 +5,7 @@
 import FxAUtils
 import UIKit
 import Telemetry
+import AdjustSdk
 
 let PostFirstRunKey = "firstrun"
 
@@ -55,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UITextField.appearance().tintColor = .black
 
         ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.startup)
+        setupAdjust()
         return true
     }
 
@@ -64,5 +66,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.foreground)
+    }
+
+    private func setupAdjust() {
+#if DEBUG
+        let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentSandbox)
+        Adjust.appDidLaunch(config)
+#else
+        let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentProduction)
+        Adjust.appDidLaunch(config)
+#endif
     }
 }
