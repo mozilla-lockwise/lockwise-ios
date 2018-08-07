@@ -1,17 +1,17 @@
 # External Dependencies
 
+With the addition of the Credential Provider API in iOS 12, you will need to use **Xcode 10** (beta 5) and **Swift 4.2** (`swiftlang-1000.0.32.1 clang-1000.10.39`) to work on Lockbox.
+
+And if you are running the beta, and haven't already: `sudo xcode-select --switch` to point to the beta Xcode app
+
 ## Swift frameworks
 
-All Swift frameworks are managed via [Carthage](https://github.com/carthage/carthage). In the home directory for the project, run `carthage update --platform iOS` to fetch & build dependencies.
+All Swift frameworks are managed via [Carthage](https://github.com/carthage/carthage).
 
-**NOTE:**  In some cases, the Swift frameworks might be built using a different version of Swift (e.g., 4.0 versus 4.1) and an error like the following is encountered for the mismatch:
+1. In the home directory for the project, run `carthage update` to fetch dependencies.
 
-```
-	Incompatible Swift version - framework was built with 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2) and the local version is 4.1 (swiftlang-902.0.48 clang-902.0.37.1).
-```
+  You cannot use `--no-use-binaries` with Carthage in this project unless you have the proper Rust environment set up. Documentation is forthcoming on the right way to do this.
 
-If this occurs, run `carthage update --platform iOS --no-use-binaries` to build from sources instead.
+2. Grab a quick ☕️ or 🍵 !!
 
-## C Libraries
-
-Firefox Lockbox for iOS uses [cjose](https://github.com/cisco/cjose) for JOSE encryption & decryption in the FxA OAuth flow. The binaries to support this external dependency are provided along with this code (in the `lockbox-ios/binaries` folder). However, if you find yourself wanting to update this library (or either of its dependencies, Jansson or OpenSSL), navigate to the `scripts` directory and run `./update-dependencies`. NOTE: You will have to build the project at least once for the appropriate `binaries` folder to get un-tarred (or you can do it yourself).
+  -  If you recieve the "Incompatible Swift version" error you may have a different version of Xcode beta then what we've last built against.
