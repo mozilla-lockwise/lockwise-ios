@@ -37,34 +37,34 @@ class ExternalLinkActionSpec: QuickSpec {
             describe("PreferredBrowserSetting") {
                 describe("getPreferredBrowserDeeplink") {
                     it("creates safari deeplinks") {
-                        expect(PreferredBrowserSetting.Safari.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal(self.testUrl))
+                        expect(Setting.PreferredBrowser.Safari.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal(self.testUrl))
                     }
 
                     it("creates firefox deeplinks") {
-                        expect(PreferredBrowserSetting.Firefox.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                        expect(Setting.PreferredBrowser.Firefox.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
                     }
 
                     it("creates focus deeplinks") {
-                        expect(PreferredBrowserSetting.Focus.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                        expect(Setting.PreferredBrowser.Focus.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
                     }
 
                     it("creates chrome https deeplinks") {
-                        expect(PreferredBrowserSetting.Chrome.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("googlechromes://github.com/mozilla-lockbox/lockbox-ios"))
+                        expect(Setting.PreferredBrowser.Chrome.getPreferredBrowserDeeplink(url: self.testUrl)?.absoluteString).to(equal("googlechromes://github.com/mozilla-lockbox/lockbox-ios"))
                     }
 
                     it("creates chrome http deeplinks") {
-                        expect(PreferredBrowserSetting.Chrome.getPreferredBrowserDeeplink(url: "http://mozilla.org")?.absoluteString).to(equal("googlechrome://mozilla.org"))
+                        expect(Setting.PreferredBrowser.Chrome.getPreferredBrowserDeeplink(url: "http://mozilla.org")?.absoluteString).to(equal("googlechrome://mozilla.org"))
                     }
                 }
 
                 describe("canOpenBrowser") {
                     it("tries to open browser") {
-                        expect(PreferredBrowserSetting.Safari.canOpenBrowser(application: self.application)).to(beTrue())
+                        expect(Setting.PreferredBrowser.Safari.canOpenBrowser(application: self.application)).to(beTrue())
                         expect(self.application.canOpenURLArgument?.absoluteString).toNot(beNil())
                     }
 
                     it("uses an http link for chrome") {
-                        expect(PreferredBrowserSetting.Chrome.canOpenBrowser(application: self.application)).to(beTrue())
+                        expect(Setting.PreferredBrowser.Chrome.canOpenBrowser(application: self.application)).to(beTrue())
                         expect(self.application.canOpenURLArgument?.absoluteString).to(equal("googlechrome://mozilla.org"))
                     }
                 }
@@ -79,18 +79,18 @@ class ExternalLinkActionSpec: QuickSpec {
 
                 describe("invoke external link") {
                     it("opens safari with deeplink") {
-                        self.userDefaults.set(PreferredBrowserSetting.Safari.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                        self.userDefaults.set(Setting.PreferredBrowser.Safari.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
                         subject.invoke(ExternalLinkAction(baseURLString: self.testUrl))
                         expect(self.application.openArgument?.absoluteString).to(equal(self.testUrl))
                     }
 
                     it("does not call open on changes to preferred browser setting") {
-                        self.userDefaults.set(PreferredBrowserSetting.Firefox.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                        self.userDefaults.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
                         expect(self.application.openArgument).to(beNil())
                         subject.invoke(ExternalLinkAction(baseURLString: self.testUrl))
                         expect(self.application.openArgument?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
                         self.application.openArgument = nil
-                        self.userDefaults.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+                        self.userDefaults.set(Setting.PreferredBrowser.Focus.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
                         expect(self.application.openArgument).to(beNil())
                         subject.invoke(ExternalLinkAction(baseURLString: self.testUrl))
                         expect(self.application.openArgument?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))

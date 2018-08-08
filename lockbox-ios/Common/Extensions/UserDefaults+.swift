@@ -7,28 +7,28 @@ import RxSwift
 import RxCocoa
 
 extension UserDefaults {
-    func on<T>(setting: SettingKey, type: T.Type) -> Observable<T> {
+    func on<T>(setting: UserDefaultKey, type: T.Type) -> Observable<T> {
         return self.rx.observe(type, setting.rawValue).filterNil()
     }
 }
 
 extension UserDefaults {
-    var onAutoLockTime: Observable<AutoLockSetting> {
+    var onAutoLockTime: Observable<Setting.AutoLock> {
         return self.on(setting: .autoLockTime, type: String.self)
-                .map { AutoLockSetting(rawValue: $0) ?? Constant.setting.defaultAutoLockTimeout }
+                .map { Setting.AutoLock(rawValue: $0) ?? Constant.setting.defaultAutoLock }
     }
 
-    var onPreferredBrowser: Observable<PreferredBrowserSetting> {
+    var onPreferredBrowser: Observable<Setting.PreferredBrowser> {
         return self.on(setting: .preferredBrowser, type: String.self)
-            .map { PreferredBrowserSetting(rawValue: $0) ?? Constant.setting.defaultPreferredBrowser }
+            .map { Setting.PreferredBrowser(rawValue: $0) ?? Constant.setting.defaultPreferredBrowser }
     }
 
     var onRecordUsageData: Observable<Bool> {
         return self.on(setting: .recordUsageData, type: Bool.self)
     }
 
-    var onItemListSort: Observable<ItemListSortSetting> {
+    var onItemListSort: Observable<Setting.ItemListSort> {
         return self.on(setting: .itemListSort, type: String.self)
-            .map { ItemListSortSetting(rawValue: $0) ?? Constant.setting.defaultItemListSort}
+            .map { Setting.ItemListSort(rawValue: $0) ?? Constant.setting.defaultItemListSort }
     }
 }

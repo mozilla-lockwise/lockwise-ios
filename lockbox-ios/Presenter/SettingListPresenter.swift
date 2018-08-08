@@ -15,11 +15,11 @@ protocol SettingListViewProtocol: class, AlertControllerView {
 
 class SettingListPresenter {
     weak private var view: SettingListViewProtocol?
+    private let dispatcher: Dispatcher
     private let routeActionHandler: RouteActionHandler
-    private let settingActionHandler: SettingActionHandler
     private let dataStoreActionHandler: DataStoreActionHandler
     private let linkActionHandler: LinkActionHandler
-    private let userDefaults: UserDefaults
+    private let userDefaultStore: UserDefaultStore
     private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
 
@@ -41,7 +41,7 @@ class SettingListPresenter {
 
     lazy private(set) var onUsageDataSettingChanged: AnyObserver<Bool> = {
         return Binder(self) { target, enabled in
-            target.settingActionHandler.invoke(SettingAction.recordUsageData(enabled: enabled))
+            target.dispatcher.dispatch(action: SettingAction.recordUsageData(enabled: enabled))
         }.asObserver()
     }()
 
@@ -84,24 +84,28 @@ class SettingListPresenter {
     }
 
     init(view: SettingListViewProtocol,
+         dispatcher: Dispatcher = .shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
-         userDefaults: UserDefaults = UserDefaults.standard,
+         userDefaultStore: UserDefaultStore = .shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
+        self.dispatcher = dispatcher
         self.routeActionHandler = routeActionHandler
-        self.settingActionHandler = settingActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.linkActionHandler = linkActionHandler
-        self.userDefaults = userDefaults
+        self.userDefaultStore = userDefaultStore
         self.biometryManager = biometryManager
     }
 
     func onViewReady() {
-        let settingsConfigDriver = Observable.combineLatest(self.userDefaults.onAutoLockTime, self.userDefaults.onPreferredBrowser, self.userDefaults.onRecordUsageData) // swiftlint:disable:this line_length
-                .map { (latest: (AutoLockSetting, PreferredBrowserSetting, Bool)) -> [SettingSectionModel] in
+        let settingsConfigDriver = Observable.combineLatest(
+                        self.userDefaultStore.autoLockTime,
+                        self.userDefaultStore.preferredBrowser,
+                        self.userDefaultStore.recordUsageData
+                )
+                .map { (latest: (Setting.AutoLock, Setting.PreferredBrowser, Bool)) -> [SettingSectionModel] in
                     return self.getSettings(
                             autoLock: latest.0,
                             preferredBrowser: latest.1,
@@ -130,8 +134,8 @@ class SettingListPresenter {
 
 extension SettingListPresenter {
     fileprivate func getSettings(
-            autoLock: AutoLockSetting?,
-            preferredBrowser: PreferredBrowserSetting,
+            autoLock: Setting.AutoLock?,
+            preferredBrowser: Setting.PreferredBrowser,
             usageDataEnabled: Bool) -> [SettingSectionModel] {
 
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [

@@ -69,28 +69,28 @@ class AutoLockStoreSpec: QuickSpec {
             describe("foregrounding app") {
                 describe("when the app is on a webview") {
                     beforeEach {
-                        self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: SettingKey.autoLockTimerDate.rawValue)
-                        self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+                        self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                         self.dispatcher.registerStub.onNext(ExternalWebsiteRouteAction(urlString: "www.mozilla.org", title: "moz", returnRoute: MainRouteAction.list))
                         self.dispatcher.registerStub.onNext(LifecycleAction.foreground)
                     }
 
                     it("locks the app") {
                         expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.lock))
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
 
                 describe("when the app is not on a webview") {
                     beforeEach {
-                        self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: SettingKey.autoLockTimerDate.rawValue)
-                        self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+                        self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                         self.dispatcher.registerStub.onNext(LifecycleAction.foreground)
                     }
 
                     it("locks the app") {
                         expect(self.dataStoreActionHandler.action).to(equal(.lock))
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
             }
@@ -100,7 +100,7 @@ class AutoLockStoreSpec: QuickSpec {
                     describe("auto lock timer is a time interval") {
                         beforeEach {
                             self.dataStore.lockedStub.onNext(true)
-                            self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                             self.dataStore.lockedStub.onNext(false)
                         }
 
@@ -109,16 +109,16 @@ class AutoLockStoreSpec: QuickSpec {
                         }
 
                         it("sets the timer value from user defaults") {
-                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).toNot(beNil())
+                            expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).toNot(beNil())
                         }
                     }
 
-                    it("doesn't set timer for AutoLockSetting.Never") {
+                    it("doesn't set timer for Setting.AutoLock.Never") {
                         self.dataStore.lockedStub.onNext(true)
-                        self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                        self.userDefaults.set(Setting.AutoLock.Never.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                         self.dataStore.lockedStub.onNext(false)
                         expect(self.subject.timer?.isValid).to(beFalsy())
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
 
@@ -129,7 +129,7 @@ class AutoLockStoreSpec: QuickSpec {
 
                     it("stops the timer") {
                         expect(self.subject.timer?.isValid).to(beFalsy())
-                        expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                        expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
             }
@@ -138,7 +138,7 @@ class AutoLockStoreSpec: QuickSpec {
                 var fireDate: TimeInterval?
 
                 beforeEach {
-                    self.userDefaults.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                    self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                     self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .FiveMinutes))
                     fireDate = self.subject.timer?.fireDate.timeIntervalSince1970
                 }
@@ -146,19 +146,19 @@ class AutoLockStoreSpec: QuickSpec {
                 describe("autolocksetting specifically") {
                     describe("to Never") {
                         beforeEach {
-                            self.userDefaults.set(AutoLockSetting.Never.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            self.userDefaults.set(Setting.AutoLock.Never.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                             self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .Never))
                         }
 
                         it("stops the timer") {
                             expect(self.subject.timer?.isValid).to(beFalse())
-                            expect(self.userDefaults.value(forKey: SettingKey.autoLockTimerDate.rawValue)).to(beNil())
+                            expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                         }
                     }
 
                     describe("to different time interval") {
                         beforeEach {
-                            self.userDefaults.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+                            self.userDefaults.set(Setting.AutoLock.OneHour.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                             self.dispatcher.registerStub.onNext(SettingAction.autoLockTime(timeout: .OneHour))
                         }
 
@@ -176,7 +176,7 @@ class AutoLockStoreSpec: QuickSpec {
                         self.dispatcher.dispatch(action: action)
                     }
                     it("resets the timer, but does not clear the fireDate") {
-                        let newFireDate = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
+                        let newFireDate = self.userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
                         expect(newFireDate).to(equal(fireDate))
                     }
                 }
