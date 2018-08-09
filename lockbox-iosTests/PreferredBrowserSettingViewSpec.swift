@@ -20,7 +20,7 @@ class PreferredBrowserSettingViewSpec: QuickSpec {
             self.onViewReadyCalled = true
         }
 
-        override var itemSelectedObserver: AnyObserver<PreferredBrowserSetting?> {
+        override var itemSelectedObserver: AnyObserver<Setting.PreferredBrowser?> {
             return Binder(self) { target, _ in
                 target.onItemSelectedActionDispatched = true
                 }.asObserver()
@@ -51,9 +51,9 @@ class PreferredBrowserSettingViewSpec: QuickSpec {
             let configDriver = PublishSubject<[PreferredBrowserSettingSectionModel]>()
 
             let sectionModels = [PreferredBrowserSettingSectionModel(model: 0, items: [
-                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox, isChecked: false, valueWhenChecked: PreferredBrowserSetting.Firefox),
-                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari, isChecked: true, valueWhenChecked: PreferredBrowserSetting.Safari),
-                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus, isChecked: false, valueWhenChecked: PreferredBrowserSetting.Focus)
+                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox, isChecked: false, valueWhenChecked: Setting.PreferredBrowser.Firefox),
+                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari, isChecked: true, valueWhenChecked: Setting.PreferredBrowser.Safari),
+                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus, isChecked: false, valueWhenChecked: Setting.PreferredBrowser.Focus)
                 ])]
 
             sectionModels[0].items[2].enabled = false

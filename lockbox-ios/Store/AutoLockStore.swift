@@ -81,7 +81,7 @@ extension AutoLockStore {
     private func setupTimer() {
         self.userDefaults.onAutoLockTime
                 .take(1)
-                .subscribe(onNext: { (latest: AutoLockSetting) in
+                .subscribe(onNext: { (latest: Setting.AutoLock) in
                     switch latest {
                     case .OneMinute:
                         self.setTimer(seconds: 60)
@@ -106,7 +106,7 @@ extension AutoLockStore {
     }
 
     private func setTimer(seconds: Int) {
-        let timerValue = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
+        let timerValue = self.userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         if timerValue != 0 && timerValue > Date().timeIntervalSince1970 {
             self.timer = Timer(fireAt: Date(timeIntervalSince1970: timerValue),
                     interval: 0,
@@ -124,7 +124,7 @@ extension AutoLockStore {
                     repeats: false)
 
             self.userDefaults.set(self.timer?.fireDate.timeIntervalSince1970,
-                    forKey: SettingKey.autoLockTimerDate.rawValue)
+                    forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
 
         paused = false
@@ -146,14 +146,14 @@ extension AutoLockStore {
             timer.invalidate()
         }
         if reset {
-            self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+            self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
     }
 
     @objc private func lockApp() {
         if !paused {
             self.dataStoreActionHandler.invoke(.lock)
-            self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+            self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
     }
 }

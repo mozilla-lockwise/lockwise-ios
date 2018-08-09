@@ -78,9 +78,9 @@ extension PreferredBrowserSettingView {
     private func setupDelegate() {
         if let presenter = self.presenter {
             self.tableView.rx.itemSelected
-                .map { (indexPath) -> PreferredBrowserSetting? in
+                .map { (indexPath) -> Setting.PreferredBrowser? in
                     self.tableView.deselectRow(at: indexPath, animated: true)
-                    return self.dataSource?[indexPath].valueWhenChecked as? PreferredBrowserSetting
+                    return self.dataSource?[indexPath].valueWhenChecked as? Setting.PreferredBrowser
                 }.bind(to: presenter.itemSelectedObserver)
                 .disposed(by: self.disposeBag)
         }

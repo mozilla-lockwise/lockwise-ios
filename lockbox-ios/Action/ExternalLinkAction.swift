@@ -55,7 +55,7 @@ class LinkActionHandler: ActionHandler {
     private func openUrl(string url: String) {
         self.userDefaults.onPreferredBrowser
             .take(1)
-            .subscribe(onNext: { (latest: PreferredBrowserSetting) in
+            .subscribe(onNext: { (latest: Setting.PreferredBrowser) in
                 latest.openUrl(url: url, application: self.application)
             })
             .disposed(by: self.disposeBag)
@@ -65,65 +65,6 @@ class LinkActionHandler: ActionHandler {
         if let settingsURL = URL(string: action.toString()),
            self.application.canOpenURL(settingsURL) {
             self.application.open(settingsURL, options: [:], completionHandler: nil)
-        }
-    }
-}
-
-enum PreferredBrowserSetting: String {
-    case Chrome
-    case Firefox
-    case Focus
-    case Safari
-    case Klar
-
-    func getPreferredBrowserDeeplink(url: String) -> URL? {
-        guard let encodedString = url.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return nil }
-
-        switch self {
-        case .Safari:
-            return URL(string: url)
-        case .Firefox:
-            return URL(string: "firefox://open-url?url=\(encodedString)")
-        case .Focus:
-            return URL(string: "firefox-focus://open-url?url=\(encodedString)")
-        case .Chrome:
-            let split = url.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false)
-            let urlWithoutScheme = split[1]
-            let chromeScheme = split[0] == "http" ? "googlechrome:" : "googlechromes:"
-            return URL(string: "\(chromeScheme)\(urlWithoutScheme)")
-        case .Klar:
-            return URL(string: "firefox-klar://open-url?url=\(encodedString)")
-        }
-    }
-
-    func canOpenBrowser(application: OpenUrlProtocol = UIApplication.shared) -> Bool {
-        if let url = self.getPreferredBrowserDeeplink(url: "http://mozilla.org") {
-            return application.canOpenURL(url)
-        }
-
-        return false
-    }
-
-    func openUrl(url: String,
-                 application: OpenUrlProtocol = UIApplication.shared,
-                 completion: ((Bool) -> Swift.Void)? = nil) {
-        if let urlToOpen = self.getPreferredBrowserDeeplink(url: url) {
-            application.open(urlToOpen, options: [:], completionHandler: completion)
-        }
-    }
-
-    func toString() -> String {
-        switch self {
-        case .Safari:
-            return Constant.string.settingsBrowserSafari
-        case .Chrome:
-            return Constant.string.settingsBrowserChrome
-        case .Firefox:
-            return Constant.string.settingsBrowserFirefox
-        case .Focus:
-            return Constant.string.settingsBrowserFocus
-        case .Klar:
-            return Constant.string.settingsBrowserKlar
         }
     }
 }
