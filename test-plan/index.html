@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Test Plan - Firefox Lockbox for iOS</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Test Plan";
+    var mkdocs_page_input_path = "test-plan.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Firefox Lockbox for iOS</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Introduction</span>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../release-notes/">Release Notes</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../contributing/">Contributing</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../metrics/">Telemetry and Metrics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Developer Guides</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../install/">Build and Install</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../architecture/">Architecture</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../updating_libraries/">Dependencies</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../releases/">Release Instructions</a>
+                </li>
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Firefox Lockbox for iOS</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Test Plan</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/test-plan.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="test-plan">Test Plan</h1>
+<p><em>Test plan for <a href="https://github.com/mozilla-lockbox/lockbox-ios">Firefox Lockbox for iOS</a></em></p>
+<p>See also: <a href="https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan">https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan</a></p>
+<h2 id="overview">Overview</h2>
+<p>Firefox Lockbox for iOS is a new mobile iOS app developed with a pre-defined set of P1 "must have" requirements and a target release at the end of June in the Apple App Store and in Test Pilot.</p>
+<p>Mozilla Product Integrity provides embedded QA to work with the team throughout the weekly sprints allowing for ongoing testing and feedback, issue triage, and continuous test plan development and end-to-end regression testing in order to accommodate a quick release schedule and submission to the App Store by end of May.</p>
+<h3 id="ownership">Ownership</h3>
+<ul>
+<li>Product Integrity: Catalin Suciu, Simion Basca, Isabel Rios</li>
+<li>Product Manager: Sandy Sage</li>
+<li>Engineering Manager: Devin Reams</li>
+<li>Engineering Leads: Sasha Heinen, James Hugman, Matt Miller</li>
+</ul>
+<h3 id="entry-criteria">Entry Criteria</h3>
+<ul>
+<li>PI has access to all product documentation, designs, code</li>
+<li>The iOS app code is available on GitHub and builds:</li>
+<li>locally via Xcode (Branch and Release)</li>
+<li>on device via buddybuild (Branch and Release)</li>
+<li>on device via TestFlight (Release)</li>
+</ul>
+<h3 id="exit-criteria">Exit Criteria</h3>
+<ul>
+<li>All test suites against P1 "must have" features have performed</li>
+<li>All bugs related to the P1 "must have" features have been triaged</li>
+<li>All bugs resolved fixed have been verified</li>
+</ul>
+<h2 id="test-matrix">Test Matrix</h2>
+<ul>
+<li>Devices to be tested (no iPad):</li>
+<li>iPhone X</li>
+<li>iPhone 8 and 8 Plus</li>
+<li>iPhone 7 and 7 Plus</li>
+<li>iPhone SE</li>
+<li>Major operating system versions to be tested (current and one prior):</li>
+<li>iOS 11 (including point-release betas)</li>
+<li>iOS 10</li>
+</ul>
+<h2 id="test-suites">Test Suites</h2>
+<ul>
+<li>Documented in TestRail: <a href="https://testrail.stage.mozaws.net/index.php?/projects/overview/52">https://testrail.stage.mozaws.net/index.php?/projects/overview/52</a> (internal Mozilla tool)</li>
+<li>Performed twice-weekly</li>
+<li>Covers all <a href="https://docs.google.com/document/d/1q2xYGsoB0ylfir-Bkg8BwP4Aj1H6OjjJHW2FmX-JexU/edit#">P1 "must have" Requirements</a> (internal Mozilla document)</li>
+<li>01 Sign in to Sync</li>
+<li>02 Onboarding</li>
+<li>03 Access saved entries</li>
+<li>04 No entries support</li>
+<li>05 Biometrics to lock/unlock</li>
+<li>06 View entry</li>
+<li>07 Copy / paste retrieval</li>
+<li>08 View password</li>
+<li>09 Account management</li>
+<li>10 Support</li>
+</ul>
+<h2 id="accessibility">Accessibility</h2>
+<p>There are a number of best practices and accessibility features available to iOS developers and we intend to build and test for:</p>
+<h2 id="1-voiceover-support">1. VoiceOver support</h2>
+<p>The reading of on-screen interface items and objects. Testing for:</p>
+<ul>
+<li>All on-screen navigation and button titles are read</li>
+<li>All on-screen alerts and popovers (interrupting the interface) are read</li>
+<li>All labels and text elements on screen are read</li>
+<li>Interaction elements like input boxes and filters have meaningful instructions</li>
+<li>Links to open websites are clearly indicated and read</li>
+</ul>
+<h2 id="2-user-interface-design">2. User interface design</h2>
+<p>The interface is legible and tappable by designing and testing for:</p>
+<ul>
+<li>adequate color contrasts (e.g.: no light text on light background)</li>
+<li>button and input sizes (e.g.: large enough to tap into easily and consistently)</li>
+<li>text sizes follow system adjustment (i.e. respect "Larger Text" setting)</li>
+</ul>
+<p><strong>MVP Testing and Results documented at:</strong><br />
+https://github.com/mozilla-lockbox/lockbox-ios/issues/441</p>
+<h3 id="out-of-scope">Out of Scope</h3>
+<ol>
+<li>Internal <a href="https://github.com/mozilla-lockbox/lockbox-ios/issues/202">metrics/analytics</a> review and testing (see <a href="../metrics/">metrics.md</a>)</li>
+<li>Internal <a href="https://github.com/mozilla-lockbox/lockbox-ios/issues/51">security review</a> (performed separately)</li>
+</ol>
+<hr />
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Dependencies - Firefox Lockbox for iOS</title>
+  <title>Adding new UI or features to Firefox Lockbox - Firefox Lockbox for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Dependencies";
-    var mkdocs_page_input_path = "updating_libraries.md";
+    var mkdocs_page_name = "Adding new UI or features to Firefox Lockbox";
+    var mkdocs_page_input_path = "new-ui.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -80,23 +80,9 @@
                     
     <a class="" href="../architecture/">Architecture</a>
                 </li>
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Dependencies</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l3"><a href="#external-dependencies">External Dependencies</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l4" href="#swift-frameworks">Swift frameworks</a></li>
-        
-            <li><a class="toctree-l4" href="#c-libraries">C Libraries</a></li>
-        
-        </ul>
-    
-
-    </ul>
+    <a class="" href="../updating_libraries/">Dependencies</a>
                 </li>
                 <li class="">
                     
@@ -126,15 +112,11 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Developer Guides &raquo;</li>
-        
-      
     
-    <li>Dependencies</li>
+    <li>Adding new UI or features to Firefox Lockbox</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/updating_libraries.md"
+        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/new-ui.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -144,29 +126,22 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="external-dependencies">External Dependencies</h1>
-<h2 id="swift-frameworks">Swift frameworks</h2>
-<p>All Swift frameworks are managed via <a href="https://github.com/carthage/carthage">Carthage</a>. In the home directory for the project, run <code>carthage update --platform iOS</code> to fetch &amp; build dependencies.</p>
-<p><strong>NOTE:</strong>  In some cases, the Swift frameworks might be built using a different version of Swift (e.g., 4.0 versus 4.1) and an error like the following is encountered for the mismatch:</p>
-<pre><code>    Incompatible Swift version - framework was built with 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2) and the local version is 4.1 (swiftlang-902.0.48 clang-902.0.37.1).
-</code></pre>
-
-<p>If this occurs, run <code>carthage update --platform iOS --no-use-binaries</code> to build from sources instead.</p>
-<h2 id="c-libraries">C Libraries</h2>
-<p>Firefox Lockbox for iOS uses <a href="https://github.com/cisco/cjose">cjose</a> for JOSE encryption &amp; decryption in the FxA OAuth flow. The binaries to support this external dependency are provided along with this code (in the <code>lockbox-ios/binaries</code> folder). However, if you find yourself wanting to update this library (or either of its dependencies, Jansson or OpenSSL), navigate to the <code>scripts</code> directory and run <code>./update-dependencies</code>. NOTE: You will have to build the project at least once for the appropriate <code>binaries</code> folder to get un-tarred (or you can do it yourself).</p>
+                <h1 id="adding-new-ui-or-features-to-firefox-lockbox">Adding new UI or features to Firefox Lockbox</h1>
+<h2 id="testing">Testing</h2>
+<p>Is it covered by XCUITests already? If not, make sure to add <code>accessibilityID</code>s to all relevant view components in the form:
+- <code>descriptiveCamelCase.button</code> for buttons
+- <code>descriptiveCamelCase.textField</code> for text fields
+- etc...</p>
+<h2 id="accessibility">Accessibility</h2>
+<p>Have you tried using VoiceOver to access your feature? Do all important and / or visible view components have <code>accessibilityLabel</code>s?</p>
+<h2 id="localization">Localization</h2>
+<p>Does your feature have strings? They should probably go in <code>Constants.swift</code> (more recommendations tbd on localization infrastructure for Lockbox)</p>
+<h2 id="user-defaults">User Defaults</h2>
+<p>Are you adding a new value to <code>UserDefaults</code>? Is there an upgrade path for users that don't have the value yet?</p>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../releases/" class="btn btn-neutral float-right" title="Release Instructions">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../architecture/" class="btn btn-neutral" title="Architecture"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -192,10 +167,6 @@
           <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../architecture/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../releases/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
