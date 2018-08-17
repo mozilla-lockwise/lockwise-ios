@@ -6,16 +6,15 @@ import Foundation
 import RxSwift
 import RxCocoa
 import FxAClient
-import SwiftyJSON
 import SwiftKeychainWrapper
 import WebKit
 
 enum KeychainKey: String {
     // note: these additional keys are holdovers from the previous Lockbox-owned style of
     // authentication
-    case email, displayName, avatarURL, accountJSON, appVersion
+    case email, displayName, avatarURL, accountJSON, appVersionCode
 
-    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .appVersion]
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .appVersionCode]
 }
 
 class AccountStore {
@@ -32,7 +31,7 @@ class AccountStore {
     private var _loginURL = ReplaySubject<URL>.create(bufferSize: 1)
     private var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
     private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
-    private var _oldAccountPresence = ReplaySubject<Bool>.create(bufferSize: 1)
+    private var _oldAccountPresence = BehaviorRelay<Bool>(value: false)
 
     public var loginURL: Observable<URL> {
         return _loginURL.asObservable()
@@ -94,21 +93,22 @@ class AccountStore {
             }
         }
 
-        self.checkOldAccount()
+        self.dispatcher.register
+            .filterByType(class: LifecycleAction.self)
+            .subscribe(onNext: { action in
+                guard case let .upgrade(previous, _) = action else {
+                        return
+                }
+
+                if previous <= 1 {
+                    self._oldAccountPresence.accept(true)
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 
 extension AccountStore {
-    private func checkOldAccount() {
-        if self.keychainWrapper.string(forKey: KeychainKey.email.rawValue) != nil ||
-                self.keychainWrapper.string(forKey: KeychainKey.displayName.rawValue) != nil ||
-                self.keychainWrapper.string(forKey: KeychainKey.avatarURL.rawValue) != nil {
-            self._oldAccountPresence.onNext(true)
-        } else {
-            self._oldAccountPresence.onNext(false)
-        }
-    }
-
     private func generateLoginURL() {
         self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
             if let url = url {
@@ -159,7 +159,7 @@ extension AccountStore {
             self.webData.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records) { }
         }
 
-        self._oldAccountPresence.onNext(false)
+        self._oldAccountPresence.accept(false)
     }
 
     private func oauthLogin(_ navigationURL: URL) {

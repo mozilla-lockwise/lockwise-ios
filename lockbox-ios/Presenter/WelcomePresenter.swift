@@ -81,18 +81,20 @@ class WelcomePresenter {
 
         self.accountStore.hasOldAccountInformation
             .filter { $0 }
-            .subscribe { _ in
-                self.view?.displayAlertController(
-                        buttons: [
-                            AlertActionButtonConfiguration(
-                                    title: Constant.string.continueText,
-                                    tapObserver: self.oauthLoginConfirmationObserver,
-                                    style: .default)
-                        ],
-                        title: Constant.string.reauthenticationRequired,
-                        message: Constant.string.appUpdateDisclaimer,
-                        style: .alert)
-            }
+            .subscribe(onNext: {  [weak self] _ in
+                self?.showOAuthUpgradeDialog()
+            })
+            .disposed(by: self.disposeBag)
+    }
+
+    func onViewDidAppear() {
+        self.accountStore.hasOldAccountInformation
+            .take(1)
+            .filter { $0 }
+            .subscribe(onNext: {  [weak self] _ in
+                self?.showOAuthUpgradeDialog()
+
+            })
             .disposed(by: self.disposeBag)
     }
 
@@ -220,5 +222,18 @@ extension WelcomePresenter {
                     .bind(to: observer)
                     .disposed(by: self.disposeBag)
         }
+    }
+
+    func showOAuthUpgradeDialog() {
+        self.view?.displayAlertController(
+            buttons: [
+                AlertActionButtonConfiguration(
+                    title: Constant.string.continueText,
+                    tapObserver: self.oauthLoginConfirmationObserver,
+                    style: .default)
+            ],
+            title: Constant.string.reauthenticationRequired,
+            message: Constant.string.appUpdateDisclaimer,
+            style: .alert)
     }
 }

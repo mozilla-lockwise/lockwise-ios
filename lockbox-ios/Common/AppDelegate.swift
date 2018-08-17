@@ -37,20 +37,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
 
         // This key will not be set on the first run of the application, only on subsequent runs.
-        if UserDefaults.standard.string(forKey: PostFirstRunKey) == nil {
+        let firstRun = UserDefaults.standard.string(forKey: PostFirstRunKey) == nil
+        if firstRun {
             Dispatcher.shared.dispatch(action: AccountAction.clear)
             Dispatcher.shared.dispatch(action: DataStoreAction.reset)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
         }
 
-        let previousAppVersion = keychainWrapper.string(forKey: KeychainKey.appVersion.rawValue)
-        let newAppVersion = Constant.app.appVersion
-
-        if previousAppVersion == nil || previousAppVersion != newAppVersion {
-            if let newAppVersion = Constant.app.appVersion {
-                keychainWrapper.set(newAppVersion, forKey: KeychainKey.appVersion.rawValue)
-            }
+        if !firstRun {
+            self.checkForUpgrades()
         }
+        keychainWrapper.set(Constant.app.appVersionCode, forKey: KeychainKey.appVersionCode.rawValue)
 
         let navBarImage = UIImage.createGradientImage(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
@@ -94,5 +91,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentProduction)
         Adjust.appDidLaunch(config)
 #endif
+    }
+}
+
+extension AppDelegate {
+    func checkForUpgrades() {
+        let current = Constant.app.appVersionCode
+        let previous = 1//keychainWrapper.integer(forKey: KeychainKey.appVersionCode.rawValue) ?? 1
+
+        if previous == 1, !keychainWrapper.hasValue(forKey: KeychainKey.accountJSON.rawValue) {
+            return
+        }
+
+        if previous < current {
+            // At the moment, this can be quite simple, since we don't have many migrations,
+            // and we don't have many versions.
+            // We may want to consider another lifecycle event (.upgradeComplete) to upgrade in stages
+            // e.g. between version 1 to 3 may need an asynchronous upgrade event to go from 1 to 2, then from 2 to 3.
+            Dispatcher.shared.dispatch(action: LifecycleAction.upgrade(from: previous, to: current))
+        }
     }
 }

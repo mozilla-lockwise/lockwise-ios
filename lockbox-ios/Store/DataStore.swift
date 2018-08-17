@@ -163,6 +163,8 @@ class DataStore {
                         self.profile.syncManager?.applicationDidBecomeActive()
                     case .startup:
                         break
+                    case let .upgrade(previous, _):
+                        self.upgradeDataStore(from: previous)
                     }
                 })
                 .disposed(by: disposeBag)
@@ -243,6 +245,10 @@ extension DataStore {
             return syncManager.syncEverything(why: .backgrounded)
         }
 
+        func disconnect() -> Success {
+            return self.profile.removeAccount()
+        }
+
         func resetProfile() {
             self.profile = profileFactory(true)
             self.initializeProfile()
@@ -250,7 +256,7 @@ extension DataStore {
             self.storageStateSubject.onNext(.Unprepared)
         }
 
-        stopSyncing() >>== resetProfile
+        stopSyncing() >>== disconnect >>== resetProfile
     }
 }
 
@@ -426,5 +432,11 @@ extension DataStore {
                     }
                 })
                 .disposed(by: self.disposeBag)
+    }
+
+    func upgradeDataStore(from previous: Int) {
+        if previous <= 1 {
+            self.reset()
+        }
     }
 }

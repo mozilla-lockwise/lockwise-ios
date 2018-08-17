@@ -47,6 +47,7 @@ class RootPresenter {
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let accountStore: AccountStore
     fileprivate let userDefaultStore: UserDefaultStore
+    fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
 
@@ -59,6 +60,7 @@ class RootPresenter {
          telemetryStore: TelemetryStore = TelemetryStore.shared,
          accountStore: AccountStore = AccountStore.shared,
          userDefaultStore: UserDefaultStore = .shared,
+         lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
          biometryManager: BiometryManager = BiometryManager()
     ) {
@@ -69,6 +71,7 @@ class RootPresenter {
         self.telemetryStore = telemetryStore
         self.accountStore = accountStore
         self.userDefaultStore = userDefaultStore
+        self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
@@ -87,16 +90,29 @@ class RootPresenter {
                 }
                 .disposed(by: self.disposeBag)
 
-        Observable.combineLatest(self.dataStore.locked, self.accountStore.hasOldAccountInformation, self.dataStore.storageState)
-                .filter { !$0.1 && $0.2 != LoginStoreState.Unprepared }
-                .map { $0.0 }
-                .distinctUntilChanged()
-                .subscribe(onNext: { locked in
-                    let route: RouteAction = locked ? LoginRouteAction.welcome : MainRouteAction.list
+        self.dataStore.storageState
+            .subscribe(onNext: { storageState in
+                switch storageState {
+                case .Unprepared, .Locked:
+                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                case .Unlocked:
+                    self.routeActionHandler.invoke(MainRouteAction.list)
+                default:
+                    break
+                }
+            })
+            .disposed(by: self.disposeBag)
 
-                    self.routeActionHandler.invoke(route)
-                })
-                .disposed(by: self.disposeBag)
+        Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
+            .filter { $0.1 == LoginStoreState.Unprepared }
+            .map { $0.0 }
+            .distinctUntilChanged()
+            .subscribe(onNext: { syncState in
+                if syncState == .NotSyncable {
+                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
