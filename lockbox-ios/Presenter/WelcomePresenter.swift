@@ -36,7 +36,6 @@ class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
     private let dispatcher: Dispatcher
-    private let linkActionHandler: LinkActionHandler
     private let accountStore: AccountStore
     private let dataStore: DataStore
     private let lifecycleStore: LifecycleStore
@@ -45,14 +44,12 @@ class WelcomePresenter {
 
     init(view: WelcomeViewProtocol,
          dispatcher: Dispatcher = .shared,
-         linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
          accountStore: AccountStore = AccountStore.shared,
          dataStore: DataStore = DataStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.dispatcher = dispatcher
-        self.linkActionHandler = linkActionHandler
         self.accountStore = accountStore
         self.dataStore = dataStore
         self.lifecycleStore = lifecycleStore
@@ -120,7 +117,7 @@ extension WelcomePresenter {
 
     private var setPasscodeButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.linkActionHandler.invoke(SettingLinkAction.touchIDPasscode)
+            target.dispatcher.dispatch(action: SettingLinkAction.touchIDPasscode)
         }.asObserver()
     }
 

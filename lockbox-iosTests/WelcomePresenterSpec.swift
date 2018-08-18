@@ -86,14 +86,6 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
-    class FakeLinkActionHandler: LinkActionHandler {
-        var invokeArgument: LinkAction?
-
-        override func invoke(_ action: LinkAction) {
-            self.invokeArgument = action
-        }
-    }
-
     class FakeAccountStore: AccountStore {
         var fakeProfile = PublishSubject<Profile?>()
 
@@ -145,7 +137,6 @@ class WelcomePresenterSpec: QuickSpec {
 
     private var view: FakeWelcomeView!
     private var dispatcher: FakeDispatcher!
-    private var linkActionHandler: FakeLinkActionHandler!
     private var accountStore: FakeAccountStore!
     private var dataStore: FakeDataStore!
     private var lifecycleStore: FakeLifecycleStore!
@@ -166,7 +157,6 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view.lockImageHiddenStub = self.scheduler.createObserver(Bool.self)
 
                 self.dispatcher = FakeDispatcher()
-                self.linkActionHandler = FakeLinkActionHandler()
                 self.accountStore = FakeAccountStore()
                 self.dataStore = FakeDataStore()
                 self.lifecycleStore = FakeLifecycleStore()
@@ -174,7 +164,6 @@ class WelcomePresenterSpec: QuickSpec {
                 self.subject = WelcomePresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
-                        linkActionHandler: self.linkActionHandler,
                         accountStore: self.accountStore,
                         dataStore: self.dataStore,
                         lifecycleStore: self.lifecycleStore,
@@ -247,8 +236,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("routes to the touchid / passcode settings page") {
-                                let action = self.linkActionHandler.invokeArgument as! SettingLinkAction
-                                expect(action).to(equal(SettingLinkAction.touchIDPasscode))
+                                let action = self.dispatcher.dispatchedActions.popLast() as! SettingLinkAction
+                                expect(action).to(equal(.touchIDPasscode))
                             }
                         }
                     }

@@ -87,21 +87,12 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeExternalLinkActionHandler: LinkActionHandler {
-        var invokedAction: LinkAction?
-
-        override func invoke(_ action: LinkAction) {
-            self.invokedAction = action
-        }
-    }
-
     private var view: FakeItemDetailView!
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
     private var copyActionHandler: FakeCopyActionHandler!
-    private var externalLinkHandler: FakeExternalLinkActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -115,7 +106,6 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
                 self.copyActionHandler = FakeCopyActionHandler()
-                self.externalLinkHandler = FakeExternalLinkActionHandler()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
@@ -123,8 +113,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
                         copyDisplayStore: self.copyDisplayStore,
-                        copyActionHandler: self.copyActionHandler,
-                        externalLinkActionHandler: self.externalLinkHandler
+                        copyActionHandler: self.copyActionHandler
                 )
             }
 
@@ -285,8 +274,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                         }
 
                         it("dispatches the externalLink action") {
-                            expect(self.externalLinkHandler.invokedAction).notTo(beNil())
-                            let action = self.externalLinkHandler.invokedAction as! ExternalLinkAction
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                            let action = self.dispatcher.dispatchActionArgument as! ExternalLinkAction
                             expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
                         }
                     }

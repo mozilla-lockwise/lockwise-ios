@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         _ = DataStore.shared
         _ = AutoLockStore.shared
+        _ = ExternalLinkStore.shared
         return true
     }
 

@@ -24,7 +24,6 @@ class ItemDetailPresenter {
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyConfirmationDisplayStore
     private var copyActionHandler: CopyActionHandler
-    private var externalLinkActionHandler: LinkActionHandler
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -70,7 +69,7 @@ class ItemDetailPresenter {
                         .take(1)
                         .subscribe(onNext: { item in
                             if let origin = item?.hostname {
-                                target.externalLinkActionHandler.invoke(ExternalLinkAction(baseURLString: origin))
+                                target.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: origin))
                             }
                         })
                         .disposed(by: target.disposeBag)
@@ -83,15 +82,13 @@ class ItemDetailPresenter {
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
          copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
-         copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
-         externalLinkActionHandler: LinkActionHandler = LinkActionHandler.shared) {
+         copyActionHandler: CopyActionHandler = CopyActionHandler.shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
         self.copyActionHandler = copyActionHandler
-        self.externalLinkActionHandler = externalLinkActionHandler
 
         self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }

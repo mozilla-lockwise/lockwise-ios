@@ -69,16 +69,8 @@ class SettingListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeLinkActionHandler: LinkActionHandler {
-        var actionArgument: LinkAction?
-        override func invoke(_ action: LinkAction) {
-            actionArgument = action
-        }
-    }
-
     private var view: FakeSettingsView!
     private var dispatcher: FakeDispatcher!
-    private var linkActionHandler: FakeLinkActionHandler!
     private var userDefaultStore: FakeUserDefaultStore!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
@@ -93,13 +85,11 @@ class SettingListPresenterSpec: QuickSpec {
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
 
                 self.dispatcher = FakeDispatcher()
-                self.linkActionHandler = FakeLinkActionHandler()
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
                                                     dispatcher: self.dispatcher,
-                                                    linkActionHandler: self.linkActionHandler,
                                                     userDefaultStore: self.userDefaultStore,
                                                     biometryManager: self.biometryManager)
             }
@@ -166,7 +156,7 @@ class SettingListPresenterSpec: QuickSpec {
                             }
 
                             it("routes to set passcode") {
-                                expect(self.linkActionHandler.actionArgument as? SettingLinkAction).to(equal(SettingLinkAction.touchIDPasscode))
+                                expect(self.dispatcher.dispatchedActions.popLast() as? SettingLinkAction).to(equal(.touchIDPasscode))
                             }
                         }
                     }
