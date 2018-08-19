@@ -9,7 +9,7 @@ import RxSwift
 
 @testable import Lockbox
 
-class ItemDetailActionHandlerSpec: QuickSpec {
+class ItemDetailActionSpec: QuickSpec {
 
     class FakeDispatcher: Dispatcher {
         var dispatchedAction: Action?
