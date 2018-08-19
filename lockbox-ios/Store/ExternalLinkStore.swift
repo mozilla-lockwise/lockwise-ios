@@ -30,7 +30,7 @@ class ExternalLinkStore {
             .filterByType(class: SettingLinkAction.self)
             .subscribe(onNext: { action in
                 self.openSettings(action)
-            })
+            }).disposed(by: self.disposeBag)
     }
 
     // MARK: - Private
