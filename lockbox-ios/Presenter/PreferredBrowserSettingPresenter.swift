@@ -15,7 +15,6 @@ class PreferredBrowserSettingPresenter {
     private weak var view: PreferredBrowserSettingViewProtocol?
     private let dispatcher: Dispatcher
     private let userDefaultStore: UserDefaultStore
-    private let routeActionHandler: RouteActionHandler
     private let disposeBag = DisposeBag()
 
     lazy var initialSettings = [
@@ -39,12 +38,10 @@ class PreferredBrowserSettingPresenter {
 
     init(view: PreferredBrowserSettingViewProtocol,
          dispatcher: Dispatcher = .shared,
-         userDefaultStore: UserDefaultStore = .shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared) {
+         userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.userDefaultStore = userDefaultStore
-        self.routeActionHandler = routeActionHandler
     }
 
     func onViewReady() {
@@ -72,7 +69,7 @@ class PreferredBrowserSettingPresenter {
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
             }.asObserver()
     }()
 

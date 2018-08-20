@@ -9,7 +9,7 @@ import RxSwift
 
 @testable import Lockbox
 
-class ItemDetailActionHandlerSpec: QuickSpec {
+class ItemDetailActionSpec: QuickSpec {
 
     class FakeDispatcher: Dispatcher {
         var dispatchedAction: Action?
@@ -20,29 +20,8 @@ class ItemDetailActionHandlerSpec: QuickSpec {
     }
 
     private var dispatcher: FakeDispatcher!
-    var subject: ItemDetailActionHandler!
 
     override func spec() {
-        describe("ItemDetailActionHandler") {
-            beforeEach {
-                self.dispatcher = FakeDispatcher()
-                self.subject = ItemDetailActionHandler(dispatcher: self.dispatcher)
-            }
-
-            describe("invoke") {
-                let action = ItemDetailDisplayAction.togglePassword(displayed: false)
-
-                beforeEach {
-                    self.subject.invoke(action)
-                }
-
-                it("passes the action to the dispatcher") {
-                    expect(self.dispatcher.dispatchedAction).notTo(beNil())
-                    let dispatchedAction = self.dispatcher.dispatchedAction as! ItemDetailDisplayAction
-                    expect(dispatchedAction).to(equal(action))
-                }
-            }
-        }
 
         describe("ItemDetailDisplayAction equality") {
             it("togglepassword is equal based on the bool value") {

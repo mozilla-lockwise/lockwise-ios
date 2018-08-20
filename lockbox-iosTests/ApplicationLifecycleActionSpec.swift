@@ -18,28 +18,8 @@ class ApplicationLifecycleActionSpec: QuickSpec {
     }
 
     private var dispatcher: FakeDispatcher!
-    var subject: ApplicationLifecycleActionHandler!
 
     override func spec() {
-        describe("ApplicationLifecycleActionHandler") {
-            beforeEach {
-                self.dispatcher = FakeDispatcher()
-                self.subject = ApplicationLifecycleActionHandler(dispatcher: self.dispatcher)
-            }
-
-            describe("invoke") {
-                beforeEach {
-                    self.subject.invoke(LifecycleAction.foreground)
-                }
-
-                it("dispatches actions to the dispatcher") {
-                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                    let argument = self.dispatcher.actionTypeArgument as! LifecycleAction
-                    expect(argument).to(equal(LifecycleAction.foreground))
-                }
-            }
-        }
-
         describe("LifecycleAction") {
             describe("telemetry") {
                 it("always returns the app event object") {

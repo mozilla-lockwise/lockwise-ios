@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         _ = DataStore.shared
         _ = AutoLockStore.shared
+        _ = ExternalLinkStore.shared
         return true
     }
 
@@ -32,8 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // This key will not be set on the first run of the application, only on subsequent runs.
         if UserDefaults.standard.string(forKey: PostFirstRunKey) == nil {
-            AccountActionHandler.shared.invoke(.clear)
-            DataStoreActionHandler.shared.invoke(.reset)
+            Dispatcher.shared.dispatch(action: AccountAction.clear)
+            Dispatcher.shared.dispatch(action: DataStoreAction.reset)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
         }
 
@@ -65,15 +66,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UITextField.appearance().tintColor = .black
 
-        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.startup)
+        Dispatcher.shared.dispatch(action: LifecycleAction.startup)
         return true
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.background)
+        Dispatcher.shared.dispatch(action: LifecycleAction.background)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        ApplicationLifecycleActionHandler.shared.invoke(LifecycleAction.foreground)
+        Dispatcher.shared.dispatch(action: LifecycleAction.foreground)
     }
 }

@@ -43,9 +43,6 @@ struct SyncStateManual {
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
     private let dispatcher: Dispatcher
-    private let routeActionHandler: RouteActionHandler
-    private let itemListDisplayActionHandler: ItemListDisplayActionHandler
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let dataStore: DataStore
     private let itemListDisplayStore: ItemListDisplayStore
     private let userDefaultStore: UserDefaultStore
@@ -61,42 +58,42 @@ class ItemListPresenter {
                 view.dismissKeyboard()
             }
 
-            target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
+            target.dispatcher.dispatch(action: MainRouteAction.detail(itemId: id))
         }.asObserver()
     }()
 
     lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
         }.asObserver()
     }()
 
     lazy private(set) var filterTextObserver: AnyObserver<String> = {
         return Binder(self) { target, filterText in
-            target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: filterText))
-            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: true))
+            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: filterText))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: true))
         }.asObserver()
     }()
 
     lazy private(set) var filterCancelObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.view?.dismissKeyboard()
-            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
-            target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
+            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
         }.asObserver()
     }()
 
     lazy private(set) var editEndedObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.view?.dismissKeyboard()
-            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
         }.asObserver()
     }()
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: true))
-            target.dataStoreActionHandler.invoke(.sync)
+            target.dispatcher.dispatch(action: PullToRefreshAction(refreshing: true))
+            target.dispatcher.dispatch(action: DataStoreAction.sync)
         }.asObserver()
     }()
 
@@ -142,7 +139,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                     urlString: Constant.app.enableSyncFAQ,
                     title: Constant.string.faq,
                     returnRoute: MainRouteAction.list))
@@ -151,7 +148,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreNewEntriesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                 urlString: Constant.app.createNewEntriesFAQ,
                 title: Constant.string.faq,
                 returnRoute: MainRouteAction.list))
@@ -203,17 +200,11 @@ class ItemListPresenter {
 
     init(view: ItemListViewProtocol,
          dispatcher: Dispatcher = .shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
          userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
-        self.routeActionHandler = routeActionHandler
-        self.itemListDisplayActionHandler = itemListDisplayActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaultStore = userDefaultStore
@@ -247,8 +238,8 @@ class ItemListPresenter {
                 sortButtonObserver: sortButtonObserver
         )
 
-        self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
-        self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+        self.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
+        self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
     }
 }
 
@@ -378,7 +369,7 @@ extension ItemListPresenter {
         self.dataStore.syncState
                 .filter { $0 == .Synced }
                 .subscribe(onNext: { _ in
-                    self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+                    self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
                 })
                 .disposed(by: self.disposeBag)
     }

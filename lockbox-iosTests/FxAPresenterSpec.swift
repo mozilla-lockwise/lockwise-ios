@@ -22,6 +22,14 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
     class FakeNavigationAction: WKNavigationAction {
         private var fakeRequest: URLRequest
         override var request: URLRequest {
@@ -30,27 +38,6 @@ class FxAPresenterSpec: QuickSpec {
 
         init(request: URLRequest) {
             self.fakeRequest = request
-        }
-    }
-
-    class FakeAccountActionHandler: AccountActionHandler {
-        var invokeArgument: AccountAction?
-
-        override func invoke(_ action: AccountAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-        var onboardingArgument: OnboardingStatusAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
-        }
-
-        override func invoke(_ action: OnboardingStatusAction) {
-            self.onboardingArgument = action
         }
     }
 
@@ -63,8 +50,7 @@ class FxAPresenterSpec: QuickSpec {
     }
 
     private var view: FakeFxAView!
-    private var accountActionHandler: FakeAccountActionHandler!
-    private var routeActionHandler: FakeRouteActionHandler!
+    private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
     var subject: FxAPresenter!
 
@@ -73,13 +59,11 @@ class FxAPresenterSpec: QuickSpec {
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
-                self.accountActionHandler = FakeAccountActionHandler()
-                self.routeActionHandler = FakeRouteActionHandler()
+                self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
                 self.subject = FxAPresenter(
                         view: self.view,
-                        accountActionHandler: self.accountActionHandler,
-                        routeActionHandler: self.routeActionHandler,
+                        dispatcher: self.dispatcher,
                         accountStore: self.accountStore
                 )
             }
@@ -103,9 +87,8 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("routes back to login") {
-                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                    let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(argument).to(equal(LoginRouteAction.welcome))
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                    expect(argument).to(equal(.welcome))
                 }
             }
 
@@ -117,10 +100,14 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
-                    expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.oauthRedirect(url: url)))
-                    let routeAction = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(routeAction).to(equal(LoginRouteAction.onboardingConfirmation))
-                    expect(self.routeActionHandler.onboardingArgument!.onboardingInProgress).to(beTrue())
+                    let accountAction = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                    expect(accountAction).to(equal(.oauthRedirect(url: url)))
+
+                    let routeAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                    expect(routeAction).to(equal(.onboardingConfirmation))
+
+                    let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
+                    expect(onboardingAction.onboardingInProgress).to(beTrue())
                 }
             }
         }

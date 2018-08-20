@@ -12,7 +12,6 @@ class AutoLockStore {
 
     private let dispatcher: Dispatcher
     private let dataStore: DataStore
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let userDefaults: UserDefaults
 
     var timer: Timer?
@@ -20,13 +19,11 @@ class AutoLockStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          userDefaults: UserDefaults = UserDefaults.standard
     ) {
         self.dispatcher = dispatcher
         self.userDefaults = userDefaults
         self.dataStore = dataStore
-        self.dataStoreActionHandler = dataStoreActionHandler
 
         self.dataStore.locked
                 .subscribe(onNext: { [weak self] locked in
@@ -43,7 +40,7 @@ class AutoLockStore {
                     // future user interaction actions will need to get added to this list
                     action is MainRouteAction ||
                             action is SettingRouteAction ||
-                            action is CopyConfirmationDisplayAction ||
+                            action is CopyAction ||
                             action is ExternalLinkAction ||
                             action is ItemListDisplayAction ||
                             action is ItemDetailDisplayAction ||
@@ -152,7 +149,7 @@ extension AutoLockStore {
 
     @objc private func lockApp() {
         if !paused {
-            self.dataStoreActionHandler.invoke(.lock)
+            self.dispatcher.dispatch(action: DataStoreAction	.lock)
             self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
     }

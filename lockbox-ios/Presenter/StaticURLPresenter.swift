@@ -14,20 +14,20 @@ protocol StaticURLViewProtocol: class {
 class StaticURLPresenter {
     private weak var view: StaticURLViewProtocol?
 
-    private let routeActionHandler: RouteActionHandler
+    private let dispatcher: Dispatcher
     private let disposeBag = DisposeBag()
 
     init(view: StaticURLViewProtocol,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared) {
+         dispatcher: Dispatcher = .shared) {
         self.view = view
-        self.routeActionHandler = routeActionHandler
+        self.dispatcher = dispatcher
     }
 
     func onViewReady() {
         self.view?.closeTapped?
                 .subscribe(onNext: { [weak self] _ in
                     if let routeAction = self?.view?.returnRoute {
-                        self?.routeActionHandler.invoke(routeAction)
+                        self?.dispatcher.dispatch(action: routeAction)
                     }
                 })
                 .disposed(by: self.disposeBag)

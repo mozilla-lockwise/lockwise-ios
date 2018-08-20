@@ -61,22 +61,6 @@ class SettingListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
-        }
-    }
-
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var actionArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.actionArgument = action
-        }
-    }
-
     class FakeBiometryManager: BiometryManager {
         var deviceAuthAvailableStub: Bool!
 
@@ -85,18 +69,8 @@ class SettingListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeLinkActionHandler: LinkActionHandler {
-        var actionArgument: LinkAction?
-        override func invoke(_ action: LinkAction) {
-            actionArgument = action
-        }
-    }
-
     private var view: FakeSettingsView!
     private var dispatcher: FakeDispatcher!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
-    private var linkActionHandler: FakeLinkActionHandler!
     private var userDefaultStore: FakeUserDefaultStore!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
@@ -111,19 +85,13 @@ class SettingListPresenterSpec: QuickSpec {
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
 
                 self.dispatcher = FakeDispatcher()
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
-                self.linkActionHandler = FakeLinkActionHandler()
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
-                        dispatcher: self.dispatcher,
-                        routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
-                        linkActionHandler: self.linkActionHandler,
-                        userDefaultStore: self.userDefaultStore,
-                        biometryManager: self.biometryManager)
+                                                    dispatcher: self.dispatcher,
+                                                    userDefaultStore: self.userDefaultStore,
+                                                    biometryManager: self.biometryManager)
             }
 
             describe("onViewReady") {
@@ -139,9 +107,11 @@ class SettingListPresenterSpec: QuickSpec {
                         }
 
                         it("locks the application and routes to the login flow") {
-                            expect(self.dataStoreActionHandler.actionArgument).to(equal(DataStoreAction.lock))
-                            let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
-                            expect(argument).to(equal(LoginRouteAction.welcome))
+                            let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                            expect(loginRouteAction).to(equal(.welcome))
+
+                            let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                            expect(dataStoreAction).to(equal(.lock))
                         }
                     }
 
@@ -186,7 +156,7 @@ class SettingListPresenterSpec: QuickSpec {
                             }
 
                             it("routes to set passcode") {
-                                expect(self.linkActionHandler.actionArgument as? SettingLinkAction).to(equal(SettingLinkAction.touchIDPasscode))
+                                expect(self.dispatcher.dispatchedActions.popLast() as? SettingLinkAction).to(equal(.touchIDPasscode))
                             }
                         }
                     }
@@ -240,8 +210,8 @@ class SettingListPresenterSpec: QuickSpec {
                 }
 
                 it("invokes the main list action") {
-                    let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
-                    expect(argument).to(equal(MainRouteAction.list))
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
 
@@ -259,7 +229,7 @@ class SettingListPresenterSpec: QuickSpec {
                     }
 
                     it("invokes the setting route action") {
-                        let argument = self.routeActionHandler.routeActionArgument as! SettingRouteAction
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
                         expect(argument).to(equal(action))
                     }
                 }
@@ -276,7 +246,7 @@ class SettingListPresenterSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(self.routeActionHandler.routeActionArgument).to(beNil())
+                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                     }
                 }
             }
