@@ -62,6 +62,14 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
     class FakeRouteActionHandler: RouteActionHandler {
         var invokeActionArgument: RouteAction?
 
@@ -75,14 +83,6 @@ class ItemListPresenterSpec: QuickSpec {
 
         override func invoke(_ action: ItemListDisplayAction) {
             self.invokeActionArgument.append(action)
-        }
-    }
-
-    class FakeSettingActionHandler: SettingActionHandler {
-        var invokeActionArgument: SettingAction?
-
-        override func invoke(_ action: SettingAction) {
-            self.invokeActionArgument = action
         }
     }
 
@@ -112,26 +112,35 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeUserDefaultStore: UserDefaultStore {
+        var itemListSortStub = PublishSubject<Setting.ItemListSort>()
+
+        override var itemListSort: Observable<Setting.ItemListSort> {
+            return self.itemListSortStub.asObservable()
+        }
+    }
+
     private var view: FakeItemListView!
+    private var dispatcher: FakeDispatcher!
     private var routeActionHandler: FakeRouteActionHandler!
     private var itemListDisplayActionHandler: FakeItemListDisplayActionHandler!
-    private var settingActionHandler: FakeSettingActionHandler!
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
+    private var userDefaultStore: FakeUserDefaultStore!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
-    private let userDefaults = UserDefaults.standard
     var subject: ItemListPresenter!
 
     override func spec() {
         describe("ItemListPresenter") {
             beforeEach {
                 self.view = FakeItemListView()
+                self.dispatcher = FakeDispatcher()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.itemListDisplayActionHandler = FakeItemListDisplayActionHandler()
-                self.settingActionHandler = FakeSettingActionHandler()
                 self.dataStore = FakeDataStore()
                 self.itemListDisplayStore = FakeItemListDisplayStore()
+                self.userDefaultStore = FakeUserDefaultStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
                 self.view.sortButtonEnableObserver = self.scheduler.createObserver(Bool.self)
@@ -141,12 +150,12 @@ class ItemListPresenterSpec: QuickSpec {
 
                 self.subject = ItemListPresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         routeActionHandler: self.routeActionHandler,
                         itemListDisplayActionHandler: self.itemListDisplayActionHandler,
-                        settingActionHandler: self.settingActionHandler,
                         dataStore: self.dataStore,
                         itemListDisplayStore: self.itemListDisplayStore,
-                        userDefaults: self.userDefaults
+                        userDefaultStore: self.userDefaultStore
                 )
             }
 
@@ -156,7 +165,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.userDefaults.set(ItemListSortSetting.alphabetically.rawValue, forKey: SettingKey.itemListSort.rawValue)
+                        self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                     }
 
                     describe("when the datastore is still syncing & prepared") {
@@ -290,7 +299,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext(items)
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.userDefaults.set(ItemListSortSetting.alphabetically.rawValue, forKey: SettingKey.itemListSort.rawValue)
+                        self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
                         self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                     }
@@ -364,7 +373,7 @@ class ItemListPresenterSpec: QuickSpec {
                     xdescribe("when sorting method switches to recently used") {
                         // pended until it's possible to construct Logins with recently_used dates
                         beforeEach {
-                            self.userDefaults.set(ItemListSortSetting.recentlyUsed.rawValue, forKey: SettingKey.itemListSort.rawValue)
+                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.recentlyUsed)
                         }
 
                         it("pushes the new configuration with the items") {
@@ -561,6 +570,7 @@ class ItemListPresenterSpec: QuickSpec {
                             .disposed(by: self.disposeBag)
 
                     self.scheduler.start()
+                    self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                 }
 
                 it("tells the view to display an option sheet") {
@@ -577,10 +587,10 @@ class ItemListPresenterSpec: QuickSpec {
                         self.view.displayOptionSheetButtons![0].tapObserver!.onNext(())
                     }
 
-                    it("dispatches the alphabetically ItemListSortSetting SettingAction") {
-                        let action = self.settingActionHandler.invokeActionArgument as SettingAction?
+                    it("dispatches the alphabetically Setting.ItemListSort. SettingAction") {
+                        let action = self.dispatcher.dispatchedActions.last as? SettingAction
                         expect(action).notTo(beNil())
-                        expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically)))
+                        expect(action).to(equal(SettingAction.itemListSort(sort: Setting.ItemListSort.alphabetically)))
                     }
                 }
 
@@ -589,10 +599,10 @@ class ItemListPresenterSpec: QuickSpec {
                         self.view.displayOptionSheetButtons![1].tapObserver!.onNext(())
                     }
 
-                    it("dispatches the recently used ItemListSortSetting SettingAction") {
-                        let action = self.settingActionHandler.invokeActionArgument as SettingAction?
+                    it("dispatches the recently used Setting.ItemListSort. SettingAction") {
+                        let action = self.dispatcher.dispatchedActions.last as? SettingAction
                         expect(action).notTo(beNil())
-                        expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed)))
+                        expect(action).to(equal(SettingAction.itemListSort(sort: Setting.ItemListSort.recentlyUsed)))
                     }
                 }
             }

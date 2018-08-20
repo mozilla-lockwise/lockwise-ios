@@ -21,6 +21,22 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
+    class FakeUserDefaultStore: UserDefaultStore {
+        var preferredBrowserStub = PublishSubject<Setting.PreferredBrowser>()
+
+        override var preferredBrowser: Observable<Setting.PreferredBrowser> {
+            return self.preferredBrowserStub.asObservable()
+        }
+    }
+
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
 
@@ -29,40 +45,39 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeSettingActionHandler: SettingActionHandler {
-        var actionArgument: SettingAction?
-        override func invoke(_ action: SettingAction) {
-            actionArgument = action
-        }
-    }
-
-    var view: FakePreferredBrowserView!
     var subject: PreferredBrowserSettingPresenter!
-    var userDefaults: UserDefaults = UserDefaults.standard
+    var view: FakePreferredBrowserView!
+    var dispatcher: FakeDispatcher!
+    var userDefaultStore: FakeUserDefaultStore!
     var routeActionHandler: FakeRouteActionHandler!
-    var settingActionHandler: FakeSettingActionHandler!
     var scheduler = TestScheduler(initialClock: 0)
 
     override func spec() {
         beforeEach {
             self.view = FakePreferredBrowserView()
+            self.dispatcher = FakeDispatcher()
+            self.userDefaultStore = FakeUserDefaultStore()
             self.routeActionHandler = FakeRouteActionHandler()
-            self.settingActionHandler = FakeSettingActionHandler()
-            self.subject = PreferredBrowserSettingPresenter(view: self.view, userDefaults: self.userDefaults, routeActionHandler: self.routeActionHandler, settingActionHandler: self.settingActionHandler)
+            self.subject = PreferredBrowserSettingPresenter(
+                    view: self.view,
+                    dispatcher: self.dispatcher,
+                    userDefaultStore: self.userDefaultStore,
+                    routeActionHandler: self.routeActionHandler
+            )
         }
 
         it("delivers updated values when user default value changes") {
             self.view.itemsObserver = self.scheduler.createObserver([PreferredBrowserSettingSectionModel].self)
             self.subject.onViewReady()
 
-            UserDefaults.standard.set(PreferredBrowserSetting.Firefox.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
+            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Firefox)
 
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 expect(settings.count).to(be(1))
                 expect(settings[0].items.count).to(be(3))
 
                 for item in settings[0].items {
-                    if item.valueWhenChecked as? PreferredBrowserSetting == PreferredBrowserSetting.Firefox {
+                    if item.valueWhenChecked as? Setting.PreferredBrowser == Setting.PreferredBrowser.Firefox {
                         expect(item.isChecked).to(beTrue())
                     } else {
                         expect(item.isChecked).to(beFalse())
@@ -71,6 +86,12 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
             } else {
                 fail("settings not set in onViewReady")
             }
+        }
+
+        it("onSettingsTap routes to settings") {
+            self.subject.onSettingsTap.onNext(())
+            let route = self.routeActionHandler.routeActionArgument as! SettingRouteAction
+            expect(route).to(equal(SettingRouteAction.list))
         }
     }
 }

@@ -11,7 +11,7 @@ import RxCocoa
 
 @testable import Lockbox
 
-class SettingsPresenterSpec: QuickSpec {
+class SettingListPresenterSpec: QuickSpec {
     class FakeSettingsView: SettingListViewProtocol {
 
         var displayAlertControllerCalled = false
@@ -35,19 +35,37 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
+    class FakeUserDefaultStore: UserDefaultStore {
+        let autoLockStub = PublishSubject<Setting.AutoLock>()
+        let preferredBrowserStub = PublishSubject<Setting.PreferredBrowser>()
+        let recordUsageDataStub = PublishSubject<Bool>()
+
+        override var autoLockTime: Observable<Setting.AutoLock> {
+            return self.autoLockStub.asObservable()
+        }
+
+        override var preferredBrowser: Observable<Setting.PreferredBrowser> {
+            return self.preferredBrowserStub.asObservable()
+        }
+
+        override var recordUsageData: Observable<Bool> {
+            return self.recordUsageDataStub.asObservable()
+        }
+    }
+
     class FakeRouteActionHandler: RouteActionHandler {
         var routeActionArgument: RouteAction?
 
         override func invoke(_ action: RouteAction) {
             self.routeActionArgument = action
-        }
-    }
-
-    class FakeSettingActionHandler: SettingActionHandler {
-        var actionArgument: SettingAction?
-
-        override func invoke(_ action: SettingAction) {
-            actionArgument = action
         }
     }
 
@@ -75,10 +93,11 @@ class SettingsPresenterSpec: QuickSpec {
     }
 
     private var view: FakeSettingsView!
+    private var dispatcher: FakeDispatcher!
     private var routeActionHandler: FakeRouteActionHandler!
-    private var settingActionHandler: FakeSettingActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var linkActionHandler: FakeLinkActionHandler!
+    private var userDefaultStore: FakeUserDefaultStore!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -86,22 +105,24 @@ class SettingsPresenterSpec: QuickSpec {
     var subject: SettingListPresenter!
 
     override func spec() {
-        describe("SettingsPresenter") {
+        describe("SettingListPresenter") {
             beforeEach {
                 self.view = FakeSettingsView()
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
 
+                self.dispatcher = FakeDispatcher()
                 self.routeActionHandler = FakeRouteActionHandler()
-                self.settingActionHandler = FakeSettingActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.linkActionHandler = FakeLinkActionHandler()
+                self.userDefaultStore = FakeUserDefaultStore()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
+                        dispatcher: self.dispatcher,
                         routeActionHandler: self.routeActionHandler,
-                        settingActionHandler: self.settingActionHandler,
                         dataStoreActionHandler: self.dataStoreActionHandler,
                         linkActionHandler: self.linkActionHandler,
+                        userDefaultStore: self.userDefaultStore,
                         biometryManager: self.biometryManager)
             }
 
@@ -126,9 +147,10 @@ class SettingsPresenterSpec: QuickSpec {
 
                     describe("detail values on view modules") {
                         beforeEach {
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                             self.subject.onViewReady()
+                            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
+                            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
+                            self.userDefaultStore.recordUsageDataStub.onNext(true)
                         }
 
                         it("sets detail value for autolock") {
@@ -138,7 +160,7 @@ class SettingsPresenterSpec: QuickSpec {
 
                         it("sets detail value for preferred browser") {
                             let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
-                            expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                            expect(preferredBrowserCellConfig.detailText).to(equal(Setting.PreferredBrowser.Focus.toString()))
                         }
                     }
                 }
@@ -171,9 +193,10 @@ class SettingsPresenterSpec: QuickSpec {
 
                     describe("detail values on view modules") {
                         beforeEach {
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                             self.subject.onViewReady()
+                            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
+                            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
+                            self.userDefaultStore.recordUsageDataStub.onNext(true)
                         }
 
                         it("does not show autolock") {
@@ -182,7 +205,7 @@ class SettingsPresenterSpec: QuickSpec {
 
                         it("sets detail value for preferred browser") {
                             let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
-                            expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                            expect(preferredBrowserCellConfig.detailText).to(equal(Setting.PreferredBrowser.Focus.toString()))
                         }
                     }
                 }
@@ -201,7 +224,7 @@ class SettingsPresenterSpec: QuickSpec {
                 }
 
                 it("calls settingActionHandler") {
-                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.recordUsageData(enabled: false)))
+                    expect(self.dispatcher.dispatchedActions.last as! SettingAction).to(equal(SettingAction.recordUsageData(enabled: false)))
                 }
             }
 

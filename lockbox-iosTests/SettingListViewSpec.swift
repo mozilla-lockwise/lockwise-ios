@@ -64,11 +64,11 @@ class SettingListViewSpec: QuickSpec {
                     let configDriver = PublishSubject<[SettingSectionModel]>()
                     let sectionModels = [
                         SettingSectionModel(model: 0, items: [
-                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.list),
-                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.list)
+                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.list, accessibilityId: ""),
+                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.list, accessibilityId: "")
                             ]),
                         SettingSectionModel(model: 1, items: [
-                            SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
+                            SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, accessibilityId: "", isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
                             ])
                     ]
 
@@ -103,11 +103,11 @@ class SettingListViewSpec: QuickSpec {
                     let configDriver = PublishSubject<[SettingSectionModel]>()
                     let sectionModels = [
                         SettingSectionModel(model: 0, items: [
-                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account),
-                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.list)
+                            SettingCellConfiguration(text: "Account", routeAction: SettingRouteAction.account, accessibilityId: ""),
+                            SettingCellConfiguration(text: "FAQ", routeAction: SettingRouteAction.list, accessibilityId: "")
                             ]),
                         SettingSectionModel(model: 1, items: [
-                            SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
+                            SwitchSettingCellConfiguration(text: "Send Usage Data", routeAction: nil, accessibilityId: "", isOn: true, onChanged: self.presenter.onUsageDataSettingChanged)
                             ])
                     ]
 
@@ -165,10 +165,10 @@ class SettingListViewSpec: QuickSpec {
         describe("SettingCellConfiguration") {
             describe("equality") {
                 it("SettingCellConfigurations are equal when the text is equal") {
-                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
-                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
-                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account)))
-                    expect(SettingCellConfiguration(text: "meow", routeAction: nil)).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account)))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account, accessibilityId: "")).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account, accessibilityId: "")))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account, accessibilityId: "")).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account, accessibilityId: "")))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil, accessibilityId: "")).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account, accessibilityId: "")))
+                    expect(SettingCellConfiguration(text: "meow", routeAction: nil, accessibilityId: "")).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account, accessibilityId: "")))
                 }
             }
         }

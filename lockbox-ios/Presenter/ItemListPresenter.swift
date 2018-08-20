@@ -21,7 +21,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
 struct LoginListTextSort {
     let logins: [Login]
     let text: String
-    let sortingOption: ItemListSortSetting
+    let sortingOption: Setting.ItemListSort
     let syncState: SyncState
     let storeState: LoginStoreState
 }
@@ -42,14 +42,14 @@ struct SyncStateManual {
 
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
-    private var routeActionHandler: RouteActionHandler
-    private var itemListDisplayActionHandler: ItemListDisplayActionHandler
-    private var dataStoreActionHandler: DataStoreActionHandler
-    private var dataStore: DataStore
-    private var itemListDisplayStore: ItemListDisplayStore
-    private var userDefaults: UserDefaults
-    private var settingActionHandler: SettingActionHandler
-    private var disposeBag = DisposeBag()
+    private let dispatcher: Dispatcher
+    private let routeActionHandler: RouteActionHandler
+    private let itemListDisplayActionHandler: ItemListDisplayActionHandler
+    private let dataStoreActionHandler: DataStoreActionHandler
+    private let dataStore: DataStore
+    private let itemListDisplayStore: ItemListDisplayStore
+    private let userDefaultStore: UserDefaultStore
+    private let disposeBag = DisposeBag()
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
         return Binder(self) { target, itemId in
@@ -102,7 +102,7 @@ class ItemListPresenter {
 
     lazy private(set) var sortingButtonObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            self.userDefaults.onItemListSort
+            self.userDefaultStore.itemListSort
                 .take(1)
                 .subscribe(onNext: { evt in
                 let latest = evt
@@ -111,12 +111,12 @@ class ItemListPresenter {
                             title: Constant.string.alphabetically,
                             tapObserver: target.alphabeticSortObserver,
                             style: .default,
-                            checked: latest == ItemListSortSetting.alphabetically),
+                            checked: latest == Setting.ItemListSort.alphabetically),
                     AlertActionButtonConfiguration(
                             title: Constant.string.recentlyUsed,
                             tapObserver: target.recentlyUsedSortObserver,
                             style: .default,
-                            checked: latest == ItemListSortSetting.recentlyUsed),
+                            checked: latest == Setting.ItemListSort.recentlyUsed),
                     AlertActionButtonConfiguration(
                             title: Constant.string.cancel,
                             tapObserver: nil,
@@ -130,13 +130,13 @@ class ItemListPresenter {
 
     lazy private var alphabeticSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically))
+            target.dispatcher.dispatch(action: SettingAction.itemListSort(sort: Setting.ItemListSort.alphabetically))
         }.asObserver()
     }()
 
     lazy private var recentlyUsedSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed))
+            target.dispatcher.dispatch(action: SettingAction.itemListSort(sort: Setting.ItemListSort.recentlyUsed))
         }.asObserver()
     }()
 
@@ -202,25 +202,25 @@ class ItemListPresenter {
     }()
 
     init(view: ItemListViewProtocol,
+         dispatcher: Dispatcher = .shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard) {
+         userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
+        self.dispatcher = dispatcher
         self.routeActionHandler = routeActionHandler
         self.itemListDisplayActionHandler = itemListDisplayActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
-        self.settingActionHandler = settingActionHandler
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
-        self.userDefaults = userDefaults
+        self.userDefaultStore = userDefaultStore
     }
 
     func onViewReady() {
-        let itemSortObservable = self.userDefaults.onItemListSort
+        let itemSortObservable = self.userDefaultStore.itemListSort
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListFilterAction.self)
@@ -255,7 +255,7 @@ class ItemListPresenter {
 extension ItemListPresenter {
     fileprivate func createItemListDriver(loginListObservable: Observable<[Login]>,
                                           filterTextObservable: Observable<ItemListFilterAction>,
-                                          itemSortObservable: Observable<ItemListSortSetting>,
+                                          itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
         let throttledListObservable = loginListObservable
@@ -272,7 +272,7 @@ extension ItemListPresenter {
                         throttledSyncStateObservable,
                         throttledStorageStateObservable
                 )
-            .map { (latest: ([Login], ItemListFilterAction, ItemListSortSetting, SyncState, LoginStoreState)) -> LoginListTextSort in
+            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState)) -> LoginListTextSort in
                     return LoginListTextSort(
                             logins: latest.0,
                             text: latest.1.filteringText,
@@ -385,7 +385,7 @@ extension ItemListPresenter {
 
     fileprivate func setupButtonBehavior(
             view: ItemListViewProtocol,
-            itemSortObservable: Observable<ItemListSortSetting>,
+            itemSortObservable: Observable<Setting.ItemListSort>,
             sortButtonObserver: AnyObserver<Bool>) {
         let itemSortTextDriver = itemSortObservable
                 .asDriver(onErrorJustReturn: .alphabetically)

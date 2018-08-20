@@ -412,7 +412,7 @@ extension DataStore {
         // default to locked state
         self.storageStateSubject.onNext(.Locked)
 
-        UserDefaults.standard.onAutoLockTime
+        UserDefaultStore.shared.autoLockTime
                 .take(1)
                 .subscribe(onNext: { autoLockSetting in
                     switch autoLockSetting {
@@ -421,7 +421,7 @@ extension DataStore {
                     default:
                         let date = NSDate(
                                 timeIntervalSince1970: UserDefaults.standard.double(
-                                        forKey: SettingKey.autoLockTimerDate.rawValue))
+                                        forKey: UserDefaultKey.autoLockTimerDate.rawValue))
 
                         if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
                             self.unlock()

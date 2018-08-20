@@ -117,6 +117,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeUserDefaultStore: UserDefaultStore {
+        var recordUsageStub = PublishSubject<Bool>()
+
+        override var recordUsageData: Observable<Bool> {
+            return self.recordUsageStub
+        }
+    }
+
     class FakeRouteActionHandler: RouteActionHandler {
         var invokeArgument: RouteAction?
 
@@ -158,6 +166,7 @@ class RootPresenterSpec: QuickSpec {
     private var routeStore: FakeRouteStore!
     private var dataStore: FakeDataStore!
     private var telemetryStore: FakeTelemetryStore!
+    private var userDefaultStore: FakeUserDefaultStore!
     private var routeActionHandler: FakeRouteActionHandler!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
     private var dataStoreActionHandler: FakeDataStoreActionHandler!
@@ -172,6 +181,7 @@ class RootPresenterSpec: QuickSpec {
                 self.routeStore = FakeRouteStore()
                 self.dataStore = FakeDataStore()
                 self.telemetryStore = FakeTelemetryStore()
+                self.userDefaultStore = FakeUserDefaultStore()
                 self.routeActionHandler = FakeRouteActionHandler()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
                 self.dataStoreActionHandler = FakeDataStoreActionHandler()
@@ -184,30 +194,11 @@ class RootPresenterSpec: QuickSpec {
                         routeStore: self.routeStore,
                         dataStore: self.dataStore,
                         telemetryStore: self.telemetryStore,
+                        userDefaultStore: self.userDefaultStore,
                         routeActionHandler: self.routeActionHandler,
                         telemetryActionHandler: self.telemetryActionHandler,
                         biometryManager: self.biometryManager
                 )
-            }
-
-            describe("when the user is missing the itemlistsort setting") {
-                beforeEach {
-                    UserDefaults.standard.removeObject(forKey: SettingKey.itemListSort.rawValue)
-
-                    self.subject = RootPresenter(
-                            view: self.view,
-                            routeStore: self.routeStore,
-                            dataStore: self.dataStore,
-                            telemetryStore: self.telemetryStore,
-                            routeActionHandler: self.routeActionHandler,
-                            telemetryActionHandler: self.telemetryActionHandler,
-                            biometryManager: self.biometryManager
-                    )
-                }
-
-                it("sets the key") {
-                    expect(UserDefaults.standard.object(forKey: SettingKey.itemListSort.rawValue) as! String).to(equal(Constant.setting.defaultItemListSort.rawValue))
-                }
             }
 
             describe("when the datastore state changes, regardless of synced state") {
@@ -1104,7 +1095,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data can be recorded") {
                         beforeEach {
-                            UserDefaults.standard.set(true, forKey: SettingKey.recordUsageData.rawValue)
+                            self.userDefaultStore.recordUsageStub.onNext(true)
                             self.telemetryStore.telemetryStub.onNext(action)
                         }
 
@@ -1116,7 +1107,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data cannot be recorded") {
                         beforeEach {
-                            UserDefaults.standard.set(false, forKey: SettingKey.recordUsageData.rawValue)
+                            self.userDefaultStore.recordUsageStub.onNext(false)
                             self.telemetryStore.telemetryStub.onNext(action)
                         }
 

@@ -35,6 +35,7 @@ Before you get started writing code, be sure what you plan to work on is somethi
 If there's something else you'd like to work on, just add a comment in the relevant issue and we'll be happy to discuss your plans. If you have an idea that doesn't have an issue at all, be sure to [file an issue](#how-to-request-enhancements) first.
 
 Once you have a patch ready:
+
 - Make sure all tests are passing and try to add tests for the code you've written. You can run tests in XCode by selecting the `uispecs` target and hitting CMD-U.
 - Submit a pull request! From there, we'll guide you through the review process to the eventual landing of your code. We aim to respond to all review requests within two business days.
 

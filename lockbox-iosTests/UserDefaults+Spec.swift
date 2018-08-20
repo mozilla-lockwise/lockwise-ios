@@ -17,42 +17,42 @@ class UserDefaultSpec: QuickSpec {
 
     override func spec() {
         describe("onAutoLockSetting") {
-            var autoLockSettingObserver = self.scheduler.createObserver(AutoLockSetting.self)
+            var autoLockSettingObserver = self.scheduler.createObserver(Setting.AutoLock.self)
 
             beforeEach {
-                autoLockSettingObserver = self.scheduler.createObserver(AutoLockSetting.self)
+                autoLockSettingObserver = self.scheduler.createObserver(Setting.AutoLock.self)
 
                 UserDefaults.standard.onAutoLockTime
                         .subscribe(autoLockSettingObserver)
                         .disposed(by: self.disposeBag)
             }
 
-            it("pushes new values for the SettingKey to observers") {
-                UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+            it("pushes new values for the UserDefaultKey to observers") {
+                UserDefaults.standard.set(Setting.AutoLock.OneHour.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
 
-                expect(autoLockSettingObserver.events.last!.value.element).to(equal(AutoLockSetting.OneHour))
+                expect(autoLockSettingObserver.events.last!.value.element).to(equal(Setting.AutoLock.OneHour))
             }
 
             it("pushes the default value when a meaningless autolock time is set") {
-                UserDefaults.standard.set("FOREVER", forKey: SettingKey.autoLockTime.rawValue)
+                UserDefaults.standard.set("FOREVER", forKey: UserDefaultKey.autoLockTime.rawValue)
 
-                expect(autoLockSettingObserver.events.last!.value.element).to(equal(Constant.setting.defaultAutoLockTimeout))
+                expect(autoLockSettingObserver.events.last!.value.element).to(equal(Constant.setting.defaultAutoLock))
             }
         }
 
         describe("onPreferredBrowser") {
-            var preferredBrowserSettingObserver: TestableObserver<PreferredBrowserSetting>!
+            var preferredBrowserSettingObserver: TestableObserver<Setting.PreferredBrowser>!
 
             beforeEach {
-                preferredBrowserSettingObserver = self.scheduler.createObserver(PreferredBrowserSetting.self)
+                preferredBrowserSettingObserver = self.scheduler.createObserver(Setting.PreferredBrowser.self)
                 UserDefaults.standard.onPreferredBrowser
                         .subscribe(preferredBrowserSettingObserver)
                         .disposed(by: self.disposeBag)
             }
 
-            it("pushes new values for theSettingKey to observers") {
-                UserDefaults.standard.set(PreferredBrowserSetting.Firefox.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
-                expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(PreferredBrowserSetting.Firefox))
+            it("pushes new values for theUserDefaultKey to observers") {
+                UserDefaults.standard.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
+                expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Firefox))
             }
         }
 
@@ -67,7 +67,7 @@ class UserDefaultSpec: QuickSpec {
             }
 
             it("pushs new values for the correct setting key") {
-                UserDefaults.standard.set(false, forKey: SettingKey.recordUsageData.rawValue)
+                UserDefaults.standard.set(false, forKey: UserDefaultKey.recordUsageData.rawValue)
                 expect(recordUsageDataSettingObserver.events.last!.value.element).to(beFalse())
             }
         }

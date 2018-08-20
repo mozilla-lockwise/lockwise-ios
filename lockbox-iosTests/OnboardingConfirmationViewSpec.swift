@@ -67,7 +67,7 @@ class OnboardingConfirmationViewSpec: QuickSpec {
                     self.subject.textView(
                             self.subject.encryptionTextView,
                             shouldInteractWith: URL(string: Constant.app.securityFAQ)!,
-                            in: NSMakeRange(33, 18))
+                            in: NSMakeRange(33, 18)) // swiftlint:disable:this legacy_constructor
                 }
 
                 it("tells the presenter") {

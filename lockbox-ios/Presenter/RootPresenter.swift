@@ -32,7 +32,7 @@ class RootPresenter {
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let accountStore: AccountStore
-    fileprivate let userDefaults: UserDefaults
+    fileprivate let userDefaultStore: UserDefaultStore
     fileprivate let routeActionHandler: RouteActionHandler
     fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
@@ -46,7 +46,7 @@ class RootPresenter {
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
          accountStore: AccountStore = AccountStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard,
+         userDefaultStore: UserDefaultStore = .shared,
          routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
          dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
@@ -57,7 +57,7 @@ class RootPresenter {
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
         self.accountStore = accountStore
-        self.userDefaults = userDefaults
+        self.userDefaultStore = userDefaultStore
         self.routeActionHandler = routeActionHandler
         self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
@@ -95,11 +95,6 @@ class RootPresenter {
                 }
             })
             .disposed(by: self.disposeBag)
-
-        if userDefaults.value(forKey: SettingKey.itemListSort.rawValue) == nil {
-            self.userDefaults.set(Constant.setting.defaultItemListSort.rawValue,
-                    forKey: SettingKey.itemListSort.rawValue)
-        }
 
         self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
@@ -247,7 +242,7 @@ class RootPresenter {
 
 extension RootPresenter {
     fileprivate func startTelemetry() {
-        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaults.onRecordUsageData)
+        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaultStore.recordUsageData)
                 .filter { $0.1 }
                 .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)

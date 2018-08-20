@@ -246,6 +246,7 @@ extension ItemListView {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
         self.navigationItem.title = Constant.string.yourLockbox
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockbox.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
             NSAttributedStringKey.foregroundColor: UIColor.white,
             NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)

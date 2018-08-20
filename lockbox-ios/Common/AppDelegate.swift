@@ -6,6 +6,7 @@ import FxAUtils
 import UIKit
 import Telemetry
 import AdjustSdk
+import SwiftKeychainWrapper
 
 let PostFirstRunKey = "firstrun"
 
@@ -13,6 +14,8 @@ let PostFirstRunKey = "firstrun"
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+
+    let keychainWrapper = KeychainWrapper.standard
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
@@ -30,10 +33,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // This key will not be set on the first run of the application, only on subsequent runs.
         if UserDefaults.standard.string(forKey: PostFirstRunKey) == nil {
-            SettingActionHandler.shared.invoke(.reset)
             AccountActionHandler.shared.invoke(.clear)
             DataStoreActionHandler.shared.invoke(.reset)
             UserDefaults.standard.set(false, forKey: PostFirstRunKey)
+        }
+
+        let previousAppVersion = keychainWrapper.string(forKey: KeychainKey.appVersion.rawValue)
+        let newAppVersion = Constant.app.appVersion
+
+        if previousAppVersion == nil || previousAppVersion != newAppVersion {
+            if let newAppVersion = Constant.app.appVersion {
+                keychainWrapper.set(newAppVersion, forKey: KeychainKey.appVersion.rawValue)
+            }
         }
 
         let navBarImage = UIImage.createGradientImage(
