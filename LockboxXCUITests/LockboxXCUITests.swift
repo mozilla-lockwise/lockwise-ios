@@ -114,11 +114,9 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
         navigator.performAction(Action.FxATypePassword)
-        waitforExistence(app.buttons["finish.button"])
-        app.buttons["finish.button"].tap()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        sleep(10)
         // Check if the account is verified and if not, verify it
-        if (app.staticTexts["Confirm your account."].exists) {
+        if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
             let group = DispatchGroup()
             group.enter()
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -127,14 +125,13 @@ class LockboxXCUITests: BaseTestCase {
                 }
             }
             group.wait()
-            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 15)
-        } else {
-            // Account is still verified, check that entries are shown
-            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
-            XCTAssertNotEqual(app.tables.cells.count, 1)
-            XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
-            snapshot("02EntryList" + CONTENT_SIZE)
         }
+        waitforExistence(app.buttons["finish.button"])
+        app.buttons["finish.button"].tap()
+
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 15)
+
+        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
