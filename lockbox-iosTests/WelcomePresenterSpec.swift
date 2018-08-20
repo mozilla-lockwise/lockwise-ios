@@ -86,14 +86,6 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
-    class FakeAccountActionHandler: AccountActionHandler {
-        var invokeArgument: AccountAction?
-
-        override func invoke(_ action: AccountAction) {
-            self.invokeArgument = action
-        }
-    }
-
     class FakeAccountStore: AccountStore {
         var fakeProfile = PublishSubject<Profile?>()
         var fakeOldAccountInformation = PublishSubject<Bool>()
@@ -230,10 +222,10 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         it("routes to FxA, and sends the appropriate account action") {
-                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                            let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                            let accountArg = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                            expect(accountArg).to(equal(AccountAction.oauthSignInMessageRead))
+                            let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                             expect(argument).to(equal(LoginRouteAction.fxa))
-                            expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.oauthSignInMessageRead))
                         }
                     }
                 }

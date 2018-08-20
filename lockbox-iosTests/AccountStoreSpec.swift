@@ -142,17 +142,10 @@ class AccountStoreSpec: QuickSpec {
                 }
             }
 
-            describe("old token presence") {
-                describe("when the keychain has old login information") {
+            describe("upgrade") {
+                describe("when the upgrade is happening") {
                     beforeEach {
-                        self.keychainManager.retrieveResult[KeychainKey.email.rawValue] = "rgaddis@mozilla.com"
-                        self.keychainManager.retrieveResult[KeychainKey.displayName.rawValue] = "Megazord"
-                        self.keychainManager.retrieveResult[KeychainKey.avatarURL.rawValue] = "https://pics.me.me/pudu-blep-22233754.png"
-                        self.subject = AccountStore(
-                                dispatcher: self.dispatcher,
-                                keychainWrapper: self.keychainManager,
-                                urlCache: self.urlCache
-                        )
+                        self.dispatcher.fakeRegistration.onNext(LifecycleAction.upgrade(from: 1, to: 2))
                     }
 
                     it("pushes out that the user has an old-style account") {

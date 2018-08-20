@@ -34,6 +34,8 @@ class RootPresenterSpec: QuickSpec {
         var pushMainViewArgument: MainRouteAction?
         var pushSettingViewArgument: SettingRouteAction?
 
+        var modalStackPresented = true
+
         func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.topViewIsArgument = type
             return self.topViewIsVar
@@ -80,10 +82,10 @@ class RootPresenterSpec: QuickSpec {
     }
 
     class FakeDispatcher: Dispatcher {
-        var dispatchActionArgument: Action?
+        var dispatchActionArgument: [Action] = []
 
         override func dispatch(action: Action) {
-            self.dispatchActionArgument = action
+            self.dispatchActionArgument.append(action)
         }
     }
 
@@ -138,7 +140,6 @@ class RootPresenterSpec: QuickSpec {
     class FakeAccountStore: AccountStore {
         let oauthInfoStub = PublishSubject<OAuthInfo?>()
         let profileInfoStub = PublishSubject<Profile?>()
-        let oldAccountInfoStub = PublishSubject<Bool>()
 
         override var oauthInfo: Observable<OAuthInfo?> {
             return self.oauthInfoStub.asObservable()
@@ -146,10 +147,6 @@ class RootPresenterSpec: QuickSpec {
 
         override var profile: Observable<Profile?> {
             return self.profileInfoStub.asObservable()
-        }
-
-        override var hasOldAccountInformation: Observable<Bool> {
-            return self.oldAccountInfoStub.asObservable()
         }
     }
 
@@ -229,9 +226,10 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 it("routes to the welcome view and resets the datastore") {
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                    let dataStoreAction = self.dispatcher.dispatchActionArgument.popLast() as! DataStoreAction
+                    expect(dataStoreAction).to(equal(DataStoreAction.reset))
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! LoginRouteAction
                     expect(arg).to(equal(LoginRouteAction.welcome))
-                    expect(self.dataStoreActionHandler.action).to(equal(DataStoreAction.reset))
                 }
             }
 
@@ -242,110 +240,30 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 it("updates the datastore credentials") {
-                    let arg = self.dispatcher.dispatchActionArgument as! MainRouteAction
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction
                     expect(arg).to(equal(MainRouteAction.list))
                 }
             }
 
             describe("when the datastore is locked") {
                 beforeEach {
-                    self.dataStore.lockedSubject.onNext(true)
+                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Locked)
                 }
 
-                describe("when there is old account information present") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(true)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
-                    }
-
-                    it("does nothing") {
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    }
-                }
-
-                describe("when the datastore is still unprepared") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(false)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unprepared)
-                    }
-
-                    it("does nothing") {
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    }
-                }
-
-                describe("when there is old account info present AND the datastore is unprepared") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(true)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unprepared)
-                    }
-
-                    it("does nothing") {
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    }
-                }
-
-                describe("when there is no old account info and the datastore is in some prepared state") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(false)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
-                    }
-
-                    it("routes to the welcome screen") {
-                        let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                        expect(arg).to(equal(LoginRouteAction.welcome))
-                    }
+                it("routes to the welcome screen") {
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
                 }
             }
 
             describe("when the datastore is unlocked") {
                 beforeEach {
-                    self.dataStore.lockedSubject.onNext(false)
+                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
                 }
 
-                describe("when there is old account information present") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(true)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
-                    }
-
-                    it("does nothing") {
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    }
-                }
-
-                describe("when the datastore is still unprepared") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(false)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unprepared)
-                    }
-
-                    it("does nothing") {
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    }
-                }
-
-                describe("when there is old account info present AND the datastore is unprepared") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(true)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unprepared)
-                    }
-
-                    it("does nothing") {
-                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                    }
-                }
-
-                describe("when there is no old account info and the datastore is in some prepared state") {
-                    beforeEach {
-                        self.accountStore.oldAccountInfoStub.onNext(false)
-                        self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
-                    }
-
-                    it("routes to the list") {
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
-                    }
+                it("routes to the list") {
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
                 }
             }
 

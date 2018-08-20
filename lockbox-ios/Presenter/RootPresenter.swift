@@ -15,6 +15,8 @@ protocol RootViewProtocol: class {
     func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
 
+    var modalStackPresented: Bool { get }
+
     func startMainStack<T: UINavigationController>(_ type: T.Type)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
@@ -31,9 +33,8 @@ struct OAuthProfile {
 
 extension OAuthProfile: Equatable {
     static func ==(lh: OAuthProfile, rh: OAuthProfile) -> Bool {
-        return// todo: update these when we can make profile and oauthinfo equatable
-                (lh.profile == nil) == (rh.profile == nil) &&
-                (lh.oauthInfo == nil) == (rh.oauthInfo == nil)
+        return lh.profile == rh.profile &&
+                lh.oauthInfo == rh.oauthInfo
     }
 }
 
@@ -82,21 +83,22 @@ class RootPresenter {
                 .bind { latest in
                     if let oauthInfo = latest.oauthInfo,
                         let profile = latest.profile {
-                        self.dataStoreActionHandler.invoke(.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
                     } else if latest.oauthInfo == nil && latest.profile == nil {
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                        self.dataStoreActionHandler.invoke(.reset)
+                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                        self.dispatcher.dispatch(action: DataStoreAction.reset)
                     }
                 }
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
+            .debug()
             .subscribe(onNext: { storageState in
                 switch storageState {
                 case .Unprepared, .Locked:
-                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                 case .Unlocked:
-                    self.routeActionHandler.invoke(MainRouteAction.list)
+                    self.dispatcher.dispatch(action: MainRouteAction.list)
                 default:
                     break
                 }
@@ -104,12 +106,13 @@ class RootPresenter {
             .disposed(by: self.disposeBag)
 
         Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
+            .debug()
             .filter { $0.1 == LoginStoreState.Unprepared }
             .map { $0.0 }
             .distinctUntilChanged()
             .subscribe(onNext: { syncState in
                 if syncState == .NotSyncable {
-                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                 }
             })
             .disposed(by: self.disposeBag)
@@ -158,7 +161,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(LoginNavigationController.self) {
                 view.startMainStack(LoginNavigationController.self)
@@ -187,7 +192,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(MainNavigationController.self) {
                 view.startMainStack(MainNavigationController.self)
@@ -212,7 +219,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(SettingNavigationController.self) {
                 view.startMainStack(SettingNavigationController.self)

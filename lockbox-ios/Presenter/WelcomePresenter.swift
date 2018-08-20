@@ -86,18 +86,6 @@ class WelcomePresenter {
             })
             .disposed(by: self.disposeBag)
     }
-
-    func onViewDidAppear() {
-        self.accountStore.hasOldAccountInformation
-            .take(1)
-            .filter { $0 }
-            .subscribe(onNext: {  [weak self] _ in
-                self?.showOAuthUpgradeDialog()
-
-            })
-            .disposed(by: self.disposeBag)
-    }
-
 }
 
 extension WelcomePresenter {
@@ -115,8 +103,8 @@ extension WelcomePresenter {
 
     private var oauthLoginConfirmationObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(LoginRouteAction.fxa)
-            target.accountActionHandler.invoke(AccountAction.oauthSignInMessageRead)
+            target.dispatcher.dispatch(action: LoginRouteAction.fxa)
+            target.dispatcher.dispatch(action: AccountAction.oauthSignInMessageRead)
         }.asObserver()
     }
 

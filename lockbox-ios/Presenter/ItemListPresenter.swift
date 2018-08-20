@@ -249,6 +249,7 @@ extension ItemListPresenter {
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+        // only run on a delay for UI purposes; keep tests from blocking
         let listThrottle = isRunningTest ? 0.0 : 1.0
         let stateThrottle = isRunningTest ? 0.0 : 2.0
         let throttledListObservable = loginListObservable

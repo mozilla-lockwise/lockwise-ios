@@ -245,10 +245,6 @@ extension DataStore {
             return syncManager.syncEverything(why: .backgrounded)
         }
 
-        func disconnect() -> Success {
-            return self.profile.removeAccount()
-        }
-
         func resetProfile() {
             self.profile = profileFactory(true)
             self.initializeProfile()
@@ -256,7 +252,7 @@ extension DataStore {
             self.storageStateSubject.onNext(.Unprepared)
         }
 
-        stopSyncing() >>== disconnect >>== resetProfile
+        stopSyncing() >>== resetProfile
     }
 }
 

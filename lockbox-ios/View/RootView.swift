@@ -62,6 +62,10 @@ class RootView: UIViewController, RootViewProtocol {
         return self.currentViewController?.presentedViewController is T
     }
 
+    var modalStackPresented: Bool {
+        return self.currentViewController?.presentedViewController is UINavigationController
+    }
+
     func startMainStack<T: UINavigationController>(_ type: T.Type) {
         self.currentViewController = type.init()
     }

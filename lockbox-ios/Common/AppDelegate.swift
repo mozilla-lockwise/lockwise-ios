@@ -97,11 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func checkForUpgrades() {
         let current = Constant.app.appVersionCode
-        let previous = 1//keychainWrapper.integer(forKey: KeychainKey.appVersionCode.rawValue) ?? 1
-
-        if previous == 1, !keychainWrapper.hasValue(forKey: KeychainKey.accountJSON.rawValue) {
-            return
-        }
+        let previous = keychainWrapper.integer(forKey: KeychainKey.appVersionCode.rawValue) ?? 1
 
         if previous < current {
             // At the moment, this can be quite simple, since we don't have many migrations,

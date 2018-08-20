@@ -73,6 +73,21 @@ class AccountStore {
                 })
                 .disposed(by: self.disposeBag)
 
+        self.dispatcher.register
+                .filterByType(class: LifecycleAction.self)
+                .subscribe(onNext: { action in
+                    guard case let .upgrade(previous, _) = action else {
+                        return
+                    }
+
+                    if previous <= 1 {
+                        self._oauthInfo.onNext(nil)
+                        self._profile.onNext(nil)
+                        self._oldAccountPresence.accept(true)
+                    }
+                })
+                .disposed(by: self.disposeBag)
+
         if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue) {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.generateLoginURL()
@@ -92,19 +107,6 @@ class AccountStore {
                 self._profile.onNext(nil)
             }
         }
-
-        self.dispatcher.register
-            .filterByType(class: LifecycleAction.self)
-            .subscribe(onNext: { action in
-                guard case let .upgrade(previous, _) = action else {
-                        return
-                }
-
-                if previous <= 1 {
-                    self._oldAccountPresence.accept(true)
-                }
-            })
-            .disposed(by: self.disposeBag)
     }
 }
 
