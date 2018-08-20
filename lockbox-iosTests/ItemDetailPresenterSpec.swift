@@ -63,11 +63,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeCopyDisplayStore: CopyConfirmationDisplayStore {
-        var copyDisplayStub = PublishSubject<CopyConfirmationDisplayAction>()
+    class FakeCopyDisplayStore: CopyDisplayStore {
+        var copyDisplayStub = PublishSubject<CopyField>()
 
-        override var copyDisplay: Driver<CopyConfirmationDisplayAction> {
-            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(field: .password))
+        override var copyDisplay: Driver<CopyField> {
+            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyField.password)
         }
     }
 
@@ -79,20 +79,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeCopyActionHandler: CopyActionHandler {
-        var invokedAction: CopyAction?
-
-        override func invoke(_ action: CopyAction) {
-            self.invokedAction = action
-        }
-    }
-
     private var view: FakeItemDetailView!
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
-    private var copyActionHandler: FakeCopyActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -105,15 +96,13 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
-                self.copyActionHandler = FakeCopyActionHandler()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
-                        copyDisplayStore: self.copyDisplayStore,
-                        copyActionHandler: self.copyActionHandler
+                        copyDisplayStore: self.copyDisplayStore
                 )
             }
 
@@ -186,8 +175,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: username, field: .username, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "")))
                             }
                         }
 
@@ -198,8 +188,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action with no text") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", field: .username, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "")))
                             }
                         }
                     }
@@ -230,8 +221,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: password, field: .password, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "")))
                             }
                         }
 
@@ -242,8 +234,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action with no text") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", field: .password, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "")))
                             }
                         }
                     }
@@ -294,7 +287,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                     it("does nothing") {
                         expect(self.dataStore.loginIDArg).to(beNil())
-                        expect(self.copyActionHandler.invokedAction).to(beNil())
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beAnInstanceOf(CopyAction.self))
                     }
                 }
             }
@@ -415,13 +408,13 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("getting a copy display action") {
                     it("tells the view to display a password temporary alert") {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .password))
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyField.password)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.password)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
 
                     it("tells the view to display a username temporary alert") {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .username))
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyField.username)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }

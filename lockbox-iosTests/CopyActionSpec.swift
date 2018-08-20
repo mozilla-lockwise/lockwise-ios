@@ -10,75 +10,7 @@ import Nimble
 @testable import Lockbox
 
 class CopyActionSpec: QuickSpec {
-    class FakeDispatcher: Dispatcher {
-        var dispatchedActions: [Action] = []
-
-        override func dispatch(action: Action) {
-            self.dispatchedActions.append(action)
-        }
-    }
-
-    class FakePasteboard: UIPasteboard {
-        var passedItems: [[String: Any]]?
-        var options: [UIPasteboardOption: Any]?
-
-        override func setItems(_ items: [[String: Any]], options: [UIPasteboardOption: Any]) {
-            self.passedItems = items
-            self.options = options
-        }
-    }
-
-    private var dispatcher: FakeDispatcher!
-    private var pasteboard: FakePasteboard!
-    var subject: CopyActionHandler!
-
     override func spec() {
-        describe("CopyActionHandler") {
-            beforeEach {
-                self.dispatcher = FakeDispatcher()
-                self.pasteboard = FakePasteboard()
-
-                self.subject = CopyActionHandler(
-                        dispatcher: self.dispatcher,
-                        pasteboard: self.pasteboard
-                )
-            }
-
-            describe("invoke") {
-                let text = "myspecialtext"
-                let fieldName = CopyField.password
-                let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd")
-
-                beforeEach {
-                    self.subject.invoke(action)
-                }
-
-                it("add the item to the pasteboard with item and timeout option") {
-                    let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
-
-                    expect(self.pasteboard.passedItems![0][UIPasteboardTypeAutomatic] as? String).to(equal(text))
-                    expect(self.pasteboard.options![UIPasteboardOption.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
-                }
-
-                it("dispatches the copied action and the copy action") {
-                    let copiedAction = self.dispatcher.dispatchedActions[0] as! CopyConfirmationDisplayAction
-                    expect(copiedAction).to(equal(CopyConfirmationDisplayAction(field: .password)))
-
-                    let copyAction = self.dispatcher.dispatchedActions[1] as! CopyAction
-                    expect(copyAction).to(equal(action))
-                }
-            }
-        }
-
-        describe("CopyDisplayAction") {
-            describe("equality") {
-                it("CopyDisplayActions are equal when fieldnames are equal") {
-                    expect(CopyConfirmationDisplayAction(field: CopyField.password)).to(equal(CopyConfirmationDisplayAction(field: CopyField.password)))
-                    expect(CopyConfirmationDisplayAction(field: CopyField.password)).notTo(equal(CopyConfirmationDisplayAction(field: CopyField.username)))
-                }
-            }
-        }
-
         describe("CopyAction") {
             describe("equality") {
                 it("CopyActions are equal when fieldnames and text are equal") {

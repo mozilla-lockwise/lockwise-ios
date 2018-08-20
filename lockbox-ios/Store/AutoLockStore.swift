@@ -40,7 +40,7 @@ class AutoLockStore {
                     // future user interaction actions will need to get added to this list
                     action is MainRouteAction ||
                             action is SettingRouteAction ||
-                            action is CopyConfirmationDisplayAction ||
+                            action is CopyAction ||
                             action is ExternalLinkAction ||
                             action is ItemListDisplayAction ||
                             action is ItemDetailDisplayAction ||

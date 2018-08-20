@@ -22,8 +22,7 @@ class ItemDetailPresenter {
     private var dispatcher: Dispatcher
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
-    private var copyDisplayStore: CopyConfirmationDisplayStore
-    private var copyActionHandler: CopyActionHandler
+    private var copyDisplayStore: CopyDisplayStore
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -61,7 +60,7 @@ class ItemDetailPresenter {
                             }
 
                             target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
-                            target.copyActionHandler.invoke(CopyAction(text: text, field: field, itemID: itemId))
+                            target.dispatcher.dispatch(action: CopyAction(text: text, field: field, itemID: itemId))
                         })
                         .disposed(by: target.disposeBag)
             } else if value == Constant.string.webAddress {
@@ -81,14 +80,12 @@ class ItemDetailPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
-         copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
-         copyActionHandler: CopyActionHandler = CopyActionHandler.shared) {
+         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
-        self.copyActionHandler = copyActionHandler
 
         self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
@@ -119,9 +116,9 @@ class ItemDetailPresenter {
         self.view?.bind(titleText: titleDriver)
 
         self.copyDisplayStore.copyDisplay
-                .drive(onNext: { action in
+                .drive(onNext: { field in
                     let fieldName: String
-                    switch action.field {
+                    switch field {
                     case .password: fieldName = Constant.string.password
                     case .username: fieldName = Constant.string.username
                     }
