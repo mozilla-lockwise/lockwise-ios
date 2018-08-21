@@ -7,6 +7,7 @@ import RxSwift
 import RxCocoa
 import UIKit
 import FxAClient
+import AdjustSdk
 
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
@@ -93,6 +94,7 @@ class RootPresenter {
 
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
+        self.startAdjust()
     }
 
     func onViewReady() {
@@ -241,5 +243,11 @@ extension RootPresenter {
                 .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
                 .disposed(by: self.disposeBag)
+    }
+
+    fileprivate func startAdjust() {
+        self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
+            Adjust.setEnabled(enabled)
+        }).disposed(by: self.disposeBag)
     }
 }

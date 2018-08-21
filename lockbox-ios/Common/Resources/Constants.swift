@@ -17,6 +17,7 @@ struct Constant {
         static let editExistingEntriesFAQ = faqURL + "#how-do-i-edit-existing-entries"
         static let securityFAQ = faqURL + "#what-security-technology-does-firefox-lockbox-use"
         static let createNewEntriesFAQ = faqURL + "#how-do-i-create-new-entries"
+        static let adjustAppToken = "383z4i46o48w"
     }
 
     struct color {
