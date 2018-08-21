@@ -230,14 +230,14 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func test5SendUsageDataSwitch() {
-        navigator.goto(Screen.SettingsMenu)
-        // Disable the send usage data
-        navigator.performAction(Action.SendUsageData)
-        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "0")
-
-        // Enable it again
-        navigator.performAction(Action.SendUsageData)
-        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "1")
+//        navigator.goto(Screen.SettingsMenu)
+//        // Disable the send usage data
+//        navigator.performAction(Action.SendUsageData)
+//        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "0")
+//
+//        // Enable it again
+//        navigator.performAction(Action.SendUsageData)
+//        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "1")
     }
 
     func test6SortEntries() {
