@@ -248,8 +248,8 @@ extension ItemListView {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockbox.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
 
         if #available(iOS 11.0, *) {
@@ -276,10 +276,6 @@ extension ItemListView {
     private var prefButton: UIButton {
         let button = UIButton()
         button.accessibilityIdentifier = "settings.button"
-        if #available(iOS 11.0, *) {
-            button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        }
-
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         button.accessibilityLabel = Constant.string.settingsAccessibilityID
         let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
@@ -295,13 +291,10 @@ extension ItemListView {
 
     private var sortingButton: UIButton {
         let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        button.titleLabel?.font = .navigationButtonFont
         // custom width constraint so "Recent" fits on small iPhone SE screen
         button.accessibilityIdentifier = "sorting.button"
         button.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 11.0, *) {
-            button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        }
         button.addConstraint(NSLayoutConstraint(
                 item: button,
                 attribute: .width,

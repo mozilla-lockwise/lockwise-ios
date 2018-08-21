@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		22336C7221111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */; };
+		224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224A6C7C212C8C2B008C7A3F /* UIFont+.swift */; };
 		226E3FF02127759C00185D11 /* ExternalLinkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */; };
 		2C2EC55520ADA85A00AF8C44 /* LockboxXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */; };
 		2C2EC56020ADAA8100AF8C44 /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */; };
@@ -225,6 +226,7 @@
 
 /* Begin PBXFileReference section */
 		22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenterSpec.swift; sourceTree = "<group>"; };
+		224A6C7C212C8C2B008C7A3F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStore.swift; sourceTree = "<group>"; };
 		2C2EC55220ADA85A00AF8C44 /* LockboxXCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockboxXCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxXCUITests.swift; sourceTree = "<group>"; };
@@ -623,6 +625,7 @@
 				4C7F3C7C20B3C32A00C4C414 /* UIButton+.swift */,
 				7AA54D3C8D454F79BD580AAF /* UserDefaults+.swift */,
 				D86A307520829B7F00589CA8 /* UIApplication+.swift */,
+				224A6C7C212C8C2B008C7A3F /* UIFont+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1133,6 +1136,7 @@
 				7AA54E83D68AA39FB3A895AF /* RootPresenter.swift in Sources */,
 				7AA54B936D967416C7AD4F3C /* Observable+.swift in Sources */,
 				7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */,
+				224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */,
 				D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */,
 				7AA548BBE384D40397D26E9B /* RootView.swift in Sources */,
 				7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */,

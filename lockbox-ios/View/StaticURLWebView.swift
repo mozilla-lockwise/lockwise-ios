@@ -49,8 +49,8 @@ class StaticURLWebView: UIViewController {
         self.navigationItem.title = self.navTitle
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
 
         if #available(iOS 11.0, *) {
@@ -63,7 +63,7 @@ class StaticURLWebView: UIViewController {
                 target: nil,
                 action: nil)
         self.navigationItem.leftBarButtonItem?.setTitleTextAttributes([
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .body)
+            .font: UIFont.navigationButtonFont
         ], for: .normal)
     }
 }
