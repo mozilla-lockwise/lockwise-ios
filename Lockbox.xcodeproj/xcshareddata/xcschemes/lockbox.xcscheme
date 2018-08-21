@@ -43,6 +43,16 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7D1B1AC31F99028D00C1F5FF"
+               BuildableName = "LockboxTests.xctest"
+               BlueprintName = "LockboxTests"
+               ReferencedContainer = "container:Lockbox.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

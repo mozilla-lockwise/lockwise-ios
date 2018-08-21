@@ -13,21 +13,19 @@ protocol AccountSettingViewProtocol: class, AlertControllerView {
 
 class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
+    let dispatcher: Dispatcher
     let accountStore: AccountStore
-    let routeActionHandler: RouteActionHandler
-    let dataStoreActionHandler: DataStoreActionHandler
-    let accountActionHandler: AccountActionHandler
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.dataStoreActionHandler.invoke(.reset)
-            target.accountActionHandler.invoke(.clear)
+            target.dispatcher.dispatch(action: DataStoreAction.reset)
+            target.dispatcher.dispatch(action: AccountAction.clear)
         }.asObserver()
     }()
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
         }.asObserver()
     }()
 
@@ -47,16 +45,12 @@ class AccountSettingPresenter {
     }()
 
     init(view: AccountSettingViewProtocol,
-         accountStore: AccountStore = AccountStore.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         accountActionHandler: AccountActionHandler = AccountActionHandler.shared
+         dispatcher: Dispatcher = .shared,
+         accountStore: AccountStore = AccountStore.shared
     ) {
         self.view = view
+        self.dispatcher = dispatcher
         self.accountStore = accountStore
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
-        self.accountActionHandler = accountActionHandler
     }
 
     func onViewReady() {

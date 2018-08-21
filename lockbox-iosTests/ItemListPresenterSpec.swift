@@ -70,22 +70,6 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeActionArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeActionArgument = action
-        }
-    }
-
-    class FakeItemListDisplayActionHandler: ItemListDisplayActionHandler {
-        var invokeActionArgument: [ItemListDisplayAction] = []
-
-        override func invoke(_ action: ItemListDisplayAction) {
-            self.invokeActionArgument.append(action)
-        }
-    }
-
     class FakeDataStore: DataStore {
         var itemListStub = PublishSubject<[Login]>()
         var syncStateStub = PublishSubject<SyncState>()
@@ -122,8 +106,6 @@ class ItemListPresenterSpec: QuickSpec {
 
     private var view: FakeItemListView!
     private var dispatcher: FakeDispatcher!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var itemListDisplayActionHandler: FakeItemListDisplayActionHandler!
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
     private var userDefaultStore: FakeUserDefaultStore!
@@ -136,8 +118,6 @@ class ItemListPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeItemListView()
                 self.dispatcher = FakeDispatcher()
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.itemListDisplayActionHandler = FakeItemListDisplayActionHandler()
                 self.dataStore = FakeDataStore()
                 self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.userDefaultStore = FakeUserDefaultStore()
@@ -151,8 +131,6 @@ class ItemListPresenterSpec: QuickSpec {
                 self.subject = ItemListPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
-                        routeActionHandler: self.routeActionHandler,
-                        itemListDisplayActionHandler: self.itemListDisplayActionHandler,
                         dataStore: self.dataStore,
                         itemListDisplayStore: self.itemListDisplayStore,
                         userDefaultStore: self.userDefaultStore
@@ -237,8 +215,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 }
 
                                 it("routes to the learn more view") {
-                                    expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                                    let argument = self.routeActionHandler.invokeActionArgument as! ExternalWebsiteRouteAction
+                                    let argument = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                                     expect(argument).to(equal(ExternalWebsiteRouteAction(
                                             urlString: Constant.app.enableSyncFAQ,
                                             title: Constant.string.faq,
@@ -271,7 +248,7 @@ class ItemListPresenterSpec: QuickSpec {
                             }
 
                             it("resets the refreshing action") {
-                                let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! PullToRefreshAction
+                                let action = self.dispatcher.dispatchedActions.popLast() as! PullToRefreshAction
                                 expect(action.refreshing).to(beFalse())
                             }
 
@@ -480,10 +457,11 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the filtertext item list display action and editing action") {
-                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beTrue())
-                    let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterAction
-                    expect(action.filteringText).to(equal(text))
+
+                    let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
+                    expect(filterAction.filteringText).to(equal(text))
                 }
             }
 
@@ -496,9 +474,11 @@ class ItemListPresenterSpec: QuickSpec {
 
                 it("hides keyboard and dispatches false editing action, clearing the text from the textfield") {
                     expect(self.view.dismissKeyboardCalled).to(beTrue())
-                    let filteringAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterAction
-                    expect(filteringAction.filteringText).to(equal(""))
-                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+
+                    let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
+                    expect(filterAction.filteringText).to(equal(""))
+
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beFalse())
                 }
             }
@@ -512,7 +492,8 @@ class ItemListPresenterSpec: QuickSpec {
 
                 it("hides keyboard and dispatches false editing action") {
                     expect(self.view.dismissKeyboardCalled).to(beTrue())
-                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beFalse())
                 }
             }
@@ -534,9 +515,8 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("tells the route action handler to display the detail view for the relevant item") {
-                        expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
-                        expect(argument).to(equal(MainRouteAction.detail(itemId: id)))
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
+                        expect(argument).to(equal(.detail(itemId: id)))
                     }
 
                     it("dismisses the keyboard") {
@@ -556,7 +536,7 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(self.routeActionHandler.invokeActionArgument).to(beNil())
+                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                     }
                 }
             }
@@ -619,8 +599,8 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the setting route action") {
-                    let action = self.routeActionHandler.invokeActionArgument as! SettingRouteAction
-                    expect(action).to(equal(SettingRouteAction.list))
+                    let action = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
+                    expect(action).to(equal(.list))
                 }
             }
         }

@@ -19,25 +19,21 @@ let copyableFields = [Constant.string.username, Constant.string.password]
 
 class ItemDetailPresenter {
     weak var view: ItemDetailViewProtocol?
+    private var dispatcher: Dispatcher
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
-    private var copyDisplayStore: CopyConfirmationDisplayStore
-    private var routeActionHandler: RouteActionHandler
-    private var dataStoreActionHandler: DataStoreActionHandler
-    private var copyActionHandler: CopyActionHandler
-    private var itemDetailActionHandler: ItemDetailActionHandler
-    private var externalLinkActionHandler: LinkActionHandler
+    private var copyDisplayStore: CopyDisplayStore
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
-            target.itemDetailActionHandler.invoke(.togglePassword(displayed: revealed))
+            target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()
     }()
 
     lazy private(set) var onCancel: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(MainRouteAction.list)
+            target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
     }()
 
@@ -63,8 +59,8 @@ class ItemDetailPresenter {
                                 field = CopyField.password
                             }
 
-                            target.dataStoreActionHandler.invoke(.touch(id: itemId))
-                            target.copyActionHandler.invoke(CopyAction(text: text, field: field, itemID: itemId))
+                            target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
+                            target.dispatcher.dispatch(action: CopyAction(text: text, field: field, itemID: itemId))
                         })
                         .disposed(by: target.disposeBag)
             } else if value == Constant.string.webAddress {
@@ -72,7 +68,7 @@ class ItemDetailPresenter {
                         .take(1)
                         .subscribe(onNext: { item in
                             if let origin = item?.hostname {
-                                target.externalLinkActionHandler.invoke(ExternalLinkAction(baseURLString: origin))
+                                target.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: origin))
                             }
                         })
                         .disposed(by: target.disposeBag)
@@ -81,25 +77,17 @@ class ItemDetailPresenter {
     }()
 
     init(view: ItemDetailViewProtocol,
+         dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
-         copyDisplayStore: CopyConfirmationDisplayStore = CopyConfirmationDisplayStore.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         copyActionHandler: CopyActionHandler = CopyActionHandler.shared,
-         itemDetailActionHandler: ItemDetailActionHandler = ItemDetailActionHandler.shared,
-         externalLinkActionHandler: LinkActionHandler = LinkActionHandler.shared) {
+         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared) {
         self.view = view
+        self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
-        self.copyActionHandler = copyActionHandler
-        self.itemDetailActionHandler = itemDetailActionHandler
-        self.externalLinkActionHandler = externalLinkActionHandler
 
-        self.itemDetailActionHandler.invoke(.togglePassword(displayed: false))
+        self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
 
     func onViewReady() {
@@ -128,9 +116,9 @@ class ItemDetailPresenter {
         self.view?.bind(titleText: titleDriver)
 
         self.copyDisplayStore.copyDisplay
-                .drive(onNext: { action in
+                .drive(onNext: { field in
                     let fieldName: String
-                    switch action.field {
+                    switch field {
                     case .password: fieldName = Constant.string.password
                     case .username: fieldName = Constant.string.username
                     }
@@ -146,7 +134,7 @@ class ItemDetailPresenter {
                         return
                     }
 
-                    self.routeActionHandler.invoke(
+                    self.dispatcher.dispatch(action:
                             ExternalWebsiteRouteAction(
                                     urlString: Constant.app.editExistingEntriesFAQ,
                                     title: Constant.string.faq,

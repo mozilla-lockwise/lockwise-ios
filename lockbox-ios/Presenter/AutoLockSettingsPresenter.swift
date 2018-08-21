@@ -15,7 +15,6 @@ class AutoLockSettingPresenter {
     private var view: AutoLockSettingViewProtocol
     private let dispatcher: Dispatcher
     private var userDefaultStore: UserDefaultStore
-    private var routeActionHandler: RouteActionHandler
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
@@ -47,12 +46,10 @@ class AutoLockSettingPresenter {
 
     init(view: AutoLockSettingViewProtocol,
          dispatcher: Dispatcher = .shared,
-         userDefaultStore: UserDefaultStore = .shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared) {
+         userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.userDefaultStore = userDefaultStore
-        self.routeActionHandler = routeActionHandler
     }
 
     func onViewReady() {
@@ -74,7 +71,7 @@ class AutoLockSettingPresenter {
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
             }.asObserver()
     }()
 }

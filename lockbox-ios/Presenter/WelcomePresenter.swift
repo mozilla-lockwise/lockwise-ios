@@ -35,10 +35,7 @@ extension LockedEnabled: Equatable {
 class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
-    private let routeActionHandler: RouteActionHandler
-    private let dataStoreActionHandler: DataStoreActionHandler
-    private let userInfoActionHandler: AccountActionHandler
-    private let linkActionHandler: LinkActionHandler
+    private let dispatcher: Dispatcher
     private let accountStore: AccountStore
     private let dataStore: DataStore
     private let lifecycleStore: LifecycleStore
@@ -46,19 +43,13 @@ class WelcomePresenter {
     private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         userInfoActionHandler: AccountActionHandler = AccountActionHandler.shared,
-         linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
+         dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = AccountStore.shared,
          dataStore: DataStore = DataStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
-        self.userInfoActionHandler = userInfoActionHandler
-        self.linkActionHandler = linkActionHandler
+        self.dispatcher = dispatcher
         self.accountStore = accountStore
         self.dataStore = dataStore
         self.lifecycleStore = lifecycleStore
@@ -72,7 +63,7 @@ class WelcomePresenter {
         self.view?.loginButtonPressed
                 .subscribe(onNext: { [weak self] _ in
                     if self?.biometryManager.deviceAuthenticationAvailable ?? true {
-                        self?.routeActionHandler.invoke(LoginRouteAction.fxa)
+                        self?.dispatcher.dispatch(action: LoginRouteAction.fxa)
                     } else {
                         self?.launchPasscodePrompt()
                     }
@@ -81,7 +72,7 @@ class WelcomePresenter {
 
         self.view?.learnMorePressed
             .subscribe(onNext: { _ in
-                self.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                self.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                         urlString: Constant.app.useLockboxFAQ,
                         title: Constant.string.learnMore,
                         returnRoute: LoginRouteAction.welcome))
@@ -120,13 +111,13 @@ class WelcomePresenter {
 extension WelcomePresenter {
     private var skipButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(LoginRouteAction.fxa)
+            target.dispatcher.dispatch(action: LoginRouteAction.fxa)
         }.asObserver()
     }
 
     private var setPasscodeButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.linkActionHandler.invoke(SettingLinkAction.touchIDPasscode)
+            target.dispatcher.dispatch(action: SettingLinkAction.touchIDPasscode)
         }.asObserver()
     }
 
@@ -171,7 +162,7 @@ extension WelcomePresenter {
                             }
                 }
                 .subscribe(onNext: { [weak self] _ in
-                    self?.dataStoreActionHandler.invoke(.unlock)
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
                 })
                 .disposed(by: self.disposeBag)
     }

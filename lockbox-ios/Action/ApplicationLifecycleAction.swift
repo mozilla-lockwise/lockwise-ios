@@ -29,17 +29,3 @@ extension LifecycleAction: TelemetryAction {
         return nil
     }
 }
-
-class ApplicationLifecycleActionHandler: ActionHandler {
-    static let shared = ApplicationLifecycleActionHandler()
-
-    private let dispatcher: Dispatcher
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ action: LifecycleAction) {
-        self.dispatcher.dispatch(action: action)
-    }
-}

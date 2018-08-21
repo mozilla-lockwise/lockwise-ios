@@ -26,17 +26,3 @@ extension AccountAction: Equatable {
         }
     }
 }
-
-class AccountActionHandler: ActionHandler {
-    static let shared = AccountActionHandler()
-    fileprivate var dispatcher: Dispatcher
-    fileprivate let disposeBag = DisposeBag()
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ action: AccountAction) {
-        self.dispatcher.dispatch(action: action)
-    }
-}

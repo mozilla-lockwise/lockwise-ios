@@ -37,6 +37,14 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
     class FakeAccountStore: AccountStore {
         let profileStub = PublishSubject<Profile?>()
 
@@ -45,35 +53,9 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeAccountActionHandler: AccountActionHandler {
-        var invokeArgument: AccountAction?
-
-        override func invoke(_ action: AccountAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.invokeArgument = action
-        }
-    }
-
     private var view: FakeAccountSettingView!
+    private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var accountActionHandler: FakeAccountActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     var subject: AccountSettingPresenter!
 
     private let disposeBag = DisposeBag()
@@ -86,17 +68,13 @@ class AccountSettingPresenterSpec: QuickSpec {
                 self.view.avatarImageDataObserver = self.scheduler.createObserver(Data.self)
                 self.view.displayNameObserver = self.scheduler.createObserver(String.self)
 
+                self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.routeActionHandler = FakeRouteActionHandler()
                 self.accountStore = FakeAccountStore()
-                self.accountActionHandler = FakeAccountActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.subject = AccountSettingPresenter(
                         view: self.view,
-                        accountStore: self.accountStore,
-                        routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
-                        accountActionHandler: self.accountActionHandler
+                        dispatcher: self.dispatcher,
+                        accountStore: self.accountStore
                 )
             }
 
@@ -135,8 +113,11 @@ class AccountSettingPresenterSpec: QuickSpec {
                     }
 
                     it("sends the clear & reset actions") {
-                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.reset))
-                        expect(self.accountActionHandler.invokeArgument).to(equal(AccountAction.clear))
+                        let accountAction = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                        expect(accountAction).to(equal(.clear))
+
+                        let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                        expect(dataStoreAction).to(equal(.reset))
                     }
                 }
             }
@@ -153,8 +134,8 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
 
                 it("sends the settings list action") {
-                    let argument = self.routeActionHandler.invokeArgument as! SettingRouteAction
-                    expect(argument).to(equal(SettingRouteAction.list))
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
         }

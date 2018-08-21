@@ -8,6 +8,20 @@ import Nimble
 
 @testable import Lockbox
 
+class FakeApplication: OpenUrlProtocol {
+    var openArgument: URL?
+    var canOpenURLArgument: URL?
+
+    func open(_ url: URL, options: [String: Any], completionHandler completion: ((Bool) -> Swift.Void)?) {
+        self.openArgument = url
+    }
+
+    func canOpenURL(_ url: URL) -> Bool {
+        self.canOpenURLArgument = url
+        return true
+    }
+}
+
 class SettingActionSpec: QuickSpec {
     override func spec() {
         describe("SettingAction") {
@@ -40,6 +54,54 @@ class SettingActionSpec: QuickSpec {
 
                 it("telemetry event value is equal to setting value") {
                     expect(SettingAction.recordUsageData(enabled: true).value).to(equal("true"))
+                }
+            }
+        }
+
+        describe("Setting") {
+            describe("PreferredBrowser") {
+                describe("getPreferredBrowserDeeplink") {
+
+                    let testUrl = "https://github.com/mozilla-lockbox/lockbox-ios"
+
+                    it("creates safari deeplinks") {
+                        expect(Setting.PreferredBrowser.Safari.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal(testUrl))
+                    }
+
+                    it("creates firefox deeplinks") {
+                        expect(Setting.PreferredBrowser.Firefox.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                    }
+
+                    it("creates focus deeplinks") {
+                        expect(Setting.PreferredBrowser.Focus.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                    }
+
+                    it("creates chrome https deeplinks") {
+                        expect(Setting.PreferredBrowser.Chrome.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("googlechromes://github.com/mozilla-lockbox/lockbox-ios"))
+                    }
+
+                    it("creates chrome http deeplinks") {
+                        expect(Setting.PreferredBrowser.Chrome.getPreferredBrowserDeeplink(url: "http://mozilla.org")?.absoluteString).to(equal("googlechrome://mozilla.org"))
+                    }
+                }
+
+                describe("canOpenBrowser") {
+
+                    var application: FakeApplication!
+
+                    beforeEach {
+                        application = FakeApplication()
+                    }
+
+                    it("tries to open browser") {
+                        expect(Setting.PreferredBrowser.Safari.canOpenBrowser(application: application)).to(beTrue())
+                        expect(application.canOpenURLArgument?.absoluteString).toNot(beNil())
+                    }
+
+                    it("uses an http link for chrome") {
+                        expect(Setting.PreferredBrowser.Chrome.canOpenBrowser(application: application)).to(beTrue())
+                        expect(application.canOpenURLArgument?.absoluteString).to(equal("googlechrome://mozilla.org"))
+                    }
                 }
             }
         }

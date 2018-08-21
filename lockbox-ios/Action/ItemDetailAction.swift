@@ -38,17 +38,3 @@ extension ItemDetailDisplayAction: Equatable {
         }
     }
 }
-
-class ItemDetailActionHandler: ActionHandler {
-    static let shared = ItemDetailActionHandler()
-
-    private let dispatcher: Dispatcher
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ displayAction: ItemDetailDisplayAction) {
-        self.dispatcher.dispatch(action: displayAction)
-    }
-}

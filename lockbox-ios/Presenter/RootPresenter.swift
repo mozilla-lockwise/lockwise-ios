@@ -28,38 +28,34 @@ class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
 
+    fileprivate let dispatcher: Dispatcher
     fileprivate let routeStore: RouteStore
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let accountStore: AccountStore
     fileprivate let userDefaultStore: UserDefaultStore
-    fileprivate let routeActionHandler: RouteActionHandler
-    fileprivate let dataStoreActionHandler: DataStoreActionHandler
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
 
     var fxa: FirefoxAccount?
 
     init(view: RootViewProtocol,
-         dispatcher: Dispatcher = Dispatcher.shared,
+         dispatcher: Dispatcher = .shared,
          routeStore: RouteStore = RouteStore.shared,
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
          accountStore: AccountStore = AccountStore.shared,
          userDefaultStore: UserDefaultStore = .shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
          biometryManager: BiometryManager = BiometryManager()
     ) {
         self.view = view
+        self.dispatcher = dispatcher
         self.routeStore = routeStore
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
         self.accountStore = accountStore
         self.userDefaultStore = userDefaultStore
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
@@ -67,7 +63,7 @@ class RootPresenter {
             .bind { latest in
                     if let oauthInfo = latest.0,
                         let profile = latest.1 {
-                        self.dataStoreActionHandler.invoke(.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
                     }
                 }
                 .disposed(by: self.disposeBag)
@@ -76,9 +72,9 @@ class RootPresenter {
             .subscribe(onNext: { storageState in
                     switch storageState {
                     case .Unprepared, .Locked:
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                     case .Unlocked:
-                        self.routeActionHandler.invoke(MainRouteAction.list)
+                        self.dispatcher.dispatch(action: MainRouteAction.list)
                     default:
                         break
                     }
@@ -91,12 +87,12 @@ class RootPresenter {
             .distinctUntilChanged()
             .subscribe(onNext: { syncState in
                 if syncState == .NotSyncable {
-                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                 }
             })
             .disposed(by: self.disposeBag)
 
-        self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: false))
+        self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
         self.startAdjust()
     }
