@@ -246,7 +246,7 @@ extension RootPresenter {
     }
 
     fileprivate func startAdjust() {
-        self.userDefaultStore.onRecordUsageData.subscribe(onNext: { enabled in
+        self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
             Adjust.setEnabled(enabled)
         }).disposed(by: self.disposeBag)
     }
