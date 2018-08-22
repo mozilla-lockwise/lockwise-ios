@@ -101,12 +101,12 @@ extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
     private func setupNavbar() {
         self.navigationItem.title = Constant.string.settingsBrowser
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
         self.navigationController?.navigationBar.accessibilityIdentifier = "openWebSitesIn.navigationBar"
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
-        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {
