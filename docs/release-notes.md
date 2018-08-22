@@ -1,5 +1,23 @@
 # Release Notes
 
+## 1.2 (Build 1939)
+
+_Date: 2018-08-22_
+
+It's been a month since our launch and we've been working hard to replace the old way of logging in with Firefox Accounts and fixing some bugs. For new users, they'll encounter a smoother and clearer experience. For existing users with the app already installed, you'll just need to sign in once again.
+
+Here's the full list of changes:
+
+- Introduced the OAuth login flow to replace the "old" way of signing in
+- Added a "migration path" so users with the app sign back in and store data properly
+- The app clears your local storage and cache when you disconnect your account
+- You can now "pull to refresh" to force a sync when looking at an empty list
+- We fixed some alignment bugs for iPhone SEs running iOS 10
+- The autolock feature has been hardened as to when and how it locks the app
+- The app no longer dynamically adjusts the navigation bar sizes so it can be usable
+
+Thanks to all our open source contributors that helped make this release possible.
+
 ## 1.1.1 (Build 1717)
 
 _Date: 2018-07-26_
