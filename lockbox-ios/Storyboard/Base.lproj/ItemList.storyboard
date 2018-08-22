@@ -35,7 +35,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" contentMode="center" horizontalHuggingPriority="249" verticalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your entries" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DEF-qU-5KB">
+                                                <textField opaque="NO" contentMode="center" horizontalHuggingPriority="248" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your entries" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DEF-qU-5KB">
                                                     <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="filterEntries.textField"/>
                                                     <constraints>
