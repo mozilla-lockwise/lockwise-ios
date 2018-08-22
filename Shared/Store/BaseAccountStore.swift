@@ -10,7 +10,6 @@ import SwiftKeychainWrapper
 import WebKit
 
 class BaseAccountStore {
-    internal var localKeychainWrapper: KeychainWrapper
     internal var sharedKeychainWrapper: KeychainWrapper
 
     internal var fxa: FirefoxAccount?
@@ -31,10 +30,7 @@ class BaseAccountStore {
         return self.sharedKeychainWrapper.string(forKey: key) ?? self.localKeychainWrapper.string(forKey: key)
     }
 
-    init(localKeychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         sharedKeychainWrapper: KeychainWrapper = KeychainWrapper(serviceName: "", accessGroup: Constant.app.group)
-        ) {
-        self.localKeychainWrapper = localKeychainWrapper
+    init(sharedKeychainWrapper: KeychainWrapper = KeychainWrapper(serviceName: "", accessGroup: Constant.app.group)) {
         self.sharedKeychainWrapper = sharedKeychainWrapper
 
         self.initialized()
