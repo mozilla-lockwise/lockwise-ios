@@ -5,7 +5,3 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 carthage bootstrap --platform iOS --color auto --cache-builds
-
-cd lockbox-ios
-tar xvfz binaries.tar.gz
-cd ..

@@ -17,16 +17,3 @@ struct ItemListFilterEditAction: ItemListDisplayAction {
 struct PullToRefreshAction: ItemListDisplayAction {
     let refreshing: Bool
 }
-
-class ItemListDisplayActionHandler: ActionHandler {
-    static let shared = ItemListDisplayActionHandler()
-    private let dispatcher: Dispatcher
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ action: ItemListDisplayAction) {
-        self.dispatcher.dispatch(action: action)
-    }
-}

@@ -75,9 +75,9 @@ extension AutoLockSettingView {
     private func setupDelegate() {
         if let presenter = self.presenter {
             self.tableView.rx.itemSelected
-                    .map { (indexPath) -> AutoLockSetting? in
+                    .map { (indexPath) -> Setting.AutoLock? in
                         self.tableView.deselectRow(at: indexPath, animated: true)
-                        return self.dataSource?[indexPath].valueWhenChecked as? AutoLockSetting
+                        return self.dataSource?[indexPath].valueWhenChecked as? Setting.AutoLock
                     }.bind(to: presenter.itemSelectedObserver)
                     .disposed(by: self.disposeBag)
         }
@@ -98,8 +98,8 @@ extension AutoLockSettingView: UIGestureRecognizerDelegate {
     private func setupNavbar() {
         self.navigationItem.title = Constant.string.settingsAutoLock
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
 
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")

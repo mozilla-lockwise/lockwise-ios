@@ -45,9 +45,24 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchActionArgument: Action?
+
+        override func dispatch(action: Action) {
+            self.dispatchActionArgument = action
+        }
+    }
+
     class FakeDataStore: DataStore {
-        var onItemStub = PublishSubject<Login?>()
+        var onItemStub: PublishSubject<Login?>
         var loginIDArg: String?
+
+        init() {
+            self.onItemStub = PublishSubject<Login?>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override func get(_ id: String) -> Observable<Login?> {
             self.loginIDArg = id
@@ -55,11 +70,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeCopyDisplayStore: CopyConfirmationDisplayStore {
-        var copyDisplayStub = PublishSubject<CopyConfirmationDisplayAction>()
+    class FakeCopyDisplayStore: CopyDisplayStore {
+        var copyDisplayStub = PublishSubject<CopyField>()
 
-        override var copyDisplay: Driver<CopyConfirmationDisplayAction> {
-            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyConfirmationDisplayAction(field: .password))
+        override var copyDisplay: Driver<CopyField> {
+            return self.copyDisplayStub.asDriver(onErrorJustReturn: CopyField.password)
         }
     }
 
@@ -71,46 +86,11 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
-        }
-    }
-
-    class FakeCopyActionHandler: CopyActionHandler {
-        var invokedAction: CopyAction?
-
-        override func invoke(_ action: CopyAction) {
-            self.invokedAction = action
-        }
-    }
-
-    class FakeItemDetailActionHandler: ItemDetailActionHandler {
-        var displayActionArgument: ItemDetailDisplayAction?
-
-        override func invoke(_ displayAction: ItemDetailDisplayAction) {
-            self.displayActionArgument = displayAction
-        }
-    }
-
-    class FakeExternalLinkActionHandler: LinkActionHandler {
-        var invokedAction: LinkAction?
-
-        override func invoke(_ action: LinkAction) {
-            self.invokedAction = action
-        }
-    }
-
     private var view: FakeItemDetailView!
+    private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var copyActionHandler: FakeCopyActionHandler!
-    private var externalLinkHandler: FakeExternalLinkActionHandler!
-    private var itemDetailActionHandler: FakeItemDetailActionHandler!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -119,30 +99,24 @@ class ItemDetailPresenterSpec: QuickSpec {
         describe("ItemDetailPresenter") {
             beforeEach {
                 self.view = FakeItemDetailView()
+                self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.copyActionHandler = FakeCopyActionHandler()
-                self.itemDetailActionHandler = FakeItemDetailActionHandler()
-                self.externalLinkHandler = FakeExternalLinkActionHandler()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
-                        copyDisplayStore: self.copyDisplayStore,
-                        routeActionHandler: self.routeActionHandler,
-                        copyActionHandler: self.copyActionHandler,
-                        itemDetailActionHandler: self.itemDetailActionHandler,
-                        externalLinkActionHandler: self.externalLinkHandler
+                        copyDisplayStore: self.copyDisplayStore
                 )
             }
 
             it("starts the password display as hidden") {
-                expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                expect(self.itemDetailActionHandler.displayActionArgument)
-                        .to(equal(ItemDetailDisplayAction.togglePassword(displayed: false)))
+                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                let action = self.dispatcher.dispatchActionArgument as! ItemDetailDisplayAction
+                expect(action).to(equal(.togglePassword(displayed: false)))
             }
 
             describe("onPasswordToggle") {
@@ -158,9 +132,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the password action with the value") {
-                    expect(self.itemDetailActionHandler.displayActionArgument).notTo(beNil())
-                    expect(self.itemDetailActionHandler.displayActionArgument)
-                            .to(equal(ItemDetailDisplayAction.togglePassword(displayed: passwordRevealSelected)))
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let action = self.dispatcher.dispatchActionArgument as! ItemDetailDisplayAction
+                    expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
                 }
             }
 
@@ -176,9 +150,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("routes to the item list") {
-                    expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
-                    let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
-                    expect(argument).to(equal(MainRouteAction.list))
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let argument = self.dispatcher.dispatchActionArgument as! MainRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
 
@@ -208,8 +182,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: username, field: .username, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "")))
                             }
                         }
 
@@ -220,8 +195,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action with no text") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", field: .username, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "")))
                             }
                         }
                     }
@@ -252,8 +228,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: password, field: .password, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "")))
                             }
                         }
 
@@ -264,8 +241,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action with no text") {
-                                expect(self.copyActionHandler.invokedAction).notTo(beNil())
-                                expect(self.copyActionHandler.invokedAction).to(equal(CopyAction(text: "", field: .password, itemID: "")))
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "")))
                             }
                         }
                     }
@@ -296,8 +274,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                         }
 
                         it("dispatches the externalLink action") {
-                            expect(self.externalLinkHandler.invokedAction).notTo(beNil())
-                            let action = self.externalLinkHandler.invokedAction as! ExternalLinkAction
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                            let action = self.dispatcher.dispatchActionArgument as! ExternalLinkAction
                             expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
                         }
                     }
@@ -316,7 +294,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                     it("does nothing") {
                         expect(self.dataStore.loginIDArg).to(beNil())
-                        expect(self.copyActionHandler.invokedAction).to(beNil())
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beAnInstanceOf(CopyAction.self))
                     }
                 }
             }
@@ -437,13 +415,13 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("getting a copy display action") {
                     it("tells the view to display a password temporary alert") {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .password))
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyField.password)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.password)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
 
                     it("tells the view to display a username temporary alert") {
-                        self.copyDisplayStore.copyDisplayStub.onNext(CopyConfirmationDisplayAction(field: .username))
+                        self.copyDisplayStore.copyDisplayStub.onNext(CopyField.username)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
@@ -455,8 +433,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("dispatches the faq link action") {
-                        expect(self.routeActionHandler.routeActionArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.routeActionArgument as! ExternalWebsiteRouteAction
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                        let argument = self.dispatcher.dispatchActionArgument as! ExternalWebsiteRouteAction
                         expect(argument).to(equal(
                                         ExternalWebsiteRouteAction(
                                                 urlString: Constant.app.editExistingEntriesFAQ,

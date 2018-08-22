@@ -6,12 +6,16 @@ import Foundation
 import RxSwift
 import RxCocoa
 import UIKit
+import FxAClient
+import AdjustSdk
 
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+
+    var modalStackPresented: Bool { get }
 
     func startMainStack<T: UINavigationController>(_ type: T.Type)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
@@ -22,74 +26,100 @@ protocol RootViewProtocol: class {
     func pushSettingView(view: SettingRouteAction)
 }
 
+struct OAuthProfile {
+    let oauthInfo: OAuthInfo?
+    let profile: Profile?
+}
+
+extension OAuthProfile: Equatable {
+    static func ==(lh: OAuthProfile, rh: OAuthProfile) -> Bool {
+        return lh.profile == rh.profile &&
+                lh.oauthInfo == rh.oauthInfo
+    }
+}
+
 class RootPresenter {
     private weak var view: RootViewProtocol?
     private let disposeBag = DisposeBag()
 
+    fileprivate let dispatcher: Dispatcher
     fileprivate let routeStore: RouteStore
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
-    fileprivate let autoLockStore: AutoLockStore
-    fileprivate let userDefaults: UserDefaults
-    fileprivate let routeActionHandler: RouteActionHandler
-    fileprivate let dataStoreActionHandler: DataStoreActionHandler
+    fileprivate let accountStore: AccountStore
+    fileprivate let userDefaultStore: UserDefaultStore
+    fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
 
+    var fxa: FirefoxAccount?
+
     init(view: RootViewProtocol,
-         dispatcher: Dispatcher = Dispatcher.shared,
+         dispatcher: Dispatcher = .shared,
          routeStore: RouteStore = RouteStore.shared,
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
-         autoLockStore: AutoLockStore = AutoLockStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
+         accountStore: AccountStore = AccountStore.shared,
+         userDefaultStore: UserDefaultStore = .shared,
+         lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
          biometryManager: BiometryManager = BiometryManager()
     ) {
         self.view = view
+        self.dispatcher = dispatcher
         self.routeStore = routeStore
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
-        self.autoLockStore = autoLockStore
-        self.userDefaults = userDefaults
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
+        self.accountStore = accountStore
+        self.userDefaultStore = userDefaultStore
+        self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
-        self.dataStore.storageState
-            .subscribe(onNext: { storageState in
-                    switch storageState {
-                    case .Unprepared, .Locked:
-                        self.routeActionHandler.invoke(LoginRouteAction.welcome)
-                    case .Unlocked, .Preparing:
-                        self.routeActionHandler.invoke(MainRouteAction.list)
-                    default:
-                        break
+        // todo: update tests with populated oauth and profile info
+        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
+                .map { OAuthProfile(oauthInfo: $0.0, profile: $0.1) }
+                .distinctUntilChanged()
+                .bind { latest in
+                    if let oauthInfo = latest.oauthInfo,
+                        let profile = latest.profile {
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                    } else if latest.oauthInfo == nil && latest.profile == nil {
+                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                        self.dispatcher.dispatch(action: DataStoreAction.reset)
                     }
-                })
+                }
                 .disposed(by: self.disposeBag)
 
+        self.dataStore.storageState
+            .debug()
+            .subscribe(onNext: { storageState in
+                switch storageState {
+                case .Unprepared, .Locked:
+                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                case .Unlocked:
+                    self.dispatcher.dispatch(action: MainRouteAction.list)
+                default:
+                    break
+                }
+            })
+            .disposed(by: self.disposeBag)
+
         Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
+            .debug()
             .filter { $0.1 == LoginStoreState.Unprepared }
             .map { $0.0 }
             .distinctUntilChanged()
             .subscribe(onNext: { syncState in
                 if syncState == .NotSyncable {
-                    self.routeActionHandler.invoke(LoginRouteAction.welcome)
+                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                 }
             })
             .disposed(by: self.disposeBag)
 
-        if userDefaults.value(forKey: SettingKey.itemListSort.rawValue) == nil {
-            self.userDefaults.set(Constant.setting.defaultItemListSort.rawValue,
-                    forKey: SettingKey.itemListSort.rawValue)
-        }
-
-        self.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: false))
+        self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
+        self.startAdjust()
     }
 
     func onViewReady() {
@@ -131,7 +161,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(LoginNavigationController.self) {
                 view.startMainStack(LoginNavigationController.self)
@@ -160,7 +192,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(MainNavigationController.self) {
                 view.startMainStack(MainNavigationController.self)
@@ -185,7 +219,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(SettingNavigationController.self) {
                 view.startMainStack(SettingNavigationController.self)
@@ -233,10 +269,16 @@ class RootPresenter {
 
 extension RootPresenter {
     fileprivate func startTelemetry() {
-        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaults.onRecordUsageData)
+        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaultStore.recordUsageData)
                 .filter { $0.1 }
                 .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
                 .disposed(by: self.disposeBag)
+    }
+
+    fileprivate func startAdjust() {
+        self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
+            Adjust.setEnabled(enabled)
+        }).disposed(by: self.disposeBag)
     }
 }

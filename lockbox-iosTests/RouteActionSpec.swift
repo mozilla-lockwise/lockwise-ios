@@ -19,39 +19,8 @@ class RouteActionSpec: QuickSpec {
     }
 
     private var dispatcher: FakeDispatcher!
-    var subject: RouteActionHandler!
 
     override func spec() {
-        describe("RouteActionHandler") {
-            beforeEach {
-                self.dispatcher = FakeDispatcher()
-                self.subject = RouteActionHandler(dispatcher: self.dispatcher)
-            }
-
-            describe("invoke(routeAction)") {
-                beforeEach {
-                    self.subject.invoke(LoginRouteAction.fxa)
-                }
-
-                it("dispatches actions to the dispatcher") {
-                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                    let argument = self.dispatcher.actionTypeArgument as! LoginRouteAction
-                    expect(argument).to(equal(LoginRouteAction.fxa))
-                }
-            }
-
-            describe("invoke(onboardingStatus)") {
-                beforeEach {
-                    self.subject.invoke(OnboardingStatusAction(onboardingInProgress: false))
-                }
-
-                it("dispatches actions to the dispatcher") {
-                    expect(self.dispatcher.actionTypeArgument).notTo(beNil())
-                    let argument = self.dispatcher.actionTypeArgument as! OnboardingStatusAction
-                    expect(argument).to(equal(OnboardingStatusAction(onboardingInProgress: false)))
-                }
-            }
-        }
 
         describe("MainRouteAction") {
             describe("equality") {

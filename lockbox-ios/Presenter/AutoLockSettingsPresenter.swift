@@ -13,54 +13,51 @@ protocol AutoLockSettingViewProtocol {
 
 class AutoLockSettingPresenter {
     private var view: AutoLockSettingViewProtocol
-    private var userDefaults: UserDefaults
-    private var routeActionHandler: RouteActionHandler
-    private var settingActionHandler: SettingActionHandler
+    private let dispatcher: Dispatcher
+    private var userDefaultStore: UserDefaultStore
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOneMinute, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.OneMinute),
+                                          valueWhenChecked: Setting.AutoLock.OneMinute),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockFiveMinutes, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.FiveMinutes),
+                                          valueWhenChecked: Setting.AutoLock.FiveMinutes),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockFifteenMinutes, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.FifteenMinutes),
+                                          valueWhenChecked: Setting.AutoLock.FifteenMinutes),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockThirtyMinutes, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.ThirtyMinutes),
+                                          valueWhenChecked: Setting.AutoLock.ThirtyMinutes),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOneHour, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.OneHour),
+                                          valueWhenChecked: Setting.AutoLock.OneHour),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockTwelveHours, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.TwelveHours),
+                                          valueWhenChecked: Setting.AutoLock.TwelveHours),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockTwentyFourHours, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.TwentyFourHours),
+                                          valueWhenChecked: Setting.AutoLock.TwentyFourHours),
         CheckmarkSettingCellConfiguration(text: Constant.string.autoLockNever, isChecked: false,
-                                          valueWhenChecked: AutoLockSetting.Never)
+                                          valueWhenChecked: Setting.AutoLock.Never)
     ]
 
-    lazy private(set) var itemSelectedObserver: AnyObserver<AutoLockSetting?> = {
+    lazy private(set) var itemSelectedObserver: AnyObserver<Setting.AutoLock?> = {
         return Binder(self) { target, newAutoLockValue in
             if let newAutoLockValue = newAutoLockValue {
-                target.settingActionHandler.invoke(.autoLockTime(timeout: newAutoLockValue))
+                target.dispatcher.dispatch(action: SettingAction.autoLockTime(timeout: newAutoLockValue))
             }
         }.asObserver()
     }()
 
     init(view: AutoLockSettingViewProtocol,
-         userDefaults: UserDefaults = UserDefaults.standard,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
+         dispatcher: Dispatcher = .shared,
+         userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
-        self.userDefaults = userDefaults
-        self.routeActionHandler = routeActionHandler
-        self.settingActionHandler = settingActionHandler
+        self.dispatcher = dispatcher
+        self.userDefaultStore = userDefaultStore
     }
 
     func onViewReady() {
-        let driver = self.userDefaults.onAutoLockTime
+        let driver = self.userDefaultStore.autoLockTime
                 .map { setting -> [CheckmarkSettingCellConfiguration] in
                     return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                         cellConfiguration.isChecked =
-                                (cellConfiguration.valueWhenChecked as? AutoLockSetting) == setting ? true : false
+                                (cellConfiguration.valueWhenChecked as? Setting.AutoLock) == setting ? true : false
                         return cellConfiguration
                     }
                 }
@@ -74,7 +71,7 @@ class AutoLockSettingPresenter {
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
             }.asObserver()
     }()
 }

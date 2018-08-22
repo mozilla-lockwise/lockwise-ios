@@ -57,7 +57,7 @@ extension OnboardingConfirmationView {
             let range = text.mutableString.range(of: Constant.string.onboardingSecurityPostfix)
             text.addAttributes([
                 NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15.0)
-            ], range: NSMakeRange(0, text.length))
+            ], range: NSMakeRange(0, text.length)) // swiftlint:disable:this legacy_constructor
 
             text.addAttributes(
                     [

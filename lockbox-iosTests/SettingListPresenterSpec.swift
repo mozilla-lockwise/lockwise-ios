@@ -11,7 +11,7 @@ import RxCocoa
 
 @testable import Lockbox
 
-class SettingsPresenterSpec: QuickSpec {
+class SettingListPresenterSpec: QuickSpec {
     class FakeSettingsView: SettingListViewProtocol {
 
         var displayAlertControllerCalled = false
@@ -35,27 +35,29 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
 
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
         }
     }
 
-    class FakeSettingActionHandler: SettingActionHandler {
-        var actionArgument: SettingAction?
+    class FakeUserDefaultStore: UserDefaultStore {
+        let autoLockStub = PublishSubject<Setting.AutoLock>()
+        let preferredBrowserStub = PublishSubject<Setting.PreferredBrowser>()
+        let recordUsageDataStub = PublishSubject<Bool>()
 
-        override func invoke(_ action: SettingAction) {
-            actionArgument = action
+        override var autoLockTime: Observable<Setting.AutoLock> {
+            return self.autoLockStub.asObservable()
         }
-    }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var actionArgument: DataStoreAction?
+        override var preferredBrowser: Observable<Setting.PreferredBrowser> {
+            return self.preferredBrowserStub.asObservable()
+        }
 
-        override func invoke(_ action: DataStoreAction) {
-            self.actionArgument = action
+        override var recordUsageData: Observable<Bool> {
+            return self.recordUsageDataStub.asObservable()
         }
     }
 
@@ -67,18 +69,9 @@ class SettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeLinkActionHandler: LinkActionHandler {
-        var actionArgument: LinkAction?
-        override func invoke(_ action: LinkAction) {
-            actionArgument = action
-        }
-    }
-
     private var view: FakeSettingsView!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var settingActionHandler: FakeSettingActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
-    private var linkActionHandler: FakeLinkActionHandler!
+    private var dispatcher: FakeDispatcher!
+    private var userDefaultStore: FakeUserDefaultStore!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -86,23 +79,19 @@ class SettingsPresenterSpec: QuickSpec {
     var subject: SettingListPresenter!
 
     override func spec() {
-        describe("SettingsPresenter") {
+        describe("SettingListPresenter") {
             beforeEach {
                 self.view = FakeSettingsView()
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
 
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.settingActionHandler = FakeSettingActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
-                self.linkActionHandler = FakeLinkActionHandler()
+                self.dispatcher = FakeDispatcher()
+                self.userDefaultStore = FakeUserDefaultStore()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
-                        routeActionHandler: self.routeActionHandler,
-                        settingActionHandler: self.settingActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
-                        linkActionHandler: self.linkActionHandler,
-                        biometryManager: self.biometryManager)
+                                                    dispatcher: self.dispatcher,
+                                                    userDefaultStore: self.userDefaultStore,
+                                                    biometryManager: self.biometryManager)
             }
 
             describe("onViewReady") {
@@ -118,17 +107,20 @@ class SettingsPresenterSpec: QuickSpec {
                         }
 
                         it("locks the application and routes to the login flow") {
-                            expect(self.dataStoreActionHandler.actionArgument).to(equal(DataStoreAction.lock))
-                            let argument = self.routeActionHandler.routeActionArgument as! LoginRouteAction
-                            expect(argument).to(equal(LoginRouteAction.welcome))
+                            let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                            expect(loginRouteAction).to(equal(.welcome))
+
+                            let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                            expect(dataStoreAction).to(equal(.lock))
                         }
                     }
 
                     describe("detail values on view modules") {
                         beforeEach {
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                             self.subject.onViewReady()
+                            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
+                            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
+                            self.userDefaultStore.recordUsageDataStub.onNext(true)
                         }
 
                         it("sets detail value for autolock") {
@@ -138,7 +130,7 @@ class SettingsPresenterSpec: QuickSpec {
 
                         it("sets detail value for preferred browser") {
                             let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[2]
-                            expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                            expect(preferredBrowserCellConfig.detailText).to(equal(Setting.PreferredBrowser.Focus.toString()))
                         }
                     }
                 }
@@ -164,16 +156,17 @@ class SettingsPresenterSpec: QuickSpec {
                             }
 
                             it("routes to set passcode") {
-                                expect(self.linkActionHandler.actionArgument as? SettingLinkAction).to(equal(SettingLinkAction.touchIDPasscode))
+                                expect(self.dispatcher.dispatchedActions.popLast() as? SettingLinkAction).to(equal(.touchIDPasscode))
                             }
                         }
                     }
 
                     describe("detail values on view modules") {
                         beforeEach {
-                            UserDefaults.standard.set(AutoLockSetting.OneHour.rawValue, forKey: SettingKey.autoLockTime.rawValue)
-                            UserDefaults.standard.set(PreferredBrowserSetting.Focus.rawValue, forKey: SettingKey.preferredBrowser.rawValue)
                             self.subject.onViewReady()
+                            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
+                            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
+                            self.userDefaultStore.recordUsageDataStub.onNext(true)
                         }
 
                         it("does not show autolock") {
@@ -182,7 +175,7 @@ class SettingsPresenterSpec: QuickSpec {
 
                         it("sets detail value for preferred browser") {
                             let preferredBrowserCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
-                            expect(preferredBrowserCellConfig.detailText).to(equal(PreferredBrowserSetting.Focus.toString()))
+                            expect(preferredBrowserCellConfig.detailText).to(equal(Setting.PreferredBrowser.Focus.toString()))
                         }
                     }
                 }
@@ -201,7 +194,7 @@ class SettingsPresenterSpec: QuickSpec {
                 }
 
                 it("calls settingActionHandler") {
-                    expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.recordUsageData(enabled: false)))
+                    expect(self.dispatcher.dispatchedActions.last as! SettingAction).to(equal(SettingAction.recordUsageData(enabled: false)))
                 }
             }
 
@@ -217,8 +210,8 @@ class SettingsPresenterSpec: QuickSpec {
                 }
 
                 it("invokes the main list action") {
-                    let argument = self.routeActionHandler.routeActionArgument as! MainRouteAction
-                    expect(argument).to(equal(MainRouteAction.list))
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
 
@@ -236,7 +229,7 @@ class SettingsPresenterSpec: QuickSpec {
                     }
 
                     it("invokes the setting route action") {
-                        let argument = self.routeActionHandler.routeActionArgument as! SettingRouteAction
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
                         expect(argument).to(equal(action))
                     }
                 }
@@ -253,7 +246,7 @@ class SettingsPresenterSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(self.routeActionHandler.routeActionArgument).to(beNil())
+                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                     }
                 }
             }

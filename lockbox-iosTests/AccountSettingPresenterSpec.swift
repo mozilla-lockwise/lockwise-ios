@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import RxCocoa
+import FxAClient
 
 @testable import Lockbox
 
@@ -36,43 +37,25 @@ class AccountSettingPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserInfoStore: UserInfoStore {
-        let profileStub = PublishSubject<ProfileInfo?>()
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
 
-        override var profileInfo: Observable<ProfileInfo?> {
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
+    class FakeAccountStore: AccountStore {
+        let profileStub = PublishSubject<Profile?>()
+
+        override var profile: Observable<Profile?> {
             return self.profileStub.asObservable()
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeUserInfoActionHandler: UserInfoActionHandler {
-        var invokeArgument: UserInfoAction?
-
-        override func invoke(_ action: UserInfoAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.invokeArgument = action
-        }
-    }
-
     private var view: FakeAccountSettingView!
-    private var userInfoStore: FakeUserInfoStore!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var userInfoActionHandler: FakeUserInfoActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
+    private var dispatcher: FakeDispatcher!
+    private var accountStore: FakeAccountStore!
     var subject: AccountSettingPresenter!
 
     private let disposeBag = DisposeBag()
@@ -85,17 +68,13 @@ class AccountSettingPresenterSpec: QuickSpec {
                 self.view.avatarImageDataObserver = self.scheduler.createObserver(Data.self)
                 self.view.displayNameObserver = self.scheduler.createObserver(String.self)
 
-                self.userInfoStore = FakeUserInfoStore()
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.userInfoStore = FakeUserInfoStore()
-                self.userInfoActionHandler = FakeUserInfoActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
+                self.dispatcher = FakeDispatcher()
+                self.accountStore = FakeAccountStore()
+                self.accountStore = FakeAccountStore()
                 self.subject = AccountSettingPresenter(
                         view: self.view,
-                        userInfoStore: self.userInfoStore,
-                        routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
-                        userInfoActionHandler: self.userInfoActionHandler
+                        dispatcher: self.dispatcher,
+                        accountStore: self.accountStore
                 )
             }
 
@@ -105,65 +84,11 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
 
                 describe("displayName") {
-                    describe("when the profileInfo has a display name") {
-                        let displayName = "meowskers"
-                        beforeEach {
-                            self.userInfoStore.profileStub.onNext(
-                                    ProfileInfo.Builder()
-                                            .displayName(displayName)
-                                            .email("blah@blah.com")
-                                            .build()
-                            )
-                        }
-
-                        it("tells the view to display the display name") {
-                            expect(self.view.displayNameObserver.events.last!.value.element).to(equal(displayName))
-                        }
-                    }
-
-                    describe("when the profileInfo does not have a display name") {
-                        let email = "meowskers@meow.com"
-                        beforeEach {
-                            self.userInfoStore.profileStub.onNext(
-                                    ProfileInfo.Builder()
-                                            .email(email)
-                                            .build()
-                            )
-                        }
-
-                        it("tells the view to display the email") {
-                            expect(self.view.displayNameObserver.events.last!.value.element).to(equal(email))
-                        }
-                    }
+                    // tricky to test because we can't construct FxAClient.Profile
                 }
 
                 describe("avatarImage") {
-                    // tricky to test the network call here
-                    xdescribe("when the profileInfo has an avatar url") {
-                        let avatarURL = URL(string: "https://i.pinimg.com/236x/f8/93/b2/f893b23eaffac078d529989aad2c714c.jpg")
-                        beforeEach {
-                            self.userInfoStore.profileStub.onNext(
-                                    ProfileInfo.Builder()
-                                            .avatar(avatarURL)
-                                            .email("blah@blah.com")
-                                            .build()
-                            )
-                        }
-
-                        it("tells the view to display the avatar image data") {
-                            expect(self.view.avatarImageDataObserver.events.last!.value.element).notTo(beNil())
-                        }
-                    }
-
-                    describe("when the profileInfo does not have an avatar url") {
-                        beforeEach {
-                            self.userInfoStore.profileStub.onNext(ProfileInfo.Builder().build())
-                        }
-
-                        it("does not tell the view to display anything") {
-                            expect(self.view.avatarImageDataObserver.events.last).to(beNil())
-                        }
-                    }
+                    // ditto
                 }
             }
 
@@ -188,8 +113,11 @@ class AccountSettingPresenterSpec: QuickSpec {
                     }
 
                     it("sends the clear & reset actions") {
-                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.reset))
-                        expect(self.userInfoActionHandler.invokeArgument).to(equal(UserInfoAction.clear))
+                        let accountAction = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                        expect(accountAction).to(equal(.clear))
+
+                        let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                        expect(dataStoreAction).to(equal(.reset))
                     }
                 }
             }
@@ -206,8 +134,8 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
 
                 it("sends the settings list action") {
-                    let argument = self.routeActionHandler.invokeArgument as! SettingRouteAction
-                    expect(argument).to(equal(SettingRouteAction.list))
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
+                    expect(argument).to(equal(.list))
                 }
             }
         }

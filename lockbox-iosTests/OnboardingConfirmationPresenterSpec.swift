@@ -19,31 +19,26 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-        var onboardingStatusArgument: OnboardingStatusAction?
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
 
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
-        }
-
-        override func invoke(_ action: OnboardingStatusAction) {
-            self.onboardingStatusArgument = action
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
         }
     }
 
     private var view: FakeOnboardingConfView!
-    private var routeActionHandler: FakeRouteActionHandler!
+    private var dispatcher: FakeDispatcher!
     var subject: OnboardingConfirmationPresenter!
 
     override func spec() {
         describe("OnboardingConfirmationPresenter") {
             beforeEach {
                 self.view = FakeOnboardingConfView()
-                self.routeActionHandler = FakeRouteActionHandler()
+                self.dispatcher = FakeDispatcher()
                 self.subject = OnboardingConfirmationPresenter(
                         view: self.view,
-                        routeActionHandler: self.routeActionHandler
+                        dispatcher: self.dispatcher
                 )
             }
 
@@ -57,14 +52,12 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                         self.view.finishTapStub.onNext(())
                     }
 
-                    it("routes to the list") {
-                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        let action = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(action).to(equal(MainRouteAction.list))
-                    }
+                    it("routes to the list and finishes onboarding") {
+                        let onboardingStatusAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
+                        expect(onboardingStatusAction).to(equal(OnboardingStatusAction(onboardingInProgress: false)))
 
-                    it("finishes onboarding") {
-                        expect(self.routeActionHandler.onboardingStatusArgument).to(equal(OnboardingStatusAction(onboardingInProgress: false)))
+                        let mainRouteAction = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
+                        expect(mainRouteAction).to(equal(.list))
                     }
                 }
             }
@@ -75,8 +68,7 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                 }
 
                 it("routes to the external webview") {
-                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                    let action = self.routeActionHandler.invokeArgument as! ExternalWebsiteRouteAction
+                    let action = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                     expect(action).to(equal(
                             ExternalWebsiteRouteAction(
                                     urlString: Constant.app.securityFAQ,

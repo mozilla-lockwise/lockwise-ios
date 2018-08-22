@@ -13,6 +13,7 @@ import RxSwift
 @testable import Lockbox
 import Storage
 import SwiftyJSON
+import FxAClient
 
 class DataStoreActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {
@@ -23,62 +24,39 @@ class DataStoreActionSpec: QuickSpec {
         }
     }
 
-    var subject: DataStoreActionHandler!
     var dispatcher: FakeDispatcher!
     private let dataStoreName: String = "dstore"
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
 
     override func spec() {
-        describe("DataStoreActionHandler") {
-            beforeEach {
-                self.dispatcher = FakeDispatcher()
-                self.subject = DataStoreActionHandler(dispatcher: self.dispatcher)
+        describe("Action equality") {
+            it("initialize is always equal") {
+                // tricky to test because we cannot construct FxAClient.OAuthInfo
             }
 
-            describe("invoke") {
-                beforeEach {
-                    self.subject.invoke(DataStoreAction.sync)
-                }
-
-                it("dispatches actions to the dispatcher") {
-                    expect(self.dispatcher.actionArgument).notTo(beNil())
-                    let argument = self.dispatcher.actionArgument as! DataStoreAction
-                    expect(argument).to(equal(DataStoreAction.sync))
-                }
+            it("non-associated data enum values are always equal") {
+                expect(DataStoreAction.lock).to(equal(DataStoreAction.lock))
+                expect(DataStoreAction.unlock).to(equal(DataStoreAction.unlock))
+                expect(DataStoreAction.reset).to(equal(DataStoreAction.reset))
+                expect(DataStoreAction.sync).to(equal(DataStoreAction.sync))
             }
 
-            describe("Action equality") {
-                it("initialize is equal based on blob value") {
-                    let json = JSON(parseJSON: "{\"ya\":\"blah\"}")
-                    let json2 = JSON(parseJSON: "{\"meow\":\"blah\"}")
-                    expect(DataStoreAction.initialize(blob: json)).to(equal(DataStoreAction.initialize(blob: json)))
-                    expect(DataStoreAction.initialize(blob: json)).notTo(equal(DataStoreAction.initialize(blob: json2)))
-                }
+            it("touch is equal based on IDs") {
+                expect(DataStoreAction.touch(id: "meow")).to(equal(DataStoreAction.touch(id: "meow")))
+                expect(DataStoreAction.touch(id: "meow")).notTo(equal(DataStoreAction.touch(id: "woof")))
+            }
 
-                it("non-associated data enum values are always equal") {
-                    expect(DataStoreAction.lock).to(equal(DataStoreAction.lock))
-                    expect(DataStoreAction.unlock).to(equal(DataStoreAction.unlock))
-                    expect(DataStoreAction.reset).to(equal(DataStoreAction.reset))
-                    expect(DataStoreAction.sync).to(equal(DataStoreAction.sync))
-                }
+            it("remove is equal based on IDs") {
+                expect(DataStoreAction.remove(id: "meow")).to(equal(DataStoreAction.remove(id: "meow")))
+                expect(DataStoreAction.remove(id: "meow")).notTo(equal(DataStoreAction.remove(id: "woof")))
+            }
 
-                it("touch is equal based on IDs") {
-                    expect(DataStoreAction.touch(id: "meow")).to(equal(DataStoreAction.touch(id: "meow")))
-                    expect(DataStoreAction.touch(id: "meow")).notTo(equal(DataStoreAction.touch(id: "woof")))
-                }
-
-                it("remove is equal based on IDs") {
-                    expect(DataStoreAction.remove(id: "meow")).to(equal(DataStoreAction.remove(id: "meow")))
-                    expect(DataStoreAction.remove(id: "meow")).notTo(equal(DataStoreAction.remove(id: "woof")))
-                }
-
-                it("different enum types are never equal") {
-                    expect(DataStoreAction.unlock).notTo(equal(DataStoreAction.lock))
-                    expect(DataStoreAction.lock).notTo(equal(DataStoreAction.unlock))
-                    expect(DataStoreAction.sync).notTo(equal(DataStoreAction.reset))
-                    expect(DataStoreAction.reset).notTo(equal(DataStoreAction.sync))
-                }
+            it("different enum types are never equal") {
+                expect(DataStoreAction.unlock).notTo(equal(DataStoreAction.lock))
+                expect(DataStoreAction.lock).notTo(equal(DataStoreAction.unlock))
+                expect(DataStoreAction.sync).notTo(equal(DataStoreAction.reset))
+                expect(DataStoreAction.reset).notTo(equal(DataStoreAction.sync))
             }
         }
     }

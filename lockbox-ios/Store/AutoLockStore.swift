@@ -12,7 +12,6 @@ class AutoLockStore {
 
     private let dispatcher: Dispatcher
     private let dataStore: DataStore
-    private let dataStoreActionHandler: DataStoreActionHandler
     private let userDefaults: UserDefaults
 
     var timer: Timer?
@@ -20,13 +19,11 @@ class AutoLockStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
          userDefaults: UserDefaults = UserDefaults.standard
     ) {
         self.dispatcher = dispatcher
         self.userDefaults = userDefaults
         self.dataStore = dataStore
-        self.dataStoreActionHandler = dataStoreActionHandler
 
         self.dataStore.locked
                 .subscribe(onNext: { [weak self] locked in
@@ -43,7 +40,7 @@ class AutoLockStore {
                     // future user interaction actions will need to get added to this list
                     action is MainRouteAction ||
                             action is SettingRouteAction ||
-                            action is CopyConfirmationDisplayAction ||
+                            action is CopyAction ||
                             action is ExternalLinkAction ||
                             action is ItemListDisplayAction ||
                             action is ItemDetailDisplayAction ||
@@ -55,11 +52,20 @@ class AutoLockStore {
                 .disposed(by: self.disposeBag)
 
         self.dispatcher.register
-            .filterByType(class: ExternalWebsiteRouteAction.self)
-            .subscribe(onNext: { [weak self] _ in
-                self?.pauseTimer()
-            })
-            .disposed(by: self.disposeBag)
+                .filterByType(class: ExternalWebsiteRouteAction.self)
+                .subscribe(onNext: { [weak self] _ in
+                    self?.pauseTimer()
+                })
+                .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+                .filterByType(class: LifecycleAction.self)
+                .filter { $0 == LifecycleAction.foreground }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.paused = false
+                    self?.setupTimer()
+                })
+                .disposed(by: self.disposeBag)
     }
 }
 
@@ -72,8 +78,10 @@ extension AutoLockStore {
     private func setupTimer() {
         self.userDefaults.onAutoLockTime
                 .take(1)
-                .subscribe(onNext: { (latest: AutoLockSetting) in
+                .subscribe(onNext: { (latest: Setting.AutoLock) in
                     switch latest {
+                    case .OneMinute:
+                        self.setTimer(seconds: 60)
                     case .FiveMinutes:
                         self.setTimer(seconds: 60 * 5)
                     case .FifteenMinutes:
@@ -82,8 +90,6 @@ extension AutoLockStore {
                         self.setTimer(seconds: 60 * 30)
                     case .OneHour:
                         self.setTimer(seconds: 60 * 60)
-                    case .OneMinute:
-                        self.setTimer(seconds: 60)
                     case .TwelveHours:
                         self.setTimer(seconds: 60 * 60 * 12)
                     case .TwentyFourHours:
@@ -97,14 +103,16 @@ extension AutoLockStore {
     }
 
     private func setTimer(seconds: Int) {
-        let timerValue = self.userDefaults.double(forKey: SettingKey.autoLockTimerDate.rawValue)
-        if timerValue != 0 && timerValue < Date().timeIntervalSince1970 {
+        let timerValue = self.userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+        if timerValue != 0 && timerValue > Date().timeIntervalSince1970 {
             self.timer = Timer(fireAt: Date(timeIntervalSince1970: timerValue),
                     interval: 0,
                     target: self,
                     selector: #selector(lockApp),
                     userInfo: nil,
                     repeats: false)
+        } else if timerValue != 0 && timerValue <= Date().timeIntervalSince1970 {
+            self.lockApp()
         } else {
             self.timer = Timer(timeInterval: TimeInterval(seconds),
                     target: self,
@@ -113,7 +121,7 @@ extension AutoLockStore {
                     repeats: false)
 
             self.userDefaults.set(self.timer?.fireDate.timeIntervalSince1970,
-                    forKey: SettingKey.autoLockTimerDate.rawValue)
+                    forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
 
         paused = false
@@ -135,12 +143,14 @@ extension AutoLockStore {
             timer.invalidate()
         }
         if reset {
-            self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+            self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
         }
     }
 
     @objc private func lockApp() {
-        self.dataStoreActionHandler.invoke(.lock)
-        self.userDefaults.removeObject(forKey: SettingKey.autoLockTimerDate.rawValue)
+        if !paused {
+            self.dispatcher.dispatch(action: DataStoreAction	.lock)
+            self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+        }
     }
 }

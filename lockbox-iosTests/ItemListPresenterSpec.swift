@@ -16,7 +16,6 @@ class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var sortButtonEnableObserver: TestableObserver<Bool>!
-        var settingButtonEnableObserver: TestableObserver<Bool>!
         var tableViewScrollObserver: TestableObserver<Bool>!
         var sortingButtonTitleObserver: TestableObserver<String>!
         var dismissSpinnerObserver: TestableObserver<Void>!
@@ -49,10 +48,6 @@ class ItemListPresenterSpec: QuickSpec {
             return self.sortButtonEnableObserver.asObserver()
         }
 
-        var settingButtonEnabled: AnyObserver<Bool>? {
-            return self.settingButtonEnableObserver.asObserver()
-        }
-
         var tableViewScrollEnabled: AnyObserver<Bool> {
             return self.tableViewScrollObserver.asObserver()
         }
@@ -67,34 +62,27 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeActionArgument: RouteAction?
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
 
-        override func invoke(_ action: RouteAction) {
-            self.invokeActionArgument = action
-        }
-    }
-
-    class FakeItemListDisplayActionHandler: ItemListDisplayActionHandler {
-        var invokeActionArgument: [ItemListDisplayAction] = []
-
-        override func invoke(_ action: ItemListDisplayAction) {
-            self.invokeActionArgument.append(action)
-        }
-    }
-
-    class FakeSettingActionHandler: SettingActionHandler {
-        var invokeActionArgument: SettingAction?
-
-        override func invoke(_ action: SettingAction) {
-            self.invokeActionArgument = action
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
         }
     }
 
     class FakeDataStore: DataStore {
-        var itemListStub = PublishSubject<[Login]>()
-        var syncStateStub = PublishSubject<SyncState>()
-        var storageStateStub = PublishSubject<LoginStoreState>()
+        var itemListStub: PublishSubject<[Login]>
+        var syncStateStub: PublishSubject<SyncState>
+        var storageStateStub: PublishSubject<LoginStoreState>
+
+        init() {
+            self.itemListStub = PublishSubject<[Login]>()
+            self.syncStateStub = PublishSubject<SyncState>()
+            self.storageStateStub = PublishSubject<LoginStoreState>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var list: Observable<[Login]> {
             return self.itemListStub.asObservable()
@@ -117,42 +105,44 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeUserDefaultStore: UserDefaultStore {
+        var itemListSortStub = PublishSubject<Setting.ItemListSort>()
+
+        override var itemListSort: Observable<Setting.ItemListSort> {
+            return self.itemListSortStub.asObservable()
+        }
+    }
+
     private var view: FakeItemListView!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var itemListDisplayActionHandler: FakeItemListDisplayActionHandler!
-    private var settingActionHandler: FakeSettingActionHandler!
+    private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
+    private var userDefaultStore: FakeUserDefaultStore!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
-    private let userDefaults = UserDefaults.standard
     var subject: ItemListPresenter!
 
     override func spec() {
         describe("ItemListPresenter") {
             beforeEach {
                 self.view = FakeItemListView()
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.itemListDisplayActionHandler = FakeItemListDisplayActionHandler()
-                self.settingActionHandler = FakeSettingActionHandler()
+                self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
                 self.itemListDisplayStore = FakeItemListDisplayStore()
+                self.userDefaultStore = FakeUserDefaultStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
                 self.view.sortButtonEnableObserver = self.scheduler.createObserver(Bool.self)
-                self.view.settingButtonEnableObserver = self.scheduler.createObserver(Bool.self)
                 self.view.tableViewScrollObserver = self.scheduler.createObserver(Bool.self)
                 self.view.dismissSpinnerObserver = self.scheduler.createObserver(Void.self)
                 self.view.pullToRefreshObserver = self.scheduler.createObserver(Bool.self)
 
                 self.subject = ItemListPresenter(
                         view: self.view,
-                        routeActionHandler: self.routeActionHandler,
-                        itemListDisplayActionHandler: self.itemListDisplayActionHandler,
-                        settingActionHandler: self.settingActionHandler,
+                        dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemListDisplayStore: self.itemListDisplayStore,
-                        userDefaults: self.userDefaults
+                        userDefaultStore: self.userDefaultStore
                 )
             }
 
@@ -162,7 +152,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.userDefaults.set(ItemListSortSetting.alphabetically.rawValue, forKey: SettingKey.itemListSort.rawValue)
+                        self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                     }
 
                     describe("when the datastore is still syncing & prepared") {
@@ -174,10 +164,6 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("tells the view to display the spinner") {
                             expect(self.view.displaySpinnerCalled).to(beTrue())
-                        }
-
-                        it("enables the setting button") {
-                            expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beTrue())
                         }
 
                         it("pushes the search field and placeholder image to the itemlist") {
@@ -205,9 +191,9 @@ class ItemListPresenterSpec: QuickSpec {
                                 expect(self.view.dismissSpinnerObserver.events.count).to(equal(1))
                             }
 
-                            it("keeps the sorting button and the tableviewscroll disabled") {
-                                expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beFalse())
-                                expect(self.view.tableViewScrollObserver.events.last!.value.element).to(beFalse())
+                            it("enables the sorting button and the tableviewscroll") {
+                                expect(self.view.sortButtonEnableObserver.events.last!.value.element).to(beTrue())
+                                expect(self.view.tableViewScrollObserver.events.last!.value.element).to(beTrue())
                             }
 
                             it("displays the emptylist placeholder") {
@@ -216,7 +202,7 @@ class ItemListPresenterSpec: QuickSpec {
                                     LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                                     LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                 ]
-                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).toEventually(equal(expectedItemConfigurations), timeout: 2.5)
+                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
                             }
 
                             describe("tapping the learnMore button in the empty list placeholder") {
@@ -226,7 +212,7 @@ class ItemListPresenterSpec: QuickSpec {
                                         LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
                                         LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                     ]
-                                    expect(self.view.itemsObserver.events.last!.value.element!.first!.items).toEventually(equal(expectedItemConfigurations), timeout: 2.5)
+                                    expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
 
                                     let configuration = self.view.itemsObserver.events.last!.value.element
                                     let emptyListPlaceholder = configuration!.first!.items[1]
@@ -238,8 +224,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 }
 
                                 it("routes to the learn more view") {
-                                    expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                                    let argument = self.routeActionHandler.invokeActionArgument as! ExternalWebsiteRouteAction
+                                    let argument = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                                     expect(argument).to(equal(ExternalWebsiteRouteAction(
                                             urlString: Constant.app.enableSyncFAQ,
                                             title: Constant.string.faq,
@@ -272,34 +257,13 @@ class ItemListPresenterSpec: QuickSpec {
                             }
 
                             it("resets the refreshing action") {
-                                let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! PullToRefreshAction
+                                let action = self.dispatcher.dispatchedActions.popLast() as! PullToRefreshAction
                                 expect(action.refreshing).to(beFalse())
                             }
 
                             it("tells the view to hide pull to refresh") {
                                 expect(self.view.pullToRefreshObserver.events.last!.value.element).to(beFalse())
                             }
-                        }
-                    }
-
-                    describe("when the datastore is preparing") {
-                        beforeEach {
-                            self.dataStore.syncStateStub.onNext(SyncState.NotSyncable)
-                            self.dataStore.storageStateStub.onNext(LoginStoreState.Preparing)
-                        }
-
-                        it("displays the email confirmation placeholder") {
-                            let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Search(enabled: Observable.just(false), cancelHidden: Observable.just(true), text: Observable.just("")),
-                                LoginListCellConfiguration.PreparingPlaceholder
-                            ]
-                            expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                            let configuration = self.view.itemsObserver.events.last!.value.element!
-                            expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                        }
-
-                        it("disables the setting button") {
-                            expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beFalse())
                         }
                     }
                 }
@@ -321,7 +285,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext(items)
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.userDefaults.set(ItemListSortSetting.alphabetically.rawValue, forKey: SettingKey.itemListSort.rawValue)
+                        self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
                         self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                     }
@@ -336,10 +300,6 @@ class ItemListPresenterSpec: QuickSpec {
                         expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
                         let configuration = self.view.itemsObserver.events.first!.value.element!
                         expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                    }
-
-                    it("enables the setting button") {
-                        expect(self.view.settingButtonEnableObserver.events.last!.value.element).to(beTrue())
                     }
 
                     describe("when text is entered into the search bar") {
@@ -399,7 +359,7 @@ class ItemListPresenterSpec: QuickSpec {
                     xdescribe("when sorting method switches to recently used") {
                         // pended until it's possible to construct Logins with recently_used dates
                         beforeEach {
-                            self.userDefaults.set(ItemListSortSetting.recentlyUsed.rawValue, forKey: SettingKey.itemListSort.rawValue)
+                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.recentlyUsed)
                         }
 
                         it("pushes the new configuration with the items") {
@@ -421,7 +381,7 @@ class ItemListPresenterSpec: QuickSpec {
                         let textObserver = self.scheduler.createObserver(String.self)
 
                         beforeEach {
-                            let searchCellConfig = self.view.itemsObserver.events.first!.value.element![0].items[0] as! LoginListCellConfiguration
+                            let searchCellConfig = self.view.itemsObserver.events.first!.value.element![0].items[0]
                             if case let .Search(enabled: enabledObservable, cancelHidden: cancelObservable, text: textObservable) = searchCellConfig {
                                 enabledObservable
                                         .bind(to: enabledObserver)
@@ -506,10 +466,11 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the filtertext item list display action and editing action") {
-                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beTrue())
-                    let action = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterAction
-                    expect(action.filteringText).to(equal(text))
+
+                    let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
+                    expect(filterAction.filteringText).to(equal(text))
                 }
             }
 
@@ -522,9 +483,11 @@ class ItemListPresenterSpec: QuickSpec {
 
                 it("hides keyboard and dispatches false editing action, clearing the text from the textfield") {
                     expect(self.view.dismissKeyboardCalled).to(beTrue())
-                    let filteringAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterAction
-                    expect(filteringAction.filteringText).to(equal(""))
-                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+
+                    let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
+                    expect(filterAction.filteringText).to(equal(""))
+
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beFalse())
                 }
             }
@@ -538,7 +501,8 @@ class ItemListPresenterSpec: QuickSpec {
 
                 it("hides keyboard and dispatches false editing action") {
                     expect(self.view.dismissKeyboardCalled).to(beTrue())
-                    let editingAction = self.itemListDisplayActionHandler.invokeActionArgument.popLast() as! ItemListFilterEditAction
+
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
                     expect(editingAction.editing).to(beFalse())
                 }
             }
@@ -560,9 +524,8 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("tells the route action handler to display the detail view for the relevant item") {
-                        expect(self.routeActionHandler.invokeActionArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeActionArgument as! MainRouteAction
-                        expect(argument).to(equal(MainRouteAction.detail(itemId: id)))
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! MainRouteAction
+                        expect(argument).to(equal(.detail(itemId: id)))
                     }
 
                     it("dismisses the keyboard") {
@@ -582,7 +545,7 @@ class ItemListPresenterSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(self.routeActionHandler.invokeActionArgument).to(beNil())
+                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                     }
                 }
             }
@@ -596,6 +559,7 @@ class ItemListPresenterSpec: QuickSpec {
                             .disposed(by: self.disposeBag)
 
                     self.scheduler.start()
+                    self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                 }
 
                 it("tells the view to display an option sheet") {
@@ -612,10 +576,10 @@ class ItemListPresenterSpec: QuickSpec {
                         self.view.displayOptionSheetButtons![0].tapObserver!.onNext(())
                     }
 
-                    it("dispatches the alphabetically ItemListSortSetting SettingAction") {
-                        let action = self.settingActionHandler.invokeActionArgument as SettingAction?
+                    it("dispatches the alphabetically Setting.ItemListSort. SettingAction") {
+                        let action = self.dispatcher.dispatchedActions.last as? SettingAction
                         expect(action).notTo(beNil())
-                        expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically)))
+                        expect(action).to(equal(SettingAction.itemListSort(sort: Setting.ItemListSort.alphabetically)))
                     }
                 }
 
@@ -624,10 +588,10 @@ class ItemListPresenterSpec: QuickSpec {
                         self.view.displayOptionSheetButtons![1].tapObserver!.onNext(())
                     }
 
-                    it("dispatches the recently used ItemListSortSetting SettingAction") {
-                        let action = self.settingActionHandler.invokeActionArgument as SettingAction?
+                    it("dispatches the recently used Setting.ItemListSort. SettingAction") {
+                        let action = self.dispatcher.dispatchedActions.last as? SettingAction
                         expect(action).notTo(beNil())
-                        expect(action).to(equal(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed)))
+                        expect(action).to(equal(SettingAction.itemListSort(sort: Setting.ItemListSort.recentlyUsed)))
                     }
                 }
             }
@@ -644,8 +608,8 @@ class ItemListPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the setting route action") {
-                    let action = self.routeActionHandler.invokeActionArgument as! SettingRouteAction
-                    expect(action).to(equal(SettingRouteAction.list))
+                    let action = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
+                    expect(action).to(equal(.list))
                 }
             }
         }

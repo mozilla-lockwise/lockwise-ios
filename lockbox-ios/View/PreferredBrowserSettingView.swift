@@ -78,9 +78,9 @@ extension PreferredBrowserSettingView {
     private func setupDelegate() {
         if let presenter = self.presenter {
             self.tableView.rx.itemSelected
-                .map { (indexPath) -> PreferredBrowserSetting? in
+                .map { (indexPath) -> Setting.PreferredBrowser? in
                     self.tableView.deselectRow(at: indexPath, animated: true)
-                    return self.dataSource?[indexPath].valueWhenChecked as? PreferredBrowserSetting
+                    return self.dataSource?[indexPath].valueWhenChecked as? Setting.PreferredBrowser
                 }.bind(to: presenter.itemSelectedObserver)
                 .disposed(by: self.disposeBag)
         }
@@ -101,12 +101,12 @@ extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
     private func setupNavbar() {
         self.navigationItem.title = Constant.string.settingsBrowser
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
-
+        self.navigationController?.navigationBar.accessibilityIdentifier = "openWebSitesIn.navigationBar"
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
-        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {

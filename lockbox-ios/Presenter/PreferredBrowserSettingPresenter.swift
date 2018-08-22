@@ -13,38 +13,35 @@ protocol PreferredBrowserSettingViewProtocol: class {
 
 class PreferredBrowserSettingPresenter {
     private weak var view: PreferredBrowserSettingViewProtocol?
-    private var userDefaults: UserDefaults
-    private var routeActionHandler: RouteActionHandler
-    private var settingActionHandler: SettingActionHandler
-    private var disposeBag = DisposeBag()
+    private let dispatcher: Dispatcher
+    private let userDefaultStore: UserDefaultStore
+    private let disposeBag = DisposeBag()
 
     lazy var initialSettings = [
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox,
-                                          valueWhenChecked: PreferredBrowserSetting.Firefox),
+                                          valueWhenChecked: Setting.PreferredBrowser.Firefox),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserChrome,
-                                          valueWhenChecked: PreferredBrowserSetting.Chrome),
+                                          valueWhenChecked: Setting.PreferredBrowser.Chrome),
         CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari,
-                                          valueWhenChecked: PreferredBrowserSetting.Safari)
+                                          valueWhenChecked: Setting.PreferredBrowser.Safari)
     ]
 
-    lazy private(set) var itemSelectedObserver: AnyObserver<PreferredBrowserSetting?> = {
+    lazy private(set) var itemSelectedObserver: AnyObserver<Setting.PreferredBrowser?> = {
         return Binder(self) { target, newPreferredBrowserValue in
             guard let newPreferredBrowserValue = newPreferredBrowserValue else {
                 return
             }
 
-            target.settingActionHandler.invoke(.preferredBrowser(browser: newPreferredBrowserValue))
+            target.dispatcher.dispatch(action: SettingAction.preferredBrowser(browser: newPreferredBrowserValue))
         }.asObserver()
     }()
 
     init(view: PreferredBrowserSettingViewProtocol,
-         userDefaults: UserDefaults = UserDefaults.standard,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared) {
+         dispatcher: Dispatcher = .shared,
+         userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
-        self.userDefaults = userDefaults
-        self.routeActionHandler = routeActionHandler
-        self.settingActionHandler = settingActionHandler
+        self.dispatcher = dispatcher
+        self.userDefaultStore = userDefaultStore
     }
 
     func onViewReady() {
@@ -52,18 +49,13 @@ class PreferredBrowserSettingPresenter {
             self.initialSettings.insert(browser, at: 1)
         }
 
-        let driver = self.userDefaults.rx.observe(String.self, SettingKey.preferredBrowser.rawValue)
-            .filterNil()
-            .map { value -> PreferredBrowserSetting? in
-                return PreferredBrowserSetting(rawValue: value)
-            }
-            .filterNil()
+        let driver = self.userDefaultStore.preferredBrowser
             .map { setting -> [CheckmarkSettingCellConfiguration] in
                 return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                     cellConfiguration.isChecked =
-                        cellConfiguration.valueWhenChecked as? PreferredBrowserSetting == setting
+                        cellConfiguration.valueWhenChecked as? Setting.PreferredBrowser == setting
                     cellConfiguration.enabled =
-                        (cellConfiguration.valueWhenChecked as? PreferredBrowserSetting)?.canOpenBrowser() ?? false
+                        (cellConfiguration.valueWhenChecked as? Setting.PreferredBrowser)?.canOpenBrowser() ?? false
                     return cellConfiguration
                 })
             }
@@ -77,17 +69,17 @@ class PreferredBrowserSettingPresenter {
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
             }.asObserver()
     }()
 
     private func getInstalledFocusBrowser() -> CheckmarkSettingCellConfiguration? {
-        if PreferredBrowserSetting.Focus.canOpenBrowser() {
+        if Setting.PreferredBrowser.Focus.canOpenBrowser() {
             return CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus,
-                                                     valueWhenChecked: PreferredBrowserSetting.Focus)
-        } else if PreferredBrowserSetting.Klar.canOpenBrowser() {
+                                                     valueWhenChecked: Setting.PreferredBrowser.Focus)
+        } else if Setting.PreferredBrowser.Klar.canOpenBrowser() {
             return CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserKlar,
-                                                     valueWhenChecked: PreferredBrowserSetting.Klar)
+                                                     valueWhenChecked: Setting.PreferredBrowser.Klar)
         }
 
         return nil

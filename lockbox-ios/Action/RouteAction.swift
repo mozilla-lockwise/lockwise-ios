@@ -4,23 +4,6 @@
 
 import Foundation
 
-class RouteActionHandler: ActionHandler {
-    static let shared = RouteActionHandler()
-    fileprivate var dispatcher: Dispatcher
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ action: RouteAction) {
-        self.dispatcher.dispatch(action: action)
-    }
-
-    func invoke(_ action: OnboardingStatusAction) {
-        self.dispatcher.dispatch(action: action)
-    }
-}
-
 protocol RouteAction: Action { }
 
 struct ExternalWebsiteRouteAction: RouteAction {

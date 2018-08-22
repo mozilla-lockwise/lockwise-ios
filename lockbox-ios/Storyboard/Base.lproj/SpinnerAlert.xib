@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -32,7 +32,7 @@
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="1Mj-QY-mDP" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2DQ-hn-m9y"/>
-                <constraint firstItem="1Mj-QY-mDP" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="67" id="IHO-QR-1Rv"/>
+                <constraint firstItem="1Mj-QY-mDP" firstAttribute="top" secondItem="mO2-mg-hqg" secondAttribute="bottom" constant="10" id="IHO-QR-1Rv"/>
                 <constraint firstAttribute="bottom" secondItem="1Mj-QY-mDP" secondAttribute="bottom" constant="20" id="KXN-re-ANZ"/>
                 <constraint firstItem="mO2-mg-hqg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" constant="20" id="L9a-gx-P6H"/>
                 <constraint firstItem="mO2-mg-hqg" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="T6z-6q-Gk5"/>

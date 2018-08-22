@@ -21,7 +21,7 @@ class AutoLockSettingsViewSpec: QuickSpec {
             self.onViewReadyCalled = true
         }
 
-        override var itemSelectedObserver: AnyObserver<AutoLockSetting?> {
+        override var itemSelectedObserver: AnyObserver<Setting.AutoLock?> {
             return Binder(self) { target, _ in
                 target.onItemSelectedActionDispatched = true
                 }.asObserver()
@@ -52,9 +52,9 @@ class AutoLockSettingsViewSpec: QuickSpec {
             let configDriver = PublishSubject<[AutoLockSettingSectionModel]>()
 
             let sectionModels = [AutoLockSettingSectionModel(model: 0, items: [
-                CheckmarkSettingCellConfiguration(text: "One Hour", isChecked: false, valueWhenChecked: AutoLockSetting.OneHour),
-                CheckmarkSettingCellConfiguration(text: "Never", isChecked: true, valueWhenChecked: AutoLockSetting.Never),
-                CheckmarkSettingCellConfiguration(text: "One Minute", isChecked: false, valueWhenChecked: AutoLockSetting.OneMinute)
+                CheckmarkSettingCellConfiguration(text: "One Hour", isChecked: false, valueWhenChecked: Setting.AutoLock.OneHour),
+                CheckmarkSettingCellConfiguration(text: "Never", isChecked: true, valueWhenChecked: Setting.AutoLock.Never),
+                CheckmarkSettingCellConfiguration(text: "One Minute", isChecked: false, valueWhenChecked: Setting.AutoLock.OneMinute)
             ])]
 
             beforeEach {

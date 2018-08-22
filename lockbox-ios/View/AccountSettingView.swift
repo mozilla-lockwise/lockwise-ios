@@ -65,12 +65,12 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
     fileprivate func setupNavBar() {
         self.navigationItem.title = Constant.string.account
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
-
+        self.navigationController?.navigationBar.accessibilityIdentifier = "accountSetting.navigationBar"
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
-        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {

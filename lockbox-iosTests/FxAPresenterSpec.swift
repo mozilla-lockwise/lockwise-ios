@@ -22,6 +22,14 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
+        }
+    }
+
     class FakeNavigationAction: WKNavigationAction {
         private var fakeRequest: URLRequest
         override var request: URLRequest {
@@ -33,34 +41,17 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeSettingActionHandler: SettingActionHandler {
-        var invokeArgument: SettingAction?
+    class FakeAccountStore: AccountStore {
+        let loginURLStub = PublishSubject<URL>()
 
-        override func invoke(_ action: SettingAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
-
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
+        override var loginURL: Observable<URL> {
+            return self.loginURLStub.asObservable()
         }
     }
 
     private var view: FakeFxAView!
-    private var settingActionHandler: FakeSettingActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
-    private var routeActionHandler: FakeRouteActionHandler!
+    private var dispatcher: FakeDispatcher!
+    private var accountStore: FakeAccountStore!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -68,14 +59,12 @@ class FxAPresenterSpec: QuickSpec {
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
-                self.settingActionHandler = FakeSettingActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
-                self.routeActionHandler = FakeRouteActionHandler()
+                self.dispatcher = FakeDispatcher()
+                self.accountStore = FakeAccountStore()
                 self.subject = FxAPresenter(
                         view: self.view,
-                        settingActionHandler: self.settingActionHandler,
-                        routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler
+                        dispatcher: self.dispatcher,
+                        accountStore: self.accountStore
                 )
             }
 
@@ -85,7 +74,10 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("tells the view to load the login URL") {
-                    expect(self.view.loadRequestArgument?.url).to(equal(ProductionFirefoxAccountConfiguration().signInURL))
+                    let url = URL(string: "https://www.mozilla.org")!
+                    self.accountStore.loginURLStub.onNext(url)
+
+                    expect(self.view.loadRequestArgument).to(equal(URLRequest(url: url)))
                 }
             }
 
@@ -95,9 +87,27 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("routes back to login") {
-                    expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                    let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(argument).to(equal(LoginRouteAction.welcome))
+                    let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                    expect(argument).to(equal(.welcome))
+                }
+            }
+
+            describe("matchingRedirectURLReceived") {
+                let url = URL(string: "https://www.mozilla.com")!
+
+                beforeEach {
+                    self.subject.matchingRedirectURLReceived(url)
+                }
+
+                it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
+                    let accountAction = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                    expect(accountAction).to(equal(.oauthRedirect(url: url)))
+
+                    let routeAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                    expect(routeAction).to(equal(.onboardingConfirmation))
+
+                    let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
+                    expect(onboardingAction.onboardingInProgress).to(beTrue())
                 }
             }
         }

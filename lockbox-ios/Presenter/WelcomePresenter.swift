@@ -7,6 +7,7 @@ import RxSwift
 import RxCocoa
 import RxOptional
 import CoreGraphics
+import FxAClient
 
 protocol WelcomeViewProtocol: class, AlertControllerView {
     var loginButtonPressed: ControlEvent<Void> { get }
@@ -34,31 +35,22 @@ extension LockedEnabled: Equatable {
 class WelcomePresenter {
     private weak var view: WelcomeViewProtocol?
 
-    private let routeActionHandler: RouteActionHandler
-    private let dataStoreActionHandler: DataStoreActionHandler
-    private let userInfoActionHandler: UserInfoActionHandler
-    private let linkActionHandler: LinkActionHandler
-    private let userInfoStore: UserInfoStore
+    private let dispatcher: Dispatcher
+    private let accountStore: AccountStore
     private let dataStore: DataStore
     private let lifecycleStore: LifecycleStore
     private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         userInfoActionHandler: UserInfoActionHandler = UserInfoActionHandler.shared,
-         linkActionHandler: LinkActionHandler = LinkActionHandler.shared,
-         userInfoStore: UserInfoStore = UserInfoStore.shared,
+         dispatcher: Dispatcher = .shared,
+         accountStore: AccountStore = AccountStore.shared,
          dataStore: DataStore = DataStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
-        self.userInfoActionHandler = userInfoActionHandler
-        self.linkActionHandler = linkActionHandler
-        self.userInfoStore = userInfoStore
+        self.dispatcher = dispatcher
+        self.accountStore = accountStore
         self.dataStore = dataStore
         self.lifecycleStore = lifecycleStore
         self.biometryManager = biometryManager
@@ -71,7 +63,7 @@ class WelcomePresenter {
         self.view?.loginButtonPressed
                 .subscribe(onNext: { [weak self] _ in
                     if self?.biometryManager.deviceAuthenticationAvailable ?? true {
-                        self?.routeActionHandler.invoke(LoginRouteAction.fxa)
+                        self?.dispatcher.dispatch(action: LoginRouteAction.fxa)
                     } else {
                         self?.launchPasscodePrompt()
                     }
@@ -80,54 +72,39 @@ class WelcomePresenter {
 
         self.view?.learnMorePressed
             .subscribe(onNext: { _ in
-                self.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+                self.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                         urlString: Constant.app.useLockboxFAQ,
                         title: Constant.string.learnMore,
                         returnRoute: LoginRouteAction.welcome))
             })
             .disposed(by: self.disposeBag)
 
-        self.userInfoActionHandler.invoke(.load)
-    }
-
-    private func setupBiometricLaunchers() {
-        let lifecycleObservable = self.lifecycleStore.lifecycleFilter
-                .filter { action -> Bool in
-            return action == LifecycleAction.foreground
-        }
-
-        let lifecycleMindingLockedObservable = Observable.combineLatest(
-                        self.userInfoStore.profileInfo,
-                        self.dataStore.locked.distinctUntilChanged(),
-                        lifecycleObservable
-                )
-                .map { ($0.0, $0.1) }
-
-        self.handleBiometrics(lifecycleMindingLockedObservable)
-
-        guard let view = self.view else { return }
-
-        let biometricButtonTapObservable = Observable.combineLatest(
-                    self.userInfoStore.profileInfo,
-                    self.dataStore.locked.distinctUntilChanged(),
-                    view.unlockButtonPressed.asObservable()
-                )
-                .map { ($0.0, $0.1) }
-
-        self.handleBiometrics(biometricButtonTapObservable)
+        self.accountStore.hasOldAccountInformation
+            .filter { $0 }
+            .subscribe(onNext: {  [weak self] _ in
+                self?.showOAuthUpgradeDialog()
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 
 extension WelcomePresenter {
     private var skipButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(LoginRouteAction.fxa)
+            target.dispatcher.dispatch(action: LoginRouteAction.fxa)
         }.asObserver()
     }
 
     private var setPasscodeButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.linkActionHandler.invoke(SettingLinkAction.touchIDPasscode)
+            target.dispatcher.dispatch(action: SettingLinkAction.touchIDPasscode)
+        }.asObserver()
+    }
+
+    private var oauthLoginConfirmationObserver: AnyObserver<Void> {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: LoginRouteAction.fxa)
+            target.dispatcher.dispatch(action: AccountAction.oauthSignInMessageRead)
         }.asObserver()
     }
 
@@ -144,6 +121,33 @@ extension WelcomePresenter {
         ]
     }
 
+    private func setupBiometricLaunchers() {
+        let lifecycleObservable = self.lifecycleStore.lifecycleFilter
+                .filter { action -> Bool in
+            return action == LifecycleAction.foreground
+        }
+
+        let lifecycleMindingLockedObservable = Observable.combineLatest(
+                        self.accountStore.profile,
+                        self.dataStore.locked.distinctUntilChanged(),
+                        lifecycleObservable
+                )
+                .map { ($0.0, $0.1) }
+
+        self.handleBiometrics(lifecycleMindingLockedObservable)
+
+        guard let view = self.view else { return }
+
+        let biometricButtonTapObservable = Observable.combineLatest(
+                        self.accountStore.profile,
+                        self.dataStore.locked.distinctUntilChanged(),
+                        view.unlockButtonPressed.asObservable()
+                )
+                .map { ($0.0, $0.1) }
+
+        self.handleBiometrics(biometricButtonTapObservable)
+    }
+
     private func launchPasscodePrompt() {
         self.view?.displayAlertController(
                 buttons: self.passcodeButtonsConfiguration,
@@ -152,7 +156,7 @@ extension WelcomePresenter {
                 style: .alert)
     }
 
-    private func handleBiometrics(_ infoLockedObservable: Observable<(ProfileInfo?, Bool)>) {
+    private func handleBiometrics(_ infoLockedObservable: Observable<(Profile?, Bool)>) {
         infoLockedObservable
                 .filter { $0.1 }
                 .map { $0.0 }
@@ -172,7 +176,7 @@ extension WelcomePresenter {
                             }
                 }
                 .subscribe(onNext: { [weak self] _ in
-                    self?.dataStoreActionHandler.invoke(.unlock)
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
                 })
                 .disposed(by: self.disposeBag)
     }
@@ -206,5 +210,18 @@ extension WelcomePresenter {
                     .bind(to: observer)
                     .disposed(by: self.disposeBag)
         }
+    }
+
+    func showOAuthUpgradeDialog() {
+        self.view?.displayAlertController(
+            buttons: [
+                AlertActionButtonConfiguration(
+                    title: Constant.string.continueText,
+                    tapObserver: self.oauthLoginConfirmationObserver,
+                    style: .default)
+            ],
+            title: Constant.string.reauthenticationRequired,
+            message: Constant.string.appUpdateDisclaimer,
+            style: .alert)
     }
 }

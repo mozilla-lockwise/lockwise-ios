@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import UIKit
+import FxAClient
 
 @testable import Lockbox
 
@@ -32,6 +33,8 @@ class RootPresenterSpec: QuickSpec {
         var pushLoginViewRouteArgument: LoginRouteAction?
         var pushMainViewArgument: MainRouteAction?
         var pushSettingViewArgument: SettingRouteAction?
+
+        var modalStackPresented = true
 
         func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.topViewIsArgument = type
@@ -78,6 +81,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeDispatcher: Dispatcher {
+        var dispatchActionArgument: [Action] = []
+
+        override func dispatch(action: Action) {
+            self.dispatchActionArgument.append(action)
+        }
+    }
+
     class FakeRouteStore: RouteStore {
         let onRouteSubject = PublishSubject<RouteAction>()
         let onboardingSubject = PublishSubject<Bool>()
@@ -92,9 +103,18 @@ class RootPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        let lockedSubject = PublishSubject<Bool>()
-        let syncSubject = PublishSubject<SyncState>()
-        let storageStateSubject = PublishSubject<LoginStoreState>()
+        let lockedSubject: PublishSubject<Bool>
+        let syncSubject: PublishSubject<SyncState>
+        let storageStateSubject: PublishSubject<LoginStoreState>
+
+        init() {
+            self.lockedSubject = PublishSubject<Bool>()
+            self.syncSubject = PublishSubject<SyncState>()
+            self.storageStateSubject = PublishSubject<LoginStoreState>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var locked: Observable<Bool> {
             return self.lockedSubject.asObservable()
@@ -117,11 +137,24 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
+    class FakeAccountStore: AccountStore {
+        let oauthInfoStub = PublishSubject<OAuthInfo?>()
+        let profileInfoStub = PublishSubject<Profile?>()
 
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
+        override var oauthInfo: Observable<OAuthInfo?> {
+            return self.oauthInfoStub.asObservable()
+        }
+
+        override var profile: Observable<Profile?> {
+            return self.profileInfoStub.asObservable()
+        }
+    }
+
+    class FakeUserDefaultStore: UserDefaultStore {
+        var recordUsageStub = PublishSubject<Bool>()
+
+        override var recordUsageData: Observable<Bool> {
+            return self.recordUsageStub
         }
     }
 
@@ -138,14 +171,6 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var action: DataStoreAction?
-
-        override func invoke(_ action: DataStoreAction) {
-            self.action = action
-        }
-    }
-
     class FakeBiometryManager: BiometryManager {
         var deviceAuthAvailableStub: Bool!
 
@@ -155,12 +180,13 @@ class RootPresenterSpec: QuickSpec {
     }
 
     private var view: FakeRootView!
+    private var dispatcher: FakeDispatcher!
     private var routeStore: FakeRouteStore!
     private var dataStore: FakeDataStore!
     private var telemetryStore: FakeTelemetryStore!
-    private var routeActionHandler: FakeRouteActionHandler!
+    private var accountStore: FakeAccountStore!
+    private var userDefaultStore: FakeUserDefaultStore!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
     private var biometryManager: FakeBiometryManager!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
@@ -169,144 +195,75 @@ class RootPresenterSpec: QuickSpec {
         describe("RootPresenter") {
             beforeEach {
                 self.view = FakeRootView()
+                self.dispatcher = FakeDispatcher()
                 self.routeStore = FakeRouteStore()
                 self.dataStore = FakeDataStore()
                 self.telemetryStore = FakeTelemetryStore()
-                self.routeActionHandler = FakeRouteActionHandler()
+                self.accountStore = FakeAccountStore()
+                self.userDefaultStore = FakeUserDefaultStore()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
                 self.biometryManager = FakeBiometryManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
                 self.biometryManager.deviceAuthAvailableStub = true
 
                 self.subject = RootPresenter(
                         view: self.view,
+                        dispatcher: self.dispatcher,
                         routeStore: self.routeStore,
                         dataStore: self.dataStore,
                         telemetryStore: self.telemetryStore,
-                        routeActionHandler: self.routeActionHandler,
+                        accountStore: self.accountStore,
+                        userDefaultStore: self.userDefaultStore,
                         telemetryActionHandler: self.telemetryActionHandler,
                         biometryManager: self.biometryManager
                 )
             }
 
-            describe("when the user is missing the itemlistsort setting") {
+            describe("when the oauth info is not available") {
                 beforeEach {
-                    UserDefaults.standard.removeObject(forKey: SettingKey.itemListSort.rawValue)
-
-                    self.subject = RootPresenter(
-                            view: self.view,
-                            routeStore: self.routeStore,
-                            dataStore: self.dataStore,
-                            telemetryStore: self.telemetryStore,
-                            routeActionHandler: self.routeActionHandler,
-                            telemetryActionHandler: self.telemetryActionHandler,
-                            biometryManager: self.biometryManager
-                    )
+                    self.accountStore.oauthInfoStub.onNext(nil)
+                    self.accountStore.profileInfoStub.onNext(nil)
                 }
 
-                it("sets the key") {
-                    expect(UserDefaults.standard.object(forKey: SettingKey.itemListSort.rawValue) as! String).to(equal(Constant.setting.defaultItemListSort.rawValue))
+                it("routes to the welcome view and resets the datastore") {
+                    let dataStoreAction = self.dispatcher.dispatchActionArgument.popLast() as! DataStoreAction
+                    expect(dataStoreAction).to(equal(DataStoreAction.reset))
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! LoginRouteAction
+                    expect(arg).to(equal(LoginRouteAction.welcome))
                 }
             }
 
-            describe("when the datastore state changes, regardless of synced state") {
-                it("routes to the welcome view") {
-                    self.dataStore.storageStateSubject.onNext(.Unprepared)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
+            xdescribe("when the oauth info and profile info are present") {
+                beforeEach {
+                    // todo: update this spec with constructable OAuthInfo and Profile
+                    self.dataStore.lockedSubject.onNext(false)
                 }
 
-                it("routes to the welcome view") {
-                    self.dataStore.storageStateSubject.onNext(.Locked)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
-                }
-
-                it("routes to the list view") {
-                    self.dataStore.storageStateSubject.onNext(.Unlocked)
-                    let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
+                it("updates the datastore credentials") {
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction
                     expect(arg).to(equal(MainRouteAction.list))
                 }
             }
 
-            describe("when the datastore is locked, regardless of synced state") {
+            describe("when the datastore is locked") {
                 beforeEach {
-                    self.dataStore.storageStateSubject.onNext(.Locked)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
+                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Locked)
                 }
 
-                it("routes to the welcome view") {
-                    self.dataStore.syncSubject.onNext(.NotSyncable)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
-                }
-
-                it("routes to the welcome view") {
-                    self.dataStore.syncSubject.onNext(.ReadyToSync)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
-                }
-
-                it("routes to the welcome view") {
-                    self.dataStore.syncSubject.onNext(.Synced)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
-                }
-
-                it("routes to the welcome view") {
-                    self.dataStore.syncSubject.onNext(.Syncing)
-                    let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
+                it("routes to the welcome screen") {
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! LoginRouteAction
                     expect(arg).to(equal(LoginRouteAction.welcome))
                 }
             }
 
             describe("when the datastore is unlocked") {
                 beforeEach {
-                    self.dataStore.lockedSubject.onNext(false)
+                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
                 }
 
-                describe("when the datastore is not syncable and unprepared") {
-                    beforeEach {
-                        self.dataStore.storageStateSubject.onNext(.Unprepared)
-                        self.dataStore.syncSubject.onNext(.NotSyncable)
-                    }
-
-                    it("displays the welcome screen") {
-                        let arg = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                        expect(arg).to(equal(LoginRouteAction.welcome))
-                    }
-                }
-
-                describe("any other storage state + sync state value") {
-                    it("routes to the list") {
-                        self.dataStore.storageStateSubject.onNext(.Unlocked)
-                        self.dataStore.syncSubject.onNext(.ReadyToSync)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
-                    }
-
-                    it("routes to the list") {
-                        self.dataStore.storageStateSubject.onNext(.Unlocked)
-                        self.dataStore.syncSubject.onNext(.Syncing)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
-                    }
-
-                    it("routes to the list") {
-                        self.dataStore.storageStateSubject.onNext(.Unlocked)
-                        self.dataStore.syncSubject.onNext(.Synced)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
-                    }
-
-                    it("routes to the list") {
-                        self.dataStore.storageStateSubject.onNext(.Unlocked)
-                        self.dataStore.syncSubject.onNext(.NotSyncable)
-                        let arg = self.routeActionHandler.invokeArgument as! MainRouteAction
-                        expect(arg).to(equal(MainRouteAction.list))
-                    }
+                it("routes to the list") {
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction
+                    expect(arg).to(equal(MainRouteAction.list))
                 }
             }
 
@@ -1104,7 +1061,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data can be recorded") {
                         beforeEach {
-                            UserDefaults.standard.set(true, forKey: SettingKey.recordUsageData.rawValue)
+                            self.userDefaultStore.recordUsageStub.onNext(true)
                             self.telemetryStore.telemetryStub.onNext(action)
                         }
 
@@ -1116,7 +1073,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data cannot be recorded") {
                         beforeEach {
-                            UserDefaults.standard.set(false, forKey: SettingKey.recordUsageData.rawValue)
+                            self.userDefaultStore.recordUsageStub.onNext(false)
                             self.telemetryStore.telemetryStub.onNext(action)
                         }
 
@@ -1132,11 +1089,10 @@ class RootPresenterSpec: QuickSpec {
     private func getPresenter() -> RootPresenter {
         return RootPresenter(
                 view: self.view,
+                dispatcher: self.dispatcher,
                 routeStore: self.routeStore,
                 dataStore: self.dataStore,
                 telemetryStore: self.telemetryStore,
-                routeActionHandler: self.routeActionHandler,
-                dataStoreActionHandler: self.dataStoreActionHandler,
                 telemetryActionHandler: self.telemetryActionHandler,
                 biometryManager: self.biometryManager
         )

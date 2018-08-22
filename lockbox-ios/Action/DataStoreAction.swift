@@ -8,9 +8,10 @@ import RxSwift
 import RxCocoa
 import Storage
 import SwiftyJSON
+import FxAClient
 
 enum DataStoreAction: Action {
-    case initialize(blob: JSON)
+    case updateCredentials(oauthInfo: FxAClient.OAuthInfo, fxaProfile: FxAClient.Profile)
     case lock
     case unlock
     case reset
@@ -23,8 +24,7 @@ enum DataStoreAction: Action {
 extension DataStoreAction: Equatable {
     static func ==(lhs: DataStoreAction, rhs: DataStoreAction) -> Bool {
         switch (lhs, rhs) {
-        case (.initialize(let lhBlob), .initialize(let rhBlob)):
-            return lhBlob == rhBlob
+        case (.updateCredentials, .updateCredentials): return true // TODO equality
         case (.lock, .lock): return true
         case (.unlock, .unlock): return true
         case (.reset, .reset): return true
@@ -37,20 +37,5 @@ extension DataStoreAction: Equatable {
             return lhID == rhID
         default: return false
         }
-    }
-}
-
-class DataStoreActionHandler: ActionHandler {
-    static let shared = DataStoreActionHandler()
-    private var dispatcher: Dispatcher
-
-    private let disposeBag = DisposeBag()
-
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
-    }
-
-    func invoke(_ action: DataStoreAction) {
-        self.dispatcher.dispatch(action: action)
     }
 }

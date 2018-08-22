@@ -4,11 +4,9 @@
 
 import Foundation
 import WebKit
-import FxAUtils
 import RxSwift
 import RxCocoa
 import SwiftyJSON
-import Account
 
 protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
@@ -21,49 +19,40 @@ struct LockedSyncState {
 
 class FxAPresenter {
     private weak var view: FxAViewProtocol?
-    fileprivate let settingActionHandler: SettingActionHandler
-    fileprivate let routeActionHandler: RouteActionHandler
-    fileprivate let dataStoreActionHandler: DataStoreActionHandler
-    fileprivate let dataStore: DataStore
+    fileprivate let dispatcher: Dispatcher
+    fileprivate let accountStore: AccountStore
 
     private var disposeBag = DisposeBag()
 
     public var onClose: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(LoginRouteAction.welcome)
+            target.dispatcher.dispatch(action: LoginRouteAction.welcome)
         }.asObserver()
     }
 
     init(view: FxAViewProtocol,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         dataStore: DataStore = DataStore.shared
+         dispatcher: Dispatcher = .shared,
+         accountStore: AccountStore = AccountStore.shared
     ) {
         self.view = view
-        self.settingActionHandler = settingActionHandler
-        self.routeActionHandler = routeActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
-        self.dataStore = dataStore
+        self.dispatcher = dispatcher
+        self.accountStore = accountStore
     }
 
     func onViewReady() {
-        self.view?.loadRequest(URLRequest(url: ProductionFirefoxAccountConfiguration().signInURL))
+        self.accountStore.loginURL
+                .bind { url in
+                    self.view?.loadRequest(URLRequest(url: url))
+                }
+                .disposed(by: self.disposeBag)
     }
 }
 
 // Extensions and enums to support logging in via remote commmand.
 extension FxAPresenter {
-    // The user has signed in to a Firefox Account.  We're done!
-    func onLogin(_ data: JSON) {
-        self.dataStore.syncState
-            .take(1)
-            .subscribe(onNext: { [weak self] syncState in
-                if syncState == .NotSyncable {
-                    self?.routeActionHandler.invoke(OnboardingStatusAction(onboardingInProgress: true))
-                    self?.routeActionHandler.invoke(LoginRouteAction.onboardingConfirmation)
-                    self?.dataStoreActionHandler.invoke(.initialize(blob: data))
-                }
-            }).disposed(by: disposeBag)
+    func matchingRedirectURLReceived(_ navigationURL: URL) {
+        self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: true))
+        self.dispatcher.dispatch(action: LoginRouteAction.onboardingConfirmation)
+        self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
     }
 }

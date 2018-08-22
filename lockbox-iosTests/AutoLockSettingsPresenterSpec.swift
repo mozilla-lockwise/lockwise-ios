@@ -21,24 +21,25 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var routeActionArgument: RouteAction?
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
 
-        override func invoke(_ action: RouteAction) {
-            self.routeActionArgument = action
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
         }
     }
 
-    class FakeSettingActionHandler: SettingActionHandler {
-        var actionArgument: SettingAction?
-        override func invoke(_ action: SettingAction) {
-            actionArgument = action
+    class FakeUserDefaultStore: UserDefaultStore {
+        let autoLockStub = PublishSubject<Setting.AutoLock>()
+
+        override var autoLockTime: Observable<Setting.AutoLock> {
+            return self.autoLockStub.asObservable()
         }
     }
 
     private var view: FakeAutoLockSettingsView!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var settingActionHandler: FakeSettingActionHandler!
+    private var dispatcher: FakeDispatcher!
+    private var userDefaultStore: FakeUserDefaultStore!
     private var scheduler = TestScheduler(initialClock: 0)
 
     var subject: AutoLockSettingPresenter!
@@ -46,23 +47,24 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
     override func spec() {
         beforeEach {
             self.view = FakeAutoLockSettingsView()
-            self.routeActionHandler = FakeRouteActionHandler()
-            self.settingActionHandler = FakeSettingActionHandler()
+            self.dispatcher = FakeDispatcher()
+            self.userDefaultStore = FakeUserDefaultStore()
 
-            self.subject = AutoLockSettingPresenter(view: self.view,
-                                             routeActionHandler: self.routeActionHandler,
-                                             settingActionHandler: self.settingActionHandler)
+            self.subject = AutoLockSettingPresenter(
+                    view: self.view,
+                    dispatcher: self.dispatcher,
+                    userDefaultStore: self.userDefaultStore)
         }
 
         it("delivers updated values when autoLock setting changes") {
             self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
             self.subject.onViewReady()
 
-            UserDefaults.standard.set(AutoLockSetting.FiveMinutes.rawValue, forKey: SettingKey.autoLockTime.rawValue)
+            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.FiveMinutes)
 
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 for item in settings[0].items {
-                    if item.valueWhenChecked as? AutoLockSetting == AutoLockSetting.FiveMinutes {
+                    if item.valueWhenChecked as? Setting.AutoLock == Setting.AutoLock.FiveMinutes {
                         expect(item.isChecked).to(beTrue())
                     } else {
                         expect(item.isChecked).to(beFalse())
@@ -76,8 +78,9 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
 
         it("calls handler when item is selected") {
-            self.subject.itemSelectedObserver.onNext(AutoLockSetting.OneHour)
-            expect(self.settingActionHandler.actionArgument).to(equal(SettingAction.autoLockTime(timeout: AutoLockSetting.OneHour)))
+            self.subject.itemSelectedObserver.onNext(Setting.AutoLock.OneHour)
+            let action = self.dispatcher.dispatchedActions.last as! SettingAction
+            expect(action).to(equal(SettingAction.autoLockTime(timeout: Setting.AutoLock.OneHour)))
         }
     }
 }

@@ -11,6 +11,7 @@ import RxTest
 import UIKit
 import CoreGraphics
 import LocalAuthentication
+import FxAClient
 
 @testable import Lockbox
 
@@ -77,40 +78,36 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
-    class FakeRouteActionHandler: RouteActionHandler {
-        var invokeArgument: RouteAction?
+    class FakeDispatcher: Dispatcher {
+        var dispatchedActions: [Action] = []
 
-        override func invoke(_ action: RouteAction) {
-            self.invokeArgument = action
+        override func dispatch(action: Action) {
+            self.dispatchedActions.append(action)
         }
     }
 
-    class FakeDataStoreActionHandler: DataStoreActionHandler {
-        var invokeArgument: DataStoreAction?
+    class FakeAccountStore: AccountStore {
+        var fakeProfile = PublishSubject<Profile?>()
+        var fakeOldAccountInformation = PublishSubject<Bool>()
 
-        override func invoke(_ action: DataStoreAction) {
-            self.invokeArgument = action
+        override var profile: Observable<Profile?> {
+            return self.fakeProfile.asObservable()
         }
-    }
 
-    class FakeLinkActionHandler: LinkActionHandler {
-        var invokeArgument: LinkAction?
-
-        override func invoke(_ action: LinkAction) {
-            self.invokeArgument = action
-        }
-    }
-
-    class FakeUserInfoStore: UserInfoStore {
-        var fakeProfileInfo = PublishSubject<ProfileInfo?>()
-
-        override var profileInfo: Observable<ProfileInfo?> {
-            return self.fakeProfileInfo.asObservable()
+        override var hasOldAccountInformation: Observable<Bool> {
+            return self.fakeOldAccountInformation.asObservable()
         }
     }
 
     class FakeDataStore: DataStore {
-        var fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
+        let fakeLocked: ReplaySubject<Bool>
+
+        init() {
+            self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var locked: Observable<Bool> {
             return self.fakeLocked.asObservable()
@@ -151,10 +148,8 @@ class WelcomePresenterSpec: QuickSpec {
     }
 
     private var view: FakeWelcomeView!
-    private var routeActionHandler: FakeRouteActionHandler!
-    private var dataStoreActionHandler: FakeDataStoreActionHandler!
-    private var linkActionHandler: FakeLinkActionHandler!
-    private var userInfoStore: FakeUserInfoStore!
+    private var dispatcher: FakeDispatcher!
+    private var accountStore: FakeAccountStore!
     private var dataStore: FakeDataStore!
     private var lifecycleStore: FakeLifecycleStore!
     private var biometryManager: FakeBiometryManager!
@@ -163,8 +158,7 @@ class WelcomePresenterSpec: QuickSpec {
     var subject: WelcomePresenter!
 
     override func spec() {
-
-        describe("LoginPresenter") {
+        describe("WelcomePresenter") {
             beforeEach {
                 self.view = FakeWelcomeView()
                 self.view.firstTimeMessageHiddenStub = self.scheduler.createObserver(Bool.self)
@@ -174,19 +168,15 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view.unlockButtonHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.lockImageHiddenStub = self.scheduler.createObserver(Bool.self)
 
-                self.routeActionHandler = FakeRouteActionHandler()
-                self.dataStoreActionHandler = FakeDataStoreActionHandler()
-                self.linkActionHandler = FakeLinkActionHandler()
-                self.userInfoStore = FakeUserInfoStore()
+                self.dispatcher = FakeDispatcher()
+                self.accountStore = FakeAccountStore()
                 self.dataStore = FakeDataStore()
                 self.lifecycleStore = FakeLifecycleStore()
                 self.biometryManager = FakeBiometryManager()
                 self.subject = WelcomePresenter(
                         view: self.view,
-                        routeActionHandler: self.routeActionHandler,
-                        dataStoreActionHandler: self.dataStoreActionHandler,
-                        linkActionHandler: self.linkActionHandler,
-                        userInfoStore: self.userInfoStore,
+                        dispatcher: self.dispatcher,
+                        accountStore: self.accountStore,
                         dataStore: self.dataStore,
                         lifecycleStore: self.lifecycleStore,
                         biometryManager: self.biometryManager
@@ -214,6 +204,32 @@ class WelcomePresenterSpec: QuickSpec {
                     }
                 }
 
+                describe("when the user has old account information") {
+                    beforeEach {
+                        self.subject.onViewReady()
+                        self.accountStore.fakeOldAccountInformation.onNext(true)
+                    }
+
+                    it("launches an alert") {
+                        expect(self.view.alertControllerTitle).to(equal(Constant.string.reauthenticationRequired))
+                        expect(self.view.alertControllerMessage).to(equal(Constant.string.appUpdateDisclaimer))
+                        expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
+                    }
+
+                    describe("tapping Continue") {
+                        beforeEach {
+                            self.view.alertControllerButtons![0].tapObserver!.onNext(())
+                        }
+
+                        it("routes to FxA, and sends the appropriate account action") {
+                            let accountArg = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                            expect(accountArg).to(equal(AccountAction.oauthSignInMessageRead))
+                            let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                            expect(argument).to(equal(LoginRouteAction.fxa))
+                        }
+                    }
+                }
+
                 describe("receiving a login button press") {
                     describe("when the user has device authentication available") {
                         beforeEach {
@@ -223,9 +239,8 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         it("dispatches the fxa login route action") {
-                            expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                            let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                            expect(argument).to(equal(LoginRouteAction.fxa))
+                            let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                            expect(argument).to(equal(.fxa))
                         }
                     }
 
@@ -248,9 +263,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the fxa login route action") {
-                                expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                                let argument = self.routeActionHandler.invokeArgument as! LoginRouteAction
-                                expect(argument).to(equal(LoginRouteAction.fxa))
+                                let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                                expect(argument).to(equal(.fxa))
                             }
                         }
 
@@ -260,8 +274,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("routes to the touchid / passcode settings page") {
-                                let action = self.linkActionHandler.invokeArgument as! SettingLinkAction
-                                expect(action).to(equal(SettingLinkAction.touchIDPasscode))
+                                let action = self.dispatcher.dispatchedActions.popLast() as! SettingLinkAction
+                                expect(action).to(equal(.touchIDPasscode))
                             }
                         }
                     }
@@ -275,8 +289,7 @@ class WelcomePresenterSpec: QuickSpec {
                     }
 
                     it("dispatches the learn more route action") {
-                        expect(self.routeActionHandler.invokeArgument).notTo(beNil())
-                        let argument = self.routeActionHandler.invokeArgument as! ExternalWebsiteRouteAction
+                        let argument = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                         expect(argument).to(equal(ExternalWebsiteRouteAction(
                                 urlString: Constant.app.useLockboxFAQ,
                                 title: Constant.string.learnMore,
@@ -287,12 +300,14 @@ class WelcomePresenterSpec: QuickSpec {
                 describe("when the device is locked") {
                     let email = "example@example.com"
 
-                    describe("when the profileinfo has an email address") {
+                    // TODO: remove pended spec when mozilla/application-services#133 is resolved
+                    xdescribe("when the profileinfo has an email address") {
                         beforeEach {
                             self.biometryManager.deviceAuthAvailableStub = true
                             self.subject.onViewReady()
                             self.dataStore.fakeLocked.onNext(true)
-                            self.userInfoStore.fakeProfileInfo.onNext(ProfileInfo.Builder().email(email).build())
+                            // tricky to test because we cannot construct a Profile with the email
+                            self.accountStore.fakeProfile.onNext(nil)
                         }
 
                         it("hides the first time login message and the fxa login button") {
@@ -323,8 +338,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                                        expect(action).to(equal(.unlock))
                                     }
                                 }
 
@@ -334,8 +349,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("does nothing") {
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                                     }
                                 }
                             }
@@ -355,8 +369,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                                        expect(action).to(equal(.unlock))
                                     }
                                 }
 
@@ -366,8 +380,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("does nothing") {
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                                     }
                                 }
                             }
@@ -380,8 +393,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("unlocks the device blindly") {
-                                expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                                expect(action).to(equal(.unlock))
                             }
                         }
                     }
@@ -391,7 +404,7 @@ class WelcomePresenterSpec: QuickSpec {
                             self.biometryManager.deviceAuthAvailableStub = true
                             self.subject.onViewReady()
                             self.dataStore.fakeLocked.onNext(true)
-                            self.userInfoStore.fakeProfileInfo.onNext(nil)
+                            self.accountStore.fakeProfile.onNext(nil)
                         }
 
                         it("hides the first time login message and the fxa login button") {
@@ -422,8 +435,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                                        expect(action).to(equal(.unlock))
                                     }
                                 }
 
@@ -433,8 +446,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("does nothing") {
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                                     }
                                 }
                             }
@@ -454,8 +466,8 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("unlocks the application") {
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                        let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                                        expect(action).to(equal(.unlock))
                                     }
                                 }
 
@@ -465,8 +477,7 @@ class WelcomePresenterSpec: QuickSpec {
                                     }
 
                                     it("does nothing") {
-                                        expect(self.routeActionHandler.invokeArgument).to(beNil())
-                                        expect(self.dataStoreActionHandler.invokeArgument).to(beNil())
+                                        expect(self.dispatcher.dispatchedActions).to(beEmpty())
                                     }
                                 }
                             }
@@ -479,8 +490,8 @@ class WelcomePresenterSpec: QuickSpec {
                             }
 
                             it("unlocks the device blindly") {
-                                expect(self.dataStoreActionHandler.invokeArgument).to(equal(DataStoreAction.unlock))
-                                expect(self.routeActionHandler.invokeArgument).to(beNil())
+                                let action = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                                expect(action).to(equal(.unlock))
                             }
                         }
                     }

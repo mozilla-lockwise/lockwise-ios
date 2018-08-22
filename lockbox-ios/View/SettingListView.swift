@@ -67,7 +67,7 @@ extension SettingListView {
                 cell.textLabel?.text = cellConfiguration.text
                 cell.selectionStyle = UITableViewCellSelectionStyle.none
                 cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
-                cell.accessibilityIdentifier = cellConfiguration.text
+                cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
                 cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
                 cell.detailTextLabel?.font = UIFont.preferredFont(forTextStyle: .caption2)
@@ -115,9 +115,10 @@ extension SettingListView {
         self.navigationItem.title = Constant.string.settingsTitle
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
+        self.navigationController?.navigationBar.accessibilityIdentifier = "settings.navigationBar"
 
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .never
@@ -128,8 +129,8 @@ extension SettingListView {
                 target: nil,
                 action: nil)
         navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .body)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationButtonFont
         ], for: .normal)
 
         if let presenter = presenter {
@@ -159,10 +160,12 @@ class SettingCellConfiguration {
     var detailText: String?
     var subtitle: NSAttributedString?
     var accessibilityActions: [UIAccessibilityCustomAction]?
+    var accessibilityId: String
 
-    init(text: String, routeAction: RouteAction?) {
+    init(text: String, routeAction: RouteAction?, accessibilityId: String) {
         self.text = text
         self.routeAction = routeAction
+        self.accessibilityId = accessibilityId
     }
 
     var reuseIndicator: String {
@@ -194,10 +197,10 @@ class SwitchSettingCellConfiguration: SettingCellConfiguration {
     var isOn: Bool = false
 
     var onChanged: AnyObserver<Bool>
-    init(text: String, routeAction: RouteAction?, isOn: Bool = false, onChanged: AnyObserver<Bool>) {
+    init(text: String, routeAction: RouteAction?, accessibilityId: String, isOn: Bool = false, onChanged: AnyObserver<Bool>) {
         self.isOn = isOn
         self.onChanged = onChanged
-        super.init(text: text, routeAction: routeAction)
+        super.init(text: text, routeAction: routeAction, accessibilityId: accessibilityId)
     }
 }
 
@@ -206,7 +209,7 @@ class CheckmarkSettingCellConfiguration: SettingCellConfiguration {
     var valueWhenChecked: Any?
 
     init(text: String, isChecked: Bool = false, valueWhenChecked: Any?) {
-        super.init(text: text, routeAction: nil)
+        super.init(text: text, routeAction: nil, accessibilityId: "")
         self.isChecked = isChecked
         self.valueWhenChecked = valueWhenChecked
     }

@@ -9,7 +9,7 @@ import UIKit
 struct Constant {
     struct app {
         static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        static let redirectURI = "https://mozilla-lockbox.github.io/fxa/ios-redirect.html"
+        static let appVersionCode = 2 // this is the version of the app that will drive updates.
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let privacyURL = "https://lockbox.firefox.com/privacy.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
@@ -18,6 +18,7 @@ struct Constant {
         static let editExistingEntriesFAQ = faqURL + "#how-do-i-edit-existing-entries"
         static let securityFAQ = faqURL + "#what-security-technology-does-firefox-lockbox-use"
         static let createNewEntriesFAQ = faqURL + "#how-do-i-create-new-entries"
+        static let adjustAppToken = "383z4i46o48w"
     }
 
     struct color {
@@ -33,9 +34,12 @@ struct Constant {
     }
 
     struct fxa {
+        static let redirectURI = "https://lockbox.firefox.com/fxa/ios-redirect.html"
         static let clientID = "98adfa37698f255b"
-        static let oauthHost = "oauth.accounts.firefox.com"
-        static let profileHost = "profile.accounts.firefox.com"
+        static let oldSyncScope = "https://identity.mozilla.com/apps/oldsync"
+        static let lockboxScope = "https://identity.mozilla.com/apps/lockbox"
+        static let profileScope = "profile"
+        static let scopes = [oldSyncScope, lockboxScope, profileScope]
     }
 
     struct string {
@@ -105,23 +109,26 @@ struct Constant {
         static let doneSyncingYourEntries = NSLocalizedString("syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
         static let installBrowserAccessibilityLabel = NSLocalizedString("install_browser_prompt", value: "%@ disabled, install this browser to make it available", comment: "Accessibility instructions for disabled web browser options")
         static let onboardingSecurityPostfix = NSLocalizedString("onboarding.encryption", value: "256-bit encryption", comment: "Name of link to algorithm used by Lockbox for encryption")
+        static let reauthenticationRequired = NSLocalizedString("reauth_required", value: "Reauthentication Required", comment: "Title of dialog box displayed when users need to reauthenticate")
+        static let appUpdateDisclaimer = NSLocalizedString("app_update_explanation", value: "Due to a recent app update, we will need you to sign in again. Apologies for the inconvenience.", comment: "Message in dialog box when users need to reauthenticate explaining application update")
+        static let continueText = NSLocalizedString("continue", value: "Continue", comment: "Button title when agreeing to proceed to access Lockbox.")
     }
 
     struct number {
-        static let displayStatusAlertLength = TimeInterval(1.5)
-        static let displayAlertFade = TimeInterval(0.3)
+        static let displayStatusAlertLength = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.5)
+        static let displayAlertFade = isRunningTest ? TimeInterval(0.0) : TimeInterval(0.3)
         static let displayAlertOpacity: CGFloat = 0.75
         static let displayAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
         static let copyExpireTimeSecs = 60
-        static let minimumSpinnerHUDTime = TimeInterval(1.0)
+        static let minimumSpinnerHUDTime = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.0)
     }
 
     struct setting {
-        static let defaultAutoLockTimeout = AutoLockSetting.FiveMinutes
-        static let defaultPreferredBrowser = PreferredBrowserSetting.Safari
+        static let defaultAutoLock = Setting.AutoLock.FiveMinutes
+        static let defaultPreferredBrowser = Setting.PreferredBrowser.Safari
         static let defaultRecordUsageData = true
-        static let defaultItemListSort = ItemListSortSetting.alphabetically
+        static let defaultItemListSort = Setting.ItemListSort.alphabetically
     }
 }

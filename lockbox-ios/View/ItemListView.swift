@@ -14,7 +14,6 @@ enum LoginListCellConfiguration {
     case Item(title: String, username: String, guid: String)
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
-    case PreparingPlaceholder
     case NoResults(learnMoreObserver: AnyObserver<Void>)
 }
 
@@ -29,8 +28,6 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "syncplaceholder"
         case .EmptyListPlaceholder:
             return "emptyplaceholder"
-        case .PreparingPlaceholder:
-            return "preparingplaceholder"
         case .NoResults:
             return "noresultsplaceholder"
         }
@@ -45,7 +42,6 @@ extension LoginListCellConfiguration: Equatable {
             return lhTitle == rhTitle && lhUsername == rhUsername
         case (.SyncListPlaceholder, .SyncListPlaceholder): return true
         case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
-        case (.PreparingPlaceholder, .PreparingPlaceholder): return true
         case (.NoResults, .NoResults): return true
         default:
             return false
@@ -120,14 +116,6 @@ extension ItemListView: ItemListViewProtocol {
         return nil
     }
 
-    var settingButtonEnabled: AnyObserver<Bool>? {
-        if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
-            return button.rx.isEnabled.asObserver()
-        }
-
-        return nil
-    }
-
     func dismissKeyboard() {
         if let cell = self.getFilterCell() {
             cell.filterTextField.resignFirstResponder()
@@ -196,12 +184,6 @@ extension ItemListView {
                                 .disposed(by: cell.disposeBag)
 
                         retCell = cell
-                    case .PreparingPlaceholder:
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "preparingplaceholder") else {
-                            fatalError("couldn't find the right cell!")
-                        }
-
-                        retCell = cell
                     case .NoResults(let learnMoreObserver):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder") as? NoResultsCell else {
                             fatalError("couldn't find the no results cell")
@@ -264,9 +246,10 @@ extension ItemListView {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
         self.navigationItem.title = Constant.string.yourLockbox
         self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockbox.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
 
         if #available(iOS 11.0, *) {
@@ -293,10 +276,6 @@ extension ItemListView {
     private var prefButton: UIButton {
         let button = UIButton()
         button.accessibilityIdentifier = "settings.button"
-        if #available(iOS 11.0, *) {
-            button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        }
-
         let prefImage = UIImage(named: "preferences")?.withRenderingMode(.alwaysTemplate)
         button.accessibilityLabel = Constant.string.settingsAccessibilityID
         let tintedPrefImage = prefImage?.tinted(UIColor(white: 1.0, alpha: 0.6))
@@ -312,13 +291,10 @@ extension ItemListView {
 
     private var sortingButton: UIButton {
         let button = UIButton(title: Constant.string.aToZ, imageName: "down-caret")
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        button.titleLabel?.font = .navigationButtonFont
         // custom width constraint so "Recent" fits on small iPhone SE screen
         button.accessibilityIdentifier = "sorting.button"
         button.translatesAutoresizingMaskIntoConstraints = false
-        if #available(iOS 11.0, *) {
-            button.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        }
         button.addConstraint(NSLayoutConstraint(
                 item: button,
                 attribute: .width,

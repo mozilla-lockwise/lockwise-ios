@@ -13,7 +13,6 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
     func bind(items: Driver<[ItemSectionModel]>)
     func bind(sortingButtonTitle: Driver<String>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
-    var settingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     func dismissKeyboard()
     var pullToRefreshActive: AnyObserver<Bool>? { get }
@@ -22,7 +21,7 @@ protocol ItemListViewProtocol: class, AlertControllerView, SpinnerAlertView {
 struct LoginListTextSort {
     let logins: [Login]
     let text: String
-    let sortingOption: ItemListSortSetting
+    let sortingOption: Setting.ItemListSort
     let syncState: SyncState
     let storeState: LoginStoreState
 }
@@ -43,14 +42,11 @@ struct SyncStateManual {
 
 class ItemListPresenter {
     private weak var view: ItemListViewProtocol?
-    private var routeActionHandler: RouteActionHandler
-    private var itemListDisplayActionHandler: ItemListDisplayActionHandler
-    private var dataStoreActionHandler: DataStoreActionHandler
-    private var dataStore: DataStore
-    private var itemListDisplayStore: ItemListDisplayStore
-    private var userDefaults: UserDefaults
-    private var settingActionHandler: SettingActionHandler
-    private var disposeBag = DisposeBag()
+    private let dispatcher: Dispatcher
+    private let dataStore: DataStore
+    private let itemListDisplayStore: ItemListDisplayStore
+    private let userDefaultStore: UserDefaultStore
+    private let disposeBag = DisposeBag()
 
     lazy private(set) var itemSelectedObserver: AnyObserver<String?> = {
         return Binder(self) { target, itemId in
@@ -62,48 +58,48 @@ class ItemListPresenter {
                 view.dismissKeyboard()
             }
 
-            target.routeActionHandler.invoke(MainRouteAction.detail(itemId: id))
+            target.dispatcher.dispatch(action: MainRouteAction.detail(itemId: id))
         }.asObserver()
     }()
 
     lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(SettingRouteAction.list)
+            target.dispatcher.dispatch(action: SettingRouteAction.list)
         }.asObserver()
     }()
 
     lazy private(set) var filterTextObserver: AnyObserver<String> = {
         return Binder(self) { target, filterText in
-            target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: filterText))
-            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: true))
+            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: filterText))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: true))
         }.asObserver()
     }()
 
     lazy private(set) var filterCancelObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.view?.dismissKeyboard()
-            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
-            target.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
+            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
         }.asObserver()
     }()
 
     lazy private(set) var editEndedObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.view?.dismissKeyboard()
-            target.itemListDisplayActionHandler.invoke(ItemListFilterEditAction(editing: false))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
         }.asObserver()
     }()
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: true))
-            target.dataStoreActionHandler.invoke(.sync)
+            target.dispatcher.dispatch(action: PullToRefreshAction(refreshing: true))
+            target.dispatcher.dispatch(action: DataStoreAction.sync)
         }.asObserver()
     }()
 
     lazy private(set) var sortingButtonObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            self.userDefaults.onItemListSort
+            self.userDefaultStore.itemListSort
                 .take(1)
                 .subscribe(onNext: { evt in
                 let latest = evt
@@ -112,12 +108,12 @@ class ItemListPresenter {
                             title: Constant.string.alphabetically,
                             tapObserver: target.alphabeticSortObserver,
                             style: .default,
-                            checked: latest == ItemListSortSetting.alphabetically),
+                            checked: latest == Setting.ItemListSort.alphabetically),
                     AlertActionButtonConfiguration(
                             title: Constant.string.recentlyUsed,
                             tapObserver: target.recentlyUsedSortObserver,
                             style: .default,
-                            checked: latest == ItemListSortSetting.recentlyUsed),
+                            checked: latest == Setting.ItemListSort.recentlyUsed),
                     AlertActionButtonConfiguration(
                             title: Constant.string.cancel,
                             tapObserver: nil,
@@ -131,19 +127,19 @@ class ItemListPresenter {
 
     lazy private var alphabeticSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.alphabetically))
+            target.dispatcher.dispatch(action: SettingAction.itemListSort(sort: Setting.ItemListSort.alphabetically))
         }.asObserver()
     }()
 
     lazy private var recentlyUsedSortObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.settingActionHandler.invoke(SettingAction.itemListSort(sort: ItemListSortSetting.recentlyUsed))
+            target.dispatcher.dispatch(action: SettingAction.itemListSort(sort: Setting.ItemListSort.recentlyUsed))
         }.asObserver()
     }()
 
     lazy private var learnMoreObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                     urlString: Constant.app.enableSyncFAQ,
                     title: Constant.string.faq,
                     returnRoute: MainRouteAction.list))
@@ -152,7 +148,7 @@ class ItemListPresenter {
 
     lazy private var learnMoreNewEntriesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.routeActionHandler.invoke(ExternalWebsiteRouteAction(
+            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                 urlString: Constant.app.createNewEntriesFAQ,
                 title: Constant.string.faq,
                 returnRoute: MainRouteAction.list))
@@ -168,12 +164,6 @@ class ItemListPresenter {
     lazy private var noResultsPlaceholderItems = [
         ItemSectionModel(model: 0, items: self.searchItem +
                 [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
-        )
-    ]
-
-    lazy private var preparingPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem +
-                [LoginListCellConfiguration.PreparingPlaceholder]
         )
     ]
 
@@ -209,25 +199,19 @@ class ItemListPresenter {
     }()
 
     init(view: ItemListViewProtocol,
-         routeActionHandler: RouteActionHandler = RouteActionHandler.shared,
-         itemListDisplayActionHandler: ItemListDisplayActionHandler = ItemListDisplayActionHandler.shared,
-         dataStoreActionHandler: DataStoreActionHandler = DataStoreActionHandler.shared,
-         settingActionHandler: SettingActionHandler = SettingActionHandler.shared,
+         dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
-         userDefaults: UserDefaults = UserDefaults.standard) {
+         userDefaultStore: UserDefaultStore = .shared) {
         self.view = view
-        self.routeActionHandler = routeActionHandler
-        self.itemListDisplayActionHandler = itemListDisplayActionHandler
-        self.dataStoreActionHandler = dataStoreActionHandler
-        self.settingActionHandler = settingActionHandler
+        self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
-        self.userDefaults = userDefaults
+        self.userDefaultStore = userDefaultStore
     }
 
     func onViewReady() {
-        let itemSortObservable = self.userDefaults.onItemListSort
+        let itemSortObservable = self.userDefaultStore.itemListSort
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: ItemListFilterAction.self)
@@ -245,34 +229,35 @@ class ItemListPresenter {
 
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
-              let settingButtonObserver = view.settingButtonEnabled,
               let pullToRefreshActiveObserver = view.pullToRefreshActive else { return }
 
         self.setupPullToRefresh(pullToRefreshActiveObserver)
         self.setupButtonBehavior(
                 view: view,
                 itemSortObservable: itemSortObservable,
-                sortButtonObserver: sortButtonObserver,
-                settingButtonObserver: settingButtonObserver
+                sortButtonObserver: sortButtonObserver
         )
 
-        self.itemListDisplayActionHandler.invoke(ItemListFilterAction(filteringText: ""))
-        self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+        self.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
+        self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
     }
 }
 
 extension ItemListPresenter {
     fileprivate func createItemListDriver(loginListObservable: Observable<[Login]>,
                                           filterTextObservable: Observable<ItemListFilterAction>,
-                                          itemSortObservable: Observable<ItemListSortSetting>,
+                                          itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+        // only run on a delay for UI purposes; keep tests from blocking
+        let listThrottle = isRunningTest ? 0.0 : 1.0
+        let stateThrottle = isRunningTest ? 0.0 : 2.0
         let throttledListObservable = loginListObservable
-                .throttle(1.0, scheduler: ConcurrentMainScheduler.instance)
+                .throttle(listThrottle, scheduler: ConcurrentMainScheduler.instance)
         let throttledSyncStateObservable = syncStateObservable
-                .throttle(2.0, scheduler: ConcurrentMainScheduler.instance)
+                .throttle(stateThrottle, scheduler: ConcurrentMainScheduler.instance)
         let throttledStorageStateObservable = storageStateObservable
-                .throttle(2.0, scheduler: ConcurrentMainScheduler.instance)
+                .throttle(stateThrottle, scheduler: ConcurrentMainScheduler.instance)
 
         return Observable.combineLatest(
                         throttledListObservable,
@@ -281,7 +266,7 @@ extension ItemListPresenter {
                         throttledSyncStateObservable,
                         throttledStorageStateObservable
                 )
-            .map { (latest: ([Login], ItemListFilterAction, ItemListSortSetting, SyncState, LoginStoreState)) -> LoginListTextSort in
+            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState)) -> LoginListTextSort in
                     return LoginListTextSort(
                             logins: latest.0,
                             text: latest.1.filteringText,
@@ -298,10 +283,6 @@ extension ItemListPresenter {
 
                     if latest.syncState == .Synced && latest.logins.isEmpty {
                         return self.emptyPlaceholderItems
-                    }
-
-                    if latest.storeState == .Preparing {
-                        return self.preparingPlaceholderItems
                     }
 
                     let sortedFilteredItems = self.filterItemsForText(latest.text, items: latest.logins)
@@ -391,16 +372,15 @@ extension ItemListPresenter {
         self.dataStore.syncState
                 .filter { $0 == .Synced }
                 .subscribe(onNext: { _ in
-                    self.itemListDisplayActionHandler.invoke(PullToRefreshAction(refreshing: false))
+                    self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
                 })
                 .disposed(by: self.disposeBag)
     }
 
     fileprivate func setupButtonBehavior(
             view: ItemListViewProtocol,
-            itemSortObservable: Observable<ItemListSortSetting>,
-            sortButtonObserver: AnyObserver<Bool>,
-            settingButtonObserver: AnyObserver<Bool>) {
+            itemSortObservable: Observable<Setting.ItemListSort>,
+            sortButtonObserver: AnyObserver<Bool>) {
         let itemSortTextDriver = itemSortObservable
                 .asDriver(onErrorJustReturn: .alphabetically)
                 .map { itemSortAction -> String in
@@ -414,12 +394,13 @@ extension ItemListPresenter {
 
         view.bind(sortingButtonTitle: itemSortTextDriver)
 
-        let enableObservable = self.dataStore.list.map { !$0.isEmpty }
+        let loginListEmptyObservable = self.dataStore.list.map { $0.isEmpty }
+        let isSyncingObservable = self.dataStore.syncState.map { $0 == .Syncing }
+        let enableObservable = isSyncingObservable.withLatestFrom(loginListEmptyObservable) { (isSyncing, isListEmpty) in
+          return !(isSyncing && isListEmpty)
+        }
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
-
-        let preparingObservable = self.dataStore.storageState.map { $0 != LoginStoreState.Preparing }
-        preparingObservable.bind(to: settingButtonObserver).disposed(by: self.disposeBag)
     }
 }
