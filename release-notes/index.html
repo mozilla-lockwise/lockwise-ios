@@ -50,7 +50,7 @@
           
             <li class="toctree-l1">
 		
-    <span class="caption-text">Introduction</span>
+    <a class="" href="..">Introduction</a>
 	    </li>
           
             <li class="toctree-l1 current">
@@ -61,6 +61,8 @@
     <li class="toctree-l2"><a href="#release-notes">Release Notes</a></li>
     
         <ul>
+        
+            <li><a class="toctree-l3" href="#12-build-1939">1.2 (Build 1939)</a></li>
         
             <li><a class="toctree-l3" href="#111-build-1717">1.1.1 (Build 1717)</a></li>
         
@@ -163,6 +165,20 @@
             <div class="section">
               
                 <h1 id="release-notes">Release Notes</h1>
+<h2 id="12-build-1939">1.2 (Build 1939)</h2>
+<p><em>Date: 2018-08-22</em></p>
+<p>It's been a month since our launch and we've been working hard to replace the old way of logging in with Firefox Accounts and fixing some bugs. For new users, they'll encounter a smoother and clearer experience. For existing users with the app already installed, you'll just need to sign in once again.</p>
+<p>Here's the full list of changes:</p>
+<ul>
+<li>Introduced the OAuth login flow to replace the "old" way of signing in</li>
+<li>Added a "migration path" so users with the app sign back in and store data properly</li>
+<li>The app clears your local storage and cache when you disconnect your account</li>
+<li>You can now "pull to refresh" to force a sync when looking at an empty list</li>
+<li>We fixed some alignment bugs for iPhone SEs running iOS 10</li>
+<li>The autolock feature has been hardened as to when and how it locks the app</li>
+<li>The app no longer dynamically adjusts the navigation bar sizes so it can be usable</li>
+</ul>
+<p>Thanks to all our open source contributors that helped make this release possible.</p>
 <h2 id="111-build-1717">1.1.1 (Build 1717)</h2>
 <p><em>Date: 2018-07-26</em></p>
 <p>It's been two weeks since our initial public launch, and one week since we opened up to all countries. Thanks to everyone's feedback we have some minor changes and bug fixes for you in this update.</p>
