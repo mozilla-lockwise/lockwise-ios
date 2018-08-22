@@ -1,6 +1,6 @@
 # Release Notes
 
-## 1.2 (Build ?????????)
+## 1.2 (Build 1939)
 
 _Date: 2018-08-22_
 
