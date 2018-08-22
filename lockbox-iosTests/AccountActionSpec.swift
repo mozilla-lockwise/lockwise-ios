@@ -35,6 +35,14 @@ class AccountActionSpec: QuickSpec {
                 it("clear actions are always equal") {
                     expect(AccountAction.clear).to(equal(AccountAction.clear))
                 }
+
+                it("oauthSignInMessageRead is always equal") {
+                    expect(AccountAction.oauthSignInMessageRead).to(equal(AccountAction.oauthSignInMessageRead))
+                }
+
+                it("non-same actions are not equal") {
+                    expect(AccountAction.clear).notTo(equal(AccountAction.oauthSignInMessageRead))
+                }
             }
         }
     }

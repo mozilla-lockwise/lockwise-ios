@@ -88,14 +88,26 @@ class WelcomePresenterSpec: QuickSpec {
 
     class FakeAccountStore: AccountStore {
         var fakeProfile = PublishSubject<Profile?>()
+        var fakeOldAccountInformation = PublishSubject<Bool>()
 
         override var profile: Observable<Profile?> {
             return self.fakeProfile.asObservable()
         }
+
+        override var hasOldAccountInformation: Observable<Bool> {
+            return self.fakeOldAccountInformation.asObservable()
+        }
     }
 
     class FakeDataStore: DataStore {
-        var fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
+        let fakeLocked: ReplaySubject<Bool>
+
+        init() {
+            self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var locked: Observable<Bool> {
             return self.fakeLocked.asObservable()
@@ -189,6 +201,32 @@ class WelcomePresenterSpec: QuickSpec {
                     it("hides the biometrics login button and label") {
                         expect(self.view.unlockButtonHiddenStub.events.last!.value.element).to(beTrue())
                         expect(self.view.lockImageHiddenStub.events.last!.value.element).to(beTrue())
+                    }
+                }
+
+                describe("when the user has old account information") {
+                    beforeEach {
+                        self.subject.onViewReady()
+                        self.accountStore.fakeOldAccountInformation.onNext(true)
+                    }
+
+                    it("launches an alert") {
+                        expect(self.view.alertControllerTitle).to(equal(Constant.string.reauthenticationRequired))
+                        expect(self.view.alertControllerMessage).to(equal(Constant.string.appUpdateDisclaimer))
+                        expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
+                    }
+
+                    describe("tapping Continue") {
+                        beforeEach {
+                            self.view.alertControllerButtons![0].tapObserver!.onNext(())
+                        }
+
+                        it("routes to FxA, and sends the appropriate account action") {
+                            let accountArg = self.dispatcher.dispatchedActions.popLast() as! AccountAction
+                            expect(accountArg).to(equal(AccountAction.oauthSignInMessageRead))
+                            let argument = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                            expect(argument).to(equal(LoginRouteAction.fxa))
+                        }
                     }
                 }
 

@@ -51,9 +51,9 @@ class CopyDisplayStoreSpec: QuickSpec {
 
                 beforeEach {
                     fieldObserver = self.scheduler.createObserver(CopyField.self)
-                    
+
                     self.subject.copyDisplay.drive(fieldObserver).disposed(by: self.disposeBag)
-                    
+
                     self.dispatcher.fakeRegistration.onNext(action)
                 }
 

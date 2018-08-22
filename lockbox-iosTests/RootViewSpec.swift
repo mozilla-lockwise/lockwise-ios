@@ -93,7 +93,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes an fxaview the top view") {
-                        expect(self.subject.topViewIs(FxAView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(FxAView.self)).to(beTrue())
                     }
                 }
 
@@ -104,7 +104,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the onboardingconfirmation the top view") {
-                        expect(self.subject.topViewIs(OnboardingConfirmationView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(OnboardingConfirmationView.self)).to(beTrue())
                     }
                 }
             }
@@ -140,7 +140,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes a detailview the top view") {
-                        expect(self.subject.topViewIs(ItemDetailView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
                     }
                 }
             }
@@ -166,7 +166,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the account view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AccountSettingView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(AccountSettingView.self)).to(beTrue())
                     }
                 }
 
@@ -176,7 +176,7 @@ class RootViewSpec: QuickSpec {
                     }
 
                     it("makes the autolock view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AutoLockSettingView.self)).toEventually(beTrue(), timeout: 20)
+                        expect(self.subject.topViewIs(AutoLockSettingView.self)).to(beTrue())
                     }
                 }
             }

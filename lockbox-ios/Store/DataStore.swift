@@ -86,7 +86,7 @@ private let defaultProfileFactory: ProfileFactory = { reset in
 class DataStore {
     public static let shared = DataStore()
 
-    private let disposeBag = DisposeBag()
+    internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[Login]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
@@ -123,6 +123,9 @@ class DataStore {
 
         self.dispatcher = dispatcher
         self.profile = profileFactory(false)
+
+        guard !isRunningTest else { return }
+
         self.initializeProfile()
         self.registerNotificationCenter()
 
@@ -160,6 +163,8 @@ class DataStore {
                         self.profile.syncManager?.applicationDidBecomeActive()
                     case .startup:
                         break
+                    case let .upgrade(previous, _):
+                        self.upgradeDataStore(from: previous)
                     }
                 })
                 .disposed(by: disposeBag)
@@ -240,14 +245,6 @@ extension DataStore {
             return syncManager.syncEverything(why: .backgrounded)
         }
 
-        func disconnect() -> Success {
-            return self.fxaLoginHelper.applicationDidDisconnect(UIApplication.shared)
-        }
-
-        func deleteAll() -> Success {
-            return self.profile.logins.removeAll()
-        }
-
         func resetProfile() {
             self.profile = profileFactory(true)
             self.initializeProfile()
@@ -255,7 +252,7 @@ extension DataStore {
             self.storageStateSubject.onNext(.Unprepared)
         }
 
-        stopSyncing() >>== disconnect >>== deleteAll >>== resetProfile
+        stopSyncing() >>== resetProfile
     }
 }
 
@@ -431,5 +428,11 @@ extension DataStore {
                     }
                 })
                 .disposed(by: self.disposeBag)
+    }
+
+    func upgradeDataStore(from previous: Int) {
+        if previous <= 1 {
+            self.reset()
+        }
     }
 }

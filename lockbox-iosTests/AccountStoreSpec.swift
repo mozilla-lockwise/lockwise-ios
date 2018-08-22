@@ -142,6 +142,26 @@ class AccountStoreSpec: QuickSpec {
                 }
             }
 
+            describe("upgrade") {
+                describe("when the upgrade is happening") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(LifecycleAction.upgrade(from: 1, to: 2))
+                    }
+
+                    it("pushes out that the user has an old-style account") {
+                        let hasOldAccountInfo = try! self.subject.hasOldAccountInformation.toBlocking().first()!
+                        expect(hasOldAccountInfo).to(beTrue())
+                    }
+                }
+
+                describe("when the keychain does not have old login information") {
+                    it("pushes out that the user does not have an old-style account") {
+                        let hasOldAccountInfo = try! self.subject.hasOldAccountInformation.toBlocking().first()!
+                        expect(hasOldAccountInfo).to(beFalse())
+                    }
+                }
+            }
+
             // tricky to test because OAuth is hard to fake out :p
             xdescribe("oauthRedirect") {
                 var oauthObserver = self.scheduler.createObserver(OAuthInfo?.self)
@@ -189,6 +209,21 @@ class AccountStoreSpec: QuickSpec {
 
                 xit("fetches all available data records and removes them") {
                     // can't subclass WKWebSiteDataStore sufficiently :(
+                }
+            }
+
+            describe("oauthSignInMessageRead") {
+                beforeEach {
+                    self.dispatcher.fakeRegistration.onNext(AccountAction.oauthSignInMessageRead)
+                }
+
+                it("clears keychain values associated with old accounts") {
+                    for key in KeychainKey.allValues {
+                        expect(self.keychainManager.removeArguments).to(contain(key.rawValue))
+                    }
+
+                    let oldAccountPresent = try! self.subject.hasOldAccountInformation.toBlocking().first()!
+                    expect(oldAccountPresent).to(beFalse())
                 }
             }
         }

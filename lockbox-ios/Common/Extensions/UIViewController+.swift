@@ -73,7 +73,7 @@ extension UIViewController: AlertControllerView {
         }
 
         DispatchQueue.main.async {
-            self.present(alertController, animated: true)
+            self.present(alertController, animated: !isRunningTest)
         }
     }
 }

@@ -15,6 +15,8 @@ protocol RootViewProtocol: class {
     func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
 
+    var modalStackPresented: Bool { get }
+
     func startMainStack<T: UINavigationController>(_ type: T.Type)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
@@ -22,6 +24,18 @@ protocol RootViewProtocol: class {
     func pushLoginView(view: LoginRouteAction)
     func pushMainView(view: MainRouteAction)
     func pushSettingView(view: SettingRouteAction)
+}
+
+struct OAuthProfile {
+    let oauthInfo: OAuthInfo?
+    let profile: Profile?
+}
+
+extension OAuthProfile: Equatable {
+    static func ==(lh: OAuthProfile, rh: OAuthProfile) -> Bool {
+        return lh.profile == rh.profile &&
+                lh.oauthInfo == rh.oauthInfo
+    }
 }
 
 class RootPresenter {
@@ -34,6 +48,7 @@ class RootPresenter {
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let accountStore: AccountStore
     fileprivate let userDefaultStore: UserDefaultStore
+    fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
 
@@ -46,6 +61,7 @@ class RootPresenter {
          telemetryStore: TelemetryStore = TelemetryStore.shared,
          accountStore: AccountStore = AccountStore.shared,
          userDefaultStore: UserDefaultStore = .shared,
+         lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
          biometryManager: BiometryManager = BiometryManager()
     ) {
@@ -56,32 +72,41 @@ class RootPresenter {
         self.telemetryStore = telemetryStore
         self.accountStore = accountStore
         self.userDefaultStore = userDefaultStore
+        self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
 
+        // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-            .bind { latest in
-                    if let oauthInfo = latest.0,
-                        let profile = latest.1 {
+                .map { OAuthProfile(oauthInfo: $0.0, profile: $0.1) }
+                .distinctUntilChanged()
+                .bind { latest in
+                    if let oauthInfo = latest.oauthInfo,
+                        let profile = latest.profile {
                         self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                    } else if latest.oauthInfo == nil && latest.profile == nil {
+                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                        self.dispatcher.dispatch(action: DataStoreAction.reset)
                     }
                 }
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
+            .debug()
             .subscribe(onNext: { storageState in
-                    switch storageState {
-                    case .Unprepared, .Locked:
-                        self.dispatcher.dispatch(action: LoginRouteAction.welcome)
-                    case .Unlocked:
-                        self.dispatcher.dispatch(action: MainRouteAction.list)
-                    default:
-                        break
-                    }
-                })
-                .disposed(by: self.disposeBag)
+                switch storageState {
+                case .Unprepared, .Locked:
+                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                case .Unlocked:
+                    self.dispatcher.dispatch(action: MainRouteAction.list)
+                default:
+                    break
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
+            .debug()
             .filter { $0.1 == LoginStoreState.Unprepared }
             .map { $0.0 }
             .distinctUntilChanged()
@@ -136,7 +161,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(LoginNavigationController.self) {
                 view.startMainStack(LoginNavigationController.self)
@@ -165,7 +192,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(MainNavigationController.self) {
                 view.startMainStack(MainNavigationController.self)
@@ -190,7 +219,9 @@ class RootPresenter {
                 return
             }
 
-            view.dismissModals()
+            if view.modalStackPresented {
+                view.dismissModals()
+            }
 
             if !view.mainStackIs(SettingNavigationController.self) {
                 view.startMainStack(SettingNavigationController.self)
