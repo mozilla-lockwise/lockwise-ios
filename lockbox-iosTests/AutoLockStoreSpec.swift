@@ -55,7 +55,7 @@ class AutoLockStoreSpec: QuickSpec {
     var subject: AutoLockStore!
 
     override func spec() {
-        xdescribe("AutoLockStore") {
+        describe("AutoLockStore") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
@@ -64,7 +64,7 @@ class AutoLockStoreSpec: QuickSpec {
                 self.subject = AutoLockStore(
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
-                        userDefaults: UserDefaults.standard)
+                        userDefaults: self.userDefaults)
             }
 
             describe("foregrounding app") {
