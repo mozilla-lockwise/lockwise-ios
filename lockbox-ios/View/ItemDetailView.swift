@@ -98,7 +98,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
         let leftButton = UIButton(title: Constant.string.back, imageName: "back")
-        leftButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if #available(iOS 11.0, *) {
@@ -107,8 +107,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
 
         if let presenter = self.presenter {

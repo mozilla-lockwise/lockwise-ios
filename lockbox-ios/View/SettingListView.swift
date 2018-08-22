@@ -115,8 +115,8 @@ extension SettingListView {
         self.navigationItem.title = Constant.string.settingsTitle
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .headline)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
         self.navigationController?.navigationBar.accessibilityIdentifier = "settings.navigationBar"
 
@@ -129,8 +129,8 @@ extension SettingListView {
                 target: nil,
                 action: nil)
         navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .body)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationButtonFont
         ], for: .normal)
 
         if let presenter = presenter {

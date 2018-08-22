@@ -98,8 +98,8 @@ extension AutoLockSettingView: UIGestureRecognizerDelegate {
     private func setupNavbar() {
         self.navigationItem.title = Constant.string.settingsAutoLock
         self.navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedStringKey.foregroundColor: UIColor.white,
-            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .semibold)
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
         ]
 
         let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
