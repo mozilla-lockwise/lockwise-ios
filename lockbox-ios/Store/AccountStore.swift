@@ -14,7 +14,7 @@ enum KeychainKey: String {
     // authentication
     case email, displayName, avatarURL, accountJSON, appVersionCode
 
-    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .appVersionCode]
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
 }
 
 class AccountStore {
