@@ -55,8 +55,7 @@ class AccountStore: BaseAccountStore {
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         localKeychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         sharedKeychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
+         keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          urlCache: URLCache = URLCache.shared,
          webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
         ) {
@@ -64,7 +63,7 @@ class AccountStore: BaseAccountStore {
         self.urlCache = urlCache
         self.webData = webData
 
-        super.init(localKeychainWrapper: localKeychainWrapper, sharedKeychainWrapper: sharedKeychainWrapper)
+        super.init(keychainWrapper: keychainWrapper)
     }
 
     override func initialized() {
@@ -130,8 +129,7 @@ extension AccountStore {
 
     private func clear() {
         for identifier in KeychainKey.allValues {
-            _ = self.localKeychainWrapper.removeObject(forKey: identifier.rawValue)
-            _ = self.sharedKeychainWrapper.removeObject(forKey: identifier.rawValue)
+            _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
         }
 
         self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
@@ -180,7 +178,7 @@ extension AccountStore {
             }
 
             if let accountJSON = try? fxa.toJSON() {
-                self.sharedKeychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
+                self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
 
             fxa.getProfile { (profile: Profile?, _) in
