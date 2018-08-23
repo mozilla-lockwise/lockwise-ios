@@ -213,7 +213,7 @@ class WelcomePresenterSpec: QuickSpec {
                     it("launches an alert") {
                         expect(self.view.alertControllerTitle).to(equal(Constant.string.reauthenticationRequired))
                         expect(self.view.alertControllerMessage).to(equal(Constant.string.appUpdateDisclaimer))
-                        expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
+                        expect(self.view.alertControllerStyle).to(equal(UIAlertController.Style.alert))
                     }
 
                     describe("tapping Continue") {

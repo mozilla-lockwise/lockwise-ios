@@ -84,7 +84,7 @@ private let defaultProfileFactory: ProfileFactory = { reset in
 }
 
 class BaseDataStore {
-    internal let disposeBag = DisposeBag()
+    internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[Login]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
@@ -156,7 +156,7 @@ class BaseDataStore {
                         self.profile.syncManager?.applicationDidEnterBackground()
                     case .foreground:
                         self.profile.syncManager?.applicationDidBecomeActive()
-                    case .startup:
+                    default:
                         break
                     }
                 })

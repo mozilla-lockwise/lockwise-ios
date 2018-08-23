@@ -11,9 +11,9 @@ import WebKit
 import Shared
 
 enum LocalUserDefaultKey: String {
-    case preferredBrowser, recordUsageData, itemListSort
+    case preferredBrowser, recordUsageData, itemListSort, appVersionCode
 
-    static var allValues: [LocalUserDefaultKey] = [.preferredBrowser, .recordUsageData, .itemListSort]
+    static var allValues: [LocalUserDefaultKey] = [.preferredBrowser, .recordUsageData, .itemListSort, .appVersionCode]
 
     var defaultValue: Any? {
         switch self {
@@ -23,16 +23,10 @@ enum LocalUserDefaultKey: String {
             return Constant.setting.defaultPreferredBrowser.rawValue
         case .recordUsageData:
             return Constant.setting.defaultRecordUsageData
+        case .appVersionCode:
+            return 0
         }
     }
-}
-
-enum KeychainKey: String {
-    // note: these additional keys are holdovers from the previous Lockbox-owned style of
-    // authentication
-    case email, displayName, avatarURL, accountJSON
-
-    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
 }
 
 class AccountStore: BaseAccountStore {

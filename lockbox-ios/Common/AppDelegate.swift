@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !firstRun {
             self.checkForUpgrades()
         }
-        UserDefaults.standard.set(Constant.app.appVersionCode, forKey: UserDefaultKey.appVersionCode.rawValue)
+        UserDefaults.standard.set(Constant.app.appVersionCode, forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
         let navBarImage = UIImage.createGradientImage(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
@@ -95,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func checkForUpgrades() {
         let current = Constant.app.appVersionCode
-        let previous = UserDefaults.standard.integer(forKey: UserDefaultKey.appVersionCode.rawValue)
+        let previous = UserDefaults.standard.integer(forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
         if previous < current {
             // At the moment, this can be quite simple, since we don't have many migrations,
