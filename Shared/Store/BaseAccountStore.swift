@@ -8,9 +8,10 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
+import Shared
 
 class BaseAccountStore {
-    internal var sharedKeychainWrapper: KeychainWrapper
+    internal var keychainWrapper: KeychainWrapper
 
     internal var fxa: FirefoxAccount?
     internal var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
@@ -27,11 +28,11 @@ class BaseAccountStore {
     internal var storedAccountJSON: String? {
         let key = KeychainKey.accountJSON.rawValue
         
-        return self.sharedKeychainWrapper.string(forKey: key) ?? self.localKeychainWrapper.string(forKey: key)
+        return self.keychainWrapper.string(forKey: key)
     }
 
-    init(sharedKeychainWrapper: KeychainWrapper = KeychainWrapper(serviceName: "", accessGroup: Constant.app.group)) {
-        self.sharedKeychainWrapper = sharedKeychainWrapper
+    init(keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain) {
+        self.keychainWrapper = keychainWrapper
 
         self.initialized()
     }
@@ -49,7 +50,7 @@ class BaseAccountStore {
             self._oauthInfo.onNext(info)
             
             if let json = try? fxa.toJSON() {
-                self.sharedKeychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
+                self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
             }
         }
         
