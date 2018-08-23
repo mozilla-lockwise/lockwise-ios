@@ -12,7 +12,7 @@ import WebKit
 enum KeychainKey: String {
     // note: these additional keys are holdovers from the previous Lockbox-owned style of
     // authentication
-    case email, displayName, avatarURL, accountJSON, appVersionCode
+    case email, displayName, avatarURL, accountJSON
 
     static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
 }
