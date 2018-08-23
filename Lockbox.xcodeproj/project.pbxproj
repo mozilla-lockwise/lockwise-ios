@@ -172,6 +172,8 @@
 		D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783612207C080300C19BC7 /* ExternalLinkAction.swift */; };
 		D8783615207D303E00C19BC7 /* ExternalLinkStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783614207D303E00C19BC7 /* ExternalLinkStoreSpec.swift */; };
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
+		D88177BD212F2DB100436B3D /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88177BC212F2DB100436B3D /* Sentry.framework */; };
+		D88177BF212F30F600436B3D /* SentryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88177BE212F30F600436B3D /* SentryManager.swift */; };
 		D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */; };
 		D895605C20967C5300CC7E47 /* AutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* AutoLockStore.swift */; };
 		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
@@ -409,6 +411,8 @@
 		D8783612207C080300C19BC7 /* ExternalLinkAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkAction.swift; sourceTree = "<group>"; };
 		D8783614207D303E00C19BC7 /* ExternalLinkStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStoreSpec.swift; sourceTree = "<group>"; };
 		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
+		D88177BC212F2DB100436B3D /* Sentry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sentry.framework; path = Carthage/Build/iOS/Sentry.framework; sourceTree = "<group>"; };
+		D88177BE212F30F600436B3D /* SentryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryManager.swift; sourceTree = "<group>"; };
 		D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockStoreSpec.swift; sourceTree = "<group>"; };
 		D895605B20967C5300CC7E47 /* AutoLockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockStore.swift; sourceTree = "<group>"; };
 		D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingViewSpec.swift; sourceTree = "<group>"; };
@@ -446,6 +450,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D88177BD212F2DB100436B3D /* Sentry.framework in Frameworks */,
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */,
 				D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */,
@@ -557,6 +562,7 @@
 			isa = PBXGroup;
 			children = (
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
+				D88177BE212F30F600436B3D /* SentryManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -678,6 +684,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D88177BC212F2DB100436B3D /* Sentry.framework */,
 				D8551EBD211954E00056B24A /* AdjustSdk.framework */,
 				D8551EBB211950BF0056B24A /* iAd.framework */,
 				D8551EB9211950AF0056B24A /* AdSupport.framework */,
@@ -1013,6 +1020,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
@@ -1136,6 +1144,7 @@
 				7DA4C6862028F85A00B61DD8 /* ItemListPresenter.swift in Sources */,
 				7AA54C8928B257655856C516 /* AppDelegate.swift in Sources */,
 				7AA540D7395F48BD6983CC3E /* Dispatcher.swift in Sources */,
+				D88177BF212F30F600436B3D /* SentryManager.swift in Sources */,
 				D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */,
 				D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */,
 				4C7F3C7D20B3C32A00C4C414 /* UIButton+.swift in Sources */,

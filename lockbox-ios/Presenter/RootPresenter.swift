@@ -120,6 +120,7 @@ class RootPresenter {
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
         self.startAdjust()
+        self.startSentry()
     }
 
     func onViewReady() {
@@ -279,6 +280,14 @@ extension RootPresenter {
     fileprivate func startAdjust() {
         self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
             Adjust.setEnabled(enabled)
+        }).disposed(by: self.disposeBag)
+    }
+
+    fileprivate func startSentry() {
+        self.userDefaultStore.recordUsageData
+            .take(1)
+            .subscribe(onNext: { enabled in
+                Sentry.shared.setup(sendUsageData: enabled)
         }).disposed(by: self.disposeBag)
     }
 }
