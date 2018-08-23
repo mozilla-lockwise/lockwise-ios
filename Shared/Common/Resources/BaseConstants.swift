@@ -39,7 +39,7 @@ enum UserDefaultKey: String {
 enum KeychainKey: String {
     // note: these additional keys are holdovers from the previous Lockbox-owned style of
     // authentication
-    case email, displayName, avatarURL, accountJSON, appVersion
+    case email, displayName, avatarURL, accountJSON, appVersionCode
 
-    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .appVersion]
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .appVersionCode]
 }
