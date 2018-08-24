@@ -29,7 +29,7 @@ class WelcomeViewSpec: QuickSpec {
         describe("WelcomeView") {
             beforeEach {
                 let sb = UIStoryboard(name: "Welcome", bundle: nil)
-                self.subject = sb.instantiateViewController(withIdentifier: "welcome") as! WelcomeView
+                self.subject = sb.instantiateViewController(withIdentifier: "welcome") as? WelcomeView
                 self.presenter = FakeLoginPresenter(view: self.subject)
                 self.subject.presenter = self.presenter
 

@@ -16,7 +16,7 @@ class AutoLockSettingView: UITableViewController {
     private var dataSource: RxTableViewSectionedReloadDataSource<AutoLockSettingSectionModel>?
 
     init() {
-        super.init(style: UITableViewStyle.grouped)
+        super.init(style: UITableView.Style.grouped)
         self.presenter = AutoLockSettingPresenter(view: self)
         view.backgroundColor = Constant.color.viewBackground
     }
@@ -63,10 +63,10 @@ extension AutoLockSettingView {
             configureCell: {(_, _, _, cellConfiguration) -> UITableViewCell in
             let cell = SettingCell()
             cell.textLabel?.text = cellConfiguration.text
-            cell.selectionStyle = UITableViewCellSelectionStyle.none
+            cell.selectionStyle = UITableViewCell.SelectionStyle.none
 
             cell.accessoryType = cellConfiguration.isChecked ?
-                UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+                UITableViewCell.AccessoryType.checkmark : UITableViewCell.AccessoryType.none
 
             return cell
         })

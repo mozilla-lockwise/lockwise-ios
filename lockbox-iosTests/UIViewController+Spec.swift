@@ -62,13 +62,13 @@ class ViewControllerSpec: QuickSpec {
 
                 let alertController = self.subject.presentedViewController as! UIAlertController
 
-                expect(alertController.preferredStyle).to(equal(UIAlertControllerStyle.actionSheet))
+                expect(alertController.preferredStyle).to(equal(UIAlertController.Style.actionSheet))
 
                 expect(alertController.actions.first!.title).to(equal(buttons[0].title))
-                expect(alertController.actions.first!.style).to(equal(UIAlertActionStyle.default))
+                expect(alertController.actions.first!.style).to(equal(UIAlertAction.Style.default))
 
                 expect(alertController.actions[1].title).to(equal(buttons[1].title))
-                expect(alertController.actions[1].style).to(equal(UIAlertActionStyle.cancel))
+                expect(alertController.actions[1].style).to(equal(UIAlertAction.Style.cancel))
             }
 
             // testing note: UIAlertAction handlers _not_ tested here because it's heinous to do so in Swift.
