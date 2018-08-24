@@ -28,6 +28,31 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
+               BuildableName = "LockboxXCUITests.xctest"
+               BlueprintName = "LockboxXCUITests"
+               ReferencedContainer = "container:Lockbox.xcodeproj">
+            </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "BaseTestCase">
+               </Test>
+            </SkippedTests>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7D1B1AC31F99028D00C1F5FF"
+               BuildableName = "LockboxTests.xctest"
+               BlueprintName = "LockboxTests"
+               ReferencedContainer = "container:Lockbox.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

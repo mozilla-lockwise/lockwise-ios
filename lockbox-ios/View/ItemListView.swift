@@ -349,7 +349,7 @@ extension ItemListView {
 
         cancelHidden
                 .subscribe(onNext: { _ in
-                    UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
+                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
                 })
                 .disposed(by: cell.disposeBag)
 

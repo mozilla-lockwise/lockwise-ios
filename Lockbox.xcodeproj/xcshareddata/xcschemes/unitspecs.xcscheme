@@ -21,16 +21,16 @@
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForTesting = "NO"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-               BuildableName = "Firefox Lockbox.app"
-               BlueprintName = "Firefox Lockbox"
+               BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
+               BuildableName = "LockboxXCUITests.xctest"
+               BlueprintName = "LockboxXCUITests"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

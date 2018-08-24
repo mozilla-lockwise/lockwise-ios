@@ -16,7 +16,7 @@ class SettingListPresenterSpec: QuickSpec {
 
         var displayAlertControllerCalled = false
         var displayAlertControllerButtons: [AlertActionButtonConfiguration]?
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
             displayAlertControllerCalled = true
             displayAlertControllerButtons = buttons
         }
@@ -194,7 +194,7 @@ class SettingListPresenterSpec: QuickSpec {
                 }
 
                 it("calls settingActionHandler") {
-                    expect(self.dispatcher.dispatchedActions.last as? SettingAction).to(equal(SettingAction.recordUsageData(enabled: false)))
+                    expect(self.dispatcher.dispatchedActions.last as! SettingAction).to(equal(SettingAction.recordUsageData(enabled: false)))
                 }
             }
 

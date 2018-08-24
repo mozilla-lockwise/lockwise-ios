@@ -22,33 +22,29 @@ class UserDefaultStoreSpec: QuickSpec {
     var dispatcher: FakeDispatcher!
     var subject: UserDefaultStore!
 
-    let userDefaults = UserDefaults(suiteName: Constant.app.group)!
-
     override func spec() {
         describe("UserDefaultStore") {
             beforeEach {
-                self.userDefaults.set(
+                UserDefaults.standard.set(
                         Constant.setting.defaultPreferredBrowser.rawValue,
-                        forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
-                self.userDefaults.set(
+                        forKey: UserDefaultKey.preferredBrowser.rawValue)
+                UserDefaults.standard.set(
                         false,
-                        forKey: LocalUserDefaultKey.recordUsageData.rawValue)
-                self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
-                self.userDefaults.removeObject(forKey: UserDefaultKey.autoLockTime.rawValue)
-                self.userDefaults.removeObject(forKey: LocalUserDefaultKey.itemListSort.rawValue)
+                        forKey: UserDefaultKey.recordUsageData.rawValue)
+                UserDefaults.standard.removeObject(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+                UserDefaults.standard.removeObject(forKey: UserDefaultKey.autoLockTime.rawValue)
+                UserDefaults.standard.removeObject(forKey: UserDefaultKey.itemListSort.rawValue)
 
                 self.dispatcher = FakeDispatcher()
                 self.subject = UserDefaultStore(dispatcher: self.dispatcher)
             }
 
             it("populates all nil values with the default on initialization") {
-                expect(Setting.AutoLock(rawValue: self.userDefaults.value(forKey: UserDefaultKey.autoLockTime.rawValue) as! String)).to(equal(Constant.setting.defaultAutoLock))
-                expect(Setting.PreferredBrowser(rawValue: self.userDefaults.value(forKey: LocalUserDefaultKey.preferredBrowser.rawValue) as! String)).to(equal(Constant.setting.defaultPreferredBrowser))
-                expect(Setting.ItemListSort(rawValue: self.userDefaults.value(forKey: LocalUserDefaultKey.itemListSort.rawValue) as! String)).to(equal(Constant.setting.defaultItemListSort))
-                expect(self.userDefaults.value(forKey: LocalUserDefaultKey.recordUsageData.rawValue) as? Bool).to(beFalse())
-                if let sharedUserDefaults = UserDefaults(suiteName: Constant.app.group) {
-                    expect(sharedUserDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
-                }
+                expect(Setting.AutoLock(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.autoLockTime.rawValue) as! String)).to(equal(Constant.setting.defaultAutoLock))
+                expect(Setting.PreferredBrowser(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.preferredBrowser.rawValue) as! String)).to(equal(Constant.setting.defaultPreferredBrowser))
+                expect(Setting.ItemListSort(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.itemListSort.rawValue) as! String)).to(equal(Constant.setting.defaultItemListSort))
+                expect(UserDefaults.standard.value(forKey: UserDefaultKey.recordUsageData.rawValue) as! Bool).to(beFalse())
+                expect(UserDefaults.standard.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
             }
 
             describe("SettingAction.autolock") {
@@ -59,7 +55,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 }
 
                 it("sets the appropriate value for key in userdefaults") {
-                    expect(Setting.AutoLock(rawValue: self.userDefaults.value(forKey: UserDefaultKey.autoLockTime.rawValue) as! String)).to(equal(autoLockSetting))
+                    expect(Setting.AutoLock(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.autoLockTime.rawValue) as! String)).to(equal(autoLockSetting))
                 }
             }
 
@@ -71,7 +67,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 }
 
                 it("sets the appropriate value for key in userdefaults") {
-                    expect(self.userDefaults.value(forKey: LocalUserDefaultKey.preferredBrowser.rawValue) as? String).to(equal(browserSetting.rawValue))
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.preferredBrowser.rawValue) as! String).to(equal(browserSetting.rawValue))
                 }
             }
 
@@ -81,7 +77,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 }
 
                 it("sets the appropriate value for the key in userdefaults") {
-                    expect(self.userDefaults.value(forKey: LocalUserDefaultKey.recordUsageData.rawValue) as? Bool).to(beFalse())
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.recordUsageData.rawValue) as! Bool).to(beFalse())
                 }
             }
 
@@ -93,7 +89,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 }
 
                 it("sets the appropriate value for the key in userdefaults") {
-                    expect(Setting.ItemListSort(rawValue: self.userDefaults.value(forKey: LocalUserDefaultKey.itemListSort.rawValue) as! String)).to(equal(itemListSort))
+                    expect(Setting.ItemListSort(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.itemListSort.rawValue) as! String)).to(equal(itemListSort))
                 }
             }
 
@@ -103,20 +99,18 @@ class UserDefaultStoreSpec: QuickSpec {
                 }
 
                 it("sets the appropriate value for key in userdefaults") {
-                    expect(Setting.AutoLock(rawValue: self.userDefaults.value(forKey: UserDefaultKey.autoLockTime.rawValue) as! String)).to(equal(Constant.setting.defaultAutoLock))
-                    expect(Setting.PreferredBrowser(rawValue: self.userDefaults.value(forKey: LocalUserDefaultKey.preferredBrowser.rawValue) as! String)).to(equal(Constant.setting.defaultPreferredBrowser))
-                    expect(Setting.ItemListSort(rawValue: self.userDefaults.value(forKey: LocalUserDefaultKey.itemListSort.rawValue) as! String)).to(equal(Constant.setting.defaultItemListSort))
-                    expect(self.userDefaults.value(forKey: LocalUserDefaultKey.recordUsageData.rawValue) as? Bool).to(beTrue())
-                    if let sharedUserDefaults = UserDefaults(suiteName: Constant.app.group) {
-                        expect(sharedUserDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
-                    }
+                    expect(Setting.AutoLock(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.autoLockTime.rawValue) as! String)).to(equal(Constant.setting.defaultAutoLock))
+                    expect(Setting.PreferredBrowser(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.preferredBrowser.rawValue) as! String)).to(equal(Constant.setting.defaultPreferredBrowser))
+                    expect(Setting.ItemListSort(rawValue: UserDefaults.standard.value(forKey: UserDefaultKey.itemListSort.rawValue) as! String)).to(equal(Constant.setting.defaultItemListSort))
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.recordUsageData.rawValue) as! Bool).to(beTrue())
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                 }
             }
 
             describe(".autoLockTime") {
                 it("pushes the UserDefaults autolocktime value") {
                     let value = Setting.AutoLock.FifteenMinutes.rawValue
-                    self.userDefaults.set(value, forKey: UserDefaultKey.autoLockTime.rawValue)
+                    UserDefaults.standard.set(value, forKey: UserDefaultKey.autoLockTime.rawValue)
                     let time = try! self.subject.autoLockTime.toBlocking().first()!
 
                     expect(value).to(equal(time.rawValue))
@@ -127,7 +121,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 it("pushes the UserDefaults preferredBrowser value") {
                     let browser = try! self.subject.preferredBrowser.toBlocking().first()!
 
-                    expect(self.userDefaults.value(forKey: LocalUserDefaultKey.preferredBrowser.rawValue) as? String).to(equal(browser.rawValue))
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.preferredBrowser.rawValue) as? String).to(equal(browser.rawValue))
                 }
             }
 
@@ -135,7 +129,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 it("pushes the UserDefaults recordUsageData value") {
                     let record = try! self.subject.recordUsageData.toBlocking().first()!
 
-                    expect(self.userDefaults.value(forKey: LocalUserDefaultKey.recordUsageData.rawValue) as? Bool).to(equal(record))
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.recordUsageData.rawValue) as! Bool).to(equal(record))
                 }
             }
 
@@ -143,17 +137,17 @@ class UserDefaultStoreSpec: QuickSpec {
                 it("pushes the UserDefaults itemListSort value") {
                     let itemListSort = try! self.subject.itemListSort.toBlocking().first()!
 
-                    expect(self.userDefaults.value(forKey: LocalUserDefaultKey.itemListSort.rawValue) as? String).to(equal(itemListSort.rawValue))
+                    expect(UserDefaults.standard.value(forKey: UserDefaultKey.itemListSort.rawValue) as? String).to(equal(itemListSort.rawValue))
                 }
             }
         }
 
         describe("UserDefaultKey defaults") {
             it("returns the appropriate key for userdefaults") {
-                expect(UserDefaultKey.autoLockTime.defaultValue as? String).to(equal(Constant.setting.defaultAutoLock.rawValue))
-                expect(LocalUserDefaultKey.preferredBrowser.defaultValue as? String).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
-                expect(LocalUserDefaultKey.recordUsageData.defaultValue as? Bool).to(equal(Constant.setting.defaultRecordUsageData))
-                expect(LocalUserDefaultKey.itemListSort.defaultValue as? String).to(equal(Constant.setting.defaultItemListSort.rawValue))
+                expect(UserDefaultKey.autoLockTime.defaultValue as! String).to(equal(Constant.setting.defaultAutoLock.rawValue))
+                expect(UserDefaultKey.preferredBrowser.defaultValue as! String).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
+                expect(UserDefaultKey.recordUsageData.defaultValue as! Bool).to(equal(Constant.setting.defaultRecordUsageData))
+                expect(UserDefaultKey.itemListSort.defaultValue as! String).to(equal(Constant.setting.defaultItemListSort.rawValue))
                 expect(UserDefaultKey.autoLockTimerDate.defaultValue).to(beNil())
             }
         }

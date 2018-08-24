@@ -18,9 +18,10 @@ class ExternalLinkStoreSpec: QuickSpec {
         var openArgument: URL?
         var canOpenURLArgument: URL?
 
-        func open(_ url: URL, options: [UIApplication.OpenExternalURLOptionsKey: Any], completionHandler completion: ((Bool) -> Void)?) {
+        func open(_ url: URL, options: [String: Any], completionHandler completion: ((Bool) -> Swift.Void)?) {
             self.openArgument = url
         }
+
         func canOpenURL(_ url: URL) -> Bool {
             self.canOpenURLArgument = url
             return true
@@ -32,25 +33,25 @@ class ExternalLinkStoreSpec: QuickSpec {
             beforeEach {
                 self.dispatcher = .shared
                 self.application = FakeApplication()
-                self.userDefaults = UserDefaults(suiteName: Constant.app.group)!
+                self.userDefaults = .standard
                 _ = ExternalLinkStore(dispatcher: self.dispatcher,
                                       application: self.application)
             }
 
             describe("invoke external link") {
                 it("opens safari with deeplink") {
-                    self.userDefaults.set(Setting.PreferredBrowser.Safari.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
+                    self.userDefaults.set(Setting.PreferredBrowser.Safari.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
                     self.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: self.testUrl))
                     expect(self.application.openArgument?.absoluteString).to(equal(self.testUrl))
                 }
 
                 it("does not call open on changes to preferred browser setting") {
-                    self.userDefaults.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
+                    self.userDefaults.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
                     expect(self.application.openArgument).to(beNil())
                     self.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: self.testUrl))
                     expect(self.application.openArgument?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
                     self.application.openArgument = nil
-                    self.userDefaults.set(Setting.PreferredBrowser.Focus.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
+                    self.userDefaults.set(Setting.PreferredBrowser.Focus.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
                     expect(self.application.openArgument).to(beNil())
                     self.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: self.testUrl))
                     expect(self.application.openArgument?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))

@@ -29,7 +29,7 @@ class WelcomePresenterSpec: QuickSpec {
         var alertControllerButtons: [AlertActionButtonConfiguration]?
         var alertControllerTitle: String?
         var alertControllerMessage: String?
-        var alertControllerStyle: UIAlertController.Style?
+        var alertControllerStyle: UIAlertControllerStyle?
 
         var loginButtonPressed: ControlEvent<Void> {
             return ControlEvent<Void>(events: fakeLoginButtonPress.asObservable())
@@ -70,7 +70,7 @@ class WelcomePresenterSpec: QuickSpec {
         func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                     title: String?,
                                     message: String?,
-                                    style: UIAlertController.Style) {
+                                    style: UIAlertControllerStyle) {
             self.alertControllerButtons = buttons
             self.alertControllerTitle = title
             self.alertControllerMessage = message
@@ -213,7 +213,7 @@ class WelcomePresenterSpec: QuickSpec {
                     it("launches an alert") {
                         expect(self.view.alertControllerTitle).to(equal(Constant.string.reauthenticationRequired))
                         expect(self.view.alertControllerMessage).to(equal(Constant.string.appUpdateDisclaimer))
-                        expect(self.view.alertControllerStyle).to(equal(UIAlertController.Style.alert))
+                        expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
                     }
 
                     describe("tapping Continue") {
@@ -254,7 +254,7 @@ class WelcomePresenterSpec: QuickSpec {
                         it("displays a directional / informative alert") {
                             expect(self.view.alertControllerTitle).to(equal(Constant.string.notUsingPasscode))
                             expect(self.view.alertControllerMessage).to(equal(Constant.string.passcodeInformation))
-                            expect(self.view.alertControllerStyle).to(equal(UIAlertController.Style.alert))
+                            expect(self.view.alertControllerStyle).to(equal(UIAlertControllerStyle.alert))
                         }
 
                         describe("tapping the Skip button") {

@@ -13,14 +13,14 @@ protocol StatusAlertView {
 struct AlertActionButtonConfiguration {
     let title: String
     let tapObserver: AnyObserver<Void>?
-    let style: UIAlertAction.Style
+    let style: UIAlertActionStyle
     let checked: Bool
 
-    init(title: String, tapObserver: AnyObserver<Void>?, style: UIAlertAction.Style) {
+    init(title: String, tapObserver: AnyObserver<Void>?, style: UIAlertActionStyle) {
         self.init(title: title, tapObserver: tapObserver, style: style, checked: false)
     }
 
-    init(title: String, tapObserver: AnyObserver<Void>?, style: UIAlertAction.Style, checked: Bool) {
+    init(title: String, tapObserver: AnyObserver<Void>?, style: UIAlertActionStyle, checked: Bool) {
         self.title = title
         self.tapObserver = tapObserver
         self.style = style
@@ -32,7 +32,7 @@ protocol AlertControllerView {
     func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                 title: String?,
                                 message: String?,
-                                style: UIAlertController.Style)
+                                style: UIAlertControllerStyle)
 }
 
 protocol SpinnerAlertView {
@@ -47,7 +47,7 @@ extension UIViewController: StatusAlertView {
             self.view.addSubview(temporaryAlertView)
 
             self.animateAlertIn(temporaryAlertView) { _ in
-                UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: message)
+                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, message)
                 self.animateAlertOut(temporaryAlertView, delay: timeout)
             }
         }
@@ -58,7 +58,7 @@ extension UIViewController: AlertControllerView {
     func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                 title: String?,
                                 message: String?,
-                                style: UIAlertController.Style) {
+                                style: UIAlertControllerStyle) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
 
         for buttonConfig in buttons {
@@ -86,14 +86,14 @@ extension UIViewController: SpinnerAlertView {
 
             spinnerAlertView.activityIndicatorView.startAnimating()
             self.animateAlertIn(spinnerAlertView)
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: Constant.string.syncingYourEntries)
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Constant.string.syncingYourEntries)
 
             dismiss
                     .delay(Constant.number.minimumSpinnerHUDTime)
                     .drive(onNext: { _ in
-                        UIAccessibility.post(
-                                notification: UIAccessibility.Notification.announcement,
-                                argument: Constant.string.doneSyncingYourEntries)
+                        UIAccessibilityPostNotification(
+                                UIAccessibilityAnnouncementNotification,
+                                Constant.string.doneSyncingYourEntries)
                         self.animateAlertOut(spinnerAlertView)
                     })
                     .disposed(by: bag)

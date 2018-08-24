@@ -16,7 +16,7 @@ class PreferredBrowserSettingView: UITableViewController {
     private var dataSource: RxTableViewSectionedReloadDataSource<PreferredBrowserSettingSectionModel>?
 
     init() {
-        super.init(style: UITableView.Style.grouped)
+        super.init(style: UITableViewStyle.grouped)
         self.presenter = PreferredBrowserSettingPresenter(view: self)
         view.backgroundColor = Constant.color.viewBackground
     }
@@ -59,8 +59,8 @@ extension PreferredBrowserSettingView {
                 cell.textLabel?.text = cellConfiguration.text
                 cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
                 cell.accessoryType = cellConfiguration.isChecked ?
-                    UITableViewCell.AccessoryType.checkmark : UITableViewCell.AccessoryType.none
-                cell.selectionStyle = UITableViewCell.SelectionStyle.none
+                    UITableViewCellAccessoryType.checkmark : UITableViewCellAccessoryType.none
+                cell.selectionStyle = UITableViewCellSelectionStyle.none
 
                 if !cellConfiguration.enabled {
                     cell.isUserInteractionEnabled = false

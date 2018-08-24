@@ -30,7 +30,7 @@ class AccountSettingPresenterSpec: QuickSpec {
             displayName.drive(self.displayNameObserver).disposed(by: self.disposeBag)
         }
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
             self.displayAlertActionButtons = buttons
             self.displayAlertControllerMessage = message
             self.displayAlertControllerTitle = title

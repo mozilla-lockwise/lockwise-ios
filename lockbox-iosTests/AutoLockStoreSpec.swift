@@ -34,7 +34,14 @@ class AutoLockStoreSpec: QuickSpec {
         }
 
     class FakeDataStore: DataStore {
-        let lockedStub = PublishSubject<Bool>()
+        let lockedStub: PublishSubject<Bool>
+
+        init() {
+            self.lockedStub = PublishSubject<Bool>()
+            super.init()
+
+            self.disposeBag = DisposeBag()
+        }
 
         override var locked: Observable<Bool> {
             return self.lockedStub.asObservable()
@@ -52,12 +59,12 @@ class AutoLockStoreSpec: QuickSpec {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
-                self.userDefaults = UserDefaults(suiteName: Constant.app.group)
+                self.userDefaults = UserDefaults.standard
 
                 self.subject = AutoLockStore(
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
-                        userDefaults: self.userDefaults)
+                        userDefaults: UserDefaults.standard)
             }
 
             describe("foregrounding app") {
@@ -70,7 +77,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     it("locks the app") {
-                        expect(self.dispatcher.dispatchActionArgument as? DataStoreAction).to(equal(DataStoreAction.lock))
+                        expect(self.dispatcher.dispatchActionArgument as! DataStoreAction).to(equal(DataStoreAction.lock))
                         expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }
@@ -83,7 +90,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     it("locks the app") {
-                        expect(self.dispatcher.dispatchActionArgument as? DataStoreAction).to(equal(DataStoreAction.lock))
+                        expect(self.dispatcher.dispatchActionArgument as! DataStoreAction).to(equal(DataStoreAction.lock))
                         expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
                     }
                 }

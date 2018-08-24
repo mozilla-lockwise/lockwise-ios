@@ -11,22 +11,22 @@ class RootView: UIViewController, RootViewProtocol {
     private var currentViewController: UINavigationController? {
         didSet {
             if let currentViewController = self.currentViewController {
-                self.addChild(currentViewController)
+                self.addChildViewController(currentViewController)
                 currentViewController.view.frame = self.view.bounds
                 self.view.addSubview(currentViewController.view)
-                currentViewController.didMove(toParent: self)
+                currentViewController.didMove(toParentViewController: self)
 
                 if oldValue != nil {
-                    self.view.sendSubviewToBack(currentViewController.view)
+                    self.view.sendSubview(toBack: currentViewController.view)
                 }
             }
 
             guard let oldViewController = oldValue else {
                 return
             }
-            oldViewController.willMove(toParent: nil)
+            oldViewController.willMove(toParentViewController: nil)
             oldViewController.view.removeFromSuperview()
-            oldViewController.removeFromParent()
+            oldViewController.removeFromParentViewController()
         }
     }
 

@@ -8,38 +8,41 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
-import Shared
 
-enum LocalUserDefaultKey: String {
-    case preferredBrowser, recordUsageData, itemListSort
+enum KeychainKey: String {
+    // note: these additional keys are holdovers from the previous Lockbox-owned style of
+    // authentication
+    case email, displayName, avatarURL, accountJSON, appVersionCode
 
-    static var allValues: [LocalUserDefaultKey] = [.preferredBrowser, .recordUsageData, .itemListSort]
-
-    var defaultValue: Any? {
-        switch self {
-        case .itemListSort:
-            return Constant.setting.defaultItemListSort.rawValue
-        case .preferredBrowser:
-            return Constant.setting.defaultPreferredBrowser.rawValue
-        case .recordUsageData:
-            return Constant.setting.defaultRecordUsageData
-        }
-    }
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .appVersionCode]
 }
 
-class AccountStore: BaseAccountStore {
+class AccountStore {
     static let shared = AccountStore()
 
-    private let dispatcher: Dispatcher
-    private let urlCache: URLCache
-    private let webData: WKWebsiteDataStore
+    private var dispatcher: Dispatcher
+    private var keychainWrapper: KeychainWrapper
+    private var urlCache: URLCache
+    private var webData: WKWebsiteDataStore
     private let disposeBag = DisposeBag()
 
+    private var fxa: FirefoxAccount?
+
     private var _loginURL = ReplaySubject<URL>.create(bufferSize: 1)
+    private var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
+    private var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
     private var _oldAccountPresence = BehaviorRelay<Bool>(value: false)
 
     public var loginURL: Observable<URL> {
         return _loginURL.asObservable()
+    }
+
+    public var profile: Observable<Profile?> {
+        return _profile.asObservable()
+    }
+
+    public var oauthInfo: Observable<OAuthInfo?> {
+        return _oauthInfo.asObservable()
     }
 
     public var hasOldAccountInformation: Observable<Bool> {
@@ -47,18 +50,15 @@ class AccountStore: BaseAccountStore {
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
+         keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
          urlCache: URLCache = URLCache.shared,
          webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
-        ) {
+    ) {
         self.dispatcher = dispatcher
+        self.keychainWrapper = keychainWrapper
         self.urlCache = urlCache
         self.webData = webData
 
-        super.init(keychainWrapper: keychainWrapper)
-    }
-
-    override func initialized() {
         self.dispatcher.register
                 .filterByType(class: AccountAction.self)
                 .subscribe(onNext: { action in
@@ -88,7 +88,7 @@ class AccountStore: BaseAccountStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        if let accountJSON = self.storedAccountJSON {
+        if let accountJSON = self.keychainWrapper.string(forKey: KeychainKey.accountJSON.rawValue) {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.generateLoginURL()
             self.populateAccountInformation()
@@ -116,6 +116,24 @@ extension AccountStore {
             if let url = url {
                 self._loginURL.onNext(url)
             }
+        }
+    }
+
+    private func populateAccountInformation() {
+        guard let fxa = self.fxa else {
+            return
+        }
+
+        fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
+            self._oauthInfo.onNext(info)
+
+            if let json = try? fxa.toJSON() {
+                self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
+            }
+        }
+
+        fxa.getProfile { (profile: Profile?, _) in
+            self._profile.onNext(profile)
         }
     }
 
@@ -177,5 +195,6 @@ extension AccountStore {
                 self._profile.onNext(profile)
             }
         }
+
     }
 }

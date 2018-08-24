@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let keychainWrapper = KeychainWrapper.standard
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
-                     launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+                     launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         if !isRunningTest {
             _ = AccountStore.shared
             _ = DataStore.shared
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
         self.window?.rootViewController = RootView()
@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationBar.appearance().isTranslucent = true
             UINavigationBar.appearance().prefersLargeTitles = true
             UINavigationBar.appearance().largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.white
+                NSAttributedStringKey.foregroundColor: UIColor.white
             ]
         } else {
             UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
