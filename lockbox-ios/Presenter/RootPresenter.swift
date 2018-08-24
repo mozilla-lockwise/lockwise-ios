@@ -51,6 +51,7 @@ class RootPresenter {
     fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
+    fileprivate let sentryManager: Sentry
 
     var fxa: FirefoxAccount?
 
@@ -63,7 +64,8 @@ class RootPresenter {
          userDefaultStore: UserDefaultStore = .shared,
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
-         biometryManager: BiometryManager = BiometryManager()
+         biometryManager: BiometryManager = BiometryManager(),
+         sentryManager: Sentry = Sentry.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -75,6 +77,7 @@ class RootPresenter {
         self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
+        self.sentryManager = sentryManager
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -287,7 +290,7 @@ extension RootPresenter {
         self.userDefaultStore.recordUsageData
             .take(1)
             .subscribe(onNext: { enabled in
-                Sentry.shared.setup(sendUsageData: enabled)
+                self.sentryManager.setup(sendUsageData: enabled)
         }).disposed(by: self.disposeBag)
     }
 }
