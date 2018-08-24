@@ -179,6 +179,16 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeSentryManager: Sentry {
+        var setupCalled: Bool = false
+
+        override func setup(sendUsageData: Bool) {
+            if sendUsageData {
+             self.setupCalled = true
+            }
+        }
+    }
+
     private var view: FakeRootView!
     private var dispatcher: FakeDispatcher!
     private var routeStore: FakeRouteStore!
@@ -188,6 +198,7 @@ class RootPresenterSpec: QuickSpec {
     private var userDefaultStore: FakeUserDefaultStore!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
     private var biometryManager: FakeBiometryManager!
+    private var sentryManager: FakeSentryManager!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -203,6 +214,7 @@ class RootPresenterSpec: QuickSpec {
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
                 self.biometryManager = FakeBiometryManager()
+                self.sentryManager = FakeSentryManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
                 self.biometryManager.deviceAuthAvailableStub = true
 
@@ -1079,6 +1091,35 @@ class RootPresenterSpec: QuickSpec {
 
                         it("passes no telemetry actions through to the telemetryactionhandler") {
                             expect(self.telemetryActionHandler.telemetryListener.events.count).to(equal(0))
+                        }
+                    }
+                }
+                describe("usage") {
+                    describe("when usage data can be recorded") {
+                        beforeEach {
+                            self.userDefaultStore.recordUsageStub.onNext(true)
+                            self.sentryManager.setup(sendUsageData: true)
+                        }
+
+                        it("sends data to Sentry") {
+                            expect(self.sentryManager.setupCalled).to(equal(true))
+                        }
+                        it("sends data to Adjust") {
+                            // TODO: add Adjust spec
+                        }
+                    }
+
+                    describe("when usage data cannot be recorded") {
+                        beforeEach {
+                            self.userDefaultStore.recordUsageStub.onNext(false)
+                            self.sentryManager.setup(sendUsageData: false)
+                        }
+
+                        it("does not send data to Sentry") {
+                            expect(self.sentryManager.setupCalled).to(equal(false))
+                        }
+                        it("does not send data to Adjust") {
+                            // TODO: add Adjust spec
                         }
                     }
                 }
