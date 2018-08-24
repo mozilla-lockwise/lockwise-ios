@@ -245,6 +245,14 @@ extension DataStore {
             return syncManager.syncEverything(why: .backgrounded)
         }
 
+        func disconnect() -> Success {
+            return self.fxaLoginHelper.applicationDidDisconnect(UIApplication.shared)
+        }
+
+        func deleteAll() -> Success {
+            return self.profile.logins.removeAll()
+        }
+
         func resetProfile() {
             self.profile = profileFactory(true)
             self.initializeProfile()
@@ -252,7 +260,7 @@ extension DataStore {
             self.storageStateSubject.onNext(.Unprepared)
         }
 
-        stopSyncing() >>== resetProfile
+        stopSyncing() >>== disconnect >>== deleteAll >>== resetProfile
     }
 }
 
