@@ -36,7 +36,7 @@ protocol AlertControllerView {
 }
 
 protocol SpinnerAlertView {
-    func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag)
+    func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag, message: String, completionMessage: String)
 }
 
 extension UIViewController: StatusAlertView {
@@ -79,21 +79,21 @@ extension UIViewController: AlertControllerView {
 }
 
 extension UIViewController: SpinnerAlertView {
-    func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
+    func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag, message: String, completionMessage: String) {
         if let spinnerAlertView = Bundle.main.loadNibNamed("SpinnerAlert", owner: self)?.first as? SpinnerAlert {
             self.styleAndCenterAlert(spinnerAlertView)
             self.view.addSubview(spinnerAlertView)
 
             spinnerAlertView.activityIndicatorView.startAnimating()
             self.animateAlertIn(spinnerAlertView)
-            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: Constant.string.syncingYourEntries)
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: message)
 
             dismiss
                     .delay(Constant.number.minimumSpinnerHUDTime)
                     .drive(onNext: { _ in
                         UIAccessibility.post(
                                 notification: UIAccessibility.Notification.announcement,
-                                argument: Constant.string.doneSyncingYourEntries)
+                                argument: completionMessage)
                         self.animateAlertOut(spinnerAlertView)
                     })
                     .disposed(by: bag)

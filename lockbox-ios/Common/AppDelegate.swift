@@ -9,7 +9,6 @@ import AdjustSdk
 import SwiftKeychainWrapper
 
 let PostFirstRunKey = "firstrun"
-public let isRunningTest = NSClassFromString("XCTestCase") != nil
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,12 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        if !isRunningTest {
-            _ = AccountStore.shared
-            _ = DataStore.shared
-            _ = AutoLockStore.shared
-            _ = ExternalLinkStore.shared
-        }
+        _ = AccountStore.shared
+        _ = DataStore.shared
+        _ = AutoLockStore.shared
+        _ = ExternalLinkStore.shared
         return true
     }
 

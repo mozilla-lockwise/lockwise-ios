@@ -6,9 +6,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class WelcomeView: UIViewController {
-    internal var presenter: WelcomePresenter?
-
+class WelcomeView: BaseWelcomeView {
     @IBOutlet internal weak var fxASigninButton: UIButton!
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!

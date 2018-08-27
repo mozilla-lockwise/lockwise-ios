@@ -351,7 +351,7 @@ extension ItemListPresenter {
                 .drive(onNext: { latest in
                     if (latest.syncState == SyncState.Syncing || latest.syncState == SyncState.ReadyToSync)
                                && !latest.manualSync {
-                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag)
+                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag, message: Constant.string.syncingYourEntries, completionMessage: Constant.string.doneSyncingYourEntries)
                     }
                 })
                 .disposed(by: self.disposeBag)

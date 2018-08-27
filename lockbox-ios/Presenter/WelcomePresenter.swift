@@ -9,38 +9,16 @@ import RxOptional
 import CoreGraphics
 import FxAClient
 
-protocol WelcomeViewProtocol: class, AlertControllerView {
+protocol WelcomeViewProtocol: BaseWelcomeViewProtocol {
     var loginButtonPressed: ControlEvent<Void> { get }
     var learnMorePressed: ControlEvent<Void> { get }
     var unlockButtonPressed: ControlEvent<Void> { get }
-    var loginButtonHidden: AnyObserver<Bool> { get }
-    var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
-    var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
-    var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> { get }
-    var lockImageHidden: AnyObserver<Bool> { get }
-    var unlockButtonHidden: AnyObserver<Bool> { get }
 }
 
-struct LockedEnabled {
-    let appLocked: Bool
-    let biometricsEnabled: Bool
-}
-
-extension LockedEnabled: Equatable {
-    static func ==(lhs: LockedEnabled, rhs: LockedEnabled) -> Bool {
-        return lhs.appLocked == rhs.appLocked && lhs.biometricsEnabled == rhs.biometricsEnabled
+class WelcomePresenter: BaseWelcomePresenter {
+    weak var view: WelcomeViewProtocol? {
+        return self.baseView as? WelcomeViewProtocol
     }
-}
-
-class WelcomePresenter {
-    private weak var view: WelcomeViewProtocol?
-
-    private let dispatcher: Dispatcher
-    private let accountStore: AccountStore
-    private let dataStore: DataStore
-    private let lifecycleStore: LifecycleStore
-    private let biometryManager: BiometryManager
-    private let disposeBag = DisposeBag()
 
     init(view: WelcomeViewProtocol,
          dispatcher: Dispatcher = .shared,
@@ -48,15 +26,16 @@ class WelcomePresenter {
          dataStore: DataStore = DataStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager()) {
-        self.view = view
-        self.dispatcher = dispatcher
-        self.accountStore = accountStore
-        self.dataStore = dataStore
-        self.lifecycleStore = lifecycleStore
-        self.biometryManager = biometryManager
+
+        super.init(view: view,
+                   dispatcher: dispatcher,
+                   accountStore: accountStore,
+                   dataStore: dataStore,
+                   lifecycleStore: lifecycleStore,
+                   biometryManager: biometryManager)
     }
 
-    func onViewReady() {
+    override func onViewReady() {
         self.setupDisplay()
         self.setupBiometricLaunchers()
 
@@ -165,15 +144,7 @@ extension WelcomePresenter {
                         return Observable.never().asSingle()
                     }
 
-                    if !target.biometryManager.deviceAuthenticationAvailable {
-                        return Single.just(())
-                    }
-
-                    return target.biometryManager.authenticateWithMessage(latest?.email ?? Constant.string.unlockPlaceholder)
-                            .catchError { _ in
-                                // ignore errors from local authentication
-                                return Observable.never().asSingle()
-                            }
+                    return target.launchBiometrics(message: latest?.email ?? Constant.string.unlockPlaceholder)
                 }
                 .subscribe(onNext: { [weak self] _ in
                     self?.dispatcher.dispatch(action: DataStoreAction.unlock)

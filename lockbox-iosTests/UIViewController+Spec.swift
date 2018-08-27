@@ -78,7 +78,7 @@ class ViewControllerSpec: QuickSpec {
             let dismissStub = PublishSubject<Void>()
 
             beforeEach {
-                self.subject.displaySpinner(dismissStub.asDriver(onErrorJustReturn: ()), bag: self.disposeBag)
+                self.subject.displaySpinner(dismissStub.asDriver(onErrorJustReturn: ()), bag: self.disposeBag, message: "", completionMessage: "")
             }
 
             it("displays a spinner alert") {
