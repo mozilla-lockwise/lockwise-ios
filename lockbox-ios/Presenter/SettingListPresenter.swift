@@ -71,6 +71,13 @@ class SettingListPresenter {
                             returnRoute: SettingRouteAction.list),
                             accessibilityId: "sendFeedbackSettingOption"),
             SettingCellConfiguration(
+                text: Constant.string.settingsGetSupport,
+                routeAction: ExternalWebsiteRouteAction(
+                    urlString: Constant.app.getSupportURL,
+                    title: Constant.string.settingsGetSupport,
+                    returnRoute: SettingRouteAction.list),
+                accessibilityId: "getSupportSettingOption"),
+            SettingCellConfiguration(
                     text: Constant.string.faq,
                     routeAction: ExternalWebsiteRouteAction(
                             urlString: Constant.app.faqURL,

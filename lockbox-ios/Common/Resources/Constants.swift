@@ -13,6 +13,7 @@ struct Constant {
         static let faqURL = "https://lockbox.firefox.com/faq.html"
         static let privacyURL = "https://lockbox.firefox.com/privacy.html"
         static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
+        static let getSupportURL = "https://discourse.mozilla.org/c/test-pilot/lockbox"
         static let useLockboxFAQ = faqURL + "#how-do-i-use-firefox-lockbox"
         static let enableSyncFAQ = faqURL + "#how-do-i-enable-sync-on-firefox"
         static let editExistingEntriesFAQ = faqURL + "#how-do-i-edit-existing-entries"
@@ -73,6 +74,7 @@ struct Constant {
         static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
         static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
         static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
+        static let settingsGetSupport = NSLocalizedString("settings.getSupport", value: "Ask a Question", comment: "Support link to Discourse discussion forum")
         static let faq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
         static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
         static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")

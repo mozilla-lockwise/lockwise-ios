@@ -40,6 +40,7 @@ enum TelemetryEventObject: String {
     case settingsItemListSort = "settings_item_list_sort"
     case settingsFaq = "settings_faq"
     case settingsProvideFeedback = "settings_provide_feedback"
+    case settingsGetSupport = "settings_get_support"
     case loginWelcome = "login_welcome"
     case loginFxa = "login_fxa"
     case loginOnboardingConfirmation = "login_onboarding_confirmation"
