@@ -16,8 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    let keychainWrapper = KeychainWrapper.standard
-
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
         if !isRunningTest {
@@ -47,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !firstRun {
             self.checkForUpgrades()
         }
-        keychainWrapper.set(Constant.app.appVersionCode, forKey: KeychainKey.appVersionCode.rawValue)
+        UserDefaults.standard.set(Constant.app.appVersionCode, forKey: UserDefaultKey.appVersionCode.rawValue)
 
         let navBarImage = UIImage.createGradientImage(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
@@ -67,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         UITextField.appearance().tintColor = .black
-        
+
         setupAdjust()
 
         Dispatcher.shared.dispatch(action: LifecycleAction.startup)
@@ -97,7 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func checkForUpgrades() {
         let current = Constant.app.appVersionCode
-        let previous = keychainWrapper.integer(forKey: KeychainKey.appVersionCode.rawValue) ?? 1
+        let previous = UserDefaults.standard.integer(forKey: UserDefaultKey.appVersionCode.rawValue)
 
         if previous < current {
             // At the moment, this can be quite simple, since we don't have many migrations,

@@ -6,9 +6,9 @@ import Foundation
 import RxSwift
 
 enum UserDefaultKey: String {
-    case autoLockTime, preferredBrowser, recordUsageData, autoLockTimerDate, itemListSort
+    case autoLockTime, preferredBrowser, recordUsageData, autoLockTimerDate, itemListSort, appVersionCode
 
-    static var allValues: [UserDefaultKey] = [.autoLockTime, .preferredBrowser, .recordUsageData, .autoLockTimerDate, .itemListSort]
+    static var allValues: [UserDefaultKey] = [.autoLockTime, .preferredBrowser, .recordUsageData, .autoLockTimerDate, .itemListSort, .appVersionCode]
 }
 
 extension UserDefaultKey {
@@ -24,6 +24,8 @@ extension UserDefaultKey {
             return Constant.setting.defaultItemListSort.rawValue
         case .autoLockTimerDate:
             return nil
+        case .appVersionCode:
+            return 0
         }
     }
 }

@@ -51,6 +51,7 @@ class RootPresenter {
     fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
+    fileprivate let sentryManager: Sentry
 
     var fxa: FirefoxAccount?
 
@@ -63,7 +64,8 @@ class RootPresenter {
          userDefaultStore: UserDefaultStore = .shared,
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
-         biometryManager: BiometryManager = BiometryManager()
+         biometryManager: BiometryManager = BiometryManager(),
+         sentryManager: Sentry = Sentry.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -75,6 +77,7 @@ class RootPresenter {
         self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
+        self.sentryManager = sentryManager
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -120,6 +123,7 @@ class RootPresenter {
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
         self.startAdjust()
+        self.startSentry()
     }
 
     func onViewReady() {
@@ -279,6 +283,14 @@ extension RootPresenter {
     fileprivate func startAdjust() {
         self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
             Adjust.setEnabled(enabled)
+        }).disposed(by: self.disposeBag)
+    }
+
+    fileprivate func startSentry() {
+        self.userDefaultStore.recordUsageData
+            .take(1)
+            .subscribe(onNext: { enabled in
+                self.sentryManager.setup(sendUsageData: enabled)
         }).disposed(by: self.disposeBag)
     }
 }

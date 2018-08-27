@@ -91,11 +91,11 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" translatesAutoresizingMaskIntoConstraints="NO" id="FgQ-ab-RJt">
-                                <rect key="frame" x="273.5" y="625" width="8" height="16"/>
+                                <rect key="frame" x="272.5" y="628" width="7" height="10"/>
                                 <color key="tintColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="16" id="Fgs-tn-D5l"/>
-                                    <constraint firstAttribute="width" constant="8" id="qup-B2-THj"/>
+                                    <constraint firstAttribute="height" constant="10" id="Fgs-tn-D5l"/>
+                                    <constraint firstAttribute="width" constant="7" id="qup-B2-THj"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -112,7 +112,7 @@
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="height" secondItem="KzI-mp-fPN" secondAttribute="height" id="Qr0-wP-XZD"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="width" secondItem="KzI-mp-fPN" secondAttribute="width" id="U4U-2H-wOZ"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="top" secondItem="KzI-mp-fPN" secondAttribute="top" id="qDT-gp-FgI"/>
-                            <constraint firstItem="FgQ-ab-RJt" firstAttribute="leading" secondItem="YaD-WB-pbb" secondAttribute="trailing" constant="3" id="sJ3-XR-7pG"/>
+                            <constraint firstItem="FgQ-ab-RJt" firstAttribute="leading" secondItem="YaD-WB-pbb" secondAttribute="trailing" constant="2" id="sJ3-XR-7pG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3Hr-tN-JYo"/>
                     </view>
@@ -128,7 +128,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="12" height="22"/>
+        <image name="arrow-right" width="6" height="10"/>
         <image name="hide-eye" width="18" height="16"/>
         <image name="reveal-eye" width="18" height="14"/>
     </resources>
