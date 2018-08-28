@@ -13,7 +13,7 @@ class StaticURLWebView: UIViewController {
     private var presenter: StaticURLPresenter?
 
     var returnRoute: RouteAction
-    private var webView = WKWebView()
+    private var activityIndicator: UIActivityIndicatorView?
 
     init(urlString: String, title: String, returnRoute: RouteAction) {
         self.urlString = urlString
@@ -34,13 +34,24 @@ class StaticURLWebView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let webView = WKWebView(frame: self.view.frame)
         self.styleNavigationBar()
 
-        self.view = webView
+        self.view.addSubview(webView)
+        webView.navigationDelegate = self
 
         if let url = URL(string: self.urlString) {
             webView.load(URLRequest(url: url))
         }
+
+        let indicator = UIActivityIndicatorView()
+        indicator.center = self.view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = .gray
+        indicator.transform = CGAffineTransform(scaleX: 3, y: 3) // Increase the size of the indicator
+        indicator.startAnimating()
+        self.view.addSubview(indicator)
+        self.activityIndicator = indicator
 
         self.presenter?.onViewReady()
     }
@@ -65,6 +76,13 @@ class StaticURLWebView: UIViewController {
         self.navigationItem.leftBarButtonItem?.setTitleTextAttributes([
             .font: UIFont.navigationButtonFont
         ], for: .normal)
+    }
+}
+
+extension StaticURLWebView: WKNavigationDelegate {
+    func webView(_ webView: WKWebView,
+                 didFinish navigation: WKNavigation!) {
+        self.activityIndicator?.stopAnimating()
     }
 }
 
