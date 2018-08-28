@@ -13,7 +13,8 @@ class StaticURLWebView: UIViewController {
     private var presenter: StaticURLPresenter?
 
     var returnRoute: RouteAction
-    private var activityIndicator: UIActivityIndicatorView?
+    public var webView: WKWebView?
+    public var activityIndicator: UIActivityIndicatorView?
 
     init(urlString: String, title: String, returnRoute: RouteAction) {
         self.urlString = urlString
@@ -43,6 +44,8 @@ class StaticURLWebView: UIViewController {
         if let url = URL(string: self.urlString) {
             webView.load(URLRequest(url: url))
         }
+
+        self.webView = webView
 
         let indicator = UIActivityIndicatorView()
         indicator.center = self.view.center
