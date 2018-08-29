@@ -137,7 +137,7 @@ extension AccountStore {
     }
 
     private func clearOldKeychainValues() {
-        for identifier in KeychainKey.allValues {
+        for identifier in KeychainKey.oldAccountValues {
             _ = KeychainWrapper.standard.removeObject(forKey: identifier.rawValue)
         }
 

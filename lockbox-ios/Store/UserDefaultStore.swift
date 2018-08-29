@@ -51,7 +51,7 @@ class UserDefaultStore: BaseUserDefaultStore {
                     }
                 })
                 .disposed(by: self.disposeBag)
-        
+
         self.loadInitialValues()
     }
 
@@ -81,7 +81,7 @@ extension UserDefaultStore {
                 self.userDefaults.set(value, forKey: key.rawValue)
             }
         }
-        
+
         for key in UserDefaultKey.allValues {
             if let value = userDefaults.value(forKey: key.rawValue) {
                 self.userDefaults.set(value, forKey: key.rawValue)

@@ -73,4 +73,6 @@ enum KeychainKey: String {
     case email, displayName, avatarURL, accountJSON
 
     static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
+    
+    static let oldAccountValues: [KeychainKey] = [.email, .displayName, .avatarURL]
 }
