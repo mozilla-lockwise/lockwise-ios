@@ -29,3 +29,28 @@ extension AccountAction: Equatable {
         }
     }
 }
+
+extension AccountAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        switch self {
+        case .oauthRedirect(let URL):
+            return .signIn
+        case .clear:
+            return .disconnect
+        case .oauthSignInMessageRead:
+            return .show
+        }
+    }
+
+    var eventObject: TelemetryEventObject {
+        return .account
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras:  [String: Any?]? {
+        return nil
+    }
+}
