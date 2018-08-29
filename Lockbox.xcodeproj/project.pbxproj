@@ -373,7 +373,6 @@
 		7D5889F9205706AA0087DF89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ItemList.storyboard; sourceTree = "<group>"; };
 		7D5889FC205706AB0087DF89 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7D5F1D7F20866A9400688DEA /* RxGesture.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxGesture.framework; path = Carthage/Build/iOS/RxGesture.framework; sourceTree = "<group>"; };
 		7D6FB87A204F00E2005E23AA /* StatusAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAlert.swift; sourceTree = "<group>"; };
 		7D73BD6F20D3135E0075D1CE /* FxAClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxAClient.framework; path = Carthage/Build/iOS/FxAClient.framework; sourceTree = "<group>"; };
 		7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatusAlert.xib; sourceTree = "<group>"; };
@@ -697,7 +696,6 @@
 				391233772090E5A200CB0233 /* Shared.framework */,
 				391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */,
 				391233712090E56E00CB0233 /* SwiftyJSON.framework */,
-				7D5F1D7F20866A9400688DEA /* RxGesture.framework */,
 				7D92DAF220586FBA00195A1B /* RxOptional.framework */,
 				7DEA1C4120362E09008AD7C4 /* Differentiator.framework */,
 				7D320B3420360F9000891F73 /* RxDataSources.framework */,
