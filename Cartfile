@@ -1,12 +1,12 @@
 github "Quick/Quick"
 github "Quick/Nimble"
 github "ReactiveX/RxSwift"
-github "RxSwiftCommunity/RxDataSources" ~> 3.0
+github "RxSwiftCommunity/RxDataSources" "026857261128bf552369a3b69b3ab56c3f85704d"
 github "RxSwiftCommunity/RxOptional" ~> 3.1.3
 github "mozilla-mobile/telemetry-ios"
 github "jrendel/SwiftKeychainWrapper" ~> 3.0
 github "mozilla-mobile/MappaMundi" "master"
-github "mozilla/application-services" "0.2.1"
-github "mozilla-lockbox/lockbox-ios-fxa-sync" "c41fac5a33519e8d9e7fdeb1a57a6ac231fdb832"
+github "mozilla/application-services" "0.2.1-xcode10"
+github "mozilla-lockbox/lockbox-ios-fxa-sync" "880f310086bac8ad16c81775b3235550d9ffc7f3"
 github "adjust/ios_sdk" ~> 4.14.1
 github "getsentry/sentry-cocoa" "4.1.0"

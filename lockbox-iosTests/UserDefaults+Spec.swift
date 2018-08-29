@@ -51,7 +51,7 @@ class UserDefaultSpec: QuickSpec {
             }
 
             it("pushes new values for theUserDefaultKey to observers") {
-                UserDefaults.standard.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: UserDefaultKey.preferredBrowser.rawValue)
+                UserDefaults.standard.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
                 expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Firefox))
             }
         }
@@ -67,7 +67,7 @@ class UserDefaultSpec: QuickSpec {
             }
 
             it("pushs new values for the correct setting key") {
-                UserDefaults.standard.set(false, forKey: UserDefaultKey.recordUsageData.rawValue)
+                UserDefaults.standard.set(false, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
                 expect(recordUsageDataSettingObserver.events.last!.value.element).to(beFalse())
             }
         }

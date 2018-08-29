@@ -170,10 +170,10 @@ extension SettingListPresenter {
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
                 string: Constant.string.settingsUsageDataSubtitle,
-                attributes: [NSAttributedStringKey.foregroundColor: UIColor.gray])
+                attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         subtitle.append(NSAttributedString(
                 string: Constant.string.learnMore,
-                attributes: [NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue]))
+                attributes: [NSAttributedString.Key.foregroundColor: Constant.color.lockBoxBlue]))
         usageDataSetting.subtitle = subtitle
         usageDataSetting.accessibilityActions = [
             UIAccessibilityCustomAction(

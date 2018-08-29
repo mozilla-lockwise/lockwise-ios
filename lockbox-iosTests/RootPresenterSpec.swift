@@ -103,18 +103,9 @@ class RootPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        let lockedSubject: PublishSubject<Bool>
-        let syncSubject: PublishSubject<SyncState>
-        let storageStateSubject: PublishSubject<LoginStoreState>
-
-        init() {
-            self.lockedSubject = PublishSubject<Bool>()
-            self.syncSubject = PublishSubject<SyncState>()
-            self.storageStateSubject = PublishSubject<LoginStoreState>()
-            super.init()
-
-            self.disposeBag = DisposeBag()
-        }
+        let lockedSubject = PublishSubject<Bool>()
+        let syncSubject = PublishSubject<SyncState>()
+        let storageStateStub = PublishSubject<LoginStoreState>()
 
         override var locked: Observable<Bool> {
             return self.lockedSubject.asObservable()
@@ -125,7 +116,7 @@ class RootPresenterSpec: QuickSpec {
         }
 
         override var storageState: Observable<LoginStoreState> {
-            return self.storageStateSubject.asObservable()
+            return self.storageStateStub.asObservable()
         }
     }
 
@@ -259,7 +250,7 @@ class RootPresenterSpec: QuickSpec {
 
             describe("when the datastore is locked") {
                 beforeEach {
-                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Locked)
+                    self.dataStore.storageStateStub.onNext(LoginStoreState.Locked)
                 }
 
                 it("routes to the welcome screen") {
@@ -270,7 +261,7 @@ class RootPresenterSpec: QuickSpec {
 
             describe("when the datastore is unlocked") {
                 beforeEach {
-                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
+                    self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                 }
 
                 it("routes to the list") {

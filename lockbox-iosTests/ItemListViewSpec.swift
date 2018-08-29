@@ -61,7 +61,7 @@ class ItemListViewSpec: QuickSpec {
         describe("ItemListView") {
             beforeEach {
                 let storyboard = UIStoryboard(name: "ItemList", bundle: Bundle.main)
-                self.subject = storyboard.instantiateViewController(withIdentifier: "itemlist") as! ItemListView
+                self.subject = storyboard.instantiateViewController(withIdentifier: "itemlist") as? ItemListView
 
                 self.presenter = FakeItemListPresenter(view: self.subject)
                 self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(String?.self)
@@ -335,7 +335,7 @@ class ItemListViewSpec: QuickSpec {
                     cell = self.subject.tableView.dataSource!.tableView(
                         self.subject.tableView,
                         cellForRowAt: IndexPath(row: 0, section: 0)
-                        ) as! FilterCell
+                        ) as? FilterCell
                 }
 
                 it("disposes of its bag when preparing for reuse") {
