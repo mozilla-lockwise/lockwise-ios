@@ -32,7 +32,7 @@ class StaticURLWebViewSpec: QuickSpec {
             }
 
             it("loads url") {
-                let webView = self.subject.view as! WKWebView
+                let webView = self.subject.webView as! WKWebView
                 expect(webView.url).to(equal(URL(string: self.url)))
             }
 
@@ -53,6 +53,17 @@ class StaticURLWebViewSpec: QuickSpec {
                 UIApplication.shared.sendAction(barButton.action!, to: barButton.target!, from: self, for: nil)
 
                 expect(voidObserver.events.count).to(equal(1))
+            }
+
+            it("sets the activity indicator") {
+                let indicator = self.subject.activityIndicator as! UIActivityIndicatorView
+                expect(indicator.isAnimating).to(beTrue())
+            }
+
+            it("navigating resets the indicator") {
+                self.subject.webView(self.subject.webView!, didFinish: nil)
+                let indicator = self.subject.activityIndicator as! UIActivityIndicatorView
+                expect(indicator.isAnimating).to(beFalse())
             }
         }
     }
