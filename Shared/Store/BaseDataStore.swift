@@ -156,6 +156,10 @@ class BaseDataStore {
                         self.profile.syncManager?.applicationDidEnterBackground()
                     case .foreground:
                         self.profile.syncManager?.applicationDidBecomeActive()
+                    case .upgrade(let previous, _):
+                        if previous <= 2 {
+                            self.handleLock()
+                        }
                     default:
                         break
                     }

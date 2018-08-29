@@ -77,15 +77,15 @@ class AccountStore: BaseAccountStore {
 
         self.dispatcher.register
                 .filterByType(class: LifecycleAction.self)
-                .subscribe(onNext: { action in
+                .subscribe(onNext: { [weak self] action in
                     guard case let .upgrade(previous, _) = action else {
                         return
                     }
 
                     if previous <= 1 {
-                        self._oauthInfo.onNext(nil)
-                        self._profile.onNext(nil)
-                        self._oldAccountPresence.accept(true)
+                        self?._oauthInfo.onNext(nil)
+                        self?._profile.onNext(nil)
+                        self?._oldAccountPresence.accept(true)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -138,7 +138,7 @@ extension AccountStore {
 
     private func clearOldKeychainValues() {
         for identifier in KeychainKey.allValues {
-            _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
+            _ = KeychainWrapper.standard.removeObject(forKey: identifier.rawValue)
         }
 
         self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in

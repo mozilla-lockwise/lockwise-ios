@@ -39,6 +39,19 @@ class UserDefaultStore: BaseUserDefaultStore {
                 })
                 .disposed(by: self.disposeBag)
 
+        self.dispatcher.register
+                .filterByType(class: LifecycleAction.self)
+                .subscribe(onNext: { action in
+                    guard case let .upgrade(previous, _) = action else {
+                        return
+                    }
+
+                    if previous <= 2 {
+                        self.readValuesFrom(UserDefaults.standard)
+                    }
+                })
+                .disposed(by: self.disposeBag)
+        
         self.loadInitialValues()
     }
 
@@ -57,6 +70,22 @@ class UserDefaultStore: BaseUserDefaultStore {
 
         for key in LocalUserDefaultKey.allValues {
             self.userDefaults.set(key.defaultValue, forKey: key.rawValue)
+        }
+    }
+}
+
+extension UserDefaultStore {
+    private func readValuesFrom(_ userDefaults: UserDefaults) {
+        for key in LocalUserDefaultKey.allValues {
+            if let value = userDefaults.value(forKey: key.rawValue) {
+                self.userDefaults.set(value, forKey: key.rawValue)
+            }
+        }
+        
+        for key in UserDefaultKey.allValues {
+            if let value = userDefaults.value(forKey: key.rawValue) {
+                self.userDefaults.set(value, forKey: key.rawValue)
+            }
         }
     }
 }
