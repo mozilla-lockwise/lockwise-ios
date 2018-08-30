@@ -6,12 +6,14 @@ import Foundation
 import RxSwift
 import AuthenticationServices
 
+@available(iOS 12, *)
 protocol CredentialProviderViewProtocol: class {
     var extensionContext: ASCredentialProviderExtensionContext { get }
-    
+
     func displayWelcome()
 }
 
+@available(iOS 12, *)
 class CredentialProviderPresenter {
     weak var view: CredentialProviderViewProtocol?
 
@@ -37,22 +39,78 @@ class CredentialProviderPresenter {
                 }
             }
             .disposed(by: self.disposeBag)
-        
+
         self.dispatcher.register
             .filterByType(class: CredentialStatusAction.self)
             .subscribe(onNext: { action in
                 switch action {
                 case .extensionConfigured:
                     self.view?.extensionContext.completeExtensionConfigurationRequest()
+                default:
+                    break
                 }
             })
             .disposed(by: self.disposeBag)
 
         self.dispatcher.dispatch(action: LifecycleAction.foreground)
-        self.dispatcher.dispatch(action: DataStoreAction.unlock)
     }
 
     func extensionConfigurationRequested() {
         self.view?.displayWelcome()
+    }
+
+    func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
+        self.dataStore.locked
+            .bind { locked in
+                if locked {
+                    self.cancelWith(.userInteractionRequired)
+                } else {
+                    self.provideCredential(for: credentialIdentity)
+                }
+            }
+            .disposed(by: self.disposeBag)
+    }
+
+    func credentialProvisionInterface(for credentialIdentity: ASPasswordCredentialIdentity) {
+        self.dataStore.locked
+            .bind { locked in
+                if locked {
+                    self.view?.displayWelcome()
+                } else {
+                    self.provideCredential(for: credentialIdentity)
+                }
+            }
+            .disposed(by: self.disposeBag)
+    }
+}
+
+@available(iOS 12, *)
+extension CredentialProviderPresenter {
+    private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+        guard let guid = credentialIdentity.recordIdentifier else {
+            self.cancelWith(.credentialIdentityNotFound)
+            return
+        }
+
+        self.dataStore.get(guid)
+                .bind { login in
+                    guard let login = login else {
+                        self.cancelWith(.credentialIdentityNotFound)
+                        return
+                    }
+
+                    self.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
+                        self.dispatcher.dispatch(action: DataStoreAction.touch(id: login.guid))
+                    }
+                }
+                .disposed(by: self.disposeBag)
+    }
+
+    private func cancelWith(_ errorCode: ASExtensionError.Code) {
+        let error = NSError(domain: ASExtensionErrorDomain,
+                            code: errorCode.rawValue,
+                            userInfo: nil)
+
+        self.view?.extensionContext.cancelRequest(withError: error)
     }
 }

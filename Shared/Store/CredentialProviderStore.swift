@@ -72,7 +72,7 @@ extension CredentialProviderStore {
                 }
                 .map { logins -> [ASPasswordCredentialIdentity] in
                     return logins.map { login -> ASPasswordCredentialIdentity in
-                        self.credentialIdentityFromLogin(login)
+                        login.passwordCredentialIdentity
                     }
                 }
                 .flatMap { credentialIdentities -> Single<Void> in

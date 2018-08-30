@@ -48,32 +48,11 @@ class CredentialProviderView: ASCredentialProviderViewController {
     }
 
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-        let databaseIsUnlocked = true
-        if (databaseIsUnlocked) {
-            let passwordCredential = ASPasswordCredential(user: "j_appleseed", password: "apple1234")
-            self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
-        } else {
-            self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
-        }
+        self.presenter?.credentialProvisionRequested(for: credentialIdentity)
     }
-
-    /*
-     Implement this method if provideCredentialWithoutUserInteraction(for:) can fail with
-     ASExtensionError.userInteractionRequired. In this case, the system may present your extension's
-     UI and call this method. Show appropriate UI for authenticating the user then provide the password
-     by completing the extension request with the associated ASPasswordCredential.
 
     override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-    }
-    */
-
-    @IBAction func cancel(_ sender: AnyObject?) {
-        self.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code: ASExtensionError.userCanceled.rawValue))
-    }
-
-    @IBAction func passwordSelected(_ sender: AnyObject?) {
-        let passwordCredential = ASPasswordCredential(user: "j_appleseed", password: "apple1234")
-        self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+        self.presenter?.credentialProvisionInterface(for: credentialIdentity)
     }
 }
 
