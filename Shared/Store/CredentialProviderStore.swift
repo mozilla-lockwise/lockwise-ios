@@ -23,8 +23,14 @@ class CredentialProviderStore {
 
     private let _stateSubject = ReplaySubject<CredentialProviderStoreState>.create(bufferSize: 1)
 
+    private let _authenticationDisplay = ReplaySubject<Bool>.create(bufferSize: 1)
+    
     var state: Observable<CredentialProviderStoreState> {
         return self._stateSubject.asObservable()
+    }
+    
+    var displayAuthentication: Observable<Bool> {
+        return self._authenticationDisplay.asObservable()
     }
 
     init(dispatcher: Dispatcher = .shared,
@@ -40,6 +46,10 @@ class CredentialProviderStore {
                     switch action {
                     case .refresh:
                         self?.checkStateAndRefresh()
+                    case .authenticationRequested:
+                        self?._authenticationDisplay.onNext(true)
+                    case .authenticated:
+                        self?._authenticationDisplay.onNext(false)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -65,11 +75,13 @@ extension CredentialProviderStore {
     private func refresh() {
         self._stateSubject.onNext(.Populating)
 
-        self.clearCredentialStore()
+        let clearObservable = self.clearCredentialStore()
                 .asObservable()
-                .flatMap { _ -> Observable<[Login]> in
-                    return self.dataStore.list
-                }
+        
+        let loginObservable = self.dataStore.list.filterEmpty()
+
+        Observable.combineLatest(clearObservable, loginObservable)
+                .map { $0.1 }
                 .map { logins -> [ASPasswordCredentialIdentity] in
                     return logins.map { login -> ASPasswordCredentialIdentity in
                         login.passwordCredentialIdentity
@@ -111,11 +123,11 @@ extension CredentialProviderStore {
             return Disposables.create()
         }
     }
-    
+
     private func credentialIdentityFromLogin(_ login: Login) -> ASPasswordCredentialIdentity {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: login.hostname, type: .URL)
         let username = login.username ?? "" // todo: what should the default value be?
-        
+
         return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: username, recordIdentifier: login.guid)
     }
 }

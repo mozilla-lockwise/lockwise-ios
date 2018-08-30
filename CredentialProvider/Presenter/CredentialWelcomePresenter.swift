@@ -13,7 +13,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     private weak var view: CredentialWelcomeViewProtocol? {
         return self.baseView as? CredentialWelcomeViewProtocol
     }
-    
+
     private let credentialProviderStore: CredentialProviderStore
 
     private var okButtonObserver: AnyObserver<Void> {
@@ -21,7 +21,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
             self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
         }.asObserver()
     }
-    
+
     init(view: BaseWelcomeViewProtocol,
                   dispatcher: Dispatcher = .shared,
                   accountStore: AccountStore = .shared,
@@ -40,35 +40,59 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 
     override func onViewReady() {
-        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-            .take(1)
-            .subscribe(onNext: { latest in
-            if latest.0 == nil && latest.1 == nil {
-                self.displayNotLoggedInMessage()
-            } else {
-                self.populateCredentials()
-            }
-        }).disposed(by: self.disposeBag)
-        
-    }
+        self.credentialProviderStore.displayAuthentication
+                .filter { $0 }
+                .flatMap { locked -> Single<Void> in
+                    if self.biometryManager.deviceAuthenticationAvailable {
+                        return self.biometryManager.authenticateWithMessage("FIRELOCK FOXBOX")
+                    } else {
+                        return Single.just(())
+                    }
+                }
+                .bind { _ in
+                    self.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    self.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
+                }
+                .disposed(by: self.disposeBag)
 
+        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
+                .take(1)
+                .subscribe(onNext: { latest in
+                    if latest.0 == nil && latest.1 == nil {
+                        self.displayNotLoggedInMessage()
+                    } else {
+                        self.populateCredentials()
+                    }
+                }).disposed(by: self.disposeBag)
+
+        self.credentialProviderStore.state
+                .asDriver(onErrorJustReturn: .NotAllowed)
+                .filter { $0 == CredentialProviderStoreState.Populating }
+                .drive(onNext: { [weak self] _ in
+                    self?.displayUpdatingStatus()
+                })
+                .disposed(by: self.disposeBag)
+    }
+}
+
+extension CredentialWelcomePresenter {
     private func displayNotLoggedInMessage() {
         view?.displayAlertController(
-            buttons: [AlertActionButtonConfiguration(
-                title: Constant.string.ok,
-                tapObserver: self.okButtonObserver,
-                style: UIAlertAction.Style.default)],
-            title: Constant.string.signInRequired,
-            message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
-            style: .alert)
+                buttons: [AlertActionButtonConfiguration(
+                        title: Constant.string.ok,
+                        tapObserver: self.okButtonObserver,
+                        style: UIAlertAction.Style.default)],
+                title: Constant.string.signInRequired,
+                message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
+                style: .alert)
     }
 
     private func populateCredentials() {
         self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
 
         let populated = self.credentialProviderStore.state
-            .filter { $0 == CredentialProviderStoreState.Populated }
-            .map { _ -> Void in return () }
+                .filter { $0 == CredentialProviderStoreState.Populated }
+                .map { _ -> Void in return () }
 
         self.credentialProviderStore.state
                 .asDriver(onErrorJustReturn: CredentialProviderStoreState.NotAllowed)
