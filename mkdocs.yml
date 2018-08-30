@@ -13,4 +13,5 @@ pages:
   - 'Build and Install': 'install.md'
   - 'Architecture': 'architecture.md'
   - 'Dependencies': 'updating_libraries.md'
+  - 'Add a browser': 'add-a-browser.md'
   - 'Release Instructions': 'releases.md'
