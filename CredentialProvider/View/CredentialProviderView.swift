@@ -4,17 +4,38 @@
 
 import AuthenticationServices
 
-class CredentialProviderView: ASCredentialProviderViewController, CredentialProviderViewProtocol {
+class CredentialProviderView: ASCredentialProviderViewController {
     private var presenter: CredentialProviderPresenter?
-    
+
+    private var currentViewController: UIViewController? {
+        didSet {
+            if let currentViewController = self.currentViewController {
+                self.addChild(currentViewController)
+                currentViewController.view.frame = self.view.bounds
+                self.view.addSubview(currentViewController.view)
+                currentViewController.didMove(toParent: self)
+                
+                if oldValue != nil {
+                    self.view.sendSubviewToBack(currentViewController.view)
+                }
+            }
+
+            guard let oldViewController = oldValue else {
+                return
+            }
+            oldViewController.willMove(toParent: nil)
+            oldViewController.view.removeFromSuperview()
+            oldViewController.removeFromParent()
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.presenter = CredentialProviderPresenter(view: self)
     }
-    
+
     override func prepareInterfaceForExtensionConfiguration() {
         self.presenter?.extensionConfigurationRequested()
-//        self.extensionContext.completeExtensionConfigurationRequest()
     }
 
     /*
@@ -53,5 +74,13 @@ class CredentialProviderView: ASCredentialProviderViewController, CredentialProv
     @IBAction func passwordSelected(_ sender: AnyObject?) {
         let passwordCredential = ASPasswordCredential(user: "j_appleseed", password: "apple1234")
         self.extensionContext.completeRequest(withSelectedCredential: passwordCredential, completionHandler: nil)
+    }
+}
+
+extension CredentialProviderView: CredentialProviderViewProtocol {
+    func displayWelcome() {
+        let welcomeView = UIStoryboard(name: "CredentialWelcome", bundle: nil)
+            .instantiateViewController(withIdentifier: "welcome")
+        self.currentViewController = welcomeView
     }
 }

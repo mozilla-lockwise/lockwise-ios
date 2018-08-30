@@ -50,7 +50,6 @@ class WelcomeView: UIViewController {
         super.viewDidDisappear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
-
 }
 
 extension WelcomeView: WelcomeViewProtocol {

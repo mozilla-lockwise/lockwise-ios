@@ -52,7 +52,7 @@ class ItemListPresenterSpec: QuickSpec {
             return self.tableViewScrollObserver.asObserver()
         }
 
-        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
+        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag, message: String, completionMessage: String) {
             self.displaySpinnerCalled = true
             dismiss.drive(self.dismissSpinnerObserver).disposed(by: bag)
         }

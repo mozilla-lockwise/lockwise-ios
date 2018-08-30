@@ -8,6 +8,8 @@ import AuthenticationServices
 
 protocol CredentialProviderViewProtocol: class {
     var extensionContext: ASCredentialProviderExtensionContext { get }
+    
+    func displayWelcome()
 }
 
 class CredentialProviderPresenter {
@@ -35,24 +37,22 @@ class CredentialProviderPresenter {
                 }
             }
             .disposed(by: self.disposeBag)
+        
+        self.dispatcher.register
+            .filterByType(class: CredentialStatusAction.self)
+            .subscribe(onNext: { action in
+                switch action {
+                case .extensionConfigured:
+                    self.view?.extensionContext.completeExtensionConfigurationRequest()
+                }
+            })
+            .disposed(by: self.disposeBag)
+
+        self.dispatcher.dispatch(action: LifecycleAction.foreground)
+        self.dispatcher.dispatch(action: DataStoreAction.unlock)
     }
 
     func extensionConfigurationRequested() {
-        self.dispatcher.dispatch(action: LifecycleAction.foreground)
-        self.dispatcher.dispatch(action: DataStoreAction.unlock)
-        
-        self.dataStore.storageState
-            .bind { (state) in
-                print(state)
-            }
-            .disposed(by: self.disposeBag)
-        
-        self.dataStore.list
-            .bind { (logins) in
-                print(logins)
-//                self.view?.extensionContext.completeExtensionConfigurationRequest()
-            }
-            .disposed(by: self.disposeBag)
-        
+        self.view?.displayWelcome()
     }
 }
