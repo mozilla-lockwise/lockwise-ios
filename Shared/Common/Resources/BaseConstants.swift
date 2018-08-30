@@ -47,9 +47,8 @@ class Constant {
     }
     
     class string {
-        static let authenticateToEnable = NSLocalizedString("autofill.authenticate_prompt", value: "Authenticate to enable Autofill", comment: "Descriptive text when displaying biometric prompt for autofill enablement")
-        static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Enabling Autofill...", comment: "Text displayed while autofill credentials are being populated")
-        static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished enabling autofill", comment: "Accesibility notification when autofill is done being enabled")
+        static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Updating Autofill...", comment: "Text displayed while autofill credentials are being populated")
+        static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating autofill", comment: "Accesibility notification when autofill is done being enabled")
     }
 }
 

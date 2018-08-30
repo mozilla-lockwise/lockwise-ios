@@ -217,6 +217,8 @@
 		7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
+		7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
@@ -393,7 +395,7 @@
 		7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailActionSpec.swift; sourceTree = "<group>"; };
 		7AA54B0FC602D0A79D87D3BD /* FilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		7AA54B2BAE0933D9BCD573D4 /* LifecycleStoreSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleStoreSpec.swift; sourceTree = "<group>"; };
-		7AA54B40696590744930A579 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7AA54B40696590744930A579 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../Shared/Common/Resources/Assets.xcassets; sourceTree = "<group>"; };
 		7AA54B40E4D80EE455AEA16D /* ItemDetailViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewSpec.swift; sourceTree = "<group>"; };
 		7AA54B41C60F04FA585E5B8F /* ItemDetailAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailAction.swift; sourceTree = "<group>"; };
 		7AA54B659468B5C0D7C3E353 /* EmptyPlaceholderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmptyPlaceholderCell.swift; sourceTree = "<group>"; };
@@ -499,6 +501,7 @@
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
+		7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
@@ -717,6 +720,7 @@
 		7AA547FECD9BACFBEE60F8B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7AA54B40696590744930A579 /* Assets.xcassets */,
 				D5E2930C207D591C0039A0AC /* Fonts */,
 				7D522E952033473F00295FF8 /* Strings */,
 				7AA5406822AB67B669BAF89B /* Info.plist */,
@@ -852,8 +856,8 @@
 		7D078EF12124E23700D10D1B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				7AA54B40696590744930A579 /* Assets.xcassets */,
 				7D078EF22124E24100D10D1B /* BaseConstants.swift */,
+				7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1289,6 +1293,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				391233892092155300CB0233 /* FxASignIn.js in Resources */,
@@ -1314,6 +1319,7 @@
 				7DDEAA612124B0B000A7D521 /* Frameworks.xcfilelist in Resources */,
 				7D9722E52134A6770071D82B /* CredentialWelcome.storyboard in Resources */,
 				7D9722D42134872E0071D82B /* Welcome.storyboard in Resources */,
+				7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */,
 				7D4396552135C2FF00B96FA9 /* SpinnerAlert.xib in Resources */,
 				7D9722E72134BF130071D82B /* Assets.xcassets in Resources */,
 			);

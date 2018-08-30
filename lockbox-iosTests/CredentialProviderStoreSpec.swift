@@ -25,8 +25,21 @@ class CredentialProviderStoreSpec: QuickSpec {
   
     }
 
+    class FakeStoreState: ASCredentialIdentityStoreState {
+        var enabledStub: Bool!
+        var incrementalUpdateStub: Bool!
+
+        override var isEnabled: Bool {
+            return enabledStub
+        }
+
+        override var supportsIncrementalUpdates: Bool {
+            return incrementalUpdateStub
+        }
+    }
+
     class FakeCredentialIdentityStore: CredentialIdentityStoreProtocol {
-        var storeState: ASCredentialIdentityStoreState!
+        var storeState: FakeStoreState!
 
         var removeSuccess: Bool!
         var removeError: Error?
@@ -69,7 +82,17 @@ class CredentialProviderStoreSpec: QuickSpec {
             }
 
             describe("init") {
-                
+                describe("isEnabled = false") {
+                    beforeEach {
+                        let storeState = FakeStoreState()
+                        storeState.enabledStub = false
+                        self.credentialIdentityStore.storeState = storeState
+                    }
+                }
+
+                it("checks the state and returns .NotAllowed if autofill is not enabled") {
+                    
+                }
             }
         }
     }
