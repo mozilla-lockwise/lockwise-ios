@@ -65,8 +65,16 @@ _all `master` and `production` branch builds are automatically uploaded from bud
 
 1. Browse to [TestFlight > Builds > iOS][3] in iTunes Connect
 2. Find the desired build number to distribute
-3. Provide [export compliance responses](export-compliance.md)
-  - this makes the build immediately available to "internal" iTunes Connect users
+3. Provide export compliance responses
+  >Does your app use encryption? Select Yes even if your app only uses the standard encryption in iOS and macOS.  
+  
+  Yes
+  
+  >Does your app qualify for any of the exemptions provided in Category 5, Part 2 of the U.S. Export Administration Regulations?  
+  
+  Yes (c) Limited to authentication, digital signature, or the decryption of data or files
+
+4. Once provided, this makes the build immediately available to "internal" App Store Connect users
 4. Copy the release notes for this release and add them to the "Test Details"
 5. Add at least one other "Group" of "external" testers to the build
   - after review, this will make it available for all those "external" testers
