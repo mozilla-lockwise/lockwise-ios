@@ -4,7 +4,6 @@ theme: readthedocs
 repo_name: GitHub
 repo_url: https://github.com/mozilla-lockbox/lockbox-ios
 
-      
 nav:
 - 'Introduction': 'index.md'
 - 'Release Notes': 'release-notes.md'
