@@ -8,6 +8,8 @@ import Nimble
 import AuthenticationServices
 import RxSwift
 import RxCocoa
+import RxBlocking
+import Storage
 
 @testable import Lockbox
 
@@ -22,7 +24,11 @@ class CredentialProviderStoreSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-  
+        let listStub = PublishSubject<[Login]>()
+
+        override var list: Observable<[Login]> {
+            return self.listStub.asObservable()
+        }
     }
 
     class FakeStoreState: ASCredentialIdentityStoreState {
@@ -41,24 +47,22 @@ class CredentialProviderStoreSpec: QuickSpec {
     class FakeCredentialIdentityStore: CredentialIdentityStoreProtocol {
         var storeState: FakeStoreState!
 
-        var removeSuccess: Bool!
-        var removeError: Error?
+        var removeCompletion: ((Bool, Error?) -> Void)?
 
         var credentialIdentities: [ASPasswordCredentialIdentity]?
-        var addSuccess: Bool!
-        var addError: Error?
+        var addCompletion: ((Bool, Error?) -> Void)?
 
         func getState(_ completion: @escaping (ASCredentialIdentityStoreState) -> Void) {
             completion(self.storeState)
         }
 
         func removeAllCredentialIdentities(_ completion: ((Bool, Error?) -> Void)?) {
-            completion!(removeSuccess, removeError)
+            self.removeCompletion = completion
         }
 
         func saveCredentialIdentities(_ credentialIdentities: [ASPasswordCredentialIdentity], completion: ((Bool, Error?) -> Void)?) {
             self.credentialIdentities = credentialIdentities
-            completion!(addSuccess, addError)
+            self.addCompletion = completion
         }
     }
 
@@ -75,6 +79,10 @@ class CredentialProviderStoreSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.credentialIdentityStore = FakeCredentialIdentityStore()
 
+                let storeState = FakeStoreState()
+                storeState.enabledStub = true
+                self.credentialIdentityStore.storeState = storeState
+
                 self.subject = CredentialProviderStore(
                     dispatcher: self.dispatcher,
                     dataStore: self.dataStore,
@@ -87,11 +95,98 @@ class CredentialProviderStoreSpec: QuickSpec {
                         let storeState = FakeStoreState()
                         storeState.enabledStub = false
                         self.credentialIdentityStore.storeState = storeState
+
+                        self.subject = CredentialProviderStore(
+                            dispatcher: self.dispatcher,
+                            dataStore: self.dataStore,
+                            credentialStore: self.credentialIdentityStore)
+                    }
+
+                    it("pushes .NotAllowed") {
+                        expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.NotAllowed))
+                    }
+                }
+            }
+
+            describe("refresh") {
+                describe("when the credential store is not enabled") {
+                    beforeEach {
+                        let storeState = FakeStoreState()
+                        storeState.enabledStub = false
+                        self.credentialIdentityStore.storeState = storeState
+
+                        self.subject = CredentialProviderStore(
+                            dispatcher: self.dispatcher,
+                            dataStore: self.dataStore,
+                            credentialStore: self.credentialIdentityStore)
+                        self.dispatcher.registerStub.onNext(CredentialProviderAction.refresh)
+                    }
+
+                    it("pushes notallowed and does nothing else") {
+                        expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.NotAllowed))
+                        expect(self.credentialIdentityStore.removeCompletion).to(beNil())
                     }
                 }
 
-                it("checks the state and returns .NotAllowed if autofill is not enabled") {
-                    
+                describe("when the credential store is enabled") {
+                    beforeEach {
+                        self.dispatcher.registerStub.onNext(CredentialProviderAction.refresh)
+                    }
+
+                    it("pushes populating and attempts to clear the credential store") {
+                        expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.Populating))
+                        expect(self.credentialIdentityStore.removeCompletion).notTo(beNil())
+                    }
+
+                    describe("when removing succeeds") {
+                        beforeEach {
+                            self.credentialIdentityStore.removeCompletion!(true, nil)
+                        }
+
+                        describe("when the datastore pushes a list of logins") {
+                            let guid1 = "fsdsdffds"
+                            let hostname1 = "http://www.mozilla.org"
+                            let username1 = "dogs@dogs.com"
+                            let password1 = "iluvcatz"
+                            let guid2 = "lgfdweolkfd"
+                            let hostname2 = "http://www.neopets.org"
+                            let username2 = "dogs@dogs.com"
+                            let password2 = "iwudnvrreusemypw"
+
+                            let logins: [Login] = [
+                                Login(guid: guid1, hostname: hostname1, username: username1, password: password1),
+                                Login(guid: guid2, hostname: hostname2, username: username2, password: password2)
+                            ]
+
+                            beforeEach {
+                                self.dataStore.listStub.onNext(logins)
+                            }
+
+                            it("passes converted ASPasswordCredentialIdentities to the ASCredentialIdentityStore") {
+                                let identity1 = self.credentialIdentityStore.credentialIdentities![0]
+                                let identity2 = self.credentialIdentityStore.credentialIdentities![1]
+
+                                expect(identity1.user).to(equal(username1))
+                                expect(identity1.recordIdentifier).to(equal(guid1))
+                                expect(identity1.serviceIdentifier.identifier).to(equal(hostname1))
+                                expect(identity2.user).to(equal(username2))
+                                expect(identity2.recordIdentifier).to(equal(guid2))
+                                expect(identity2.serviceIdentifier.identifier).to(equal(hostname2))
+
+                                expect(self.credentialIdentityStore.addCompletion).notTo(beNil())
+                            }
+
+                            describe("when the addition succeeds") {
+                                beforeEach {
+                                    self.credentialIdentityStore.addCompletion!(true, nil)
+                                }
+
+                                it("pushes populated") {
+                                    expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.Populated))
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
