@@ -8,9 +8,9 @@ Some assumptions:
   - ideally, `production` will perfectly reproduce master
   - but if `master` is in an un-releasable state, we cherry-pick commits to this branch
   - this is an exception rather than the preferred maintenance method
-- all `master` and `production` builds are sent to iTunes Connect, with the same buddybuild build number
-- iTunes Connect has ["internal" testers][2] (mobile devs, product integrity)
-  - thus, iTunes Connect and TestFlight can have ["external" testers][2] which we add manually
+- all `master` and `production` builds are sent to App Store Connect, with the same buddybuild build number
+- App Store Connect has ["internal" testers][2] (mobile devs, product integrity)
+  - thus, App Store Connect and TestFlight can have ["external" testers][2] which we add manually
   - currently, no plans exist for "external" users to include anyone outside of Mozilla
 
 ## Distributing Builds through buddybuild (branch / release)
@@ -37,8 +37,8 @@ _all commits on all branches and pull requests are automatically built_
 4. push the tag to GitHub and create a corresponding "Release" on GitHub.com
   - copy the release notes to the "Release" on GitHub
   - download the `.ipa` from buddybuild and attach it to the Release on GitHub
-5. Hopefully by now the build has been uploaded to iTunes Connect
-6. Browse to iTunes Connect and continue the "Distributing..." instructions
+5. Hopefully by now the build has been uploaded to App Store Connect
+6. Browse to App Store Connect and continue the "Distributing..." instructions
 
 ### In Case of Emergency (Release)
 
@@ -51,19 +51,21 @@ _similar to above, but requires explicit cherry-pick commits on `production` bra
   - thus skipping or avoiding the non-release-able commits
 5. Push the resulting `production` branch to GitHub.com
 6. Create a tag from `production` matching the format: `major.minor.patch.build`
-  - for example: `1.3.1.1624`
+  - for example: `git tag -a -s 1.3.1.1624 -m "1.3.1 (Build 1624)"`
 7. Push the tag to GitHub and create a corresponding "Release" on GitHub.com
   - copy the release notes to the "Release" on GitHub
 8. Browse to buddybuild and find the desired `production` branch build to distribute
   - download the `.ipa` from buddybuild and attach it to the Release on GitHub
-9. From the buddybuild's build "Deploy" tab, select the "Upload to iTunes Connect" link
-10. Browse to iTunes Connect to find the build and continue the "Distributing..." instructions
+9. From the buddybuild's build "Deploy" tab, select the "Upload to App Store Connect" link
+10. Browse to App Store Connect to find the build and continue the "Distributing..." instructions
 
 ## Distributing Builds through TestFlight (release)
 
-_all `master` and `production` branch builds are automatically uploaded from buddybuild to iTunes Connect_
+_all `master` and `production` branch builds are automatically uploaded from buddybuild to App Store Connect._
 
-1. Browse to [TestFlight > Builds > iOS][3] in iTunes Connect
+NOTE: if for some reason buddybuild does not deploy a build to App Store Connect, download the full App Store Connect .ipa from buddybuild and use the "Application Loader" app to manually upload it yourself.
+
+1. Browse to [TestFlight > Builds > iOS][3] in App Store Connect
 2. Find the desired build number to distribute
 3. Provide export compliance responses
   >Does your app use encryption? Select Yes even if your app only uses the standard encryption in iOS and macOS.  
@@ -78,13 +80,13 @@ _all `master` and `production` branch builds are automatically uploaded from bud
 4. Copy the release notes for this release and add them to the "Test Details"
 5. Add at least one other "Group" of "external" testers to the build
   - after review, this will make it available for all those "external" testers
-  - example: "lockbox-dev" which includes our other non-iTunes Connect engineers
+  - example: "lockbox-dev" which includes our other non-App Store Connect engineers
   - example: "Product" which includes other product and content Mozillians
   - example: "Cohort A" which includes the first round of volunteers to test
 
 ## Distributing through the App Store (release)
 
-1. Browse to the [App Store][4] section in iTunes Connect
+1. Browse to the [App Store][4] section in App Store Connect
 2. Confirm the "App Information" details are accurate and complete
 3. Confirm the "Pricing and Availability" details are accurate and complete
 4. Browse to the "iOS App" section to "Prepare for Submission"
