@@ -16,7 +16,7 @@ _These instructions are for developers wanting to add another browser setting so
   case DuckDuckGo
   ```
 
-3. Define that new case in the `getPreferredBrowserDeeplink` switch statement and return the string (with that new query scheme as the expected URL syntax):
+3. Define that new case in the `getPreferredBrowserDeeplink` switch statement and return the string with that new query scheme as the expected URL syntax. Keep in mind you may need to encode the URLs and test some links to make sure they open as expected on a real device with the browser installed:
 
   ```swift
   case .DuckDuckGo:
