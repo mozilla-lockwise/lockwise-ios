@@ -10,6 +10,12 @@ import SwiftKeychainWrapper
 import WebKit
 import Shared
 
+/* These UserDefault keys are maintained separately from the `UserDefaultKey`
+ * enum in BaseConstants.swift because, for the time being, they are only
+ * useful in the main application. However, rather than maintaining two
+ * separate UserDefaults instances, all the values for these keys are stored
+ * in the app group instance so that no further migrations will be required
+ * in the case that they become relevant in an app extension context. */
 enum LocalUserDefaultKey: String {
     case preferredBrowser, recordUsageData, itemListSort, appVersionCode
 

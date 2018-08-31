@@ -92,6 +92,7 @@ class BaseDataStore {
     private let fxaLoginHelper: FxALoginHelper
     private let profileFactory: ProfileFactory
     private let keychainWrapper: KeychainWrapper
+    private let userDefaults: UserDefaults
     internal var profile: FxAUtils.Profile
     private let dispatcher: Dispatcher
 
@@ -114,10 +115,12 @@ class BaseDataStore {
     init(dispatcher: Dispatcher = Dispatcher.shared,
          profileFactory: @escaping ProfileFactory = defaultProfileFactory,
          fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
-         keychainWrapper: KeychainWrapper = KeychainWrapper.standard) {
+         keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
+         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard) {
         self.profileFactory = profileFactory
         self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper
+        self.userDefaults = userDefaults
 
         self.dispatcher = dispatcher
         self.profile = profileFactory(false)
@@ -412,7 +415,7 @@ extension BaseDataStore {
         // default to locked state
         self.storageStateSubject.onNext(.Locked)
 
-        UserDefaults(suiteName: Constant.app.group)?.onAutoLockTime
+        self.userDefaults.onAutoLockTime
                 .take(1)
                 .subscribe(onNext: { autoLockSetting in
                     switch autoLockSetting {
@@ -420,7 +423,7 @@ extension BaseDataStore {
                         self.unlock()
                     default:
                         let date = NSDate(
-                                timeIntervalSince1970: UserDefaults.standard.double(
+                                timeIntervalSince1970: self.userDefaults.double(
                                         forKey: UserDefaultKey.autoLockTimerDate.rawValue))
 
                         if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {

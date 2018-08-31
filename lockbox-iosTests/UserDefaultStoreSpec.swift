@@ -147,7 +147,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 }
             }
 
-            fdescribe(".upgrade") {
+            describe(".upgrade") {
                 let autoLockTime = Setting.AutoLock.OneHour
                 let preferredBrowser = Setting.PreferredBrowser.Firefox
                 let recordUsageData = false

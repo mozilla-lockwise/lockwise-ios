@@ -21,7 +21,7 @@ class AutoLockStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
-         userDefaults: UserDefaults = .standard,
+         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard,
          keychainWrapper: KeychainWrapper = KeychainWrapper(serviceName: "", accessGroup: Constant.app.group)
     ) {
         self.dispatcher = dispatcher
