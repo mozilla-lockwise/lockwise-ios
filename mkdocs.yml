@@ -4,13 +4,18 @@ theme: readthedocs
 repo_name: GitHub
 repo_url: https://github.com/mozilla-lockbox/lockbox-ios
 
-pages:
+nav:
 - 'Introduction': 'index.md'
 - 'Release Notes': 'release-notes.md'
-- 'Contributing': 'contributing.md'
+- 'How to Contribute': 
+  - 'Contributing': 'contributing.md'
+  - 'Code of Conduct': 'code_of_conduct.md'
 - 'Telemetry and Metrics': 'metrics.md'
 - 'Developer Guides':
   - 'Build and Install': 'install.md'
   - 'Architecture': 'architecture.md'
   - 'Dependencies': 'updating_libraries.md'
+  - 'How to: add a browser': 'add-a-browser.md'
+  - 'How to: add a UI feature': 'new-ui.md'
+  - 'Test Plan': 'test-plan.md'
   - 'Release Instructions': 'releases.md'
