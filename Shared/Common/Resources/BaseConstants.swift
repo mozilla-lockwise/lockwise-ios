@@ -49,6 +49,10 @@ class Constant {
     class string {
         static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Updating Autofill...", comment: "Text displayed while autofill credentials are being populated")
         static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating autofill", comment: "Accesibility notification when autofill is done being enabled")
+        static let signInRequired = NSLocalizedString("autofill.signInRequired", value: "Sign in Required", comment: "Title for alert dialog explaining that a user must be signed in to use autofill")
+        static let signInRequiredBody = NSLocalizedString("autofill.signInRequiredBody", value: "You must be signed in to %@ before AutoFill will allow you to add passwords from %@. Once you are signed in, go to your devices's Settings>Passwords & Accounts to add %@ to AutoFill", comment: "Body for alert dialog explaining that a user must be signed in to use autofill")
+        static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
+        static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
     }
 }
 

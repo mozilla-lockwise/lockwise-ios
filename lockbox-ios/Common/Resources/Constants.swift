@@ -45,7 +45,6 @@ extension Constant.string {
     static let confirmDialogMessage = NSLocalizedString("confirm_dialog_message", value: "This will delete your Firefox Account information and all saved entries from Firefox Lockbox.", comment: "Confirm dialog message")
     static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied", comment: "Alert text when a field has been copied, with an interpolated field name value")
     static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
-    static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
     static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
     static let recent = NSLocalizedString("recent", value: "Recent", comment: "Button title when entries list is sorted by most recently used entry")
     static let recentlyUsed = NSLocalizedString("recently_used", value: "Recently Used", comment: "Label for the option sheet action allowing users to sort an entry list by the most recently used entries")
