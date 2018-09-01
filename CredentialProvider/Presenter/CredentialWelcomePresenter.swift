@@ -22,8 +22,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
 
-            // TODO: Close the screen
-            //self.view?.extensionContext.cancelRequest()
+            self.dispatcher.dispatch(action: CredentialStatusAction.cancel)
         }.asObserver()
     }
     
