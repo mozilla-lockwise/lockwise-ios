@@ -49,6 +49,7 @@ class Constant {
     class string {
         static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Updating Autofill...", comment: "Text displayed while autofill credentials are being populated")
         static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating autofill", comment: "Accesibility notification when autofill is done being enabled")
+        static let unlockPlaceholder = NSLocalizedString("unlock_placeholder", value: "This will unlock the app.", comment: "Placeholder text when the user's email is unavailable while unlocking Lockbox, shown in Touch ID and passcode prompts")
     }
 }
 

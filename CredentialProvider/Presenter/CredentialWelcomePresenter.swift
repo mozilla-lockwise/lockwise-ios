@@ -33,6 +33,12 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 
     override func onViewReady() {
+        self.launchBiometrics(message: Constant.string.unlockPlaceholder)
+            .subscribe(onSuccess: self.populateCredentials, onError: nil)
+            .disposed(by: self.disposeBag)
+    }
+
+    private func populateCredentials() {
         self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
 
         let populated = self.credentialProviderStore.state
