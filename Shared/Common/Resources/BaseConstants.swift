@@ -53,6 +53,7 @@ class Constant {
         static let signInRequiredBody = NSLocalizedString("autofill.signInRequiredBody", value: "You must be signed in to %@ before AutoFill will allow you to add passwords from %@. Once you are signed in, go to your devices's Settings>Passwords & Accounts to add %@ to AutoFill", comment: "Body for alert dialog explaining that a user must be signed in to use autofill")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
+        static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
     }
 }
 

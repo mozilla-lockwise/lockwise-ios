@@ -18,7 +18,6 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
     private var okButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            // TODO: Make this work
             if let url = URL(string: "lockbox://") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
@@ -61,7 +60,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     private func displayNotLoggedInMessage() {
         view?.displayAlertController(
             buttons: [AlertActionButtonConfiguration(
-                title: Constant.string.ok,
+                title: Constant.string.signIn,
                 tapObserver: self.okButtonObserver,
                 style: UIAlertAction.Style.default)],
             title: Constant.string.signInRequired,
