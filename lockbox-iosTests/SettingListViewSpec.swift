@@ -145,15 +145,15 @@ class SettingListViewSpec: QuickSpec {
                 }
             }
 
-            describe("onSignOut") {
+            describe("onLockNow") {
                 var observer = self.scheduler.createObserver(Void.self)
 
                 beforeEach {
                     observer = self.scheduler.createObserver(Void.self)
 
-                    self.subject.onSignOut.subscribe(observer).disposed(by: self.disposeBag)
+                    self.subject.onLockNow.subscribe(observer).disposed(by: self.disposeBag)
 
-                    self.subject.signOutButton.sendActions(for: .touchUpInside)
+                    self.subject.lockNowButton.sendActions(for: .touchUpInside)
                 }
 
                 it("tells any observers") {

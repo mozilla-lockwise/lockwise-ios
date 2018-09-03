@@ -10,7 +10,7 @@ import LocalAuthentication
 
 protocol SettingListViewProtocol: class, AlertControllerView {
     func bind(items: Driver<[SettingSectionModel]>)
-    var onSignOut: ControlEvent<Void> { get }
+    var onLockNow: ControlEvent<Void> { get }
 }
 
 class SettingListPresenter {
@@ -113,7 +113,7 @@ class SettingListPresenter {
 
         self.view?.bind(items: settingsConfigDriver)
 
-        self.view?.onSignOut
+        self.view?.onLockNow
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
                         self.dispatcher.dispatch(action: DataStoreAction.lock)
