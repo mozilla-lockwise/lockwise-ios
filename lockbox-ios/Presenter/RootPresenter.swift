@@ -102,6 +102,7 @@ class RootPresenter {
                     self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                 case .Unlocked:
                     self.dispatcher.dispatch(action: MainRouteAction.list)
+                    self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
                 default:
                     break
                 }
