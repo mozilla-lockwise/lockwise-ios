@@ -83,11 +83,12 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                 })
                 .disposed(by: self.disposeBag)
 
-            populated
+        populated
                 .delay(Constant.number.displayStatusAlertLength, scheduler: MainScheduler.instance)
                 .subscribe{ _ in
                     self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
                 }
                 .disposed(by: self.disposeBag)
+
     }
 }
