@@ -31,7 +31,7 @@ class SettingListView: UIViewController {
 
         // Subscribe to Dynamic Type change events.
         NotificationCenter.default.rx
-            .notification(NSNotification.Name.UIContentSizeCategoryDidChange)
+            .notification(UIContentSizeCategory.didChangeNotification)
             .subscribe(onNext: { _ in self.tableView.tableFooterView?.setNeedsLayout() })
             .disposed(by: self.disposeBag)
     }
