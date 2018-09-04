@@ -59,9 +59,13 @@ class CredentialProviderPresenter {
                 switch action {
                 case .extensionConfigured:
                     self.view?.extensionContext.completeExtensionConfigurationRequest()
-                case .loginSelected(let login):
+                case .loginSelected(let login, let relock):
                     self.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
                         self.dispatcher.dispatch(action: DataStoreAction.touch(id: login.guid))
+
+                        if relock {
+                            self.dispatcher.dispatch(action: DataStoreAction.lock)
+                        }
                     }
                 default:
                     break
@@ -90,7 +94,10 @@ class CredentialProviderPresenter {
         self.dataStore.locked
                 .take(1)
                 .bind { [weak self] locked in
-                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    if locked {
+                        self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    }
+
                     self?.provideCredential(for: credentialIdentity, relock: locked)
                 }
                 .disposed(by: self.disposeBag)
@@ -125,18 +132,12 @@ extension CredentialProviderPresenter {
 
         self.dataStore.get(guid)
                 .bind { [weak self] login in
-                    self?.dispatcher.dispatch(action: DataStoreAction.touch(id: guid))
-
-                    if relock {
-                        self?.dispatcher.dispatch(action: DataStoreAction.lock)
-                    }
-
                     guard let login = login else {
                         self?.cancelWith(.credentialIdentityNotFound)
                         return
                     }
 
-                    self?.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login))
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login, relock: relock))
                 }
                 .disposed(by: self.disposeBag)
     }

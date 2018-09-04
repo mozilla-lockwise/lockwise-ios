@@ -6,5 +6,5 @@ import Foundation
 import Storage
 
 enum CredentialStatusAction: Action {
-    case extensionConfigured, userCancelled, loginSelected(login: Login)
+    case extensionConfigured, userCancelled, loginSelected(login: Login, relock: Bool)
 }

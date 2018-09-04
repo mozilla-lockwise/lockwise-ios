@@ -24,11 +24,11 @@ class CredentialProviderStore {
     private let _stateSubject = ReplaySubject<CredentialProviderStoreState>.create(bufferSize: 1)
 
     private let _authenticationDisplay = ReplaySubject<Bool>.create(bufferSize: 1)
-    
+
     var state: Observable<CredentialProviderStoreState> {
         return self._stateSubject.asObservable()
     }
-    
+
     var displayAuthentication: Observable<Bool> {
         return self._authenticationDisplay.asObservable()
     }

@@ -50,10 +50,6 @@ class CredentialProviderView: ASCredentialProviderViewController {
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
         self.presenter?.credentialProvisionRequested(for: credentialIdentity)
     }
-
-    override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.presenter?.credentialProvisionInterface(for: credentialIdentity)
-    }
 }
 
 extension CredentialProviderView: CredentialProviderViewProtocol {
