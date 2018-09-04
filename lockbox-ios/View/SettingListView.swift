@@ -31,7 +31,7 @@ class SettingListView: UIViewController {
 
         // Subscribe to Dynamic Type change events.
         NotificationCenter.default.rx
-            .notification(NSNotification.Name.UIContentSizeCategoryDidChange)
+            .notification(UIContentSizeCategory.didChangeNotification)
             .subscribe(onNext: { _ in self.tableView.tableFooterView?.setNeedsLayout() })
             .disposed(by: self.disposeBag)
     }
@@ -175,7 +175,7 @@ extension SettingListView {
         // Mark lockNow button for resize. Otherwise, while the container would have enough space, the text would still be truncated.
         self.lockNowButton.setNeedsLayout()
 
-        let height = footerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        let height = footerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         var frame = footerView.frame
         frame.size.height = height
         footerView.frame = frame
