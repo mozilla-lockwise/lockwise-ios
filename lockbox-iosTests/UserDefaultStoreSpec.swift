@@ -146,6 +146,29 @@ class UserDefaultStoreSpec: QuickSpec {
                     expect(self.userDefaults.value(forKey: LocalUserDefaultKey.itemListSort.rawValue) as? String).to(equal(itemListSort.rawValue))
                 }
             }
+
+            describe(".upgrade") {
+                let autoLockTime = Setting.AutoLock.OneHour
+                let preferredBrowser = Setting.PreferredBrowser.Firefox
+                let recordUsageData = false
+                let itemListSort = Setting.ItemListSort.recentlyUsed
+
+                beforeEach {
+                    UserDefaults.standard.set(autoLockTime.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
+                    UserDefaults.standard.set(preferredBrowser.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
+                    UserDefaults.standard.set(recordUsageData, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
+                    UserDefaults.standard.set(itemListSort.rawValue, forKey: LocalUserDefaultKey.itemListSort.rawValue)
+
+                    self.dispatcher.registerStub.onNext(LifecycleAction.upgrade(from: 2, to: 3))
+                }
+
+                it("reads settings values from UserDefaults.standard") {
+                    expect(try! self.subject.autoLockTime.toBlocking().first()!).to(equal(autoLockTime))
+                    expect(try! self.subject.preferredBrowser.toBlocking().first()!).to(equal(preferredBrowser))
+                    expect(try! self.subject.recordUsageData.toBlocking().first()!).to(equal(recordUsageData))
+                    expect(try! self.subject.itemListSort.toBlocking().first()!).to(equal(itemListSort))
+                }
+            }
         }
 
         describe("UserDefaultKey defaults") {
@@ -154,6 +177,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 expect(LocalUserDefaultKey.preferredBrowser.defaultValue as? String).to(equal(Constant.setting.defaultPreferredBrowser.rawValue))
                 expect(LocalUserDefaultKey.recordUsageData.defaultValue as? Bool).to(equal(Constant.setting.defaultRecordUsageData))
                 expect(LocalUserDefaultKey.itemListSort.defaultValue as? String).to(equal(Constant.setting.defaultItemListSort.rawValue))
+                expect(LocalUserDefaultKey.appVersionCode.defaultValue as? Int).to(equal(0))
                 expect(UserDefaultKey.autoLockTimerDate.defaultValue).to(beNil())
             }
         }

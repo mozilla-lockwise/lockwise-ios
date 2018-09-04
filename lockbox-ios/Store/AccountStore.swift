@@ -10,6 +10,12 @@ import SwiftKeychainWrapper
 import WebKit
 import Shared
 
+/* These UserDefault keys are maintained separately from the `UserDefaultKey`
+ * enum in BaseConstants.swift because, for the time being, they are only
+ * useful in the main application. However, rather than maintaining two
+ * separate UserDefaults instances, all the values for these keys are stored
+ * in the app group instance so that no further migrations will be required
+ * in the case that they become relevant in an app extension context. */
 enum LocalUserDefaultKey: String {
     case preferredBrowser, recordUsageData, itemListSort, appVersionCode
 
@@ -77,15 +83,15 @@ class AccountStore: BaseAccountStore {
 
         self.dispatcher.register
                 .filterByType(class: LifecycleAction.self)
-                .subscribe(onNext: { action in
+                .subscribe(onNext: { [weak self] action in
                     guard case let .upgrade(previous, _) = action else {
                         return
                     }
 
                     if previous <= 1 {
-                        self._oauthInfo.onNext(nil)
-                        self._profile.onNext(nil)
-                        self._oldAccountPresence.accept(true)
+                        self?._oauthInfo.onNext(nil)
+                        self?._profile.onNext(nil)
+                        self?._oldAccountPresence.accept(true)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -137,8 +143,8 @@ extension AccountStore {
     }
 
     private func clearOldKeychainValues() {
-        for identifier in KeychainKey.allValues {
-            _ = self.keychainWrapper.removeObject(forKey: identifier.rawValue)
+        for identifier in KeychainKey.oldAccountValues {
+            _ = KeychainWrapper.standard.removeObject(forKey: identifier.rawValue)
         }
 
         self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
