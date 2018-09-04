@@ -22,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ = AutoLockStore.shared
         _ = ExternalLinkStore.shared
         _ = UserDefaultStore.shared
+        if #available(iOS 12, *) {
+            _ = CredentialProviderStore.shared
+        }
         return true
     }
 
