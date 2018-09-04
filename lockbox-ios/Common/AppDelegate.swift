@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ = DataStore.shared
         _ = AutoLockStore.shared
         _ = ExternalLinkStore.shared
+        _ = UserDefaultStore.shared
         return true
     }
 

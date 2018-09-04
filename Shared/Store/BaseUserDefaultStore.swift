@@ -19,7 +19,7 @@ class BaseUserDefaultStore {
          sharedUserDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? UserDefaults.standard) {
         self.dispatcher = dispatcher
         self.userDefaults = sharedUserDefaults
-        
+
         self.initialized()
     }
 

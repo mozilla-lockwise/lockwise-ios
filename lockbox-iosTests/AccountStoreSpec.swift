@@ -270,12 +270,15 @@ class AccountStoreSpec: QuickSpec {
 
             describe("oauthSignInMessageRead") {
                 beforeEach {
+                    KeychainWrapper.standard.set("something", forKey: KeychainKey.avatarURL.rawValue)
+                    KeychainWrapper.standard.set("is", forKey: KeychainKey.displayName.rawValue)
+                    KeychainWrapper.standard.set("in here", forKey: KeychainKey.email.rawValue)
                     self.dispatcher.fakeRegistration.onNext(AccountAction.oauthSignInMessageRead)
                 }
 
-                it("clears keychain values associated with old accounts") {
-                    for key in KeychainKey.allValues {
-                        expect(self.keychainManager.removeArguments).to(contain(key.rawValue))
+                it("clears keychain.standard values associated with old accounts") {
+                    for key in KeychainKey.oldAccountValues {
+                        expect(KeychainWrapper.standard.hasValue(forKey: key.rawValue)).to(beFalse())
                     }
 
                     let oldAccountPresent = try! self.subject.hasOldAccountInformation.toBlocking().first()!

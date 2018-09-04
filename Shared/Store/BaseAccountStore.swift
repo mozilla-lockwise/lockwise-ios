@@ -20,14 +20,14 @@ class BaseAccountStore {
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
     }
-    
+
     public var profile: Observable<Profile?> {
         return _profile.asObservable()
     }
 
     internal var storedAccountJSON: String? {
         let key = KeychainKey.accountJSON.rawValue
-        
+
         return self.keychainWrapper.string(forKey: key)
     }
 
@@ -48,12 +48,12 @@ class BaseAccountStore {
 
         fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
             self._oauthInfo.onNext(info)
-            
+
             if let json = try? fxa.toJSON() {
                 self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
             }
         }
-        
+
         fxa.getProfile { (profile: Profile?, _) in
             self._profile.onNext(profile)
         }
