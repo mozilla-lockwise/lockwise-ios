@@ -18,7 +18,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
     private var okButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            if let url = URL(string: "lockbox://") {
+            if let url = URL(string: "lockbox://fxa") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
 
