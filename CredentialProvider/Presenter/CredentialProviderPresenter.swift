@@ -73,71 +73,70 @@ class CredentialProviderPresenter {
     }
 
     func extensionConfigurationRequested() {
-        self.dispatcher.dispatch(action: DataStoreAction.unlock)
-        self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
+        self.dataStore.locked
+                .bind { locked in
+                    if locked {
+                        self.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
+                    } else {
+                        self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
+                    }
+                }
+                .disposed(by: self.disposeBag)
+
         self.view?.displayWelcome()
     }
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
         self.dataStore.locked
-            .bind { locked in
-                if locked {
-                    self.cancelWith(.userInteractionRequired)
-                } else {
-                    self.provideCredential(for: credentialIdentity)
+                .take(1)
+                .bind { [weak self] locked in
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    self?.provideCredential(for: credentialIdentity, relock: locked)
                 }
-            }
-            .disposed(by: self.disposeBag)
-    }
-
-    func credentialProvisionInterface(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.dataStore.locked
-            .bind { locked in
-                if locked {
-                    self.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
-                    self.view?.displayWelcome()
-                } else {
-                    self.provideCredential(for: credentialIdentity)
-                }
-            }
-            .disposed(by: self.disposeBag)
+                .disposed(by: self.disposeBag)
     }
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
         self.dataStore.locked
-            .bind { locked in
-                if locked {
-                    self.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
-                    self.view?.displayWelcome()
-                } else {
-                    self.view?.displayAlertController(buttons: [
-                            AlertActionButtonConfiguration(title: "OK", tapObserver: self.dismissObserver, style: .default)
-                        ],
-                                                      title: "Credential list not available yet",
-                                                      message: "Please check back later",
-                                                      style: .alert)
+                .bind { locked in
+                    if locked {
+                        self.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
+                        self.view?.displayWelcome()
+                    } else {
+                        self.view?.displayAlertController(buttons: [
+                                AlertActionButtonConfiguration(title: "OK", tapObserver: self.dismissObserver, style: .default)
+                            ],
+                                                          title: "Credential list not available yet",
+                                                          message: "Please check back later",
+                                                          style: .alert)
+                    }
                 }
-            }
-            .disposed(by: self.disposeBag)
+                .disposed(by: self.disposeBag)
     }
 }
 
 @available(iOS 12, *)
 extension CredentialProviderPresenter {
-    private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+    private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity, relock: Bool) {
         guard let guid = credentialIdentity.recordIdentifier else {
             self.cancelWith(.credentialIdentityNotFound)
             return
         }
 
         self.dataStore.get(guid)
-                .bind { login in
+                .bind { [weak self] login in
+                    self?.dispatcher.dispatch(action: DataStoreAction.touch(id: guid))
+
+                    if relock {
+                        self?.dispatcher.dispatch(action: DataStoreAction.lock)
+                    }
+
                     guard let login = login else {
-                        self.cancelWith(.credentialIdentityNotFound)
+                        self?.cancelWith(.credentialIdentityNotFound)
                         return
                     }
 
-                    self.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login))
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login))
                 }
                 .disposed(by: self.disposeBag)
     }

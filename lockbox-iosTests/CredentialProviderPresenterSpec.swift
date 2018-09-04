@@ -46,6 +46,10 @@ class CredentialProviderPresenterSpec: QuickSpec {
         func displayWelcome() {
             self.displayWelcomeCalled = true
         }
+
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+            
+        }
     }
 
     class FakeDispatcher: Dispatcher {

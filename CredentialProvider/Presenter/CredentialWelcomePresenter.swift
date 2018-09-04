@@ -42,16 +42,16 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     override func onViewReady() {
         self.credentialProviderStore.displayAuthentication
                 .filter { $0 }
-                .flatMap { locked -> Single<Void> in
-                    if self.biometryManager.deviceAuthenticationAvailable {
-                        return self.biometryManager.authenticateWithMessage("FIRELOCK FOXBOX")
+                .flatMap { [weak self] locked -> Single<Void> in
+                    if self?.biometryManager.deviceAuthenticationAvailable ?? false {
+                        return self?.biometryManager.authenticateWithMessage("FIRELOCK FOXBOX") ?? Single.just(())
                     } else {
                         return Single.just(())
                     }
                 }
-                .bind { _ in
-                    self.dispatcher.dispatch(action: DataStoreAction.unlock)
-                    self.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
+                .bind { [weak self] _ in
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    self?.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
                 }
                 .disposed(by: self.disposeBag)
 
