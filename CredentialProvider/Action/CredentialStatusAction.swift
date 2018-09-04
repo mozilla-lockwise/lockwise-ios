@@ -6,5 +6,4 @@ import Foundation
 
 enum CredentialStatusAction: Action {
     case extensionConfigured
-    case cancel
 }

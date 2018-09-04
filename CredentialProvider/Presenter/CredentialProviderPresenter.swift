@@ -44,8 +44,6 @@ class CredentialProviderPresenter {
                 switch action {
                 case .extensionConfigured:
                     self.view?.extensionContext.completeExtensionConfigurationRequest()
-                case .cancel:
-                    self.view?.extensionContext.cancelRequest(withError: NSError(domain: ASExtensionErrorDomain, code:ASExtensionError.userInteractionRequired.rawValue))
                 }
             })
             .disposed(by: self.disposeBag)

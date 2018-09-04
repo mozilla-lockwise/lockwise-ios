@@ -18,11 +18,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
     private var okButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            if let url = URL(string: "lockbox://fxa") {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-
-            self.dispatcher.dispatch(action: CredentialStatusAction.cancel)
+            self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
         }.asObserver()
     }
     
@@ -59,7 +55,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     private func displayNotLoggedInMessage() {
         view?.displayAlertController(
             buttons: [AlertActionButtonConfiguration(
-                title: Constant.string.signIn,
+                title: Constant.string.ok,
                 tapObserver: self.okButtonObserver,
                 style: UIAlertAction.Style.default)],
             title: Constant.string.signInRequired,
@@ -75,23 +71,23 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
             .map { _ -> Void in return () }
 
         self.credentialProviderStore.state
-            .asDriver(onErrorJustReturn: CredentialProviderStoreState.NotAllowed)
-            .filter { $0 == CredentialProviderStoreState.Populating }
-            .drive(onNext: { [weak self] _ in
-                guard let disposeBag = self?.disposeBag else { return }
+                .asDriver(onErrorJustReturn: CredentialProviderStoreState.NotAllowed)
+                .filter { $0 == CredentialProviderStoreState.Populating }
+                .drive(onNext: { [weak self] _ in
+                    guard let disposeBag = self?.disposeBag else { return }
 
-                self?.view?.displaySpinner(populated.asDriver(onErrorJustReturn: ()),
-                                           bag: disposeBag,
-                                           message: Constant.string.enablingAutofill,
-                                           completionMessage: Constant.string.completedEnablingAutofill)
-            })
-            .disposed(by: self.disposeBag)
+                    self?.view?.displaySpinner(populated.asDriver(onErrorJustReturn: ()),
+                                               bag: disposeBag,
+                                               message: Constant.string.enablingAutofill,
+                                               completionMessage: Constant.string.completedEnablingAutofill)
+                })
+                .disposed(by: self.disposeBag)
 
-        populated
-            .delay(Constant.number.displayStatusAlertLength, scheduler: MainScheduler.instance)
-            .subscribe{ _ in
-                self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
-            }
-            .disposed(by: self.disposeBag)
+            populated
+                .delay(Constant.number.displayStatusAlertLength, scheduler: MainScheduler.instance)
+                .subscribe{ _ in
+                    self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
+                }
+                .disposed(by: self.disposeBag)
     }
 }

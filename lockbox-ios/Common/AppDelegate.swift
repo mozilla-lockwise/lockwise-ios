@@ -71,18 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
-            return false
-        }
-
-        if components.host == "fxa" {
-            Dispatcher.shared.dispatch(action: LoginRouteAction.fxa)
-        }
-
-        return true
-    }
-
     func applicationDidEnterBackground(_ application: UIApplication) {
         Dispatcher.shared.dispatch(action: LifecycleAction.background)
     }
