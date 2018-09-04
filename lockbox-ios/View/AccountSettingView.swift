@@ -52,8 +52,7 @@ extension AccountSettingView: AccountSettingViewProtocol {
 
 extension AccountSettingView: UIGestureRecognizerDelegate {
     fileprivate func setupUnlinkAccountButton() {
-        self.unlinkAccountButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
-        self.unlinkAccountButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
+        self.unlinkAccountButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
 
         if let presenter = self.presenter {
             self.unlinkAccountButton.rx.tap
