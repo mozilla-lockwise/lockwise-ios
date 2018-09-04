@@ -15,7 +15,7 @@ class SettingListView: UIViewController {
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<SettingSectionModel>?
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var signOutButton: UIButton!
+    @IBOutlet weak var lockNowButton: UIButton!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -26,11 +26,22 @@ class SettingListView: UIViewController {
         self.view.backgroundColor = Constant.color.viewBackground
         self.setupDataSource()
         self.setupDelegate()
-        self.setupSignOutButton()
+        self.setupLockNowButton()
         self.presenter?.onViewReady()
+
+        // Subscribe to Dynamic Type change events.
+        NotificationCenter.default.rx
+            .notification(NSNotification.Name.UIContentSizeCategoryDidChange)
+            .subscribe(onNext: { _ in self.tableView.tableFooterView?.setNeedsLayout() })
+            .disposed(by: self.disposeBag)
     }
 
-override func viewWillAppear(_ animated: Bool) {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.sizeFooterView()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.setupNavbar()
         self.styleTableViewBackground()
@@ -43,8 +54,8 @@ override func viewWillAppear(_ animated: Bool) {
 }
 
 extension SettingListView: SettingListViewProtocol {
-    public var onSignOut: ControlEvent<Void> {
-        return self.signOutButton.rx.tap
+    public var onLockNow: ControlEvent<Void> {
+        return self.lockNowButton.rx.tap
     }
 
     func bind(items: Driver<[SettingSectionModel]>) {
@@ -140,16 +151,36 @@ extension SettingListView {
         }
     }
 
-    fileprivate func setupSignOutButton() {
-        self.signOutButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        self.signOutButton.addTopBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
-        self.signOutButton.addBottomBorderWithColor(color: Constant.color.cellBorderGrey, width: 0.5)
+    fileprivate func setupLockNowButton() {
+        self.lockNowButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        self.lockNowButton.titleLabel?.textAlignment = .center
+        self.lockNowButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        self.lockNowButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
     }
 
     fileprivate func styleTableViewBackground() {
         let backgroundView = UIView(frame: self.view.bounds)
         backgroundView.backgroundColor = Constant.color.viewBackground
         self.tableView.backgroundView = backgroundView
+    }
+
+    /** Force table view footer resize.
+     *
+     * Footer view is not automatically resized by the table view. The method manually sizes the view and forces re-layout.
+     */
+    private func sizeFooterView() {
+        guard let footerView = self.tableView.tableFooterView else {
+            return
+        }
+        // Mark lockNow button for resize. Otherwise, while the container would have enough space, the text would still be truncated.
+        self.lockNowButton.setNeedsLayout()
+
+        let height = footerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        var frame = footerView.frame
+        frame.size.height = height
+        footerView.frame = frame
+
+        self.tableView.tableFooterView = footerView
     }
 }
 

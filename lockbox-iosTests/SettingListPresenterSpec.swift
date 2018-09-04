@@ -30,7 +30,7 @@ class SettingListPresenterSpec: QuickSpec {
             items.drive(itemsObserver).disposed(by: disposeBag)
         }
 
-        var onSignOut: ControlEvent<Void> {
+        var onLockNow: ControlEvent<Void> {
             return ControlEvent(events: fakeButtonPress.asObservable())
         }
     }

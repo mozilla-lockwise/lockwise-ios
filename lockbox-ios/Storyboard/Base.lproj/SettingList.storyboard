@@ -29,7 +29,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="44" id="Vkm-HP-o1P"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="Vkm-HP-o1P"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                             <state key="normal" title="Lock Now">
@@ -41,9 +41,10 @@
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="KPq-Rv-WTJ" firstAttribute="leading" secondItem="evG-dP-9fl" secondAttribute="leading" id="XTr-Yx-P0Y"/>
-                                        <constraint firstAttribute="trailing" secondItem="KPq-Rv-WTJ" secondAttribute="trailing" id="fH9-j8-mzi"/>
-                                        <constraint firstAttribute="bottom" secondItem="KPq-Rv-WTJ" secondAttribute="bottom" id="v3e-9O-rM1"/>
+                                        <constraint firstItem="KPq-Rv-WTJ" firstAttribute="leading" secondItem="evG-dP-9fl" secondAttribute="leading" id="54g-sq-kp6"/>
+                                        <constraint firstAttribute="bottom" secondItem="KPq-Rv-WTJ" secondAttribute="bottom" id="DHG-KP-Rqe"/>
+                                        <constraint firstAttribute="trailing" secondItem="KPq-Rv-WTJ" secondAttribute="trailing" id="JIJ-UR-sKi"/>
+                                        <constraint firstItem="KPq-Rv-WTJ" firstAttribute="top" secondItem="evG-dP-9fl" secondAttribute="top" id="Ucx-uv-VtU"/>
                                     </constraints>
                                 </view>
                                 <prototypes>
@@ -67,7 +68,7 @@
                         <viewLayoutGuide key="safeArea" id="1cT-6d-0cg"/>
                     </view>
                     <connections>
-                        <outlet property="signOutButton" destination="KPq-Rv-WTJ" id="JYJ-RB-n9t"/>
+                        <outlet property="lockNowButton" destination="KPq-Rv-WTJ" id="ghO-8v-elv"/>
                         <outlet property="tableView" destination="lcM-sN-0rK" id="bkh-nq-W3I"/>
                     </connections>
                 </viewController>
