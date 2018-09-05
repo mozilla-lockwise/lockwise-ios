@@ -59,7 +59,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                 tapObserver: self.okButtonObserver,
                 style: UIAlertAction.Style.default)],
             title: Constant.string.signInRequired,
-            message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName, Constant.string.productName),
+            message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
             style: .alert)
     }
 
