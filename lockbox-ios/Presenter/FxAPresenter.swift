@@ -52,7 +52,15 @@ class FxAPresenter {
 extension FxAPresenter {
     func matchingRedirectURLReceived(_ navigationURL: URL) {
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: true))
-        self.dispatcher.dispatch(action: LoginRouteAction.onboardingConfirmation)
+        self.dispatcher.dispatch(action: self.getOnboardingRoute())
         self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
+    }
+
+    private func getOnboardingRoute() -> LoginRouteAction {
+        if #available(iOS 12.0, *) {
+            return LoginRouteAction.autofillOnboarding
+        } else {
+            return LoginRouteAction.onboardingConfirmation
+        }
     }
 }

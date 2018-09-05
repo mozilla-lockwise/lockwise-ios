@@ -45,6 +45,7 @@ enum TelemetryEventObject: String {
     case loginFxa = "login_fxa"
     case loginOnboardingConfirmation = "login_onboarding_confirmation"
     case loginLearnMore = "login_learn_more"
+    case autofillOnboarding = "autofill_onboarding"
 }
 
 enum ExtraKey: String {
