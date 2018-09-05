@@ -13,7 +13,7 @@ import Nimble
 @available(iOS 12, *)
 class LoginSpec: QuickSpec {
     override func spec() {
-        fdescribe("Login+") {
+        describe("Login+") {
             let guid = "fsdsdf"
             let hostname = "http://www.mozilla.org"
             let username = "dogs@dogs.com"

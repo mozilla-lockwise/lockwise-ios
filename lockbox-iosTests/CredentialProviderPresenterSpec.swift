@@ -48,7 +48,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
         }
 
         func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
-            
+
         }
     }
 
@@ -93,7 +93,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
     var subject: CredentialProviderPresenter!
 
     override func spec() {
-        fdescribe("CredentialProviderPresenter") {
+        describe("CredentialProviderPresenter") {
             beforeEach {
                 self.view = FakeCredentialProviderView()
                 self.dispatcher = FakeDispatcher()
@@ -108,12 +108,64 @@ class CredentialProviderPresenterSpec: QuickSpec {
             }
 
             describe("CredentialStatusAction") {
-                beforeEach {
-                    self.dispatcher.registerSubject.onNext(CredentialStatusAction.extensionConfigured)
+                describe("extensionConfigured") {
+                    beforeEach {
+                        self.dispatcher.registerSubject.onNext(CredentialStatusAction.extensionConfigured)
+                    }
+
+                    it("confirms the extension configuration") {
+                        expect(self.view.fakeExtensionContext.extensionConfigurationCompleted).to(beTrue())
+                    }
                 }
 
-                it("confirms the extension configuration") {
-                    expect(self.view.fakeExtensionContext.extensionConfigurationCompleted).to(beTrue())
+                describe("loginSelected:relock:") {
+                    let guid = "afsdfdasfdsasf"
+                    let login = Login(guid: guid, hostname: "http://www.mozilla.com", username: "dogs@dogs.com", password: "meow")
+
+                    describe("relock = true") {
+                        beforeEach {
+                            self.dispatcher.registerSubject.onNext(CredentialStatusAction.loginSelected(login: login, relock: true))
+                        }
+
+                        it("selects the credential") {
+                            expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
+                            expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
+                            expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
+                        }
+
+                        describe("on completion") {
+                            beforeEach {
+                                self.view.fakeExtensionContext.completeRequestCompletion!(true)
+                            }
+
+                            it("touches the login and relocks the datastore") {
+                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.lock))
+                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
+                            }
+                        }
+                    }
+
+                    describe("relock = false") {
+                        beforeEach {
+                            self.dispatcher.registerSubject.onNext(CredentialStatusAction.loginSelected(login: login, relock: false))
+                        }
+
+                        it("selects the credential") {
+                            expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
+                            expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
+                            expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
+                        }
+
+                        describe("on completion") {
+                            beforeEach {
+                                self.view.fakeExtensionContext.completeRequestCompletion!(true)
+                            }
+
+                            it("touches the login") {
+                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
+                            }
+                        }
+                    }
                 }
             }
 
@@ -140,9 +192,9 @@ class CredentialProviderPresenterSpec: QuickSpec {
                             self.dataStore.lockedStub.onNext(true)
                         }
 
-                        it("cancels the request with userInteractionRequired") {
+                        it("cancels the request with notFound") {
                             expect(self.view.fakeExtensionContext.error).notTo(beNil())
-                            expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.userInteractionRequired.rawValue))
+                            expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
                         }
                     }
 
@@ -183,13 +235,13 @@ class CredentialProviderPresenterSpec: QuickSpec {
                             beforeEach {
                                 self.dataStore.getStub.onNext(nil)
                             }
-                            
+
                             it("cancels the request with notFound") {
                                 expect(self.view.fakeExtensionContext.error).notTo(beNil())
                                 expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
                             }
                         }
-                        
+
                         describe("when the login is not nil and the password fill completes") {
                             let login = Login(guid: guid, hostname: "http://www.mozilla.com", username: "dogs@dogs.com", password: "meow")
 
@@ -197,17 +249,8 @@ class CredentialProviderPresenterSpec: QuickSpec {
                                 self.dataStore.getStub.onNext(login)
                             }
 
-                            it("still touches the guid and relocks the datastore")  {
-                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.lock))
-                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
-                            }
-
-                            it("provides the passwordcredential and touches the password") {
-                                expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
-                                expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
-                                expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
-
-                                self.view.fakeExtensionContext.completeRequestCompletion!(true)
+                            it("dispatches the selected credential action") {
+                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login, relock: true)))
                             }
                         }
                     }
@@ -239,14 +282,8 @@ class CredentialProviderPresenterSpec: QuickSpec {
                                 self.dataStore.getStub.onNext(login)
                             }
 
-                            it("provides the passwordcredential and touches the password") {
-                                expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
-                                expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
-                                expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
-
-                                self.view.fakeExtensionContext.completeRequestCompletion!(true)
-
-                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
+                            it("dispatches the credentialstatusaction") {
+                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login, relock: false)))
                             }
                         }
                     }

@@ -7,8 +7,9 @@ import AuthenticationServices
 import RxSwift
 import RxCocoa
 
-protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView, StatusAlertView { }
+protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView { }
 
+@available(iOS 12, *)
 class CredentialWelcomePresenter: BaseWelcomePresenter {
     private weak var view: CredentialWelcomeViewProtocol? {
         return self.baseView as? CredentialWelcomeViewProtocol
@@ -75,6 +76,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 }
 
+@available(iOS 12, *)
 extension CredentialWelcomePresenter {
     private func displayNotLoggedInMessage() {
         view?.displayAlertController(

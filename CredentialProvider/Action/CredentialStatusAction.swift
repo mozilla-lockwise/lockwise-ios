@@ -8,3 +8,18 @@ import Storage
 enum CredentialStatusAction: Action {
     case extensionConfigured, userCancelled, loginSelected(login: Login, relock: Bool)
 }
+
+extension CredentialStatusAction: Equatable {
+    static func ==(lhs: CredentialStatusAction, rhs: CredentialStatusAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.extensionConfigured, .extensionConfigured):
+            return true
+        case (.userCancelled, .userCancelled):
+            return true
+        case (.loginSelected(let lhLogin, let lhRelock), .loginSelected(let rhLogin, let rhRelock)):
+            return lhLogin == rhLogin && lhRelock == rhRelock
+        default:
+            return false
+        }
+    }
+}
