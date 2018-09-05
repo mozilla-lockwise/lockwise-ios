@@ -71,7 +71,7 @@ class CredentialWelcomePresenterSpec: QuickSpec {
     var subject: CredentialWelcomePresenter!
 
     override func spec() {
-        fdescribe("CredentialWelcomePresenter") {
+        describe("CredentialWelcomePresenter") {
             beforeEach {
                 self.view = FakeCredentialProviderView()
                 self.credentialProviderStore = FakeCredentialProviderStore()

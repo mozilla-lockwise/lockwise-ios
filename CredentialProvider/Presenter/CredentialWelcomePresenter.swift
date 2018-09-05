@@ -5,6 +5,7 @@
 import Foundation
 import AuthenticationServices
 import RxSwift
+import FxAClient
 import RxCocoa
 
 protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView { }
@@ -43,9 +44,13 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     override func onViewReady() {
         self.credentialProviderStore.displayAuthentication
                 .filter { $0 }
-                .flatMap { [weak self] locked -> Single<Void> in
+                .flatMap { _ -> Observable<Profile?> in
+                    return self.accountStore.profile
+                }
+                .flatMap { [weak self] profile -> Single<Void> in
+                    let message = profile?.email ?? Constant.string.unlockPlaceholder
                     if self?.biometryManager.deviceAuthenticationAvailable ?? false {
-                        return self?.biometryManager.authenticateWithMessage("FIRELOCK FOXBOX") ?? Single.just(())
+                        return self?.biometryManager.authenticateWithMessage(message) ?? Single.just(())
                     } else {
                         return Single.just(())
                     }
