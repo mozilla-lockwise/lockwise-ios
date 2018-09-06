@@ -57,13 +57,25 @@ class ExternalLinkStoreSpec: QuickSpec {
                 }
             }
 
-            describe("open setting link") {
+            describe("open touchid setting link") {
                 beforeEach {
                     self.dispatcher.dispatch(action: SettingLinkAction.touchIDPasscode)
                 }
 
                 it("opens the appropriate string value of the settings page") {
                     let expectedURL = URL(string: "App-Prefs:root=TOUCHID_PASSCODE")
+                    expect(self.application.canOpenURLArgument).to(equal(expectedURL))
+                    expect(self.application.openArgument).to(equal(expectedURL))
+                }
+            }
+
+            describe("open autofill setting link") {
+                beforeEach {
+                    self.dispatcher.dispatch(action: SettingLinkAction.autofill)
+                }
+
+                it("opens the appropriate string value of the settings page") {
+                    let expectedURL = URL(string: "App-Prefs:root=Passwords_And_Accounts")
                     expect(self.application.canOpenURLArgument).to(equal(expectedURL))
                     expect(self.application.openArgument).to(equal(expectedURL))
                 }

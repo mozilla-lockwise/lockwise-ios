@@ -249,6 +249,8 @@
 		D8DD9300213F83D600F8041D /* AutofillOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */; };
 		D8DD9302213F840100F8041D /* AutofillOnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */; };
 		D8DD9304213F863700F8041D /* AutofillOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */; };
+		D8DD93072140D8D900F8041D /* AutofillOnboardingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD93052140D7CA00F8041D /* AutofillOnboardingPresenterSpec.swift */; };
+		D8DD93092140DB1100F8041D /* AutofillOnboardingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD93082140DB1100F8041D /* AutofillOnboardingViewSpec.swift */; };
 		D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -536,6 +538,8 @@
 		D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingView.swift; sourceTree = "<group>"; };
 		D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingPresenter.swift; sourceTree = "<group>"; };
 		D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AutofillOnboarding.storyboard; sourceTree = "<group>"; };
+		D8DD93052140D7CA00F8041D /* AutofillOnboardingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingPresenterSpec.swift; sourceTree = "<group>"; };
+		D8DD93082140DB1100F8041D /* AutofillOnboardingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingViewSpec.swift; sourceTree = "<group>"; };
 		D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResultsCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -979,6 +983,8 @@
 				7AA54DF673E124AA32EF8EBC /* OnboardingConfirmationViewSpec.swift */,
 				7AA5445216A3C61522245622 /* UserDefaultStoreSpec.swift */,
 				7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */,
+				D8DD93052140D7CA00F8041D /* AutofillOnboardingPresenterSpec.swift */,
+				D8DD93082140DB1100F8041D /* AutofillOnboardingViewSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1493,6 +1499,7 @@
 				7AA54EEAB64EF8D9A7F48739 /* CopyDisplayStoreSpec.swift in Sources */,
 				D8783615207D303E00C19BC7 /* ExternalLinkStoreSpec.swift in Sources */,
 				7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */,
+				D8DD93072140D8D900F8041D /* AutofillOnboardingPresenterSpec.swift in Sources */,
 				7AA5469948A8AE091E024CC7 /* ItemListDisplayStoreSpec.swift in Sources */,
 				7AA54850D6DE1CD66D8C43AE /* AccountActionSpec.swift in Sources */,
 				7AA54E2C7C6639BCA7C37A1F /* AccountSettingPresenterSpec.swift in Sources */,
@@ -1509,6 +1516,7 @@
 				7AA54BED3E368028D3315105 /* TelemetryStoreSpec.swift in Sources */,
 				7AA541AFF5CAB679285F8FFC /* LifecycleStoreSpec.swift in Sources */,
 				7AA54363851F23DEF3EB7BDB /* OnboardingConfirmationViewSpec.swift in Sources */,
+				D8DD93092140DB1100F8041D /* AutofillOnboardingViewSpec.swift in Sources */,
 				7AA546F4C028EB5AFFA9342F /* UserDefaultStoreSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

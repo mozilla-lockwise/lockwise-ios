@@ -104,7 +104,11 @@ class FxAPresenterSpec: QuickSpec {
                     expect(accountAction).to(equal(.oauthRedirect(url: url)))
 
                     let routeAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
-                    expect(routeAction).to(equal(.onboardingConfirmation))
+                    if #available(iOS 12.0, *) {
+                        expect(routeAction).to(equal(.autofillOnboarding))
+                    } else {
+                        expect(routeAction).to(equal(.onboardingConfirmation))
+                    }
 
                     let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
                     expect(onboardingAction.onboardingInProgress).to(beTrue())
