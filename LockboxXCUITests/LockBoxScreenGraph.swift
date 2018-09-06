@@ -169,3 +169,91 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     return map
 }
+
+extension BaseTestCase {
+
+    func checkIfAccountIsVerified() {
+        if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
+            let group = DispatchGroup()
+            group.enter()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.verifyAccount() {
+                    group.leave()
+                }
+            }
+            group.wait()
+        }
+    }
+
+    func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
+        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
+        let restUrl = URL(string: postEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+
+        request.httpMethod = "POST"
+
+        let jsonObject: [String: Any] = ["uid": uid, "code":code]
+        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
+        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+        if let json = json {
+            print("json \(json)")
+        }
+        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
+
+        request.httpBody = jsonData
+        print("json \(jsonData!)")
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("error:", error)
+                return
+            }
+            done()
+        }
+        task.resume()
+    }
+
+    func verifyAccount(done: @escaping () -> ()) {
+        // GET to EndPoint/mail/test-9876@restmail.net
+        let restUrl = URL(string: getEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.httpMethod = "GET"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if(error != nil) {
+                print("Error: \(error ?? "Get Error" as! Error)")
+            }
+            let responseString = String(data: data!, encoding: .utf8)
+            print("responseString = \(String(describing: responseString))")
+
+            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
+            let regexCode = "(code=[a-z0-9]{0,32}$?)"
+            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
+                uid = String(responseString![rangeUid])
+            }
+
+            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
+                code = String(responseString![rangeCode])
+            }
+
+            if (code != nil && uid != nil) {
+                let codeNumber = self.getPostValues(value: code)
+                let uidNumber = self.getPostValues(value: uid)
+
+                self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
+                    done()
+                }
+            } else {
+                done()
+            }
+        }
+        task.resume()
+    }
+
+    func getPostValues(value: String) -> String {
+        // From the regExp it is necessary to get only the number to add it to a json and send in POST request
+        let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
+        let numberValue = value[finalNumberIndex...];
+        return String(numberValue)
+    }
+}
