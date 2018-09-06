@@ -1,3 +1,3 @@
 #!/bin/bash
 
-carthage bootstrap --platform iOS --verbose
+carthage bootstrap --platform iOS --color auto --cache-builds
