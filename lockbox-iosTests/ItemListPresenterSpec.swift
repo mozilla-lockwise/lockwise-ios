@@ -14,6 +14,7 @@ import Storage
 
 class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
+        var sortingButtonHidden: AnyObserver<Bool>?
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var sortButtonEnableObserver: TestableObserver<Bool>!
         var tableViewScrollObserver: TestableObserver<Bool>!

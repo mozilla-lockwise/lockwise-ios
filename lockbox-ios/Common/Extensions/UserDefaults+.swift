@@ -15,9 +15,4 @@ extension UserDefaults {
     var onRecordUsageData: Observable<Bool> {
         return self.on(setting: LocalUserDefaultKey.recordUsageData.rawValue, type: Bool.self)
     }
-
-    var onItemListSort: Observable<Setting.ItemListSort> {
-        return self.on(setting: LocalUserDefaultKey.itemListSort.rawValue, type: String.self)
-            .map { Setting.ItemListSort(rawValue: $0) ?? Constant.setting.defaultItemListSort }
-    }
 }

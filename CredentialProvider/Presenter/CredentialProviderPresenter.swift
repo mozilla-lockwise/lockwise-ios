@@ -2,16 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import AuthenticationServices
+import Foundation
 import RxSwift
 import RxCocoa
+import Storage
 
 @available(iOS 12, *)
 protocol CredentialProviderViewProtocol: class, AlertControllerView {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
     func displayWelcome()
+    func displayItemList()
 }
 
 @available(iOS 12, *)
@@ -114,13 +116,14 @@ class CredentialProviderPresenter {
                         self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
                         self?.view?.displayWelcome()
                     } else {
-                        guard let dismissObserver = self?.dismissObserver else { return }
-                        self?.view?.displayAlertController(buttons: [
-                                AlertActionButtonConfiguration(title: "OK", tapObserver: dismissObserver, style: .default)
-                            ],
-                                                          title: "Credential list not available yet",
-                                                          message: "Please check back later",
-                                                          style: .alert)
+                        self?.view?.displayItemList()
+//                        guard let dismissObserver = self?.dismissObserver else { return }
+//                        self?.view?.displayAlertController(buttons: [
+//                                AlertActionButtonConfiguration(title: "OK", tapObserver: dismissObserver, style: .default)
+//                            ],
+//                                                          title: "Credential list not available yet",
+//                                                          message: "Please check back later",
+//                                                          style: .alert)
                     }
                 }
                 .disposed(by: self.disposeBag)

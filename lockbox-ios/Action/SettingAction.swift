@@ -100,11 +100,6 @@ extension Setting.AutoLock {
 }
 
 extension Setting {
-    enum ItemListSort: String {
-        case alphabetically
-        case recentlyUsed
-    }
-
     enum PreferredBrowser: String {
         case Chrome
         case Firefox

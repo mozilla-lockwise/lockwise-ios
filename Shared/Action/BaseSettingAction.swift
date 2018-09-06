@@ -37,4 +37,9 @@ class Setting {
             }
         }
     }
+
+    enum ItemListSort: String {
+        case alphabetically
+        case recentlyUsed
+    }
 }

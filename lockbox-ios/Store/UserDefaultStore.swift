@@ -16,10 +16,6 @@ class UserDefaultStore: BaseUserDefaultStore {
         return self.userDefaults.onRecordUsageData
     }
 
-    public var itemListSort: Observable<Setting.ItemListSort> {
-        return self.userDefaults.onItemListSort
-    }
-
     override func initialized() {
         self.dispatcher.register
                 .filterByType(class: SettingAction.self)
@@ -32,7 +28,7 @@ class UserDefaultStore: BaseUserDefaultStore {
                     case .recordUsageData(let enabled):
                         self.userDefaults.set(enabled, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
                     case .itemListSort(let sort):
-                        self.userDefaults.set(sort.rawValue, forKey: LocalUserDefaultKey.itemListSort.rawValue)
+                        self.userDefaults.set(sort.rawValue, forKey: UserDefaultKey.itemListSort.rawValue)
                     case .reset:
                         self.restoreDefaults()
                     }
