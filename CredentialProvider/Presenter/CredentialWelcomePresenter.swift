@@ -5,6 +5,7 @@
 import Foundation
 import AuthenticationServices
 import RxSwift
+import RxCocoa
 
 protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView, StatusAlertView { }
 
@@ -14,6 +15,12 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
     
     private let credentialProviderStore: CredentialProviderStore
+
+    private var okButtonObserver: AnyObserver<Void> {
+        return Binder(self) { target, _ in
+            self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
+        }.asObserver()
+    }
     
     init(view: BaseWelcomeViewProtocol,
                   dispatcher: Dispatcher = .shared,
@@ -33,6 +40,30 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 
     override func onViewReady() {
+        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
+            .take(1)
+            .subscribe(onNext: { latest in
+            if latest.0 == nil && latest.1 == nil {
+                self.displayNotLoggedInMessage()
+            } else {
+                self.populateCredentials()
+            }
+        }).disposed(by: self.disposeBag)
+        
+    }
+
+    private func displayNotLoggedInMessage() {
+        view?.displayAlertController(
+            buttons: [AlertActionButtonConfiguration(
+                title: Constant.string.ok,
+                tapObserver: self.okButtonObserver,
+                style: UIAlertAction.Style.default)],
+            title: Constant.string.signInRequired,
+            message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
+            style: .alert)
+    }
+
+    private func populateCredentials() {
         self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
 
         let populated = self.credentialProviderStore.state
@@ -58,6 +89,6 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                     self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
                 }
                 .disposed(by: self.disposeBag)
-        
+
     }
 }
