@@ -16,7 +16,22 @@
                     <view key="view" contentMode="scaleToFill" id="BuU-Ak-iZz">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="YNk-Or-B8W">
+                                <rect key="frame" x="-59" y="0.0" width="476" height="194"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="bA8-o8-CxF" userLabel="Lockbox">
+                                <rect key="frame" x="72.5" y="302" width="230" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="230" id="1Xn-9B-SWn"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="bA8-o8-CxF" firstAttribute="top" secondItem="YNk-Or-B8W" secondAttribute="bottom" constant="73" id="s4R-JZ-zx4"/>
+                            <constraint firstItem="bA8-o8-CxF" firstAttribute="centerX" secondItem="Ky8-vK-JVj" secondAttribute="centerX" id="wd8-bB-Ebd"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Ky8-vK-JVj"/>
                     </view>
                 </viewController>
@@ -24,4 +39,8 @@
             </objects>
         </scene>
     </scenes>
+    <resources>
+        <image name="lockbox-title" width="224" height="28"/>
+        <image name="nessie" width="476" height="194"/>
+    </resources>
 </document>

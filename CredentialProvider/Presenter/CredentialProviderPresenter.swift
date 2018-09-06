@@ -45,26 +45,26 @@ class CredentialProviderPresenter {
         self.dataStore = dataStore
 
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-            .bind { (oauthInfo, profile) in
+            .bind { [weak self] (oauthInfo, profile) in
                 if let oauthInfo = oauthInfo,
                     let profile = profile {
-                    self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                    self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
                 }
             }
             .disposed(by: self.disposeBag)
 
         self.dispatcher.register
             .filterByType(class: CredentialStatusAction.self)
-            .subscribe(onNext: { action in
+            .subscribe(onNext: { [weak self] action in
                 switch action {
                 case .extensionConfigured:
-                    self.view?.extensionContext.completeExtensionConfigurationRequest()
+                    self?.view?.extensionContext.completeExtensionConfigurationRequest()
                 case .loginSelected(let login, let relock):
-                    self.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
-                        self.dispatcher.dispatch(action: DataStoreAction.touch(id: login.guid))
+                    self?.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
+                        self?.dispatcher.dispatch(action: DataStoreAction.touch(id: login.guid))
 
                         if relock {
-                            self.dispatcher.dispatch(action: DataStoreAction.lock)
+                            self?.dispatcher.dispatch(action: DataStoreAction.lock)
                         }
                     }
                 default:
@@ -72,17 +72,17 @@ class CredentialProviderPresenter {
                 }
             })
             .disposed(by: self.disposeBag)
-
-        self.dispatcher.dispatch(action: LifecycleAction.foreground)
     }
 
     func extensionConfigurationRequested() {
+        self.dispatcher.dispatch(action: LifecycleAction.foreground)
+
         self.dataStore.locked
-                .bind { locked in
+                .bind { [weak self] locked in
                     if locked {
-                        self.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
+                        self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
                     } else {
-                        self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
+                        self?.dispatcher.dispatch(action: CredentialProviderAction.refresh)
                     }
                 }
                 .disposed(by: self.disposeBag)
@@ -91,6 +91,8 @@ class CredentialProviderPresenter {
     }
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
+        self.dispatcher.dispatch(action: LifecycleAction.foreground)
+
         self.dataStore.locked
                 .take(1)
                 .bind { [weak self] locked in
@@ -104,14 +106,17 @@ class CredentialProviderPresenter {
     }
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
+        self.dispatcher.dispatch(action: LifecycleAction.foreground)
+
         self.dataStore.locked
-                .bind { locked in
+                .bind { [weak self] locked in
                     if locked {
-                        self.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
-                        self.view?.displayWelcome()
+                        self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
+                        self?.view?.displayWelcome()
                     } else {
-                        self.view?.displayAlertController(buttons: [
-                                AlertActionButtonConfiguration(title: "OK", tapObserver: self.dismissObserver, style: .default)
+                        guard let dismissObserver = self?.dismissObserver else { return }
+                        self?.view?.displayAlertController(buttons: [
+                                AlertActionButtonConfiguration(title: "OK", tapObserver: dismissObserver, style: .default)
                             ],
                                                           title: "Credential list not available yet",
                                                           message: "Please check back later",

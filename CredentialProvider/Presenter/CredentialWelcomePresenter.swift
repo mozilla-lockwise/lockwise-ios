@@ -44,8 +44,12 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     override func onViewReady() {
         self.credentialProviderStore.displayAuthentication
                 .filter { $0 }
-                .flatMap { _ -> Observable<Profile?> in
-                    return self.accountStore.profile
+                .flatMap { [weak self] _ -> Observable<Profile?> in
+                    guard let accountStore = self?.accountStore else {
+                        return Observable.just(nil)
+                    }
+
+                    return accountStore.profile
                 }
                 .flatMap { [weak self] profile -> Single<Void> in
                     let message = profile?.email ?? Constant.string.unlockPlaceholder
@@ -116,8 +120,8 @@ extension CredentialWelcomePresenter {
 
         populated
                 .delay(Constant.number.displayStatusAlertLength, scheduler: MainScheduler.instance)
-                .subscribe{ _ in
-                    self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
+                .subscribe{ [weak self] _ in
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
                 }
                 .disposed(by: self.disposeBag)
 

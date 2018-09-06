@@ -94,7 +94,7 @@ class BaseDataStore {
     private let keychainWrapper: KeychainWrapper
     private let userDefaults: UserDefaults
     internal var profile: FxAUtils.Profile
-    private let dispatcher: Dispatcher
+    internal let dispatcher: Dispatcher
 
     public var list: Observable<[Login]> {
         return self.listSubject.asObservable()
@@ -190,6 +190,11 @@ class BaseDataStore {
                 .disposed(by: self.disposeBag)
 
         self.setInitialState()
+        self.initialized()
+    }
+    
+    public func initialized() {
+        fatalError("not implemented!")
     }
 
     public func get(_ id: String) -> Observable<Login?> {
@@ -411,7 +416,7 @@ extension BaseDataStore {
         self.handleLock()
     }
 
-    private func handleLock() {
+    internal func handleLock() {
         // default to locked state
         self.storageStateSubject.onNext(.Locked)
 

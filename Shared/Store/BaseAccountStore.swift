@@ -36,7 +36,7 @@ class BaseAccountStore {
 
         self.initialized()
     }
-    
+
     internal func initialized() {
         fatalError("not implemented!")
     }

@@ -12,8 +12,10 @@ class AutoLockStore: BaseAutoLockStore {
     override func initialized() {
         self.dispatcher.register
                 .filter { action -> Bool in
-                    // note: any future actions that should reset the timer will go here.
-                    // for now, none of the CredentialProvider actions are good candidates.
+                    if let action = action as? CredentialProviderAction {
+                        return action == CredentialProviderAction.authenticated
+                    }
+
                     return false
                 }
                 .subscribe(onNext: { [weak self] _ in
