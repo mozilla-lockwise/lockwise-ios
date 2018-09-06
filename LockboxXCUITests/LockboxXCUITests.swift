@@ -200,9 +200,10 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        safari.launch()
 
         let urlValue = safari.buttons["URL"].value as! String
-        waitForValueContains(safari.buttons["URL"], value: "accounts")
+        waitForValueContains(safari.buttons["URL"], value: urlValue) // expect value to be "accounts"
 
         app.launch()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
