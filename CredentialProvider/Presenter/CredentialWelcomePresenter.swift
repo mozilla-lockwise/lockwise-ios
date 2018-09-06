@@ -79,7 +79,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                 .asDriver(onErrorJustReturn: .NotAllowed)
                 .filter { $0 == CredentialProviderStoreState.Populating }
                 .drive(onNext: { [weak self] _ in
-                    self?.displayUpdatingStatus()
+                    self?.populateCredentials()
                 })
                 .disposed(by: self.disposeBag)
     }
@@ -99,8 +99,6 @@ extension CredentialWelcomePresenter {
     }
 
     private func populateCredentials() {
-        self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
-
         let populated = self.credentialProviderStore.state
                 .filter { $0 == CredentialProviderStoreState.Populated }
                 .map { _ -> Void in return () }
