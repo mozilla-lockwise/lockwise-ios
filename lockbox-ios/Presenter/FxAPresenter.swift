@@ -22,6 +22,19 @@ class FxAPresenter {
     fileprivate let dispatcher: Dispatcher
     fileprivate let accountStore: AccountStore
 
+    fileprivate var _credentialProviderStore: Any?
+
+    @available (iOS 12, *)
+    private var credentialProviderStore: CredentialProviderStore? {
+        return _credentialProviderStore as? CredentialProviderStore
+    }
+
+    private let _nextRouteSubject = ReplaySubject<LoginRouteAction>.create(bufferSize: 1)
+
+    var nextRoute: Observable<LoginRouteAction> {
+        return self._nextRouteSubject.asObservable()
+    }
+
     private var disposeBag = DisposeBag()
 
     public var onClose: AnyObserver<Void> {
@@ -39,12 +52,37 @@ class FxAPresenter {
         self.accountStore = accountStore
     }
 
+    @available(iOS 12, *)
+    init(view: FxAViewProtocol,
+         dispatcher: Dispatcher = .shared,
+         accountStore: AccountStore = AccountStore.shared,
+         credentialProviderStore: CredentialProviderStore = CredentialProviderStore.shared
+        ) {
+        self.view = view
+        self.dispatcher = dispatcher
+        self.accountStore = accountStore
+        self._credentialProviderStore = credentialProviderStore
+    }
+
     func onViewReady() {
         self.accountStore.loginURL
                 .bind { url in
                     self.view?.loadRequest(URLRequest(url: url))
                 }
                 .disposed(by: self.disposeBag)
+
+        if #available(iOS 12.0, *) {
+            if let credentialProviderStore = self.credentialProviderStore {
+                credentialProviderStore.state
+                    .map({ state in
+                        return state == .NotAllowed ? LoginRouteAction.autofillOnboarding : LoginRouteAction.onboardingConfirmation
+                    }).subscribe(onNext: { route in
+                        self._nextRouteSubject.onNext(route)
+                    }).disposed(by: self.disposeBag)
+            }
+        } else {
+            _nextRouteSubject.onNext(.onboardingConfirmation)
+        }
     }
 }
 
@@ -52,15 +90,12 @@ class FxAPresenter {
 extension FxAPresenter {
     func matchingRedirectURLReceived(_ navigationURL: URL) {
         self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: true))
-        self.dispatcher.dispatch(action: self.getOnboardingRoute())
-        self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
-    }
 
-    private func getOnboardingRoute() -> LoginRouteAction {
-        if #available(iOS 12.0, *) {
-            return LoginRouteAction.autofillOnboarding
-        } else {
-            return LoginRouteAction.onboardingConfirmation
-        }
+        self.nextRoute
+            .take(1)
+            .subscribe(onNext: { action in
+                self.dispatcher.dispatch(action: action)
+            }).disposed(by: self.disposeBag)
+        self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
     }
 }

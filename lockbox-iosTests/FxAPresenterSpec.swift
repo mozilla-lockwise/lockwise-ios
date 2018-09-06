@@ -52,6 +52,7 @@ class FxAPresenterSpec: QuickSpec {
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
+    private var credentialProviderStore: Any!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -61,11 +62,23 @@ class FxAPresenterSpec: QuickSpec {
                 self.view = FakeFxAView()
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.subject = FxAPresenter(
+
+                if #available(iOS 12.0, *) {
+                    self.credentialProviderStore = FakeCredentialProviderStore()
+                    self.subject = FxAPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
-                        accountStore: self.accountStore
-                )
+                        accountStore: self.accountStore,
+                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore
+                    )
+
+                } else {
+                    self.subject = FxAPresenter(
+                            view: self.view,
+                            dispatcher: self.dispatcher,
+                            accountStore: self.accountStore
+                    )
+                }
             }
 
             describe(".onViewReady()") {
@@ -97,6 +110,10 @@ class FxAPresenterSpec: QuickSpec {
 
                 beforeEach {
                     self.subject.matchingRedirectURLReceived(url)
+
+                    if #available(iOS 12.0, *) {
+                        (self.credentialProviderStore as! FakeCredentialProviderStore).stateToProvide.onNext(.NotAllowed)
+                    }
                 }
 
                 it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
@@ -115,5 +132,14 @@ class FxAPresenterSpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+@available(iOS 12, *)
+class FakeCredentialProviderStore: CredentialProviderStore {
+    var stateToProvide = ReplaySubject<CredentialProviderStoreState>.create(bufferSize: 1)
+
+    override var state: Observable<CredentialProviderStoreState> {
+        return stateToProvide.asObservable()
     }
 }
