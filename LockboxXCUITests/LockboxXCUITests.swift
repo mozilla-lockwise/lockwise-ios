@@ -201,6 +201,7 @@ class LockboxXCUITests: BaseTestCase {
         // Safari is open
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
 
+        waitforExistence(safari.buttons["URL"])
         let urlValue = safari.buttons["URL"].value as! String
         waitForValueContains(safari.buttons["URL"], value: "accounts")
 
