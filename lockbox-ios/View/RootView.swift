@@ -88,6 +88,10 @@ class RootView: UIViewController, RootViewProtocol {
             if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
                 self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
             }
+        case .autofillOnboarding:
+            if let autofillOnboardingView = UIStoryboard(name: "AutofillOnboarding", bundle: nil).instantiateViewController(withIdentifier: "autofillonboarding") as? AutofillOnboardingView {
+                self.currentViewController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
+            }
         }
     }
 
