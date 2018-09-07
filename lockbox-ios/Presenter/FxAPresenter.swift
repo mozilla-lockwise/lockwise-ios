@@ -25,7 +25,7 @@ class FxAPresenter {
     fileprivate var _credentialProviderStore: Any?
 
     @available (iOS 12, *)
-    private var credentialProviderStore: CredentialProviderStore? {
+    private var credentialProviderStore: CredentialProviderStore {
         if let store = _credentialProviderStore as? CredentialProviderStore {
             return store
         }
@@ -76,14 +76,12 @@ class FxAPresenter {
                 .disposed(by: self.disposeBag)
 
         if #available(iOS 12.0, *) {
-            if let credentialProviderStore = self.credentialProviderStore {
-                credentialProviderStore.state
-                    .map({ state in
-                        return state == .NotAllowed ? LoginRouteAction.autofillOnboarding : LoginRouteAction.onboardingConfirmation
-                    }).subscribe(onNext: { route in
-                        self._nextRouteSubject.onNext(route)
-                    }).disposed(by: self.disposeBag)
-            }
+            self.credentialProviderStore.state
+                .map({ state in
+                    return state == .NotAllowed ? LoginRouteAction.autofillOnboarding : LoginRouteAction.onboardingConfirmation
+                }).subscribe(onNext: { route in
+                    self._nextRouteSubject.onNext(route)
+                }).disposed(by: self.disposeBag)
         } else {
             _nextRouteSubject.onNext(.onboardingConfirmation)
         }
