@@ -187,6 +187,10 @@ class RootPresenter {
                 if !view.topViewIs(OnboardingConfirmationView.self) {
                     view.pushLoginView(view: .onboardingConfirmation)
                 }
+            case .autofillOnboarding:
+                if !view.topViewIs(AutofillOnboardingView.self) {
+                    view.pushLoginView(view: .autofillOnboarding)
+                }
             }
         }.asObserver()
     }()
