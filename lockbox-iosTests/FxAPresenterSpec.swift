@@ -109,11 +109,12 @@ class FxAPresenterSpec: QuickSpec {
                 let url = URL(string: "https://www.mozilla.com")!
 
                 beforeEach {
-                    self.subject.matchingRedirectURLReceived(url)
-
                     if #available(iOS 12.0, *) {
                         (self.credentialProviderStore as! FakeCredentialProviderStore).stateToProvide.onNext(.NotAllowed)
                     }
+
+                    self.subject.onViewReady()
+                    self.subject.matchingRedirectURLReceived(url)
                 }
 
                 it("invokes the oauth redirect, routes to onboarding, and sets onboarding status") {
