@@ -26,7 +26,11 @@ class FxAPresenter {
 
     @available (iOS 12, *)
     private var credentialProviderStore: CredentialProviderStore? {
-        return _credentialProviderStore as? CredentialProviderStore
+        if let store = _credentialProviderStore as? CredentialProviderStore {
+            return store
+        }
+
+        return CredentialProviderStore.shared
     }
 
     private let _nextRouteSubject = ReplaySubject<LoginRouteAction>.create(bufferSize: 1)

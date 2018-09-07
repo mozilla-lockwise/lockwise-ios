@@ -9,7 +9,7 @@ import RxCocoa
 import Storage
 
 enum CredentialProviderStoreState {
-    case NotAllowed, Populating, Populated
+    case NotAllowed, Populating, Populated, Allowed
 }
 
 @available(iOS 12, *)
@@ -45,9 +45,7 @@ class CredentialProviderStore {
                 .disposed(by: self.disposeBag)
 
         self.credentialStore.getState { [weak self] state in
-            if !state.isEnabled {
-                self?._stateSubject.onNext(.NotAllowed)
-            }
+            self?._stateSubject.onNext(state.isEnabled ? .Allowed : .NotAllowed)
         }
     }
 }
