@@ -75,12 +75,15 @@ extension CredentialProviderStore {
     private func refresh() {
         self._stateSubject.onNext(.Populating)
 
-        let clearObservable = self.clearCredentialStore()
-                .asObservable()
-        
         let loginObservable = self.dataStore.list.filterEmpty()
 
-        Observable.combineLatest(clearObservable, loginObservable)
+        loginObservable.flatMap { logins -> Observable<(Void, [Login])> in
+                    let clearObservable = self.clearCredentialStore()
+                        .asObservable()
+                    let justLoginObservable = Observable.just(logins)
+
+                    return Observable.combineLatest(clearObservable, justLoginObservable)
+                }
                 .map { $0.1 }
                 .map { logins -> [ASPasswordCredentialIdentity] in
                     return logins.map { login -> ASPasswordCredentialIdentity in

@@ -19,6 +19,11 @@ class CredentialWelcomeView: UIViewController {
         super.viewDidLoad()
         self.presenter?.onViewReady()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.presenter?.onViewAppeared()
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

@@ -6,18 +6,6 @@ import Foundation
 
 class DataStore: BaseDataStore {
     public static let shared = DataStore()
-    
-    override func initialized() {
-        self.dispatcher.register
-                .filterByType(class: LifecycleAction.self)
-                .subscribe(onNext: { [weak self] action in
-                    switch action {
-                    case .foreground:
-                        self?.handleLock()
-                    default:
-                        break
-                    }
-                })
-                .disposed(by: self.disposeBag)
-    }
+
+    override func initialized() { }
 }

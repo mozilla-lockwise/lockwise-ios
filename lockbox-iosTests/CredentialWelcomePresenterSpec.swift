@@ -8,6 +8,7 @@ import Nimble
 import AuthenticationServices
 import RxSwift
 import RxCocoa
+import FxAClient
 
 @testable import Lockbox
 
@@ -63,8 +64,17 @@ class CredentialWelcomePresenterSpec: QuickSpec {
         }
     }
 
+    class FakeAccountStore: AccountStore {
+        let profileStub = PublishSubject<Profile?>()
+
+        override var profile: Observable<Profile?> {
+            return self.profileStub.asObservable()
+        }
+    }
+
     private var view: FakeCredentialProviderView!
     private var credentialProviderStore: FakeCredentialProviderStore!
+    private var accountStore: FakeAccountStore!
     private var dispatcher: FakeDispatcher!
     private var biometryManager: FakeBiometryManager!
 
@@ -75,52 +85,98 @@ class CredentialWelcomePresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeCredentialProviderView()
                 self.credentialProviderStore = FakeCredentialProviderStore()
+                self.accountStore = FakeAccountStore()
                 self.dispatcher = FakeDispatcher()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = CredentialWelcomePresenter(
                             view: self.view,
                             dispatcher: self.dispatcher,
+                            accountStore: self.accountStore,
                             credentialProviderStore: self.credentialProviderStore,
                             biometryManager: self.biometryManager
                         )
             }
 
-            describe("onViewReady") {
+            describe("onViewAppeared") {
                 beforeEach {
-                    self.subject.onViewReady()
+                    self.subject.onViewAppeared()
                 }
 
                 describe("displayAuthentication") {
-                    describe("when device authentication is available") {
+                    beforeEach {
+                        self.credentialProviderStore.displayAuthStub.onNext(true)
+                    }
+
+                    // can't construct profile :(
+                    xdescribe("when the profile has an email address") {
+                        let email = "dogs@dogs.com"
+
                         beforeEach {
-                            self.biometryManager.deviceAuthAvailableStub = true
-                            self.credentialProviderStore.displayAuthStub.onNext(true)
+                            //                                self.accountStore.profileStub.onNext(profile)
                         }
-
                         it("requests authentication") {
-                            expect(self.biometryManager.authMessage).notTo(beNil())
+                            expect(self.biometryManager.authMessage).to(equal(email))
                         }
 
-                        it("dispatches the unlock and authenticated actions when auth succeeds") {
-                            self.biometryManager.fakeAuthResponse.onNext(())
+                        describe("when device authentication is available") {
+                            beforeEach {
+                                self.biometryManager.deviceAuthAvailableStub = true
+                            }
 
-                            expect(self.dispatcher.dispatchedActions.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticated))
-                            expect(self.dispatcher.dispatchedActions.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
+                            it("dispatches the unlock and authenticated actions when auth succeeds") {
+                                self.biometryManager.fakeAuthResponse.onNext(())
+
+                                expect(self.dispatcher.dispatchedActions.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticated))
+                                expect(self.dispatcher.dispatchedActions.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
+                            }
+
+                            describe("when device authentication is not available") {
+                                beforeEach {
+                                    self.biometryManager.deviceAuthAvailableStub = false
+                                }
+
+                                it("does not request authentication; just unlocks and dispatches appropriate actions") {
+                                    expect(self.biometryManager.authMessage).to(beNil())
+
+                                    expect(self.dispatcher.dispatchedActions.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticated))
+                                    expect(self.dispatcher.dispatchedActions.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
+                                }
+                            }
                         }
                     }
 
-                    describe("when device authentication is available") {
-                        beforeEach {
-                            self.biometryManager.deviceAuthAvailableStub = false
-                            self.credentialProviderStore.displayAuthStub.onNext(true)
+                    describe("when the profile is nil") {
+                        describe("when device authentication is avaialable") {
+                            beforeEach {
+                                self.biometryManager.deviceAuthAvailableStub = true
+                                self.accountStore.profileStub.onNext(nil)
+                            }
+
+                            it("requests authentication") {
+                                expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                            }
+
+                            it("dispatches the unlock and authenticated actions when auth succeeds") {
+                                self.biometryManager.fakeAuthResponse.onNext(())
+
+                                expect(self.dispatcher.dispatchedActions.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticated))
+                                expect(self.dispatcher.dispatchedActions.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
+                            }
                         }
 
-                        it("does not request authentication; just unlocks and dispatches appropriate actions") {
-                            expect(self.biometryManager.authMessage).to(beNil())
+                        describe("when device authentication is not available") {
+                            beforeEach {
+                                self.biometryManager.deviceAuthAvailableStub = false
+                                self.accountStore.profileStub.onNext(nil)
+                            }
 
-                            expect(self.dispatcher.dispatchedActions.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticated))
-                            expect(self.dispatcher.dispatchedActions.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
+                            it("does not request authentication; just unlocks and dispatches appropriate actions") {
+                                expect(self.biometryManager.authMessage).to(beNil())
+
+                                expect(self.dispatcher.dispatchedActions.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticated))
+                                expect(self.dispatcher.dispatchedActions.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
+                            }
                         }
                     }
                 }

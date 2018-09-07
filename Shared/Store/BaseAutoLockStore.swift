@@ -77,6 +77,7 @@ extension BaseAutoLockStore {
 
             self.userDefaults.set(self.timer?.fireDate.timeIntervalSince1970,
                     forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+            self.userDefaults.synchronize()
         }
 
         paused = false

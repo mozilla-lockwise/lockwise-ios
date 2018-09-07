@@ -159,6 +159,7 @@ class BaseDataStore {
                         self.profile.syncManager?.applicationDidEnterBackground()
                     case .foreground:
                         self.profile.syncManager?.applicationDidBecomeActive()
+                        self.handleLock()
                     case .upgrade(let previous, _):
                         if previous <= 2 {
                             self.handleLock()
@@ -413,13 +414,13 @@ extension BaseDataStore {
             return
         }
         self.syncSubject.onNext(.ReadyToSync)
+
+        // default to locked state on initialized
+        self.storageStateSubject.onNext(.Locked)
         self.handleLock()
     }
 
     internal func handleLock() {
-        // default to locked state
-        self.storageStateSubject.onNext(.Locked)
-
         self.userDefaults.onAutoLockTime
                 .take(1)
                 .subscribe(onNext: { autoLockSetting in

@@ -12,6 +12,7 @@ class AutoLockStore: BaseAutoLockStore {
 
     override func initialized() {
         self.dataStore.locked
+            .skip(1)
             .subscribe(onNext: { [weak self] locked in
                 if locked {
                     self?.stopTimer()

@@ -128,9 +128,24 @@ class CredentialProviderStoreSpec: QuickSpec {
                     }
                 }
 
-                describe("when the credential store is enabled") {
+                describe("when the credential store is enabled and there is a populated logins list") {
+                    let guid1 = "fsdsdffds"
+                    let hostname1 = "http://www.mozilla.org"
+                    let username1 = "dogs@dogs.com"
+                    let password1 = "iluvcatz"
+                    let guid2 = "lgfdweolkfd"
+                    let hostname2 = "http://www.neopets.org"
+                    let username2 = "dogs@dogs.com"
+                    let password2 = "iwudnvrreusemypw"
+
+                    let logins: [Login] = [
+                        Login(guid: guid1, hostname: hostname1, username: username1, password: password1),
+                        Login(guid: guid2, hostname: hostname2, username: username2, password: password2)
+                    ]
+
                     beforeEach {
                         self.dispatcher.registerStub.onNext(CredentialProviderAction.refresh)
+                        self.dataStore.listStub.onNext(logins)
                     }
 
                     it("pushes populating and attempts to clear the credential store") {
@@ -143,47 +158,27 @@ class CredentialProviderStoreSpec: QuickSpec {
                             self.credentialIdentityStore.removeCompletion!(true, nil)
                         }
 
-                        describe("when the datastore pushes a list of logins") {
-                            let guid1 = "fsdsdffds"
-                            let hostname1 = "http://www.mozilla.org"
-                            let username1 = "dogs@dogs.com"
-                            let password1 = "iluvcatz"
-                            let guid2 = "lgfdweolkfd"
-                            let hostname2 = "http://www.neopets.org"
-                            let username2 = "dogs@dogs.com"
-                            let password2 = "iwudnvrreusemypw"
+                        it("passes converted ASPasswordCredentialIdentities to the ASCredentialIdentityStore") {
+                            let identity1 = self.credentialIdentityStore.credentialIdentities![0]
+                            let identity2 = self.credentialIdentityStore.credentialIdentities![1]
 
-                            let logins: [Login] = [
-                                Login(guid: guid1, hostname: hostname1, username: username1, password: password1),
-                                Login(guid: guid2, hostname: hostname2, username: username2, password: password2)
-                            ]
+                            expect(identity1.user).to(equal(username1))
+                            expect(identity1.recordIdentifier).to(equal(guid1))
+                            expect(identity1.serviceIdentifier.identifier).to(equal(hostname1))
+                            expect(identity2.user).to(equal(username2))
+                            expect(identity2.recordIdentifier).to(equal(guid2))
+                            expect(identity2.serviceIdentifier.identifier).to(equal(hostname2))
 
+                            expect(self.credentialIdentityStore.addCompletion).notTo(beNil())
+                        }
+
+                        describe("when the addition succeeds") {
                             beforeEach {
-                                self.dataStore.listStub.onNext(logins)
+                                self.credentialIdentityStore.addCompletion!(true, nil)
                             }
 
-                            it("passes converted ASPasswordCredentialIdentities to the ASCredentialIdentityStore") {
-                                let identity1 = self.credentialIdentityStore.credentialIdentities![0]
-                                let identity2 = self.credentialIdentityStore.credentialIdentities![1]
-
-                                expect(identity1.user).to(equal(username1))
-                                expect(identity1.recordIdentifier).to(equal(guid1))
-                                expect(identity1.serviceIdentifier.identifier).to(equal(hostname1))
-                                expect(identity2.user).to(equal(username2))
-                                expect(identity2.recordIdentifier).to(equal(guid2))
-                                expect(identity2.serviceIdentifier.identifier).to(equal(hostname2))
-
-                                expect(self.credentialIdentityStore.addCompletion).notTo(beNil())
-                            }
-
-                            describe("when the addition succeeds") {
-                                beforeEach {
-                                    self.credentialIdentityStore.addCompletion!(true, nil)
-                                }
-
-                                it("pushes populated") {
-                                    expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.Populated))
-                                }
+                            it("pushes populated") {
+                                expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.Populated))
                             }
                         }
                     }
