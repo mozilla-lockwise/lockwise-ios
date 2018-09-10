@@ -11,7 +11,7 @@ class Dispatcher {
     fileprivate let storeDispatchSubject = PublishSubject<Action>()
 
     open var register: Observable<Action> {
-        return self.storeDispatchSubject.asObservable().debug()
+        return self.storeDispatchSubject.asObservable()
     }
 
     open func dispatch(action: Action) {

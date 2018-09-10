@@ -67,8 +67,8 @@ class CredentialProviderPresenter {
                             self?.dispatcher.dispatch(action: DataStoreAction.lock)
                         }
                     }
-                default:
-                    break
+                case .userCanceled:
+                    self?.cancelWith(.userCanceled)
                 }
             })
             .disposed(by: self.disposeBag)

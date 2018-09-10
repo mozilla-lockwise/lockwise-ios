@@ -18,7 +18,7 @@ class CredentialStatusActionSpec: QuickSpec {
                 }
 
                 it("userCancelled is always equal") {
-                    expect(CredentialStatusAction.userCancelled).to(equal(CredentialStatusAction.userCancelled))
+                    expect(CredentialStatusAction.userCanceled).to(equal(CredentialStatusAction.userCanceled))
                 }
 
                 it("loginSelected is equalbased on login and relock values") {
@@ -32,7 +32,7 @@ class CredentialStatusActionSpec: QuickSpec {
                 }
 
                 it("different enum values are not equal") {
-                    expect(CredentialStatusAction.userCancelled).notTo(equal(CredentialStatusAction.extensionConfigured))
+                    expect(CredentialStatusAction.userCanceled).notTo(equal(CredentialStatusAction.extensionConfigured))
                 }
             }
         }

@@ -80,10 +80,14 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
                 return target.launchBiometrics(message: message)
             }
-            .bind { [weak self] _ in
-                self?.dispatcher.dispatch(action: DataStoreAction.unlock)
-                self?.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
-            }
+            .subscribe(
+                onNext: { [weak self] _ in
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    self?.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
+                }, onError: { [weak self] _ in
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+                }
+            )
             .disposed(by: self.disposeBag)
     }
 }

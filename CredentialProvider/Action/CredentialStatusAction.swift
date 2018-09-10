@@ -6,7 +6,7 @@ import Foundation
 import Storage
 
 enum CredentialStatusAction: Action {
-    case extensionConfigured, userCancelled, loginSelected(login: Login, relock: Bool)
+    case extensionConfigured, userCanceled, loginSelected(login: Login, relock: Bool)
 }
 
 extension CredentialStatusAction: Equatable {
@@ -14,7 +14,7 @@ extension CredentialStatusAction: Equatable {
         switch (lhs, rhs) {
         case (.extensionConfigured, .extensionConfigured):
             return true
-        case (.userCancelled, .userCancelled):
+        case (.userCanceled, .userCanceled):
             return true
         case (.loginSelected(let lhLogin, let lhRelock), .loginSelected(let rhLogin, let rhRelock)):
             return lhLogin == rhLogin && lhRelock == rhRelock
