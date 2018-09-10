@@ -126,6 +126,10 @@ class LockboxXCUITests: BaseTestCase {
             }
             group.wait()
         }
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            app.buttons["notNow.button"].tap()
+        }
         waitforExistence(app.buttons["finish.button"])
         app.buttons["finish.button"].tap()
 
