@@ -116,7 +116,7 @@ class BaseDataStore {
          profileFactory: @escaping ProfileFactory = defaultProfileFactory,
          fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard) {
+         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!) {
         self.profileFactory = profileFactory
         self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper

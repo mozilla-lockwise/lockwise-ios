@@ -84,14 +84,15 @@ class AccountStore: BaseAccountStore {
         self.dispatcher.register
                 .filterByType(class: LifecycleAction.self)
                 .subscribe(onNext: { [weak self] action in
-                    guard case let .upgrade(previous, _) = action else {
+                    guard case let .upgrade(previous, _) = action,
+                        let self = self else {
                         return
                     }
 
                     if previous <= 1 {
-                        self?._oauthInfo.onNext(nil)
-                        self?._profile.onNext(nil)
-                        self?._oldAccountPresence.accept(true)
+                        self._oauthInfo.onNext(nil)
+                        self._profile.onNext(nil)
+                        self._oldAccountPresence.accept(true)
                     }
                 })
                 .disposed(by: self.disposeBag)
