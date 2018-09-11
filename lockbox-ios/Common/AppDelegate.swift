@@ -9,7 +9,6 @@ import AdjustSdk
 import SwiftKeychainWrapper
 
 let PostFirstRunKey = "firstrun"
-public let isRunningTest = NSClassFromString("XCTestCase") != nil
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,18 +16,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
-                     launchOptions: [UIApplicationLaunchOptionsKey: Any]? = nil) -> Bool {
-        if !isRunningTest {
-            _ = AccountStore.shared
-            _ = DataStore.shared
-            _ = AutoLockStore.shared
-            _ = ExternalLinkStore.shared
+                     launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        _ = AccountStore.shared
+        _ = DataStore.shared
+        _ = AutoLockStore.shared
+        _ = ExternalLinkStore.shared
+        _ = UserDefaultStore.shared
+        if #available(iOS 12, *) {
+            _ = CredentialProviderStore.shared
         }
         return true
     }
 
     func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
 
         self.window?.rootViewController = RootView()
@@ -45,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !firstRun {
             self.checkForUpgrades()
         }
-        UserDefaults.standard.set(Constant.app.appVersionCode, forKey: UserDefaultKey.appVersionCode.rawValue)
+        UserDefaults.standard.set(Constant.app.appVersionCode, forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
         let navBarImage = UIImage.createGradientImage(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
@@ -57,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationBar.appearance().isTranslucent = true
             UINavigationBar.appearance().prefersLargeTitles = true
             UINavigationBar.appearance().largeTitleTextAttributes = [
-                NSAttributedStringKey.foregroundColor: UIColor.white
+                NSAttributedString.Key.foregroundColor: UIColor.white
             ]
         } else {
             UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
@@ -95,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate {
     func checkForUpgrades() {
         let current = Constant.app.appVersionCode
-        let previous = UserDefaults.standard.integer(forKey: UserDefaultKey.appVersionCode.rawValue)
+        let previous = UserDefaults.standard.integer(forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
         if previous < current {
             // At the moment, this can be quite simple, since we don't have many migrations,

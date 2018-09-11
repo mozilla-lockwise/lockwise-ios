@@ -31,7 +31,7 @@ class SettingListView: UIViewController {
 
         // Subscribe to Dynamic Type change events.
         NotificationCenter.default.rx
-            .notification(NSNotification.Name.UIContentSizeCategoryDidChange)
+            .notification(UIContentSizeCategory.didChangeNotification)
             .subscribe(onNext: { _ in self.tableView.tableFooterView?.setNeedsLayout() })
             .disposed(by: self.disposeBag)
     }
@@ -76,7 +76,7 @@ extension SettingListView {
                     reuseIdentifier: cellConfiguration.reuseIndicator)
 
                 cell.textLabel?.text = cellConfiguration.text
-                cell.selectionStyle = UITableViewCellSelectionStyle.none
+                cell.selectionStyle = UITableViewCell.SelectionStyle.none
                 cell.accessibilityCustomActions = cellConfiguration.accessibilityActions
                 cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
@@ -175,7 +175,7 @@ extension SettingListView {
         // Mark lockNow button for resize. Otherwise, while the container would have enough space, the text would still be truncated.
         self.lockNowButton.setNeedsLayout()
 
-        let height = footerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+        let height = footerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
         var frame = footerView.frame
         frame.size.height = height
         footerView.frame = frame
@@ -203,12 +203,12 @@ class SettingCellConfiguration {
         return "\(self.cellStyle.rawValue)-setting-cell"
     }
 
-    var cellStyle: UITableViewCellStyle {
+    var cellStyle: UITableViewCell.CellStyle {
         if self.subtitle != nil {
-            return UITableViewCellStyle.subtitle
+            return UITableViewCell.CellStyle.subtitle
         }
 
-        return UITableViewCellStyle.value1
+        return UITableViewCell.CellStyle.value1
     }
 }
 

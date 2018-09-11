@@ -106,16 +106,19 @@ class RouteActionSpec: QuickSpec {
                     expect(LoginRouteAction.welcome.eventObject).to(equal(TelemetryEventObject.loginWelcome))
                     expect(LoginRouteAction.fxa.eventObject).to(equal(TelemetryEventObject.loginFxa))
                     expect(LoginRouteAction.onboardingConfirmation.eventObject).to(equal(TelemetryEventObject.loginOnboardingConfirmation))
+                    expect(LoginRouteAction.autofillOnboarding.eventObject).to(equal(TelemetryEventObject.autofillOnboarding))
                 }
 
                 it("returns nil as the value") {
                     expect(LoginRouteAction.welcome.value).to(beNil())
                     expect(LoginRouteAction.fxa.value).to(beNil())
+                    expect(LoginRouteAction.autofillOnboarding.value).to(beNil())
                 }
 
                 it("returns nil as for the extras") {
                   expect(LoginRouteAction.welcome.extras).to(beNil())
                   expect(LoginRouteAction.fxa.extras).to(beNil())
+                  expect(LoginRouteAction.autofillOnboarding.extras).to(beNil())
                 }
             }
         }

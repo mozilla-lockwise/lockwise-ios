@@ -42,7 +42,7 @@ class AccountSettingViewSpec: QuickSpec {
         describe("AccountSettingView") {
             beforeEach {
                 self.subject = UIStoryboard(name: "AccountSetting", bundle: nil)
-                        .instantiateViewController(withIdentifier: "accountsetting") as! AccountSettingView
+                        .instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView
 
                 self.presenter = FakeAccountSettingPresenter(view: self.subject)
                 self.presenter.unlinkAccountStub = self.scheduler.createObserver(Void.self)
@@ -91,15 +91,15 @@ class AccountSettingViewSpec: QuickSpec {
 
             describe("bind(avatarImageData)") {
                 let avatarImage = UIImage(named: "confirm")!
-                let dataFromPlaceholder = UIImagePNGRepresentation(UIImage(named: "avatar-placeholder")!)
+                let dataFromPlaceholder = UIImage(named: "avatar-placeholder")?.pngData()
 
                 beforeEach {
-                    let dataFromImage = UIImagePNGRepresentation(avatarImage)!
+                    let dataFromImage = avatarImage.pngData()!
                     self.subject.bind(avatarImage: Driver.just(dataFromImage))
                 }
 
                 it("changes the image to not have the placeholder") {
-                    expect(UIImagePNGRepresentation(self.subject.avatarImageView.image!)).notTo(equal(dataFromPlaceholder))
+                    expect(self.subject.avatarImageView.image!.pngData()).notTo(equal(dataFromPlaceholder))
                 }
             }
         }
