@@ -169,8 +169,11 @@ class LockboxXCUITests: BaseTestCase {
     func test6SortEntries() {
         navigator.goto(Screen.LockboxMainPage)
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"], timeout: 10)
-        navigator.goto(Screen.SortEntriesMenu)
-        navigator.performAction(Action.SelectRecentOrder)
+        // Checking if doing the steps directly works on bb
+        waitforExistence(app.buttons["sorting.button"])
+        app.buttons["sorting.button"].tap()
+        waitforExistence(app.buttons["Recently Used"])
+        app.buttons["Recently Used"].tap()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
@@ -178,9 +181,10 @@ class LockboxXCUITests: BaseTestCase {
         // Disable the label check until BB failure is not present
         let firstCellRecent = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellRecent, "wopr.norad.org")
-        navigator.goto(Screen.SortEntriesMenu)
-        navigator.performAction(Action.SelectAlphabeticalOrder)
 
+        app.buttons["sorting.button"].tap()
+        waitforExistence(app.buttons["Alphabetically"])
+        app.buttons["Alphabetically"].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
