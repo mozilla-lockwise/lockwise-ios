@@ -323,8 +323,13 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         describe("when device authentication is available") {
+                            it("starts authentication") {
+                                expect(self.biometryManager.authMessage).to(equal(email))
+                            }
+
                             describe("foregrounding actions") {
                                 beforeEach {
+                                    self.biometryManager.authMessage = nil
                                     self.lifecycleStore.fakeCycle.onNext(LifecycleAction.foreground)
                                 }
 
@@ -356,6 +361,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                             describe("pressing the biometrics button") {
                                 beforeEach {
+                                    self.biometryManager.authMessage = nil
                                     self.view.fakeUnlockButtonPress.onNext(())
                                 }
 
