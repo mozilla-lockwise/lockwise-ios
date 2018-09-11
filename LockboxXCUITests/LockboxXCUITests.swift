@@ -41,7 +41,7 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
         navigator.performAction(Action.FxATypePassword)
-        sleep(10)
+        // Lets try to remove this sleep(10) and see if the tests consistently pass
         // Check if the account is verified and if not, verify it
         checkIfAccountIsVerified()
 
@@ -121,7 +121,7 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-        waitforExistence(safari.buttons["URL"], timeout: 5)
+        waitforExistence(safari.buttons["URL"], timeout: 10)
         waitForValueContains(safari.buttons["URL"], value: "accounts")
 
         app.launch()
@@ -139,10 +139,17 @@ class LockboxXCUITests: BaseTestCase {
         // And, connect it again
         waitforExistence(app.buttons["getStarted.button"])
         app.buttons["getStarted.button"].tap()
+        userState.fxaUsername =  emailTestAccountLogins
         userState.fxaPassword = passwordTestAccountLogins
-        waitforExistence(app.staticTexts[emailTestAccountLogins], timeout: 10)
-        navigator.nowAt(Screen.FxASigninScreenPassword)
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.nowAt(Screen.FxASigninScreenEmail)
+        navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATypePassword)
+
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            app.buttons["notNow.button"].tap()
+        }
         waitforExistence(app.buttons["finish.button"], timeout: 10)
         app.buttons["finish.button"].tap()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
