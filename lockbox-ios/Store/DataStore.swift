@@ -7,6 +7,8 @@ import Foundation
 class DataStore: BaseDataStore {
     public static let shared = DataStore()
 
+    override func initialized() { }
+
     override func unlock() {
         func performUnlock() {
             self.storageStateSubject.onNext(.Unlocked)

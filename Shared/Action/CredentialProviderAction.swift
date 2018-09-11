@@ -6,5 +6,5 @@ import Foundation
 import AuthenticationServices
 
 enum CredentialProviderAction: Action {
-    case refresh
+    case refresh, authenticationRequested, authenticated
 }

@@ -3,7 +3,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Storage
 
 enum CredentialStatusAction: Action {
-    case extensionConfigured
+    case extensionConfigured, userCanceled, loginSelected(login: Login, relock: Bool)
+}
+
+extension CredentialStatusAction: Equatable {
+    static func ==(lhs: CredentialStatusAction, rhs: CredentialStatusAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.extensionConfigured, .extensionConfigured):
+            return true
+        case (.userCanceled, .userCanceled):
+            return true
+        case (.loginSelected(let lhLogin, let lhRelock), .loginSelected(let rhLogin, let rhRelock)):
+            return lhLogin == rhLogin && lhRelock == rhRelock
+        default:
+            return false
+        }
+    }
 }

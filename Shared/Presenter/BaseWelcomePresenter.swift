@@ -47,9 +47,5 @@ extension BaseWelcomePresenter {
         }
 
         return self.biometryManager.authenticateWithMessage(message)
-            .catchError { _ in
-                // ignore errors from local authentication
-                return Observable.never().asSingle()
-        }
     }
 }

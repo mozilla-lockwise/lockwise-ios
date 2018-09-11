@@ -95,7 +95,6 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
-            .debug()
             .subscribe(onNext: { storageState in
                 switch storageState {
                 case .Unprepared, .Locked:
@@ -110,7 +109,6 @@ class RootPresenter {
             .disposed(by: self.disposeBag)
 
         Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
-            .debug()
             .filter { $0.1 == LoginStoreState.Unprepared }
             .map { $0.0 }
             .distinctUntilChanged()

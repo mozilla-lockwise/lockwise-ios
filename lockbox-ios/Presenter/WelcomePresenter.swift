@@ -151,6 +151,10 @@ extension WelcomePresenter {
                     }
 
                     return target.launchBiometrics(message: latest?.email ?? Constant.string.unlockPlaceholder)
+                        .catchError { _ in
+                            // ignore errors from local authentication
+                            return Observable.never().asSingle()
+                        }
                 }
                 .subscribe(onNext: { [weak self] _ in
                     self?.dispatcher.dispatch(action: DataStoreAction.unlock)

@@ -5,15 +5,17 @@
 import Foundation
 import AuthenticationServices
 import RxSwift
+import FxAClient
 import RxCocoa
 
-protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView, StatusAlertView { }
+protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView { }
 
+@available(iOS 12, *)
 class CredentialWelcomePresenter: BaseWelcomePresenter {
     private weak var view: CredentialWelcomeViewProtocol? {
         return self.baseView as? CredentialWelcomeViewProtocol
     }
-    
+
     private let credentialProviderStore: CredentialProviderStore
 
     private var okButtonObserver: AnyObserver<Void> {
@@ -21,7 +23,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
             self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
         }.asObserver()
     }
-    
+
     init(view: BaseWelcomeViewProtocol,
                   dispatcher: Dispatcher = .shared,
                   accountStore: AccountStore = .shared,
@@ -41,34 +43,72 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
     override func onViewReady() {
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-            .take(1)
-            .subscribe(onNext: { latest in
-            if latest.0 == nil && latest.1 == nil {
-                self.displayNotLoggedInMessage()
-            } else {
-                self.populateCredentials()
-            }
-        }).disposed(by: self.disposeBag)
-        
+                .take(1)
+                .subscribe(onNext: { latest in
+                    if latest.0 == nil && latest.1 == nil {
+                        self.displayNotLoggedInMessage()
+                    } else {
+                        self.populateCredentials()
+                    }
+                }).disposed(by: self.disposeBag)
+
+        self.credentialProviderStore.state
+                .asDriver(onErrorJustReturn: .NotAllowed)
+                .filter { $0 == CredentialProviderStoreState.Populating }
+                .drive(onNext: { [weak self] _ in
+                    self?.populateCredentials()
+                })
+                .disposed(by: self.disposeBag)
     }
 
+    func onViewAppeared() {
+        self.credentialProviderStore.displayAuthentication
+            .filter { $0 }
+            .flatMap { [weak self] _ -> Observable<Profile?> in
+                guard let accountStore = self?.accountStore else {
+                    return Observable.just(nil)
+                }
+
+                return accountStore.profile
+            }
+            .flatMap { [weak self] profile -> Single<Void> in
+                guard let target = self else {
+                    return Observable.never().asSingle()
+                }
+
+                let message = profile?.email ?? Constant.string.unlockPlaceholder
+
+                return target.launchBiometrics(message: message)
+            }
+            .subscribe(
+                onNext: { [weak self] _ in
+                    self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    self?.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
+                }, onError: { [weak self] _ in
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+                }
+            )
+            .disposed(by: self.disposeBag)
+    }
+}
+
+@available(iOS 12, *)
+extension CredentialWelcomePresenter {
     private func displayNotLoggedInMessage() {
         view?.displayAlertController(
-            buttons: [AlertActionButtonConfiguration(
-                title: Constant.string.ok,
-                tapObserver: self.okButtonObserver,
-                style: UIAlertAction.Style.default)],
-            title: Constant.string.signInRequired,
-            message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
-            style: .alert)
+                buttons: [AlertActionButtonConfiguration(
+                        title: Constant.string.ok,
+                        tapObserver: self.okButtonObserver,
+                        style: UIAlertAction.Style.default)],
+                title: Constant.string.signInRequired,
+                message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
+                style: .alert)
     }
 
     private func populateCredentials() {
-        self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
-
         let populated = self.credentialProviderStore.state
-            .filter { $0 == CredentialProviderStoreState.Populated }
-            .map { _ -> Void in return () }
+                .filter { $0 == CredentialProviderStoreState.Populated }
+                .map { _ -> Void in return () }
 
         self.credentialProviderStore.state
                 .asDriver(onErrorJustReturn: CredentialProviderStoreState.NotAllowed)
@@ -85,8 +125,8 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
         populated
                 .delay(Constant.number.displayStatusAlertLength, scheduler: MainScheduler.instance)
-                .subscribe{ _ in
-                    self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
+                .subscribe{ [weak self] _ in
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
                 }
                 .disposed(by: self.disposeBag)
 

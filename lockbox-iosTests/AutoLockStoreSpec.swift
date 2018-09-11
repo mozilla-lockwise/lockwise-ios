@@ -89,45 +89,6 @@ class AutoLockStoreSpec: QuickSpec {
                 }
             }
 
-            describe("onLock setting changed") {
-                describe("to unlock") {
-                    describe("auto lock timer is a time interval") {
-                        beforeEach {
-                            self.dataStore.lockedStub.onNext(true)
-                            self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
-                            self.dataStore.lockedStub.onNext(false)
-                        }
-
-                        it("sets the timer") {
-                            expect(self.subject.timer).toNot(beNil())
-                        }
-
-                        it("sets the timer value from user defaults") {
-                            expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).toNot(beNil())
-                        }
-                    }
-
-                    it("doesn't set timer for Setting.AutoLock.Never") {
-                        self.dataStore.lockedStub.onNext(true)
-                        self.userDefaults.set(Setting.AutoLock.Never.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
-                        self.dataStore.lockedStub.onNext(false)
-                        expect(self.subject.timer?.isValid).to(beFalsy())
-                        expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
-                    }
-                }
-
-                describe("to lock") {
-                    beforeEach {
-                        self.dataStore.lockedStub.onNext(true)
-                    }
-
-                    it("stops the timer") {
-                        expect(self.subject.timer?.isValid).to(beFalsy())
-                        expect(self.userDefaults.value(forKey: UserDefaultKey.autoLockTimerDate.rawValue)).to(beNil())
-                    }
-                }
-            }
-
             describe("on any user interaction") {
                 var fireDate: TimeInterval?
 
