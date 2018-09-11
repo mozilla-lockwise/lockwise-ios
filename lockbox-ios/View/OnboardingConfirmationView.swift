@@ -56,13 +56,13 @@ extension OnboardingConfirmationView {
             let text = NSMutableAttributedString(string: encryptionText)
             let range = text.mutableString.range(of: Constant.string.onboardingSecurityPostfix)
             text.addAttributes([
-                NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15.0)
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0)
             ], range: NSMakeRange(0, text.length)) // swiftlint:disable:this legacy_constructor
 
             text.addAttributes(
                     [
-                        NSAttributedStringKey.link: NSString(string: Constant.app.securityFAQ),
-                        NSAttributedStringKey.foregroundColor: Constant.color.lockBoxBlue
+                        NSAttributedString.Key.link: NSString(string: Constant.app.securityFAQ),
+                        NSAttributedString.Key.foregroundColor: Constant.color.lockBoxBlue
                     ],
                     range: range
             )

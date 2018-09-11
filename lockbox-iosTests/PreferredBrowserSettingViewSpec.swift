@@ -67,9 +67,9 @@ class PreferredBrowserSettingViewSpec: QuickSpec {
             it("configures table view based on model") {
                 expect(self.subject.tableView.numberOfSections).to(equal(1))
                 expect(self.subject.tableView.numberOfRows(inSection: 0)).to(equal(3))
-                expect(self.subject.tableView.cellForRow(at: IndexPath(row: 1, section: 0))?.accessoryType).to(equal(UITableViewCellAccessoryType.checkmark))
-                expect(self.subject.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.accessoryType).to(equal(UITableViewCellAccessoryType.none))
-                expect(self.subject.tableView.cellForRow(at: IndexPath(row: 2, section: 0))?.accessoryType).to(equal(UITableViewCellAccessoryType.none))
+                expect(self.subject.tableView.cellForRow(at: IndexPath(row: 1, section: 0))?.accessoryType).to(equal(UITableViewCell.AccessoryType.checkmark))
+                expect(self.subject.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.accessoryType).to(equal(UITableViewCell.AccessoryType.none))
+                expect(self.subject.tableView.cellForRow(at: IndexPath(row: 2, section: 0))?.accessoryType).to(equal(UITableViewCell.AccessoryType.none))
                 expect(self.subject.tableView.cellForRow(at: IndexPath(row: 2, section: 0))?.isUserInteractionEnabled).to(beFalse())
                 expect(self.subject.tableView.cellForRow(at: IndexPath(row: 2, section: 0))?.textLabel?.isEnabled).to(beFalse())
             }

@@ -103,18 +103,9 @@ class RootPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        let lockedSubject: PublishSubject<Bool>
-        let syncSubject: PublishSubject<SyncState>
-        let storageStateSubject: PublishSubject<LoginStoreState>
-
-        init() {
-            self.lockedSubject = PublishSubject<Bool>()
-            self.syncSubject = PublishSubject<SyncState>()
-            self.storageStateSubject = PublishSubject<LoginStoreState>()
-            super.init()
-
-            self.disposeBag = DisposeBag()
-        }
+        let lockedSubject = PublishSubject<Bool>()
+        let syncSubject = PublishSubject<SyncState>()
+        let storageStateStub = PublishSubject<LoginStoreState>()
 
         override var locked: Observable<Bool> {
             return self.lockedSubject.asObservable()
@@ -125,7 +116,7 @@ class RootPresenterSpec: QuickSpec {
         }
 
         override var storageState: Observable<LoginStoreState> {
-            return self.storageStateSubject.asObservable()
+            return self.storageStateStub.asObservable()
         }
     }
 
@@ -259,7 +250,7 @@ class RootPresenterSpec: QuickSpec {
 
             describe("when the datastore is locked") {
                 beforeEach {
-                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Locked)
+                    self.dataStore.storageStateStub.onNext(LoginStoreState.Locked)
                 }
 
                 it("routes to the welcome screen") {
@@ -270,10 +261,12 @@ class RootPresenterSpec: QuickSpec {
 
             describe("when the datastore is unlocked") {
                 beforeEach {
-                    self.dataStore.storageStateSubject.onNext(LoginStoreState.Unlocked)
+                    self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                 }
 
-                it("routes to the list") {
+                it("routes to the list and refreshes the credential provider store") {
+                    let credArg = self.dispatcher.dispatchActionArgument.popLast() as! CredentialProviderAction
+                    expect(credArg).to(equal(CredentialProviderAction.refresh))
                     let arg = self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction
                     expect(arg).to(equal(MainRouteAction.list))
                 }
@@ -421,6 +414,50 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
+
+                        describe(".autofillOnboarding") {
+                            describe("if the top view is not already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.autofillOnboarding)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("does not start the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("checks for the autofillOnboarding & tells the view to show the autofillOnboarding") {
+                                    expect(self.view.topViewIsArgument === AutofillOnboardingView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.autofillOnboarding))
+                                }
+                            }
+
+                            describe("if the top view is already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.autofillOnboarding)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("does not start the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument).to(beNil())
+                                }
+
+                                it("checks for the FxAView & nothing happens") {
+                                    expect(self.view.topViewIsArgument === AutofillOnboardingView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                }
+                            }
+                        }
                     }
 
                     describe("if the login stack is not already displayed") {
@@ -535,6 +572,50 @@ class RootPresenterSpec: QuickSpec {
                                 it("checks for the onboardingconfirmationview & tells the view to show the it") {
                                     expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
                                     expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.onboardingConfirmation))
+                                }
+                            }
+
+                            describe("if the top view is already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.onboardingConfirmation)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the onboardingconfimrationview & nothing happens") {
+                                    expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                }
+                            }
+                        }
+
+                        describe(".autofillOnboarding") {
+                            describe("if the top view is not already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.autofillOnboarding)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the autofillOnboadingView & tells the view to show the it") {
+                                    expect(self.view.topViewIsArgument === AutofillOnboardingView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.autofillOnboarding))
                                 }
                             }
 

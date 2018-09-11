@@ -21,9 +21,9 @@ class CopyDisplayStoreSpec: QuickSpec {
 
     class FakePasteboard: UIPasteboard {
         var passedItems: [[String: Any]]?
-        var options: [UIPasteboardOption: Any]?
+        var options: [UIPasteboard.OptionsKey: Any]?
 
-        override func setItems(_ items: [[String: Any]], options: [UIPasteboardOption: Any]) {
+        override func setItems(_ items: [[String: Any]], options: [UIPasteboard.OptionsKey: Any]) {
             self.passedItems = items
             self.options = options
         }
@@ -60,8 +60,8 @@ class CopyDisplayStoreSpec: QuickSpec {
                 it("adds the item to the pasteboard with item and timeout option") {
                     let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
 
-                    expect(self.pasteboard.passedItems![0][UIPasteboardTypeAutomatic] as? String).to(equal(text))
-                    expect(self.pasteboard.options![UIPasteboardOption.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
+                    expect(self.pasteboard.passedItems![0][UIPasteboard.typeAutomatic] as? String).to(equal(text))
+                    expect(self.pasteboard.options![UIPasteboard.OptionsKey.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
                 }
 
                 it("pushes the copied field") {

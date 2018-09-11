@@ -52,7 +52,7 @@ class ItemDetailViewSpec: QuickSpec {
         describe("ItemDetailView") {
             beforeEach {
                 let sb = UIStoryboard(name: "ItemDetail", bundle: nil)
-                self.subject = sb.instantiateViewController(withIdentifier: "itemdetailview") as! ItemDetailView
+                self.subject = sb.instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView
                 self.presenter = FakeItemDetailPresenter(view: self.subject)
 
                 self.subject.presenter = self.presenter

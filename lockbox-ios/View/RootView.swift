@@ -11,22 +11,22 @@ class RootView: UIViewController, RootViewProtocol {
     private var currentViewController: UINavigationController? {
         didSet {
             if let currentViewController = self.currentViewController {
-                self.addChildViewController(currentViewController)
+                self.addChild(currentViewController)
                 currentViewController.view.frame = self.view.bounds
                 self.view.addSubview(currentViewController.view)
-                currentViewController.didMove(toParentViewController: self)
+                currentViewController.didMove(toParent: self)
 
                 if oldValue != nil {
-                    self.view.sendSubview(toBack: currentViewController.view)
+                    self.view.sendSubviewToBack(currentViewController.view)
                 }
             }
 
             guard let oldViewController = oldValue else {
                 return
             }
-            oldViewController.willMove(toParentViewController: nil)
+            oldViewController.willMove(toParent: nil)
             oldViewController.view.removeFromSuperview()
-            oldViewController.removeFromParentViewController()
+            oldViewController.removeFromParent()
         }
     }
 
@@ -87,6 +87,10 @@ class RootView: UIViewController, RootViewProtocol {
         case .onboardingConfirmation:
             if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
                 self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
+            }
+        case .autofillOnboarding:
+            if let autofillOnboardingView = UIStoryboard(name: "AutofillOnboarding", bundle: nil).instantiateViewController(withIdentifier: "autofillonboarding") as? AutofillOnboardingView {
+                self.currentViewController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
             }
         }
     }

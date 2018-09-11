@@ -44,6 +44,11 @@ class LockboxXCUITests: BaseTestCase {
         sleep(10)
         // Check if the account is verified and if not, verify it
         checkIfAccountIsVerified()
+
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            app.buttons["notNow.button"].tap()
+        }
         waitforExistence(app.buttons["finish.button"])
         app.buttons["finish.button"].tap()
 

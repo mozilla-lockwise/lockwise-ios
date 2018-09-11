@@ -50,7 +50,7 @@ extension SettingAction: TelemetryAction {
         case .reset:
             return nil
         }
-  }
+    }
 
     var extras: [String: Any?]? {
         return nil
@@ -76,42 +76,33 @@ extension SettingAction: Equatable {
     }
 }
 
-class Setting {
+extension Setting.AutoLock {
+    func toString() -> String {
+        switch self {
+        case .OneMinute:
+            return Constant.string.autoLockOneMinute
+        case .FiveMinutes:
+            return Constant.string.autoLockFiveMinutes
+        case .FifteenMinutes:
+            return Constant.string.autoLockFifteenMinutes
+        case .ThirtyMinutes:
+            return Constant.string.autoLockThirtyMinutes
+        case .OneHour:
+            return Constant.string.autoLockOneHour
+        case .TwelveHours:
+            return Constant.string.autoLockTwelveHours
+        case .TwentyFourHours:
+            return Constant.string.autoLockTwentyFourHours
+        case .Never:
+            return Constant.string.autoLockNever
+        }
+    }
+}
+
+extension Setting {
     enum ItemListSort: String {
         case alphabetically
         case recentlyUsed
-    }
-
-    enum AutoLock: String {
-        case OneMinute
-        case FiveMinutes
-        case FifteenMinutes
-        case ThirtyMinutes
-        case OneHour
-        case TwelveHours
-        case TwentyFourHours
-        case Never
-
-        func toString() -> String {
-            switch self {
-            case .OneMinute:
-                return Constant.string.autoLockOneMinute
-            case .FiveMinutes:
-                return Constant.string.autoLockFiveMinutes
-            case .FifteenMinutes:
-                return Constant.string.autoLockFifteenMinutes
-            case .ThirtyMinutes:
-                return Constant.string.autoLockThirtyMinutes
-            case .OneHour:
-                return Constant.string.autoLockOneHour
-            case .TwelveHours:
-                return Constant.string.autoLockTwelveHours
-            case .TwentyFourHours:
-                return Constant.string.autoLockTwentyFourHours
-            case .Never:
-                return Constant.string.autoLockNever
-            }
-        }
     }
 
     enum PreferredBrowser: String {

@@ -35,7 +35,7 @@ class ItemListPresenterSpec: QuickSpec {
             sortingButtonTitle.drive(sortingButtonTitleObserver).disposed(by: self.disposeBag)
         }
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
             self.displayOptionSheetButtons = buttons
             self.displayOptionSheetTitle = title
         }
@@ -52,7 +52,7 @@ class ItemListPresenterSpec: QuickSpec {
             return self.tableViewScrollObserver.asObserver()
         }
 
-        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
+        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag, message: String, completionMessage: String) {
             self.displaySpinnerCalled = true
             dismiss.drive(self.dismissSpinnerObserver).disposed(by: bag)
         }
