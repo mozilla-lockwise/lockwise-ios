@@ -146,7 +146,7 @@ class CredentialWelcomePresenterSpec: QuickSpec {
                         }
                     }
 
-                    describe("when the profile is nil") {
+                    xdescribe("when the profile is nil") {
                         describe("when device authentication is avaialable") {
                             beforeEach {
                                 self.biometryManager.deviceAuthAvailableStub = true
