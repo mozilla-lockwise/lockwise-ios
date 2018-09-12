@@ -16,9 +16,6 @@
 
 2. **Enable AutoFill** (locked app): does prompt for biometrics, show spinner screen
 
-  - first try: does prompt
-  - disable and re-enable second time: double biometrics prompt weirdness
-
 3. **Enable AutoFill** (unlocked app): does not prompt for biometrics, show spinner screen
 
 4. **Enable AutoFill then cancel biometrics**: does prompt then take back to settings
@@ -36,10 +33,5 @@
 10. **QTB tap into entry list** (unlocked): does not prompt for biometrics
 
 11. **QTB tap into entry list** (locked): does prompt for biometrics
-
-  - Twitter app: double biometrics prompt
-  - Twitter app: do it a second time: entry list and app are unlocked
-  - Safari app: double biometrics prompt
-  - Safari app: double biometrics prompt: entry list and app are still locked
 
 12. **Cancel QTB tap-to-fill** (locked): does prompt for biometrics then go back to app/website
