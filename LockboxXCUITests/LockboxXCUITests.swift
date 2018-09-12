@@ -6,6 +6,7 @@ import XCTest
 
 let emailTestAccountLogins = "test-b62feb2ed6@restmail.net"
 let passwordTestAccountLogins = "FRCuQaPm"
+let testingURL = "https://wopr.norad.org/~sarentz/fxios/testpages/password.html"
 
 var uid: String!
 var code: String!
@@ -134,17 +135,7 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
 
         // Now disconnect the account
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-
-        // And, connect it again
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        userState.fxaUsername =  emailTestAccountLogins
-        userState.fxaPassword = passwordTestAccountLogins
-        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-        navigator.nowAt(Screen.FxASigninScreenEmail)
-        navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATypePassword)
+        disconnectAndConnectAccount()
 
         if #available(iOS 12.0, *) {
             waitforExistence(app.buttons["setupAutofill.button"])
@@ -257,5 +248,67 @@ class LockboxXCUITests: BaseTestCase {
         // The app version option exists and it is not empty
         XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
         XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
+    }
+
+    // Verify SetAutofillNow
+    func testSetAutofillNow() {
+        // Disconnect account
+        disconnectAndConnectAccount()
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            app.buttons["setupAutofill.button"].tap()
+        }
+        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
+    }
+
+    // Once app is open
+    func testSetAutofillSettings() {
+        // Open Setting to add Lockbox
+        navigator.goto(Screen.SettingsMenu)
+        navigator.performAction(Action.OpenDeviceSettings)
+        // Wait until settings app is open
+        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
+        // Configure Passwords & Accounts settings
+        settingsApp.cells.staticTexts["Passwords & Accounts"].tap()
+        settingsApp.cells.staticTexts["AutoFill Passwords"].tap()
+        settingsApp.switches["AutoFill Passwords"].tap()
+        waitforExistence(settingsApp.cells.staticTexts["Lockbox"])
+        settingsApp.cells.staticTexts["Lockbox"].tap()
+        // Wait until the app is updated
+        sleep(5)
+        settingsApp.terminate()
+
+        // Open Safari
+        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        safari.launch()
+        waitforExistence(safari.buttons["URL"], timeout: 5)
+        safari.buttons["URL"].tap()
+        safari.textFields["URL"].typeText(testingURL)
+        safari.textFields["URL"].typeText("\r")
+        waitforExistence(safari.textFields["test@example.com"])
+        safari.textFields["test@example.com"].tap()
+        // Need to confirm what is shown here, different elements have appeared and
+        if (safari.otherElements["Password Auto-fill"].exists) {
+            safari.otherElements["Password Auto-fill"].tap()
+        }
+        safari.buttons["Use “test@example.com”"].tap()
+        // Once previous is clear we can assert that the element shown is correct
+        //XCTAssertTrue(safari.buttons["iosmztest@gmail.com, for this website — Lockbox"].exists)
+        safari.terminate()
+    }
+
+    private func disconnectAndConnectAccount() {
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        // And, connect it again
+        waitforExistence(app.buttons["getStarted.button"])
+        app.buttons["getStarted.button"].tap()
+        userState.fxaUsername =  emailTestAccountLogins
+        userState.fxaPassword = passwordTestAccountLogins
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.nowAt(Screen.FxASigninScreenEmail)
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATypePassword)
     }
 }

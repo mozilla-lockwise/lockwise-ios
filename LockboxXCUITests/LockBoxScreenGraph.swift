@@ -35,6 +35,7 @@ class Action {
 
     static let LockNow = "LockNow"
     static let SendUsageData = "SendUsageData"
+    static let OpenDeviceSettings = "OpenDeviceSettings"
 
     static let DisconnectFirefoxLockbox = "DisconnectFirefoxLockbox"
     static let DisconnectFirefoxLockboxCancel = "DisconnectFirefoxLockboxCancel"
@@ -136,6 +137,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.SendUsageData) { userState in
             app.switches["sendUsageData.switch"].tap()
+        }
+
+        screenState.gesture(forAction: Action.OpenDeviceSettings) { userState in
+            app.cells["autoFillSettingsOption"].tap()
+
         }
 
         screenState.gesture(forAction: Action.LockNow) { userState in
