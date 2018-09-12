@@ -31,101 +31,20 @@ class LockboxXCUITests: BaseTestCase {
         super.setUp()
     }
 
-    private func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
-        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
-        let restUrl = URL(string: postEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-
-        request.httpMethod = "POST"
-
-        let jsonObject: [String: Any] = ["uid": uid, "code":code]
-        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
-        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-        if let json = json {
-            print("json \(json)")
-        }
-        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
-
-        request.httpBody = jsonData
-        print("json \(jsonData!)")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("error:", error)
-                return
-            }
-            done()
-        }
-        task.resume()
-    }
-
-    private func verifyAccount(done: @escaping () -> ()) {
-        // GET to EndPoint/mail/test-9876@restmail.net
-        let restUrl = URL(string: getEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.httpMethod = "GET"
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if(error != nil) {
-                print("Error: \(error ?? "Get Error" as! Error)")
-            }
-            let responseString = String(data: data!, encoding: .utf8)
-            print("responseString = \(String(describing: responseString))")
-
-            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
-            let regexCode = "(code=[a-z0-9]{0,32}$?)"
-
-            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
-                uid = String(responseString![rangeUid])
-            }
-            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
-                code = String(responseString![rangeCode])
-            }
-
-            if let code = code,
-                let uid = uid {
-                let codeNumber = self.getPostValues(value: code)
-                let uidNumber = self.getPostValues(value: uid)
-
-                self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
-                    done()
-                }
-            } else {
-                done()
-            }
-        }
-        task.resume()
-    }
-
-    private func getPostValues(value: String) -> String {
-        // From the regExp it is necessary to get only the number to add it to a json and send in POST request
-        let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
-        let numberValue = value[finalNumberIndex...];
-        return String(numberValue)
-    }
-
     func test0LoginSuccessfully() {
         snapshot("01Welcome" + CONTENT_SIZE)
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = "test-b62feb2ed6@restmail.net"
         navigator.goto(Screen.FxASigninScreenEmail)
         waitforExistence(app.navigationBars["Lockbox.FxAView"])
-        waitforExistence(app.webViews.textFields["Email"])
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
         navigator.performAction(Action.FxATypePassword)
-        sleep(10)
+        // Lets try to remove this sleep(10) and see if the tests consistently pass
         // Check if the account is verified and if not, verify it
-        if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
-            let group = DispatchGroup()
-            group.enter()
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.verifyAccount() {
-                    group.leave()
-                }
-            }
-            group.wait()
-        }
+        checkIfAccountIsVerified()
+
         if #available(iOS 12.0, *) {
             waitforExistence(app.buttons["setupAutofill.button"])
             app.buttons["notNow.button"].tap()
@@ -148,10 +67,8 @@ class LockboxXCUITests: BaseTestCase {
 
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
-        // Some checks can be done here to be sure the Account UI is fine
-        // To be uncommented once it is sure they appear, now it is not consistent in all run
-        //XCTAssertTrue(app.images["avatar-placeholder"].exists, "The image placeholder does not appear")
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
+        XCTAssertEqual(app.staticTexts["username.Label"].label, emailTestAccountLogins)
         XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
     }
 
@@ -204,8 +121,7 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-
-        let urlValue = safari.buttons["URL"].value as! String
+        waitforExistence(safari.buttons["URL"], timeout: 10)
         waitForValueContains(safari.buttons["URL"], value: "accounts")
 
         app.launch()
@@ -216,21 +132,27 @@ class LockboxXCUITests: BaseTestCase {
         // First Cancel disconnecting the account
         navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
         waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
-        /* This part is disabled until the OAuth new flow is clear and stable
+
         // Now disconnect the account
         navigator.performAction(Action.DisconnectFirefoxLockbox)
+
+        // And, connect it again
         waitforExistence(app.buttons["getStarted.button"])
         app.buttons["getStarted.button"].tap()
+        userState.fxaUsername =  emailTestAccountLogins
         userState.fxaPassword = passwordTestAccountLogins
-        waitforExistence(app.staticTexts[emailTestAccountLogins], timeout: 10)
-        navigator.nowAt(Screen.FxASigninScreen)
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.nowAt(Screen.FxASigninScreenEmail)
+        navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATypePassword)
-        // In small screens it is necessary to dismiss the keyboard
-        app.buttons["Done"].tap()
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitforExistence(app.buttons["finish.button"])
+
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            app.buttons["notNow.button"].tap()
+        }
+        waitforExistence(app.buttons["finish.button"], timeout: 10)
         app.buttons["finish.button"].tap()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])*/
+        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
     }
 
     func test5SendUsageDataSwitch() {
@@ -247,18 +169,22 @@ class LockboxXCUITests: BaseTestCase {
     func test6SortEntries() {
         navigator.goto(Screen.LockboxMainPage)
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"], timeout: 10)
-        navigator.goto(Screen.SortEntriesMenu)
-        navigator.performAction(Action.SelectRecentOrder)
+        // Checking if doing the steps directly works on bb
+        waitforExistence(app.buttons["sorting.button"])
+        app.buttons["sorting.button"].tap()
+        waitforExistence(app.buttons["Recently Used"])
+        app.buttons["Recently Used"].tap()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        // Disable the label check until we figure out how to tap UIAlertActions in iOS 12...
-        // let buttonLabelChanged = app.buttons["sorting.button"].label
-        // XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
+        let buttonLabelChanged = app.buttons["sorting.button"].label
+        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
+        // Lets see if this is fixed now
         // Disable the label check until BB failure is not present
-        // let firstCellRecent = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
-        // XCTAssertEqual(firstCellRecent, "wopr.norad.org")
-        navigator.goto(Screen.SortEntriesMenu)
-        navigator.performAction(Action.SelectAlphabeticalOrder)
+        let firstCellRecent = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
+        XCTAssertEqual(firstCellRecent, "wopr.norad.org")
 
+        app.buttons["sorting.button"].tap()
+        waitforExistence(app.buttons["Alphabetically"])
+        app.buttons["Alphabetically"].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
@@ -324,21 +250,12 @@ class LockboxXCUITests: BaseTestCase {
         passcodeInput.tap()
         passcodeInput.typeText("0000\r")
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        disconnectAccount()
     }
 
-    private func disconnectAccount() {
-        navigator.nowAt(Screen.LockboxMainPage)
-        //navigator.performAction(Action.DisconnectFirefoxLockbox)
-        navigator.goto(Screen.AccountSettingsMenu)
-        app.buttons["disconnectFirefoxLockbox.button"].tap()
-        waitforExistence(app.buttons["Disconnect"])
-        app.buttons["Disconnect"].tap()
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        /* This needs issue #588 to be fixed or clarified the expected behaviour
-        waitforExistence(app.staticTexts[emailTestAccountLogins])
-        app.webViews.links["Use a different account"].tap()
-        waitforExistence(app.webViews.textFields["Email"])*/
+    func testAppVersion() {
+        navigator.goto(Screen.SettingsMenu)
+        // The app version option exists and it is not empty
+        XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
+        XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
     }
 }

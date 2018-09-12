@@ -7,6 +7,7 @@ import AuthenticationServices
 import RxSwift
 import FxAClient
 import RxCocoa
+import LocalAuthentication
 
 protocol CredentialWelcomeViewProtocol: BaseWelcomeViewProtocol, SpinnerAlertView { }
 
@@ -17,6 +18,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 
     private let credentialProviderStore: CredentialProviderStore
+    private var authenticationBag = DisposeBag()
 
     private var okButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
@@ -62,8 +64,12 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 
     func onViewAppeared() {
+        self.authenticationBag = DisposeBag()
+
+        let delay = isRunningTest ? 0.0 : 1.0
         self.credentialProviderStore.displayAuthentication
             .filter { $0 }
+            .delay(delay, scheduler: MainScheduler.instance)
             .flatMap { [weak self] _ -> Observable<Profile?> in
                 guard let accountStore = self?.accountStore else {
                     return Observable.just(nil)
@@ -84,11 +90,16 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                 onNext: { [weak self] _ in
                     self?.dispatcher.dispatch(action: DataStoreAction.unlock)
                     self?.dispatcher.dispatch(action: CredentialProviderAction.authenticated)
-                }, onError: { [weak self] _ in
+                }, onError: { [weak self] error in
+                    if let error = error as? LAError,
+                        error.code == LAError.Code.systemCancel {
+                        return
+                    }
+
                     self?.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
                 }
             )
-            .disposed(by: self.disposeBag)
+            .disposed(by: self.authenticationBag)
     }
 }
 
