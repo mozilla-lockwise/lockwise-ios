@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.3 (Build 2259)
+
+You now have the ability to automatically fill your username and password into apps and websites.
+
+Be sure to enable AutoFill after updating to iOS 12 in "Settings" under the "Passwords & Accounts" section.
+
 ## 1.2 (Build 2016)
 
 _Date: 2018-08-27_
