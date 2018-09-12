@@ -18,6 +18,9 @@ class BaseUserDefaultStore {
     public var itemListSort: Observable<Setting.ItemListSort> {
         return self.userDefaults.onItemListSort
     }
+    public var recordUsageData: Observable<Bool> {
+        return self.userDefaults.onRecordUsageData
+    }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          sharedUserDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? UserDefaults.standard) {

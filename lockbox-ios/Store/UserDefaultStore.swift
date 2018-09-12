@@ -12,10 +12,6 @@ class UserDefaultStore: BaseUserDefaultStore {
         return self.userDefaults.onPreferredBrowser
     }
 
-    public var recordUsageData: Observable<Bool> {
-        return self.userDefaults.onRecordUsageData
-    }
-
     override func initialized() {
         self.dispatcher.register
                 .filterByType(class: SettingAction.self)

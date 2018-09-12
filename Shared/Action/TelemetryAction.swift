@@ -19,7 +19,7 @@ enum TelemetryEventCategory: String {
 }
 
 enum TelemetryEventMethod: String {
-case tap, startup, foreground, background, settingChanged, show
+case tap, startup, foreground, background, settingChanged, show, canceled, login_selected, autofill_locked, autofill_unlocked, refresh
 }
 
 enum TelemetryEventObject: String {
@@ -46,6 +46,7 @@ enum TelemetryEventObject: String {
     case loginOnboardingConfirmation = "login_onboarding_confirmation"
     case loginLearnMore = "login_learn_more"
     case autofillOnboarding = "autofill_onboarding"
+    case autofill = "autofill"
 }
 
 enum ExtraKey: String {

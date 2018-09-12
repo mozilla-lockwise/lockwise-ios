@@ -22,9 +22,12 @@ class CredentialProviderPresenter {
 
     private let dispatcher: Dispatcher
     private let accountStore: AccountStore
+    private let telemetryStore: TelemetryStore
+    private let userDefaultStore: UserDefaultStore
+    private let dataStore: DataStore
+    private let telemetryActionHandler: TelemetryActionHandler
     private let credentialProviderStore: CredentialProviderStore
     private let autoLockStore: AutoLockStore
-    private let dataStore: DataStore
     private let disposeBag = DisposeBag()
 
     private var dismissObserver: AnyObserver<Void> {
@@ -36,15 +39,21 @@ class CredentialProviderPresenter {
     init(view: CredentialProviderViewProtocol,
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = .shared,
+         telemetryStore: TelemetryStore = .shared,
+         userDefaultStore: UserDefaultStore = .shared,
+         dataStore: DataStore = .shared,
+         telemetryActionHandler: TelemetryActionHandler = .shared,
          credentialProviderStore: CredentialProviderStore = .shared,
-         autoLockStore: AutoLockStore = .shared,
-         dataStore: DataStore = .shared) {
+         autoLockStore: AutoLockStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
+        self.telemetryStore = telemetryStore
+        self.userDefaultStore = userDefaultStore
+        self.dataStore = dataStore
+        self.telemetryActionHandler = telemetryActionHandler
         self.credentialProviderStore = credentialProviderStore
         self.autoLockStore = autoLockStore
-        self.dataStore = dataStore
 
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
             .bind { [weak self] (oauthInfo, profile) in
@@ -74,6 +83,10 @@ class CredentialProviderPresenter {
                 }
             })
             .disposed(by: self.disposeBag)
+
+        self.dispatcher.dispatch(action: LifecycleAction.foreground)
+        self.dispatcher.dispatch(action: DataStoreAction.unlock)
+        self.startTelemetry()
     }
 
     func extensionConfigurationRequested() {
@@ -156,5 +169,16 @@ extension CredentialProviderPresenter {
                             userInfo: nil)
 
         self.view?.extensionContext.cancelRequest(withError: error)
+    }
+}
+
+@available(iOS 12, *)
+extension CredentialProviderPresenter {
+    fileprivate func startTelemetry() {
+        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaultStore.recordUsageData)
+            .filter { $0.1 }
+            .map { $0.0 }
+            .bind(to: self.telemetryActionHandler.telemetryActionListener)
+            .disposed(by: self.disposeBag)
     }
 }

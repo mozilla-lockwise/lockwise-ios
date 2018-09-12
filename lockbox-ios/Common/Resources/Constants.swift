@@ -28,7 +28,6 @@ extension Constant.fxa {
 
 extension Constant.setting {
     static let defaultPreferredBrowser = Setting.PreferredBrowser.Safari
-    static let defaultRecordUsageData = true
 }
 
 extension Constant.string {
