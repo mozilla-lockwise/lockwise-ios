@@ -35,6 +35,12 @@ class CredentialStatusActionSpec: QuickSpec {
                     expect(CredentialStatusAction.userCanceled).notTo(equal(CredentialStatusAction.extensionConfigured))
                 }
             }
+
+            describe("telemetry") {
+                it("returns the settingChanged event method") {
+                    expect(CredentialStatusAction.extensionConfigured.eventMethod).to(equal(TelemetryEventMethod.settingChanged))
+              }
+            }
         }
     }
 }

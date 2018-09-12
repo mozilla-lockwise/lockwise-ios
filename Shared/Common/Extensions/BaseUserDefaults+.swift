@@ -17,4 +17,8 @@ extension UserDefaults {
         return self.on(setting: UserDefaultKey.autoLockTime.rawValue, type: String.self)
                 .map { Setting.AutoLock(rawValue: $0) ?? Constant.setting.defaultAutoLock }
     }
+
+    var onRecordUsageData: Observable<Bool> {
+        return self.on(setting: UserDefaultKey.recordUsageData.rawValue, type: Bool.self)
+    }
 }

@@ -23,3 +23,29 @@ extension CredentialStatusAction: Equatable {
         }
     }
 }
+
+extension CredentialStatusAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        switch self {
+        case .extensionConfigured:
+            return .settingChanged
+        case .userCanceled:
+            return .canceled
+        case .loginSelected:
+            return .login_selected
+        }
+
+    }
+
+    var eventObject: TelemetryEventObject {
+        return .autofill
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String : Any?]? {
+        return nil
+    }
+}

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		08454B9821486AAD00328040 /* CredentialUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08454B9621486AAC00328040 /* CredentialUserDefaultStore.swift */; };
+		08454B9A21486BCF00328040 /* TelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08454B9921486BCE00328040 /* TelemetryStore.swift */; };
+		08454B9B21486BCF00328040 /* TelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08454B9921486BCE00328040 /* TelemetryStore.swift */; };
 		22336C7221111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */; };
 		224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224A6C7C212C8C2B008C7A3F /* UIFont+.swift */; };
 		226E3FF02127759C00185D11 /* ExternalLinkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */; };
@@ -49,7 +52,6 @@
 		7AA543D5D705C1B0B7B78CBD /* AccountAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5492DA3988625D1DAB5BD /* AccountAction.swift */; };
 		7AA543E59B8E38A18A8BE54D /* FxAClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */; };
 		7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54575C8FE51664E45ACD8 /* CopyAction.swift */; };
-		7AA5457DB74127B904E5A767 /* TelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA548F4166A1826238F6589 /* TelemetryStore.swift */; };
 		7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542B3E1A27FC2B8806363 /* String+Spec.swift */; };
 		7AA545ADA952B5C4ECF6D313 /* ItemDetailPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54304F17F52F8B2C3D8BD /* ItemDetailPresenterSpec.swift */; };
 		7AA545D6182E36466BC8256A /* CopyDisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54247F60B5BDC1BA90AD4 /* CopyDisplayStore.swift */; };
@@ -328,6 +330,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		08454B9621486AAC00328040 /* CredentialUserDefaultStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialUserDefaultStore.swift; sourceTree = "<group>"; };
+		08454B9921486BCE00328040 /* TelemetryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TelemetryStore.swift; path = Shared/Store/TelemetryStore.swift; sourceTree = SOURCE_ROOT; };
 		22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenterSpec.swift; sourceTree = "<group>"; };
 		224A6C7C212C8C2B008C7A3F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStore.swift; sourceTree = "<group>"; };
@@ -402,7 +406,6 @@
 		7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListDisplayStore.swift; sourceTree = "<group>"; };
 		7AA547CE3404CC8123CA455D /* Observable+Spec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Spec.swift"; sourceTree = "<group>"; };
 		7AA548CFC3319394489DD10E /* FxAPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAPresenter.swift; sourceTree = "<group>"; };
-		7AA548F4166A1826238F6589 /* TelemetryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryStore.swift; sourceTree = "<group>"; };
 		7AA54927D3D3AF3F60B9DD4B /* OnboardingConfirmationPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenter.swift; sourceTree = "<group>"; };
 		7AA5492DA3988625D1DAB5BD /* AccountAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountAction.swift; sourceTree = "<group>"; };
 		7AA549951B0D1648DBA0F253 /* SettingActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingActionSpec.swift; sourceTree = "<group>"; };
@@ -703,7 +706,6 @@
 				7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */,
 				7AA54247F60B5BDC1BA90AD4 /* CopyDisplayStore.swift */,
 				7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */,
-				7AA548F4166A1826238F6589 /* TelemetryStore.swift */,
 				7DDEAA702124CEB100A7D521 /* DataStore.swift */,
 				226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */,
 				7D07A31E2138863400772283 /* AutoLockStore.swift */,
@@ -854,6 +856,7 @@
 			children = (
 				D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */,
 				7AA54EAE6E8D8E78F37BEA82 /* BaseDataStore.swift */,
+				08454B9921486BCE00328040 /* TelemetryStore.swift */,
 				7AA543A8C2F252E8F8C2B1AF /* LifecycleStore.swift */,
 				7D078EEE2124DF6500D10D1B /* BaseAccountStore.swift */,
 				7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */,
@@ -1151,6 +1154,7 @@
 		7DE5896C2125D200005CFF47 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				08454B9621486AAC00328040 /* CredentialUserDefaultStore.swift */,
 				7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */,
 				7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */,
 				7D07A320213886C100772283 /* CredentialAutoLockStore.swift */,
@@ -1613,6 +1617,7 @@
 				7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */,
 				7D4396612135D8BD00B96FA9 /* SentryManager.swift in Sources */,
 				D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */,
+				08454B9A21486BCF00328040 /* TelemetryStore.swift in Sources */,
 				7DA4B08C2140141E00C9EFEA /* CredentialWelcomePresenter.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */,
 				D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift in Sources */,
@@ -1638,7 +1643,6 @@
 				7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */,
 				7AA546B578EBABE3543AB466 /* TelemetryAction.swift in Sources */,
 				7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */,
-				7AA5457DB74127B904E5A767 /* TelemetryStore.swift in Sources */,
 				7AA54E336336462A6DEB79EE /* LifecycleStore.swift in Sources */,
 				7AA5429FC403FDC52F2034F0 /* EmptyPlaceholderCell.swift in Sources */,
 				7AA54C565CB9C3C8651D97C8 /* ExternalWebsiteNavigationController.swift in Sources */,
@@ -1656,6 +1660,7 @@
 			files = (
 				7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */,
 				7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */,
+				08454B9B21486BCF00328040 /* TelemetryStore.swift in Sources */,
 				7D9722DB21348C2F0071D82B /* CredentialWelcomePresenter.swift in Sources */,
 				7D9722C8213464020071D82B /* UIViewController+.swift in Sources */,
 				7D9722E021349B9F0071D82B /* CredentialStatusAction.swift in Sources */,
@@ -1664,6 +1669,7 @@
 				7D09B2482125DD4800794CA2 /* CredentialDataStore.swift in Sources */,
 				7D078EF02124DF6500D10D1B /* BaseAccountStore.swift in Sources */,
 				7D078EEC2124DCE400D10D1B /* BaseSettingAction.swift in Sources */,
+				08454B9821486AAD00328040 /* CredentialUserDefaultStore.swift in Sources */,
 				7DDEAA6B2124B61800A7D521 /* ErrorAction.swift in Sources */,
 				7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */,
 				7D07A31B21385C4300772283 /* Login+.swift in Sources */,
@@ -1806,7 +1812,11 @@
 				);
 				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1828,7 +1838,11 @@
 				);
 				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1850,7 +1864,11 @@
 				);
 				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1874,7 +1892,11 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1900,7 +1922,11 @@
 				);
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2054,7 +2080,10 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2092,7 +2121,10 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2123,7 +2155,11 @@
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
@@ -2148,7 +2184,11 @@
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.adhoc.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2172,7 +2212,11 @@
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2266,7 +2310,10 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2301,7 +2348,11 @@
 				);
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
