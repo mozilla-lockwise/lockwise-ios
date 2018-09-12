@@ -17,9 +17,9 @@ import Shared
  * in the app group instance so that no further migrations will be required
  * in the case that they become relevant in an app extension context. */
 enum LocalUserDefaultKey: String {
-    case preferredBrowser, recordUsageData, itemListSort, appVersionCode
+    case preferredBrowser, itemListSort, appVersionCode, recordUsageData
 
-    static var allValues: [LocalUserDefaultKey] = [.preferredBrowser, .recordUsageData, .itemListSort, .appVersionCode]
+    static var allValues: [LocalUserDefaultKey] = [.preferredBrowser, .itemListSort, .appVersionCode]
 
     var defaultValue: Any? {
         switch self {

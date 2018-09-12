@@ -15,6 +15,10 @@ class BaseUserDefaultStore {
         return self.userDefaults.onAutoLockTime
     }
 
+    public var recordUsageData: Observable<Bool> {
+        return self.userDefaults.onRecordUsageData
+    }
+
     init(dispatcher: Dispatcher = Dispatcher.shared,
          sharedUserDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? UserDefaults.standard) {
         self.dispatcher = dispatcher

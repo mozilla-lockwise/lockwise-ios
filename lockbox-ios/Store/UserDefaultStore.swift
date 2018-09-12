@@ -12,10 +12,6 @@ class UserDefaultStore: BaseUserDefaultStore {
         return self.userDefaults.onPreferredBrowser
     }
 
-    public var recordUsageData: Observable<Bool> {
-        return self.userDefaults.onRecordUsageData
-    }
-
     public var itemListSort: Observable<Setting.ItemListSort> {
         return self.userDefaults.onItemListSort
     }
