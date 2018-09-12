@@ -11,9 +11,4 @@ extension UserDefaults {
         return self.on(setting: LocalUserDefaultKey.preferredBrowser.rawValue, type: String.self)
             .map { Setting.PreferredBrowser(rawValue: $0) ?? Constant.setting.defaultPreferredBrowser }
     }
-
-    var onItemListSort: Observable<Setting.ItemListSort> {
-        return self.on(setting: LocalUserDefaultKey.itemListSort.rawValue, type: String.self)
-            .map { Setting.ItemListSort(rawValue: $0) ?? Constant.setting.defaultItemListSort }
-    }
 }

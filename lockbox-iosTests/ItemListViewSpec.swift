@@ -69,7 +69,7 @@ class ItemListViewSpec: QuickSpec {
                 self.presenter.fakeSortingButtonObserver = self.scheduler.createObserver(Void.self)
                 self.presenter.fakeCancelObserver = self.scheduler.createObserver(Void.self)
                 self.presenter.fakeEditEndedObserver = self.scheduler.createObserver(Void.self)
-                self.subject.presenter = self.presenter
+                self.subject.basePresenter = self.presenter
 
                 _ = UINavigationController(rootViewController: self.subject)
                 self.subject.preloadView()

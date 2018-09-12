@@ -21,6 +21,7 @@ class Constant {
 
     struct setting {
         static let defaultAutoLock = Setting.AutoLock.FiveMinutes
+        static let defaultItemListSort = Setting.ItemListSort.alphabetically
         static let defaultRecordUsageData = true
     }
 
@@ -46,7 +47,7 @@ class Constant {
         static let copyExpireTimeSecs = 60
         static let minimumSpinnerHUDTime = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.0)
     }
-    
+
     class string {
         static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Updating Autofill...", comment: "Text displayed while autofill credentials are being populated")
         static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating autofill", comment: "Accesibility notification when autofill is done being enabled")
@@ -56,13 +57,16 @@ class Constant {
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
         static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
+        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
+        static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
+        static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
     }
 }
 
 enum UserDefaultKey: String {
-    case autoLockTime, autoLockTimerDate, recordUsageData
+    case autoLockTime, autoLockTimerDate, itemListSort, recordUsageData
 
-    static var allValues: [UserDefaultKey] = [.autoLockTime, .autoLockTimerDate, .recordUsageData]
+    static var allValues: [UserDefaultKey] = [.autoLockTime, .autoLockTimerDate, .itemListSort, .recordUsageData]
 
     var defaultValue: Any? {
         switch self {
@@ -72,6 +76,8 @@ enum UserDefaultKey: String {
             return Constant.setting.defaultRecordUsageData
         case .autoLockTimerDate:
             return nil
+        case .itemListSort:
+            return Constant.setting.defaultItemListSort.rawValue
         }
     }
 }

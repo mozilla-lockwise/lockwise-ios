@@ -6,6 +6,8 @@ import Foundation
 
 class UserDefaultStore: BaseUserDefaultStore {
     static let shared = UserDefaultStore()
-    
-    override func initialized() { }
+
+    override func initialized() {
+        // NOP
+    }
 }

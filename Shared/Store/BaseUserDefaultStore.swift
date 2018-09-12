@@ -15,6 +15,9 @@ class BaseUserDefaultStore {
         return self.userDefaults.onAutoLockTime
     }
 
+    public var itemListSort: Observable<Setting.ItemListSort> {
+        return self.userDefaults.onItemListSort
+    }
     public var recordUsageData: Observable<Bool> {
         return self.userDefaults.onRecordUsageData
     }
