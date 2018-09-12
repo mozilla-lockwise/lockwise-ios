@@ -24,13 +24,16 @@ class ItemListPresenter: BaseItemListPresenter {
                 view.dismissKeyboard()
             }
 
-            print("Selected: \(id)")
-//            target.dispatcher.dispatch(action: MainRouteAction.detail(itemId: id))
+            self.dataStore.get(id)
+                .take(1)
+                .subscribe(onNext: { login in
+                    if let login = login {
+                        target.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login, relock: false))
+                    } else {
+                        target.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+                    }
+                })
+                .disposed(by: self.disposeBag)
             }.asObserver()
-    }
-
-    override func onViewReady() {
-        super.onViewReady()
-        print("HERE! \(#function)")
     }
 }
