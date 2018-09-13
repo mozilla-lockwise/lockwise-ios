@@ -111,7 +111,8 @@ Configuration:
 
 _Once a version has been merged or released, the major app version should be increased_
 
-- Update the value in `Common/Resources/Info.plist`, for example from `1.2` to `1.3`
+- Update the value in `Common/Resources/Info.plist` for the Lockbox app, for example from `1.2` to `1.3`
+- Also update the value in `CredentialProvider/Info.plist` for the extension to _the exact same version_
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
 [2]: https://developer.apple.com/testflight/testers/
