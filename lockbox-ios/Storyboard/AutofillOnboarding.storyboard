@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.9"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,20 +15,21 @@
             <objects>
                 <viewController storyboardIdentifier="autofillonboarding" useStoryboardIdentifierAsRestorationIdentifier="YES" id="YeN-ld-MSj" customClass="AutofillOnboardingView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AXG-bc-K38">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4" userLabel="Not Now Button">
-                                <rect key="frame" x="158" y="584" width="60" height="48"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4" userLabel="Not Now Button">
+                                <rect key="frame" x="110" y="485" width="100" height="48"/>
                                 <accessibility key="accessibilityConfiguration" identifier="notNow.button"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="UMK-pk-Gqs"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="fas-J1-ty6"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                 <state key="normal" title="Not Now"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yEI-pU-vMZ" userLabel="Setup Autofill Button">
-                                <rect key="frame" x="40" y="516" width="295" height="48"/>
+                                <rect key="frame" x="40" y="417" width="240" height="48"/>
                                 <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration" identifier="setupAutofill.button"/>
                                 <constraints>
@@ -40,19 +41,19 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No longer are the days of switching between apps in order to copy and paste your logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xVH-GK-wIb">
-                                <rect key="frame" x="40" y="364" width="295" height="54"/>
+                                <rect key="frame" x="40" y="265" width="240" height="54"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AutoFill your logins right from your browser or app." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Krc-YI-yKW">
-                                <rect key="frame" x="40" y="299" width="295" height="53"/>
+                                <rect key="frame" x="40" y="200" width="240" height="53"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-onboarding-logo" translatesAutoresizingMaskIntoConstraints="NO" id="RNz-0B-NNa">
-                                <rect key="frame" x="40" y="160" width="295" height="111"/>
+                                <rect key="frame" x="40" y="61" width="240" height="111"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -65,13 +66,12 @@
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" secondItem="RNz-0B-NNa" secondAttribute="trailing" constant="40" id="Ryd-fg-Sso"/>
                             <constraint firstItem="Krc-YI-yKW" firstAttribute="top" secondItem="RNz-0B-NNa" secondAttribute="bottom" constant="28" id="UK3-6i-bkX"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" secondItem="xVH-GK-wIb" secondAttribute="trailing" constant="40" id="WeT-mg-jDc"/>
-                            <constraint firstItem="GdN-75-tz4" firstAttribute="leading" secondItem="AXG-bc-K38" secondAttribute="leading" constant="140" id="XSU-fN-Uaa"/>
                             <constraint firstItem="GdN-75-tz4" firstAttribute="top" secondItem="yEI-pU-vMZ" secondAttribute="bottom" constant="20" id="ble-Cg-dzb"/>
+                            <constraint firstItem="GdN-75-tz4" firstAttribute="centerX" secondItem="AXG-bc-K38" secondAttribute="centerX" id="eR3-pL-8Rv"/>
                             <constraint firstItem="yEI-pU-vMZ" firstAttribute="leading" secondItem="faL-BK-34o" secondAttribute="leading" constant="40" id="kce-xI-Nfc"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" secondItem="yEI-pU-vMZ" secondAttribute="trailing" constant="40" id="q1b-Ct-1ya"/>
                             <constraint firstItem="xVH-GK-wIb" firstAttribute="top" secondItem="Krc-YI-yKW" secondAttribute="bottom" constant="12" id="r3o-Ea-Ika"/>
                             <constraint firstItem="Krc-YI-yKW" firstAttribute="leading" secondItem="faL-BK-34o" secondAttribute="leading" constant="40" id="vfM-f1-QOI"/>
-                            <constraint firstAttribute="trailing" secondItem="GdN-75-tz4" secondAttribute="trailing" constant="140" id="xOc-jX-3pu"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="faL-BK-34o"/>
                     </view>
