@@ -46,7 +46,7 @@ class SettingListViewSpec: QuickSpec {
     override func spec() {
         describe("SettingListView") {
             beforeEach {
-                self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as! SettingListView
+                self.subject = UIStoryboard(name: "SettingList", bundle: nil).instantiateViewController(withIdentifier: "settinglist") as? SettingListView
                 self.presenter = FakeSettingsPresenter(view: self.subject)
                 self.presenter.settingCellStub = self.scheduler.createObserver(RouteAction?.self)
                 self.presenter.usageDataCellStub = self.scheduler.createObserver(Bool.self)
@@ -138,22 +138,22 @@ class SettingListViewSpec: QuickSpec {
                     }
 
                     it("prepareForReuse changes DisposeBag") {
-                        let cell = SettingCell(style: UITableViewCellStyle.default, reuseIdentifier: "setting-cell")
+                        let cell = SettingCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: "setting-cell")
                         let oldDisposeBag = cell.disposeBag
                         expect(cell.prepareForReuse()).toNot(be(oldDisposeBag))
                     }
                 }
             }
 
-            describe("onSignOut") {
+            describe("onLockNow") {
                 var observer = self.scheduler.createObserver(Void.self)
 
                 beforeEach {
                     observer = self.scheduler.createObserver(Void.self)
 
-                    self.subject.onSignOut.subscribe(observer).disposed(by: self.disposeBag)
+                    self.subject.onLockNow.subscribe(observer).disposed(by: self.disposeBag)
 
-                    self.subject.signOutButton.sendActions(for: .touchUpInside)
+                    self.subject.lockNowButton.sendActions(for: .touchUpInside)
                 }
 
                 it("tells any observers") {

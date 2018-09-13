@@ -34,7 +34,7 @@ class OnboardingConfirmationViewSpec: QuickSpec {
         describe("OnboardingConfirmationView") {
             beforeEach {
                 let sb = UIStoryboard(name: "OnboardingConfirmation", bundle: nil)
-                self.subject = sb.instantiateViewController(withIdentifier: "onboardingconfirmation") as! OnboardingConfirmationView
+                self.subject = sb.instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView
                 self.presenter = FakeOnboardingConfPresenter(view: self.subject)
                 self.subject.presenter = self.presenter
 
@@ -64,7 +64,7 @@ class OnboardingConfirmationViewSpec: QuickSpec {
 
             describe("textViewURL") {
                 beforeEach {
-                    self.subject.textView(
+                    _ = self.subject.textView(
                             self.subject.encryptionTextView,
                             shouldInteractWith: URL(string: Constant.app.securityFAQ)!,
                             in: NSMakeRange(33, 18)) // swiftlint:disable:this legacy_constructor

@@ -95,13 +95,13 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
-            .debug()
             .subscribe(onNext: { storageState in
                 switch storageState {
                 case .Unprepared, .Locked:
                     self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                 case .Unlocked:
                     self.dispatcher.dispatch(action: MainRouteAction.list)
+                    self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
                 default:
                     break
                 }
@@ -109,7 +109,6 @@ class RootPresenter {
             .disposed(by: self.disposeBag)
 
         Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
-            .debug()
             .filter { $0.1 == LoginStoreState.Unprepared }
             .map { $0.0 }
             .distinctUntilChanged()
@@ -185,6 +184,10 @@ class RootPresenter {
             case .onboardingConfirmation:
                 if !view.topViewIs(OnboardingConfirmationView.self) {
                     view.pushLoginView(view: .onboardingConfirmation)
+                }
+            case .autofillOnboarding:
+                if !view.topViewIs(AutofillOnboardingView.self) {
+                    view.pushLoginView(view: .autofillOnboarding)
                 }
             }
         }.asObserver()

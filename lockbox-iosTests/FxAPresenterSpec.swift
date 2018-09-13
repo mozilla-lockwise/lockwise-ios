@@ -52,6 +52,7 @@ class FxAPresenterSpec: QuickSpec {
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
+    private var credentialProviderStore: Any!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -61,11 +62,23 @@ class FxAPresenterSpec: QuickSpec {
                 self.view = FakeFxAView()
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.subject = FxAPresenter(
+
+                if #available(iOS 12.0, *) {
+                    self.credentialProviderStore = FakeCredentialProviderStore()
+                    self.subject = FxAPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
-                        accountStore: self.accountStore
-                )
+                        accountStore: self.accountStore,
+                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore
+                    )
+
+                } else {
+                    self.subject = FxAPresenter(
+                            view: self.view,
+                            dispatcher: self.dispatcher,
+                            accountStore: self.accountStore
+                    )
+                }
             }
 
             describe(".onViewReady()") {
@@ -96,6 +109,11 @@ class FxAPresenterSpec: QuickSpec {
                 let url = URL(string: "https://www.mozilla.com")!
 
                 beforeEach {
+                    if #available(iOS 12.0, *) {
+                        (self.credentialProviderStore as! FakeCredentialProviderStore).stateToProvide.onNext(.NotAllowed)
+                    }
+
+                    self.subject.onViewReady()
                     self.subject.matchingRedirectURLReceived(url)
                 }
 
@@ -104,12 +122,25 @@ class FxAPresenterSpec: QuickSpec {
                     expect(accountAction).to(equal(.oauthRedirect(url: url)))
 
                     let routeAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
-                    expect(routeAction).to(equal(.onboardingConfirmation))
+                    if #available(iOS 12.0, *) {
+                        expect(routeAction).to(equal(.autofillOnboarding))
+                    } else {
+                        expect(routeAction).to(equal(.onboardingConfirmation))
+                    }
 
                     let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
                     expect(onboardingAction.onboardingInProgress).to(beTrue())
                 }
             }
         }
+    }
+}
+
+@available(iOS 12, *)
+class FakeCredentialProviderStore: CredentialProviderStore {
+    var stateToProvide = ReplaySubject<CredentialProviderStoreState>.create(bufferSize: 1)
+
+    override var state: Observable<CredentialProviderStoreState> {
+        return stateToProvide.asObservable()
     }
 }

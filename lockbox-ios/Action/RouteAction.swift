@@ -22,6 +22,7 @@ enum LoginRouteAction: RouteAction {
     case welcome
     case fxa
     case onboardingConfirmation
+    case autofillOnboarding
 }
 
 extension LoginRouteAction: TelemetryAction {
@@ -37,6 +38,8 @@ extension LoginRouteAction: TelemetryAction {
             return .loginFxa
         case .onboardingConfirmation:
             return .loginOnboardingConfirmation
+        case .autofillOnboarding:
+            return .autofillOnboarding
         }
     }
 

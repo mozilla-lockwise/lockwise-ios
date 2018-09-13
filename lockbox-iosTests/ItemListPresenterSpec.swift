@@ -14,6 +14,7 @@ import Storage
 
 class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
+        var sortingButtonHidden: AnyObserver<Bool>?
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var sortButtonEnableObserver: TestableObserver<Bool>!
         var tableViewScrollObserver: TestableObserver<Bool>!
@@ -35,7 +36,7 @@ class ItemListPresenterSpec: QuickSpec {
             sortingButtonTitle.drive(sortingButtonTitleObserver).disposed(by: self.disposeBag)
         }
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertControllerStyle) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
             self.displayOptionSheetButtons = buttons
             self.displayOptionSheetTitle = title
         }
@@ -52,7 +53,7 @@ class ItemListPresenterSpec: QuickSpec {
             return self.tableViewScrollObserver.asObserver()
         }
 
-        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag) {
+        func displaySpinner(_ dismiss: Driver<Void>, bag: DisposeBag, message: String, completionMessage: String) {
             self.displaySpinnerCalled = true
             dismiss.drive(self.dismissSpinnerObserver).disposed(by: bag)
         }

@@ -33,8 +33,8 @@ class CopyDisplayStore {
     private func copy(_ action: CopyAction) {
         let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
 
-        self.pasteboard.setItems([[UIPasteboardTypeAutomatic: action.text]],
-                options: [UIPasteboardOption.expirationDate: expireDate])
+        self.pasteboard.setItems([[UIPasteboard.typeAutomatic: action.text]],
+                options: [UIPasteboard.OptionsKey.expirationDate: expireDate])
 
         self._copyDisplay.onNext(action.field)
     }
