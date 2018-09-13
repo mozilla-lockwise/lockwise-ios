@@ -10,6 +10,20 @@ import Foundation
 class AutoLockStore: BaseAutoLockStore {
     static let shared = AutoLockStore()
 
+    private let lifecycleStore: LifecycleStore
+
+    init(dispatcher: Dispatcher = Dispatcher.shared,
+         dataStore: DataStore = DataStore.shared,
+         lifecycleStore: LifecycleStore = .shared,
+         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard
+        ) {
+        self.lifecycleStore = lifecycleStore
+
+        super.init(dispatcher: dispatcher,
+                   dataStore: dataStore,
+                   userDefaults: userDefaults)
+    }
+
     override func initialized() {
         self.dataStore.locked
             .skip(1)
@@ -45,7 +59,9 @@ class AutoLockStore: BaseAutoLockStore {
             })
             .disposed(by: self.disposeBag)
 
-        self.dispatcher.register
+        Observable.combineLatest(self.dispatcher.register, self.dataStore.locked)
+            .filter { !$0.1 }
+            .map { $0.0 }
             .filterByType(class: LifecycleAction.self)
             .filter { $0 == LifecycleAction.foreground }
             .subscribe(onNext: { [weak self] _ in

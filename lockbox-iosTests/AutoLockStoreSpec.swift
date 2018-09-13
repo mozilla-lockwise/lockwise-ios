@@ -61,10 +61,12 @@ class AutoLockStoreSpec: QuickSpec {
             }
 
             describe("foregrounding app") {
-                describe("when the app is on a webview") {
+                describe("when the app is on a webview and is unlocked") {
                     beforeEach {
                         self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: UserDefaultKey.autoLockTimerDate.rawValue)
                         self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
+
+                        self.dataStore.lockedStub.onNext(false)
                         self.dispatcher.registerStub.onNext(ExternalWebsiteRouteAction(urlString: "www.mozilla.org", title: "moz", returnRoute: MainRouteAction.list))
                         self.dispatcher.registerStub.onNext(LifecycleAction.foreground)
                     }
@@ -78,6 +80,8 @@ class AutoLockStoreSpec: QuickSpec {
                 describe("when the app is not on a webview") {
                     beforeEach {
                         self.userDefaults.set((Date().timeIntervalSince1970 - 3), forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+
+                        self.dataStore.lockedStub.onNext(false)
                         self.userDefaults.set(Setting.AutoLock.FiveMinutes.rawValue, forKey: UserDefaultKey.autoLockTime.rawValue)
                         self.dispatcher.registerStub.onNext(LifecycleAction.foreground)
                     }
