@@ -5,7 +5,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import SwiftKeychainWrapper
 
 class BaseAutoLockStore {
     internal let disposeBag = DisposeBag()
@@ -13,19 +12,15 @@ class BaseAutoLockStore {
     internal let dispatcher: Dispatcher
     internal let dataStore: DataStore
     internal let userDefaults: UserDefaults
-    internal let keychainWrapper: KeychainWrapper
 
     var timer: Timer?
     var paused: Bool = false
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
-         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard,
-         keychainWrapper: KeychainWrapper = KeychainWrapper(serviceName: "", accessGroup: Constant.app.group)
-    ) {
+         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard) {
         self.dispatcher = dispatcher
         self.userDefaults = userDefaults
-        self.keychainWrapper = keychainWrapper
         self.dataStore = dataStore
 
         self.initialized()
