@@ -207,7 +207,6 @@
 		7DA4B08C2140141E00C9EFEA /* CredentialWelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722DA21348C2F0071D82B /* CredentialWelcomePresenter.swift */; };
 		7DA4B08E2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4B08D2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift */; };
 		7DA4B09021401C2D00C9EFEA /* CredentialStatusActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */; };
-		7DA4C6832028F84800B61DD8 /* ItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6802028F84800B61DD8 /* ItemListView.swift */; };
 		7DA4C6832028F84800B61DD8 /* BaseItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6802028F84800B61DD8 /* BaseItemListView.swift */; };
 		7DA4C6862028F85A00B61DD8 /* ItemListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6852028F85A00B61DD8 /* ItemListPresenter.swift */; };
 		7DA4C68D2028F99200B61DD8 /* ItemListViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6872028F86E00B61DD8 /* ItemListViewSpec.swift */; };
@@ -530,7 +529,6 @@
 		7D9D64921F9F8EE300279C39 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		7DA4B08D2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialWelcomePresenterSpec.swift; sourceTree = "<group>"; };
 		7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStatusActionSpec.swift; sourceTree = "<group>"; };
-		7DA4C6802028F84800B61DD8 /* ItemListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
 		7DA4C6802028F84800B61DD8 /* BaseItemListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseItemListView.swift; sourceTree = "<group>"; };
 		7DA4C6852028F85A00B61DD8 /* ItemListPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListPresenter.swift; sourceTree = "<group>"; };
 		7DA4C6872028F86E00B61DD8 /* ItemListViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListViewSpec.swift; sourceTree = "<group>"; };
@@ -730,7 +728,6 @@
 				7AA54146E0C9269A0CE8D53A /* AccountStore.swift */,
 				7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */,
 				7AA54247F60B5BDC1BA90AD4 /* CopyDisplayStore.swift */,
-				7AA548F4166A1826238F6589 /* TelemetryStore.swift */,
 				7DDEAA702124CEB100A7D521 /* DataStore.swift */,
 				226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */,
 				7D07A31E2138863400772283 /* AutoLockStore.swift */,
@@ -1709,7 +1706,6 @@
 				7DB9DE982140C68000239D31 /* BaseItemListView.swift in Sources */,
 				7D078EF02124DF6500D10D1B /* BaseAccountStore.swift in Sources */,
 				7D078EEC2124DCE400D10D1B /* BaseSettingAction.swift in Sources */,
-				08454B9821486AAD00328040 /* CredentialUserDefaultStore.swift in Sources */,
 				7DDEAA6B2124B61800A7D521 /* ErrorAction.swift in Sources */,
 				3996418721486C0E000A1984 /* Data+.swift in Sources */,
 				3996417E21482068000A1984 /* CredentialItemListView.swift in Sources */,
