@@ -2,9 +2,9 @@
 
 ## 1.3 (Build 2259)
 
-You now have the ability to automatically fill your username and password into apps and websites.
+With iOS 12 you can automatically fill your usernames and passwords from Firefox Lockbox into apps and websites.
 
-Be sure to enable AutoFill after updating to iOS 12 in "Settings" under the "Passwords & Accounts" section.
+Be sure to enable AutoFill after updating to iOS 12 from within Settings under the "Passwords & Accounts" section.
 
 ## 1.2 (Build 2016)
 
