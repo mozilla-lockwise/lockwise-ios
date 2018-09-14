@@ -113,6 +113,7 @@ _Once a version has been merged or released, the major app version should be inc
 
 - Update the value in `Common/Resources/Info.plist` for the Lockbox app, for example from `1.2` to `1.3`
 - Also update the value in `CredentialProvider/Info.plist` for the extension to _the exact same version_
+- Be sure to submit the new build to TestFlight Beta App Review ASAP so that review doesn't prevent external user testing
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
 [2]: https://developer.apple.com/testflight/testers/
