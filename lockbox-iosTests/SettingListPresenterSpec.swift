@@ -170,7 +170,7 @@ class SettingListPresenterSpec: QuickSpec {
                         }
 
                         it("does not show autolock") {
-                            expect(self.view.itemsObserver.events.last!.value.element![1].items.count).to(equal(2))
+                            expect(self.view.itemsObserver.events.last!.value.element![1].items.count).to(equal(3))
                         }
 
                         it("sets detail value for preferred browser") {
