@@ -142,6 +142,8 @@ class ItemListPresenter: BaseItemListPresenter {
 
         self.setupPullToRefresh(pullToRefreshActiveObserver)
         self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
+
+        self.dispatcher.dispatch(action: ItemListFilterByIdAction(identifiers: nil))
     }
 }
 

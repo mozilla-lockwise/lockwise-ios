@@ -17,3 +17,7 @@ struct ItemListFilterEditAction: ItemListDisplayAction {
 struct PullToRefreshAction: ItemListDisplayAction {
     let refreshing: Bool
 }
+
+struct ItemListFilterByIdAction: ItemListDisplayAction {
+    let identifiers: [String]?
+}
