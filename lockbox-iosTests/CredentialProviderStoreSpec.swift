@@ -183,6 +183,17 @@ class CredentialProviderStoreSpec: QuickSpec {
                         }
                     }
                 }
+
+                describe("when the credential list is enabled and there is no login list") {
+                    beforeEach {
+                        self.dispatcher.registerStub.onNext(CredentialProviderAction.refresh)
+                        self.dataStore.listStub.onNext([])
+                    }
+
+                    it("just pushes populated") {
+                        expect(try! self.subject.state.toBlocking().first()!).to(equal(CredentialProviderStoreState.Populated))
+                    }
+                }
             }
         }
     }

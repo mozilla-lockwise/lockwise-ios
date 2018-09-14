@@ -18,6 +18,7 @@ class CredentialProviderStore {
 
     private let dispatcher: Dispatcher
     private let dataStore: DataStore
+    private let accountStore: AccountStore
     private let credentialStore: CredentialIdentityStoreProtocol
     private let disposeBag = DisposeBag()
 
@@ -35,9 +36,11 @@ class CredentialProviderStore {
 
     init(dispatcher: Dispatcher = .shared,
          dataStore: DataStore = .shared,
+         accountStore: AccountStore = .shared,
          credentialStore: CredentialIdentityStoreProtocol = ASCredentialIdentityStore.shared) {
         self.dispatcher = dispatcher
         self.dataStore = dataStore
+        self.accountStore = accountStore
         self.credentialStore = credentialStore
 
         self.dispatcher.register
@@ -73,11 +76,20 @@ extension CredentialProviderStore {
     }
 
     private func refresh() {
-        self._stateSubject.onNext(.Populating)
+        Observable.combineLatest(self.dataStore.list, self.accountStore.oauthInfo, self.accountStore.profile)
+                .filter { $0.1 != nil && $0.2 != nil }
+                .map { $0.0 }
+                .filter { $0.isEmpty }
+                .bind { _ in
+                    self._stateSubject.onNext(.Populated)
+                }
+                .disposed(by: self.disposeBag)
 
         let loginObservable = self.dataStore.list.filterEmpty()
 
         loginObservable.flatMap { logins -> Observable<(Void, [Login])> in
+                    self._stateSubject.onNext(.Populating)
+
                     let clearObservable = self.clearCredentialStore()
                         .asObservable()
                     let justLoginObservable = Observable.just(logins)
