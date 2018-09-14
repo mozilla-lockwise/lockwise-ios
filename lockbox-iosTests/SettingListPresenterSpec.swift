@@ -170,7 +170,11 @@ class SettingListPresenterSpec: QuickSpec {
                         }
 
                         it("does not show autolock") {
-                            expect(self.view.itemsObserver.events.last!.value.element![1].items.count).to(equal(2))
+                            if #available(iOS 12.0, *) {
+                                expect(self.view.itemsObserver.events.last!.value.element![1].items.count).to(equal(3))
+                            } else {
+                                expect(self.view.itemsObserver.events.last!.value.element![1].items.count).to(equal(2))
+                            }
                         }
 
                         it("sets detail value for preferred browser") {
