@@ -93,7 +93,7 @@ class ItemListPresenter: BaseItemListPresenter {
         }.asObserver()
     }()
 
-    override var learnMoreObserver: AnyObserver<Void> {
+    override var learnMoreObserver: AnyObserver<Void>? {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                     urlString: Constant.app.enableSyncFAQ,
@@ -102,7 +102,7 @@ class ItemListPresenter: BaseItemListPresenter {
         }.asObserver()
     }
 
-    override var learnMoreNewEntriesObserver: AnyObserver<Void> {
+    override var learnMoreNewEntriesObserver: AnyObserver<Void>? {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                 urlString: Constant.app.createNewEntriesFAQ,
