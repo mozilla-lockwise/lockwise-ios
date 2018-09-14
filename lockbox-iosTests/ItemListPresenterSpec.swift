@@ -218,7 +218,7 @@ class ItemListPresenterSpec: QuickSpec {
                                     let configuration = self.view.itemsObserver.events.last!.value.element
                                     let emptyListPlaceholder = configuration!.first!.items[1]
                                     if case let .EmptyListPlaceholder(learnMoreObserver) = emptyListPlaceholder {
-                                        learnMoreObserver.onNext(())
+                                        learnMoreObserver!.onNext(())
                                     } else {
                                         fail("wrong item configuration!")
                                     }
