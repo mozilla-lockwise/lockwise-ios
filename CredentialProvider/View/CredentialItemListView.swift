@@ -27,13 +27,16 @@ class ItemListView: BaseItemListView, ItemListViewProtocol {
     override func styleNavigationBar() {
         super.styleNavigationBar()
 
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.cancelButton)
-
-        if let presenter = presenter {
-            (self.navigationItem.leftBarButtonItem?.customView as? UIButton)?.rx.tap
-                .bind(to: presenter.cancelButtonObserver)
-                .disposed(by: self.disposeBag)
+        guard let presenter = presenter else {
+            return
         }
+
+        let button = self.cancelButton
+        button.rx.tap
+            .bind(to: presenter.cancelButtonObserver)
+            .disposed(by: self.disposeBag)
+
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
     }
 }
 
