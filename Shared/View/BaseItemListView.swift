@@ -160,6 +160,10 @@ extension BaseItemListView {
 
                         cell.titleLabel.text = title
                         cell.detailLabel.text = username
+                        
+                        if (self.extensionContext == nil) {
+                            cell.accessoryType = .disclosureIndicator
+                        }
 
                         retCell = cell
                     case .SyncListPlaceholder:
