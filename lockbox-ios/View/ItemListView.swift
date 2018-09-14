@@ -12,7 +12,6 @@ class ItemListView: BaseItemListView {
         return self.basePresenter as? ItemListPresenter
     }
 
-    private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {

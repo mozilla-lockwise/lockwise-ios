@@ -191,6 +191,13 @@ extension SettingListPresenter {
             supportSettingSection.items.append(appVersionSetting)
         }
 
+        if #available(iOS 12.0, *) {
+            let autoFillSetting = SettingCellConfiguration(text: Constant.string.settingsAutoFillSettings,
+                                                           routeAction: SettingLinkAction.autofill,
+                                                           accessibilityId: "autoFillSettingsOption")
+            applicationConfigurationSection.items.append(autoFillSetting)
+        }
+
         return [supportSettingSection, applicationConfigurationSection]
     }
 

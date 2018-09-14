@@ -9,6 +9,10 @@ import RxCocoa
 class CredentialWelcomeView: UIViewController {
     internal var presenter: CredentialWelcomePresenter?
     @IBOutlet private weak var oceanView: UIImageView!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

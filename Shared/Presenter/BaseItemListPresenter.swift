@@ -44,11 +44,11 @@ class BaseItemListPresenter {
         fatalError("not implemented!")
     }
 
-    internal var learnMoreObserver: AnyObserver<Void> {
+    internal var learnMoreObserver: AnyObserver<Void>? {
         fatalError("not implemented!")
     }
 
-    internal var learnMoreNewEntriesObserver: AnyObserver<Void> {
+    internal var learnMoreNewEntriesObserver: AnyObserver<Void>? {
         fatalError("not implemented!")
     }
 

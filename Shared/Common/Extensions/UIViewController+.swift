@@ -141,3 +141,10 @@ extension UIViewController {
         _ = self.view
     }
 }
+
+extension UINavigationController {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        // Allow the view controller to set the preferredStatusBarStyle
+        return topViewController?.preferredStatusBarStyle ?? .default
+    }
+}

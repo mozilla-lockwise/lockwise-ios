@@ -12,7 +12,7 @@ struct ExternalLinkAction: LinkAction {
     let baseURLString: String
 }
 
-enum SettingLinkAction: LinkAction {
+enum SettingLinkAction: RouteAction {
     case touchIDPasscode
     case autofill
 
