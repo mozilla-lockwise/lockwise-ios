@@ -131,13 +131,8 @@ class CredentialProviderPresenter {
                         self?.view?.displayWelcome()
                     } else {
                         self?.view?.displayItemList()
-//                        guard let dismissObserver = self?.dismissObserver else { return }
-//                        self?.view?.displayAlertController(buttons: [
-//                                AlertActionButtonConfiguration(title: "OK", tapObserver: dismissObserver, style: .default)
-//                            ],
-//                                                          title: "Credential list not available yet",
-//                                                          message: "Please check back later",
-//                                                          style: .alert)
+                        let ids = serviceIdentifiers.map { $0.identifier }
+                        self?.dispatcher.dispatch(action: ItemListFilterByIdAction(identifiers: ids))
                     }
                 })
                 .disposed(by: self.disposeBag)
