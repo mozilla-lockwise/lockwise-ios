@@ -14,10 +14,6 @@ class CredentialProviderView: ASCredentialProviderViewController {
                 currentViewController.view.frame = self.view.bounds
                 self.view.addSubview(currentViewController.view)
                 currentViewController.didMove(toParent: self)
-                
-                if oldValue != nil {
-                    self.view.sendSubviewToBack(currentViewController.view)
-                }
             }
 
             guard let oldViewController = oldValue else {
