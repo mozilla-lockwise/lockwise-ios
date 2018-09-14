@@ -124,7 +124,8 @@ class CredentialProviderPresenter {
         self.dispatcher.dispatch(action: LifecycleAction.foreground)
 
         self.dataStore.locked
-                .bind { [weak self] locked in
+                .asDriver(onErrorJustReturn: true)
+                .drive(onNext: { [weak self] locked in
                     if locked {
                         self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
                         self?.view?.displayWelcome()
@@ -138,7 +139,7 @@ class CredentialProviderPresenter {
 //                                                          message: "Please check back later",
 //                                                          style: .alert)
                     }
-                }
+                })
                 .disposed(by: self.disposeBag)
     }
 }
