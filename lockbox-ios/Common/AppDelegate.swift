@@ -48,24 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         UserDefaults.standard.set(Constant.app.appVersionCode, forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
-        let navBarImage = UIImage.createGradientImage(
-                frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
-                colors: [Constant.color.lockBoxBlue, Constant.color.lockBoxTeal],
-                locations: [0.15, 0]
-        )
-        if #available(iOS 11.0, *) {
-            UINavigationBar.appearance().barTintColor = UIColor(patternImage: navBarImage!)
-            UINavigationBar.appearance().isTranslucent = true
-            UINavigationBar.appearance().prefersLargeTitles = true
-            UINavigationBar.appearance().largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]
-        } else {
-            UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
-            UINavigationBar.appearance().isTranslucent = false
-        }
-
-        UITextField.appearance().tintColor = .black
+        AppearanceHelper.shared.setupAppearance()
 
         setupAdjust()
 

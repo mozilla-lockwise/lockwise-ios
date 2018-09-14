@@ -27,6 +27,7 @@ class CredentialProviderView: ASCredentialProviderViewController {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        AppearanceHelper.shared.setupAppearance()
         self.presenter = CredentialProviderPresenter(view: self)
     }
 
@@ -58,11 +59,7 @@ extension CredentialProviderView: CredentialProviderViewProtocol {
     func displayItemList() {
         let viewController = UIStoryboard(name: "ItemList", bundle: nil)
             .instantiateViewController(withIdentifier: "itemlist")
-        self.currentViewController = viewController
 
-        guard let itemList = viewController as? ItemListView,
-            let presenter = itemList.presenter else {
-                return
-        }
+        self.currentViewController = UINavigationController(rootViewController: viewController)
     }
 }

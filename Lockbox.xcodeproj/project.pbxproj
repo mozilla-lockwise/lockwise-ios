@@ -26,6 +26,8 @@
 		391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233802090E60A00CB0233 /* XCGLogger.framework */; };
 		391233842090E63000CB0233 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233832090E63000CB0233 /* Alamofire.framework */; };
 		391233892092155300CB0233 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 391233882092155300CB0233 /* FxASignIn.js */; };
+		3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
+		3931871F214C12C7003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
 		393F9E7820E6DA4F0004C503 /* OnboardingConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E6B93174DF10AABF407 /* OnboardingConfirmationView.swift */; };
 		3996417E21482068000A1984 /* CredentialItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996417D21482068000A1984 /* CredentialItemListView.swift */; };
 		399641802148218D000A1984 /* CredentialItemListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996417F2148218D000A1984 /* CredentialItemListPresenter.swift */; };
@@ -367,6 +369,7 @@
 		391233802090E60A00CB0233 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		391233832090E63000CB0233 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		391233882092155300CB0233 /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = FxASignIn.js; path = "Carthage/Checkouts/lockbox-ios-fxa-sync/Assets/FxASignIn.js"; sourceTree = SOURCE_ROOT; };
+		3931871D214C12C5003C9E4A /* AppearanceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceHelper.swift; sourceTree = "<group>"; };
 		3996417D21482068000A1984 /* CredentialItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialItemListView.swift; sourceTree = "<group>"; };
 		3996417F2148218D000A1984 /* CredentialItemListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialItemListPresenter.swift; sourceTree = "<group>"; };
 		39964181214863D5000A1984 /* CredentialUserDefaultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialUserDefaultStore.swift; sourceTree = "<group>"; };
@@ -738,6 +741,7 @@
 		7AA545D81CFDA7E54485C845 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				3931871D214C12C5003C9E4A /* AppearanceHelper.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
 			);
 			path = Helpers;
@@ -1661,6 +1665,7 @@
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
 				D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */,
 				7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */,
+				3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */,
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
@@ -1738,6 +1743,7 @@
 				7D4396542135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7D9722C3213461510071D82B /* UIImage+.swift in Sources */,
 				7D09B24D2125E1E200794CA2 /* BaseUserDefaults+.swift in Sources */,
+				3931871F214C12C7003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D078EED2124DCF500D10D1B /* TelemetryAction.swift in Sources */,
 				7AA548349DDB5D1CF52DD82E /* CredentialWelcomeView.swift in Sources */,
 			);
