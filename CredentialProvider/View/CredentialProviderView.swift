@@ -24,6 +24,10 @@ class CredentialProviderView: ASCredentialProviderViewController {
             oldViewController.removeFromParent()
         }
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.currentViewController?.preferredStatusBarStyle ?? .default
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

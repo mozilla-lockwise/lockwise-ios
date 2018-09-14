@@ -15,9 +15,14 @@ class ItemListView: BaseItemListView, ItemListViewProtocol {
         return self.basePresenter as? ItemListPresenter
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.presenter?.onViewReady()
+        self.setNeedsStatusBarAppearanceUpdate()
     }
 
     override func createPresenter() -> BaseItemListPresenter {
