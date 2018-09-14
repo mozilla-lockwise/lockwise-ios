@@ -292,7 +292,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="12" height="22"/>
+        <image name="arrow-right" width="6.5" height="10"/>
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
     </resources>
