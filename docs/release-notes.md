@@ -1,6 +1,6 @@
 # Release Notes
 
-## 1.3 (Build 2259)
+## 1.3 (Build 2294)
 
 With iOS 12 you can automatically fill your usernames and passwords from Firefox Lockbox into apps and websites.
 
