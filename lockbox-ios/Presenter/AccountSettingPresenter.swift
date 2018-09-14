@@ -18,6 +18,7 @@ class AccountSettingPresenter {
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: CredentialProviderAction.clear)
             target.dispatcher.dispatch(action: DataStoreAction.reset)
             target.dispatcher.dispatch(action: AccountAction.clear)
         }.asObserver()

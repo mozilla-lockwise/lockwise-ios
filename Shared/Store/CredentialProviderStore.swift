@@ -50,6 +50,8 @@ class CredentialProviderStore {
                         self?._authenticationDisplay.onNext(true)
                     case .authenticated:
                         self?._authenticationDisplay.onNext(false)
+                    case.clear:
+                        self?.clear()
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -62,6 +64,12 @@ class CredentialProviderStore {
 
 @available(iOS 12, *)
 extension CredentialProviderStore {
+    private func clear() {
+        self.clearCredentialStore()
+                .subscribe()
+                .disposed(by: self.disposeBag)
+    }
+    
     private func checkStateAndRefresh() {
         self.credentialStore.getState { [weak self] state in
             if state.isEnabled {
