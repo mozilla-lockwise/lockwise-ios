@@ -6,7 +6,7 @@ import Foundation
 import AuthenticationServices
 
 enum CredentialProviderAction: Action {
-    case refresh, authenticationRequested, authenticated
+    case refresh, authenticationRequested, authenticated, clear
 }
 
 extension CredentialProviderAction: TelemetryAction {
@@ -18,6 +18,8 @@ extension CredentialProviderAction: TelemetryAction {
             return .autofill_locked
         case .authenticated:
             return .autofill_unlocked
+        case .clear:
+            return .autofill_clear
         }
 
     }
