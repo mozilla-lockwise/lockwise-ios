@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,7 +12,7 @@
         <!--Item List View-->
         <scene sceneID="5Zv-jH-AQ4">
             <objects>
-                <viewController storyboardIdentifier="itemlist" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2mk-ib-5TB" customClass="ItemListView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="itemlist" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2mk-ib-5TB" customClass="ItemListView" customModule="CredentialProvider" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EWp-zW-Z4E">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,7 +27,7 @@
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="filtercell" rowHeight="44" id="hEu-cd-CNd" customClass="FilterCell" customModule="Lockbox" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="filtercell" rowHeight="44" id="hEu-cd-CNd" customClass="FilterCell" customModule="CredentialProvider" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hEu-cd-CNd" id="0wm-do-QXQ">
@@ -36,7 +35,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="center" horizontalHuggingPriority="248" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search your entries" textAlignment="natural" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="DEF-qU-5KB">
-                                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="287" height="44"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="filterEntries.textField"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="44" id="fe1-O9-xUl"/>
@@ -90,11 +89,11 @@
                                             <outlet property="filterTextField" destination="DEF-qU-5KB" id="mzd-ec-hdw"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="itemlistcell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="itemlistcell" rowHeight="60" id="js3-IG-n21" customClass="ItemListCell" customModule="Lockbox" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="itemlistcell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="itemlistcell" rowHeight="60" id="js3-IG-n21" customClass="ItemListCell" customModule="CredentialProvider" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="72" width="375" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="js3-IG-n21" id="R1R-SD-Nxb">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="60"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3A5-nI-aV6">
@@ -104,7 +103,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2T-XM-ua9">
-                                                    <rect key="frame" x="14" y="30" width="31" height="17.5"/>
+                                                    <rect key="frame" x="14" y="30" width="31" height="18"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -146,7 +145,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" image="item-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="hbE-L4-UGB">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="252.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="253"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -158,7 +157,7 @@
                                         </tableViewCellContentView>
                                         <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="emptylistplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="emptylistplaceholder" rowHeight="300" id="Zwa-yR-CR7" customClass="EmptyPlaceholderCell" customModule="Lockbox" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="emptylistplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="emptylistplaceholder" rowHeight="300" id="Zwa-yR-CR7" customClass="EmptyPlaceholderCell" customModule="CredentialProvider" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="385" width="375" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zwa-yR-CR7" id="6wL-a0-kfc">
@@ -169,7 +168,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smh-ku-Ub5">
-                                                    <rect key="frame" x="47.5" y="182" width="280" height="62.5"/>
+                                                    <rect key="frame" x="47.5" y="182" width="280" height="63"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="WcY-qh-pBg"/>
                                                     </constraints>
@@ -218,7 +217,7 @@
                                             <outlet property="learnMoreButton" destination="aQB-Vr-ObR" id="rtw-oq-uuY"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="noresultsplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="noresultsplaceholder" rowHeight="300" id="k0g-dg-N0G" customClass="NoResultsCell" customModule="Lockbox" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="noresultsplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="noresultsplaceholder" rowHeight="300" id="k0g-dg-N0G" customClass="NoResultsCell" customModule="CredentialProvider" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="685" width="375" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="k0g-dg-N0G" id="CRM-Km-Zcb">
@@ -235,7 +234,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
-                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="161.5"/>
+                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="162"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XXw-4F-3gz"/>
@@ -293,7 +292,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="6" height="10"/>
+        <image name="arrow-right" width="12" height="22"/>
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
     </resources>
