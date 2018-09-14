@@ -108,6 +108,16 @@ class CredentialProviderStoreSpec: QuickSpec {
                 }
             }
 
+            describe("clear") {
+                beforeEach {
+                    self.dispatcher.registerStub.onNext(CredentialProviderAction.clear)
+                }
+
+                it("clears the credential store") {
+                    expect(self.credentialIdentityStore.removeCompletion).notTo(beNil())
+                }
+            }
+
             describe("refresh") {
                 describe("when the credential store is not enabled") {
                     beforeEach {
