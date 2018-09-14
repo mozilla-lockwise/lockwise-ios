@@ -57,7 +57,7 @@ class Constant {
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
         static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
-        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Your Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
+        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
     }
