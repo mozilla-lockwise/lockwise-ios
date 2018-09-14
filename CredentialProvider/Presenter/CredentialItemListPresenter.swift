@@ -14,6 +14,10 @@ class ItemListPresenter: BaseItemListPresenter {
         return self.baseView as? ItemListViewProtocol
     }
 
+    override var learnMoreObserver: AnyObserver<Void>? { return nil }
+
+    override var learnMoreNewEntriesObserver: AnyObserver<Void>? { return nil }
+
     override var itemSelectedObserver: AnyObserver<String?> {
         return Binder(self) { target, itemId in
             guard let id = itemId else {

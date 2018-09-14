@@ -13,8 +13,8 @@ enum LoginListCellConfiguration {
     case Search(enabled: Observable<Bool>, cancelHidden: Observable<Bool>, text: Observable<String>)
     case Item(title: String, username: String, guid: String)
     case SyncListPlaceholder
-    case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>)
-    case NoResults(learnMoreObserver: AnyObserver<Void>)
+    case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>?)
+    case NoResults(learnMoreObserver: AnyObserver<Void>?)
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -177,20 +177,26 @@ extension BaseItemListView {
                             fatalError("couldn't find the right cell!")
                         }
 
-                        cell.learnMoreButton.rx.tap
-                                .bind(to: learnMoreObserver)
-                                .disposed(by: cell.disposeBag)
-
+                        if let observer = learnMoreObserver {
+                            cell.learnMoreButton.rx.tap
+                                    .bind(to: observer)
+                                    .disposed(by: cell.disposeBag)
+                        } else {
+                            cell.learnMoreButton.isHidden = true
+                        }
                         retCell = cell
                     case .NoResults(let learnMoreObserver):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder") as? NoResultsCell else {
                             fatalError("couldn't find the no results cell")
                         }
 
-                        cell.learnMoreButton.rx.tap
-                            .bind(to: learnMoreObserver)
-                            .disposed(by: cell.disposeBag)
-
+                        if let observer = learnMoreObserver {
+                            cell.learnMoreButton.rx.tap
+                                .bind(to: observer)
+                                .disposed(by: cell.disposeBag)
+                        } else {
+                            cell.learnMoreButton.isHidden = true
+                        }
                         retCell = cell
                     }
 
