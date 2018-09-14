@@ -118,6 +118,9 @@ class AccountSettingPresenterSpec: QuickSpec {
 
                         let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                         expect(dataStoreAction).to(equal(.reset))
+
+                        let credprovideraction = self.dispatcher.dispatchedActions.popLast() as! CredentialProviderAction
+                        expect(credprovideraction).to(equal(.clear))
                     }
                 }
             }
