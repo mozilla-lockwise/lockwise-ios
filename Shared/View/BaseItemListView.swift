@@ -52,7 +52,7 @@ extension LoginListCellConfiguration: Equatable {
 class BaseItemListView: UIViewController {
     internal var basePresenter: BaseItemListPresenter?
     @IBOutlet weak var tableView: UITableView!
-    private var disposeBag = DisposeBag()
+    internal var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {

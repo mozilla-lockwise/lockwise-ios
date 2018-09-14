@@ -36,4 +36,10 @@ class ItemListPresenter: BaseItemListPresenter {
                 .disposed(by: self.disposeBag)
             }.asObserver()
     }
+
+    lazy var cancelButtonObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+        }.asObserver()
+    }()
 }
