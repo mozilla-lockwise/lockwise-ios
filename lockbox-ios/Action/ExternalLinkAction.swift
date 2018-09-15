@@ -15,13 +15,6 @@ struct ExternalLinkAction: LinkAction {
 enum SettingLinkAction: RouteAction {
     case touchIDPasscode
     case autofill
-
-    func toString() -> String {
-        switch self {
-        case .touchIDPasscode: return "App-Prefs:root=TOUCHID_PASSCODE"
-        case .autofill: return "App-Prefs:root=Passwords_And_Accounts"
-        }
-    }
 }
 
 extension ExternalLinkAction: Equatable {
