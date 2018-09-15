@@ -63,7 +63,7 @@ class ExternalLinkStoreSpec: QuickSpec {
                 }
 
                 it("opens the appropriate string value of the settings page") {
-                    let expectedURL = URL(string: "App-Prefs:root=TOUCHID_PASSCODE")
+                    let expectedURL = URL(string: UIApplication.openSettingsURLString)
                     expect(self.application.canOpenURLArgument).to(equal(expectedURL))
                     expect(self.application.openArgument).to(equal(expectedURL))
                 }
@@ -75,7 +75,7 @@ class ExternalLinkStoreSpec: QuickSpec {
                 }
 
                 it("opens the appropriate string value of the settings page") {
-                    let expectedURL = URL(string: "App-Prefs:root=Passwords_And_Accounts")
+                    let expectedURL = URL(string: UIApplication.openSettingsURLString)
                     expect(self.application.canOpenURLArgument).to(equal(expectedURL))
                     expect(self.application.openArgument).to(equal(expectedURL))
                 }

@@ -45,7 +45,7 @@ class ExternalLinkStore {
     }
 
     private func openSettings(_ action: SettingLinkAction) {
-        if let settingsURL = URL(string: action.toString()),
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString),
             self.application.canOpenURL(settingsURL) {
             self.application.open(settingsURL, options: [:], completionHandler: nil)
         }
