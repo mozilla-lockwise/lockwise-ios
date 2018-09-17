@@ -178,6 +178,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
 extension BaseTestCase {
 
+   func disconnectAndConnectAccount() {
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        // And, connect it again
+        waitforExistence(app.buttons["getStarted.button"])
+        app.buttons["getStarted.button"].tap()
+        userState.fxaUsername =  emailTestAccountLogins
+        userState.fxaPassword = passwordTestAccountLogins
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.nowAt(Screen.FxASigninScreenEmail)
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATypePassword)
+    }
+
     func checkIfAccountIsVerified() {
         if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
             let group = DispatchGroup()
