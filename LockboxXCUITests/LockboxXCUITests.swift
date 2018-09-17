@@ -284,16 +284,13 @@ class LockboxXCUITests: BaseTestCase {
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
         safari.launch()
         waitforExistence(safari.buttons["URL"], timeout: 5)
-        safari.buttons["URL"].tap()
-        safari.textFields["URL"].typeText(testingURL)
-        safari.textFields["URL"].typeText("\r")
-        waitforExistence(safari.textFields["test@example.com"])
-        safari.textFields["test@example.com"].tap()
+        waitforExistence(safari.textFields["Email or phone"])
+        safari.textFields["Email or phone"].tap()
         // Need to confirm what is shown here, different elements have appeared and
         if (safari.otherElements["Password Auto-fill"].exists) {
             safari.otherElements["Password Auto-fill"].tap()
         }
-        safari.buttons["Use “test@example.com”"].tap()
+        safari.buttons["Use “iosmztest@gmail.com”"].tap()
         // Once previous is clear we can assert that the element shown is correct
         //XCTAssertTrue(safari.buttons["iosmztest@gmail.com, for this website — Lockbox"].exists)
         safari.terminate()
