@@ -18,6 +18,7 @@ protocol BaseItemListViewProtocol: class {
 struct LoginListTextSort {
     let logins: [Login]
     let text: String
+    let ids: [String]?
     let sortingOption: Setting.ItemListSort
     let syncState: SyncState
     let storeState: LoginStoreState
@@ -27,6 +28,7 @@ extension LoginListTextSort: Equatable {
     static func ==(lhs: LoginListTextSort, rhs: LoginListTextSort) -> Bool {
         return lhs.logins == rhs.logins &&
             lhs.text == rhs.text &&
+            lhs.ids == rhs.ids &&
             lhs.sortingOption == rhs.sortingOption &&
             lhs.syncState == rhs.syncState
     }
@@ -135,10 +137,13 @@ class BaseItemListPresenter {
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
             .filterByType(class: ItemListFilterAction.self)
+        let filterIdObservable = self.itemListDisplayStore.listDisplay
+            .filterByType(class: ItemListFilterByIdAction.self)
 
         let listDriver = self.createItemListDriver(
             loginListObservable: self.dataStore.list,
             filterTextObservable: filterTextObservable,
+            filterIdObservable: filterIdObservable,
             itemSortObservable: itemSortObservable,
             syncStateObservable: self.dataStore.syncState,
             storageStateObservable: self.dataStore.storageState
@@ -153,6 +158,7 @@ class BaseItemListPresenter {
 extension BaseItemListPresenter {
     fileprivate func createItemListDriver(loginListObservable: Observable<[Login]>,
                                           filterTextObservable: Observable<ItemListFilterAction>,
+                                          filterIdObservable: Observable<ItemListFilterByIdAction>,
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
@@ -169,17 +175,19 @@ extension BaseItemListPresenter {
         return Observable.combineLatest(
             throttledListObservable,
             filterTextObservable,
+            filterIdObservable,
             itemSortObservable,
             throttledSyncStateObservable,
             throttledStorageStateObservable
             )
-            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState)) -> LoginListTextSort in
+            .map { (latest: ([Login], ItemListFilterAction, ItemListFilterByIdAction, Setting.ItemListSort, SyncState, LoginStoreState)) -> LoginListTextSort in
                 return LoginListTextSort(
                     logins: latest.0,
                     text: latest.1.filteringText,
-                    sortingOption: latest.2,
-                    syncState: latest.3,
-                    storeState: latest.4
+                    ids: latest.2.identifiers,
+                    sortingOption: latest.3,
+                    syncState: latest.4,
+                    storeState: latest.5
                 )
             }
             .distinctUntilChanged()
@@ -192,7 +200,10 @@ extension BaseItemListPresenter {
                     return self.emptyPlaceholderItems
                 }
 
-                let sortedFilteredItems = self.filterItemsForText(latest.text, items: latest.logins)
+                let filteredItems = self.filterItemsForText(latest.text,
+                                                            items: self.filterItemsById(latest.ids, items: latest.logins))
+
+                let sortedFilteredItems = filteredItems
                     .sorted { lhs, rhs -> Bool in
                         switch latest.sortingOption {
                         case .alphabetically:
@@ -221,6 +232,30 @@ extension BaseItemListPresenter {
         }
 
         return self.searchItem + loginCells
+    }
+
+    fileprivate func filterItemsById(_ ids: [String]?, items: [Login]) -> [Login] {
+        guard let ids = ids else {
+            return items
+        }
+
+        let hostnames = self.prepareServiceHostnames(from: ids)
+
+        return items.filter { self.credential($0.hostname, shouldMatch: hostnames) }
+    }
+
+    func prepareServiceHostnames(from identifiers: [String]) -> [String] {
+        return identifiers.compactMap { URL(string: $0)?.host }
+    }
+
+    func credential(_ urlString: String, shouldMatch serviceHostnames: [String]) -> Bool {
+        guard let hostname = URL(string: urlString)?.host else {
+            return false
+        }
+
+        return serviceHostnames
+            .map { hostname.contains($0) || $0.contains(hostname) }
+            .reduce(false) { $0 || $1 }
     }
 
     fileprivate func filterItemsForText(_ text: String, items: [Login]) -> [Login] {

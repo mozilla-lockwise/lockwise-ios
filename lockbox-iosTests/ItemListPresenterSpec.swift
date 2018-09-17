@@ -153,6 +153,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterByIdAction(identifiers: nil))
                         self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                     }
 
@@ -286,6 +287,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext(items)
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterByIdAction(identifiers: nil))
                         self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
                         self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
