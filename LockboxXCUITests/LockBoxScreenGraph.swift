@@ -6,6 +6,22 @@ import Foundation
 import MappaMundi
 import XCTest
 
+let emailTestAccountLogins = "test-b62feb2ed6@restmail.net"
+let passwordTestAccountLogins = "FRCuQaPm"
+
+var uid: String!
+var code: String!
+
+let firstEntryEmail = "iosmztest@gmail.com"
+
+let getEndPoint = "http://restmail.net/mail/test-b62feb2ed6"
+let postEndPoint = "https://api.accounts.firefox.com/v1/recovery_email/verify_code"
+let deleteEndPoint = "http://restmail.net/mail/test-b62feb2ed6@restmail.net"
+
+let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+
 class Screen {
     static let WelcomeScreen = "WelcomeScreen"
     static let OnboardingWelcomeScreen = "OnboardingWelcomeScreen"
@@ -215,6 +231,62 @@ extension BaseTestCase {
         navigator.performAction(Action.FxATypePassword)
     }
 
+    func loginFxAccount() {
+        userState.fxaPassword = passwordTestAccountLogins
+        userState.fxaUsername = "test-b62feb2ed6@restmail.net"
+        navigator.goto(Screen.FxASigninScreenEmail)
+        waitforExistence(app.navigationBars["Lockbox.FxAView"])
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.performAction(Action.FxATypeEmail)
+        waitforExistence(app.webViews.secureTextFields["Password"])
+        navigator.performAction(Action.FxATypePassword)
+    }
+
+    func skipAutofillConfiguration() {
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            if (app.buttons["setupAutofill.button"].exists) {
+            app.buttons["notNow.button"].tap()
+            }
+        }
+    }
+
+    func tapOnFinishButton() {
+        waitforExistence(app.buttons["finish.button"])
+        app.buttons["finish.button"].tap()
+    }
+
+    func waitForLockboxEntriesListView() {
+        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        navigator.nowAt(Screen.LockboxMainPage)
+    }
+
+    func disconnectAccount() {
+        navigator.goto(Screen.LockboxMainPage)
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+    }
+
+    func configureAutofillSettings() {
+        settings.cells.staticTexts["Passwords & Accounts"].tap()
+        settings.cells.staticTexts["AutoFill Passwords"].tap()
+        waitforExistence(settings.switches["AutoFill Passwords"], timeout: 3)
+        settings.switches["AutoFill Passwords"].tap()
+        waitforExistence(settings.cells.staticTexts["Lockbox"])
+        settings.cells.staticTexts["Lockbox"].tap()
+    }
+
+    func deleteUserInbox() {
+        let restUrl = URL(string: deleteEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.httpMethod = "DELETE"
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            print("Delete")
+        }
+        task.resume()
+    }
+
     func checkIfAccountIsVerified() {
         if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
             let group = DispatchGroup()
@@ -298,5 +370,18 @@ extension BaseTestCase {
         let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
         let numberValue = value[finalNumberIndex...];
         return String(numberValue)
+    }
+
+    func deleteApp(name: String) {
+        app.terminate()
+        let icon = springboard.icons["Lockbox"]
+        if icon.exists {
+            let iconFrame = icon.frame
+            let springboardFrame = springboard.frame
+            icon.press(forDuration: 1.3)
+            springboard.coordinate(withNormalizedOffset: CGVector(dx: (iconFrame.minX + 3 * UIScreen.main.scale) / springboardFrame.maxX, dy: (iconFrame.minY + 3 * UIScreen.main.scale) / springboardFrame.maxY)).tap()
+            waitforExistence(springboard.alerts.buttons["Delete"])
+            springboard.alerts.buttons["Delete"].tap()
+        }
     }
 }
