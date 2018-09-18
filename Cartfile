@@ -1,7 +1,7 @@
 github "Quick/Quick"
 github "Quick/Nimble"
 github "ReactiveX/RxSwift"
-github "RxSwiftCommunity/RxDataSources" "026857261128bf552369a3b69b3ab56c3f85704d"
+github "RxSwiftCommunity/RxDataSources" "81b709c28b8ceb5cddc8c2262d009ea8735f0893"
 github "RxSwiftCommunity/RxOptional" ~> 3.1.3
 github "mozilla-mobile/telemetry-ios"
 github "jrendel/SwiftKeychainWrapper" ~> 3.0
