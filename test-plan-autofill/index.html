@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Export Compliance Information - Firefox Lockbox for iOS</title>
+  <title>Test Plan for iOS 12 AutoFill - Firefox Lockbox for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Export Compliance Information";
-    var mkdocs_page_input_path = "export-compliance.md";
+    var mkdocs_page_name = "Test Plan for iOS 12 AutoFill";
+    var mkdocs_page_input_path = "test-plan-autofill.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -60,7 +60,17 @@
           
             <li class="toctree-l1">
 		
+    <span class="caption-text">How to Contribute</span>
+    <ul class="subnav">
+                <li class="">
+                    
     <a class="" href="../contributing/">Contributing</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../code_of_conduct/">Code of Conduct</a>
+                </li>
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -83,6 +93,18 @@
                 <li class="">
                     
     <a class="" href="../updating_libraries/">Dependencies</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../add-a-browser/">How to: add a browser</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../new-ui/">How to: add a UI feature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../test-plan/">Test Plan</a>
                 </li>
                 <li class="">
                     
@@ -113,10 +135,10 @@
     
       
     
-    <li>Export Compliance Information</li>
+    <li>Test Plan for iOS 12 AutoFill</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/export-compliance.md"
+        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/test-plan-autofill.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -126,27 +148,56 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="export-compliance-information">Export Compliance Information</h1>
-<blockquote>
-<p>Does your app use encryption? Select Yes even if your app only uses the standard encryption in iOS and macOS.</p>
-</blockquote>
-<p>Yes</p>
-<blockquote>
-<p>Does your app qualify for any of the exemptions provided in Category 5, Part 2 of the U.S. Export Administration Regulations?</p>
-</blockquote>
-<p>No</p>
-<blockquote>
-<p>Does your app implement any encryption algorithms that are proprietary or yet-to-be-accepted as standards by international standard bodies (IEEE, IETF, ITU, etc.)?</p>
-</blockquote>
-<p>No</p>
-<blockquote>
-<p>Does your app implement any standard encryption algorithms instead of, or in addition to, using or accessing the encryption in Apple’s iOS or macOS?</p>
-</blockquote>
-<p>Yes</p>
-<blockquote>
-<p>Is your app going to be available on the French App Store?</p>
-</blockquote>
-<p>No</p>
+                <h1 id="test-plan-for-ios-12-autofill">Test Plan for iOS 12 AutoFill</h1>
+<h2 id="getting-to-clean-state-for-testing">Getting to "clean state" for testing</h2>
+<ul>
+<li>Disconnect</li>
+<li>Disable "Lockbox" in AutoFill</li>
+<li>Turn off AutoFill entirely</li>
+<li>Delete app</li>
+<li>Install production version 1.2 (2051)</li>
+<li>Sign in</li>
+<li>Install master version 1.3 (2224+)</li>
+</ul>
+<h2 id="core-test-cases-and-expected-results">Core test cases and expected results</h2>
+<ol>
+<li>
+<p><strong>Upgrade from 1.2 to 1.3</strong> (locked or unlocked): does not require FxA sign in, prompts for biometrics to unlock otherwise straight to entry list</p>
+</li>
+<li>
+<p><strong>Enable AutoFill</strong> (locked app): does prompt for biometrics, show spinner screen</p>
+</li>
+<li>
+<p><strong>Enable AutoFill</strong> (unlocked app): does not prompt for biometrics, show spinner screen</p>
+</li>
+<li>
+<p><strong>Enable AutoFill then cancel biometrics</strong>: does prompt then take back to settings</p>
+</li>
+<li>
+<p><strong>Open App</strong> (manually locked app): does prompt for biometrics</p>
+</li>
+<li>
+<p><strong>Open App</strong> (timer locked): does prompt</p>
+</li>
+<li>
+<p><strong>Open App</strong> (unlocked during autofill enabling): does prompt (again)</p>
+</li>
+<li>
+<p><strong>Safari QuickType tap-to-fill</strong> (unlocked app): does (system) prompt for biometrics</p>
+</li>
+<li>
+<p><strong>Safari QuickType tap-to-fill</strong> (locked app): does (system) prompt for biometrics</p>
+</li>
+<li>
+<p><strong>QTB tap into entry list</strong> (unlocked): does not prompt for biometrics</p>
+</li>
+<li>
+<p><strong>QTB tap into entry list</strong> (locked): does prompt for biometrics</p>
+</li>
+<li>
+<p><strong>Cancel QTB tap-to-fill</strong> (locked): does prompt for biometrics then go back to app/website</p>
+</li>
+</ol>
               
             </div>
           </div>

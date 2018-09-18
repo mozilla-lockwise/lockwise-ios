@@ -60,7 +60,17 @@
           
             <li class="toctree-l1">
 		
+    <span class="caption-text">How to Contribute</span>
+    <ul class="subnav">
+                <li class="">
+                    
     <a class="" href="../contributing/">Contributing</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../code_of_conduct/">Code of Conduct</a>
+                </li>
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -84,6 +94,18 @@
                     
     <a class="" href="../updating_libraries/">Dependencies</a>
                 </li>
+                <li class="">
+                    
+    <a class="" href="../add-a-browser/">How to: add a browser</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../new-ui/">How to: add a UI feature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../test-plan/">Test Plan</a>
+                </li>
                 <li class=" current">
                     
     <a class="current" href="./">Release Instructions</a>
@@ -103,7 +125,7 @@
         
             <li><a class="toctree-l4" href="#taking-screenshots-for-new-releases">Taking screenshots for new releases</a></li>
         
-            <li><a class="toctree-l4" href="#updating-the-version-for-a-release">Updating the version for a release</a></li>
+            <li><a class="toctree-l4" href="#updating-the-version">Updating the version</a></li>
         
         </ul>
     
@@ -161,9 +183,9 @@
 <li>ideally, <code>production</code> will perfectly reproduce master</li>
 <li>but if <code>master</code> is in an un-releasable state, we cherry-pick commits to this branch</li>
 <li>this is an exception rather than the preferred maintenance method</li>
-<li>all <code>master</code> and <code>production</code> builds are sent to iTunes Connect, with the same buddybuild build number</li>
-<li>iTunes Connect has <a href="https://developer.apple.com/testflight/testers/">"internal" testers</a> (mobile devs, product integrity)</li>
-<li>thus, iTunes Connect and TestFlight can have <a href="https://developer.apple.com/testflight/testers/">"external" testers</a> which we add manually</li>
+<li>all <code>master</code> and <code>production</code> builds are sent to App Store Connect, with the same buddybuild build number</li>
+<li>App Store Connect has <a href="https://developer.apple.com/testflight/testers/">"internal" testers</a> (mobile devs, product integrity)</li>
+<li>thus, App Store Connect and TestFlight can have <a href="https://developer.apple.com/testflight/testers/">"external" testers</a> which we add manually</li>
 <li>currently, no plans exist for "external" users to include anyone outside of Mozilla</li>
 </ul>
 <h2 id="distributing-builds-through-buddybuild-branch-release">Distributing Builds through buddybuild (branch / release)</h2>
@@ -189,8 +211,8 @@
 <li>push the tag to GitHub and create a corresponding "Release" on GitHub.com</li>
 <li>copy the release notes to the "Release" on GitHub</li>
 <li>download the <code>.ipa</code> from buddybuild and attach it to the Release on GitHub</li>
-<li>Hopefully by now the build has been uploaded to iTunes Connect</li>
-<li>Browse to iTunes Connect and continue the "Distributing..." instructions</li>
+<li>Hopefully by now the build has been uploaded to App Store Connect</li>
+<li>Browse to App Store Connect and continue the "Distributing..." instructions</li>
 </ol>
 <h3 id="in-case-of-emergency-release">In Case of Emergency (Release)</h3>
 <p><em>similar to above, but requires explicit cherry-pick commits on <code>production</code> branch when <code>master</code> branch is not in a release-able state</em></p>
@@ -202,31 +224,42 @@
 <li>thus skipping or avoiding the non-release-able commits</li>
 <li>Push the resulting <code>production</code> branch to GitHub.com</li>
 <li>Create a tag from <code>production</code> matching the format: <code>major.minor.patch.build</code></li>
-<li>for example: <code>1.3.1.1624</code></li>
+<li>for example: <code>git tag -a -s 1.3.1.1624 -m "1.3.1 (Build 1624)"</code></li>
 <li>Push the tag to GitHub and create a corresponding "Release" on GitHub.com</li>
 <li>copy the release notes to the "Release" on GitHub</li>
 <li>Browse to buddybuild and find the desired <code>production</code> branch build to distribute</li>
 <li>download the <code>.ipa</code> from buddybuild and attach it to the Release on GitHub</li>
-<li>From the buddybuild's build "Deploy" tab, select the "Upload to iTunes Connect" link</li>
-<li>Browse to iTunes Connect to find the build and continue the "Distributing..." instructions</li>
+<li>From the buddybuild's build "Deploy" tab, select the "Upload to App Store Connect" link</li>
+<li>Browse to App Store Connect to find the build and continue the "Distributing..." instructions</li>
 </ol>
 <h2 id="distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</h2>
-<p><em>all <code>master</code> and <code>production</code> branch builds are automatically uploaded from buddybuild to iTunes Connect</em></p>
+<p><em>all <code>master</code> and <code>production</code> branch builds are automatically uploaded from buddybuild to App Store Connect.</em></p>
+<p>NOTE: if for some reason buddybuild does not deploy a build to App Store Connect, download the full App Store Connect .ipa from buddybuild and use the "Application Loader" app to manually upload it yourself.</p>
 <ol>
-<li>Browse to <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds">TestFlight &gt; Builds &gt; iOS</a> in iTunes Connect</li>
+<li>Browse to <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270/testflight?section=iosbuilds">TestFlight &gt; Builds &gt; iOS</a> in App Store Connect</li>
 <li>Find the desired build number to distribute</li>
-<li>Provide <a href="../export-compliance/">export compliance responses</a></li>
-<li>this makes the build immediately available to "internal" iTunes Connect users</li>
+<li>Provide export compliance responses<blockquote>
+<p>Does your app use encryption? Select Yes even if your app only uses the standard encryption in iOS and macOS.  </p>
+</blockquote>
+</li>
+</ol>
+<p>Yes</p>
+<blockquote>
+<p>Does your app qualify for any of the exemptions provided in Category 5, Part 2 of the U.S. Export Administration Regulations?  </p>
+</blockquote>
+<p>Yes (c) Limited to authentication, digital signature, or the decryption of data or files</p>
+<ol>
+<li>Once provided, this makes the build immediately available to "internal" App Store Connect users</li>
 <li>Copy the release notes for this release and add them to the "Test Details"</li>
 <li>Add at least one other "Group" of "external" testers to the build</li>
 <li>after review, this will make it available for all those "external" testers</li>
-<li>example: "lockbox-dev" which includes our other non-iTunes Connect engineers</li>
+<li>example: "lockbox-dev" which includes our other non-App Store Connect engineers</li>
 <li>example: "Product" which includes other product and content Mozillians</li>
 <li>example: "Cohort A" which includes the first round of volunteers to test</li>
 </ol>
 <h2 id="distributing-through-the-app-store-release">Distributing through the App Store (release)</h2>
 <ol>
-<li>Browse to the <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270">App Store</a> section in iTunes Connect</li>
+<li>Browse to the <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270">App Store</a> section in App Store Connect</li>
 <li>Confirm the "App Information" details are accurate and complete</li>
 <li>Confirm the "Pricing and Availability" details are accurate and complete</li>
 <li>Browse to the "iOS App" section to "Prepare for Submission"</li>
@@ -234,20 +267,22 @@
 <li>select the corresponding build number for the App Store release</li>
 <li>set the release instructions (manually, immediately, on a date)</li>
 <li>Save and "Submit for Review"</li>
-<li>???</li>
+<li>Wait for notification the app is ready for release and then release it (manually, on schedule and/or phased)</li>
 </ol>
+<p>NOTE: <em>brand new</em> apps may take up to 2 or more hours to appear throughout the App Store whereas existing app (updates) can appear within an hour. Schedule accordingly!</p>
 <h2 id="taking-screenshots-for-new-releases">Taking screenshots for new releases</h2>
 <p>Screenshots are automated via Fastlane. To get Fastlane, run <code>brew cask install fastlane</code>. From there, you will be able to run <code>fastlane snapshot</code> in the root directory of the project to run the screenshot task.</p>
 <p>Configuration:
 - [languages] Update / add desired locales to <code>fastlane/Snapfile</code>
 - [devices] Update / add desired device sizes to <code>fastlane/Snapfile</code>
 - <a href="https://stackoverflow.com/questions/38316591/how-to-test-dynamic-type-larger-font-sizes-in-ios-simulator">text size</a> Update the <code>CONTENT_SIZE</code> variable in <code>LockboxXCUITests/BaseTestCase.swift</code></p>
-<h2 id="updating-the-version-for-a-release">Updating the version for a release</h2>
+<h2 id="updating-the-version">Updating the version</h2>
+<p><em>Once a version has been merged or released, the major app version should be increased</em></p>
 <ul>
-<li>Once a version has been merged or released, the app version should be bumped</li>
-<li>Update the value in <code>Common/Resources/Info.plist</code>, for example from <code>1.2</code> to <code>1.3</code></li>
+<li>Update the value in <code>Common/Resources/Info.plist</code> for the Lockbox app, for example from <code>1.2</code> to <code>1.3</code></li>
+<li>Also update the value in <code>CredentialProvider/Info.plist</code> for the extension to <em>the exact same version</em></li>
+<li>Be sure to submit the new build to TestFlight Beta App Review ASAP so that review doesn't prevent external user testing</li>
 </ul>
-<hr />
               
             </div>
           </div>
@@ -256,7 +291,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="../updating_libraries/" class="btn btn-neutral" title="Dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../test-plan/" class="btn btn-neutral" title="Test Plan"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -284,7 +319,7 @@
           <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../updating_libraries/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../test-plan/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
     </span>

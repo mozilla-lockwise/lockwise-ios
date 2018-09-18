@@ -60,7 +60,17 @@
           
             <li class="toctree-l1">
 		
+    <span class="caption-text">How to Contribute</span>
+    <ul class="subnav">
+                <li class="">
+                    
     <a class="" href="../contributing/">Contributing</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../code_of_conduct/">Code of Conduct</a>
+                </li>
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -91,12 +101,22 @@
         
             <li><a class="toctree-l4" href="#swift-frameworks">Swift frameworks</a></li>
         
-            <li><a class="toctree-l4" href="#c-libraries">C Libraries</a></li>
-        
         </ul>
     
 
     </ul>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../add-a-browser/">How to: add a browser</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../new-ui/">How to: add a UI feature</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../test-plan/">Test Plan</a>
                 </li>
                 <li class="">
                     
@@ -145,15 +165,22 @@
             <div class="section">
               
                 <h1 id="external-dependencies">External Dependencies</h1>
+<p>With the addition of the Credential Provider API in iOS 12, you will need to use <strong>Xcode 10</strong> (beta 6) and <strong>Swift 4.2</strong> (<code>swiftlang-1000.0.36 clang-1000.10.44</code>) to work on Lockbox.</p>
+<p>And if you are running the beta, and haven't already: <code>sudo xcode-select --switch</code> to point to the beta Xcode app</p>
 <h2 id="swift-frameworks">Swift frameworks</h2>
-<p>All Swift frameworks are managed via <a href="https://github.com/carthage/carthage">Carthage</a>. In the home directory for the project, run <code>carthage update --platform iOS</code> to fetch &amp; build dependencies.</p>
-<p><strong>NOTE:</strong>  In some cases, the Swift frameworks might be built using a different version of Swift (e.g., 4.0 versus 4.1) and an error like the following is encountered for the mismatch:</p>
-<pre><code>    Incompatible Swift version - framework was built with 4.0.3 (swiftlang-900.0.74.1 clang-900.0.39.2) and the local version is 4.1 (swiftlang-902.0.48 clang-902.0.37.1).
-</code></pre>
-
-<p>If this occurs, run <code>carthage update --platform iOS --no-use-binaries</code> to build from sources instead.</p>
-<h2 id="c-libraries">C Libraries</h2>
-<p>Firefox Lockbox for iOS uses <a href="https://github.com/cisco/cjose">cjose</a> for JOSE encryption &amp; decryption in the FxA OAuth flow. The binaries to support this external dependency are provided along with this code (in the <code>lockbox-ios/binaries</code> folder). However, if you find yourself wanting to update this library (or either of its dependencies, Jansson or OpenSSL), navigate to the <code>scripts</code> directory and run <code>./update-dependencies</code>. NOTE: You will have to build the project at least once for the appropriate <code>binaries</code> folder to get un-tarred (or you can do it yourself).</p>
+<p>All Swift frameworks are managed via <a href="https://github.com/carthage/carthage">Carthage</a>.</p>
+<ol>
+<li>In the home directory for the project, run <code>carthage update</code> to fetch dependencies.</li>
+</ol>
+<p>You cannot use <code>--no-use-binaries</code> with Carthage in this project unless you have the proper Rust environment set up. Documentation is forthcoming on the right way to do this.</p>
+<ol>
+<li>
+<p>Grab a quick ☕️ or 🍵 !!</p>
+</li>
+<li>
+<p>If you receive the "Incompatible Swift version" error you may have a different version of Xcode beta then what we've last built against.</p>
+</li>
+</ol>
               
             </div>
           </div>
@@ -161,7 +188,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../releases/" class="btn btn-neutral float-right" title="Release Instructions">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../add-a-browser/" class="btn btn-neutral float-right" title="How to: add a browser">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../architecture/" class="btn btn-neutral" title="Architecture"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -195,7 +222,7 @@
         <span><a href="../architecture/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../releases/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../add-a-browser/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
