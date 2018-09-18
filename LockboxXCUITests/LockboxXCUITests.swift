@@ -10,7 +10,7 @@ let passwordTestAccountLogins = "FRCuQaPm"
 var uid: String!
 var code: String!
 
-let firstEntryEmail = "iosmztest@gmail.co"
+let firstEntryEmail = "iosmztest@gmail.com"
 
 let getEndPoint = "http://restmail.net/mail/test-b62feb2ed6"
 let postEndPoint = "https://api.accounts.firefox.com/v1/recovery_email/verify_code"
