@@ -11,6 +11,7 @@ import Shared
 
 protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)
+    func bind(sortChanged: Driver<Setting.ItemListSort>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
@@ -213,14 +214,22 @@ extension ItemListPresenter {
                         return Constant.string.recent
                     }
                 }
+        
+        let itemSortScrollDriver = itemSortObservable
+                .asDriver(onErrorJustReturn: .alphabetically)
 
         view.bind(sortingButtonTitle: itemSortTextDriver)
+        view.bind(sortChanged: itemSortScrollDriver)
 
         let loginListEmptyObservable = self.dataStore.list.map { $0.isEmpty }
         let isSyncingObservable = self.dataStore.syncState.map { $0 == .Syncing }
         let enableObservable = isSyncingObservable.withLatestFrom(loginListEmptyObservable) { (isSyncing, isListEmpty) in
           return !(isSyncing && isListEmpty)
         }
+        
+//        _ = itemSortObservable.distinctUntilChanged().bind { (_itemSort) in
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) { self.view?.scrollToTop() }
+//        }.disposed(by: self.disposeBag)
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)

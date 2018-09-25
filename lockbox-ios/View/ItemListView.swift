@@ -57,6 +57,15 @@ extension ItemListView: ItemListViewProtocol {
                 .disposed(by: self.disposeBag)
         }
     }
+    
+    func bind(sortChanged: Driver<Setting.ItemListSort>) {
+        sortChanged.delay(RxTimeInterval(0.1))
+                   .distinctUntilChanged()
+                    .drive(onNext: { (_sort) in
+                        self.scrollToTop()
+                    }, onCompleted: nil, onDisposed: nil)
+                    .disposed(by: self.disposeBag)
+    }
 
     var tableViewScrollEnabled: AnyObserver<Bool> {
         return self.tableView.rx.isScrollEnabled.asObserver()
@@ -100,6 +109,10 @@ extension ItemListView {
                 .bind(to: presenter.refreshObserver)
                 .disposed(by: self.disposeBag)
         }
+    }
+    
+    func scrollToTop() {
+        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .none, animated: true)
     }
 }
 
