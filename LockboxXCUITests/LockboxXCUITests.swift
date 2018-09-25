@@ -6,7 +6,6 @@ import XCTest
 
 let emailTestAccountLogins = "test-b62feb2ed6@restmail.net"
 let passwordTestAccountLogins = "FRCuQaPm"
-let testingURL = "https://wopr.norad.org/~sarentz/fxios/testpages/password.html"
 
 var uid: String!
 var code: String!
