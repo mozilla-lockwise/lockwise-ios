@@ -11,12 +11,12 @@ import Shared
 
 protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)
-    func bind(sortChanged: Driver<Setting.ItemListSort>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
     var onSettingsButtonPressed: ControlEvent<Void>? { get }
     var onSortingButtonPressed: ControlEvent<Void>? { get }
+    func scrollToTop()
 }
 
 struct SyncStateManual {
@@ -28,6 +28,12 @@ class ItemListPresenter: BaseItemListPresenter {
     weak var view: ItemListViewProtocol? {
         return self.baseView as? ItemListViewProtocol
     }
+    
+    lazy private var listSortedObserver: AnyObserver<Setting.ItemListSort> = {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: ScrollAction.toTop)
+        }.asObserver()
+    }()
 
     override var itemSelectedObserver: AnyObserver<String?> {
         return Binder(self) { target, itemId in
@@ -98,6 +104,21 @@ class ItemListPresenter: BaseItemListPresenter {
         self.setupSpinnerDisplay()
 
         let itemSortObservable = self.userDefaultStore.itemListSort
+        
+        itemSortObservable.bind(to: self.listSortedObserver).disposed(by: self.disposeBag)
+        
+        self.dispatcher.register
+            .filterByType(class: ScrollAction.self)
+            .subscribe({ evt in
+                guard let action = evt.element else { return }
+                switch action {
+                case .toTop:
+                    DispatchQueue.main.async {
+                        self.view?.scrollToTop()
+                    }
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
@@ -214,22 +235,14 @@ extension ItemListPresenter {
                         return Constant.string.recent
                     }
                 }
-        
-        let itemSortScrollDriver = itemSortObservable
-                .asDriver(onErrorJustReturn: .alphabetically)
 
         view.bind(sortingButtonTitle: itemSortTextDriver)
-        view.bind(sortChanged: itemSortScrollDriver)
 
         let loginListEmptyObservable = self.dataStore.list.map { $0.isEmpty }
         let isSyncingObservable = self.dataStore.syncState.map { $0 == .Syncing }
         let enableObservable = isSyncingObservable.withLatestFrom(loginListEmptyObservable) { (isSyncing, isListEmpty) in
           return !(isSyncing && isListEmpty)
         }
-        
-//        _ = itemSortObservable.distinctUntilChanged().bind { (_itemSort) in
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) { self.view?.scrollToTop() }
-//        }.disposed(by: self.disposeBag)
 
         enableObservable.bind(to: sortButtonObserver).disposed(by: self.disposeBag)
         enableObservable.bind(to: view.tableViewScrollEnabled).disposed(by: self.disposeBag)
