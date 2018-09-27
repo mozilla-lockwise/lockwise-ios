@@ -11,12 +11,12 @@ import Shared
 
 protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)
+    func bind(scrollAction: Driver<ScrollAction>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
     var onSettingsButtonPressed: ControlEvent<Void>? { get }
     var onSortingButtonPressed: ControlEvent<Void>? { get }
-    func scrollToTop()
 }
 
 struct SyncStateManual {
@@ -104,26 +104,17 @@ class ItemListPresenter: BaseItemListPresenter {
         self.setupSpinnerDisplay()
 
         let itemSortObservable = self.userDefaultStore.itemListSort
-        
         itemSortObservable.bind(to: self.listSortedObserver).disposed(by: self.disposeBag)
         
-        self.dispatcher.register
-            .filterByType(class: ScrollAction.self)
-            .subscribe({ evt in
-                guard let action = evt.element else { return }
-                switch action {
-                case .toTop:
-                    DispatchQueue.main.async {
-                        self.view?.scrollToTop()
-                    }
-                }
-            })
-            .disposed(by: self.disposeBag)
-
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
               let pullToRefreshActiveObserver = view.pullToRefreshActive else { return }
 
+        let scrollActionDriver = self.dispatcher.register
+            .filterByType(class: ScrollAction.self)
+            .asDriver(onErrorJustReturn: ScrollAction.toTop)
+        view.bind(scrollAction: scrollActionDriver)
+        
         self.setupButtonBehavior(
                 view: view,
                 itemSortObservable: itemSortObservable,
