@@ -281,6 +281,9 @@
 		D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */; };
 		D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */; };
 		D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */; };
+		D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */; };
+		D8DA03D8215B34AA00656455 /* AutofillInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */; };
+		D8DA03DA215B34FC00656455 /* AutofillInstructionsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA03D9215B34FC00656455 /* AutofillInstructionsPresenter.swift */; };
 		D8DD9300213F83D600F8041D /* AutofillOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */; };
 		D8DD9302213F840100F8041D /* AutofillOnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */; };
 		D8DD9304213F863700F8041D /* AutofillOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */; };
@@ -584,6 +587,9 @@
 		D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsViewSpec.swift; sourceTree = "<group>"; };
 		D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingView.swift; sourceTree = "<group>"; };
 		D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenter.swift; sourceTree = "<group>"; };
+		D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SetupAutofill.storyboard; sourceTree = "<group>"; };
+		D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsView.swift; sourceTree = "<group>"; };
+		D8DA03D9215B34FC00656455 /* AutofillInstructionsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsPresenter.swift; sourceTree = "<group>"; };
 		D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingView.swift; sourceTree = "<group>"; };
 		D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingPresenter.swift; sourceTree = "<group>"; };
 		D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AutofillOnboarding.storyboard; sourceTree = "<group>"; };
@@ -709,6 +715,7 @@
 				7AA545D5E7A7EB65733B8A8A /* StaticURLPresenter.swift */,
 				7AA54927D3D3AF3F60B9DD4B /* OnboardingConfirmationPresenter.swift */,
 				D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */,
+				D8DA03D9215B34FC00656455 /* AutofillInstructionsPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -799,6 +806,7 @@
 				7D578D24207573B000DC9C73 /* SettingList.storyboard */,
 				7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */,
 				D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */,
+				D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -842,6 +850,7 @@
 				7AA54E6B93174DF10AABF407 /* OnboardingConfirmationView.swift */,
 				D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */,
 				7DB9DEA02140CC0300239D31 /* ItemListView.swift */,
+				D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1372,6 +1381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */,
+				D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				391233892092155300CB0233 /* FxASignIn.js in Resources */,
@@ -1632,8 +1642,10 @@
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
 				7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */,
+				D8DA03DA215B34FC00656455 /* AutofillInstructionsPresenter.swift in Sources */,
 				D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */,
 				7DDEAA712124CEB100A7D521 /* DataStore.swift in Sources */,
+				D8DA03D8215B34AA00656455 /* AutofillInstructionsView.swift in Sources */,
 				D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */,
 				7AA546A2A19976883EB9CFE4 /* BaseDataStore.swift in Sources */,
 				7AA54DDC2527A59C773FAC3D /* Constants.swift in Sources */,

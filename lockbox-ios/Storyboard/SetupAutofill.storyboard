@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Autofill Instructions View-->
+        <scene sceneID="csk-xe-T9e">
+            <objects>
+                <viewController storyboardIdentifier="autofillinstructions" id="Lfh-H7-t6g" customClass="AutofillInstructionsView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wli-NL-jKr">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnK-nY-NyH">
+                                <rect key="frame" x="40" y="588" width="295" height="44"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="13" maxX="0.0" maxY="13"/>
+                                <state key="normal" title="Got it">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-step-icons" translatesAutoresizingMaskIntoConstraints="NO" id="3Mq-xu-nQh">
+                                <rect key="frame" x="40" y="302" width="29" height="246"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcZ-pI-Mgz">
+                                <rect key="frame" x="80" y="530" width="172" height="18"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Deselect ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="15" name=".SFNSText"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="iCloud Keychain">
+                                        <attributes>
+                                            <color key="NSColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="15" name="SFMono-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Lockbox" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0I-o4-2Ym">
+                                <rect key="frame" x="80" y="487" width="105" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn on AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ys5-RP-RQg">
+                                <rect key="frame" x="80" y="444" width="185" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap into AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaL-kM-bTV">
+                                <rect key="frame" x="80" y="399" width="187" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap into Passwords &amp; Accounts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daO-QU-3p5">
+                                <rect key="frame" x="80" y="356" width="215" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open to Settings app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xig-s8-dim">
+                                <rect key="frame" x="80" y="310" width="146" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-screenshot" translatesAutoresizingMaskIntoConstraints="NO" id="g8B-77-eAO">
+                                <rect key="frame" x="67" y="156" width="240" height="159"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="159" id="3aE-J4-EkZ"/>
+                                    <constraint firstAttribute="width" constant="315" id="BaA-qa-MYa"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How to Set up AutoFill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbo-05-zWe">
+                                <rect key="frame" x="84.5" y="108" width="204" height="27"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="dbo-05-zWe" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="84.280000000000001" id="0Ug-jC-7xv"/>
+                            <constraint firstItem="g8B-77-eAO" firstAttribute="top" secondItem="dbo-05-zWe" secondAttribute="bottom" constant="21" id="2Oq-WC-DPX"/>
+                            <constraint firstItem="jQO-vK-4qk" firstAttribute="bottom" secondItem="KnK-nY-NyH" secondAttribute="bottom" constant="35" id="9g9-xg-IVb"/>
+                            <constraint firstItem="jQO-vK-4qk" firstAttribute="trailing" secondItem="KnK-nY-NyH" secondAttribute="trailing" constant="40" id="Ahw-hh-BVv"/>
+                            <constraint firstItem="dbo-05-zWe" firstAttribute="top" secondItem="jQO-vK-4qk" secondAttribute="top" constant="88" id="Bf7-1V-FAV"/>
+                            <constraint firstItem="KnK-nY-NyH" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="40" id="Bz8-xR-UV2"/>
+                            <constraint firstItem="YaL-kM-bTV" firstAttribute="top" secondItem="daO-QU-3p5" secondAttribute="bottom" constant="25" id="GnQ-lr-rgX"/>
+                            <constraint firstItem="jQO-vK-4qk" firstAttribute="trailing" secondItem="g8B-77-eAO" secondAttribute="trailing" constant="67.950000000000003" id="K6j-a5-24f"/>
+                            <constraint firstItem="xig-s8-dim" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="LHJ-bD-21w"/>
+                            <constraint firstItem="3Mq-xu-nQh" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="40" id="TrE-M1-L0G"/>
+                            <constraint firstItem="daO-QU-3p5" firstAttribute="top" secondItem="xig-s8-dim" secondAttribute="bottom" constant="28" id="Y22-9K-ERQ"/>
+                            <constraint firstItem="vcZ-pI-Mgz" firstAttribute="top" secondItem="r0I-o4-2Ym" secondAttribute="bottom" constant="25" id="b8L-aE-w8S"/>
+                            <constraint firstItem="jQO-vK-4qk" firstAttribute="bottom" secondItem="3Mq-xu-nQh" secondAttribute="bottom" constant="119" id="cPq-F2-Vld"/>
+                            <constraint firstItem="r0I-o4-2Ym" firstAttribute="top" secondItem="Ys5-RP-RQg" secondAttribute="bottom" constant="25" id="cVk-3P-sIT"/>
+                            <constraint firstItem="jQO-vK-4qk" firstAttribute="trailing" secondItem="dbo-05-zWe" secondAttribute="trailing" constant="86.719999999999999" id="eZR-Qf-3Qw"/>
+                            <constraint firstItem="Ys5-RP-RQg" firstAttribute="top" secondItem="YaL-kM-bTV" secondAttribute="bottom" constant="27" id="fx4-Jw-dwO"/>
+                            <constraint firstItem="YaL-kM-bTV" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="jXk-iy-7az"/>
+                            <constraint firstItem="r0I-o4-2Ym" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="kNX-9x-0b4"/>
+                            <constraint firstItem="Ys5-RP-RQg" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="krv-bU-Qpq"/>
+                            <constraint firstItem="daO-QU-3p5" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="mG4-d6-fO7"/>
+                            <constraint firstItem="vcZ-pI-Mgz" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="qEf-eQ-jTv"/>
+                            <constraint firstItem="g8B-77-eAO" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="67.049999999999997" id="uID-c4-bab"/>
+                            <constraint firstItem="KnK-nY-NyH" firstAttribute="top" secondItem="vcZ-pI-Mgz" secondAttribute="bottom" constant="40" id="ueW-Go-I3k"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="jQO-vK-4qk"/>
+                    </view>
+                    <connections>
+                        <outlet property="finishButton" destination="KnK-nY-NyH" id="52w-4V-NiN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qyj-bX-Mub" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53.600000000000001" y="26.53673163418291"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="autofill-screenshot" width="333" height="177"/>
+        <image name="autofill-step-icons" width="29" height="246"/>
+    </resources>
+</document>

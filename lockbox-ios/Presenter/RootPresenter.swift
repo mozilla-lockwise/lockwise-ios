@@ -251,6 +251,10 @@ class RootPresenter {
                 if !view.topViewIs(PreferredBrowserSettingView.self) {
                     view.pushSettingView(view: .preferredBrowser)
                 }
+            case .autofillInstructions:
+                if !view.topViewIs(AutofillInstructionsView.self) {
+                    view.pushSettingView(view: .autofillInstructions)
+                }
             }
         }.asObserver()
     }()
