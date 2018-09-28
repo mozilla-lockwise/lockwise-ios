@@ -5,10 +5,12 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import AVKit
 
 class AutofillInstructionsView: UIViewController {
     internal var presenter: AutofillInstructionsPresenter?
     @IBOutlet weak var finishButton: UIButton!
+    @IBOutlet weak var videoView: UIView!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -17,6 +19,7 @@ class AutofillInstructionsView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setupVideo()
         self.presenter?.onViewReady()
     }
 
@@ -32,6 +35,23 @@ class AutofillInstructionsView: UIViewController {
 }
 
 extension AutofillInstructionsView: OnboardingInstructionsViewProtocol {
+    private func setupVideo() {
+        guard let path = Bundle.main.url(forResource: "AutofillSetup_v1.4", withExtension: "mp4") else {
+            return
+        }
+
+        let player = AVPlayer(url: path)
+        let layer = AVPlayerLayer(player: player)
+        layer.frame = self.videoView.bounds
+        self.videoView.layer.addSublayer(layer)
+        player.play()
+
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: nil) { (_) in
+            player.seek(to: CMTime.zero)
+            player.play()
+        }
+    }
+
     var finishButtonTapped: Observable<Void> {
         return self.finishButton.rx.tap.asObservable()
     }

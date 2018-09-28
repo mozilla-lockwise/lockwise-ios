@@ -252,9 +252,7 @@ class RootPresenter {
                     view.pushSettingView(view: .preferredBrowser)
                 }
             case .autofillInstructions:
-                if !view.topViewIs(AutofillInstructionsView.self) {
-                    view.pushSettingView(view: .autofillInstructions)
-                }
+                view.startModalStack(AutofillInstructionsNavigationController())
             }
         }.asObserver()
     }()
