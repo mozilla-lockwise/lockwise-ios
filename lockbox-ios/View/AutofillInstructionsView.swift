@@ -11,6 +11,7 @@ class AutofillInstructionsView: UIViewController {
     internal var presenter: AutofillInstructionsPresenter?
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var videoView: UIView!
+    private let disposeBag = DisposeBag()
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -34,7 +35,13 @@ class AutofillInstructionsView: UIViewController {
     }
 }
 
-extension AutofillInstructionsView: OnboardingInstructionsViewProtocol {
+extension AutofillInstructionsView: AutofillInstructionsViewProtocol {
+    var finishButtonTapped: Observable<Void> {
+        return self.finishButton.rx.tap.asObservable()
+    }
+}
+
+extension AutofillInstructionsView {
     private func setupVideo() {
         guard let path = Bundle.main.url(forResource: "AutofillSetup_v1.4", withExtension: "mp4") else {
             return
@@ -46,13 +53,11 @@ extension AutofillInstructionsView: OnboardingInstructionsViewProtocol {
         self.videoView.layer.addSublayer(layer)
         player.play()
 
-        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: player.currentItem, queue: nil) { (_) in
-            player.seek(to: CMTime.zero)
-            player.play()
-        }
-    }
-
-    var finishButtonTapped: Observable<Void> {
-        return self.finishButton.rx.tap.asObservable()
+        NotificationCenter.default.rx
+            .notification(NSNotification.Name.AVPlayerItemDidPlayToEndTime)
+            .subscribe({_ in
+                player.seek(to: CMTime.zero)
+                player.play()
+            }).disposed(by: self.disposeBag)
     }
 }

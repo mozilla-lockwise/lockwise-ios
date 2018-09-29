@@ -5,16 +5,16 @@
 import Foundation
 import RxSwift
 
-protocol OnboardingInstructionsViewProtocol: class {
+protocol AutofillInstructionsViewProtocol: class {
     var finishButtonTapped: Observable<Void> { get }
 }
 
 class AutofillInstructionsPresenter {
-    private weak var view: OnboardingInstructionsViewProtocol?
+    private weak var view: AutofillInstructionsViewProtocol?
     private let dispatcher: Dispatcher
     private let disposeBag = DisposeBag()
 
-    init(view: OnboardingInstructionsViewProtocol,
+    init(view: AutofillInstructionsViewProtocol,
          dispatcher: Dispatcher = .shared) {
         self.view = view
         self.dispatcher = dispatcher

@@ -1142,6 +1142,33 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
+
+                        describe(".autofillInstructions") {
+                            describe("when top view is not the autofillInstructions") {
+                                beforeEach {
+                                    self.view.modalStackIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.autofillInstructions)
+                                }
+
+                                it("starts the modal") {
+                                    expect(self.view.modalStackIsArgument === AutofillInstructionsNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument).notTo(beNil())
+                                }
+                            }
+
+                            describe("when top view is the autofillInstructions") {
+                                beforeEach {
+                                    self.view.modalStackIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(SettingRouteAction.autofillInstructions)
+                                }
+
+                                it("does not start the modal") {
+                                    expect(self.view.modalStackIsArgument === AutofillInstructionsNavigationController.self).to(beTrue())
+                                    expect(self.view.startModalStackArgument).to(beNil())
+                                }
+                            }
+                        }
+
                     }
                 }
 

@@ -263,6 +263,8 @@
 		D831FEE7205F3D5100EAE19A /* SettingListViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */; };
 		D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CBE2B2085488D008245A7 /* SettingCell.swift */; };
 		D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */; };
+		D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */; };
+		D84BF22A2160067900990618 /* AutofillInstructionsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */; };
 		D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EB9211950AF0056B24A /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBB211950BF0056B24A /* iAd.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBD211954E00056B24A /* AdjustSdk.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -571,6 +573,8 @@
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
 		D83CBE2B2085488D008245A7 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
 		D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsNavigationController.swift; sourceTree = "<group>"; };
+		D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsViewSpec.swift; sourceTree = "<group>"; };
+		D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsPresenterSpec.swift; sourceTree = "<group>"; };
 		D8551EB9211950AF0056B24A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		D8551EBB211950BF0056B24A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		D8551EBD211954E00056B24A /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
@@ -1056,6 +1060,8 @@
 				7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */,
 				7DA4B08D2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift */,
 				7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */,
+				D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */,
+				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1546,6 +1552,7 @@
 				D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */,
 				7D1B1AD41F9902C600C1F5FF /* DataStoreActionSpec.swift in Sources */,
 				7D44088F20178713001873F6 /* WelcomeViewSpec.swift in Sources */,
+				D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */,
 				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
 				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
 				7DFF2EF2213854BA00F001ED /* Login+Spec.swift in Sources */,
@@ -1560,6 +1567,7 @@
 				7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */,
 				7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */,
 				7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */,
+				D84BF22A2160067900990618 /* AutofillInstructionsPresenterSpec.swift in Sources */,
 				D831FEE7205F3D5100EAE19A /* SettingListViewSpec.swift in Sources */,
 				D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */,
 				7AA54B255317D07347416493 /* RouteStoreSpec.swift in Sources */,
