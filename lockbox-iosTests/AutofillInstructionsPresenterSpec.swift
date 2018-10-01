@@ -17,7 +17,6 @@ class AutofillInstructionsPresenterSpec: QuickSpec {
         var finishButtonTapped: Observable<Void> {
             return finishButtonTapStub.asObserver()
         }
-
     }
 
     class FakeDispatcher: Dispatcher {

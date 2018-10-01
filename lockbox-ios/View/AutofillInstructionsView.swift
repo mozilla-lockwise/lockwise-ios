@@ -20,7 +20,7 @@ class AutofillInstructionsView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupVideo()
+        self.setupVideoLoop()
         self.presenter?.onViewReady()
     }
 
@@ -42,7 +42,7 @@ extension AutofillInstructionsView: AutofillInstructionsViewProtocol {
 }
 
 extension AutofillInstructionsView {
-    private func setupVideo() {
+    private func setupVideoLoop() {
         guard let path = Bundle.main.url(forResource: "AutofillSetup_v1.4", withExtension: "mp4") else {
             return
         }
