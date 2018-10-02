@@ -95,6 +95,12 @@ class AccountStore: BaseAccountStore {
                 })
                 .disposed(by: self.disposeBag)
 
+        initFxa()
+    }
+}
+
+extension AccountStore {
+    private func initFxa() {
         if let accountJSON = self.storedAccountJSON {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.generateLoginURL()
@@ -102,10 +108,10 @@ class AccountStore: BaseAccountStore {
         } else {
             FxAConfig.release { (config: FxAConfig?, _) in
                 if let config = config {
-                   self.fxa = try? FirefoxAccount(
-                           config: config,
-                           clientId: Constant.fxa.clientID,
-                           redirectUri: Constant.fxa.redirectURI)
+                    self.fxa = try? FirefoxAccount(
+                        config: config,
+                        clientId: Constant.fxa.clientID,
+                        redirectUri: Constant.fxa.redirectURI)
 
                     self.generateLoginURL()
                 }
@@ -115,9 +121,7 @@ class AccountStore: BaseAccountStore {
             }
         }
     }
-}
 
-extension AccountStore {
     private func generateLoginURL() {
         self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
             if let url = url {
@@ -139,6 +143,8 @@ extension AccountStore {
 
         self._profile.onNext(nil)
         self._oauthInfo.onNext(nil)
+
+        self.initFxa()
     }
 
     private func clearOldKeychainValues() {
