@@ -36,6 +36,7 @@ class Constant {
         static let buttonTitleColorNormalState = UIColor.white
         static let buttonTitleColorOtherState = UIColor(white: 1.0, alpha: 0.6)
         static let shadowColor = UIColor(red: 12, green: 12, blue: 13)
+        static let videoBorderColor = UIColor(hex: 0xD7D7DB)
     }
 
     struct number {
