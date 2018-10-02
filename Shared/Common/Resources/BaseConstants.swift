@@ -35,6 +35,7 @@ class Constant {
         static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
         static let buttonTitleColorNormalState = UIColor.white
         static let buttonTitleColorOtherState = UIColor(white: 1.0, alpha: 0.6)
+        static let shadowColor = UIColor(red: 12, green: 12, blue: 13)
     }
 
     struct number {
