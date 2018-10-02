@@ -35,6 +35,7 @@ class Action {
 
     static let LockNow = "LockNow"
     static let SendUsageData = "SendUsageData"
+    static let OpenDeviceSettings = "OpenDeviceSettings"
 
     static let DisconnectFirefoxLockbox = "DisconnectFirefoxLockbox"
     static let DisconnectFirefoxLockboxCancel = "DisconnectFirefoxLockboxCancel"
@@ -138,6 +139,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.switches["sendUsageData.switch"].tap()
         }
 
+        screenState.gesture(forAction: Action.OpenDeviceSettings) { userState in
+            app.cells["autoFillSettingsOption"].tap()
+
+        }
+
         screenState.gesture(forAction: Action.LockNow) { userState in
             app.buttons["lockNow.button"].tap()
         }
@@ -171,6 +177,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 }
 
 extension BaseTestCase {
+
+   func disconnectAndConnectAccount() {
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        // And, connect it again
+        waitforExistence(app.buttons["getStarted.button"])
+        app.buttons["getStarted.button"].tap()
+        userState.fxaUsername =  emailTestAccountLogins
+        userState.fxaPassword = passwordTestAccountLogins
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.nowAt(Screen.FxASigninScreenEmail)
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATypePassword)
+    }
 
     func checkIfAccountIsVerified() {
         if (app.webViews.staticTexts["Confirm this sign-in"].exists) {

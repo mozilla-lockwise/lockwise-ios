@@ -41,8 +41,9 @@ class LockboxXCUITests: BaseTestCase {
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
         navigator.performAction(Action.FxATypePassword)
-        // Lets try to remove this sleep(10) and see if the tests consistently pass
-        // Check if the account is verified and if not, verify it
+        // When the account is unverified, it is necessary to wait here while finding a different workaround
+        sleep(5)
+         // Check if the account is verified and if not, verify it
         checkIfAccountIsVerified()
 
         if #available(iOS 12.0, *) {
@@ -134,17 +135,7 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
 
         // Now disconnect the account
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-
-        // And, connect it again
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        userState.fxaUsername =  emailTestAccountLogins
-        userState.fxaPassword = passwordTestAccountLogins
-        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-        navigator.nowAt(Screen.FxASigninScreenEmail)
-        navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATypePassword)
+        disconnectAndConnectAccount()
 
         if #available(iOS 12.0, *) {
             waitforExistence(app.buttons["setupAutofill.button"])
@@ -257,5 +248,63 @@ class LockboxXCUITests: BaseTestCase {
         // The app version option exists and it is not empty
         XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
         XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
+    }
+
+    // Verify SetAutofillNow
+    func testSetAutofillNow() {
+        // Disconnect account
+        disconnectAndConnectAccount()
+        if #available(iOS 12.0, *) {
+            waitforExistence(app.buttons["setupAutofill.button"])
+            app.buttons["setupAutofill.button"].tap()
+        }
+        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
+    }
+
+    // Once app is open
+    func testSetAutofillSettings() {
+        // Open Setting to add Lockbox
+        navigator.goto(Screen.SettingsMenu)
+        navigator.performAction(Action.OpenDeviceSettings)
+        // Wait until settings app is open
+        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
+        // Configure Passwords & Accounts settings
+        settingsApp.cells.staticTexts["Passwords & Accounts"].tap()
+        waitforExistence(settingsApp.cells.staticTexts["AutoFill Passwords"])
+        settingsApp.cells.staticTexts["AutoFill Passwords"].tap()
+        waitforExistence(settingsApp.switches["AutoFill Passwords"])
+        settingsApp.switches["AutoFill Passwords"].tap()
+        waitforExistence(settingsApp.cells.staticTexts["Lockbox"])
+        settingsApp.cells.staticTexts["Lockbox"].tap()
+        // Wait until the app is updated
+        sleep(5)
+        settingsApp.terminate()
+
+        // Open Safari
+        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+        safari.launch()
+        waitforExistence(safari.buttons["URL"], timeout: 5)
+        safari.buttons["ReloadButton"].tap()
+        waitforExistence(safari.textFields["Email or phone"])
+        safari.textFields["Email or phone"].tap()
+
+        // Need to confirm what is shown here, different elements have appeared during the tests
+        if (safari.buttons["Other passwords"].exists) {
+            safari.buttons["Other passwords"].tap()
+            // Workaround for the test, the first time the password does not appear
+            safari.buttons["Cancel"].tap()
+            safari.buttons["Other passwords"].tap()
+            waitforExistence(safari.otherElements.staticTexts["Choose a saved password to use"])
+            print(safari.debugDescription)
+            XCTAssertTrue(safari.buttons.otherElements["iosmztest@gmail.com, for this website — Lockbox"].exists)
+        } else if (safari.otherElements["Password Auto-fill"].exists) {
+            safari.otherElements["Password Auto-fill"].tap()
+            XCTAssertTrue(safari.buttons["iosmztest@gmail.com, for this website — Lockbox"].exists)
+        } else {
+            XCTAssertTrue(safari.buttons["Use “iosmztest@gmail.com”"].exists)
+        }
+        safari.terminate()
     }
 }

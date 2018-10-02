@@ -228,11 +228,18 @@ class RootPresenterSpec: QuickSpec {
                     self.accountStore.profileInfoStub.onNext(nil)
                 }
 
-                it("routes to the welcome view and resets the datastore") {
+                it("clears the account, credential provider, routes to the welcome view and resets the datastore") {
+                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! AccountAction
+                    expect(arg).to(equal(AccountAction.clear))
+
+                    let credentialProviderAction = self.dispatcher.dispatchActionArgument.popLast() as! CredentialProviderAction
+                    expect(credentialProviderAction).to(equal(CredentialProviderAction.clear))
+
                     let dataStoreAction = self.dispatcher.dispatchActionArgument.popLast() as! DataStoreAction
                     expect(dataStoreAction).to(equal(DataStoreAction.reset))
-                    let arg = self.dispatcher.dispatchActionArgument.popLast() as! LoginRouteAction
-                    expect(arg).to(equal(LoginRouteAction.welcome))
+
+                    let loginRouteAction = self.dispatcher.dispatchActionArgument.popLast() as! LoginRouteAction
+                    expect(loginRouteAction).to(equal(LoginRouteAction.welcome))
                 }
             }
 
