@@ -206,6 +206,11 @@ extension BaseItemListView {
                             fatalError("couldn't find the selectapassword cell")
                         }
 
+                        let borderView = UIView()
+                        borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
+                        borderView.backgroundColor = Constant.color.helpTextBorderColor
+                        cell.addSubview(borderView)
+
                         retCell = cell
                     }
 
