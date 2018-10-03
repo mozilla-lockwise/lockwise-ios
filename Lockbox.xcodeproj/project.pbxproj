@@ -262,6 +262,9 @@
 		D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */; };
 		D831FEE7205F3D5100EAE19A /* SettingListViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */; };
 		D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83CBE2B2085488D008245A7 /* SettingCell.swift */; };
+		D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */; };
+		D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */; };
+		D84BF22A2160067900990618 /* AutofillInstructionsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */; };
 		D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EB9211950AF0056B24A /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBB211950BF0056B24A /* iAd.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBD211954E00056B24A /* AdjustSdk.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -281,6 +284,10 @@
 		D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */; };
 		D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */; };
 		D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */; };
+		D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */; };
+		D8DA03D8215B34AA00656455 /* AutofillInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */; };
+		D8DA03DA215B34FC00656455 /* AutofillInstructionsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DA03D9215B34FC00656455 /* AutofillInstructionsPresenter.swift */; };
+		D8DA03DC215DD26900656455 /* AutofillSetup_v1.4.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D8DA03DB215DD23D00656455 /* AutofillSetup_v1.4.mp4 */; };
 		D8DD9300213F83D600F8041D /* AutofillOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */; };
 		D8DD9302213F840100F8041D /* AutofillOnboardingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */; };
 		D8DD9304213F863700F8041D /* AutofillOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */; };
@@ -565,6 +572,9 @@
 		D831FEE6205F3D5000EAE19A /* SettingListViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListViewSpec.swift; sourceTree = "<group>"; };
 		D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
 		D83CBE2B2085488D008245A7 /* SettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCell.swift; sourceTree = "<group>"; };
+		D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsNavigationController.swift; sourceTree = "<group>"; };
+		D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsViewSpec.swift; sourceTree = "<group>"; };
+		D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsPresenterSpec.swift; sourceTree = "<group>"; };
 		D8551EB9211950AF0056B24A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		D8551EBB211950BF0056B24A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		D8551EBD211954E00056B24A /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
@@ -584,6 +594,10 @@
 		D8D0293120702D9400CC01C6 /* AutoLockSettingsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsViewSpec.swift; sourceTree = "<group>"; };
 		D8D029332074166800CC01C6 /* PreferredBrowserSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingView.swift; sourceTree = "<group>"; };
 		D8D029352074169700CC01C6 /* PreferredBrowserSettingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenter.swift; sourceTree = "<group>"; };
+		D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SetupAutofill.storyboard; sourceTree = "<group>"; };
+		D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsView.swift; sourceTree = "<group>"; };
+		D8DA03D9215B34FC00656455 /* AutofillInstructionsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsPresenter.swift; sourceTree = "<group>"; };
+		D8DA03DB215DD23D00656455 /* AutofillSetup_v1.4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = AutofillSetup_v1.4.mp4; sourceTree = "<group>"; };
 		D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingView.swift; sourceTree = "<group>"; };
 		D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillOnboardingPresenter.swift; sourceTree = "<group>"; };
 		D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AutofillOnboarding.storyboard; sourceTree = "<group>"; };
@@ -709,6 +723,7 @@
 				7AA545D5E7A7EB65733B8A8A /* StaticURLPresenter.swift */,
 				7AA54927D3D3AF3F60B9DD4B /* OnboardingConfirmationPresenter.swift */,
 				D8DD9301213F840000F8041D /* AutofillOnboardingPresenter.swift */,
+				D8DA03D9215B34FC00656455 /* AutofillInstructionsPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -778,6 +793,7 @@
 		7AA547FECD9BACFBEE60F8B8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D8DA03DB215DD23D00656455 /* AutofillSetup_v1.4.mp4 */,
 				7AA54B40696590744930A579 /* Assets.xcassets */,
 				D5E2930C207D591C0039A0AC /* Fonts */,
 				7D522E952033473F00295FF8 /* Strings */,
@@ -799,6 +815,7 @@
 				7D578D24207573B000DC9C73 /* SettingList.storyboard */,
 				7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */,
 				D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */,
+				D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -822,6 +839,7 @@
 				7AA54C7A277D5D7C03F4F453 /* MainNavigationController.swift */,
 				7AA54FD51CE484EAF78B4324 /* SettingNavigationController.swift */,
 				7AA54DC6857783DACB5DA3EC /* ExternalWebsiteNavigationController.swift */,
+				D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */,
 			);
 			path = NavigationController;
 			sourceTree = "<group>";
@@ -842,6 +860,7 @@
 				7AA54E6B93174DF10AABF407 /* OnboardingConfirmationView.swift */,
 				D8DD92FF213F83D600F8041D /* AutofillOnboardingView.swift */,
 				7DB9DEA02140CC0300239D31 /* ItemListView.swift */,
+				D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1041,6 +1060,8 @@
 				7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */,
 				7DA4B08D2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift */,
 				7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */,
+				D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */,
+				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1371,7 +1392,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8DA03DC215DD26900656455 /* AutofillSetup_v1.4.mp4 in Resources */,
 				7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */,
+				D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				391233892092155300CB0233 /* FxASignIn.js in Resources */,
@@ -1529,6 +1552,7 @@
 				D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */,
 				7D1B1AD41F9902C600C1F5FF /* DataStoreActionSpec.swift in Sources */,
 				7D44088F20178713001873F6 /* WelcomeViewSpec.swift in Sources */,
+				D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */,
 				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
 				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
 				7DFF2EF2213854BA00F001ED /* Login+Spec.swift in Sources */,
@@ -1543,6 +1567,7 @@
 				7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */,
 				7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */,
 				7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */,
+				D84BF22A2160067900990618 /* AutofillInstructionsPresenterSpec.swift in Sources */,
 				D831FEE7205F3D5100EAE19A /* SettingListViewSpec.swift in Sources */,
 				D8D0293220702D9400CC01C6 /* AutoLockSettingsViewSpec.swift in Sources */,
 				7AA54B255317D07347416493 /* RouteStoreSpec.swift in Sources */,
@@ -1631,9 +1656,12 @@
 				7D07A31F2138863400772283 /* AutoLockStore.swift in Sources */,
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
+				D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift in Sources */,
 				7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */,
+				D8DA03DA215B34FC00656455 /* AutofillInstructionsPresenter.swift in Sources */,
 				D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */,
 				7DDEAA712124CEB100A7D521 /* DataStore.swift in Sources */,
+				D8DA03D8215B34AA00656455 /* AutofillInstructionsView.swift in Sources */,
 				D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */,
 				7AA546A2A19976883EB9CFE4 /* BaseDataStore.swift in Sources */,
 				7AA54DDC2527A59C773FAC3D /* Constants.swift in Sources */,

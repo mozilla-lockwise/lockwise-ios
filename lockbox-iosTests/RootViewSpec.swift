@@ -190,6 +190,16 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(AutoLockSettingView.self)).to(beTrue())
                     }
                 }
+
+                describe("autofillInsturctions") {
+                    beforeEach {
+                        self.subject.pushSettingView(view: .autofillInstructions)
+                    }
+
+                    it("makes the autofill instructions view the new modal") {
+                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    }
+                }
             }
         }
     }
