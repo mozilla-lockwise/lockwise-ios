@@ -90,6 +90,8 @@ class RootPresenter {
                     } else if latest.oauthInfo == nil && latest.profile == nil {
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                         self.dispatcher.dispatch(action: DataStoreAction.reset)
+                        self.dispatcher.dispatch(action: CredentialProviderAction.clear)
+                        self.dispatcher.dispatch(action: AccountAction.clear)
                     }
                 }
                 .disposed(by: self.disposeBag)
