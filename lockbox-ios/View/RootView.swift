@@ -119,6 +119,10 @@ class RootView: UIViewController, RootViewProtocol {
             self.currentViewController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
         case .preferredBrowser:
             self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
+        case .autofillInstructions:
+            if let autofillSettingView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
+                self.currentViewController?.pushViewController(autofillSettingView, animated: !isRunningTest)
+            }
         }
     }
 

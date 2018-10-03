@@ -90,6 +90,7 @@ enum SettingRouteAction: RouteAction {
     case account
     case autoLock
     case preferredBrowser
+    case autofillInstructions
 }
 
 extension SettingRouteAction: TelemetryAction {
@@ -107,7 +108,8 @@ extension SettingRouteAction: TelemetryAction {
             return .settingsAutolock
         case .preferredBrowser:
             return .settingsPreferredBrowser
-
+        case .autofillInstructions:
+            return .autofillInstructions
         }
     }
 
