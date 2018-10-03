@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.3.1 (Build 2428)
+
+We fixed some bugs related to "Disconnecting" (signing out) and the new AutoFill feature.
+
+Here's the full list of changes:
+
+- If you "Disconnect" then sign-in, you won't get stuck seeing the “No matching entries” error message
+- We also made it so if you sign-in with a different account, you don't accidentally see the items from the first account
+
 ## 1.3 (Build 2362)
 
 _Date: 2018-09-15_
