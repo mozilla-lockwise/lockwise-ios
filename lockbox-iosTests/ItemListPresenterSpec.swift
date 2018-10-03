@@ -80,7 +80,6 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
     
-    
     class FakeDispatcher: Dispatcher {
         var dispatchedActions: [Action] = []
         let fakeRegistration = PublishSubject<Action>()

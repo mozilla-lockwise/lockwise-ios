@@ -29,7 +29,7 @@ class ItemListPresenter: BaseItemListPresenter {
         return self.baseView as? ItemListViewProtocol
     }
     
-    lazy private var listSortedObserver: AnyObserver<Setting.ItemListSort> = {
+    lazy private(set) var listSortedObserver: AnyObserver<Setting.ItemListSort> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ScrollAction.toTop)
         }.asObserver()
