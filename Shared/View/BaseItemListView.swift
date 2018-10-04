@@ -15,6 +15,7 @@ enum LoginListCellConfiguration {
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>?)
     case NoResults(learnMoreObserver: AnyObserver<Void>?)
+    case SelectAPasswordHelpText
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -30,6 +31,8 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "emptyplaceholder"
         case .NoResults:
             return "noresultsplaceholder"
+        case .SelectAPasswordHelpText:
+            return "selectapasswordhelptext"
         }
     }
 }
@@ -197,6 +200,17 @@ extension BaseItemListView {
                         } else {
                             cell.learnMoreButton.isHidden = true
                         }
+                        retCell = cell
+                    case .SelectAPasswordHelpText:
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext") else {
+                            fatalError("couldn't find the selectapassword cell")
+                        }
+
+                        let borderView = UIView()
+                        borderView.frame = CGRect(x: 0, y: cell.frame.height-1, width: cell.frame.width, height: 1)
+                        borderView.backgroundColor = Constant.color.helpTextBorderColor
+                        cell.addSubview(borderView)
+
                         retCell = cell
                     }
 
