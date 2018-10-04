@@ -256,19 +256,26 @@ class LockboxXCUITests: BaseTestCase {
         disconnectAndConnectAccount()
         if #available(iOS 12.0, *) {
             waitforExistence(app.buttons["setupAutofill.button"])
-            app.buttons["setupAutofill.button"].tap()
+            navigator.performAction(Action.SetAutofillNow)
+            waitforExistence(app.buttons["gotIt.button"])
+            navigator.goto(Screen.LockboxMainPage)
+            waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        } else {
+            waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         }
-        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
-        waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
     }
 
     // Once app is open
     func testSetAutofillSettings() {
-        // Open Setting to add Lockbox
+        // Open Lockbox settings to check the Autofill option
+        navigator.goto(Screen.AutoFillPasswordSetUpInstructionsSettings)
+        XCTAssertTrue(app.buttons["gotIt.button"].exists)
         navigator.goto(Screen.SettingsMenu)
-        navigator.performAction(Action.OpenDeviceSettings)
-        // Wait until settings app is open
+        waitforExistence(app.navigationBars["settings.navigationBar"])
+
+        // Then open settings app to follow the described steps
         let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        settingsApp.launch()
         waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
         // Configure Passwords & Accounts settings
         settingsApp.cells.staticTexts["Passwords & Accounts"].tap()

@@ -8,6 +8,9 @@ import XCTest
 
 class Screen {
     static let WelcomeScreen = "WelcomeScreen"
+    static let OnboardingWelcomeScreen = "OnboardingWelcomeScreen"
+    static let AutofillOnboardingWhenLogingIn = "AutofillOnboardingWhenLogingIn"
+    static let AutofillSetUpInstructionsWhenLogingIn = "AutofillSetUpInstructionsWhenLogingIn"
     static let LockboxMainPage = "LockboxMainPage"
     static let SettingsMenu = "SettingsMenu"
 
@@ -19,6 +22,7 @@ class Screen {
     static let LockedScreen = "LockedScreen"
     static let AccountSettingsMenu = "AccountSettingsMenu"
     static let AutolockSettingsMenu = "AutolockSettingsMenu"
+    static let AutoFillPasswordSetUpInstructionsSettings = "AutoFillPasswordSetUpInstructionsSettings"
 
     static let SortEntriesMenu = "SortEntriesMenu"
 
@@ -31,7 +35,9 @@ class Action {
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
     static let FxALogInSuccessfully = "FxALogInSuccessfully"
 
-    static let OpenSettingsMenu = "OpenSettingsMenu"
+    static let NotAutofillSetUpNow = "NotAutofillSetUpNow"
+    static let SetAutofillNow = "SetAutofillNow"
+    static let TapOnFinish = "TapOnFinish"
 
     static let LockNow = "LockNow"
     static let SendUsageData = "SendUsageData"
@@ -88,13 +94,31 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.FxASigninScreenPassword) { screenState in
-        screenState.gesture(forAction: Action.FxATypePassword) { userState in
+        screenState.gesture(forAction: Action.FxATypePassword, transitionTo: Screen.AutofillOnboardingWhenLogingIn) { userState in
             app.webViews.secureTextFields["Password"].tap()
             app.webViews.secureTextFields["Password"].typeText(userState.fxaPassword!)
             app.webViews.buttons["Sign in"].tap()
         }
     }
 
+    map.addScreenState(Screen.OnboardingWelcomeScreen) { screenState in
+        screenState.gesture(forAction: Action.TapOnFinish, transitionTo: Screen.LockboxMainPage) { userState in
+            app.buttons["finish.button"].tap()
+        }
+    }
+
+    map.addScreenState(Screen.AutofillOnboardingWhenLogingIn) { screenState in
+        screenState.gesture(forAction: Action.NotAutofillSetUpNow, transitionTo: Screen.OnboardingWelcomeScreen) { userState in
+            app.buttons["notNow.button"].tap()
+        }
+        screenState.gesture(forAction: Action.SetAutofillNow, transitionTo: Screen.AutofillSetUpInstructionsWhenLogingIn) { userState in
+            app.buttons["setupAutofill.button"].tap()
+        }
+    }
+
+    map.addScreenState(Screen.AutofillSetUpInstructionsWhenLogingIn) { screenState in
+        screenState.tap(app.buttons["gotIt.button"], to: Screen.LockboxMainPage)
+    }
 
     map.addScreenState(Screen.FxCreateAccount) { screenState in
         screenState.backAction = navigationControllerBackAction
@@ -134,14 +158,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["openWebSitesInSettingOption"], to: Screen.OpenSitesInMenu)
         screenState.tap(app.tables.cells["accountSettingOption"], to: Screen.AccountSettingsMenu)
         screenState.tap(app.tables.cells["autoLockSettingOption"], to: Screen.AutolockSettingsMenu)
+        screenState.tap(app.tables.cells["autoFillSettingsOption"], to: Screen.AutoFillPasswordSetUpInstructionsSettings)
 
         screenState.gesture(forAction: Action.SendUsageData) { userState in
             app.switches["sendUsageData.switch"].tap()
-        }
-
-        screenState.gesture(forAction: Action.OpenDeviceSettings) { userState in
-            app.cells["autoFillSettingsOption"].tap()
-
         }
 
         screenState.gesture(forAction: Action.LockNow) { userState in
@@ -166,6 +186,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.buttons["disconnectFirefoxLockbox.button"].tap()
             app.buttons["Cancel"].tap()
         }
+    }
+
+    map.addScreenState(Screen.AutoFillPasswordSetUpInstructionsSettings) { screenState in
+        screenState.tap(app.buttons["gotIt.button"], to: Screen.SettingsMenu)
     }
 
     map.addScreenState(Screen.AutolockSettingsMenu) { screenState in
