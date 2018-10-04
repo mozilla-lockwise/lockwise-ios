@@ -42,6 +42,13 @@ protocol SpinnerAlertView {
 extension UIViewController: StatusAlertView {
     func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
         if let temporaryAlertView = Bundle.main.loadNibNamed("StatusAlert", owner: self)?.first as? StatusAlert {
+            
+            for view in self.view.subviews {
+                if view is StatusAlert {
+                    self.animateAlertOut(view, delay: timeout)
+                }
+            }
+            
             temporaryAlertView.messageLabel.text = message
             self.styleAndCenterAlert(temporaryAlertView)
             self.view.addSubview(temporaryAlertView)
