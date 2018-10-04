@@ -48,10 +48,10 @@ class LockboxXCUITests: BaseTestCase {
 
         if #available(iOS 12.0, *) {
             waitforExistence(app.buttons["setupAutofill.button"])
-            app.buttons["notNow.button"].tap()
+            navigator.performAction(Action.NotAutofillSetUpNow)
         }
         waitforExistence(app.buttons["finish.button"])
-        app.buttons["finish.button"].tap()
+        navigator.goto(Screen.LockboxMainPage)
 
         waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 15)
 
@@ -259,8 +259,6 @@ class LockboxXCUITests: BaseTestCase {
             navigator.performAction(Action.SetAutofillNow)
             waitforExistence(app.buttons["gotIt.button"])
             navigator.goto(Screen.LockboxMainPage)
-            waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        } else {
             waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         }
     }
