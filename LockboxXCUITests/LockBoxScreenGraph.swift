@@ -117,7 +117,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.AutofillSetUpInstructionsWhenLogingIn) { screenState in
-        screenState.tap(app.buttons["gotIt.button"], to: Screen.LockboxMainPage)
+        screenState.tap(app.buttons["gotIt.button"], to: Screen.OnboardingWelcomeScreen)
     }
 
     map.addScreenState(Screen.FxCreateAccount) { screenState in
