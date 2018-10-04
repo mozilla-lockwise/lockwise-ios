@@ -40,6 +40,7 @@
 		399641882148714D000A1984 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996418621486C0E000A1984 /* Data+.swift */; };
 		39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
 		39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
+		4C31D5902166ACFF0002F6B0 /* ItemDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C31D58F2166ACFE0002F6B0 /* ItemDetailPresenter.swift */; };
 		4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */; };
 		7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */; };
 		7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */; };
@@ -158,7 +159,6 @@
 		7D1B1AD21F9902B300C1F5FF /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7D1B1AD41F9902C600C1F5FF /* DataStoreActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B1AD31F9902C600C1F5FF /* DataStoreActionSpec.swift */; };
 		7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22032033C57F0098C3A3 /* ItemDetailView.swift */; };
-		7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */; };
 		7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */; };
 		7D2D2F0B20C5A8B300339D9B /* OnboardingConfirmation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */; };
 		7D302BE81FD7106B00D2FD4B /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; };
@@ -388,6 +388,7 @@
 		39B1508820878E42007497E5 /* Deferred.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Deferred.framework; path = Carthage/Build/iOS/Deferred.framework; sourceTree = "<group>"; };
 		39DB3677208E2A800026DA92 /* Account.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Account.framework; path = Carthage/Build/iOS/Account.framework; sourceTree = "<group>"; };
 		39DB367D208E2F8F0026DA92 /* FxA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxA.framework; path = Carthage/Build/iOS/FxA.framework; sourceTree = "<group>"; };
+		4C31D58F2166ACFE0002F6B0 /* ItemDetailPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailPresenter.swift; sourceTree = "<group>"; };
 		4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Spec.swift"; sourceTree = "<group>"; };
 		7AA5404248F72FC87CC4978B /* Date+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		7AA5406822AB67B669BAF89B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
@@ -497,7 +498,6 @@
 		7D1B1AC81F99028D00C1F5FF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D1B1AD31F9902C600C1F5FF /* DataStoreActionSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreActionSpec.swift; sourceTree = "<group>"; };
 		7D1B22032033C57F0098C3A3 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
-		7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailPresenter.swift; sourceTree = "<group>"; };
 		7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerAlert.swift; sourceTree = "<group>"; };
 		7D1D2F0620AA39700011BFC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SpinnerAlert.xib; sourceTree = "<group>"; };
 		7D1D2F0920AA39710011BFC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
@@ -713,9 +713,9 @@
 			children = (
 				7D44088A201786F1001873F6 /* WelcomePresenter.swift */,
 				7DA4C6852028F85A00B61DD8 /* ItemListPresenter.swift */,
+				4C31D58F2166ACFE0002F6B0 /* ItemDetailPresenter.swift */,
 				7AA548CFC3319394489DD10E /* FxAPresenter.swift */,
 				7AA541C0A078BB02BFD7EB0B /* RootPresenter.swift */,
-				7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */,
 				7AA5410097B2C840B28B007E /* AccountSettingPresenter.swift */,
 				D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */,
 				D8D029292064445100CC01C6 /* AutoLockSettingsPresenter.swift */,
@@ -1649,7 +1649,6 @@
 				D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */,
 				7AA548BBE384D40397D26E9B /* RootView.swift in Sources */,
 				7D9722C62134622F0071D82B /* BaseWelcomePresenter.swift in Sources */,
-				7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */,
 				D8DD9302213F840100F8041D /* AutofillOnboardingPresenter.swift in Sources */,
 				7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */,
 				D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */,
@@ -1693,6 +1692,7 @@
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
 				D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */,
 				7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */,
+				4C31D5902166ACFF0002F6B0 /* ItemDetailPresenter.swift in Sources */,
 				3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */,
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
