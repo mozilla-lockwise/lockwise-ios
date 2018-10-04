@@ -78,7 +78,7 @@ class RouteActionSpec: QuickSpec {
                     expect(SettingRouteAction.account.eventObject).to(equal(TelemetryEventObject.settingsAccount))
                     expect(SettingRouteAction.autoLock.eventObject).to(equal(TelemetryEventObject.settingsAutolock))
                     expect(SettingRouteAction.preferredBrowser.eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
-                    expect(SettingRouteAction.autofillInstructions.eventObject).to(equal(TelemetryEventObject.autofillInstructions))
+                    expect(SettingRouteAction.autofillInstructions.eventObject).to(equal(TelemetryEventObject.autofillSettingsInstructions))
                 }
 
                 it("returns nil as the value") {

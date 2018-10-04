@@ -112,7 +112,7 @@ extension SettingRouteAction: TelemetryAction {
         case .preferredBrowser:
             return .settingsPreferredBrowser
         case .autofillInstructions:
-            return .autofillInstructions
+            return .autofillSettingsInstructions
         }
     }
 
