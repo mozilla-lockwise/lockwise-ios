@@ -69,9 +69,9 @@ class AutofillOnboardingPresenterSpec: QuickSpec {
                         self.view.setupAutofillTabStub.onNext(())
                     }
 
-                    it("routes to settings") {
-                        let settingLinkAction = self.dispatcher.dispatchedActions.popLast() as! SettingLinkAction
-                        expect(settingLinkAction).to(equal(.autofill))
+                    it("routes to autofillInstructions") {
+                        let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                        expect(loginRouteAction).to(equal(.autofillInstructions))
                     }
                 }
             }

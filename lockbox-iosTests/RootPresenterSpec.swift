@@ -647,6 +647,50 @@ class RootPresenterSpec: QuickSpec {
                                 }
                             }
                         }
+
+                        describe(".autofillInstructions") {
+                            describe("if the top view is not already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = false
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.autofillInstructions)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the autofillOnboadingView & tells the view to show the it") {
+                                    expect(self.view.topViewIsArgument === AutofillInstructionsView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.autofillInstructions))
+                                }
+                            }
+
+                            describe("if the top view is already the login view") {
+                                beforeEach {
+                                    self.view.topViewIsVar = true
+                                    self.routeStore.onRouteSubject.onNext(LoginRouteAction.autofillInstructions)
+                                }
+
+                                it("dismisses any modals") {
+                                    expect(self.view.dismissModalCalled).to(beTrue())
+                                }
+
+                                it("starts the login stack") {
+                                    expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                }
+
+                                it("checks for the autofillinstructions & nothing happens") {
+                                    expect(self.view.topViewIsArgument === AutofillInstructionsView.self).to(beTrue())
+                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                }
+                            }
+                        }
                     }
                 }
 

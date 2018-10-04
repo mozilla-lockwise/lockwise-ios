@@ -118,6 +118,17 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(AutofillOnboardingView.self)).to(beTrue())
                     }
                 }
+
+                describe("autofillInstructions") {
+                    beforeEach {
+                        self.subject.startMainStack(LoginNavigationController.self)
+                        self.subject.pushLoginView(view: LoginRouteAction.autofillInstructions)
+                    }
+
+                    it("makes the autofillInsutrctions the top view") {
+                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    }
+                }
             }
 
             describe("displaying main stack after login stack") {
