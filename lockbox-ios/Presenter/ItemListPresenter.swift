@@ -15,6 +15,7 @@ protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemLi
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
     var onSettingsButtonPressed: ControlEvent<Void>? { get }
+    var onSortingButtonPressed: ControlEvent<Void>? { get }
 }
 
 struct SyncStateManual {
@@ -45,34 +46,6 @@ class ItemListPresenter: BaseItemListPresenter {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: PullToRefreshAction(refreshing: true))
             target.dispatcher.dispatch(action: DataStoreAction.sync)
-        }.asObserver()
-    }()
-
-    lazy private(set) var sortingButtonObserver: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            self.userDefaultStore.itemListSort
-                .take(1)
-                .subscribe(onNext: { evt in
-                let latest = evt
-                target.view?.displayAlertController(buttons: [
-                    AlertActionButtonConfiguration(
-                            title: Constant.string.alphabetically,
-                            tapObserver: target.alphabeticSortObserver,
-                            style: .default,
-                            checked: latest == Setting.ItemListSort.alphabetically),
-                    AlertActionButtonConfiguration(
-                            title: Constant.string.recentlyUsed,
-                            tapObserver: target.recentlyUsedSortObserver,
-                            style: .default,
-                            checked: latest == Setting.ItemListSort.recentlyUsed),
-                    AlertActionButtonConfiguration(
-                            title: Constant.string.cancel,
-                            tapObserver: nil,
-                            style: .cancel)],
-                        title: Constant.string.sortEntries,
-                        message: nil,
-                        style: .actionSheet)
-            }).disposed(by: self.disposeBag)
         }.asObserver()
     }()
 
@@ -142,6 +115,38 @@ class ItemListPresenter: BaseItemListPresenter {
             onSettingsButtonPressed.subscribe { _ in
                 self.dispatcher.dispatch(action: SettingRouteAction.list)
                 }.disposed(by: disposeBag)
+        }
+        
+        if let onSortingButtonPressed = self.view?.onSortingButtonPressed {
+            onSortingButtonPressed.subscribe { _ in
+                self.userDefaultStore.itemListSort
+                    .take(1)
+                    .subscribe(onNext: { [weak self] evt in
+                        guard let strongSelf = self else { return }
+                        let latest = evt
+                        view.displayAlertController(
+                            buttons: [
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.alphabetically,
+                                    tapObserver: strongSelf.alphabeticSortObserver,
+                                    style: .default,
+                                    checked: latest == Setting.ItemListSort.alphabetically),
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.recentlyUsed,
+                                    tapObserver: strongSelf.recentlyUsedSortObserver,
+                                    style: .default,
+                                    checked: latest == Setting.ItemListSort.recentlyUsed),
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.cancel,
+                                    tapObserver: nil,
+                                    style: .cancel)
+                            ],
+                            title: Constant.string.sortEntries,
+                            message: nil,
+                            style: .actionSheet)
+                    }).disposed(by: self.disposeBag)
+            }.disposed(by: self.disposeBag)
+            
         }
     }
 }
