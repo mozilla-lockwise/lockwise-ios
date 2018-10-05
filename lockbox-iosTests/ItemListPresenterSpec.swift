@@ -24,6 +24,7 @@ class ItemListPresenterSpec: QuickSpec {
         var dismissKeyboardCalled = false
         var displaySpinnerCalled = false
         var pullToRefreshObserver: TestableObserver<Bool>!
+        var fakeOnSettingsPressed = PublishSubject<Void>()
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -60,6 +61,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         var pullToRefreshActive: AnyObserver<Bool>? {
             return self.pullToRefreshObserver?.asObserver()
+        }
+        
+        var onSettingsButtonPressed: ControlEvent<Void>? {
+            return ControlEvent<Void>(events: fakeOnSettingsPressed.asObservable())
         }
     }
 
@@ -599,13 +604,8 @@ class ItemListPresenterSpec: QuickSpec {
 
             describe("settings button") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.onSettingsTapped)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeOnSettingsPressed.onNext(())
                 }
 
                 it("dispatches the setting route action") {
