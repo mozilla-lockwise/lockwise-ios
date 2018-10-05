@@ -25,6 +25,7 @@ class ItemListPresenterSpec: QuickSpec {
         var displaySpinnerCalled = false
         var pullToRefreshObserver: TestableObserver<Bool>!
         var fakeOnSettingsPressed = PublishSubject<Void>()
+        var fakeOnSortingButtonPressed = PublishSubject<Void>()
 
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var displayOptionSheetTitle: String?
@@ -65,6 +66,10 @@ class ItemListPresenterSpec: QuickSpec {
         
         var onSettingsButtonPressed: ControlEvent<Void>? {
             return ControlEvent<Void>(events: fakeOnSettingsPressed.asObservable())
+        }
+        
+        var onSortingButtonPressed: ControlEvent<Void>? {
+            return ControlEvent<Void>(events: fakeOnSortingButtonPressed.asObservable())
         }
     }
 
@@ -558,13 +563,8 @@ class ItemListPresenterSpec: QuickSpec {
 
             describe("sortingButton") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.sortingButtonObserver)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeOnSortingButtonPressed.onNext(())
                     self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                 }
 

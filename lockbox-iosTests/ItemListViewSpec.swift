@@ -39,10 +39,6 @@ class ItemListViewSpec: QuickSpec {
             return self.fakeFilterTextObserver.asObserver()
         }
 
-        override var sortingButtonObserver: AnyObserver<Void> {
-            return self.fakeSortingButtonObserver.asObserver()
-        }
-
         override var filterCancelObserver: AnyObserver<Void> {
             return self.fakeCancelObserver.asObserver()
         }
