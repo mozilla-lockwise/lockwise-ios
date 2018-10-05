@@ -36,9 +36,6 @@ class ItemListView: BaseItemListView {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
 
         if let presenter = presenter {
-            (self.navigationItem.rightBarButtonItem?.customView as? UIButton)?.rx.tap
-                .bind(to: presenter.onSettingsTapped)
-                .disposed(by: self.disposeBag)
 
             (self.navigationItem.leftBarButtonItem?.customView as? UIButton)?.rx.tap
                 .bind(to: presenter.sortingButtonObserver)
@@ -81,6 +78,14 @@ extension ItemListView: ItemListViewProtocol {
             return button.rx.isEnabled.asObserver()
         }
 
+        return nil
+    }
+    
+    var onSettingsButtonPressed: ControlEvent<Void>? {
+        if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
+            return button.rx.tap
+        }
+        
         return nil
     }
 }

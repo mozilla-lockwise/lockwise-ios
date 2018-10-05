@@ -14,6 +14,7 @@ protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemLi
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
+    var onSettingsButtonPressed: ControlEvent<Void>? { get }
 }
 
 struct SyncStateManual {
@@ -39,12 +40,6 @@ class ItemListPresenter: BaseItemListPresenter {
             target.dispatcher.dispatch(action: MainRouteAction.detail(itemId: id))
         }.asObserver()
     }
-
-    lazy private(set) var onSettingsTapped: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            target.dispatcher.dispatch(action: SettingRouteAction.list)
-        }.asObserver()
-    }()
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
@@ -142,6 +137,12 @@ class ItemListPresenter: BaseItemListPresenter {
 
         self.setupPullToRefresh(pullToRefreshActiveObserver)
         self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
+        
+        if let onSettingsButtonPressed = self.view?.onSettingsButtonPressed {
+            onSettingsButtonPressed.subscribe { _ in
+                self.dispatcher.dispatch(action: SettingRouteAction.list)
+                }.disposed(by: disposeBag)
+        }
     }
 }
 
