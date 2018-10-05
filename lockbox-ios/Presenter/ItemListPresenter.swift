@@ -144,8 +144,10 @@ class ItemListPresenter: BaseItemListPresenter {
                             title: Constant.string.sortEntries,
                             message: nil,
                             style: .actionSheet)
-                    }).disposed(by: self.disposeBag)
-            }.disposed(by: self.disposeBag)
+                    })
+                    .disposed(by: self.disposeBag)
+            }
+            .disposed(by: self.disposeBag)
             
         }
     }
