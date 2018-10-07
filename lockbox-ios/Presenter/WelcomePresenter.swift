@@ -131,6 +131,16 @@ extension WelcomePresenter {
                 .map { ($0.0, $0.1) }
 
         self.handleBiometrics(biometricButtonTapObservable)
+
+        // Launch the biometrics on cold start
+        let coldStartObservable = Observable.combineLatest(
+            self.accountStore.profile,
+            self.dataStore.locked.distinctUntilChanged(),
+            self.dataStore.forceLock)
+            .take(1)
+            .filter { !$0.2 }
+            .map { ($0.0, $0.1) }
+        self.handleBiometrics(coldStartObservable)
     }
 
     private func launchPasscodePrompt() {

@@ -117,6 +117,7 @@ class SettingListPresenter {
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
                         self.dispatcher.dispatch(action: DataStoreAction.lock)
+                        self.dispatcher.dispatch(action: DataStoreAction.forceLock(locked: true))
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                     } else {
                         self.view?.displayAlertController(

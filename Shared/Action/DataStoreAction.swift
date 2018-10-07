@@ -19,6 +19,7 @@ enum DataStoreAction: Action {
     case touch(id: String)
     case add(item: LoginData)
     case remove(id: String)
+    case forceLock(locked: Bool) // Used when the "Lock Now" button is tapped
 }
 
 extension DataStoreAction: Equatable {
