@@ -421,24 +421,14 @@ extension BaseDataStore {
     }
 
     internal func handleLock() {
-        self.userDefaults.onAutoLockTime
-                .take(1)
-                .subscribe(onNext: { autoLockSetting in
-                    switch autoLockSetting {
-                    case .Never:
-                        self.unlock()
-                    default:
-                        let date = NSDate(
-                                timeIntervalSince1970: self.userDefaults.double(
-                                        forKey: UserDefaultKey.autoLockTimerDate.rawValue))
+        let date = NSDate(
+                timeIntervalSince1970: self.userDefaults.double(
+                        forKey: UserDefaultKey.autoLockTimerDate.rawValue))
 
-                        if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
-                            self.unlock()
-                        } else {
-                            self.lock()
-                        }
-                    }
-                })
-                .disposed(by: self.disposeBag)
+        if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
+            self.unlock()
+        } else {
+            self.lock()
+        }
     }
 }
