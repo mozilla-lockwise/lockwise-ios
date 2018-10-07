@@ -36,6 +36,8 @@ extension DataStoreAction: Equatable {
             return true
         case (.remove(let lhID), .remove(let rhID)):
             return lhID == rhID
+        case (.forceLock(let lhLocked), .forceLock(let rhLocked)):
+            return lhLocked == rhLocked
         default: return false
         }
     }
