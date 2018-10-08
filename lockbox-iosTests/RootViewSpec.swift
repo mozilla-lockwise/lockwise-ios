@@ -202,7 +202,7 @@ class RootViewSpec: QuickSpec {
                     }
                 }
 
-                describe("autofillInsturctions") {
+                xdescribe("autofillInsturctions") {
                     beforeEach {
                         self.subject.pushSettingView(view: .autofillInstructions)
                     }
