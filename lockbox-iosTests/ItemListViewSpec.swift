@@ -23,7 +23,6 @@ class ItemListViewSpec: QuickSpec {
         var onViewReadyCalled = false
         var fakeItemSelectedObserver: TestableObserver<String?>!
         var fakeFilterTextObserver: TestableObserver<String>!
-        var fakeSortingButtonObserver: TestableObserver<Void>!
         var fakeCancelObserver: TestableObserver<Void>!
         var fakeEditEndedObserver: TestableObserver<Void>!
 
@@ -37,10 +36,6 @@ class ItemListViewSpec: QuickSpec {
 
         override var filterTextObserver: AnyObserver<String> {
             return self.fakeFilterTextObserver.asObserver()
-        }
-
-        override var sortingButtonObserver: AnyObserver<Void> {
-            return self.fakeSortingButtonObserver.asObserver()
         }
 
         override var filterCancelObserver: AnyObserver<Void> {
@@ -66,7 +61,6 @@ class ItemListViewSpec: QuickSpec {
                 self.presenter = FakeItemListPresenter(view: self.subject)
                 self.presenter.fakeItemSelectedObserver = self.scheduler.createObserver(String?.self)
                 self.presenter.fakeFilterTextObserver = self.scheduler.createObserver(String.self)
-                self.presenter.fakeSortingButtonObserver = self.scheduler.createObserver(Void.self)
                 self.presenter.fakeCancelObserver = self.scheduler.createObserver(Void.self)
                 self.presenter.fakeEditEndedObserver = self.scheduler.createObserver(Void.self)
                 self.subject.basePresenter = self.presenter
@@ -287,16 +281,42 @@ class ItemListViewSpec: QuickSpec {
                     }
                 }
             }
-
+            
             describe("tapping the sorting button") {
+                var buttonObserver = self.scheduler.createObserver(Void.self)
+                
                 beforeEach {
-                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+                    buttonObserver = self.scheduler.createObserver(Void.self)
+                    
+                    self.subject.onSortingButtonPressed!
+                        .subscribe(buttonObserver)
+                        .disposed(by: self.disposeBag)
 
-                    button.sendActions(for: .touchUpInside)
+                    let sortingButton = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+                    sortingButton.sendActions(for: .touchUpInside)
                 }
 
-                it("tells the presenter") {
-                    expect(self.presenter.fakeSortingButtonObserver.events.count).to(equal(1))
+                it("tells observers about button taps") {
+                    expect(buttonObserver.events.count).to(be(1))
+                }
+            }
+     
+            describe("tapping the settings button") {
+                var buttonObserver = self.scheduler.createObserver(Void.self)
+                
+                beforeEach {
+                    buttonObserver = self.scheduler.createObserver(Void.self)
+                    
+                    self.subject.onSettingsButtonPressed!
+                        .subscribe(buttonObserver)
+                        .disposed(by: self.disposeBag)
+                    
+                    let settingsButton = self.subject.navigationItem.rightBarButtonItem!.customView as! UIButton
+                    settingsButton.sendActions(for: .touchUpInside)
+                }
+                
+                it("tells observers about button taps") {
+                    expect(buttonObserver.events.count).to(be(1))
                 }
             }
 
