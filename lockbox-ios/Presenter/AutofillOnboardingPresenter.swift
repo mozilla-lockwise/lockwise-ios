@@ -30,8 +30,7 @@ class AutofillOnboardingPresenter {
 
         self.view?.setupAutofillTapped
             .subscribe(onNext: { _ in
-                self.dispatcher.dispatch(action: LoginRouteAction.onboardingConfirmation)
-                self.dispatcher.dispatch(action: SettingLinkAction.autofill)
+                self.dispatcher.dispatch(action: LoginRouteAction.autofillInstructions)
             })
             .disposed(by: self.disposeBag)
     }

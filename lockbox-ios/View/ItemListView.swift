@@ -34,16 +34,6 @@ class ItemListView: BaseItemListView {
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
-
-        if let presenter = presenter {
-            (self.navigationItem.rightBarButtonItem?.customView as? UIButton)?.rx.tap
-                .bind(to: presenter.onSettingsTapped)
-                .disposed(by: self.disposeBag)
-
-            (self.navigationItem.leftBarButtonItem?.customView as? UIButton)?.rx.tap
-                .bind(to: presenter.sortingButtonObserver)
-                .disposed(by: self.disposeBag)
-        }
     }
 
     override func createPresenter() -> BaseItemListPresenter {
@@ -81,6 +71,22 @@ extension ItemListView: ItemListViewProtocol {
             return button.rx.isEnabled.asObserver()
         }
 
+        return nil
+    }
+    
+    var onSettingsButtonPressed: ControlEvent<Void>? {
+        if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
+            return button.rx.tap
+        }
+        
+        return nil
+    }
+    
+    var onSortingButtonPressed: ControlEvent<Void>? {
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            return button.rx.tap
+        }
+        
         return nil
     }
 }

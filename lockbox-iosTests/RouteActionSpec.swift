@@ -78,7 +78,7 @@ class RouteActionSpec: QuickSpec {
                     expect(SettingRouteAction.account.eventObject).to(equal(TelemetryEventObject.settingsAccount))
                     expect(SettingRouteAction.autoLock.eventObject).to(equal(TelemetryEventObject.settingsAutolock))
                     expect(SettingRouteAction.preferredBrowser.eventObject).to(equal(TelemetryEventObject.settingsPreferredBrowser))
-                    expect(SettingRouteAction.autofillInstructions.eventObject).to(equal(TelemetryEventObject.autofillInstructions))
+                    expect(SettingRouteAction.autofillInstructions.eventObject).to(equal(TelemetryEventObject.autofillSettingsInstructions))
                 }
 
                 it("returns nil as the value") {
@@ -108,18 +108,21 @@ class RouteActionSpec: QuickSpec {
                     expect(LoginRouteAction.fxa.eventObject).to(equal(TelemetryEventObject.loginFxa))
                     expect(LoginRouteAction.onboardingConfirmation.eventObject).to(equal(TelemetryEventObject.loginOnboardingConfirmation))
                     expect(LoginRouteAction.autofillOnboarding.eventObject).to(equal(TelemetryEventObject.autofillOnboarding))
+                    expect(LoginRouteAction.autofillInstructions.eventObject).to(equal(TelemetryEventObject.autofillOnboardingInstructions))
                 }
 
                 it("returns nil as the value") {
                     expect(LoginRouteAction.welcome.value).to(beNil())
                     expect(LoginRouteAction.fxa.value).to(beNil())
                     expect(LoginRouteAction.autofillOnboarding.value).to(beNil())
+                    expect(LoginRouteAction.autofillInstructions.value).to(beNil())
                 }
 
                 it("returns nil as for the extras") {
                   expect(LoginRouteAction.welcome.extras).to(beNil())
                   expect(LoginRouteAction.fxa.extras).to(beNil())
                   expect(LoginRouteAction.autofillOnboarding.extras).to(beNil())
+                  expect(LoginRouteAction.autofillInstructions.extras).to(beNil())
                 }
             }
         }

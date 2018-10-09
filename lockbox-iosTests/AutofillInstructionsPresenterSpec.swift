@@ -27,6 +27,14 @@ class AutofillInstructionsPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeRouteStore: RouteStore {
+        var isOnboardingValue = false
+        override var onboarding: Observable<Bool> {
+            return Observable.just(isOnboardingValue)
+        }
+    }
+
+    private var routeStore: FakeRouteStore!
     private var view: FakeAutofillInstructionsView!
     private var dispatcher: FakeDispatcher!
     var subject: AutofillInstructionsPresenter!
@@ -36,9 +44,11 @@ class AutofillInstructionsPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeAutofillInstructionsView()
                 self.dispatcher = FakeDispatcher()
+                self.routeStore = FakeRouteStore()
                 self.subject = AutofillInstructionsPresenter(
                     view: self.view,
-                    dispatcher: self.dispatcher
+                    dispatcher: self.dispatcher,
+                    routeStore: self.routeStore
                 )
             }
 
@@ -48,13 +58,28 @@ class AutofillInstructionsPresenterSpec: QuickSpec {
                 }
 
                 describe("onFinishButtonTapped") {
-                    beforeEach {
-                        self.view.finishButtonTapStub.onNext(())
+                    describe("during onboarding") {
+                        beforeEach {
+                            self.routeStore.isOnboardingValue = true
+                            self.view.finishButtonTapStub.onNext(())
+                        }
+
+                        it("routes to the LoginRouteAction.onboardingConfirmation") {
+                            let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
+                            expect(loginRouteAction).to(equal(.onboardingConfirmation))
+                        }
                     }
 
-                    it("routes to the SettingRouteAction.list") {
-                        let settingRouteAction = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
-                        expect(settingRouteAction).to(equal(.list))
+                    describe("from settings") {
+                        beforeEach {
+                            self.routeStore.isOnboardingValue = false
+                            self.view.finishButtonTapStub.onNext(())
+                        }
+
+                        it("routes to the SettingRouteAction.list") {
+                            let settingRouteAction = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
+                            expect(settingRouteAction).to(equal(.list))
+                        }
                     }
                 }
             }
