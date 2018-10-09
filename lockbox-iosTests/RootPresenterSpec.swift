@@ -648,7 +648,7 @@ class RootPresenterSpec: QuickSpec {
                             }
                         }
 
-                        describe(".autofillInstructions") {
+                        xdescribe(".autofillInstructions") {
                             describe("if the top view is not already the login view") {
                                 beforeEach {
                                     self.view.topViewIsVar = false
