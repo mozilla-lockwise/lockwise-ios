@@ -1,5 +1,21 @@
 # Release Notes
 
+## 1.3.1 (Build 2513)
+
+_Date: 2018-10-09_
+
+
+We fixed some bugs related to "Disconnecting" (signing out) and the new AutoFill feature.
+
+Here's the full list of changes:
+
+- If you "Disconnect" then sign-in, you won't get stuck seeing the “No matching entries” error message
+- We also made it so if you sign-in with a different account, you don't accidentally see the items from the first account
+- The app now presents TouchID or FaceID upon app launch
+- Additional steps are taken to not display multiple overlays at one time
+- Help text was added to the credential search when using autofill
+- Instructions to setup autofill for iOS 12 users is now displayed during onboarding as well as under Settings
+
 ## 1.3.1 (Build 2428)
 
 We fixed some bugs related to "Disconnecting" (signing out) and the new AutoFill feature.
