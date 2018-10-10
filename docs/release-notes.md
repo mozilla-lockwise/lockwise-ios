@@ -1,6 +1,6 @@
 # Release Notes
 
-## 1.3.1 (Build 2514)
+## 1.3.1 (Build 2513)
 
 _Date: 2018-10-09_
 
