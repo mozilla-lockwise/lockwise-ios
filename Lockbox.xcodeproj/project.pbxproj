@@ -126,6 +126,8 @@
 		7AA54EC7A9CA9BBD57AFEAF9 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54B0FC602D0A79D87D3BD /* FilterCell.swift */; };
 		7AA54EEAB64EF8D9A7F48739 /* CopyDisplayStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA543307459610B170AFBD5 /* CopyDisplayStoreSpec.swift */; };
 		7AA54FF1E300E6DEEFD77717 /* UIColor+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54EDDE9ECFDD6DFC4DEC5 /* UIColor+Spec.swift */; };
+		7B50F371215A52B900ADC28D /* ScrollAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B50F370215A52B900ADC28D /* ScrollAction.swift */; };
+		7B50F372215BE13100ADC28D /* ScrollAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B50F370215A52B900ADC28D /* ScrollAction.swift */; };
 		7D078EE72124DC5800D10D1B /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EE62124DC5800D10D1B /* UserDefaults+.swift */; };
 		7D078EE92124DC9300D10D1B /* BiometryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5408D5D52952F11E20EEC /* BiometryManager.swift */; };
 		7D078EEB2124DCE100D10D1B /* SettingAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EEA2124DCE100D10D1B /* SettingAction.swift */; };
@@ -482,6 +484,7 @@
 		7AA54FD51CE484EAF78B4324 /* SettingNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingNavigationController.swift; sourceTree = "<group>"; };
 		7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+.swift"; sourceTree = "<group>"; };
 		7AA54FFBEBCACA7A506F5C16 /* DispatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatcherSpec.swift; sourceTree = "<group>"; };
+		7B50F370215A52B900ADC28D /* ScrollAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollAction.swift; sourceTree = "<group>"; };
 		7D078EE62124DC5800D10D1B /* UserDefaults+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
 		7D078EEA2124DCE100D10D1B /* SettingAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAction.swift; sourceTree = "<group>"; };
 		7D078EEE2124DF6500D10D1B /* BaseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAccountStore.swift; sourceTree = "<group>"; };
@@ -779,12 +782,12 @@
 		7AA54792ED918CF9CE82AED0 /* Action */ = {
 			isa = PBXGroup;
 			children = (
-				7AA54E38ACC2FDBBF700D5E1 /* RouteAction.swift */,
-				7AA54D4E439D76B910034E2A /* ErrorAction.swift */,
 				7AA5492DA3988625D1DAB5BD /* AccountAction.swift */,
-				7AA54B41C60F04FA585E5B8F /* ItemDetailAction.swift */,
 				7AA54575C8FE51664E45ACD8 /* CopyAction.swift */,
+				7AA54D4E439D76B910034E2A /* ErrorAction.swift */,
 				D8783612207C080300C19BC7 /* ExternalLinkAction.swift */,
+				7AA54B41C60F04FA585E5B8F /* ItemDetailAction.swift */,
+				7AA54E38ACC2FDBBF700D5E1 /* RouteAction.swift */,
 				7D078EEA2124DCE100D10D1B /* SettingAction.swift */,
 			);
 			path = Action;
@@ -881,6 +884,7 @@
 		7D078EE22124DC1800D10D1B /* Action */ = {
 			isa = PBXGroup;
 			children = (
+				7B50F370215A52B900ADC28D /* ScrollAction.swift */,
 				7AA547479EBD794467A4A4DF /* ApplicationLifecycleAction.swift */,
 				7AA5432C1975C7E9053A5CF3 /* TelemetryAction.swift */,
 				7AA54549204186237036B464 /* DataStoreAction.swift */,
@@ -1647,6 +1651,7 @@
 				7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */,
 				224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */,
 				D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */,
+				7B50F371215A52B900ADC28D /* ScrollAction.swift in Sources */,
 				7AA548BBE384D40397D26E9B /* RootView.swift in Sources */,
 				7D9722C62134622F0071D82B /* BaseWelcomePresenter.swift in Sources */,
 				7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */,
@@ -1758,6 +1763,7 @@
 				7DB9DE9A2140CB0000239D31 /* ItemListCell.swift in Sources */,
 				7D9722CC213485840071D82B /* StatusAlert.swift in Sources */,
 				7D9722C72134622F0071D82B /* BaseWelcomePresenter.swift in Sources */,
+				7B50F372215BE13100ADC28D /* ScrollAction.swift in Sources */,
 				7D09B24C2125DDC200794CA2 /* ApplicationLifecycleAction.swift in Sources */,
 				7DB9DE972140C5F400239D31 /* BaseItemListPresenter.swift in Sources */,
 				7D078EF62124E48300D10D1B /* Observable+.swift in Sources */,

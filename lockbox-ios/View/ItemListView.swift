@@ -57,6 +57,17 @@ extension ItemListView: ItemListViewProtocol {
                 .disposed(by: self.disposeBag)
         }
     }
+    
+    func bind(scrollAction: Driver<ScrollAction>) {
+        scrollAction.delay(RxTimeInterval(0.1))
+                    .drive(onNext: { action in
+                        switch action {
+                        case .toTop:
+                            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .none, animated: true)
+                        }
+                    })
+                    .disposed(by: self.disposeBag)
+    }
 
     var tableViewScrollEnabled: AnyObserver<Bool> {
         return self.tableView.rx.isScrollEnabled.asObserver()
