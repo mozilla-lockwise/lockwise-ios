@@ -23,12 +23,6 @@ class SettingListViewSpec: QuickSpec {
             onViewReadyCalled = true
         }
 
-        override var onDone: AnyObserver<Void> {
-            return Binder(self) { target, _ in
-                target.onDoneActionDispatched = true
-            }.asObserver()
-        }
-
         override var onSettingCellTapped: AnyObserver<RouteAction?> {
             return self.settingCellStub.asObserver()
         }
