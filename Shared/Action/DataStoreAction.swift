@@ -19,6 +19,7 @@ enum DataStoreAction: Action {
     case touch(id: String)
     case add(item: LoginData)
     case remove(id: String)
+    case forceLock(locked: Bool) // Used when the "Lock Now" button is tapped
 }
 
 extension DataStoreAction: Equatable {
@@ -35,6 +36,8 @@ extension DataStoreAction: Equatable {
             return true
         case (.remove(let lhID), .remove(let rhID)):
             return lhID == rhID
+        case (.forceLock(let lhLocked), .forceLock(let rhLocked)):
+            return lhLocked == rhLocked
         default: return false
         }
     }
