@@ -117,6 +117,9 @@ class BaseItemListPresenter {
             )]
     }()
 
+    var helpTextItems: [LoginListCellConfiguration] {
+        return []
+    }
 
     init(view: BaseItemListViewProtocol,
          dispatcher: Dispatcher = .shared,
@@ -220,7 +223,7 @@ extension BaseItemListPresenter {
             return LoginListCellConfiguration.Item(title: titleText, username: usernameText, guid: login.guid)
         }
 
-        return self.searchItem + loginCells
+        return self.searchItem + self.helpTextItems + loginCells
     }
 
     fileprivate func filterItemsForText(_ text: String, items: [Login]) -> [Login] {

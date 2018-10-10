@@ -117,6 +117,7 @@ class SettingListPresenter {
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
                         self.dispatcher.dispatch(action: DataStoreAction.lock)
+                        self.dispatcher.dispatch(action: DataStoreAction.forceLock(locked: true))
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                     } else {
                         self.view?.displayAlertController(
@@ -193,7 +194,7 @@ extension SettingListPresenter {
 
         if #available(iOS 12.0, *) {
             let autoFillSetting = SettingCellConfiguration(text: Constant.string.settingsAutoFillSettings,
-                                                           routeAction: SettingLinkAction.autofill,
+                                                           routeAction: SettingRouteAction.autofillInstructions,
                                                            accessibilityId: "autoFillSettingsOption")
             applicationConfigurationSection.items.append(autoFillSetting)
         }

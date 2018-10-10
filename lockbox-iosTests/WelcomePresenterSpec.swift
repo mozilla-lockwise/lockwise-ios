@@ -101,9 +101,11 @@ class WelcomePresenterSpec: QuickSpec {
 
     class FakeDataStore: DataStore {
         let fakeLocked: ReplaySubject<Bool>
+        let forceLockSubject: ReplaySubject<Bool>
 
         init() {
             self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
+            self.forceLockSubject = ReplaySubject<Bool>.create(bufferSize: 1)
             super.init()
 
             self.disposeBag = DisposeBag()
@@ -111,6 +113,10 @@ class WelcomePresenterSpec: QuickSpec {
 
         override var locked: Observable<Bool> {
             return self.fakeLocked.asObservable()
+        }
+
+        override var forceLock: Observable<Bool> {
+            return self.forceLockSubject.asObservable()
         }
     }
 
@@ -354,8 +360,33 @@ class WelcomePresenterSpec: QuickSpec {
                                 }
                             }
 
+                            describe("on cold start") {
+                                beforeEach {
+                                    self.biometryManager.authMessage = nil
+                                    self.dataStore.forceLockSubject.onNext(false)
+                                    self.subject.onViewReady()
+                                }
+
+                                it("starts authentication") {
+                                    expect(self.biometryManager.authMessage).to(equal(email))
+                                }
+                            }
+
+                            describe("on force lock") {
+                                beforeEach {
+                                    self.biometryManager.authMessage = nil
+                                    self.dataStore.forceLockSubject.onNext(true)
+                                    self.subject.onViewReady()
+                                }
+
+                                it("does not start authentication") {
+                                    expect(self.biometryManager.authMessage).to(beNil())
+                                }
+                            }
+
                             describe("pressing the biometrics button") {
                                 beforeEach {
+                                    self.biometryManager.authMessage = nil
                                     self.view.fakeUnlockButtonPress.onNext(())
                                 }
 

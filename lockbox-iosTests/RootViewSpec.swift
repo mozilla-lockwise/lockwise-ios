@@ -118,6 +118,17 @@ class RootViewSpec: QuickSpec {
                         expect(self.subject.topViewIs(AutofillOnboardingView.self)).to(beTrue())
                     }
                 }
+
+                describe("autofillInstructions") {
+                    beforeEach {
+                        self.subject.startMainStack(LoginNavigationController.self)
+                        self.subject.pushLoginView(view: LoginRouteAction.autofillInstructions)
+                    }
+
+                    it("makes the autofillInsutrctions the top view") {
+                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    }
+                }
             }
 
             describe("displaying main stack after login stack") {
@@ -188,6 +199,16 @@ class RootViewSpec: QuickSpec {
 
                     it("makes the autolock view the top view of the modal stack") {
                         expect(self.subject.topViewIs(AutoLockSettingView.self)).to(beTrue())
+                    }
+                }
+
+                describe("autofillInsturctions") {
+                    beforeEach {
+                        self.subject.pushSettingView(view: .autofillInstructions)
+                    }
+
+                    it("makes the autofill instructions view the new modal") {
+                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
                     }
                 }
             }

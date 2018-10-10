@@ -23,6 +23,7 @@ enum LoginRouteAction: RouteAction {
     case fxa
     case onboardingConfirmation
     case autofillOnboarding
+    case autofillInstructions
 }
 
 extension LoginRouteAction: TelemetryAction {
@@ -40,6 +41,8 @@ extension LoginRouteAction: TelemetryAction {
             return .loginOnboardingConfirmation
         case .autofillOnboarding:
             return .autofillOnboarding
+        case .autofillInstructions:
+            return .autofillOnboardingInstructions
         }
     }
 
@@ -90,6 +93,7 @@ enum SettingRouteAction: RouteAction {
     case account
     case autoLock
     case preferredBrowser
+    case autofillInstructions
 }
 
 extension SettingRouteAction: TelemetryAction {
@@ -107,7 +111,8 @@ extension SettingRouteAction: TelemetryAction {
             return .settingsAutolock
         case .preferredBrowser:
             return .settingsPreferredBrowser
-
+        case .autofillInstructions:
+            return .autofillSettingsInstructions
         }
     }
 
