@@ -27,6 +27,7 @@ class SettingListView: UIViewController {
         self.setupDataSource()
         self.setupDelegate()
         self.setupLockNowButton()
+        self.setupNavbar()
         self.presenter?.onViewReady()
 
         // Subscribe to Dynamic Type change events.
@@ -43,7 +44,6 @@ class SettingListView: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setupNavbar()
         self.styleTableViewBackground()
     }
 
@@ -63,6 +63,10 @@ extension SettingListView: SettingListViewProtocol {
             items.drive(self.tableView.rx.items(dataSource: dataSource))
                     .disposed(by: self.disposeBag)
         }
+    }
+    
+    var onDoneButtonPressed: ControlEvent<Void>? {
+        return self.navigationItem.rightBarButtonItem?.rx.tap
     }
 }
 
@@ -144,11 +148,6 @@ extension SettingListView {
             .font: UIFont.navigationButtonFont
         ], for: .normal)
 
-        if let presenter = presenter {
-            navigationItem.rightBarButtonItem?.rx.tap
-                    .bind(to: presenter.onDone)
-                    .disposed(by: self.disposeBag)
-        }
     }
 
     fileprivate func setupLockNowButton() {
