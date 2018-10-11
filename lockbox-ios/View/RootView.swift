@@ -7,6 +7,7 @@ import UIKit
 
 class RootView: UIViewController, RootViewProtocol {
     internal var presenter: RootPresenter?
+    private var viewFactory: ViewFactory
 
     private var currentViewController: UINavigationController? {
         didSet {
@@ -34,7 +35,8 @@ class RootView: UIViewController, RootViewProtocol {
         return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
     }
 
-    init() {
+    init(viewFactory: ViewFactory = ViewFactory.shared) {
+        self.viewFactory = viewFactory
         super.init(nibName: nil, bundle: nil)
         if !isRunningTest {
             self.presenter = RootPresenter(view: self)
@@ -83,19 +85,16 @@ class RootView: UIViewController, RootViewProtocol {
         case .welcome:
             self.currentViewController?.popToRootViewController(animated: !isRunningTest)
         case .fxa:
-            self.currentViewController?.pushViewController(FxAView(), animated: !isRunningTest)
+            self.currentViewController?.pushViewController(self.viewFactory.make(FxAView.self), animated: !isRunningTest)
         case .onboardingConfirmation:
-            if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
-                self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
-            }
+            let onboardingConfirmationView = self.viewFactory.make(storyboardName: "OnboardingConfirmation", identifier: "onboardingconfirmation")
+            self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
         case .autofillOnboarding:
-            if let autofillOnboardingView = UIStoryboard(name: "AutofillOnboarding", bundle: nil).instantiateViewController(withIdentifier: "autofillonboarding") as? AutofillOnboardingView {
-                self.currentViewController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
-            }
+            let autofillOnboardingView = self.viewFactory.make(storyboardName: "AutofillOnboarding", identifier: "autofillonboarding")
+            self.currentViewController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
         case .autofillInstructions:
-            if let autofillInstructionsView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentViewController?.pushViewController(autofillInstructionsView, animated: !isRunningTest)
-            }
+            let autofillInstructionsView = self.viewFactory.make(storyboardName: "SetupAutofill", identifier: "autofillinstructions")
+            self.currentViewController?.pushViewController(autofillInstructionsView, animated: !isRunningTest)
         }
     }
 
@@ -104,7 +103,8 @@ class RootView: UIViewController, RootViewProtocol {
         case .list:
             self.currentViewController?.popToRootViewController(animated: !isRunningTest)
         case .detail(let id):
-            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
+
+            if let itemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview") as? ItemDetailView {
                 itemDetailView.itemId = id
                 self.currentViewController?.pushViewController(itemDetailView, animated: !isRunningTest)
             }
@@ -116,17 +116,15 @@ class RootView: UIViewController, RootViewProtocol {
         case .list:
             self.currentViewController?.popToRootViewController(animated: !isRunningTest)
         case .account:
-            if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView {
-                self.currentViewController?.pushViewController(accountSettingView, animated: !isRunningTest)
-            }
+            let accountSettingView = self.viewFactory.make(storyboardName: "AccountSetting", identifier: "accountsetting")
+            self.currentViewController?.pushViewController(accountSettingView, animated: !isRunningTest)
         case .autoLock:
-            self.currentViewController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
+            self.currentViewController?.pushViewController(self.viewFactory.make(AutoLockSettingView.self), animated: !isRunningTest)
         case .preferredBrowser:
-            self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
+            self.currentViewController?.pushViewController(self.viewFactory.make(PreferredBrowserSettingView.self), animated: !isRunningTest)
         case .autofillInstructions:
-            if let autofillSettingView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentViewController?.pushViewController(autofillSettingView, animated: !isRunningTest)
-            }
+            let autofillSettingView = self.viewFactory.make(storyboardName: "SetupAutofill", identifier: "autofillinstructions")
+            self.currentViewController?.pushViewController(autofillSettingView, animated: !isRunningTest)
         }
     }
 

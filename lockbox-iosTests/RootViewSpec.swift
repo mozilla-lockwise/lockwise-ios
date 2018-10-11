@@ -17,15 +17,37 @@ class RootViewSpec: QuickSpec {
         }
     }
 
+    class FakeViewFactory: ViewFactory {
+        override func make<T>(_ type: T.Type) -> UIViewController where T : UIViewController {
+            switch type {
+            case is FxAView.Type:
+                return FakeFxAView()
+            default:
+                return UIViewController()
+            }
+        }
+
+        override func make(storyboardName: String, identifier: String) -> UIViewController {
+//            switch storyboardName {
+//            case "OnboardingConfirmation":
+//                return OnboardingConfirmationView(coder: NSCoder()) ?? UIViewController()
+//            default:
+                return UIViewController()
+//            }
+        }
+    }
+
     private var presenter: FakeRootPresenter!
     var subject: RootView!
+    var viewFactory: ViewFactory!
 
     override func spec() {
         let window = UIWindow()
 
         describe("RootView") {
             beforeEach {
-                self.subject = RootView()
+                self.viewFactory = FakeViewFactory()
+                self.subject = RootView(viewFactory: self.viewFactory)
                 self.presenter = FakeRootPresenter(view: self.subject)
                 self.subject.presenter = self.presenter
 
