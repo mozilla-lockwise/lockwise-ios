@@ -69,7 +69,9 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func startMainStack<T: UINavigationController>(_ type: T.Type) {
-        self.currentViewController = type.init()
+        if let vc = self.viewFactory.make(type) as? UINavigationController {
+            self.currentViewController = vc
+        }
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
