@@ -28,7 +28,7 @@ class ItemListPresenter: BaseItemListPresenter {
     weak var view: ItemListViewProtocol? {
         return self.baseView as? ItemListViewProtocol
     }
-    
+
     lazy private(set) var listSortedObserver: AnyObserver<Setting.ItemListSort> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ScrollAction.toTop)
@@ -105,7 +105,7 @@ class ItemListPresenter: BaseItemListPresenter {
 
         let itemSortObservable = self.userDefaultStore.itemListSort
         itemSortObservable.bind(to: self.listSortedObserver).disposed(by: self.disposeBag)
-        
+
         guard let view = self.view,
               let sortButtonObserver = view.sortingButtonEnabled,
               let pullToRefreshActiveObserver = view.pullToRefreshActive else { return }
@@ -114,7 +114,7 @@ class ItemListPresenter: BaseItemListPresenter {
             .filterByType(class: ScrollAction.self)
             .asDriver(onErrorJustReturn: ScrollAction.toTop)
         view.bind(scrollAction: scrollActionDriver)
-        
+
         self.setupButtonBehavior(
                 view: view,
                 itemSortObservable: itemSortObservable,
@@ -123,13 +123,13 @@ class ItemListPresenter: BaseItemListPresenter {
 
         self.setupPullToRefresh(pullToRefreshActiveObserver)
         self.dispatcher.dispatch(action: PullToRefreshAction(refreshing: false))
-        
+
         if let onSettingsButtonPressed = self.view?.onSettingsButtonPressed {
             onSettingsButtonPressed.subscribe { _ in
                 self.dispatcher.dispatch(action: SettingRouteAction.list)
                 }.disposed(by: disposeBag)
         }
-        
+
         if let onSortingButtonPressed = self.view?.onSortingButtonPressed {
             onSortingButtonPressed.subscribe { _ in
                 self.userDefaultStore.itemListSort
@@ -161,7 +161,7 @@ class ItemListPresenter: BaseItemListPresenter {
                     .disposed(by: self.disposeBag)
             }
             .disposed(by: self.disposeBag)
-            
+
         }
     }
 }
@@ -184,7 +184,10 @@ extension ItemListPresenter {
                 .drive(onNext: { latest in
                     if (latest.syncState == SyncState.Syncing || latest.syncState == SyncState.ReadyToSync)
                                && !latest.manualSync {
-                        self.view?.displaySpinner(hideSpinnerObservable, bag: self.disposeBag, message: Constant.string.syncingYourEntries, completionMessage: Constant.string.doneSyncingYourEntries)
+                        self.view?.displaySpinner(hideSpinnerObservable,
+                                                  bag: self.disposeBag,
+                                                  message: Constant.string.syncingYourEntries,
+                                                  completionMessage: Constant.string.doneSyncingYourEntries)
                     }
                 })
                 .disposed(by: self.disposeBag)
