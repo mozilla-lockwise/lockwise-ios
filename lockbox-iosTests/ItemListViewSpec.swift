@@ -46,7 +46,7 @@ class ItemListViewSpec: QuickSpec {
         override var editEndedObserver: AnyObserver<Void> {
             return self.fakeEditEndedObserver.asObserver()
         }
-        
+
         override var listSortedObserver: AnyObserver<Setting.ItemListSort> {
             return self.fakeListSortedObserver.asObserver()
         }
@@ -287,13 +287,13 @@ class ItemListViewSpec: QuickSpec {
                     }
                 }
             }
-            
+
             describe("tapping the sorting button") {
                 var buttonObserver = self.scheduler.createObserver(Void.self)
-                
+
                 beforeEach {
                     buttonObserver = self.scheduler.createObserver(Void.self)
-                    
+
                     self.subject.onSortingButtonPressed!
                         .subscribe(buttonObserver)
                         .disposed(by: self.disposeBag)
@@ -306,21 +306,21 @@ class ItemListViewSpec: QuickSpec {
                     expect(buttonObserver.events.count).to(be(1))
                 }
             }
-     
+
             describe("tapping the settings button") {
                 var buttonObserver = self.scheduler.createObserver(Void.self)
-                
+
                 beforeEach {
                     buttonObserver = self.scheduler.createObserver(Void.self)
-                    
+
                     self.subject.onSettingsButtonPressed!
                         .subscribe(buttonObserver)
                         .disposed(by: self.disposeBag)
-                    
+
                     let settingsButton = self.subject.navigationItem.rightBarButtonItem!.customView as! UIButton
                     settingsButton.sendActions(for: .touchUpInside)
                 }
-                
+
                 it("tells observers about button taps") {
                     expect(buttonObserver.events.count).to(be(1))
                 }

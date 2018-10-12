@@ -39,7 +39,7 @@ class ItemListPresenterSpec: QuickSpec {
         func bind(sortingButtonTitle: Driver<String>) {
             sortingButtonTitle.drive(sortingButtonTitleObserver).disposed(by: self.disposeBag)
         }
-        
+
         func bind(scrollAction: Driver<ScrollAction>) {
             scrollToTopCalled = true
             scrollAction.drive(scrollActionObserver).disposed(by: self.disposeBag)
@@ -70,24 +70,24 @@ class ItemListPresenterSpec: QuickSpec {
         var pullToRefreshActive: AnyObserver<Bool>? {
             return self.pullToRefreshObserver?.asObserver()
         }
-        
+
         var onSettingsButtonPressed: ControlEvent<Void>? {
             return ControlEvent<Void>(events: fakeOnSettingsPressed.asObservable())
         }
-        
+
         var onSortingButtonPressed: ControlEvent<Void>? {
             return ControlEvent<Void>(events: fakeOnSortingButtonPressed.asObservable())
         }
     }
-    
+
     class FakeDispatcher: Dispatcher {
         var dispatchedActions: [Action] = []
         let fakeRegistration = PublishSubject<Action>()
-        
+
         override var register: Observable<Action> {
             return self.fakeRegistration.asObservable()
         }
-        
+
         override func dispatch(action: Action) {
             self.dispatchedActions.append(action)
         }
@@ -577,14 +577,14 @@ class ItemListPresenterSpec: QuickSpec {
             describe("sortingButton") {
                 beforeEach {
                     self.subject.onViewReady()
-                    
+
                     let itemSettingObservable: TestableObservable<ScrollAction> = self.scheduler.createColdObservable([next(50, ScrollAction.toTop)])
                     itemSettingObservable
                         .bind(to: self.view.scrollActionObserver)
                         .disposed(by: self.disposeBag)
-                    
+
                     self.view.fakeOnSortingButtonPressed.onNext(())
-                    
+
                     self.scheduler.start()
                     self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                 }
@@ -608,14 +608,14 @@ class ItemListPresenterSpec: QuickSpec {
                         expect(action).notTo(beNil())
                         expect(action).to(equal(SettingAction.itemListSort(sort: Setting.ItemListSort.alphabetically)))
                     }
-                    
+
                     it("dispatches the scroll to top action. ScrollAction") {
                         let dispatched = self.dispatcher.dispatchedActions.dropLast()
                         let action = dispatched.last as? ScrollAction
                         expect(action).notTo(beNil())
                         expect(action).to(equal(ScrollAction.toTop))
                     }
-                    
+
                     it("scrolls to top") {
                         expect(self.view.scrollActionObserver.events.count).to(equal(1))
                         expect(self.view.scrollToTopCalled).to(beTrue())
@@ -632,14 +632,14 @@ class ItemListPresenterSpec: QuickSpec {
                         expect(action).notTo(beNil())
                         expect(action).to(equal(SettingAction.itemListSort(sort: Setting.ItemListSort.recentlyUsed)))
                     }
-                    
+
                     it("dispatches the scroll to top action. ScrollAction") {
                         let dispatched = self.dispatcher.dispatchedActions.dropLast()
                         let action = dispatched.last as? ScrollAction
                         expect(action).notTo(beNil())
                         expect(action).to(equal(ScrollAction.toTop))
                     }
-                    
+
                     it("scrolls to top") {
                         expect(self.view.scrollActionObserver.events.count).to(equal(1))
                         expect(self.view.scrollToTopCalled).to(beTrue())
