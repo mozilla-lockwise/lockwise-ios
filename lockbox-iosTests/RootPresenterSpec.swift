@@ -648,7 +648,7 @@ class RootPresenterSpec: QuickSpec {
                             }
                         }
 
-                        describe(".autofillInstructions") {
+                        xdescribe(".autofillInstructions") {
                             describe("if the top view is not already the login view") {
                                 beforeEach {
                                     self.view.topViewIsVar = false
@@ -1194,7 +1194,7 @@ class RootPresenterSpec: QuickSpec {
                             }
                         }
 
-                        describe(".autofillInstructions") {
+                        xdescribe(".autofillInstructions") {
                             describe("when top view is not the autofillInstructions") {
                                 beforeEach {
                                     self.view.modalStackIsVar = false

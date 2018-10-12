@@ -108,7 +108,7 @@ class RootViewSpec: QuickSpec {
                     }
                 }
 
-                describe("autofillOnboarding") {
+                xdescribe("autofillOnboarding") {
                     beforeEach {
                         self.subject.startMainStack(LoginNavigationController.self)
                         self.subject.pushLoginView(view: LoginRouteAction.autofillOnboarding)
@@ -119,7 +119,7 @@ class RootViewSpec: QuickSpec {
                     }
                 }
 
-                describe("autofillInstructions") {
+                xdescribe("autofillInstructions") {
                     beforeEach {
                         self.subject.startMainStack(LoginNavigationController.self)
                         self.subject.pushLoginView(view: LoginRouteAction.autofillInstructions)
@@ -202,7 +202,7 @@ class RootViewSpec: QuickSpec {
                     }
                 }
 
-                describe("autofillInsturctions") {
+                xdescribe("autofillInsturctions") {
                     beforeEach {
                         self.subject.pushSettingView(view: .autofillInstructions)
                     }
