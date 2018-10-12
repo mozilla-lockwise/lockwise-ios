@@ -57,7 +57,7 @@ extension ItemListView: ItemListViewProtocol {
                 .disposed(by: self.disposeBag)
         }
     }
-    
+
     func bind(scrollAction: Driver<ScrollAction>) {
         scrollAction.delay(RxTimeInterval(0.1))
                     .drive(onNext: { action in
@@ -84,20 +84,20 @@ extension ItemListView: ItemListViewProtocol {
 
         return nil
     }
-    
+
     var onSettingsButtonPressed: ControlEvent<Void>? {
         if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
             return button.rx.tap
         }
-        
+
         return nil
     }
-    
+
     var onSortingButtonPressed: ControlEvent<Void>? {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             return button.rx.tap
         }
-        
+
         return nil
     }
 }
