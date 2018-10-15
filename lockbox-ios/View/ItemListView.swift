@@ -58,6 +58,17 @@ extension ItemListView: ItemListViewProtocol {
         }
     }
 
+    func bind(scrollAction: Driver<ScrollAction>) {
+        scrollAction.delay(RxTimeInterval(0.1))
+                    .drive(onNext: { action in
+                        switch action {
+                        case .toTop:
+                            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .none, animated: true)
+                        }
+                    })
+                    .disposed(by: self.disposeBag)
+    }
+
     var tableViewScrollEnabled: AnyObserver<Bool> {
         return self.tableView.rx.isScrollEnabled.asObserver()
     }
@@ -73,20 +84,20 @@ extension ItemListView: ItemListViewProtocol {
 
         return nil
     }
-    
+
     var onSettingsButtonPressed: ControlEvent<Void>? {
         if let button = self.navigationItem.rightBarButtonItem?.customView as? UIButton {
             return button.rx.tap
         }
-        
+
         return nil
     }
-    
+
     var onSortingButtonPressed: ControlEvent<Void>? {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             return button.rx.tap
         }
-        
+
         return nil
     }
 }

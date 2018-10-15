@@ -39,6 +39,8 @@ _all commits on all branches and pull requests are automatically built_
   - download the `.ipa` from buddybuild and attach it to the Release on GitHub
 5. Hopefully by now the build has been uploaded to App Store Connect
 6. Browse to App Store Connect and continue the "Distributing..." instructions
+7. Download and unzip dSYM build artifact from buddybuild
+8. Upload dSYM files to Sentry using `sentry-cli` using [sentry instructions](https://docs.sentry.io/clients/cocoa/dsym/#manually-with-sentry-cli)
 
 ### In Case of Emergency (Release)
 

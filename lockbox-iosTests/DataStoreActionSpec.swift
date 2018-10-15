@@ -58,6 +58,12 @@ class DataStoreActionSpec: QuickSpec {
                 expect(DataStoreAction.sync).notTo(equal(DataStoreAction.reset))
                 expect(DataStoreAction.reset).notTo(equal(DataStoreAction.sync))
             }
+
+            it("forceLock is equal based on bool") {
+                expect(DataStoreAction.forceLock(locked: true)).to(equal(DataStoreAction.forceLock(locked: true)))
+                expect(DataStoreAction.forceLock(locked: false)).to(equal(DataStoreAction.forceLock(locked: false)))
+                expect(DataStoreAction.forceLock(locked: true)).notTo(equal(DataStoreAction.forceLock(locked: false)))
+            }
         }
     }
 }
