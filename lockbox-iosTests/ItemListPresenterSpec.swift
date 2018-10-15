@@ -9,6 +9,9 @@ import RxSwift
 import RxCocoa
 import RxTest
 import Storage
+import FxAClient
+import SwiftKeychainWrapper
+import FxAUtils
 
 @testable import Lockbox
 
@@ -98,11 +101,11 @@ class ItemListPresenterSpec: QuickSpec {
         var syncStateStub: PublishSubject<SyncState>
         var storageStateStub: PublishSubject<LoginStoreState>
 
-        init() {
+        init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
             self.itemListStub = PublishSubject<[Login]>()
             self.syncStateStub = PublishSubject<SyncState>()
             self.storageStateStub = PublishSubject<LoginStoreState>()
-            super.init()
+            super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
 
             self.disposeBag = DisposeBag()
         }
@@ -136,6 +139,10 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    private let fakeProfileFactory: ProfileFactory = { reset in
+        FakeProfile()
+    }
+
     private var view: FakeItemListView!
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
@@ -150,7 +157,7 @@ class ItemListPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeItemListView()
                 self.dispatcher = FakeDispatcher()
-                self.dataStore = FakeDataStore()
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory)
                 self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)

@@ -9,6 +9,8 @@ import RxSwift
 import RxTest
 import UIKit
 import FxAClient
+import SwiftKeychainWrapper
+import FxAUtils
 
 @testable import Lockbox
 
@@ -130,13 +132,17 @@ class RootPresenterSpec: QuickSpec {
 
     class FakeAccountStore: AccountStore {
         let oauthInfoStub = PublishSubject<OAuthInfo?>()
-        let profileInfoStub = PublishSubject<Profile?>()
+        let profileInfoStub = PublishSubject<FxAClient.Profile?>()
+
+        override func initialized() {
+            //noop
+        }
 
         override var oauthInfo: Observable<OAuthInfo?> {
             return self.oauthInfoStub.asObservable()
         }
 
-        override var profile: Observable<Profile?> {
+        override var profile: Observable<FxAClient.Profile?> {
             return self.profileInfoStub.asObservable()
         }
     }
@@ -170,7 +176,7 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeSentryManager: Sentry {
+    class FakeSentryManager: Lockbox.Sentry {
         var setupCalled: Bool = false
 
         override func setup(sendUsageData: Bool) {
@@ -178,6 +184,10 @@ class RootPresenterSpec: QuickSpec {
              self.setupCalled = true
             }
         }
+    }
+
+    private let fakeProfileFactory: ProfileFactory = { reset in
+        FakeProfile()
     }
 
     private var view: FakeRootView!
@@ -199,7 +209,7 @@ class RootPresenterSpec: QuickSpec {
                 self.view = FakeRootView()
                 self.dispatcher = FakeDispatcher()
                 self.routeStore = FakeRouteStore()
-                self.dataStore = FakeDataStore()
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
                 self.telemetryStore = FakeTelemetryStore()
                 self.accountStore = FakeAccountStore()
                 self.userDefaultStore = FakeUserDefaultStore()

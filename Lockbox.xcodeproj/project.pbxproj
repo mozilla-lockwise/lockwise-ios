@@ -259,6 +259,7 @@
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
+		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
 		D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingListView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */; };
 		D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */; };
@@ -569,6 +570,7 @@
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
+		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenter.swift; sourceTree = "<group>"; };
 		D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenterSpec.swift; sourceTree = "<group>"; };
@@ -1066,6 +1068,7 @@
 				7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */,
 				D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */,
 				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
+				D82FF5152172DAC600018346 /* FakeProfile.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1604,6 +1607,7 @@
 				7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */,
 				7AA54AA7964A1C95FDB7AA6E /* UserDefaults+Spec.swift in Sources */,
 				7DA4B09021401C2D00C9EFEA /* CredentialStatusActionSpec.swift in Sources */,
+				D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */,
 				7AA540CB2BA73DB82EDDAED1 /* SettingNavigationControllerSpec.swift in Sources */,
 				7DA4B08E2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift in Sources */,
 				7AA54C2A679E7AAF3C34E7E6 /* BiometryManagerSpec.swift in Sources */,
