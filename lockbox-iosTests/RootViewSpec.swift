@@ -17,15 +17,37 @@ class RootViewSpec: QuickSpec {
         }
     }
 
+    class FakeViewFactory: ViewFactory {
+        var isAArgument: UIViewController?
+        var isAReturnValue: Bool = true
+
+        var makeTypeArgument: UIViewController.Type?
+        var makeStoryboardArgument: String?
+        var makeIdentifierArgument: String?
+
+        override func make<T>(_ type: T.Type) -> UIViewController where T: UIViewController {
+            self.makeTypeArgument = type
+            return type is UINavigationController.Type ? UINavigationController() : UIViewController()
+        }
+
+        override func make(storyboardName: String, identifier: String) -> UIViewController {
+            self.makeStoryboardArgument = storyboardName
+            self.makeIdentifierArgument = identifier
+            return UIViewController()
+        }
+    }
+
     private var presenter: FakeRootPresenter!
     var subject: RootView!
+    var viewFactory: FakeViewFactory!
 
     override func spec() {
         let window = UIWindow()
 
         describe("RootView") {
             beforeEach {
-                self.subject = RootView()
+                self.viewFactory = FakeViewFactory()
+                self.subject = RootView(viewFactory: self.viewFactory)
                 self.presenter = FakeRootPresenter(view: self.subject)
                 self.subject.presenter = self.presenter
 
@@ -49,8 +71,8 @@ class RootViewSpec: QuickSpec {
                         self.subject.startMainStack(MainNavigationController.self)
                     }
 
-                    it("returns true") {
-                        expect(self.subject.mainStackIs(MainNavigationController.self)).to(beTrue())
+                    it("buids the navigation controller") {
+                        expect(self.viewFactory.makeTypeArgument === MainNavigationController.self).to(beTrue())
                     }
                 }
             }
@@ -68,8 +90,8 @@ class RootViewSpec: QuickSpec {
                         self.subject.startModalStack(SettingNavigationController())
                     }
 
-                    it("returns true") {
-                        expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beTrue())
+                    it("builds the navigation controller") {
+                        expect(self.viewFactory.makeTypeArgument === MainNavigationController.self).to(beTrue())
                     }
                 }
             }
@@ -81,8 +103,8 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushLoginView(view: LoginRouteAction.welcome)
                     }
 
-                    it("makes a loginview the top view") {
-                        expect(self.subject.topViewIs(WelcomeView.self)).to(beTrue())
+                    it("builds a navigation controller") {
+                        expect(self.viewFactory.makeTypeArgument === LoginNavigationController.self).to(beTrue())
                     }
                 }
 
@@ -92,8 +114,8 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushLoginView(view: LoginRouteAction.fxa)
                     }
 
-                    it("makes an fxaview the top view") {
-                        expect(self.subject.topViewIs(FxAView.self)).to(beTrue())
+                    it("makes an fxaview view controller") {
+                        expect(self.viewFactory.makeTypeArgument === FxAView.self).to(beTrue())
                     }
                 }
 
@@ -103,8 +125,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushLoginView(view: LoginRouteAction.onboardingConfirmation)
                     }
 
-                    it("makes the onboardingconfirmation the top view") {
-                        expect(self.subject.topViewIs(OnboardingConfirmationView.self)).to(beTrue())
+                    it("makes the onboardingconfirmation view controller") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(equal("OnboardingConfirmation"))
+                        expect(self.viewFactory.makeIdentifierArgument).to(equal("onboardingconfirmation"))
                     }
                 }
 
@@ -114,8 +137,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushLoginView(view: LoginRouteAction.autofillOnboarding)
                     }
 
-                    it("makes the autofillOnboarding the top view") {
-                        expect(self.subject.topViewIs(AutofillOnboardingView.self)).to(beTrue())
+                    it("makes the autofillOnboarding view controller") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(equal("AutofillOnboarding"))
+                        expect(self.viewFactory.makeIdentifierArgument).to(equal("autofillonboarding"))
                     }
                 }
 
@@ -125,21 +149,10 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushLoginView(view: LoginRouteAction.autofillInstructions)
                     }
 
-                    it("makes the autofillInsutrctions the top view") {
-                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    it("makes the autofillInsutrctions view controller") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(equal("SetupAutofill"))
+                        expect(self.viewFactory.makeIdentifierArgument).to(equal("autofillinstructions"))
                     }
-                }
-            }
-
-            describe("displaying main stack after login stack") {
-                beforeEach {
-                    self.subject.startMainStack(LoginNavigationController.self)
-                    self.subject.startMainStack(MainNavigationController.self)
-                }
-
-                it("displays the main stack only") {
-                    expect(self.subject.mainStackIs(LoginNavigationController.self)).to(beFalse())
-                    expect(self.subject.mainStackIs(MainNavigationController.self)).to(beTrue())
                 }
             }
 
@@ -150,8 +163,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushMainView(view: .list)
                     }
 
-                    it("makes a listview the top view") {
-                        expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
+                    it("only makes the view controller") {
+                        expect(self.viewFactory.makeTypeArgument == MainNavigationController.self).to(beTrue())
+                        expect(self.viewFactory.makeStoryboardArgument).to(beNil())
                     }
                 }
 
@@ -161,8 +175,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushMainView(view: .detail(itemId: "dffsdfs"))
                     }
 
-                    it("makes a detailview the top view") {
-                        expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
+                    it("makes a detailview view controller") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(equal("ItemDetail"))
+                        expect(self.viewFactory.makeIdentifierArgument).to(equal("itemdetailview"))
                     }
                 }
             }
@@ -177,8 +192,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushSettingView(view: .list)
                     }
 
-                    it("makes the list view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
+                    it("only makes the navigation controller") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(beNil())
+                        expect(self.viewFactory.makeTypeArgument === SettingNavigationController.self).to(beTrue())
                     }
                 }
 
@@ -187,8 +203,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushSettingView(view: .account)
                     }
 
-                    it("makes the account view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AccountSettingView.self)).to(beTrue())
+                    it("makes the account view") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(equal("AccountSetting"))
+                        expect(self.viewFactory.makeIdentifierArgument).to(equal("accountsetting"))
                     }
                 }
 
@@ -197,8 +214,8 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushSettingView(view: .autoLock)
                     }
 
-                    it("makes the autolock view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AutoLockSettingView.self)).to(beTrue())
+                    it("makes the autolock view") {
+                        expect(self.viewFactory.makeTypeArgument === AutoLockSettingView.self).to(beTrue())
                     }
                 }
 
@@ -207,8 +224,9 @@ class RootViewSpec: QuickSpec {
                         self.subject.pushSettingView(view: .autofillInstructions)
                     }
 
-                    it("makes the autofill instructions view the new modal") {
-                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    it("makes the autofill insturctions view") {
+                        expect(self.viewFactory.makeStoryboardArgument).to(equal("SetupAutofill"))
+                        expect(self.viewFactory.makeIdentifierArgument).to(equal("autofillinstructions"))
                     }
                 }
             }

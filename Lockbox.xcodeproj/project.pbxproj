@@ -259,6 +259,7 @@
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
+		D806AE36216EF7EE00169B1C /* ViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D806AE35216EF7EE00169B1C /* ViewFactory.swift */; };
 		D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingListView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */; };
 		D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */; };
@@ -569,6 +570,7 @@
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
+		D806AE35216EF7EE00169B1C /* ViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactory.swift; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenter.swift; sourceTree = "<group>"; };
 		D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenterSpec.swift; sourceTree = "<group>"; };
@@ -1074,6 +1076,7 @@
 			isa = PBXGroup;
 			children = (
 				7D4396602135D8BC00B96FA9 /* SentryManager.swift */,
+				D806AE35216EF7EE00169B1C /* ViewFactory.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1708,6 +1711,7 @@
 				7AA5462CD711A33ACB5E48A2 /* UIView+.swift in Sources */,
 				7AA54B00F88A2EF6FDFA2892 /* SettingNavigationController.swift in Sources */,
 				7AA54C0AFF50DFF42D405014 /* BaseSettingAction.swift in Sources */,
+				D806AE36216EF7EE00169B1C /* ViewFactory.swift in Sources */,
 				7AA542395C9C6379C27909B5 /* BaseUserDefaults+.swift in Sources */,
 				7AA54D3D19DB0AC7D0B59812 /* BiometryManager.swift in Sources */,
 				7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */,
