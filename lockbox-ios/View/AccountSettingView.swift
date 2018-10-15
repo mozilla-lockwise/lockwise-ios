@@ -48,17 +48,16 @@ extension AccountSettingView: AccountSettingViewProtocol {
                 .drive(self.usernameLabel.rx.text)
                 .disposed(by: self.disposeBag)
     }
+    
+    var unLinkAccountButtonPressed: ControlEvent<Void> {
+        return self.unlinkAccountButton.rx.tap
+    }
+    
 }
 
 extension AccountSettingView: UIGestureRecognizerDelegate {
     fileprivate func setupUnlinkAccountButton() {
         self.unlinkAccountButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
-
-        if let presenter = self.presenter {
-            self.unlinkAccountButton.rx.tap
-                    .bind(to: presenter.unLinkAccountTapped)
-                    .disposed(by: self.disposeBag)
-        }
     }
 
     fileprivate func setupNavBar() {

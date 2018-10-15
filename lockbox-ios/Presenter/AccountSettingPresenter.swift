@@ -9,12 +9,14 @@ import RxSwift
 protocol AccountSettingViewProtocol: class, AlertControllerView {
     func bind(avatarImage: Driver<Data>)
     func bind(displayName: Driver<String>)
+    var unLinkAccountButtonPressed: ControlEvent<Void> { get }
 }
 
 class AccountSettingPresenter {
     weak var view: AccountSettingViewProtocol?
     let dispatcher: Dispatcher
     let accountStore: AccountStore
+    private let disposeBag = DisposeBag()
 
     lazy private var unlinkAccountObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
@@ -27,21 +29,6 @@ class AccountSettingPresenter {
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: SettingRouteAction.list)
-        }.asObserver()
-    }()
-
-    lazy private(set) var unLinkAccountTapped: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            target.view?.displayAlertController(buttons: [
-                AlertActionButtonConfiguration(title: Constant.string.cancel,
-                                               tapObserver: nil,
-                                               style: .cancel),
-                AlertActionButtonConfiguration(title: Constant.string.unlink,
-                        tapObserver: target.unlinkAccountObserver,
-                        style: .destructive)],
-                    title: Constant.string.confirmDialogTitle,
-                    message: Constant.string.confirmDialogMessage,
-                    style: .alert)
         }.asObserver()
     }()
 
@@ -77,5 +64,24 @@ class AccountSettingPresenter {
                 .filterNil()
 
         self.view?.bind(avatarImage: avatarImageDriver)
+        
+        self.view?.unLinkAccountButtonPressed.subscribe { [weak self] _ in
+            self?.view?.displayAlertController(
+                buttons: [
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.cancel,
+                        tapObserver: nil,
+                        style: .cancel
+                    ),
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.unlink,
+                        tapObserver: self?.unlinkAccountObserver,
+                        style: .destructive)
+                ],
+                title: Constant.string.confirmDialogTitle,
+                message: Constant.string.confirmDialogMessage,
+                style: .alert)
+        }
+        .disposed(by: self.disposeBag)
     }
 }
