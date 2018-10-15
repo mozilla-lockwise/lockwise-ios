@@ -53,6 +53,14 @@ extension AccountSettingView: AccountSettingViewProtocol {
         return self.unlinkAccountButton.rx.tap
     }
     
+    var onSettingsButtonPressed: ControlEvent<Void>? {
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            return button.rx.tap
+        }
+        
+        return nil
+    }
+    
 }
 
 extension AccountSettingView: UIGestureRecognizerDelegate {
@@ -72,10 +80,6 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {
-            leftButton.rx.tap
-                .bind(to: presenter.onSettingsTap)
-                .disposed(by: self.disposeBag)
-
             self.navigationController?.interactivePopGestureRecognizer?.delegate = self
             self.navigationController?.interactivePopGestureRecognizer?.rx.event
                 .map { _ -> Void in

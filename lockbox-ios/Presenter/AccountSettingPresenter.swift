@@ -10,6 +10,7 @@ protocol AccountSettingViewProtocol: class, AlertControllerView {
     func bind(avatarImage: Driver<Data>)
     func bind(displayName: Driver<String>)
     var unLinkAccountButtonPressed: ControlEvent<Void> { get }
+    var onSettingsButtonPressed: ControlEvent<Void>? { get }
 }
 
 class AccountSettingPresenter {
@@ -64,6 +65,13 @@ class AccountSettingPresenter {
                 .filterNil()
 
         self.view?.bind(avatarImage: avatarImageDriver)
+        
+        if let onSettingsButtonPressed = self.view?.onSettingsButtonPressed {
+            onSettingsButtonPressed.subscribe { [weak self] _ in
+                self?.dispatcher.dispatch(action: SettingRouteAction.list)
+            }
+            .disposed(by: disposeBag)
+        }
         
         self.view?.unLinkAccountButtonPressed.subscribe { [weak self] _ in
             self?.view?.displayAlertController(
