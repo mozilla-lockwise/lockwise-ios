@@ -20,6 +20,7 @@ class AccountSettingPresenterSpec: QuickSpec {
         var displayAlertControllerTitle: String?
         var displayAlertControllerMessage: String?
         var fakeUnlinkAccountButtonPressed = PublishSubject<Void>()
+        var fakeOnSettingsButtonPressed = PublishSubject<Void>()
 
         let disposeBag = DisposeBag()
 
@@ -39,6 +40,10 @@ class AccountSettingPresenterSpec: QuickSpec {
         
         var unLinkAccountButtonPressed: ControlEvent<Void> {
             return ControlEvent<Void>(events: fakeUnlinkAccountButtonPressed.asObservable())
+        }
+        
+        var onSettingsButtonPressed: ControlEvent<Void>? {
+            return ControlEvent<Void>(events: fakeOnSettingsButtonPressed.asObservable())
         }
     }
 
@@ -128,13 +133,8 @@ class AccountSettingPresenterSpec: QuickSpec {
 
             describe("onSettingsTap") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.onSettingsTap)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeOnSettingsButtonPressed.onNext(()) 
                 }
 
                 it("sends the settings list action") {

@@ -72,12 +72,21 @@ class AccountSettingViewSpec: QuickSpec {
             }
 
             describe("tapping the back to settings button") {
+                var buttonObserver = self.scheduler.createObserver(Void.self)
+                
                 beforeEach {
-                    (self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton).sendActions(for: .touchUpInside)
+                    buttonObserver = self.scheduler.createObserver(Void.self)
+                    
+                    self.subject.onSettingsButtonPressed!
+                        .subscribe(buttonObserver)
+                        .disposed(by: self.disposeBag)
+                    
+                    let settingsButton = self.subject.navigationItem.leftBarButtonItem?.customView as! UIButton
+                    settingsButton.sendActions(for: .touchUpInside)
                 }
 
-                it("tells the presenter") {
-                    expect(self.presenter.settingTapStub.events.count).to(equal(1))
+                it("tells observers about button taps") {
+                    expect(buttonObserver.events.count).to(be(1))
                 }
             }
 
