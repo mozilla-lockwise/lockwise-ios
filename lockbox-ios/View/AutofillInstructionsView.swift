@@ -54,7 +54,7 @@ extension AutofillInstructionsView {
 
         let player = AVPlayer(url: path)
         let layer = AVPlayerLayer(player: player)
-        layer.videoGravity = .resizeAspect
+        layer.videoGravity = .resizeAspectFill
         layer.frame = self.videoView.bounds
         self.videoView.setBorder(color: Constant.color.videoBorderColor, width: 1)
         layer.shadowColor = Constant.color.shadowColor.cgColor

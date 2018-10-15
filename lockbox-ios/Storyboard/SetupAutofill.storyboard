@@ -33,10 +33,10 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-step-icons" translatesAutoresizingMaskIntoConstraints="NO" id="3Mq-xu-nQh">
-                                <rect key="frame" x="40" y="203" width="29" height="246"/>
+                                <rect key="frame" x="40" y="213" width="29" height="246"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcZ-pI-Mgz">
-                                <rect key="frame" x="80" y="431" width="172" height="18"/>
+                                <rect key="frame" x="80" y="441" width="172" height="18"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Deselect ">
                                         <attributes>
@@ -56,45 +56,46 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Lockbox" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0I-o4-2Ym">
-                                <rect key="frame" x="80" y="388" width="105" height="18"/>
+                                <rect key="frame" x="80" y="398" width="105" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn on AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ys5-RP-RQg">
-                                <rect key="frame" x="80" y="345" width="185" height="18"/>
+                                <rect key="frame" x="80" y="355" width="185" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap into AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaL-kM-bTV">
-                                <rect key="frame" x="80" y="300" width="187" height="18"/>
+                                <rect key="frame" x="80" y="310" width="187" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap into Passwords &amp; Accounts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daO-QU-3p5">
-                                <rect key="frame" x="80" y="254" width="215" height="18"/>
+                                <rect key="frame" x="80" y="264" width="215" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Open the Settings app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xig-s8-dim">
-                                <rect key="frame" x="80" y="208" width="154" height="18"/>
+                                <rect key="frame" x="80" y="218" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7dk-uJ-tG0">
-                                <rect key="frame" x="30" y="95" width="260" height="77"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7dk-uJ-tG0">
+                                <rect key="frame" x="30" y="88" width="260" height="140"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="159" id="1sO-ZN-LMV"/>
+                                    <constraint firstAttribute="width" secondItem="7dk-uJ-tG0" secondAttribute="height" multiplier="13:7" id="8Xw-Ru-W4n"/>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" priority="250" constant="315" id="Nrj-fi-2ZV"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" priority="250" constant="159" id="agK-Ll-poX"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How to Set up AutoFill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbo-05-zWe">
-                                <rect key="frame" x="0.0" y="35" width="320" height="27"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="How to Set up AutoFill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbo-05-zWe">
+                                <rect key="frame" x="0.0" y="28" width="320" height="27"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -108,25 +109,25 @@
                             <constraint firstItem="KnK-nY-NyH" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="40" id="Bz8-xR-UV2"/>
                             <constraint firstItem="YaL-kM-bTV" firstAttribute="top" secondItem="daO-QU-3p5" secondAttribute="bottom" constant="28" id="GnQ-lr-rgX"/>
                             <constraint firstItem="xig-s8-dim" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="LHJ-bD-21w"/>
+                            <constraint firstItem="dbo-05-zWe" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jQO-vK-4qk" secondAttribute="top" id="LNF-Xn-syc"/>
                             <constraint firstItem="3Mq-xu-nQh" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="40" id="TrE-M1-L0G"/>
                             <constraint firstItem="daO-QU-3p5" firstAttribute="top" secondItem="xig-s8-dim" secondAttribute="bottom" constant="28" id="Y22-9K-ERQ"/>
-                            <constraint firstItem="7dk-uJ-tG0" firstAttribute="top" secondItem="dbo-05-zWe" secondAttribute="bottom" constant="33" id="afj-Bq-8PV"/>
                             <constraint firstItem="vcZ-pI-Mgz" firstAttribute="top" secondItem="r0I-o4-2Ym" secondAttribute="bottom" constant="25" id="b8L-aE-w8S"/>
-                            <constraint firstItem="jQO-vK-4qk" firstAttribute="bottom" secondItem="3Mq-xu-nQh" secondAttribute="bottom" constant="119" id="cPq-F2-Vld"/>
+                            <constraint firstItem="jQO-vK-4qk" firstAttribute="bottom" secondItem="3Mq-xu-nQh" secondAttribute="bottom" constant="109" id="cPq-F2-Vld"/>
                             <constraint firstItem="r0I-o4-2Ym" firstAttribute="top" secondItem="Ys5-RP-RQg" secondAttribute="bottom" constant="25" id="cVk-3P-sIT"/>
                             <constraint firstItem="jQO-vK-4qk" firstAttribute="trailing" secondItem="dbo-05-zWe" secondAttribute="trailing" id="eZR-Qf-3Qw"/>
                             <constraint firstItem="Ys5-RP-RQg" firstAttribute="top" secondItem="YaL-kM-bTV" secondAttribute="bottom" constant="27" id="fx4-Jw-dwO"/>
-                            <constraint firstItem="3Mq-xu-nQh" firstAttribute="top" secondItem="7dk-uJ-tG0" secondAttribute="bottom" constant="31" id="iwA-KN-Nz9"/>
+                            <constraint firstItem="3Mq-xu-nQh" firstAttribute="top" relation="lessThanOrEqual" secondItem="7dk-uJ-tG0" secondAttribute="bottom" constant="31" id="iwA-KN-Nz9"/>
                             <constraint firstItem="YaL-kM-bTV" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="jXk-iy-7az"/>
                             <constraint firstItem="jQO-vK-4qk" firstAttribute="trailing" secondItem="7dk-uJ-tG0" secondAttribute="trailing" constant="30" id="k0n-as-ocZ"/>
                             <constraint firstItem="r0I-o4-2Ym" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="kNX-9x-0b4"/>
                             <constraint firstItem="Ys5-RP-RQg" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="krv-bU-Qpq"/>
                             <constraint firstItem="daO-QU-3p5" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="mG4-d6-fO7"/>
                             <constraint firstItem="vcZ-pI-Mgz" firstAttribute="leading" secondItem="3Mq-xu-nQh" secondAttribute="trailing" constant="11" id="qEf-eQ-jTv"/>
-                            <constraint firstItem="dbo-05-zWe" firstAttribute="top" secondItem="jQO-vK-4qk" secondAttribute="top" constant="15" id="rhD-Te-8U7"/>
-                            <constraint firstItem="KnK-nY-NyH" firstAttribute="top" secondItem="vcZ-pI-Mgz" secondAttribute="bottom" constant="40" id="ueW-Go-I3k"/>
+                            <constraint firstItem="7dk-uJ-tG0" firstAttribute="top" relation="greaterThanOrEqual" secondItem="dbo-05-zWe" secondAttribute="bottom" constant="10" id="qZB-QA-WfY"/>
+                            <constraint firstItem="7dk-uJ-tG0" firstAttribute="top" relation="lessThanOrEqual" secondItem="dbo-05-zWe" secondAttribute="bottom" constant="33" id="rRy-4A-hed"/>
+                            <constraint firstItem="KnK-nY-NyH" firstAttribute="top" secondItem="vcZ-pI-Mgz" secondAttribute="bottom" constant="30" id="ueW-Go-I3k"/>
                             <constraint firstItem="7dk-uJ-tG0" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="30" id="vgO-i4-d3q"/>
-                            <constraint firstItem="dbo-05-zWe" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jQO-vK-4qk" secondAttribute="top" constant="15" id="wQr-ur-hFq"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jQO-vK-4qk"/>
                     </view>
