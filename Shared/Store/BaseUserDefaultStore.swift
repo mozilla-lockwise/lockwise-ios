@@ -22,6 +22,10 @@ class BaseUserDefaultStore {
         return self.userDefaults.onRecordUsageData
     }
 
+    public var forceLock: Observable<Bool> {
+        return self.userDefaults.onForceLock
+    }
+
     init(dispatcher: Dispatcher = Dispatcher.shared,
          sharedUserDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? UserDefaults.standard) {
         self.dispatcher = dispatcher

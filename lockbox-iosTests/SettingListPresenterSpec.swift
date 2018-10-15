@@ -115,10 +115,10 @@ class SettingListPresenterSpec: QuickSpec {
                             let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                             expect(loginRouteAction).to(equal(.welcome))
 
-                            var dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
-                            expect(dataStoreAction).to(equal(.forceLock(locked: true)))
+                            let settingAction = self.dispatcher.dispatchedActions.popLast() as! SettingAction
+                            expect(settingAction).to(equal(.forceLock(enabled: true)))
 
-                            dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                            let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                             expect(dataStoreAction).to(equal(.lock))
                         }
                     }

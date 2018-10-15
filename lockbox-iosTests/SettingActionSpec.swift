@@ -37,6 +37,12 @@ class SettingActionSpec: QuickSpec {
                 it("different enum values are not equal") {
                     expect(SettingAction.autoLockTime(timeout: Setting.AutoLock.TwentyFourHours)).notTo(equal(SettingAction.reset))
                 }
+
+                it("forceLock is equal based on bool") {
+                    expect(SettingAction.forceLock(enabled: true)).to(equal(SettingAction.forceLock(enabled: true)))
+                    expect(SettingAction.forceLock(enabled: false)).to(equal(SettingAction.forceLock(enabled: false)))
+                    expect(SettingAction.forceLock(enabled: true)).notTo(equal(SettingAction.forceLock(enabled: false)))
+                }
             }
 
             describe("telemetry") {

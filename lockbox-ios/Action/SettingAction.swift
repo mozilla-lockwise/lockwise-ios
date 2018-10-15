@@ -11,6 +11,7 @@ enum SettingAction: Action {
     case preferredBrowser(browser: Setting.PreferredBrowser)
     case recordUsageData(enabled: Bool)
     case reset
+    case forceLock(enabled: Bool) // Used when the "Lock Now" button is tapped
 }
 
 extension SettingAction: TelemetryAction {
@@ -30,6 +31,8 @@ extension SettingAction: TelemetryAction {
             return .settingsRecordUsageData
         case .itemListSort:
             return .settingsItemListSort
+        case .forceLock:
+            return .forceLock
         }
     }
 
@@ -49,6 +52,8 @@ extension SettingAction: TelemetryAction {
                 Setting.ItemListSort.alphabetically.rawValue : Setting.ItemListSort.recentlyUsed.rawValue
         case .reset:
             return nil
+        case .forceLock(let enabled):
+            return String(enabled)
         }
     }
 
@@ -70,6 +75,8 @@ extension SettingAction: Equatable {
             return lhSort == rhSort
         case (.reset, .reset):
             return true
+        case (.forceLock(let lhEnabled), .forceLock(let rhEnabled)):
+            return lhEnabled == rhEnabled
         default:
             return false
         }
