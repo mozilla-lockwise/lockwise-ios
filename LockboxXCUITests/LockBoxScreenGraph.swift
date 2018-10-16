@@ -22,6 +22,8 @@ let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
 
+let appName = "Lockbox"
+
 class Screen {
     static let WelcomeScreen = "WelcomeScreen"
     static let OnboardingWelcomeScreen = "OnboardingWelcomeScreen"
@@ -38,7 +40,7 @@ class Screen {
     static let LockedScreen = "LockedScreen"
     static let AccountSettingsMenu = "AccountSettingsMenu"
     static let AutolockSettingsMenu = "AutolockSettingsMenu"
-    static let AutoFillPasswordSetUpInstructionsSettings = "AutoFillPasswordSetUpInstructionsSettings"
+    static let AutoFillSetUpInstructionsSettings = "AutoFillSetUpInstructionsSettings"
 
     static let SortEntriesMenu = "SortEntriesMenu"
 
@@ -174,7 +176,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["openWebSitesInSettingOption"], to: Screen.OpenSitesInMenu)
         screenState.tap(app.tables.cells["accountSettingOption"], to: Screen.AccountSettingsMenu)
         screenState.tap(app.tables.cells["autoLockSettingOption"], to: Screen.AutolockSettingsMenu)
-        screenState.tap(app.tables.cells["autoFillSettingsOption"], to: Screen.AutoFillPasswordSetUpInstructionsSettings)
+        screenState.tap(app.tables.cells["autoFillSettingsOption"], to: Screen.AutoFillSetUpInstructionsSettings)
 
         screenState.gesture(forAction: Action.SendUsageData) { userState in
             app.switches["sendUsageData.switch"].tap()
@@ -204,7 +206,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(Screen.AutoFillPasswordSetUpInstructionsSettings) { screenState in
+    map.addScreenState(Screen.AutoFillSetUpInstructionsSettings) { screenState in
         screenState.tap(app.buttons["gotIt.button"], to: Screen.SettingsMenu)
     }
 
@@ -246,9 +248,14 @@ extension BaseTestCase {
         if #available(iOS 12.0, *) {
             waitforExistence(app.buttons["setupAutofill.button"])
             if (app.buttons["setupAutofill.button"].exists) {
-            app.buttons["notNow.button"].tap()
+                app.buttons["notNow.button"].tap()
             }
         }
+    }
+
+    func tapOnAutofillConfiguration() {
+        waitforExistence(app.buttons["setupAutofill.button"])
+        app.buttons["setupAutofill.button"].tap()
     }
 
     func tapOnFinishButton() {
@@ -374,7 +381,7 @@ extension BaseTestCase {
 
     func deleteApp(name: String) {
         app.terminate()
-        let icon = springboard.icons["Lockbox"]
+        let icon = springboard.icons[appName]
         if icon.exists {
             let iconFrame = icon.frame
             let springboardFrame = springboard.frame

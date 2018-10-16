@@ -4,86 +4,31 @@
 
 import XCTest
 
-let emailTestAccountLogins = "test-b62feb2ed6@restmail.net"
-let passwordTestAccountLogins = "FRCuQaPm"
-
-var uid: String!
-var code: String!
-
-let firstEntryEmail = "iosmztest@gmail.com"
-
-let getEndPoint = "http://restmail.net/mail/test-b62feb2ed6"
-let postEndPoint = "https://api.accounts.firefox.com/v1/recovery_email/verify_code"
-let deleteEndPoint = "http://restmail.net/mail/test-b62feb2ed6@restmail.net"
-
 class LockboxXCUITests: BaseTestCase {
 
     override func setUp() {
         // First Delete the inbox
-        let restUrl = URL(string: deleteEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.httpMethod = "DELETE"
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            print("Delete")
-        }
-        task.resume()
+        deleteUserInbox()
         super.setUp()
     }
 
-    func test0LoginSuccessfully() {
+    override func tearDown() {
+        deleteApp(name: "Lockbox")
+    }
+
+    func testCheckEntryDetailsView() {
         snapshot("01Welcome" + CONTENT_SIZE)
-        userState.fxaPassword = passwordTestAccountLogins
-        userState.fxaUsername = "test-b62feb2ed6@restmail.net"
-        navigator.goto(Screen.FxASigninScreenEmail)
-        waitforExistence(app.navigationBars["Lockbox.FxAView"])
-        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-        navigator.performAction(Action.FxATypeEmail)
-        waitforExistence(app.webViews.secureTextFields["Password"])
-        navigator.performAction(Action.FxATypePassword)
-        // When the account is unverified, it is necessary to wait here while finding a different workaround
-        sleep(5)
-         // Check if the account is verified and if not, verify it
+        loginFxAccount()
+        // Check if the account is verified and if not, verify it
         checkIfAccountIsVerified()
+        skipAutofillConfiguration()
+        tapOnFinishButton()
 
-        if #available(iOS 12.0, *) {
-            waitforExistence(app.buttons["setupAutofill.button"])
-            navigator.performAction(Action.NotAutofillSetUpNow)
-        }
-        waitforExistence(app.buttons["finish.button"])
-        navigator.goto(Screen.LockboxMainPage)
-
-        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 15)
-
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        waitForLockboxEntriesListView()
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
         snapshot("02EntryList" + CONTENT_SIZE)
-    }
 
-    func test1SettingsAccountUI() {
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        snapshot("03Settings" + CONTENT_SIZE)
-
-        navigator.goto(Screen.AccountSettingsMenu)
-        waitforExistence(app.navigationBars["accountSetting.navigationBar"])
-        XCTAssertTrue(app.staticTexts["username.Label"].exists)
-        XCTAssertEqual(app.staticTexts["username.Label"].label, emailTestAccountLogins)
-        XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
-    }
-
-    func test2SettingOpenWebSitesIn() {
-        navigator.goto(Screen.OpenSitesInMenu)
-        waitforExistence(app.navigationBars["openWebSitesIn.navigationBar"])
-        XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
-    }
-
-    func test3EntryDetails() {
-        navigator.goto(Screen.LockboxMainPage)
-        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"], timeout: 15)
         navigator.goto(Screen.EntryDetails)
 
         // The fields appear
@@ -121,7 +66,6 @@ class LockboxXCUITests: BaseTestCase {
 
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
-        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
         waitforExistence(safari.buttons["URL"], timeout: 10)
         waitForValueContains(safari.buttons["URL"], value: "accounts")
 
@@ -129,37 +73,61 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
     }
 
-    func test4SettingDisconnectAccount() {
-        // First Cancel disconnecting the account
+    func testSettingsAccountUI() {
+        loginFxAccount()
+        // Check if the account is verified and if not, verify it
+        checkIfAccountIsVerified()
+        skipAutofillConfiguration()
+        tapOnFinishButton()
+        waitForLockboxEntriesListView()
+        snapshot("03Settings" + CONTENT_SIZE)
+
+        navigator.goto(Screen.AccountSettingsMenu)
+        waitforExistence(app.navigationBars["accountSetting.navigationBar"])
+        XCTAssertTrue(app.staticTexts["username.Label"].exists)
+        XCTAssertEqual(app.staticTexts["username.Label"].label, emailTestAccountLogins)
+        XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
+
+        // Try Cancel disconnecting the account
         navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
-        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
+    }
 
-        // Now disconnect the account
-        disconnectAndConnectAccount()
+    func testSettings() {
+        loginFxAccount()
+        // Check if the account is verified and if not, verify it
+        checkIfAccountIsVerified()
+        skipAutofillConfiguration()
+        tapOnFinishButton()
+        waitForLockboxEntriesListView()
 
+        // Check OpenSitesIn Menu option
+        navigator.goto(Screen.OpenSitesInMenu)
+        waitforExistence(app.navigationBars["openWebSitesIn.navigationBar"])
+        XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
+
+        // Check App Version not empty
+        navigator.goto(Screen.SettingsMenu)
+        // The app version option exists and it is not empty
+        XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
+        XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
+
+        // Check configure Autofill from settings
         if #available(iOS 12.0, *) {
-            waitforExistence(app.buttons["setupAutofill.button"])
-            app.buttons["notNow.button"].tap()
+            navigator.goto(Screen.AutoFillSetUpInstructionsSettings)
+            XCTAssertTrue(app.buttons["gotIt.button"].exists)
         }
-        waitforExistence(app.buttons["finish.button"], timeout: 10)
-        app.buttons["finish.button"].tap()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
     }
 
-    func test5SendUsageDataSwitch() {
-//        navigator.goto(Screen.SettingsMenu)
-//        // Disable the send usage data
-//        navigator.performAction(Action.SendUsageData)
-//        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "0")
-//
-//        // Enable it again
-//        navigator.performAction(Action.SendUsageData)
-//        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "1")
-    }
+    func testEntriesSortAndSearch() {
+        loginFxAccount()
+        // Check if the account is verified and if not, verify it
+        checkIfAccountIsVerified()
+        skipAutofillConfiguration()
+        tapOnFinishButton()
+        waitForLockboxEntriesListView()
 
-    func test6SortEntries() {
-        navigator.goto(Screen.LockboxMainPage)
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"], timeout: 10)
         // Checking if doing the steps directly works on bb
         waitforExistence(app.buttons["sorting.button"])
         app.buttons["sorting.button"].tap()
@@ -168,8 +136,7 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
-        // Lets see if this is fixed now
-        // Disable the label check until BB failure is not present
+        // Check that the order has changed
         let firstCellRecent = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellRecent, "wopr.norad.org")
 
@@ -180,25 +147,11 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
         sleep(2)
+        // Check that the order has changed again to its initial state
         let firstCellAlphabetically = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellAlphabetically, "accounts.google.com")
-    }
 
-    func test7ChangeDefaultAutolock() {
-        navigator.goto(Screen.SettingsMenu)
-        waitforExistence(app.navigationBars["settings.navigationBar"])
-        navigator.goto(Screen.AutolockSettingsMenu)
-
-        app.cells.staticTexts["Never"].tap()
-        navigator.goto(Screen.LockboxMainPage)
-        // Send app to background and launch it
-        XCUIDevice.shared.press(.home)
-        app.activate()
-        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
-    }
-
-    func test8SearchOptions() {
-        navigator.goto(Screen.LockboxMainPage)
+        // Search entries options
         let searchTextField = app.cells.textFields["filterEntries.textField"]
         searchTextField.tap()
         searchTextField.typeText("a")
@@ -230,7 +183,25 @@ class LockboxXCUITests: BaseTestCase {
         XCTAssertEqual(searchFieldValueAfterXButton, "Search your entries")
     }
 
-    func test9LockNowUnlock() {
+    func testCheckAutolock() {
+        loginFxAccount()
+        // Check if the account is verified and if not, verify it
+        checkIfAccountIsVerified()
+        skipAutofillConfiguration()
+        tapOnFinishButton()
+        waitForLockboxEntriesListView()
+
+        navigator.goto(Screen.SettingsMenu)
+        waitforExistence(app.navigationBars["settings.navigationBar"])
+        navigator.goto(Screen.AutolockSettingsMenu)
+
+        app.cells.staticTexts["Never"].tap()
+        navigator.goto(Screen.LockboxMainPage)
+        // Send app to background and launch it
+        XCUIDevice.shared.press(.home)
+        app.activate()
+        waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
+
         navigator.goto(Screen.LockboxMainPage)
         navigator.performAction(Action.LockNow)
         waitforExistence(app.buttons["Unlock Firefox Lockbox"])
@@ -243,73 +214,45 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
     }
 
-    func testAppVersion() {
-        navigator.goto(Screen.SettingsMenu)
-        // The app version option exists and it is not empty
-        XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
-        XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
-    }
-
-    // Verify SetAutofillNow
-    func testSetAutofillNow() {
-        // Disconnect account
-        disconnectAndConnectAccount()
+    func testSetAutofill() {
         if #available(iOS 12.0, *) {
+            let testingURL = "https://wopr.norad.org/~sarentz/fxios/testpages/password.html"
+            loginFxAccount()
+            checkIfAccountIsVerified()
             waitforExistence(app.buttons["setupAutofill.button"])
-            navigator.performAction(Action.SetAutofillNow)
-            waitforExistence(app.buttons["gotIt.button"])
+            navigator.goto(Screen.AutofillSetUpInstructionsWhenLogingIn)
             navigator.goto(Screen.LockboxMainPage)
-            waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        }
-    }
+            waitForLockboxEntriesListView()
 
-    // Once app is open
-    func testSetAutofillSettings() {
-        // Open Lockbox settings to check the Autofill option
-        navigator.goto(Screen.AutoFillPasswordSetUpInstructionsSettings)
-        XCTAssertTrue(app.buttons["gotIt.button"].exists)
-        navigator.goto(Screen.SettingsMenu)
-        waitforExistence(app.navigationBars["settings.navigationBar"])
+            // Open Settings app
+            settings.launch()
+            // Wait until settings app is open
+            waitforExistence(settings.cells.staticTexts["Passwords & Accounts"])
+            // Configure Passwords & Accounts settings
+            configureAutofillSettings()
+            // Wait until the app is updated
+            sleep(5)
+            settings.terminate()
 
-        // Then open settings app to follow the described steps
-        let settingsApp = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
-        settingsApp.launch()
-        waitforExistence(settingsApp.cells.staticTexts["Passwords & Accounts"])
-        // Configure Passwords & Accounts settings
-        settingsApp.cells.staticTexts["Passwords & Accounts"].tap()
-        waitforExistence(settingsApp.cells.staticTexts["AutoFill Passwords"])
-        settingsApp.cells.staticTexts["AutoFill Passwords"].tap()
-        waitforExistence(settingsApp.switches["AutoFill Passwords"])
-        settingsApp.switches["AutoFill Passwords"].tap()
-        waitforExistence(settingsApp.cells.staticTexts["Lockbox"])
-        settingsApp.cells.staticTexts["Lockbox"].tap()
-        // Wait until the app is updated
-        sleep(5)
-        settingsApp.terminate()
-
-        // Open Safari
-        let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-        safari.launch()
-        waitforExistence(safari.buttons["URL"], timeout: 5)
-        safari.buttons["ReloadButton"].tap()
-        waitforExistence(safari.textFields["Email or phone"])
-        safari.textFields["Email or phone"].tap()
-
-        // Need to confirm what is shown here, different elements have appeared during the tests
-        if (safari.buttons["Other passwords"].exists) {
-            safari.buttons["Other passwords"].tap()
-            // Workaround for the test, the first time the password does not appear
-            safari.buttons["Cancel"].tap()
-            safari.buttons["Other passwords"].tap()
-            waitforExistence(safari.otherElements.staticTexts["Choose a saved password to use"])
-            print(safari.debugDescription)
-            XCTAssertTrue(safari.buttons.otherElements["iosmztest@gmail.com, for this website — Lockbox"].exists)
-        } else if (safari.otherElements["Password Auto-fill"].exists) {
-            safari.otherElements["Password Auto-fill"].tap()
-            XCTAssertTrue(safari.buttons["iosmztest@gmail.com, for this website — Lockbox"].exists)
-        } else {
-            XCTAssertTrue(safari.buttons["Use “iosmztest@gmail.com”"].exists)
-        }
-        safari.terminate()
+            //Open Safari
+            safari.launch()
+            waitforExistence(safari.buttons["URL"], timeout: 5)
+            safari.buttons["URL"].tap()
+            safari.textFields["URL"].typeText(testingURL)
+            safari.textFields["URL"].typeText("\r")
+            waitforExistence(safari.buttons["submit"], timeout: 5)
+            // Need to confirm what is shown here, different elements have appeared and
+            if (safari.buttons["Other passwords"].exists) {
+                safari.buttons["Other passwords"].tap()
+                waitforExistence(safari.otherElements.staticTexts["Choose a saved password to use"])
+                XCTAssertTrue(safari.buttons.otherElements["test@example.com, for this website — Lockbox"].exists)
+            } else if (safari.otherElements["Password Auto-fill"].exists) {
+                safari.otherElements["Password Auto-fill"].tap()
+                XCTAssertTrue(safari.buttons["test@example.com, for this website — Lockbox"].exists)
+            } else {
+                XCTAssertTrue(safari.buttons["Use “test@example.com”"].exists)
+            }
+            safari.terminate()
+            }
     }
 }
