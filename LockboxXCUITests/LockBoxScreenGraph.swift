@@ -220,19 +220,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
 extension BaseTestCase {
 
-   func disconnectAndConnectAccount() {
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-        // And, connect it again
-        waitforExistence(app.buttons["getStarted.button"])
-        app.buttons["getStarted.button"].tap()
-        userState.fxaUsername =  emailTestAccountLogins
-        userState.fxaPassword = passwordTestAccountLogins
-        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
-        navigator.nowAt(Screen.FxASigninScreenEmail)
-        navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATypePassword)
-    }
-
     func loginFxAccount() {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = "test-b62feb2ed6@restmail.net"
@@ -246,7 +233,8 @@ extension BaseTestCase {
 
     func skipAutofillConfiguration() {
         if #available(iOS 12.0, *) {
-            waitforExistence(app.buttons["setupAutofill.button"])
+            //If autofill is set this option will not appear
+            sleep(3)
             if (app.buttons["setupAutofill.button"].exists) {
                 app.buttons["notNow.button"].tap()
             }
