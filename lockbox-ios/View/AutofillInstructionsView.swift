@@ -56,6 +56,8 @@ extension AutofillInstructionsView {
         layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowRadius = 9
         self.videoView.layer.addSublayer(layer)
+
+        _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: .default, options: .mixWithOthers)
         player.play()
 
         NotificationCenter.default.rx
