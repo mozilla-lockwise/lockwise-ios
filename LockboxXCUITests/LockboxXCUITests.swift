@@ -86,10 +86,15 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
         XCTAssertEqual(app.staticTexts["username.Label"].label, emailTestAccountLogins)
-        XCTAssertTrue(app.buttons["disconnectAndConnectAccountFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
+        XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
 
         // Try Cancel disconnecting the account
         navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
+        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
+
+        // Disconnect the account
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        waitforExistence(app.buttons["getStarted.button"])
     }
 
     func testSettings() {
