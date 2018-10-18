@@ -9,6 +9,7 @@ import RxDataSources
 
 protocol PreferredBrowserSettingViewProtocol: class {
     func bind(items: Driver<[PreferredBrowserSettingSectionModel]>)
+    var onSettingsButtonPressed: ControlEvent<Void>? { get }
 }
 
 class PreferredBrowserSettingPresenter {
@@ -65,6 +66,13 @@ class PreferredBrowserSettingPresenter {
             .asDriver(onErrorJustReturn: [])
 
         view?.bind(items: driver)
+        
+        if let onSettingsButtonPressed = view?.onSettingsButtonPressed {
+            onSettingsButtonPressed.subscribe { [weak self] _ in
+                self?.dispatcher.dispatch(action: SettingRouteAction.list)
+            }
+            .disposed(by: disposeBag)
+        }
     }
 
     lazy private(set) var onSettingsTap: AnyObserver<Void> = {

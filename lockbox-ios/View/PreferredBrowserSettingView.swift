@@ -31,7 +31,6 @@ class PreferredBrowserSettingView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setupNavbar()
         self.setupFooter()
     }
 
@@ -39,6 +38,7 @@ class PreferredBrowserSettingView: UITableViewController {
         super.viewDidLoad()
         self.setupDataSource()
         self.setupDelegate()
+        self.setupNavbar()
         self.presenter?.onViewReady()
     }
 
@@ -95,6 +95,14 @@ extension PreferredBrowserSettingView: PreferredBrowserSettingViewProtocol {
                 .disposed(by: self.disposeBag)
         }
     }
+    
+    var onSettingsButtonPressed: ControlEvent<Void>? {
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            return button.rx.tap
+        }
+        
+        return nil
+    }
 }
 
 extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
@@ -110,10 +118,6 @@ extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {
-            leftButton.rx.tap
-                .bind(to: presenter.onSettingsTap)
-                .disposed(by: self.disposeBag)
-
             self.navigationController?.interactivePopGestureRecognizer?.delegate = self
             self.navigationController?.interactivePopGestureRecognizer?.rx.event
                 .map { _ -> Void in
