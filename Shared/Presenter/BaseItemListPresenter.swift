@@ -75,19 +75,17 @@ class BaseItemListPresenter {
     }()
 
     lazy fileprivate var emptyPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem +
-            [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
+        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
         )
     ]
 
     lazy fileprivate var noResultsPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem +
-            [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
+        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
         )
     ]
 
     lazy internal var syncPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.SyncListPlaceholder])
+        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.SyncListPlaceholder])
     ]
 
     lazy fileprivate var searchItem: [LoginListCellConfiguration] = {
@@ -223,7 +221,7 @@ extension BaseItemListPresenter {
             return LoginListCellConfiguration.Item(title: titleText, username: usernameText, guid: login.guid)
         }
 
-        return self.searchItem + self.helpTextItems + loginCells
+        return self.helpTextItems + loginCells
     }
 
     fileprivate func filterItemsForText(_ text: String, items: [Login]) -> [Login] {

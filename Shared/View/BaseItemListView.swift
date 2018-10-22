@@ -93,7 +93,27 @@ class BaseItemListView: UIViewController {
         ]
 
         if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .never
+            self.navigationItem.largeTitleDisplayMode = .always
+//            self.navigationItem.navigationbar
+        }
+
+        if #available(iOS 11.0, *) {
+            let searchController = UISearchController(searchResultsController: nil)
+            searchController.obscuresBackgroundDuringPresentation = true
+            searchController.searchBar.placeholder = "Search"
+            searchController.hidesNavigationBarDuringPresentation = true
+            searchController.searchResultsUpdater = self
+            searchController.delegate = self
+            searchController.isActive = true
+            searchController.searchBar.barTintColor = UIColor.clear
+            searchController.searchBar.backgroundColor = UIColor.clear
+            searchController.searchBar.backgroundImage = nil
+            self.navigationItem.searchController = searchController
+            self.navigationItem.hidesSearchBarWhenScrolling = false
+            self.definesPresentationContext = true
+            searchController.searchBar.sizeToFit()
+        } else {
+            // Fallback on earlier versions
         }
     }
 }
@@ -318,4 +338,16 @@ extension BaseItemListView {
             cell.filterTextField.becomeFirstResponder()
         }
     }
+}
+
+extension BaseItemListView: UISearchControllerDelegate {
+
+}
+
+extension BaseItemListView: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+
+    }
+
+
 }
