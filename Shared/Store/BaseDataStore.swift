@@ -171,6 +171,8 @@ class BaseDataStore {
                         if previous <= 2 {
                             self.handleLock()
                         }
+                    case .shutdown:
+                        self.shutdown()
                     default:
                         break
                     }
@@ -231,6 +233,12 @@ class BaseDataStore {
                 }
             })
             .disposed(by: self.disposeBag)
+    }
+
+    public func shutdown() {
+        if !self.profile.isShutdown {
+            self.profile.shutdown()
+        }
     }
 }
 
