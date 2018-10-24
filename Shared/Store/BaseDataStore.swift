@@ -235,7 +235,7 @@ class BaseDataStore {
             .disposed(by: self.disposeBag)
     }
 
-    public func shutdown() {
+    private func shutdown() {
         if !self.profile.isShutdown {
             self.profile.shutdown()
         }
