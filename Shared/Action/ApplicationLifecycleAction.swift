@@ -9,6 +9,7 @@ enum LifecycleAction: Action {
     case background
     case startup
     case upgrade(from: Int, to: Int)
+    case shutdown
 }
 
 extension LifecycleAction: Equatable {
@@ -36,6 +37,7 @@ extension LifecycleAction: TelemetryAction {
         case .startup: return .startup
         // TODO add a TelemetryEventMethod for upgrading
         case .upgrade: return .startup
+        case .shutdown: return .shutdown
         }
     }
 

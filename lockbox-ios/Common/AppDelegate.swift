@@ -65,6 +65,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Dispatcher.shared.dispatch(action: LifecycleAction.foreground)
     }
 
+    func applicationWillTerminate(_ application: UIApplication) {
+        Dispatcher.shared.dispatch(action: LifecycleAction.shutdown)
+    }
+
     private func setupAdjust() {
 #if DEBUG
         let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentSandbox)
