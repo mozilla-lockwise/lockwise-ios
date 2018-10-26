@@ -21,12 +21,14 @@ class FakeProfile: FxAUtils.Profile {
 
     var logins: Storage.BrowserLogins & ResettableSyncStorage & SyncableLogins
 
+    var isShudownReturnValue = true
     var isShutdown: Bool {
-        return true
+        return isShudownReturnValue
     }
 
+    var shutdownCalled = false
     func shutdown() {
-
+        self.shutdownCalled = true
     }
 
     func reopen() {
