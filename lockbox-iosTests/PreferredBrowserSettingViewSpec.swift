@@ -29,6 +29,8 @@ class PreferredBrowserSettingViewSpec: QuickSpec {
 
     var presenter: FakePreferredBrowserSettingPresenter!
     var subject: PreferredBrowserSettingView!
+    private let scheduler = TestScheduler(initialClock: 0)
+    private let disposeBag = DisposeBag()
 
     override func spec() {
         beforeEach {
@@ -76,6 +78,25 @@ class PreferredBrowserSettingViewSpec: QuickSpec {
 
             it("calls presenter when cell is tapped") {
                 expect(self.presenter.onItemSelectedActionDispatched).to(beTrue())
+            }
+        }
+        
+        describe("tapping the back to settings button") {
+            var buttonObserver = self.scheduler.createObserver(Void.self)
+            
+            beforeEach {
+                buttonObserver = self.scheduler.createObserver(Void.self)
+                
+                self.subject.onSettingsButtonPressed!
+                    .subscribe(buttonObserver)
+                    .disposed(by: self.disposeBag)
+                
+                let settingsButton = self.subject.navigationItem.leftBarButtonItem?.customView as! UIButton
+                settingsButton.sendActions(for: .touchUpInside)
+            }
+            
+            it("tells observers about button taps") {
+                expect(buttonObserver.events.count).to(be(1))
             }
         }
     }

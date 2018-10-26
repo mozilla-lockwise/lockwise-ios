@@ -14,11 +14,17 @@ import RxCocoa
 class PreferredBrowserSettingPresenterSpec: QuickSpec {
     class FakePreferredBrowserView: PreferredBrowserSettingViewProtocol {
         var itemsObserver: TestableObserver<[PreferredBrowserSettingSectionModel]>!
+        var fakeOnSettingsButtonPressed = PublishSubject<Void>()
         private let disposeBag = DisposeBag()
 
         func bind(items: SharedSequence<DriverSharingStrategy, [PreferredBrowserSettingSectionModel]>) {
             items.drive(itemsObserver).disposed(by: disposeBag)
         }
+        
+        var onSettingsButtonPressed: ControlEvent<Void>? {
+            return ControlEvent<Void>(events: fakeOnSettingsButtonPressed.asObservable())
+        }
+        
     }
 
     class FakeDispatcher: Dispatcher {
@@ -81,6 +87,19 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
             self.subject.onSettingsTap.onNext(())
             let route = self.dispatcher.dispatchedActions.last as! SettingRouteAction
             expect(route).to(equal(SettingRouteAction.list))
+        }
+        
+        describe("settings button") {
+            beforeEach {
+                self.view.itemsObserver = self.scheduler.createObserver([PreferredBrowserSettingSectionModel].self)
+                self.subject.onViewReady()
+                self.view.fakeOnSettingsButtonPressed.onNext(())
+            }
+            
+            it("dispatches the setting route action") {
+                let action = self.dispatcher.dispatchedActions.popLast() as! SettingRouteAction
+                expect(action).to(equal(.list))
+            }
         }
     }
 }
