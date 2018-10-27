@@ -63,7 +63,7 @@ class RootPresenter {
          accountStore: AccountStore = AccountStore.shared,
          userDefaultStore: UserDefaultStore = .shared,
          lifecycleStore: LifecycleStore = .shared,
-         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler.shared,
+         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: Sentry = Sentry.shared
     ) {

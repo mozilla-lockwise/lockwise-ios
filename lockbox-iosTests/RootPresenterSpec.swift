@@ -213,7 +213,7 @@ class RootPresenterSpec: QuickSpec {
                 self.telemetryStore = FakeTelemetryStore()
                 self.accountStore = FakeAccountStore()
                 self.userDefaultStore = FakeUserDefaultStore()
-                self.telemetryActionHandler = FakeTelemetryActionHandler()
+                self.telemetryActionHandler = FakeTelemetryActionHandler(accountStore: self.accountStore)
                 self.biometryManager = FakeBiometryManager()
                 self.sentryManager = FakeSentryManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
