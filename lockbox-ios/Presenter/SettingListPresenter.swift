@@ -112,7 +112,7 @@ class SettingListPresenter {
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
                         self.dispatcher.dispatch(action: DataStoreAction.lock)
-                        self.dispatcher.dispatch(action: DataStoreAction.forceLock(locked: true))
+                        self.dispatcher.dispatch(action: SettingAction.forceLock(enabled: true))
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                     } else {
                         self.view?.displayAlertController(
@@ -123,7 +123,7 @@ class SettingListPresenter {
                     }
                 }
                 .disposed(by: self.disposeBag)
-        
+
         if let onDoneButtonPressed = self.view?.onDoneButtonPressed {
             onDoneButtonPressed.subscribe { _ in
                 self.dispatcher.dispatch(action: MainRouteAction.list)
