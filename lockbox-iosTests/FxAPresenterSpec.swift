@@ -8,7 +8,6 @@ import WebKit
 import RxCocoa
 import RxSwift
 import RxTest
-import AdjustSdk
 
 @testable import Lockbox
 import Account
@@ -50,10 +49,10 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeAdjust: Adjust {
-        var eventSent: ADJEvent?
+    class FakeAdjustManager: AdjustManager {
+        var eventSent: AdjustManager.AdjustEvent?
 
-        override func trackEvent(_ event: ADJEvent?) {
+        override func trackEvent(_ event: AdjustManager.AdjustEvent) {
             self.eventSent = event
         }
     }
@@ -62,7 +61,7 @@ class FxAPresenterSpec: QuickSpec {
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
     private var credentialProviderStore: Any!
-    private var adjust: FakeAdjust!
+    private var adjustManager: FakeAdjustManager!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -72,7 +71,7 @@ class FxAPresenterSpec: QuickSpec {
                 self.view = FakeFxAView()
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.adjust = FakeAdjust()
+                self.adjustManager = FakeAdjustManager()
 
                 if #available(iOS 12.0, *) {
                     self.credentialProviderStore = FakeCredentialProviderStore()
@@ -81,7 +80,7 @@ class FxAPresenterSpec: QuickSpec {
                         dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
                         credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore,
-                        adjust: self.adjust
+                        adjustManager: self.adjustManager
                     )
 
                 } else {
@@ -89,7 +88,7 @@ class FxAPresenterSpec: QuickSpec {
                             view: self.view,
                             dispatcher: self.dispatcher,
                             accountStore: self.accountStore,
-                            adjust: self.adjust
+                            adjustManager: self.adjustManager
                     )
                 }
             }
@@ -146,7 +145,7 @@ class FxAPresenterSpec: QuickSpec {
                 }
 
                 it("sends adjust event") {
-                    expect(self.adjust.eventSent!.eventToken).to(equal("cuahml"))
+                    expect(self.adjustManager.eventSent!.rawValue).to(equal("cuahml"))
                 }
             }
         }

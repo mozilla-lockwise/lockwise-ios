@@ -7,7 +7,6 @@ import WebKit
 import RxSwift
 import RxCocoa
 import SwiftyJSON
-import AdjustSdk
 
 protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
@@ -22,7 +21,7 @@ class FxAPresenter {
     private weak var view: FxAViewProtocol?
     fileprivate let dispatcher: Dispatcher
     fileprivate let accountStore: AccountStore
-    private let adjust: Adjust
+    private let adjustManager: AdjustManager
 
     fileprivate var _credentialProviderStore: Any?
 
@@ -52,12 +51,12 @@ class FxAPresenter {
     init(view: FxAViewProtocol,
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = AccountStore.shared,
-         adjust: Adjust
+         adjustManager: AdjustManager = AdjustManager.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
-        self.adjust = adjust
+        self.adjustManager = adjustManager
     }
 
     @available(iOS 12, *)
@@ -65,13 +64,13 @@ class FxAPresenter {
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = AccountStore.shared,
          credentialProviderStore: CredentialProviderStore = CredentialProviderStore.shared,
-         adjust: Adjust
+         adjustManager: AdjustManager = AdjustManager.shared
         ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
         self._credentialProviderStore = credentialProviderStore
-        self.adjust = adjust
+        self.adjustManager = adjustManager
     }
 
     func onViewReady() {
@@ -105,6 +104,6 @@ extension FxAPresenter {
                 self.dispatcher.dispatch(action: action)
             }).disposed(by: self.disposeBag)
         self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
-        self.adjust.trackEvent(ADJEvent(eventToken: "cuahml"))
+        self.adjustManager.trackEvent(.FxaComplete)
     }
 }
