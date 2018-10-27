@@ -8,6 +8,7 @@ import WebKit
 import RxCocoa
 import RxSwift
 import RxTest
+import AdjustSdk
 
 @testable import Lockbox
 import Account
@@ -49,10 +50,19 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeAdjust: Adjust {
+        var eventSent: ADJEvent?
+
+        override func trackEvent(_ event: ADJEvent?) {
+            self.eventSent = event
+        }
+    }
+
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
     private var credentialProviderStore: Any!
+    private var adjust: FakeAdjust!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -62,6 +72,7 @@ class FxAPresenterSpec: QuickSpec {
                 self.view = FakeFxAView()
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
+                self.adjust = FakeAdjust()
 
                 if #available(iOS 12.0, *) {
                     self.credentialProviderStore = FakeCredentialProviderStore()
@@ -69,14 +80,16 @@ class FxAPresenterSpec: QuickSpec {
                         view: self.view,
                         dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
-                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore
+                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore,
+                        adjust: self.adjust
                     )
 
                 } else {
                     self.subject = FxAPresenter(
                             view: self.view,
                             dispatcher: self.dispatcher,
-                            accountStore: self.accountStore
+                            accountStore: self.accountStore,
+                            adjust: self.adjust
                     )
                 }
             }
@@ -130,6 +143,10 @@ class FxAPresenterSpec: QuickSpec {
 
                     let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
                     expect(onboardingAction.onboardingInProgress).to(beTrue())
+                }
+
+                it("sends adjust event") {
+                    expect(self.adjust.eventSent!.eventToken).to(equal("cuahml"))
                 }
             }
         }

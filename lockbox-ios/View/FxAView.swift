@@ -8,6 +8,7 @@ import RxSwift
 import RxCocoa
 import SwiftyJSON
 import FxAClient
+import AdjustSdk
 
 class FxAView: UIViewController {
     internal var presenter: FxAPresenter?
@@ -22,7 +23,8 @@ class FxAView: UIViewController {
     init(webView: WKWebView = WKWebView()) {
         self.webView = webView
         super.init(nibName: nil, bundle: nil)
-        self.presenter = FxAPresenter(view: self)
+        self.presenter = FxAPresenter(view: self,
+                                      adjust: Adjust.init())
     }
 
     override func viewDidLoad() {

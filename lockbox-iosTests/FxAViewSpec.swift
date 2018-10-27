@@ -7,6 +7,7 @@ import Nimble
 import UIKit
 import WebKit
 import RxSwift
+import AdjustSdk
 
 @testable import Lockbox
 
@@ -42,7 +43,7 @@ class FxAViewSpec: QuickSpec {
             self.webView = FakeWebView()
 
             self.subject = FxAView(webView: self.webView)
-            self.presenter = FakeFxAPresenter(view: self.subject)
+            self.presenter = FakeFxAPresenter(view: self.subject, adjust: Adjust.init())
             self.subject.presenter = self.presenter
 
             self.subject.viewDidLoad()
