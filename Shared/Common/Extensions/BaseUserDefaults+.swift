@@ -26,4 +26,8 @@ extension UserDefaults {
         return self.on(setting: UserDefaultKey.itemListSort.rawValue, type: String.self)
             .map { Setting.ItemListSort(rawValue: $0) ?? Constant.setting.defaultItemListSort }
     }
+
+    var onForceLock: Observable<Bool> {
+        return self.on(setting: UserDefaultKey.forceLock.rawValue, type: Bool.self)
+    }
 }

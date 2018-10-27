@@ -103,11 +103,9 @@ class WelcomePresenterSpec: QuickSpec {
 
     class FakeDataStore: DataStore {
         let fakeLocked: ReplaySubject<Bool>
-        let forceLockSubject: ReplaySubject<Bool>
 
         init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
             self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
-            self.forceLockSubject = ReplaySubject<Bool>.create(bufferSize: 1)
             super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
 
             self.disposeBag = DisposeBag()
@@ -115,10 +113,6 @@ class WelcomePresenterSpec: QuickSpec {
 
         override var locked: Observable<Bool> {
             return self.fakeLocked.asObservable()
-        }
-
-        override var forceLock: Observable<Bool> {
-            return self.forceLockSubject.asObservable()
         }
     }
 
@@ -369,7 +363,7 @@ class WelcomePresenterSpec: QuickSpec {
                             describe("on cold start") {
                                 beforeEach {
                                     self.biometryManager.authMessage = nil
-                                    self.dataStore.forceLockSubject.onNext(false)
+                                    UserDefaults.standard.set(false, forKey: UserDefaultKey.forceLock.rawValue)
                                     self.subject.onViewReady()
                                 }
 
@@ -381,7 +375,7 @@ class WelcomePresenterSpec: QuickSpec {
                             describe("on force lock") {
                                 beforeEach {
                                     self.biometryManager.authMessage = nil
-                                    self.dataStore.forceLockSubject.onNext(true)
+                                    UserDefaults.standard.set(true, forKey: UserDefaultKey.forceLock.rawValue)
                                     self.subject.onViewReady()
                                 }
 
