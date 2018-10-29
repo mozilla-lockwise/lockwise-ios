@@ -27,6 +27,8 @@ class UserDefaultStore: BaseUserDefaultStore {
                         self.userDefaults.set(sort.rawValue, forKey: UserDefaultKey.itemListSort.rawValue)
                     case .reset:
                         self.restoreDefaults()
+                    case .forceLock(let enabled):
+                        self.userDefaults.set(enabled, forKey: UserDefaultKey.forceLock.rawValue)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -40,6 +42,15 @@ class UserDefaultStore: BaseUserDefaultStore {
 
                     if previous <= 2 {
                         self.readValuesFrom(UserDefaults.standard)
+                    }
+                })
+                .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+                .filterByType(class: DataStoreAction.self)
+                .subscribe(onNext: { action in
+                    if action == DataStoreAction.unlock {
+                        self.userDefaults.set(false, forKey: UserDefaultKey.forceLock.rawValue)
                     }
                 })
                 .disposed(by: self.disposeBag)
