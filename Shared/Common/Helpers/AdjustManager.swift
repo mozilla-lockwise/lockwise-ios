@@ -14,16 +14,17 @@ class AdjustManager {
         case FxaComplete = "cuahml"
     }
 
+    private var adjustConfig: ADJConfig? {
+        #if DEBUG
+            return ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentSandbox)
+        #else
+            return ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentProduction)
+        #endif
+    }
+
     init() {
         adjust = Adjust()
-
-        #if DEBUG
-            let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentSandbox)
-            adjust.appDidLaunch(config)
-        #else
-            let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentProduction)
-            adjust.appDidLaunch(config)
-        #endif
+        adjust.appDidLaunch(self.adjustConfig)
     }
 
     func trackEvent(_ event: AdjustEvent) {

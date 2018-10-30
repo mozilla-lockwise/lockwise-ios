@@ -19,7 +19,7 @@ class AdjustManagerSpec: QuickSpec {
                 self.subject = AdjustManager()
             }
 
-            // Disabling as they seem to fail on buddybuild
+            // Disabling as they seem to fail on buddybuild: GH Issue #787
             xdescribe("set enable to true") {
                 beforeEach {
                     self.subject.setEnabled(true)
