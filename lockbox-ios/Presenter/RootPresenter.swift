@@ -7,7 +7,6 @@ import RxSwift
 import RxCocoa
 import UIKit
 import FxAClient
-import AdjustSdk
 
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
@@ -52,6 +51,7 @@ class RootPresenter {
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: Sentry
+    fileprivate let adjustManager: AdjustManager
 
     var fxa: FirefoxAccount?
 
@@ -65,7 +65,8 @@ class RootPresenter {
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
-         sentryManager: Sentry = Sentry.shared
+         sentryManager: Sentry = Sentry.shared,
+         adjustManager: AdjustManager = AdjustManager.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -78,6 +79,7 @@ class RootPresenter {
         self.telemetryActionHandler = telemetryActionHandler
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
+        self.adjustManager = adjustManager
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -295,7 +297,7 @@ extension RootPresenter {
 
     fileprivate func startAdjust() {
         self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
-            Adjust.setEnabled(enabled)
+            self.adjustManager.setEnabled(enabled)
         }).disposed(by: self.disposeBag)
     }
 

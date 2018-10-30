@@ -49,10 +49,19 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeAdjustManager: AdjustManager {
+        var eventSent: AdjustManager.AdjustEvent?
+
+        override func trackEvent(_ event: AdjustManager.AdjustEvent) {
+            self.eventSent = event
+        }
+    }
+
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
     private var credentialProviderStore: Any!
+    private var adjustManager: FakeAdjustManager!
     var subject: FxAPresenter!
 
     override func spec() {
@@ -62,6 +71,7 @@ class FxAPresenterSpec: QuickSpec {
                 self.view = FakeFxAView()
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
+                self.adjustManager = FakeAdjustManager()
 
                 if #available(iOS 12.0, *) {
                     self.credentialProviderStore = FakeCredentialProviderStore()
@@ -69,14 +79,16 @@ class FxAPresenterSpec: QuickSpec {
                         view: self.view,
                         dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
-                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore
+                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore,
+                        adjustManager: self.adjustManager
                     )
 
                 } else {
                     self.subject = FxAPresenter(
                             view: self.view,
                             dispatcher: self.dispatcher,
-                            accountStore: self.accountStore
+                            accountStore: self.accountStore,
+                            adjustManager: self.adjustManager
                     )
                 }
             }
@@ -130,6 +142,10 @@ class FxAPresenterSpec: QuickSpec {
 
                     let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
                     expect(onboardingAction.onboardingInProgress).to(beTrue())
+                }
+
+                it("sends adjust event") {
+                    expect(self.adjustManager.eventSent!.rawValue).to(equal("cuahml"))
                 }
             }
         }

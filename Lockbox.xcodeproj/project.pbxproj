@@ -259,6 +259,8 @@
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
+		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
+		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
 		D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingListView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */; };
@@ -570,6 +572,8 @@
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
+		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
+		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenter.swift; sourceTree = "<group>"; };
@@ -764,6 +768,7 @@
 			children = (
 				3931871D214C12C5003C9E4A /* AppearanceHelper.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
+				D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1069,6 +1074,7 @@
 				D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */,
 				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
 				D82FF5152172DAC600018346 /* FakeProfile.swift */,
+				D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1558,6 +1564,7 @@
 				7DA4C68D2028F99200B61DD8 /* ItemListViewSpec.swift in Sources */,
 				D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */,
 				7D1B1AD41F9902C600C1F5FF /* DataStoreActionSpec.swift in Sources */,
+				D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */,
 				7D44088F20178713001873F6 /* WelcomeViewSpec.swift in Sources */,
 				D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */,
 				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
@@ -1626,6 +1633,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */,
 				393F9E7820E6DA4F0004C503 /* OnboardingConfirmationView.swift in Sources */,
 				D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */,
 				7DB9DE962140C5F400239D31 /* BaseItemListPresenter.swift in Sources */,

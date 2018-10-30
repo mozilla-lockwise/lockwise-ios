@@ -22,7 +22,7 @@ class FxAView: UIViewController {
     init(webView: WKWebView = WKWebView()) {
         self.webView = webView
         super.init(nibName: nil, bundle: nil)
-        self.presenter = FxAPresenter(view: self)
+        self.presenter = FxAPresenter(view: self, adjustManager: AdjustManager.shared)
     }
 
     override func viewDidLoad() {
