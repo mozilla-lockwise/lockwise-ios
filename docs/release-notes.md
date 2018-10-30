@@ -1,5 +1,37 @@
 # Release Notes
 
+## 1.3.2 (Build 2520)
+
+_Date: 2018-10-30_
+
+We fixed more bugs! You should see some slight improvements but nothing major.
+
+Here's the full list of changes:
+
+- Login list scrolls to top after changing the sort order
+- AutoFill Instructions now looks better on smaller screens
+- AutoFill Instructions video now doesn't stop your audio
+- "Lock Now" button overrides the autolock timer setting
+- Updated Adjust and Telemetry
+
+
+## 1.3.1 (Build 2517)
+
+_Date: 2018-10-10_
+
+We fixed some bugs! The big ones are related to "Disconnecting" your Firefox Account (signing out) and the new AutoFill feature.
+
+Here's the full list of changes:
+
+ - If you "Disconnect" your Firefox Account then sign in again, you won't get stuck seeing the “No matching entries” error message
+ - We also made it so if you sign in with a different account, you don't accidentally see the items from the first account
+ - The app now presents Touch ID or Face ID upon app launch so you don't have to to do an extra tap to unlock
+ - Additional steps are taken to not display multiple overlays at one time so it's clear what's been copied
+ - Help text was added to the credential search when using AutoFill so you know exactly what to do
+ - Instructions on how to setup AutoFill for iOS 12 users was added to onboarding and in the Settings screen
+
+A big "thanks" to all the contributors that helped along the way!
+
 ## 1.3.1 (Build 2428)
 
 We fixed some bugs related to "Disconnecting" (signing out) and the new AutoFill feature.

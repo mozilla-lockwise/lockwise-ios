@@ -19,7 +19,7 @@ enum TelemetryEventCategory: String {
 }
 
 enum TelemetryEventMethod: String {
-case tap, startup, foreground, background, settingChanged, show, canceled, login_selected, autofill_locked, autofill_unlocked, refresh, autofill_clear
+case tap, startup, foreground, background, settingChanged, show, canceled, login_selected, autofill_locked, autofill_unlocked, refresh, autofill_clear, shutdown
 }
 
 enum TelemetryEventObject: String {
@@ -49,6 +49,7 @@ enum TelemetryEventObject: String {
     case autofill = "autofill"
     case autofillSettingsInstructions = "autofill_instructions"
     case autofillOnboardingInstructions = "autofill_onboarding_instructions"
+    case forceLock = "force_lock"
 }
 
 enum ExtraKey: String {
@@ -56,12 +57,17 @@ enum ExtraKey: String {
 }
 
 class TelemetryActionHandler: ActionHandler {
-    static let shared = TelemetryActionHandler()
-
     private let telemetry: Telemetry
+    private let accountStore: BaseAccountStore
 
-    init(telemetry: Telemetry = Telemetry.default) {
+    private var disposeBag = DisposeBag()
+
+    private var profileUid: String?
+
+    init(telemetry: Telemetry = Telemetry.default,
+         accountStore: BaseAccountStore) {
         self.telemetry = telemetry
+        self.accountStore = accountStore
 
         let telemetryConfig = self.telemetry.configuration
         telemetryConfig.appName = "Lockbox"
@@ -80,16 +86,22 @@ class TelemetryActionHandler: ActionHandler {
 
         // todo: get telemetry-ios PR merged so that we can have a custom PingBuilder for Lockbox
         self.telemetry.add(pingBuilderType: FocusEventPingBuilder.self)
+
+        self.accountStore.profile.subscribe(onNext: { (profile) in
+            self.profileUid = profile?.uid
+        }).disposed(by: self.disposeBag)
     }
 
     lazy var telemetryActionListener: AnyObserver<TelemetryAction> = {
         return Binder(self) { target, action in
+            let extras = self.addUidTo(extras: action.extras)
+
             target.telemetry.recordEvent(
                     category: TelemetryEventCategory.action.rawValue,
                     method: action.eventMethod.rawValue,
                     object: action.eventObject.rawValue,
                     value: action.value,
-                    extras: action.extras
+                    extras: extras
             )
         }.asObserver()
     }()
@@ -119,5 +131,19 @@ extension TelemetryActionHandler {
 
     fileprivate var shortVersion: String {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    }
+
+    private func addUidTo(extras: [String: Any?]?) -> [String: Any?]? {
+        if let uid = self.profileUid {
+            if let extras = extras {
+                return extras.merging([ExtraKey.fxauid.rawValue: uid]) { (_, new) -> Any? in
+                    return new
+                }
+            } else {
+                return [ExtraKey.fxauid.rawValue: uid]
+            }
+        }
+
+        return extras
     }
 }

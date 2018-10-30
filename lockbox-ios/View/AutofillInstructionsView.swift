@@ -20,7 +20,7 @@ class AutofillInstructionsView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupVideoLoop()
+
         self.presenter?.onViewReady()
     }
 
@@ -32,6 +32,11 @@ class AutofillInstructionsView: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.setupVideoLoop()
     }
 }
 
@@ -49,6 +54,7 @@ extension AutofillInstructionsView {
 
         let player = AVPlayer(url: path)
         let layer = AVPlayerLayer(player: player)
+        layer.videoGravity = .resizeAspectFill
         layer.frame = self.videoView.bounds
         self.videoView.setBorder(color: Constant.color.videoBorderColor, width: 1)
         layer.shadowColor = Constant.color.shadowColor.cgColor
@@ -56,6 +62,8 @@ extension AutofillInstructionsView {
         layer.shadowOffset = CGSize(width: 0, height: 2)
         layer.shadowRadius = 9
         self.videoView.layer.addSublayer(layer)
+
+        _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback, mode: .default, options: .mixWithOthers)
         player.play()
 
         NotificationCenter.default.rx

@@ -12,6 +12,8 @@ import UIKit
 import CoreGraphics
 import LocalAuthentication
 import FxAClient
+import SwiftKeychainWrapper
+import FxAUtils
 
 @testable import Lockbox
 
@@ -87,10 +89,10 @@ class WelcomePresenterSpec: QuickSpec {
     }
 
     class FakeAccountStore: AccountStore {
-        var fakeProfile = PublishSubject<Profile?>()
+        var fakeProfile = PublishSubject<FxAClient.Profile?>()
         var fakeOldAccountInformation = PublishSubject<Bool>()
 
-        override var profile: Observable<Profile?> {
+        override var profile: Observable<FxAClient.Profile?> {
             return self.fakeProfile.asObservable()
         }
 
@@ -101,22 +103,16 @@ class WelcomePresenterSpec: QuickSpec {
 
     class FakeDataStore: DataStore {
         let fakeLocked: ReplaySubject<Bool>
-        let forceLockSubject: ReplaySubject<Bool>
 
-        init() {
+        init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
             self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
-            self.forceLockSubject = ReplaySubject<Bool>.create(bufferSize: 1)
-            super.init()
+            super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
 
             self.disposeBag = DisposeBag()
         }
 
         override var locked: Observable<Bool> {
             return self.fakeLocked.asObservable()
-        }
-
-        override var forceLock: Observable<Bool> {
-            return self.forceLockSubject.asObservable()
         }
     }
 
@@ -153,6 +149,10 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
+    private let fakeProfileFactory: ProfileFactory = { reset in
+        FakeProfile()
+    }
+
     private var view: FakeWelcomeView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
@@ -176,7 +176,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.dataStore = FakeDataStore()
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory)
                 self.lifecycleStore = FakeLifecycleStore()
                 self.biometryManager = FakeBiometryManager()
                 self.subject = WelcomePresenter(
@@ -363,7 +363,7 @@ class WelcomePresenterSpec: QuickSpec {
                             describe("on cold start") {
                                 beforeEach {
                                     self.biometryManager.authMessage = nil
-                                    self.dataStore.forceLockSubject.onNext(false)
+                                    UserDefaults.standard.set(false, forKey: UserDefaultKey.forceLock.rawValue)
                                     self.subject.onViewReady()
                                 }
 
@@ -375,7 +375,7 @@ class WelcomePresenterSpec: QuickSpec {
                             describe("on force lock") {
                                 beforeEach {
                                     self.biometryManager.authMessage = nil
-                                    self.dataStore.forceLockSubject.onNext(true)
+                                    UserDefaults.standard.set(true, forKey: UserDefaultKey.forceLock.rawValue)
                                     self.subject.onViewReady()
                                 }
 

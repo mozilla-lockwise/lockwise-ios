@@ -11,6 +11,7 @@ import LocalAuthentication
 protocol SettingListViewProtocol: class, AlertControllerView {
     func bind(items: Driver<[SettingSectionModel]>)
     var onLockNow: ControlEvent<Void> { get }
+    var onDoneButtonPressed: ControlEvent<Void>? { get }
 }
 
 class SettingListPresenter {
@@ -19,12 +20,6 @@ class SettingListPresenter {
     private let userDefaultStore: UserDefaultStore
     private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
-
-    lazy private(set) var onDone: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            target.dispatcher.dispatch(action: MainRouteAction.list)
-        }.asObserver()
-    }()
 
     lazy private(set) var onSettingCellTapped: AnyObserver<RouteAction?> = {
         return Binder(self) { target, action in
@@ -117,7 +112,7 @@ class SettingListPresenter {
                 .subscribe { _ in
                     if self.biometryManager.deviceAuthenticationAvailable {
                         self.dispatcher.dispatch(action: DataStoreAction.lock)
-                        self.dispatcher.dispatch(action: DataStoreAction.forceLock(locked: true))
+                        self.dispatcher.dispatch(action: SettingAction.forceLock(enabled: true))
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                     } else {
                         self.view?.displayAlertController(
@@ -128,6 +123,13 @@ class SettingListPresenter {
                     }
                 }
                 .disposed(by: self.disposeBag)
+
+        if let onDoneButtonPressed = self.view?.onDoneButtonPressed {
+            onDoneButtonPressed.subscribe { _ in
+                self.dispatcher.dispatch(action: MainRouteAction.list)
+            }
+            .disposed(by: self.disposeBag)
+        }
     }
 }
 

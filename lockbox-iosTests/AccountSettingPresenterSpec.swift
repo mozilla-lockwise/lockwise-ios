@@ -19,6 +19,8 @@ class AccountSettingPresenterSpec: QuickSpec {
         var displayAlertActionButtons: [AlertActionButtonConfiguration]?
         var displayAlertControllerTitle: String?
         var displayAlertControllerMessage: String?
+        var fakeUnlinkAccountButtonPressed = PublishSubject<Void>()
+        var fakeOnSettingsButtonPressed = PublishSubject<Void>()
 
         let disposeBag = DisposeBag()
 
@@ -34,6 +36,14 @@ class AccountSettingPresenterSpec: QuickSpec {
             self.displayAlertActionButtons = buttons
             self.displayAlertControllerMessage = message
             self.displayAlertControllerTitle = title
+        }
+
+        var unLinkAccountButtonPressed: ControlEvent<Void> {
+            return ControlEvent<Void>(events: fakeUnlinkAccountButtonPressed.asObservable())
+        }
+
+        var onSettingsButtonPressed: ControlEvent<Void>? {
+            return ControlEvent<Void>(events: fakeOnSettingsButtonPressed.asObservable())
         }
     }
 
@@ -94,12 +104,8 @@ class AccountSettingPresenterSpec: QuickSpec {
 
             describe("unlinkAccountTapped") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.unLinkAccountTapped)
-                            .disposed(by: self.disposeBag)
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeUnlinkAccountButtonPressed.onNext(())
                 }
                 it("displays the alert controller") {
                     expect(self.view.displayAlertActionButtons).notTo(beNil())
@@ -127,13 +133,8 @@ class AccountSettingPresenterSpec: QuickSpec {
 
             describe("onSettingsTap") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.onSettingsTap)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeOnSettingsButtonPressed.onNext(())
                 }
 
                 it("sends the settings list action") {

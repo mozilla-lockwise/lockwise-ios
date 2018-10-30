@@ -67,9 +67,9 @@ class Constant {
 }
 
 enum UserDefaultKey: String {
-    case autoLockTime, autoLockTimerDate, itemListSort, recordUsageData
+    case autoLockTime, autoLockTimerDate, itemListSort, recordUsageData, forceLock
 
-    static var allValues: [UserDefaultKey] = [.autoLockTime, .autoLockTimerDate, .itemListSort, .recordUsageData]
+    static var allValues: [UserDefaultKey] = [.autoLockTime, .autoLockTimerDate, .itemListSort, .recordUsageData, .forceLock]
 
     var defaultValue: Any? {
         switch self {
@@ -81,6 +81,8 @@ enum UserDefaultKey: String {
             return nil
         case .itemListSort:
             return Constant.setting.defaultItemListSort.rawValue
+        case .forceLock:
+            return false
         }
     }
 }

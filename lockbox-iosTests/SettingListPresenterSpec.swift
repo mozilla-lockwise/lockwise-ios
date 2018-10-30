@@ -16,6 +16,7 @@ class SettingListPresenterSpec: QuickSpec {
 
         var displayAlertControllerCalled = false
         var displayAlertControllerButtons: [AlertActionButtonConfiguration]?
+        var fakeOnDoneButtonPressed = PublishSubject<Void>()
         func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
             displayAlertControllerCalled = true
             displayAlertControllerButtons = buttons
@@ -32,6 +33,10 @@ class SettingListPresenterSpec: QuickSpec {
 
         var onLockNow: ControlEvent<Void> {
             return ControlEvent(events: fakeButtonPress.asObservable())
+        }
+
+        var onDoneButtonPressed: ControlEvent<Void>? {
+            return ControlEvent<Void>(events: fakeOnDoneButtonPressed.asObservable())
         }
     }
 
@@ -110,10 +115,10 @@ class SettingListPresenterSpec: QuickSpec {
                             let loginRouteAction = self.dispatcher.dispatchedActions.popLast() as! LoginRouteAction
                             expect(loginRouteAction).to(equal(.welcome))
 
-                            var dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
-                            expect(dataStoreAction).to(equal(.forceLock(locked: true)))
+                            let settingAction = self.dispatcher.dispatchedActions.popLast() as! SettingAction
+                            expect(settingAction).to(equal(.forceLock(enabled: true)))
 
-                            dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
+                            let dataStoreAction = self.dispatcher.dispatchedActions.popLast() as! DataStoreAction
                             expect(dataStoreAction).to(equal(.lock))
                         }
                     }
@@ -207,13 +212,8 @@ class SettingListPresenterSpec: QuickSpec {
 
             describe("onDone") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, ())])
-
-                    voidObservable
-                            .bind(to: self.subject.onDone)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeOnDoneButtonPressed.onNext(())
                 }
 
                 it("invokes the main list action") {

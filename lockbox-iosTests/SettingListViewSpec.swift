@@ -23,12 +23,6 @@ class SettingListViewSpec: QuickSpec {
             onViewReadyCalled = true
         }
 
-        override var onDone: AnyObserver<Void> {
-            return Binder(self) { target, _ in
-                target.onDoneActionDispatched = true
-            }.asObserver()
-        }
-
         override var onSettingCellTapped: AnyObserver<RouteAction?> {
             return self.settingCellStub.asObserver()
         }
@@ -170,6 +164,25 @@ class SettingListViewSpec: QuickSpec {
                     expect(SettingCellConfiguration(text: "meow", routeAction: nil, accessibilityId: "")).to(equal(SettingCellConfiguration(text: "meow", routeAction: SettingRouteAction.account, accessibilityId: "")))
                     expect(SettingCellConfiguration(text: "meow", routeAction: nil, accessibilityId: "")).notTo(equal(SettingCellConfiguration(text: "woof", routeAction: SettingRouteAction.account, accessibilityId: "")))
                 }
+            }
+        }
+
+        describe("tapping the done button") {
+            var buttonObserver = self.scheduler.createObserver(Void.self)
+
+            beforeEach {
+                buttonObserver = self.scheduler.createObserver(Void.self)
+
+                self.subject.onDoneButtonPressed!
+                    .subscribe(buttonObserver)
+                    .disposed(by: self.disposeBag)
+
+                let doneButton = self.subject.navigationItem.rightBarButtonItem!
+                _ = doneButton.target?.perform(doneButton.action)
+            }
+
+            it("tells observers about button taps") {
+                expect(buttonObserver.events.count).to(be(1))
             }
         }
     }

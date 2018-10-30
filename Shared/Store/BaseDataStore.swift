@@ -88,12 +88,11 @@ class BaseDataStore {
     private var listSubject = BehaviorRelay<[Login]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
-    private var forceLockSubject = ReplaySubject<Bool>.create(bufferSize: 1)
 
     private let fxaLoginHelper: FxALoginHelper
     private let profileFactory: ProfileFactory
     private let keychainWrapper: KeychainWrapper
-    private let userDefaults: UserDefaults
+    internal let userDefaults: UserDefaults
     internal var profile: FxAUtils.Profile
     internal let dispatcher: Dispatcher
 
@@ -111,10 +110,6 @@ class BaseDataStore {
 
     public var storageState: Observable<LoginStoreState> {
         return self.storageStateSubject.asObservable()
-    }
-
-    public var forceLock: Observable<Bool> {
-        return self.forceLockSubject.asObservable()
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
@@ -152,8 +147,6 @@ class BaseDataStore {
                         self.add(item: login)
                     case let .remove(id:id):
                         self.remove(id: id)
-                    case let .forceLock(locked: locked):
-                        self.forceLock(locked: locked)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -171,6 +164,8 @@ class BaseDataStore {
                         if previous <= 2 {
                             self.handleLock()
                         }
+                    case .shutdown:
+                        self.shutdown()
                     default:
                         break
                     }
@@ -231,6 +226,12 @@ class BaseDataStore {
                 }
             })
             .disposed(by: self.disposeBag)
+    }
+
+    private func shutdown() {
+        if !self.profile.isShutdown {
+            self.profile.shutdown()
+        }
     }
 }
 
@@ -386,10 +387,6 @@ extension BaseDataStore {
     private func makeEmptyList() {
         self.listSubject.accept([])
     }
-
-    private func forceLock(locked: Bool) {
-        self.forceLockSubject.onNext(locked)
-    }
 }
 
 extension BaseDataStore {
@@ -427,30 +424,32 @@ extension BaseDataStore {
         self.syncSubject.onNext(.ReadyToSync)
 
         // default to locked state on initialized
-        self.forceLockSubject.onNext(false)
         self.storageStateSubject.onNext(.Locked)
         self.handleLock()
     }
 
     internal func handleLock() {
-        self.userDefaults.onAutoLockTime
-                .take(1)
-                .subscribe(onNext: { autoLockSetting in
-                    switch autoLockSetting {
-                    case .Never:
-                        self.unlock()
-                    default:
-                        let date = NSDate(
-                                timeIntervalSince1970: self.userDefaults.double(
-                                        forKey: UserDefaultKey.autoLockTimerDate.rawValue))
+        Observable.combineLatest(
+            self.userDefaults.onAutoLockTime,
+            self.userDefaults.onForceLock)
+            .take(1)
+            .subscribe(onNext: { autoLockSetting, forceLock in
+                if forceLock {
+                    self.lock()
+                } else if autoLockSetting == .Never {
+                    self.unlock()
+                } else {
+                    let date = NSDate(
+                        timeIntervalSince1970: self.userDefaults.double(
+                            forKey: UserDefaultKey.autoLockTimerDate.rawValue))
 
-                        if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
-                            self.unlock()
-                        } else {
-                            self.lock()
-                        }
+                    if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
+                        self.unlock()
+                    } else {
+                        self.lock()
                     }
-                })
-                .disposed(by: self.disposeBag)
+                }
+            })
+        .disposed(by: self.disposeBag)
     }
 }

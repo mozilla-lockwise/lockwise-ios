@@ -48,17 +48,24 @@ extension AccountSettingView: AccountSettingViewProtocol {
                 .drive(self.usernameLabel.rx.text)
                 .disposed(by: self.disposeBag)
     }
+
+    var unLinkAccountButtonPressed: ControlEvent<Void> {
+        return self.unlinkAccountButton.rx.tap
+    }
+
+    var onSettingsButtonPressed: ControlEvent<Void>? {
+        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
+            return button.rx.tap
+        }
+
+        return nil
+    }
+
 }
 
 extension AccountSettingView: UIGestureRecognizerDelegate {
     fileprivate func setupUnlinkAccountButton() {
         self.unlinkAccountButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
-
-        if let presenter = self.presenter {
-            self.unlinkAccountButton.rx.tap
-                    .bind(to: presenter.unLinkAccountTapped)
-                    .disposed(by: self.disposeBag)
-        }
     }
 
     fileprivate func setupNavBar() {
@@ -73,10 +80,6 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {
-            leftButton.rx.tap
-                .bind(to: presenter.onSettingsTap)
-                .disposed(by: self.disposeBag)
-
             self.navigationController?.interactivePopGestureRecognizer?.delegate = self
             self.navigationController?.interactivePopGestureRecognizer?.rx.event
                 .map { _ -> Void in
