@@ -65,14 +65,14 @@ class AccountSettingPresenter {
                 .filterNil()
 
         self.view?.bind(avatarImage: avatarImageDriver)
-        
+
         if let onSettingsButtonPressed = self.view?.onSettingsButtonPressed {
             onSettingsButtonPressed.subscribe { [weak self] _ in
                 self?.dispatcher.dispatch(action: SettingRouteAction.list)
             }
             .disposed(by: disposeBag)
         }
-        
+
         self.view?.unLinkAccountButtonPressed.subscribe { [weak self] _ in
             self?.view?.displayAlertController(
                 buttons: [

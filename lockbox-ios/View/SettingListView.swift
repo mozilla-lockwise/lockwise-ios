@@ -64,7 +64,7 @@ extension SettingListView: SettingListViewProtocol {
                     .disposed(by: self.disposeBag)
         }
     }
-    
+
     var onDoneButtonPressed: ControlEvent<Void>? {
         return self.navigationItem.rightBarButtonItem?.rx.tap
     }

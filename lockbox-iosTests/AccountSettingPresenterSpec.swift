@@ -37,11 +37,11 @@ class AccountSettingPresenterSpec: QuickSpec {
             self.displayAlertControllerMessage = message
             self.displayAlertControllerTitle = title
         }
-        
+
         var unLinkAccountButtonPressed: ControlEvent<Void> {
             return ControlEvent<Void>(events: fakeUnlinkAccountButtonPressed.asObservable())
         }
-        
+
         var onSettingsButtonPressed: ControlEvent<Void>? {
             return ControlEvent<Void>(events: fakeOnSettingsButtonPressed.asObservable())
         }
@@ -134,7 +134,7 @@ class AccountSettingPresenterSpec: QuickSpec {
             describe("onSettingsTap") {
                 beforeEach {
                     self.subject.onViewReady()
-                    self.view.fakeOnSettingsButtonPressed.onNext(()) 
+                    self.view.fakeOnSettingsButtonPressed.onNext(())
                 }
 
                 it("sends the settings list action") {

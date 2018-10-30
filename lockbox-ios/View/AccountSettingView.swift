@@ -48,19 +48,19 @@ extension AccountSettingView: AccountSettingViewProtocol {
                 .drive(self.usernameLabel.rx.text)
                 .disposed(by: self.disposeBag)
     }
-    
+
     var unLinkAccountButtonPressed: ControlEvent<Void> {
         return self.unlinkAccountButton.rx.tap
     }
-    
+
     var onSettingsButtonPressed: ControlEvent<Void>? {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             return button.rx.tap
         }
-        
+
         return nil
     }
-    
+
 }
 
 extension AccountSettingView: UIGestureRecognizerDelegate {

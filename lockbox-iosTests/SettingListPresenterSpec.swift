@@ -34,7 +34,7 @@ class SettingListPresenterSpec: QuickSpec {
         var onLockNow: ControlEvent<Void> {
             return ControlEvent(events: fakeButtonPress.asObservable())
         }
-        
+
         var onDoneButtonPressed: ControlEvent<Void>? {
             return ControlEvent<Void>(events: fakeOnDoneButtonPressed.asObservable())
         }
