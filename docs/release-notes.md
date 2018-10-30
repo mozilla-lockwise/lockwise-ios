@@ -4,14 +4,15 @@
 
 _Date: 2018-10-30_
 
+We fixed more bugs! You should see some slight improvements but nothing major.
+
 Here's the full list of changes:
 
- - Login list scrolls to top after changing the sort order
- - Autofill Instructions now works better for smaller screens
- - Autofill Instructions video now doesn't stop a user's audio
- - Improved logic for how events are handled in presenters
- - "Lock Now" button overrides autolock setting
- - Updated Adjust and Telemetry
+- Login list scrolls to top after changing the sort order
+- AutoFill Instructions now looks better on smaller screens
+- AutoFill Instructions video now doesn't stop your audio
+- "Lock Now" button overrides the autolock timer setting
+- Updated Adjust and Telemetry
 
 
 ## 1.3.1 (Build 2517)
