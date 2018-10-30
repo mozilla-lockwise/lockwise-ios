@@ -186,6 +186,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeAdjustManager: AdjustManager {
+        var enabledValue: Bool?
+
+        override func setEnabled(_ enabled: Bool) {
+            self.enabledValue = enabled
+        }
+    }
+
     private let fakeProfileFactory: ProfileFactory = { reset in
         FakeProfile()
     }
@@ -200,6 +208,7 @@ class RootPresenterSpec: QuickSpec {
     private var telemetryActionHandler: FakeTelemetryActionHandler!
     private var biometryManager: FakeBiometryManager!
     private var sentryManager: FakeSentryManager!
+    private var adjustManager: FakeAdjustManager!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -216,6 +225,7 @@ class RootPresenterSpec: QuickSpec {
                 self.telemetryActionHandler = FakeTelemetryActionHandler()
                 self.biometryManager = FakeBiometryManager()
                 self.sentryManager = FakeSentryManager()
+                self.adjustManager = FakeAdjustManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
                 self.biometryManager.deviceAuthAvailableStub = true
 
@@ -228,7 +238,8 @@ class RootPresenterSpec: QuickSpec {
                         accountStore: self.accountStore,
                         userDefaultStore: self.userDefaultStore,
                         telemetryActionHandler: self.telemetryActionHandler,
-                        biometryManager: self.biometryManager
+                        biometryManager: self.biometryManager,
+                        adjustManager: self.adjustManager
                 )
             }
 
@@ -1250,6 +1261,10 @@ class RootPresenterSpec: QuickSpec {
                             expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventMethod).to(equal(action.eventMethod))
                             expect(self.telemetryActionHandler.telemetryListener.events.last!.value.element!.eventObject).to(equal(action.eventObject))
                         }
+
+                        it("enables adjust") {
+                            expect(self.adjustManager.enabledValue).to(beTrue())
+                        }
                     }
 
                     describe("when usage data cannot be recorded") {
@@ -1260,6 +1275,10 @@ class RootPresenterSpec: QuickSpec {
 
                         it("passes no telemetry actions through to the telemetryactionhandler") {
                             expect(self.telemetryActionHandler.telemetryListener.events.count).to(equal(0))
+                        }
+
+                        it("disables adjust") {
+                            expect(self.adjustManager.enabledValue).to(beFalse())
                         }
                     }
                 }

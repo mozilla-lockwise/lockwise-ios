@@ -5,7 +5,6 @@
 import FxAUtils
 import UIKit
 import Telemetry
-import AdjustSdk
 import SwiftKeychainWrapper
 
 let PostFirstRunKey = "firstrun"
@@ -70,13 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func setupAdjust() {
-#if DEBUG
-        let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentSandbox)
-        Adjust.appDidLaunch(config)
-#else
-        let config = ADJConfig(appToken: Constant.app.adjustAppToken, environment: ADJEnvironmentProduction)
-        Adjust.appDidLaunch(config)
-#endif
+        _ = AdjustManager.shared
     }
 }
 
