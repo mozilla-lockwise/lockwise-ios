@@ -55,14 +55,14 @@ class AccountSettingViewSpec: QuickSpec {
 
             describe("tapping the unlink account button") {
                 var buttonObserver = self.scheduler.createObserver(Void.self)
-                
+
                 beforeEach {
                     buttonObserver = self.scheduler.createObserver(Void.self)
-                    
+
                     self.subject.unLinkAccountButtonPressed
                         .subscribe(buttonObserver)
                         .disposed(by: self.disposeBag)
-                    
+
                     self.subject.unlinkAccountButton.sendActions(for: .touchUpInside)
                 }
 
@@ -73,14 +73,14 @@ class AccountSettingViewSpec: QuickSpec {
 
             describe("tapping the back to settings button") {
                 var buttonObserver = self.scheduler.createObserver(Void.self)
-                
+
                 beforeEach {
                     buttonObserver = self.scheduler.createObserver(Void.self)
-                    
+
                     self.subject.onSettingsButtonPressed!
                         .subscribe(buttonObserver)
                         .disposed(by: self.disposeBag)
-                    
+
                     let settingsButton = self.subject.navigationItem.leftBarButtonItem?.customView as! UIButton
                     settingsButton.sendActions(for: .touchUpInside)
                 }
