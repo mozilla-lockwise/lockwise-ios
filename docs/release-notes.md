@@ -1,5 +1,19 @@
 # Release Notes
 
+## 1.3.2 (Build 2520)
+
+_Date: 2018-10-30_
+
+Here's the full list of changes:
+
+ - Login list scrolls to top after changing the sort order
+ - Autofill Instructions now works better for smaller screens
+ - Autofill Instructions video now doesn't stop a user's audio
+ - Improved logic for how events are handled in presenters
+ - "Lock Now" button overrides autolock setting
+ - Updated Adjust and Telemetry
+
+
 ## 1.3.1 (Build 2517)
 
 _Date: 2018-10-10_
