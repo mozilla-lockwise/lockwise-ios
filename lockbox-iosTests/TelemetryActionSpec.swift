@@ -7,6 +7,7 @@ import Telemetry
 import Quick
 import Nimble
 import RxSwift
+import FxAClient
 
 @testable import Lockbox
 
@@ -35,13 +36,16 @@ class TelemetryActionSpec: QuickSpec {
     }
 
     private var telemetry: FakeTelemetry!
+    private var accountStore: AccountStore!
     var subject: TelemetryActionHandler!
 
     override func spec() {
         describe("TelemetryActionHandler") {
             beforeEach {
                 self.telemetry = FakeTelemetry(storageName: "meow")
-                self.subject = TelemetryActionHandler(telemetry: self.telemetry)
+                self.accountStore = AccountStore()
+                self.subject = TelemetryActionHandler(telemetry: self.telemetry,
+                                                      accountStore: self.accountStore)
             }
 
             describe("invoke") {
