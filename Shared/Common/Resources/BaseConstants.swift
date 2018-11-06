@@ -23,6 +23,7 @@ class Constant {
         static let defaultAutoLock = Setting.AutoLock.FiveMinutes
         static let defaultItemListSort = Setting.ItemListSort.alphabetically
         static let defaultRecordUsageData = true
+        static let defaultForceLock = false
     }
 
     struct color {
@@ -82,7 +83,7 @@ enum UserDefaultKey: String {
         case .itemListSort:
             return Constant.setting.defaultItemListSort.rawValue
         case .forceLock:
-            return false
+            return Constant.setting.defaultForceLock
         }
     }
 }
