@@ -213,6 +213,8 @@
 <li>download the <code>.ipa</code> from buddybuild and attach it to the Release on GitHub</li>
 <li>Hopefully by now the build has been uploaded to App Store Connect</li>
 <li>Browse to App Store Connect and continue the "Distributing..." instructions</li>
+<li>Download and unzip dSYM build artifact from buddybuild</li>
+<li>Upload dSYM files to Sentry using <code>sentry-cli</code> using <a href="https://docs.sentry.io/clients/cocoa/dsym/#manually-with-sentry-cli">sentry instructions</a></li>
 </ol>
 <h3 id="in-case-of-emergency-release">In Case of Emergency (Release)</h3>
 <p><em>similar to above, but requires explicit cherry-pick commits on <code>production</code> branch when <code>master</code> branch is not in a release-able state</em></p>
