@@ -60,8 +60,8 @@
                                                         <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="reveal.button"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
-                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tbk-ki-qGK" userLabel="Open Button">
-                                                    <rect key="frame" x="327" y="-3.5" width="43" height="52"/>
+                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tbk-ki-qGK" userLabel="Open Button">
+                                                    <rect key="frame" x="327" y="-4.5" width="43" height="52.5"/>
                                                     <accessibility key="accessibilityConfiguration" label="Reveal password in plaintext"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="open"/>
@@ -71,8 +71,8 @@
                                                         <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="open.button"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
-                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HfY-Wo-gMH" userLabel="Copy Button">
-                                                    <rect key="frame" x="327" y="-4.5" width="43" height="52"/>
+                                                <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HfY-Wo-gMH" userLabel="Copy Button">
+                                                    <rect key="frame" x="327" y="-4.5" width="43" height="52.5"/>
                                                     <accessibility key="accessibilityConfiguration" label="Copy value"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="copy"/>
@@ -85,9 +85,11 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="tuK-Xc-guT" secondAttribute="bottom" constant="9" id="2ma-1F-nb8"/>
+                                                <constraint firstItem="HfY-Wo-gMH" firstAttribute="centerY" secondItem="H0O-36-Vfq" secondAttribute="centerY" id="6fI-th-46b"/>
                                                 <constraint firstItem="t0H-71-xTp" firstAttribute="leading" secondItem="H0O-36-Vfq" secondAttribute="leading" constant="15" id="CgT-og-AF4"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="tuK-Xc-guT" secondAttribute="trailing" constant="15" id="HeH-t9-N2F"/>
                                                 <constraint firstAttribute="trailing" secondItem="HfY-Wo-gMH" secondAttribute="trailing" constant="5" id="M3P-rq-PHQ"/>
+                                                <constraint firstItem="Tbk-ki-qGK" firstAttribute="centerY" secondItem="H0O-36-Vfq" secondAttribute="centerY" id="NXp-wa-p77"/>
                                                 <constraint firstItem="Mhp-Pp-rfw" firstAttribute="centerY" secondItem="H0O-36-Vfq" secondAttribute="centerY" id="WVb-Or-XM2"/>
                                                 <constraint firstItem="tuK-Xc-guT" firstAttribute="top" secondItem="t0H-71-xTp" secondAttribute="bottom" id="aUX-6o-tGa"/>
                                                 <constraint firstItem="tuK-Xc-guT" firstAttribute="leading" secondItem="H0O-36-Vfq" secondAttribute="leading" constant="15" id="npB-KA-kFK"/>
