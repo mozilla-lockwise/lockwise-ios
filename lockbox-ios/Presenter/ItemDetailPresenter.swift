@@ -168,7 +168,7 @@ extension ItemDetailPresenter {
                         password: false,
                         valueFontColor: Constant.color.lockBoxBlue,
                         accessibilityId: "webAddressItemDetail",
-                        openButton: true)
+                        showOpenButton: true)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
@@ -177,7 +177,7 @@ extension ItemDetailPresenter {
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
                         password: false,
                         accessibilityId: "userNameItemDetail",
-                        copyButton: true),
+                        showCopyButton: true),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
@@ -186,7 +186,7 @@ extension ItemDetailPresenter {
                             passwordText),
                         password: true,
                         accessibilityId: "passwordItemDetail",
-                        copyButton: true)
+                        showCopyButton: true)
             ])
         ]
 

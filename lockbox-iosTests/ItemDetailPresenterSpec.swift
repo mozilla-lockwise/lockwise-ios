@@ -384,9 +384,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let usernameSection = viewConfig[1].items[0]
                         let passwordSection = viewConfig[1].items[1]
 
-                        expect(webAddressSection.openButton).to(beTrue())
-                        expect(usernameSection.openButton).to(beFalse())
-                        expect(passwordSection.openButton).to(beFalse())
+                        expect(webAddressSection.showOpenButton).to(beTrue())
+                        expect(usernameSection.showOpenButton).to(beFalse())
+                        expect(passwordSection.showOpenButton).to(beFalse())
                     }
 
                     it("copy button is displayed for username and password") {
@@ -396,9 +396,9 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let usernameSection = viewConfig[1].items[0]
                         let passwordSection = viewConfig[1].items[1]
 
-                        expect(webAddressSection.copyButton).to(beFalse())
-                        expect(usernameSection.copyButton).to(beTrue())
-                        expect(passwordSection.copyButton).to(beTrue())
+                        expect(webAddressSection.showCopyButton).to(beFalse())
+                        expect(usernameSection.showCopyButton).to(beTrue())
+                        expect(passwordSection.showCopyButton).to(beTrue())
                     }
                 }
 
