@@ -376,6 +376,30 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(passwordSection.value).to(equal("•••••••••"))
                         expect(passwordSection.password).to(beTrue())
                     }
+
+                    it("open button is displayed for web address") {
+                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+
+                        let webAddressSection = viewConfig[0].items[0]
+                        let usernameSection = viewConfig[1].items[0]
+                        let passwordSection = viewConfig[1].items[1]
+
+                        expect(webAddressSection.showOpenButton).to(beTrue())
+                        expect(usernameSection.showOpenButton).to(beFalse())
+                        expect(passwordSection.showOpenButton).to(beFalse())
+                    }
+
+                    it("copy button is displayed for username and password") {
+                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+
+                        let webAddressSection = viewConfig[0].items[0]
+                        let usernameSection = viewConfig[1].items[0]
+                        let passwordSection = viewConfig[1].items[1]
+
+                        expect(webAddressSection.showCopyButton).to(beFalse())
+                        expect(usernameSection.showCopyButton).to(beTrue())
+                        expect(passwordSection.showCopyButton).to(beTrue())
+                    }
                 }
 
                 describe("when there is no title, origin, username, or notes") {
