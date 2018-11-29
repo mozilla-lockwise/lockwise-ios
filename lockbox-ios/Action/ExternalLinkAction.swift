@@ -22,3 +22,21 @@ extension ExternalLinkAction: Equatable {
         return lhs.baseURLString == rhs.baseURLString
     }
 }
+
+extension ExternalLinkAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .tap
+    }
+
+    var eventObject: TelemetryEventObject {
+        return .openInBrowser
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
+}
