@@ -95,6 +95,7 @@ class BaseDataStore {
     internal let userDefaults: UserDefaults
     internal var profile: FxAUtils.Profile
     internal let dispatcher: Dispatcher
+    private let application: UIApplication
 
     public var list: Observable<[Login]> {
         return self.listSubject.asObservable()
@@ -116,11 +117,13 @@ class BaseDataStore {
          profileFactory: @escaping ProfileFactory = defaultProfileFactory,
          fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!) {
+         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!,
+         application: UIApplication = UIApplication.shared) {
         self.profileFactory = profileFactory
         self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper
         self.userDefaults = userDefaults
+        self.application = application
 
         self.dispatcher = dispatcher
         self.profile = profileFactory(false)
@@ -157,6 +160,11 @@ class BaseDataStore {
                     switch action {
                     case .background:
                         self.profile.syncManager?.applicationDidEnterBackground()
+                        var taskId = UIBackgroundTaskIdentifier.invalid
+                        taskId = application.beginBackgroundTask (expirationHandler: {
+                            self.profile.shutdown()
+                            application.endBackgroundTask(taskId)
+                        })
                     case .foreground:
                         self.profile.syncManager?.applicationDidBecomeActive()
                         self.handleLock()
