@@ -1,5 +1,35 @@
 # Release Notes
 
+## 1.3.2 (Build 2635)
+
+_Date: 2018-11-03_
+
+We fixed more bugs! You should see some slight improvements but nothing major.
+
+Here's the full list of changes:
+
+- Login list scrolls to top after changing the sort order
+- AutoFill Instructions now looks better on smaller screens
+- AutoFill Instructions video now doesn't stop your audio
+- "Lock Now" button overrides the autolock timer setting
+- Updated Adjust and Telemetry
+
+
+## 1.3.2 (Build 2520)
+
+_Date: 2018-10-30_
+
+We fixed more bugs! You should see some slight improvements but nothing major.
+
+Here's the full list of changes:
+
+- Login list scrolls to top after changing the sort order
+- AutoFill Instructions now looks better on smaller screens
+- AutoFill Instructions video now doesn't stop your audio
+- "Lock Now" button overrides the autolock timer setting
+- Updated Adjust and Telemetry
+
+
 ## 1.3.1 (Build 2517)
 
 _Date: 2018-10-10_

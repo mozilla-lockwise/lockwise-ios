@@ -23,6 +23,7 @@ class Constant {
         static let defaultAutoLock = Setting.AutoLock.FiveMinutes
         static let defaultItemListSort = Setting.ItemListSort.alphabetically
         static let defaultRecordUsageData = true
+        static let defaultForceLock = false
     }
 
     struct color {
@@ -67,9 +68,9 @@ class Constant {
 }
 
 enum UserDefaultKey: String {
-    case autoLockTime, autoLockTimerDate, itemListSort, recordUsageData
+    case autoLockTime, autoLockTimerDate, itemListSort, recordUsageData, forceLock
 
-    static var allValues: [UserDefaultKey] = [.autoLockTime, .autoLockTimerDate, .itemListSort, .recordUsageData]
+    static var allValues: [UserDefaultKey] = [.autoLockTime, .autoLockTimerDate, .itemListSort, .recordUsageData, .forceLock]
 
     var defaultValue: Any? {
         switch self {
@@ -81,6 +82,8 @@ enum UserDefaultKey: String {
             return nil
         case .itemListSort:
             return Constant.setting.defaultItemListSort.rawValue
+        case .forceLock:
+            return Constant.setting.defaultForceLock
         }
     }
 }

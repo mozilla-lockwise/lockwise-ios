@@ -167,21 +167,26 @@ extension ItemDetailPresenter {
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
                         password: false,
                         valueFontColor: Constant.color.lockBoxBlue,
-                        accessibilityId: "webAddressItemDetail")
+                        accessibilityId: "webAddressItemDetail",
+                        showOpenButton: true)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
                         title: Constant.string.username,
                         value: username,
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
-                        password: false, accessibilityId: "userNameItemDetail"),
+                        password: false,
+                        accessibilityId: "userNameItemDetail",
+                        showCopyButton: true),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
                         accessibilityLabel: String(
                             format: Constant.string.passwordCellAccessibilityLabel,
                             passwordText),
-                        password: true, accessibilityId: "passwordItemDetail")
+                        password: true,
+                        accessibilityId: "passwordItemDetail",
+                        showCopyButton: true)
             ])
         ]
 

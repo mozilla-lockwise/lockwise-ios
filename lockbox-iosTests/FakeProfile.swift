@@ -21,12 +21,14 @@ class FakeProfile: FxAUtils.Profile {
 
     var logins: Storage.BrowserLogins & ResettableSyncStorage & SyncableLogins
 
+    var isShudownReturnValue = true
     var isShutdown: Bool {
-        return true
+        return isShudownReturnValue
     }
 
+    var shutdownCalled = false
     func shutdown() {
-
+        self.shutdownCalled = true
     }
 
     func reopen() {
@@ -90,11 +92,11 @@ class FakeBrowserLogins: BrowserLogins & ResettableSyncStorage & SyncableLogins 
         return Deferred<Maybe<[GUID]>>()
     }
 
-    func markAsSynchronized<T>(_: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>> where T : Collection, T.Element == GUID {
+    func markAsSynchronized<T>(_: T, modified: Timestamp) -> Deferred<Maybe<Timestamp>> where T: Collection, T.Element == GUID {
         return Deferred<Maybe<Timestamp>>()
     }
 
-    func markAsDeleted<T>(_ guids: T) -> Success where T : Collection, T.Element == GUID {
+    func markAsDeleted<T>(_ guids: T) -> Success where T: Collection, T.Element == GUID {
         return Success()
     }
 
@@ -228,7 +230,7 @@ class DefaultsPrefs: Prefs {
         return nil
     }
 
-    func dictionaryForKey(_ defaultName: String) -> [String : Any]? {
+    func dictionaryForKey(_ defaultName: String) -> [String: Any]? {
         return nil
     }
 
@@ -239,6 +241,4 @@ class DefaultsPrefs: Prefs {
     func clearAll() {
 
     }
-
-
 }

@@ -42,7 +42,7 @@ class CredentialProviderPresenter {
          telemetryStore: TelemetryStore = .shared,
          userDefaultStore: UserDefaultStore = .shared,
          dataStore: DataStore = .shared,
-         telemetryActionHandler: TelemetryActionHandler = .shared,
+         telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          credentialProviderStore: CredentialProviderStore = .shared,
          autoLockStore: AutoLockStore = .shared) {
         self.view = view
