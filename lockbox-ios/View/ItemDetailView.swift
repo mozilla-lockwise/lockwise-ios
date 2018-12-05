@@ -94,9 +94,9 @@ extension ItemDetailView: ItemDetailViewProtocol {
     }
 
     func bind(titleText: Driver<String>) {
-//        titleText
-//                .drive(self.navigationItem.rx.title)
-//                .disposed(by: self.disposeBag)
+        titleText
+                .drive(self.navigationItem.rx.title)
+                .disposed(by: self.disposeBag)
     }
 }
 
@@ -109,17 +109,17 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .always
-            let searchController = UISearchController()
-            searchController.obscuresBackgroundDuringPresentation = true
-            searchController.searchBar.placeholder = "Search"
-            searchController.searchBar.backgroundColor = UIColor.red
-            searchController.hidesNavigationBarDuringPresentation = true
-//            searchController.searchResultsUpdater = self
-//            searchController.delegate = self
-            self.navigationItem.searchController = searchController
-            self.navigationItem.hidesSearchBarWhenScrolling = false
-            self.definesPresentationContext = true
-            searchController.searchBar.sizeToFit()
+//            let searchController = UISearchController()
+//            searchController.obscuresBackgroundDuringPresentation = true
+//            searchController.searchBar.placeholder = "Search"
+//            searchController.searchBar.backgroundColor = UIColor.red
+//            searchController.hidesNavigationBarDuringPresentation = true
+////            searchController.searchResultsUpdater = self
+////            searchController.delegate = self
+//            self.navigationItem.searchController = searchController
+//            self.navigationItem.hidesSearchBarWhenScrolling = false
+//            self.definesPresentationContext = true
+//            searchController.searchBar.sizeToFit()
         }
 
         self.navigationController?.navigationBar.tintColor = UIColor.white

@@ -108,9 +108,24 @@ class BaseItemListView: UIViewController {
             searchController.searchBar.barTintColor = UIColor.clear
             searchController.searchBar.backgroundColor = UIColor.clear
             searchController.searchBar.backgroundImage = nil
+            searchController.searchBar.tintColor = UIColor.white
+
             self.navigationItem.searchController = searchController
             self.navigationItem.hidesSearchBarWhenScrolling = false
             self.definesPresentationContext = true
+
+            let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField
+            searchField?.textColor = UIColor.white
+            if let searchIconView = searchField?.leftView as? UIImageView {
+                searchIconView.image = searchIconView.image?.withRenderingMode(.alwaysTemplate)
+                searchIconView.tintColor = UIColor.white
+            }
+
+            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+//            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "placeholder", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+
+//            UIBarButtonItem.appearance(whenContainedInInstancesOf:[UISearchBar.self]).tintColor = UIColor.white
+
             searchController.searchBar.sizeToFit()
         } else {
             // Fallback on earlier versions
