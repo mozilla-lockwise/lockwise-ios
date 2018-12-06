@@ -11,6 +11,14 @@ class DataStore: BaseDataStore {
 
     override func unlock() {
         func performUnlock() {
+            do {
+                if let loginsKey = BaseDataStore.loginsKey {
+                    try self.loginStorage?.unlock(withEncryptionKey: loginsKey)
+                }
+            } catch let error {
+                print("Sync15: \(error)")
+            }
+
             self.storageStateSubject.onNext(.Unlocked)
             self.profile.reopen()
             self.profile.syncManager?.beginTimedSyncs()

@@ -16,6 +16,7 @@ class BaseAccountStore {
     internal var fxa: FirefoxAccount?
     internal var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
     internal var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
+    internal var _account = ReplaySubject<FirefoxAccount?>.create(bufferSize: 1)
 
     public var oauthInfo: Observable<OAuthInfo?> {
         return _oauthInfo.asObservable()
@@ -23,6 +24,10 @@ class BaseAccountStore {
 
     public var profile: Observable<Profile?> {
         return _profile.asObservable()
+    }
+
+    public var account: Observable<FirefoxAccount?> {
+        return _account.asObservable()
     }
 
     internal var storedAccountJSON: String? {
@@ -45,6 +50,8 @@ class BaseAccountStore {
         guard let fxa = self.fxa else {
             return
         }
+
+        self._account.onNext(fxa)
 
         fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
             self._oauthInfo.onNext(info)

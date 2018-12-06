@@ -28,6 +28,7 @@ protocol RootViewProtocol: class {
 struct OAuthProfile {
     let oauthInfo: OAuthInfo?
     let profile: Profile?
+    let account: FirefoxAccount?
 }
 
 extension OAuthProfile: Equatable {
@@ -82,13 +83,14 @@ class RootPresenter {
         self.adjustManager = adjustManager
 
         // todo: update tests with populated oauth and profile info
-        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-                .map { OAuthProfile(oauthInfo: $0.0, profile: $0.1) }
+        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile, self.accountStore.account)
+                .map { OAuthProfile(oauthInfo: $0.0, profile: $0.1, account: $0.2) }
                 .distinctUntilChanged()
                 .bind { latest in
                     if let oauthInfo = latest.oauthInfo,
-                        let profile = latest.profile {
-                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
+                        let profile = latest.profile,
+                        let account = latest.account {
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile, account: account))
                     } else if latest.oauthInfo == nil && latest.profile == nil {
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                         self.dispatcher.dispatch(action: DataStoreAction.reset)
