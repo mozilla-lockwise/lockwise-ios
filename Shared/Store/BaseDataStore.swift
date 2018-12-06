@@ -99,7 +99,7 @@ class BaseDataStore {
     private let application: UIApplication
     internal var syncUnlockInfo: SyncUnlockInfo?
 
-    internal var loginStorage: LoginsStorage?
+    internal var loginsStorage: LoginsStorage?
 
     public var list: Observable<[Login]> {
         return self.listSubject.asObservable()
@@ -244,15 +244,12 @@ class BaseDataStore {
 
     public func unlock() {
         func performUnlock() {
-            self.storageStateSubject.onNext(.Unlocked)
-
-            self.profile.reopen()
-
-            self.profile.syncManager.syncEverything(why: .startup)
-
             do {
                 if let loginsKey = BaseDataStore.loginsKey {
-                    try self.loginStorage?.unlock(withEncryptionKey: loginsKey)
+                    try self.loginsStorage?.unlock(withEncryptionKey: loginsKey)
+                    if let syncUnlockInfo = self.syncUnlockInfo {
+                        try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
+                    }
                 }
             } catch let error {
                 print("Sync15: \(error)")
@@ -311,69 +308,30 @@ extension BaseDataStore {
 
 extension BaseDataStore {
     public func touch(id: String) {
-        self.profile.logins.addUseOfLoginByGUID(id)
+        do {
+            try self.loginsStorage?.touch(id: id)
+        } catch let error {
+            print("Sync15: \(error)")
+        }
     }
 }
 
 extension BaseDataStore {
     private func reset() {
-        func stopSyncing() -> Success {
-            guard let syncManager = self.profile.syncManager else {
-                return succeed()
-            }
-            syncManager.endTimedSyncs()
-            if !syncManager.isSyncing {
-                return succeed()
-            }
-
-            return syncManager.syncEverything(why: .backgrounded)
+        do {
+            try self.loginsStorage?.reset()
+        } catch let error {
+            print("Sync15: \(error)")
         }
-
-        func disconnect() -> Success {
-            return self.fxaLoginHelper.applicationDidDisconnect(UIApplication.shared)
-        }
-
-        func deleteAll() -> Success {
-            return self.profile.logins.removeAll()
-        }
-
-        func resetProfile() {
-            self.profile = profileFactory(true)
-            self.initializeProfile()
-            self.syncSubject.onNext(.NotSyncable)
-            self.storageStateSubject.onNext(.Unprepared)
-        }
-
-        stopSyncing() >>== disconnect >>== deleteAll >>== resetProfile
     }
 }
 
 extension BaseDataStore {
     func lock() {
-        guard !self.profile.isShutdown else {
-            return
-        }
-
-        guard self.profile.hasSyncableAccount() else {
-            return
-        }
-
-        self.profile.syncManager?.endTimedSyncs()
-
-        func finalShutdown() {
-            do {
-                try self.loginStorage?.lock()
-            } catch let error {
-                print("Sync15: \(error)")
-            }
-            self.profile.shutdown()
-        }
-        self.storageStateSubject.onNext(.Locked)
-
-        if self.profile.syncManager.isSyncing {
-            self.profile.syncManager.syncEverything(why: .backgrounded) >>== finalShutdown
-        } else {
-            finalShutdown()
+        do {
+            try self.loginsStorage?.lock()
+        } catch let error {
+            print("Sync15: \(error)")
         }
     }
 }
@@ -382,7 +340,7 @@ extension BaseDataStore {
     public func sync() {
         if let syncUnlockInfo = self.syncUnlockInfo {
             do {
-                try self.loginStorage?.sync(unlockInfo: syncUnlockInfo)
+                try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
             } catch let error {
                 print("Sync15: \(error)")
             }
@@ -441,18 +399,13 @@ extension BaseDataStore {
     }
 
     private func updateList() {
-//        let logins = self.profile.logins
-//        logins.getAllLogins() >>== { (cursor: Cursor<Login>) in
-//            self.listSubject.accept(cursor.asArray())
-//        }
-
         do {
-            if let loginStorage = self.loginStorage {
-                if loginStorage.isLocked() {
+            if let loginsStorage = self.loginsStorage {
+                if loginsStorage.isLocked() {
                     return
                 }
 
-                let loginRecords = try loginStorage.list()
+                let loginRecords = try loginsStorage.list()
                 let oldStyleLogins = loginRecords.map { (record: LoginRecord) -> Login in
                     return Login(guid: record.id, hostname: record.hostname, username: record.username ?? "", password: record.password)
                 }
@@ -470,15 +423,15 @@ extension BaseDataStore {
 
 extension BaseDataStore {
     public func remove(id: String) {
-        self.profile.logins.removeLoginByGUID(id) >>== {
-            self.syncSubject.onNext(.ReadyToSync)
-        }
+//        self.profile.logins.removeLoginByGUID(id) >>== {
+//            self.syncSubject.onNext(.ReadyToSync)
+//        }
     }
 
     public func add(item: LoginData) {
-        self.profile.logins.addLogin(item) >>== {
-            self.syncSubject.onNext(.ReadyToSync)
-        }
+//        self.profile.logins.addLogin(item) >>== {
+//            self.syncSubject.onNext(.ReadyToSync)
+//        }
     }
 }
 
@@ -502,7 +455,7 @@ extension BaseDataStore {
         let files = FileAccessor(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
-        self.loginStorage = LoginsStorage(databasePath: file)
+        self.loginsStorage = LoginsStorage(databasePath: file)
     }
 
     private func initializeProfile() {

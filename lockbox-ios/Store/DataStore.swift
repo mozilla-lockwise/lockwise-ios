@@ -13,16 +13,14 @@ class DataStore: BaseDataStore {
         func performUnlock() {
             do {
                 if let loginsKey = BaseDataStore.loginsKey {
-                    try self.loginStorage?.unlock(withEncryptionKey: loginsKey)
+                    try self.loginsStorage?.unlock(withEncryptionKey: loginsKey)
+                    if let syncUnlockInfo = self.syncUnlockInfo {
+                        try loginsStorage?.sync(unlockInfo: syncUnlockInfo)
+                    }
                 }
             } catch let error {
                 print("Sync15: \(error)")
             }
-
-            self.storageStateSubject.onNext(.Unlocked)
-            self.profile.reopen()
-            self.profile.syncManager?.beginTimedSyncs()
-            self.profile.syncManager.syncEverything(why: .startup)
         }
 
         self.storageState
