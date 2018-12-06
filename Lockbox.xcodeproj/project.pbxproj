@@ -247,6 +247,10 @@
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
+		D819A4B121B96F93004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
+		D819A4B221B97000004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
+		D819A4B321B975D2004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
+		D819A4B421B975D2004EE6F3 /* Sync15Logins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D80D41B821F65E91008A7B11 /* SizeClassStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B721F65E91008A7B11 /* SizeClassStore.swift */; };
 		D80D41BA21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
 		D80D41BC21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
@@ -333,6 +337,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				D819A4B421B975D2004EE6F3 /* Sync15Logins.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -572,6 +577,7 @@
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
+		D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sync15Logins.framework; sourceTree = "<group>"; };
 		D80D41B721F65E91008A7B11 /* SizeClassStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStore.swift; sourceTree = "<group>"; };
 		D80D41B921F677A5008A7B11 /* SizeClassAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassAction.swift; sourceTree = "<group>"; };
 		D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStoreSpec.swift; sourceTree = "<group>"; };
@@ -649,9 +655,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D819A4B121B96F93004EE6F3 /* Sync15Logins.framework in Frameworks */,
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */,
 				D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */,
+				D819A4B321B975D2004EE6F3 /* Sync15Logins.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
 				7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */,
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
@@ -679,6 +687,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D819A4B221B97000004EE6F3 /* Sync15Logins.framework in Frameworks */,
+				7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */,
+				7D80F3082118DCC700DA191B /* AuthenticationServices.framework in Frameworks */,
+				7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */,
+				7D078EF72124E52B00D10D1B /* RxOptional.framework in Frameworks */,
+				7DDEAA682124B28500A7D521 /* Shared.framework in Frameworks */,
+				7DDEAA692124B28500A7D521 /* Storage.framework in Frameworks */,
+				7D078EF82124E58000D10D1B /* Differentiator.framework in Frameworks */,
+				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
+				7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */,
+				7DDEAA642124B27200A7D521 /* FxAUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +1003,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */,
 				7D4396562135D79700B96FA9 /* Sentry.framework */,
 				D8551EBD211954E00056B24A /* AdjustSdk.framework */,
 				D8551EBB211950BF0056B24A /* iAd.framework */,
@@ -2156,6 +2176,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
@@ -2194,6 +2215,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
@@ -2226,6 +2248,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -2251,6 +2274,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -2275,6 +2299,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -2368,6 +2393,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";

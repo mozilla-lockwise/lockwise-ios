@@ -13,6 +13,7 @@ import Shared
 import Storage
 import SwiftyJSON
 import SwiftKeychainWrapper
+import Sync15Logins
 
 enum SyncError: Error {
     case CryptoInvalidKey
@@ -96,6 +97,9 @@ class BaseDataStore {
     internal var profile: FxAUtils.Profile
     internal let dispatcher: Dispatcher
     private let application: UIApplication
+    internal var syncUnlockInfo: SyncUnlockInfo?
+
+    internal var loginStorage: LoginsStorage?
 
     public var list: Observable<[Login]> {
         return self.listSubject.asObservable()
@@ -113,6 +117,23 @@ class BaseDataStore {
         return self.storageStateSubject.asObservable()
     }
 
+    // From: https://github.com/mozilla-lockbox/lockbox-ios-fxa-sync/blob/120bcb10967ea0f2015fc47bbf8293db57043568/Providers/Profile.swift#L168
+    internal static var loginsKey: String? {
+        let key = "sqlcipher.key.logins.db"
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
+        if keychain.hasValue(forKey: key) {
+            return keychain.string(forKey: key)
+        }
+
+        let Length: UInt = 256
+        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+        keychain.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
+        return secret
+    }
+
+    var unlockInfo: SyncUnlockInfo?
+
     init(dispatcher: Dispatcher = Dispatcher.shared,
          profileFactory: @escaping ProfileFactory = defaultProfileFactory,
          fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
@@ -127,15 +148,19 @@ class BaseDataStore {
 
         self.dispatcher = dispatcher
         self.profile = profileFactory(false)
+
+        initializeLoginsStorage()
+
         self.initializeProfile()
         self.registerNotificationCenter()
 
         dispatcher.register
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
+                    print("Sync15: \(action)")
                     switch action {
-                    case .updateCredentials(let oauthInfo, let fxaProfile):
-                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile)
+                    case .updateCredentials(let oauthInfo, let fxaProfile, let account):
+                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile, account: account)
                     case .reset:
                         self.reset()
                     case .sync:
@@ -224,6 +249,14 @@ class BaseDataStore {
             self.profile.reopen()
 
             self.profile.syncManager.syncEverything(why: .startup)
+
+            do {
+                if let loginsKey = BaseDataStore.loginsKey {
+                    try self.loginStorage?.unlock(withEncryptionKey: loginsKey)
+                }
+            } catch let error {
+                print("Sync15: \(error)")
+            }
         }
 
         self.storageState
@@ -244,7 +277,7 @@ class BaseDataStore {
 }
 
 extension BaseDataStore {
-    public func updateCredentials(_ oauthInfo: OAuthInfo, fxaProfile: FxAClient.Profile) {
+    public func updateCredentials(_ oauthInfo: OAuthInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount) {
         guard let keysString = oauthInfo.keys else {
             return
         }
@@ -252,7 +285,7 @@ extension BaseDataStore {
         let keys = JSON(parseJSON: keysString)
         let scopedKey = keys[Constant.fxa.oldSyncScope]
 
-        guard let account = profile.getAccount() else {
+        guard let profileAccount = profile.getAccount() else {
             _ = fxaLoginHelper.application(UIApplication.shared,
                                            email: fxaProfile.email,
                                            accessToken: oauthInfo.accessToken,
@@ -261,7 +294,17 @@ extension BaseDataStore {
         }
 
         if let oauthInfoKey = OAuthInfoKey(from: scopedKey) {
-            account.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
+            profileAccount.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
+        }
+
+        let syncKey = scopedKey["k"].stringValue
+        let kid = scopedKey["kid"].stringValue
+
+        do {
+            self.syncUnlockInfo = try SyncUnlockInfo(kid: kid, fxaAccessToken: oauthInfo.accessToken, syncKey: syncKey, tokenserverURL: account.getTokenServerEndpointURL().absoluteString)
+
+        } catch let error {
+            print("Sync15: \(error)")
         }
     }
 }
@@ -318,6 +361,11 @@ extension BaseDataStore {
         self.profile.syncManager?.endTimedSyncs()
 
         func finalShutdown() {
+            do {
+                try self.loginStorage?.lock()
+            } catch let error {
+                print("Sync15: \(error)")
+            }
             self.profile.shutdown()
         }
         self.storageStateSubject.onNext(.Locked)
@@ -332,6 +380,13 @@ extension BaseDataStore {
 
 extension BaseDataStore {
     public func sync() {
+        if let syncUnlockInfo = self.syncUnlockInfo {
+            do {
+                try self.loginStorage?.sync(unlockInfo: syncUnlockInfo)
+            } catch let error {
+                print("Sync15: \(error)")
+            }
+        }
         self.profile.syncManager.syncEverything(why: .syncNow)
     }
 
@@ -386,9 +441,25 @@ extension BaseDataStore {
     }
 
     private func updateList() {
-        let logins = self.profile.logins
-        logins.getAllLogins() >>== { (cursor: Cursor<Login>) in
-            self.listSubject.accept(cursor.asArray())
+//        let logins = self.profile.logins
+//        logins.getAllLogins() >>== { (cursor: Cursor<Login>) in
+//            self.listSubject.accept(cursor.asArray())
+//        }
+
+        do {
+            if let loginStorage = self.loginStorage {
+                if loginStorage.isLocked() {
+                    return
+                }
+
+                let loginRecords = try loginStorage.list()
+                let oldStyleLogins = loginRecords.map { (record: LoginRecord) -> Login in
+                    return Login(guid: record.id, hostname: record.hostname, username: record.username ?? "", password: record.password)
+                }
+                self.listSubject.accept(oldStyleLogins)
+            }
+        } catch let error {
+            print("Sync15: \(error)")
         }
     }
 
@@ -413,6 +484,27 @@ extension BaseDataStore {
 
 // initialization
 extension BaseDataStore {
+    private func initializeLoginsStorage() {
+        let filename = "logins.db"
+
+        let profileDirName = "profile.\(self.profile.localName())" // FIXME
+
+        // Bug 1147262: First option is for device, second is for simulator.
+        var rootPath: String
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
+        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+            rootPath = url.path
+        } else {
+            print("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
+            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+        }
+
+        let files = FileAccessor(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
+        let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
+
+        self.loginStorage = LoginsStorage(databasePath: file)
+    }
+
     private func initializeProfile() {
         self.profile.syncManager?.applicationDidBecomeActive()
 
