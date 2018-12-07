@@ -5,7 +5,7 @@
 import Account
 import Foundation
 import FxAClient
-import FxAUtils
+//import FxAUtils
 import RxSwift
 import RxCocoa
 import RxOptional
@@ -78,11 +78,11 @@ public enum LoginStoreError: Error {
     case Locked
 }
 
-public typealias ProfileFactory = (_ reset: Bool) -> FxAUtils.Profile
-
-private let defaultProfileFactory: ProfileFactory = { reset in
-    BrowserProfile(localName: "lockbox-profile", clear: reset)
-}
+//public typealias ProfileFactory = (_ reset: Bool) -> FxAUtils.Profile
+//
+//private let defaultProfileFactory: ProfileFactory = { reset in
+//    BrowserProfile(localName: "lockbox-profile", clear: reset)
+//}
 
 class BaseDataStore {
     internal var disposeBag = DisposeBag()
@@ -90,14 +90,15 @@ class BaseDataStore {
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
-    private let fxaLoginHelper: FxALoginHelper
-    private let profileFactory: ProfileFactory
+//    private let fxaLoginHelper: FxALoginHelper
+//    private let profileFactory: ProfileFactory
     private let keychainWrapper: KeychainWrapper
     internal let userDefaults: UserDefaults
-    internal var profile: FxAUtils.Profile
+//    internal var profile: FxAUtils.Profile
     internal let dispatcher: Dispatcher
     private let application: UIApplication
     internal var syncUnlockInfo: SyncUnlockInfo?
+    internal let accountStore: BaseAccountStore
 
     internal var loginsStorage: LoginsStorage?
 
@@ -135,24 +136,26 @@ class BaseDataStore {
     var unlockInfo: SyncUnlockInfo?
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         profileFactory: @escaping ProfileFactory = defaultProfileFactory,
-         fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
+//         profileFactory: @escaping ProfileFactory = defaultProfileFactory,
+//         fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
          userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!,
+         accountStore: BaseAccountStore = AccountStore.shared,
          application: UIApplication = UIApplication.shared) {
-        self.profileFactory = profileFactory
-        self.fxaLoginHelper = fxaLoginHelper
+//        self.profileFactory = profileFactory
+//        self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper
         self.userDefaults = userDefaults
         self.application = application
+        self.accountStore = accountStore
 
         self.dispatcher = dispatcher
-        self.profile = profileFactory(false)
+//        self.profile = profileFactory(false)
 
-        initializeLoginsStorage()
+        self.initializeLoginsStorage()
 
-        self.initializeProfile()
-        self.registerNotificationCenter()
+//        self.initializeProfile()
+//        self.registerNotificationCenter()
 
         dispatcher.register
                 .filterByType(class: DataStoreAction.self)
@@ -184,14 +187,17 @@ class BaseDataStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .background:
-                        self.profile.syncManager?.applicationDidEnterBackground()
-                        var taskId = UIBackgroundTaskIdentifier.invalid
-                        taskId = application.beginBackgroundTask (expirationHandler: {
-                            self.profile.shutdown()
-                            application.endBackgroundTask(taskId)
-                        })
+                        self.loginsStorage?.doDestroy()
+//                        self.profile.syncManager?.applicationDidEnterBackground()
+//                        var taskId = UIBackgroundTaskIdentifier.invalid
+//                        taskId = application.beginBackgroundTask (expirationHandler: {
+//                            self.profile.shutdown()
+//                            application.endBackgroundTask(taskId)
+//                        })
                     case .foreground:
-                        self.profile.syncManager?.applicationDidBecomeActive()
+//                        self.profile.syncManager?.applicationDidBecomeActive()
+                        self.initializeLoginsStorage()
+                        self.sync()
                         self.handleLock()
                     case .upgrade(let previous, _):
                         if previous <= 2 {
@@ -246,9 +252,11 @@ class BaseDataStore {
         func performUnlock() {
             do {
                 if let loginsKey = BaseDataStore.loginsKey {
-                    try self.loginsStorage?.unlock(withEncryptionKey: loginsKey)
-                    if let syncUnlockInfo = self.syncUnlockInfo {
-                        try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
+                    guard let loginsStorage = self.loginsStorage else { return }
+                    if loginsStorage.isLocked() {
+                        try loginsStorage.unlock(withEncryptionKey: loginsKey)
+                        self.storageStateSubject.onNext(.Unlocked)
+                        self.doSync()
                     }
                 }
             } catch let error {
@@ -267,8 +275,28 @@ class BaseDataStore {
     }
 
     private func shutdown() {
-        if !self.profile.isShutdown {
-            self.profile.shutdown()
+        do {
+            try self.loginsStorage?.doDestroy()
+        } catch let error {
+            print("Sync15: \(error)")
+        }
+//        if !self.profile.isShutdown {
+//            self.profile.shutdown()
+//        }
+    }
+
+    internal func doSync() {
+        if let syncUnlockInfo = self.syncUnlockInfo {
+            self.syncSubject.onNext(SyncState.Syncing)
+
+            DispatchQueue.global(qos: .background).async {
+                do {
+                    try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
+                    self.syncSubject.onNext(SyncState.Synced)
+                } catch let error {
+                    print("Sync15: \(error)")
+                }
+            }
         }
     }
 }
@@ -282,17 +310,17 @@ extension BaseDataStore {
         let keys = JSON(parseJSON: keysString)
         let scopedKey = keys[Constant.fxa.oldSyncScope]
 
-        guard let profileAccount = profile.getAccount() else {
-            _ = fxaLoginHelper.application(UIApplication.shared,
-                                           email: fxaProfile.email,
-                                           accessToken: oauthInfo.accessToken,
-                                           oauthKeys: scopedKey)
-            return
-        }
-
-        if let oauthInfoKey = OAuthInfoKey(from: scopedKey) {
-            profileAccount.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
-        }
+//        guard let profileAccount = profile.getAccount() else {
+//            _ = fxaLoginHelper.application(UIApplication.shared,
+//                                           email: fxaProfile.email,
+//                                           accessToken: oauthInfo.accessToken,
+//                                           oauthKeys: scopedKey)
+//            return
+//        }
+//
+//        if let oauthInfoKey = OAuthInfoKey(from: scopedKey) {
+//            profileAccount.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
+//        }
 
         let syncKey = scopedKey["k"].stringValue
         let kid = scopedKey["kid"].stringValue
@@ -328,8 +356,15 @@ extension BaseDataStore {
 
 extension BaseDataStore {
     func lock() {
+        guard let loginsStorage = self.loginsStorage else { return }
+
+        if loginsStorage.isLocked() {
+            return
+        }
+
         do {
-            try self.loginsStorage?.lock()
+            try loginsStorage.lock()
+            self.storageStateSubject.onNext(.Locked)
         } catch let error {
             print("Sync15: \(error)")
         }
@@ -338,65 +373,65 @@ extension BaseDataStore {
 
 extension BaseDataStore {
     public func sync() {
-        if let syncUnlockInfo = self.syncUnlockInfo {
-            do {
-                try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
-            } catch let error {
-                print("Sync15: \(error)")
-            }
+        guard let loginsStorage = self.loginsStorage else { return }
+
+        if loginsStorage.isLocked() {
+            return
         }
-        self.profile.syncManager.syncEverything(why: .syncNow)
+
+        self.doSync()
+//        self.profile.syncManager.syncEverything(why: .syncNow)
     }
 
-    private func registerNotificationCenter() {
-        let names = [NotificationNames.FirefoxAccountVerified,
-                     NotificationNames.ProfileDidStartSyncing,
-                     NotificationNames.ProfileDidFinishSyncing
-        ]
-        names.forEach { name in
-            NotificationCenter.default.rx
-                    .notification(name)
-                    .subscribe(onNext: { self.updateSyncState(from: $0) })
-                    .disposed(by: self.disposeBag)
-        }
-    }
+//    private func registerNotificationCenter() {
+//        let names = [NotificationNames.FirefoxAccountVerified,
+//                     NotificationNames.ProfileDidStartSyncing,
+//                     NotificationNames.ProfileDidFinishSyncing
+//        ]
+//        names.forEach { name in
+//            NotificationCenter.default.rx
+//                    .notification(name)
+//                    .subscribe(onNext: { self.updateSyncState(from: $0) })
+//                    .disposed(by: self.disposeBag)
+//        }
+//    }
 
-    private func updateSyncState(from notification: Notification) {
-        Observable.combineLatest(self.storageState, self.syncState)
-            .take(1)
-            .subscribe(onNext: { latest in
-                self.update(storageState: latest.0, syncState: latest.1, from: notification)
-            })
-            .disposed(by: self.disposeBag)
-    }
+//    private func updateSyncState(from notification: Notification) {
+//        Observable.combineLatest(self.storageState, self.syncState)
+//            .take(1)
+//            .subscribe(onNext: { latest in
+//                self.update(storageState: latest.0, syncState: latest.1, from: notification)
+//            })
+//            .disposed(by: self.disposeBag)
+//    }
 
-    private func update(storageState: LoginStoreState, syncState: SyncState, from notification: Notification) {
-        // LoginStoreState: Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
-        //      Store state goes from:
-        //          * Unprepared to Preparing when a valid username and password are detected.
-        //          * Preparing to Unlocked when first sync (including email confirmation) has finished.
-        //          * Unlocked to Locked on locking (not sync related).
-
-        // SyncState: NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
-        //      Sync state goes from:
-        //          * NotSyncable to Syncing after email confirmation.
-        //          * Anything to Syncing at the start of sync after the first syncing starts
-        //          * Syncing to Synced after all syncs.
-        //
-        //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
-        switch (storageState, syncState, notification.name) {
-        case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
-            syncSubject.onNext(.Syncing)
-        case (_, _, NotificationNames.ProfileDidStartSyncing):
-            // fall through for the locked and unlocked states.
-            syncSubject.onNext(.Syncing)
-        case (_, _, NotificationNames.ProfileDidFinishSyncing):
-            // end of all syncs
-            syncSubject.onNext(.Synced)
-        default:
-            print("Unexpected state combination: \(storageState) | \(syncState), \(notification.name)")
-        }
-    }
+//    private func update(storageState: LoginStoreState, syncState: SyncState, from notification: Notification) {
+//        // LoginStoreState: Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
+//        //      Store state goes from:
+//        //          * Unprepared to Preparing when a valid username and password are detected.
+//        //          * Preparing to Unlocked when first sync (including email confirmation) has finished.
+//        //          * Unlocked to Locked on locking (not sync related).
+//
+//        // SyncState: NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
+//        //      Sync state goes from:
+//        //          * NotSyncable to Syncing after email confirmation.
+//        //          * Anything to Syncing at the start of sync after the first syncing starts
+//        //          * Syncing to Synced after all syncs.
+//        //
+//        //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
+//        switch (storageState, syncState, notification.name) {
+//        case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
+//            syncSubject.onNext(.Syncing)
+//        case (_, _, NotificationNames.ProfileDidStartSyncing):
+//            // fall through for the locked and unlocked states.
+//            syncSubject.onNext(.Syncing)
+//        case (_, _, NotificationNames.ProfileDidFinishSyncing):
+//            // end of all syncs
+//            syncSubject.onNext(.Synced)
+//        default:
+//            print("Unexpected state combination: \(storageState) | \(syncState), \(notification.name)")
+//        }
+//    }
 
     private func updateList() {
         do {
@@ -440,7 +475,7 @@ extension BaseDataStore {
     private func initializeLoginsStorage() {
         let filename = "logins.db"
 
-        let profileDirName = "profile.\(self.profile.localName())" // FIXME
+        let profileDirName = "profile.lockbox-profile)"
 
         // Bug 1147262: First option is for device, second is for simulator.
         var rootPath: String
@@ -458,27 +493,41 @@ extension BaseDataStore {
         self.loginsStorage = LoginsStorage(databasePath: file)
     }
 
-    private func initializeProfile() {
-        self.profile.syncManager?.applicationDidBecomeActive()
-
-        self.fxaLoginHelper.application(UIApplication.shared, didLoadProfile: profile)
-    }
+//    private func initializeProfile() {
+//        self.profile.syncManager?.applicationDidBecomeActive()
+//
+//        self.fxaLoginHelper.application(UIApplication.shared, didLoadProfile: profile)
+//    }
 
     private func setInitialState() {
-        guard profile.hasSyncableAccount() else {
-            if !profile.hasAccount() {
-                // first run.
-                self.storageStateSubject.onNext(.Unprepared)
-            }
+        self.accountStore.account
+            .take(1)
+            .subscribe(onNext: { (account) in
+                if account == nil {
+                    self.storageStateSubject.onNext(.Unprepared)
+                    self.syncSubject.onNext(.NotSyncable)
+                } else {
+                    self.syncSubject.onNext(.ReadyToSync)
 
-            self.syncSubject.onNext(.NotSyncable)
-            return
-        }
-        self.syncSubject.onNext(.ReadyToSync)
-
-        // default to locked state on initialized
-        self.storageStateSubject.onNext(.Locked)
-        self.handleLock()
+                    // default to locked state on initialized
+                    self.storageStateSubject.onNext(.Locked)
+                    self.handleLock()
+                }
+            }).disposed(by: self.disposeBag)
+//        guard profile.hasSyncableAccount() else {
+//            if !profile.hasAccount() {
+//                // first run.
+//                self.storageStateSubject.onNext(.Unprepared)
+//            }
+//
+//            self.syncSubject.onNext(.NotSyncable)
+//            return
+//        }
+//        self.syncSubject.onNext(.ReadyToSync)
+//
+//        // default to locked state on initialized
+//        self.storageStateSubject.onNext(.Locked)
+//        self.handleLock()
     }
 
     internal func handleLock() {
