@@ -6,8 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Storage
-import Shared
+import Sync15Logins
 
 protocol BaseItemListViewProtocol: class {
     func bind(items: Driver<[ItemSectionModel]>)
@@ -17,7 +16,7 @@ protocol BaseItemListViewProtocol: class {
 }
 
 struct LoginListTextSort {
-    let logins: [Login]
+    let logins: [LoginRecord]
     let text: String
     let sortingOption: Setting.ItemListSort
     let syncState: SyncState
@@ -135,7 +134,7 @@ class BaseItemListPresenter {
 }
 
 extension BaseItemListPresenter {
-    fileprivate func createItemListDriver(loginListObservable: Observable<[Login]>,
+    fileprivate func createItemListDriver(loginListObservable: Observable<[LoginRecord]>,
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
@@ -161,7 +160,7 @@ extension BaseItemListPresenter {
             itemDetailIdObservable,
             sidebarObservable
             )
-            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, String, Bool)) -> LoginListTextSort in
+            .map { (latest: ([LoginRecord], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, String, Bool)) -> LoginListTextSort in
                 return LoginListTextSort(
                     logins: latest.0,
                     text: latest.1.filteringText,
@@ -200,7 +199,7 @@ extension BaseItemListPresenter {
             .asDriver(onErrorJustReturn: [])
     }
 
-    fileprivate func configurationsFromItems(_ items: [Login], detailItemId: String) -> [LoginListCellConfiguration] {
+    fileprivate func configurationsFromItems(_ items: [LoginRecord], detailItemId: String) -> [LoginListCellConfiguration] {
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname.titleFromHostname()
             let usernameEmpty = login.username == "" || login.username == nil
@@ -216,7 +215,7 @@ extension BaseItemListPresenter {
         return self.helpTextItems + loginCells
     }
 
-    fileprivate func filterItemsForText(_ text: String, items: [Login]) -> [Login] {
+    fileprivate func filterItemsForText(_ text: String, items: [LoginRecord]) -> [LoginRecord] {
         if text.isEmpty {
             return items
         }

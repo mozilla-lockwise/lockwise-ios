@@ -6,7 +6,7 @@ import Foundation
 import AuthenticationServices
 import RxSwift
 import RxCocoa
-import Storage
+import Sync15Logins
 
 enum CredentialProviderStoreState {
     case NotAllowed, Populating, Populated, Allowed
@@ -97,9 +97,8 @@ extension CredentialProviderStore {
 
         let loginObservable = self.dataStore.list.filterEmpty()
 
-        loginObservable.flatMap { logins -> Observable<(Void, [Login])> in
+        loginObservable.flatMap { logins -> Observable<(Void, [LoginRecord])> in
                     self._stateSubject.onNext(.Populating)
-
                     let clearObservable = self.clearCredentialStore()
                         .asObservable()
                     let justLoginObservable = Observable.just(logins)
@@ -149,10 +148,10 @@ extension CredentialProviderStore {
         }
     }
 
-    private func credentialIdentityFromLogin(_ login: Login) -> ASPasswordCredentialIdentity {
+    private func credentialIdentityFromLogin(_ login: LoginRecord) -> ASPasswordCredentialIdentity {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: login.hostname, type: .URL)
         let username = login.username ?? "" // todo: what should the default value be?
 
-        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: username, recordIdentifier: login.guid)
+        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: username, recordIdentifier: login.id)
     }
 }

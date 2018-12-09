@@ -7,8 +7,4 @@ $(SRCROOT)/Carthage/Build/iOS/RxDataSources.framework
 $(SRCROOT)/Carthage/Build/iOS/FxAClient.framework
 $(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework
 $(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework
-$(SRCROOT)/Carthage/Build/iOS/Shared.framework
-$(SRCROOT)/Carthage/Build/iOS/Account.framework
-$(SRCROOT)/Carthage/Build/iOS/FxAUtils.framework
-$(SRCROOT)/Carthage/Build/iOS/Storage.framework
 $(SRCROOT)/Carthage/Build/iOS/RxOptional.framework

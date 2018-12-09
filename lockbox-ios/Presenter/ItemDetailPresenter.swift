@@ -6,7 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Storage
+import Sync15Logins
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
     var learnHowToEditTapped: Observable<Void> { get }
@@ -169,7 +169,7 @@ class ItemDetailPresenter {
 
 // helpers
 extension ItemDetailPresenter {
-    private func configurationForLogin(_ login: Login?, passwordDisplayed: Bool) -> [ItemDetailSectionModel] {
+    private func configurationForLogin(_ login: LoginRecord?, passwordDisplayed: Bool) -> [ItemDetailSectionModel] {
         var passwordText: String
         let itemPassword: String = login?.password ?? ""
 

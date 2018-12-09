@@ -2,18 +2,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Account
 import Foundation
 import FxAClient
-//import FxAUtils
 import RxSwift
 import RxCocoa
 import RxOptional
-import Shared
-import Storage
+import Sync15Logins
 import SwiftyJSON
 import SwiftKeychainWrapper
-import Sync15Logins
 
 enum SyncError: Error {
     case CryptoInvalidKey
@@ -86,7 +82,7 @@ public enum LoginStoreError: Error {
 
 class BaseDataStore {
     internal var disposeBag = DisposeBag()
-    private var listSubject = BehaviorRelay<[Login]>(value: [])
+    private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
@@ -102,7 +98,7 @@ class BaseDataStore {
 
     internal var loginsStorage: LoginsStorage?
 
-    public var list: Observable<[Login]> {
+    public var list: Observable<[LoginRecord]> {
         return self.listSubject.asObservable()
     }
 
@@ -122,13 +118,12 @@ class BaseDataStore {
     internal static var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
         let keychain = KeychainWrapper.sharedAppContainerKeychain
-        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
         if keychain.hasValue(forKey: key) {
             return keychain.string(forKey: key)
         }
 
         let Length: UInt = 256
-        let secret = Bytes.generateRandomBytes(Length).base64EncodedString
+        let secret = Bytes.generateRandomBytes(Length).base64EncodedString(options: [])
         keychain.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
         return secret
     }
@@ -160,7 +155,7 @@ class BaseDataStore {
         dispatcher.register
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
-                    print("Sync15: \(action)")
+                    print("Sync15 Action: \(action)")
                     switch action {
                     case .updateCredentials(let oauthInfo, let fxaProfile, let account):
                         self.updateCredentials(oauthInfo, fxaProfile: fxaProfile, account: account)
@@ -174,10 +169,10 @@ class BaseDataStore {
                         self.lock()
                     case .unlock:
                         self.unlock()
-                    case let .add(item: login):
-                        self.add(item: login)
-                    case let .remove(id:id):
-                        self.remove(id: id)
+//                    case let .add(item: login):
+//                        self.add(item: login)
+//                    case let .remove(id:id):
+//                        self.remove(id: id)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -239,11 +234,11 @@ class BaseDataStore {
         fatalError("not implemented!")
     }
 
-    public func get(_ id: String) -> Observable<Login?> {
+    public func get(_ id: String) -> Observable<LoginRecord?> {
         return self.listSubject
-                .map { items -> Login? in
+                .map { items -> LoginRecord? in
                     return items.filter { item in
-                        return item.guid == id
+                        return item.id == id
                     }.first
                 }.asObservable()
     }
@@ -294,7 +289,7 @@ class BaseDataStore {
                     try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
                     self.syncSubject.onNext(SyncState.Synced)
                 } catch let error {
-                    print("Sync15: \(error)")
+                    print("Sync15 Sync Error: \(error)")
                 }
             }
         }
@@ -441,10 +436,11 @@ extension BaseDataStore {
                 }
 
                 let loginRecords = try loginsStorage.list()
-                let oldStyleLogins = loginRecords.map { (record: LoginRecord) -> Login in
-                    return Login(guid: record.id, hostname: record.hostname, username: record.username ?? "", password: record.password)
-                }
-                self.listSubject.accept(oldStyleLogins)
+                self.listSubject.accept(loginRecords)
+//                let oldStyleLogins = loginRecords.map { (record: LoginRecord) -> Login in
+//                    return Login(guid: record.id, hostname: record.hostname, username: record.username ?? "", password: record.password)
+//                }
+//                self.listSubject.accept(oldStyleLogins)
             }
         } catch let error {
             print("Sync15: \(error)")
@@ -457,17 +453,17 @@ extension BaseDataStore {
 }
 
 extension BaseDataStore {
-    public func remove(id: String) {
+//    public func remove(id: String) {
 //        self.profile.logins.removeLoginByGUID(id) >>== {
 //            self.syncSubject.onNext(.ReadyToSync)
 //        }
-    }
+//    }
 
-    public func add(item: LoginData) {
+//    public func add(item: LoginData) {
 //        self.profile.logins.addLogin(item) >>== {
 //            self.syncSubject.onNext(.ReadyToSync)
 //        }
-    }
+//    }
 }
 
 // initialization

@@ -8,7 +8,6 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
-import Shared
 
 /* These UserDefault keys are maintained separately from the `UserDefaultKey`
  * enum in BaseConstants.swift because, for the time being, they are only

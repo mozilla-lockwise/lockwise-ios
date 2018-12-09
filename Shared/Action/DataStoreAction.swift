@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 import RxSwift
 import RxCocoa
-import Storage
 import SwiftyJSON
 import FxAClient
 
@@ -17,8 +16,8 @@ enum DataStoreAction: Action {
     case reset
     case sync
     case touch(id: String)
-    case add(item: LoginData)
-    case remove(id: String)
+//    case add(item: LoginData)
+//    case remove(id: String)
 }
 
 extension DataStoreAction: Equatable {
@@ -31,10 +30,10 @@ extension DataStoreAction: Equatable {
         case (.sync, .sync): return true
         case (.touch(let lhID), .touch(let rhID)):
             return lhID == rhID
-        case (.add, .add):
-            return true
-        case (.remove(let lhID), .remove(let rhID)):
-            return lhID == rhID
+//        case (.add, .add):
+//            return true
+//        case (.remove(let lhID), .remove(let rhID)):
+//            return lhID == rhID
         default: return false
         }
     }

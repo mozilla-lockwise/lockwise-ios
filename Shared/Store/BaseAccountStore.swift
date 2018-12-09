@@ -8,7 +8,6 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
-import Shared
 
 class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper

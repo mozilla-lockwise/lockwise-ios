@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Storage
+import Sync15Logins
 
 enum CredentialStatusAction: Action {
-    case extensionConfigured, userCanceled, loginSelected(login: Login, relock: Bool)
+    case extensionConfigured, userCanceled, loginSelected(login: LoginRecord, relock: Bool)
 }
 
 extension CredentialStatusAction: Equatable {
