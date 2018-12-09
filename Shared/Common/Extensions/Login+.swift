@@ -3,14 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Storage
+import Sync15Logins
 import AuthenticationServices
 
 @available(iOS 12, *)
-extension Login {
+extension LoginRecord {
     open var passwordCredentialIdentity: ASPasswordCredentialIdentity {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)
-        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: self.username ?? "", recordIdentifier: self.guid)
+        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: self.username ?? "", recordIdentifier: self.id)
     }
 
     open var passwordCredential: ASPasswordCredential {

@@ -16,16 +16,10 @@
 		2C2EC56020ADAA8100AF8C44 /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */; };
 		2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */; };
 		2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */; };
-		391233682090E52800CB0233 /* Account.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB3677208E2A800026DA92 /* Account.framework */; };
-		3912336E2090E52800CB0233 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39DB367D208E2F8F0026DA92 /* FxA.framework */; };
 		391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233712090E56E00CB0233 /* SwiftyJSON.framework */; };
 		391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */; };
-		391233782090E5A300CB0233 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233772090E5A200CB0233 /* Shared.framework */; };
-		3912337C2090E5E200CB0233 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337A2090E5E200CB0233 /* Storage.framework */; };
-		3912337E2090E5E200CB0233 /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337B2090E5E200CB0233 /* Sync.framework */; };
 		391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233802090E60A00CB0233 /* XCGLogger.framework */; };
 		391233842090E63000CB0233 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233832090E63000CB0233 /* Alamofire.framework */; };
-		391233892092155300CB0233 /* FxASignIn.js in Resources */ = {isa = PBXBuildFile; fileRef = 391233882092155300CB0233 /* FxASignIn.js */; };
 		3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
 		3931871F214C12C7003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
 		39318722214C19A8003C9E4A /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39318721214C19A8003C9E4A /* UIButton+.swift */; };
@@ -39,7 +33,6 @@
 		3996418721486C0E000A1984 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996418621486C0E000A1984 /* Data+.swift */; };
 		399641882148714D000A1984 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996418621486C0E000A1984 /* Data+.swift */; };
 		39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
-		39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
 		4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */; };
 		7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */; };
 		7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E126924935F1ADF4E8E /* ItemDetailStore.swift */; };
@@ -237,12 +230,9 @@
 		7DDEAA612124B0B000A7D521 /* Frameworks.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = 7DDEAA602124B0B000A7D521 /* Frameworks.xcfilelist */; };
 		7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CDEA56C47263160AD0E /* Dispatcher.swift */; };
 		7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D73BD6F20D3135E0075D1CE /* FxAClient.framework */; };
-		7DDEAA642124B27200A7D521 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
 		7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
 		7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D320B3420360F9000891F73 /* RxDataSources.framework */; };
 		7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
-		7DDEAA682124B28500A7D521 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233772090E5A200CB0233 /* Shared.framework */; };
-		7DDEAA692124B28500A7D521 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337A2090E5E200CB0233 /* Storage.framework */; };
 		7DDEAA6A2124B60F00A7D521 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5445B47B7A548F0F0E294 /* Action.swift */; };
 		7DDEAA6B2124B61800A7D521 /* ErrorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54D4E439D76B910034E2A /* ErrorAction.swift */; };
 		7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D80F3072118DCC700DA191B /* AuthenticationServices.framework */; };
@@ -261,8 +251,19 @@
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
 		D819A4B121B96F93004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
 		D819A4B221B97000004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
-		D819A4B321B975D2004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
 		D819A4B421B975D2004EE6F3 /* Sync15Logins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D819A4B921BAF988004EE6F3 /* LoginRecord+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */; };
+		D819A4BA21BAF988004EE6F3 /* LoginRecord+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */; };
+		D819A4BC21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */; };
+		D819A4BD21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */; };
+		D819A4BF21BB2622004EE6F3 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BE21BB2622004EE6F3 /* AppInfo.swift */; };
+		D819A4C021BB2622004EE6F3 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BE21BB2622004EE6F3 /* AppInfo.swift */; };
+		D819A4C221BB2686004EE6F3 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C121BB2686004EE6F3 /* Bytes.swift */; };
+		D819A4C321BB2686004EE6F3 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C121BB2686004EE6F3 /* Bytes.swift */; };
+		D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */; };
+		D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */; };
+		D819A4C821BB3351004EE6F3 /* NSData+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C721BB3351004EE6F3 /* NSData+.swift */; };
+		D819A4C921BB3351004EE6F3 /* NSData+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C721BB3351004EE6F3 /* NSData+.swift */; };
 		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
 		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
@@ -381,12 +382,8 @@
 		2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
 		391233712090E56E00CB0233 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
-		391233772090E5A200CB0233 /* Shared.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Shared.framework; path = Carthage/Build/iOS/Shared.framework; sourceTree = "<group>"; };
-		3912337A2090E5E200CB0233 /* Storage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Storage.framework; path = Carthage/Build/iOS/Storage.framework; sourceTree = "<group>"; };
-		3912337B2090E5E200CB0233 /* Sync.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sync.framework; path = Carthage/Build/iOS/Sync.framework; sourceTree = "<group>"; };
 		391233802090E60A00CB0233 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
 		391233832090E63000CB0233 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		391233882092155300CB0233 /* FxASignIn.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = FxASignIn.js; path = "Carthage/Checkouts/lockbox-ios-fxa-sync/Assets/FxASignIn.js"; sourceTree = SOURCE_ROOT; };
 		3931871D214C12C5003C9E4A /* AppearanceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceHelper.swift; sourceTree = "<group>"; };
 		39318721214C19A8003C9E4A /* UIButton+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		3996417D21482068000A1984 /* CredentialItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialItemListView.swift; sourceTree = "<group>"; };
@@ -394,10 +391,7 @@
 		39964181214863D5000A1984 /* CredentialUserDefaultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialUserDefaultStore.swift; sourceTree = "<group>"; };
 		3996418321486BE2000A1984 /* String+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		3996418621486C0E000A1984 /* Data+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+.swift"; sourceTree = "<group>"; };
-		39B1508620878E42007497E5 /* FxAUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxAUtils.framework; path = Carthage/Build/iOS/FxAUtils.framework; sourceTree = "<group>"; };
 		39B1508820878E42007497E5 /* Deferred.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Deferred.framework; path = Carthage/Build/iOS/Deferred.framework; sourceTree = "<group>"; };
-		39DB3677208E2A800026DA92 /* Account.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Account.framework; path = Carthage/Build/iOS/Account.framework; sourceTree = "<group>"; };
-		39DB367D208E2F8F0026DA92 /* FxA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxA.framework; path = Carthage/Build/iOS/FxA.framework; sourceTree = "<group>"; };
 		4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Spec.swift"; sourceTree = "<group>"; };
 		7AA5404248F72FC87CC4978B /* Date+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		7AA5406822AB67B669BAF89B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
@@ -578,6 +572,12 @@
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
 		D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sync15Logins.framework; sourceTree = "<group>"; };
+		D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginRecord+.swift"; sourceTree = "<group>"; };
+		D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccessor.swift; sourceTree = "<group>"; };
+		D819A4BE21BB2622004EE6F3 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		D819A4C121BB2686004EE6F3 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
+		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift .swift"; sourceTree = "<group>"; };
+		D819A4C721BB3351004EE6F3 /* NSData+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+.swift"; sourceTree = "<group>"; };
 		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
 		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
@@ -649,7 +649,6 @@
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */,
 				D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */,
-				D819A4B321B975D2004EE6F3 /* Sync15Logins.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
 				7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */,
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
@@ -658,15 +657,9 @@
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
 				391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */,
-				391233682090E52800CB0233 /* Account.framework in Frameworks */,
-				3912337C2090E5E200CB0233 /* Storage.framework in Frameworks */,
-				3912336E2090E52800CB0233 /* FxA.framework in Frameworks */,
-				3912337E2090E5E200CB0233 /* Sync.framework in Frameworks */,
 				391233842090E63000CB0233 /* Alamofire.framework in Frameworks */,
 				39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */,
 				391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */,
-				39DB366D208E25710026DA92 /* FxAUtils.framework in Frameworks */,
-				391233782090E5A300CB0233 /* Shared.framework in Frameworks */,
 				7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */,
 				7D4396572135D79800B96FA9 /* Sentry.framework in Frameworks */,
 				7D73BD7020D3135E0075D1CE /* FxAClient.framework in Frameworks */,
@@ -682,12 +675,9 @@
 				7D80F3082118DCC700DA191B /* AuthenticationServices.framework in Frameworks */,
 				7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */,
 				7D078EF72124E52B00D10D1B /* RxOptional.framework in Frameworks */,
-				7DDEAA682124B28500A7D521 /* Shared.framework in Frameworks */,
-				7DDEAA692124B28500A7D521 /* Storage.framework in Frameworks */,
 				7D078EF82124E58000D10D1B /* Differentiator.framework in Frameworks */,
 				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
 				7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */,
-				7DDEAA642124B27200A7D521 /* FxAUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -709,10 +699,7 @@
 		391233672090E4FB00CB0233 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				39DB3677208E2A800026DA92 /* Account.framework */,
 				39B1508820878E42007497E5 /* Deferred.framework */,
-				39B1508620878E42007497E5 /* FxAUtils.framework */,
-				39DB367D208E2F8F0026DA92 /* FxA.framework */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -778,6 +765,9 @@
 				3931871D214C12C5003C9E4A /* AppearanceHelper.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
 				D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */,
+				D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */,
+				D819A4BE21BB2622004EE6F3 /* AppInfo.swift */,
+				D819A4C121BB2686004EE6F3 /* Bytes.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -818,7 +808,6 @@
 				7D522E952033473F00295FF8 /* Strings */,
 				7AA5406822AB67B669BAF89B /* Info.plist */,
 				7AA54F13767439D644B91C5E /* lockbox-ios-Bridging-Header.h */,
-				391233882092155300CB0233 /* FxASignIn.js */,
 				7AA547418F6E716AEEE385F6 /* Constants.swift */,
 			);
 			path = Resources;
@@ -951,6 +940,9 @@
 				7AA54D3C8D454F79BD580AAF /* BaseUserDefaults+.swift */,
 				7DFF2EEE21384FB800F001ED /* Login+.swift */,
 				7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */,
+				D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */,
+				D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */,
+				D819A4C721BB3351004EE6F3 /* NSData+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -996,9 +988,6 @@
 				7D73BD6F20D3135E0075D1CE /* FxAClient.framework */,
 				391233832090E63000CB0233 /* Alamofire.framework */,
 				391233802090E60A00CB0233 /* XCGLogger.framework */,
-				3912337A2090E5E200CB0233 /* Storage.framework */,
-				3912337B2090E5E200CB0233 /* Sync.framework */,
-				391233772090E5A200CB0233 /* Shared.framework */,
 				391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */,
 				391233712090E56E00CB0233 /* SwiftyJSON.framework */,
 				7D92DAF220586FBA00195A1B /* RxOptional.framework */,
@@ -1420,7 +1409,6 @@
 				D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
-				391233892092155300CB0233 /* FxASignIn.js in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
 				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
 				7D578D22207573B000DC9C73 /* SettingList.storyboard in Resources */,
@@ -1483,15 +1471,9 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Differentiator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Account.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Storage.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/FxA.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Sync.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/FxAUtils.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Shared.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
@@ -1506,15 +1488,10 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differentiator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftKeychainWrapper.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftyJSON.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Account.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Storage.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxA.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sync.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XCGLogger.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAUtils.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Shared.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAClient.framework",
 			);
@@ -1647,6 +1624,7 @@
 				393F9E7820E6DA4F0004C503 /* OnboardingConfirmationView.swift in Sources */,
 				D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */,
 				7DB9DE962140C5F400239D31 /* BaseItemListPresenter.swift in Sources */,
+				D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift .swift in Sources */,
 				7D078EE72124DC5800D10D1B /* UserDefaults+.swift in Sources */,
 				7DA4C6862028F85A00B61DD8 /* ItemListPresenter.swift in Sources */,
 				7AA54C8928B257655856C516 /* AppDelegate.swift in Sources */,
@@ -1680,6 +1658,7 @@
 				D8DD9302213F840100F8041D /* AutofillOnboardingPresenter.swift in Sources */,
 				7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */,
 				D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */,
+				D819A4C221BB2686004EE6F3 /* Bytes.swift in Sources */,
 				7D07A31F2138863400772283 /* AutoLockStore.swift in Sources */,
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
@@ -1707,6 +1686,7 @@
 				7DB9DEA12140CC0300239D31 /* ItemListView.swift in Sources */,
 				7D4396612135D8BD00B96FA9 /* SentryManager.swift in Sources */,
 				D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */,
+				D819A4BC21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */,
 				08454B9A21486BCF00328040 /* TelemetryStore.swift in Sources */,
 				7DA4B08C2140141E00C9EFEA /* CredentialWelcomePresenter.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* ItemDetailStore.swift in Sources */,
@@ -1716,10 +1696,12 @@
 				7DFF2EEF21384FB800F001ED /* Login+.swift in Sources */,
 				7AA54EC7A9CA9BBD57AFEAF9 /* FilterCell.swift in Sources */,
 				7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */,
+				D819A4C821BB3351004EE6F3 /* NSData+.swift in Sources */,
 				7AA545D6182E36466BC8256A /* CopyDisplayStore.swift in Sources */,
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
 				D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */,
 				7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */,
+				D819A4B921BAF988004EE6F3 /* LoginRecord+.swift in Sources */,
 				3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */,
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
@@ -1734,6 +1716,7 @@
 				7AA54D3D19DB0AC7D0B59812 /* BiometryManager.swift in Sources */,
 				7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */,
 				7AA546B578EBABE3543AB466 /* TelemetryAction.swift in Sources */,
+				D819A4BF21BB2622004EE6F3 /* AppInfo.swift in Sources */,
 				7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */,
 				7AA54E336336462A6DEB79EE /* LifecycleStore.swift in Sources */,
 				7AA5429FC403FDC52F2034F0 /* EmptyPlaceholderCell.swift in Sources */,
@@ -1750,6 +1733,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D819A4BD21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */,
 				7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */,
 				7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */,
 				7DB9DE9B2140CB0300239D31 /* ItemDetailCell.swift in Sources */,
@@ -1770,6 +1754,7 @@
 				7DDEAA6B2124B61800A7D521 /* ErrorAction.swift in Sources */,
 				3996418721486C0E000A1984 /* Data+.swift in Sources */,
 				3996417E21482068000A1984 /* CredentialItemListView.swift in Sources */,
+				D819A4BA21BAF988004EE6F3 /* LoginRecord+.swift in Sources */,
 				7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */,
 				7D07A31B21385C4300772283 /* Login+.swift in Sources */,
 				7D09B24A2125DD8C00794CA2 /* DataStoreAction.swift in Sources */,
@@ -1789,7 +1774,9 @@
 				7D09B24C2125DDC200794CA2 /* ApplicationLifecycleAction.swift in Sources */,
 				7DB9DE972140C5F400239D31 /* BaseItemListPresenter.swift in Sources */,
 				7D078EF62124E48300D10D1B /* Observable+.swift in Sources */,
+				D819A4C021BB2622004EE6F3 /* AppInfo.swift in Sources */,
 				399641802148218D000A1984 /* CredentialItemListPresenter.swift in Sources */,
+				D819A4C321BB2686004EE6F3 /* Bytes.swift in Sources */,
 				7DB9DE9C2140CB0600239D31 /* FilterCell.swift in Sources */,
 				7DB9DEA32140D04700239D31 /* ItemListDisplayAction.swift in Sources */,
 				7DB9DEA42140D41E00239D31 /* UIFont+.swift in Sources */,
@@ -1801,8 +1788,10 @@
 				7D4396542135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7D9722C3213461510071D82B /* UIImage+.swift in Sources */,
 				7D09B24D2125E1E200794CA2 /* BaseUserDefaults+.swift in Sources */,
+				D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift .swift in Sources */,
 				3931871F214C12C7003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D078EED2124DCF500D10D1B /* TelemetryAction.swift in Sources */,
+				D819A4C921BB3351004EE6F3 /* NSData+.swift in Sources */,
 				7AA548349DDB5D1CF52DD82E /* CredentialWelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

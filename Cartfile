@@ -7,6 +7,5 @@ github "mozilla-mobile/telemetry-ios"
 github "jrendel/SwiftKeychainWrapper" ~> 3.0
 github "mozilla-mobile/MappaMundi" "master"
 github "mozilla/application-services" "0.9.0"
-github "mozilla-lockbox/lockbox-ios-fxa-sync" "880f310086bac8ad16c81775b3235550d9ffc7f3"
 github "adjust/ios_sdk" ~> 4.14.1
 github "getsentry/sentry-cocoa" "4.1.0"

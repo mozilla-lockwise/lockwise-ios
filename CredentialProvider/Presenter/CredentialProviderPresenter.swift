@@ -6,7 +6,6 @@ import AuthenticationServices
 import Foundation
 import RxSwift
 import RxCocoa
-import Storage
 
 @available(iOS 12, *)
 protocol CredentialProviderViewProtocol: class, AlertControllerView {
@@ -73,7 +72,7 @@ class CredentialProviderPresenter {
                     self?.view?.extensionContext.completeExtensionConfigurationRequest()
                 case .loginSelected(let login, let relock):
                     self?.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
-                        self?.dispatcher.dispatch(action: DataStoreAction.touch(id: login.guid))
+                        self?.dispatcher.dispatch(action: DataStoreAction.touch(id: login.id))
 
                         if relock {
                             self?.dispatcher.dispatch(action: DataStoreAction.lock)
