@@ -1,5 +1,18 @@
 # Release Notes
 
+## 1.3.3 (Build 2691)
+
+_Date: 2018-12-11_
+
+We fixed more bugs! You should see some slight improvements but nothing major.
+
+Here's the full list of changes:
+
+- Upgrade to RxSwift, application services dependencies
+- Add Copy and Open icons to item detail screen
+- Properly close DB when app is backgrounded
+
+
 ## 1.3.2 (Build 2635)
 
 _Date: 2018-11-03_
