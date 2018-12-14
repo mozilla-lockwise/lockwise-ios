@@ -306,6 +306,7 @@ class LockboxXCUITests: BaseTestCase {
             XCTAssertTrue(safari.buttons.otherElements["iosmztest@gmail.com, for this website — Lockbox"].exists)
         } else if (safari.otherElements["Password Auto-fill"].exists) {
             safari.otherElements["Password Auto-fill"].tap()
+            waitforExistence(safari.buttons["Lockbox…"], timeout: 3)
             XCTAssertTrue(safari.buttons["Lockbox…"].exists)
         } else {
             XCTAssertTrue(safari.buttons["Use “iosmztest@gmail.com”"].exists)
