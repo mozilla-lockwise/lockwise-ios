@@ -58,6 +58,8 @@ class BaseItemListView: UIViewController {
     internal var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
+    private var searchController: UISearchController?
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
@@ -98,28 +100,28 @@ class BaseItemListView: UIViewController {
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .always
 
-            let searchController = UISearchController(searchResultsController: nil)
-            searchController.obscuresBackgroundDuringPresentation = true
+            searchController = UISearchController(searchResultsController: nil)
+            searchController?.obscuresBackgroundDuringPresentation = true
 //            searchController.searchBar.placeholder = Constant.string.searchYourEntries
-            searchController.hidesNavigationBarDuringPresentation = true
-            searchController.searchResultsUpdater = self
-            searchController.delegate = self
-            searchController.isActive = true
+            searchController?.hidesNavigationBarDuringPresentation = true
+            searchController?.searchResultsUpdater = self
+            searchController?.delegate = self
+            searchController?.isActive = true
 //            searchController.searchBar.barTintColor = UIColor.red
-            searchController.searchBar.backgroundColor = Constant.color.navBackgroundColor
-            searchController.searchBar.tintColor = UIColor.white // Cancel button
+            searchController?.searchBar.backgroundColor = Constant.color.navBackgroundColor
+            searchController?.searchBar.tintColor = UIColor.white // Cancel button
 //            searchController.searchBar.barTintColor = Constant.color.navBackgroundColor
-            searchController.searchBar.barStyle = .black
+            searchController?.searchBar.barStyle = .black
 
             self.navigationItem.searchController = searchController
             self.navigationItem.hidesSearchBarWhenScrolling = false
             self.definesPresentationContext = true
 
             let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(Constant.color.navSearchPlaceholderTextColor)
-            searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
-            searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
+            searchController?.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
+            searchController?.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
 
-            let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField
+            let searchField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
             searchField?.textColor = UIColor.white
             searchField?.backgroundColor = Constant.color.navBackgroundColor
 //            searchField?.layer.backgroundColor = Constant.color.navSearchBackgroundColor.cgColor
@@ -131,11 +133,12 @@ class BaseItemListView: UIViewController {
             }
 
 //            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor])
 
-//            UIBarButtonItem.appearance(whenContainedInInstancesOf:[UISearchBar.self]).tintColor = UIColor.white
+            UIBarButtonItem.appearance(whenContainedInInstancesOf:[UISearchBar.self]).tintColor = UIColor.white
 
-            searchController.searchBar.sizeToFit()
+            searchController?.searchBar.sizeToFit()
         } else {
             // Fallback on earlier versions
         }
@@ -270,6 +273,15 @@ extension BaseItemListView {
 
     fileprivate func setupDelegate() {
         if let presenter = self.basePresenter {
+
+            if let searchController = self.searchController {
+                searchController.searchBar.rx.text
+                    .orEmpty
+                    .asObservable()
+                    .bind(to: presenter.filterTextObserver)
+                    .disposed(by: self.disposeBag)
+            }
+
             self.tableView.rx.itemSelected
                     .map { (path: IndexPath) -> String? in
                         guard let config = self.dataSource?[path] else {

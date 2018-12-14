@@ -108,18 +108,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .always
-//            let searchController = UISearchController()
-//            searchController.obscuresBackgroundDuringPresentation = true
-//            searchController.searchBar.placeholder = "Search"
-//            searchController.searchBar.backgroundColor = UIColor.red
-//            searchController.hidesNavigationBarDuringPresentation = true
-////            searchController.searchResultsUpdater = self
-////            searchController.delegate = self
-//            self.navigationItem.searchController = searchController
-//            self.navigationItem.hidesSearchBarWhenScrolling = false
-//            self.definesPresentationContext = true
-//            searchController.searchBar.sizeToFit()
+//            self.navigationItem.largeTitleDisplayMode = .always
         }
 
         self.navigationController?.navigationBar.tintColor = UIColor.white
