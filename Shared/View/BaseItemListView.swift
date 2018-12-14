@@ -115,18 +115,14 @@ class BaseItemListView: UIViewController {
             self.navigationItem.hidesSearchBarWhenScrolling = false
             self.definesPresentationContext = true
 
-            let searchIcon = UIImage(named: "search-icon")?.tinted(UIColor.white)
+            let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(Constant.color.navSearchPlaceholderTextColor)
             searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
             searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
 
             let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField
             searchField?.textColor = UIColor.white
             searchField?.backgroundColor = Constant.color.navBackgroundColor
-            searchField?.layer.backgroundColor = Constant.color.navBackgroundColor.cgColor
-        /*    if let searchIconView = searchField?.leftView as? UIImageView {
-                searchIconView.image = searchIconView.image?.withRenderingMode(.alwaysTemplate)
-                searchIconView.tintColor = UIColor.white
-            }*/
+//            searchField?.layer.backgroundColor = Constant.color.navSearchBackgroundColor.cgColor
 
             if let backgroundview = searchField?.subviews.first {
                 backgroundview.backgroundColor = Constant.color.navBackgroundColor
