@@ -15,12 +15,11 @@ class AppearanceHelper {
             locations: [0.15, 0]
         )
         if #available(iOS 11.0, *) {
-//            UINavigationBar.appearance().barTintColor = UIColor(patternImage: navBarImage!)
-            UINavigationBar.appearance().barTintColor = Constant.color.lockBoxBlue
-            UINavigationBar.appearance().isTranslucent = true
+            UINavigationBar.appearance().barTintColor = Constant.color.navBackgroundColor
+            UINavigationBar.appearance().isTranslucent = false
             UINavigationBar.appearance().prefersLargeTitles = true
             UINavigationBar.appearance().largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.white
+                NSAttributedString.Key.foregroundColor: Constant.color.navTextColor
             ]
         } else {
             UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)

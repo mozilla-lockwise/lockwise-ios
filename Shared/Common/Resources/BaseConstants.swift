@@ -39,6 +39,11 @@ class Constant {
         static let shadowColor = UIColor(red: 12, green: 12, blue: 13)
         static let videoBorderColor = UIColor(hex: 0xD7D7DB)
         static let helpTextBorderColor = UIColor(hex: 0xD8D7DE)
+        static let navBackgroundColor = UIColor(red: 19, green: 125, blue: 181)
+        static let navTextColor = UIColor(red: 237, green: 237, blue: 240)
+        static let navSearchBackgroundColor = UIColor(red: 12, green: 12, blue: 13, alpha: 0.2)
+        static let navSerachTextColor = UIColor.white
+        static let navSearchPlaceholderTextColor = UIColor(white: 1.0, alpha: 0.8)
     }
 
     struct number {
@@ -64,6 +69,7 @@ class Constant {
         static let yourLockbox = NSLocalizedString("your_lockbox", value: "Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
+        static let searchYourEntries = NSLocalizedString("search.placeholder", value: "Search your entries", comment: "Placeholder text for search field")
     }
 }
 
