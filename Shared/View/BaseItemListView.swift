@@ -54,7 +54,7 @@ class BaseItemListView: UIViewController {
     internal var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
-    private var searchController: UISearchController?
+    var searchController: UISearchController?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
