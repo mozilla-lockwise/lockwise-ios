@@ -113,16 +113,13 @@ class BaseItemListView: UIViewController {
 
             let searchField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
             searchField?.textColor = UIColor.white
-            searchField?.backgroundColor = Constant.color.navBackgroundColor
-//            searchField?.layer.backgroundColor = Constant.color.navSearchBackgroundColor.cgColor
 
             if let backgroundview = searchField?.subviews.first {
-                backgroundview.backgroundColor = Constant.color.navBackgroundColor
+                backgroundview.backgroundColor = UIColor(white: 0.7, alpha: 0.7)
                 backgroundview.layer.cornerRadius = 10
                 backgroundview.clipsToBounds = true
             }
 
-//            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor])
 
