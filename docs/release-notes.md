@@ -1,8 +1,8 @@
 # Release Notes
 
-## 1.3.3 (Build 2712)
+## 1.3.3 (Build 2717)
 
-_Date: 2018-12-11_
+_Date: 2018-12-17_
 
 We fixed more bugs! You should see some slight improvements but nothing major.
 
