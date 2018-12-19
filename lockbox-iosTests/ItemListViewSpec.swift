@@ -335,7 +335,7 @@ class ItemListViewSpec: QuickSpec {
             }
 
             it("disables the search bar") {
-                expect(self.subject.searchController?.searchBar.isUserInteractionEnabled).to(beFalse())
+                expect(self.subject.searchController?.searchBar.isUserInteractionEnabled).toEventually(beFalse())
             }
         }
     }
