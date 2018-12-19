@@ -114,6 +114,7 @@ class BaseItemListView: UIViewController {
             let searchField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
             searchField?.textColor = UIColor.white
 
+
             if let backgroundview = searchField?.subviews.first {
                 backgroundview.backgroundColor = UIColor(white: 0.7, alpha: 0.7)
                 backgroundview.layer.cornerRadius = 10
@@ -165,7 +166,9 @@ extension BaseItemListView: BaseItemListViewProtocol {
     }
 
     func setFilterEnabled(enabled: Bool) {
-        self.searchController?.searchBar.isUserInteractionEnabled = enabled
+        DispatchQueue.main.async {
+            self.searchController?.searchBar.isUserInteractionEnabled = enabled
+        }
     }
 }
 
