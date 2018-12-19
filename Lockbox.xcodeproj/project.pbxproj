@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -138,8 +138,6 @@
 		7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EF22124E24100D10D1B /* BaseConstants.swift */; };
 		7D078EF42124E24100D10D1B /* BaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EF22124E24100D10D1B /* BaseConstants.swift */; };
 		7D078EF62124E48300D10D1B /* Observable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */; };
-		7D078EF72124E52B00D10D1B /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D92DAF220586FBA00195A1B /* RxOptional.framework */; };
-		7D078EF82124E58000D10D1B /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
 		7D07A31B21385C4300772283 /* Login+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEE21384FB800F001ED /* Login+.swift */; };
 		7D07A31C21385C6F00772283 /* CredentialStatusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722DF21349B9F0071D82B /* CredentialStatusAction.swift */; };
 		7D07A31D213885C900772283 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
@@ -192,7 +190,6 @@
 		7D8057EC2135E51300D41BDD /* CredentialProviderStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */; };
 		7D8057EE2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */; };
 		7D8057EF2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */; };
-		7D80F3082118DCC700DA191B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D80F3072118DCC700DA191B /* AuthenticationServices.framework */; };
 		7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D80F30A2118DCC700DA191B /* CredentialProviderView.swift */; };
 		7D80F30E2118DCC700DA191B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D80F30C2118DCC700DA191B /* MainInterface.storyboard */; };
 		7D80F3132118DCC700DA191B /* CredentialProvider.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D80F3062118DCC700DA191B /* CredentialProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -236,13 +233,6 @@
 		7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC75D7B206AD01C007CDDBB /* AccountSetting.storyboard */; };
 		7DDEAA612124B0B000A7D521 /* Frameworks.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = 7DDEAA602124B0B000A7D521 /* Frameworks.xcfilelist */; };
 		7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CDEA56C47263160AD0E /* Dispatcher.swift */; };
-		7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D73BD6F20D3135E0075D1CE /* FxAClient.framework */; };
-		7DDEAA642124B27200A7D521 /* FxAUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508620878E42007497E5 /* FxAUtils.framework */; };
-		7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
-		7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D320B3420360F9000891F73 /* RxDataSources.framework */; };
-		7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
-		7DDEAA682124B28500A7D521 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233772090E5A200CB0233 /* Shared.framework */; };
-		7DDEAA692124B28500A7D521 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3912337A2090E5E200CB0233 /* Storage.framework */; };
 		7DDEAA6A2124B60F00A7D521 /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5445B47B7A548F0F0E294 /* Action.swift */; };
 		7DDEAA6B2124B61800A7D521 /* ErrorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54D4E439D76B910034E2A /* ErrorAction.swift */; };
 		7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D80F3072118DCC700DA191B /* AuthenticationServices.framework */; };
@@ -669,16 +659,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */,
-				7D80F3082118DCC700DA191B /* AuthenticationServices.framework in Frameworks */,
-				7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */,
-				7D078EF72124E52B00D10D1B /* RxOptional.framework in Frameworks */,
-				7DDEAA682124B28500A7D521 /* Shared.framework in Frameworks */,
-				7DDEAA692124B28500A7D521 /* Storage.framework in Frameworks */,
-				7D078EF82124E58000D10D1B /* Differentiator.framework in Frameworks */,
-				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
-				7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */,
-				7DDEAA642124B27200A7D521 /* FxAUtils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1305,7 +1285,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D80F3172118DCC700DA191B /* Build configuration list for PBXNativeTarget "CredentialProvider" */;
 			buildPhases = (
-				7DDEAA5F2124A61900A7D521 /* ShellScript */,
 				7D80F3022118DCC700DA191B /* Sources */,
 				7D80F3032118DCC700DA191B /* Frameworks */,
 				7D80F3042118DCC700DA191B /* Resources */,
@@ -1524,24 +1503,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		7DDEAA5F2124A61900A7D521 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"$(SRCROOT)/CredentialProvider/Resources/FileLists/Frameworks.xcfilelist",
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1912,11 +1873,7 @@
 				);
 				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1938,11 +1895,7 @@
 				);
 				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1964,11 +1917,7 @@
 				);
 				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1992,11 +1941,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2022,11 +1967,7 @@
 				);
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2151,9 +2092,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				SWIFT_VERSION = 4.2;
 				VALIDATE_PRODUCT = YES;
@@ -2225,190 +2165,178 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
-				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
-				PRODUCT_NAME = "Firefox Lockbox";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
-				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
-				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
+			LIBRARY_SEARCH_PATHS = (
+				"$(inherited)",
+				"$(PROJECT_DIR)",
+			);
+			PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
+			PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
+			PRODUCT_NAME = "Firefox Lockbox";
+			PROVISIONING_PROFILE_SPECIFIER = "";
+			SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
+			SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
+			SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
+			SWIFT_VERSION = 4.2;
+			TARGETED_DEVICE_FAMILY = 1;
 		};
-		7D80F3142118DCC700DA191B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = CredentialProvider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
+		name = Release;
+	};
+	7D80F3142118DCC700DA191B /* Debug */ = {
+		isa = XCBuildConfiguration;
+		buildSettings = {
+			APPLICATION_EXTENSION_API_ONLY = NO;
+			CLANG_ENABLE_OBJC_WEAK = YES;
+			CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
+			CODE_SIGN_STYLE = Automatic;
+			DEVELOPMENT_TEAM = 43AQ936H96;
+			FRAMEWORK_SEARCH_PATHS = (
+				"$(inherited)",
+				"$(PROJECT_DIR)/Carthage/Build/iOS",
+			);
+			INFOPLIST_FILE = CredentialProvider/Info.plist;
+			IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+			MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+			MTL_FAST_MATH = YES;
+			PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SKIP_INSTALL = YES;
+			SWIFT_VERSION = 4.2;
+			TARGETED_DEVICE_FAMILY = "1,2";
 		};
-		7D80F3152118DCC700DA191B /* Branch */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = CredentialProvider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.adhoc.CredentialProvider;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Branch;
+		name = Debug;
+	};
+	7D80F3152118DCC700DA191B /* Branch */ = {
+		isa = XCBuildConfiguration;
+		buildSettings = {
+			APPLICATION_EXTENSION_API_ONLY = NO;
+			CLANG_ENABLE_OBJC_WEAK = YES;
+			CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
+			CODE_SIGN_STYLE = Automatic;
+			DEVELOPMENT_TEAM = 43AQ936H96;
+			FRAMEWORK_SEARCH_PATHS = (
+				"$(inherited)",
+				"$(PROJECT_DIR)/Carthage/Build/iOS",
+			);
+			INFOPLIST_FILE = CredentialProvider/Info.plist;
+			IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+			MTL_FAST_MATH = YES;
+			PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.adhoc.CredentialProvider;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SKIP_INSTALL = YES;
+			SWIFT_VERSION = 4.2;
+			TARGETED_DEVICE_FAMILY = "1,2";
 		};
-		7D80F3162118DCC700DA191B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = NO;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				INFOPLIST_FILE = CredentialProvider/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
+		name = Branch;
+	};
+	7D80F3162118DCC700DA191B /* Release */ = {
+		isa = XCBuildConfiguration;
+		buildSettings = {
+			APPLICATION_EXTENSION_API_ONLY = NO;
+			CLANG_ENABLE_OBJC_WEAK = YES;
+			CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
+			CODE_SIGN_STYLE = Automatic;
+			DEVELOPMENT_TEAM = 43AQ936H96;
+			FRAMEWORK_SEARCH_PATHS = (
+				"$(inherited)",
+				"$(PROJECT_DIR)/Carthage/Build/iOS",
+			);
+			INFOPLIST_FILE = CredentialProvider/Info.plist;
+			IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+			LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+			MTL_FAST_MATH = YES;
+			PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
+			PRODUCT_NAME = "$(TARGET_NAME)";
+			SKIP_INSTALL = YES;
+			SWIFT_VERSION = 4.2;
+			TARGETED_DEVICE_FAMILY = "1,2";
 		};
-		7DD276FE2051988000962DEB /* Branch */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
-			};
-			name = Branch;
+		name = Release;
+	};
+	7DD276FE2051988000962DEB /* Branch */ = {
+		isa = XCBuildConfiguration;
+		buildSettings = {
+			ALWAYS_SEARCH_USER_PATHS = NO;
+			CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+			CLANG_ANALYZER_NONNULL = YES;
+			CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+			CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+			CLANG_CXX_LIBRARY = "libc++";
+			CLANG_ENABLE_MODULES = YES;
+			CLANG_ENABLE_OBJC_ARC = YES;
+			CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+			CLANG_WARN_BOOL_CONVERSION = YES;
+			CLANG_WARN_COMMA = YES;
+			CLANG_WARN_CONSTANT_CONVERSION = YES;
+			CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+			CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+			CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+			CLANG_WARN_EMPTY_BODY = YES;
+			CLANG_WARN_ENUM_CONVERSION = YES;
+			CLANG_WARN_INFINITE_RECURSION = YES;
+			CLANG_WARN_INT_CONVERSION = YES;
+			CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+			CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+			CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+			CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+			CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+			CLANG_WARN_STRICT_PROTOTYPES = YES;
+			CLANG_WARN_SUSPICIOUS_MOVE = YES;
+			CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+			CLANG_WARN_UNREACHABLE_CODE = YES;
+			CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+			CODE_SIGN_IDENTITY = "iPhone Developer";
+			COPY_PHASE_STRIP = NO;
+			DEBUG_INFORMATION_FORMAT = dwarf;
+			DEVELOPMENT_TEAM = 43AQ936H96;
+			ENABLE_STRICT_OBJC_MSGSEND = YES;
+			ENABLE_TESTABILITY = YES;
+			GCC_C_LANGUAGE_STANDARD = gnu11;
+			GCC_DYNAMIC_NO_PIC = NO;
+			GCC_NO_COMMON_BLOCKS = YES;
+			GCC_OPTIMIZATION_LEVEL = 0;
+			GCC_PREPROCESSOR_DEFINITIONS = (
+				"DEBUG=1",
+				"$(inherited)",
+			);
+			GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+			GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+			GCC_WARN_UNDECLARED_SELECTOR = YES;
+			GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+			GCC_WARN_UNUSED_FUNCTION = YES;
+			GCC_WARN_UNUSED_VARIABLE = YES;
+			IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+			MTL_ENABLE_DEBUG_INFO = YES;
+			ONLY_ACTIVE_ARCH = YES;
+			SDKROOT = iphoneos;
+			SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
+			SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
+			SWIFT_VERSION = 4.2;
 		};
-		7DD276FF2051988000962DEB /* Branch */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				BUNDLE_ID_SUFFIX = .adhoc;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "Firefox Lockbox.entitlements";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_BITCODE = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
-				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
+		name = Branch;
+	};
+	7DD276FF2051988000962DEB /* Branch */ = {
+		isa = XCBuildConfiguration;
+		buildSettings = {
+			ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+			ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+			BUNDLE_ID_SUFFIX = .adhoc;
+			CLANG_ENABLE_MODULES = YES;
+			CODE_SIGN_ENTITLEMENTS = "Firefox Lockbox.entitlements";
+			"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+			CODE_SIGN_STYLE = Automatic;
+			DEFINES_MODULE = YES;
+			DEVELOPMENT_TEAM = 43AQ936H96;
+			ENABLE_BITCODE = NO;
+			FRAMEWORK_SEARCH_PATHS = (
+				"$(inherited)",
+				"$(PROJECT_DIR)/Carthage/Build/iOS",
+			);
+			HEADER_SEARCH_PATHS = "";
+			INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2448,11 +2376,7 @@
 				);
 				INFOPLIST_FILE = "lockbox-iosTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "mozilla.lockbox-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
