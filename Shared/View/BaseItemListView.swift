@@ -149,15 +149,10 @@ extension BaseItemListView: BaseItemListViewProtocol {
     }
 
     func dismissKeyboard() {
-        if let cell = self.getFilterCell() {
-            cell.filterTextField.resignFirstResponder()
+        if let searchBar = self.searchController?.searchBar {
+            searchBar.resignFirstResponder()
         }
     }
-
-    private func getFilterCell() -> FilterCell? {
-        return self.tableView.cellForRow(at: [0, 0]) as? FilterCell
-    }
-
 
     func bind(titleText: Driver<String>) {
         titleText
@@ -295,6 +290,4 @@ extension BaseItemListView: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
 
     }
-
-
 }
