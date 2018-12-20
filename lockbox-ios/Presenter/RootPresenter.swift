@@ -11,18 +11,24 @@ import FxAClient
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+    func sidebarStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
 
     var modalStackPresented: Bool { get }
 
-    func startMainStack<T: UINavigationController>(_ type: T.Type)
+    func startMainStack<T: UINavigationController>(_ navigationController: T)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
+    func startSidebarStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
 
     func pushLoginView(view: LoginRouteAction)
     func pushMainView(view: MainRouteAction)
     func pushSettingView(view: SettingRouteAction)
+    func pushSidebarView(view: MainRouteAction)
+
+    func setSidebarEnabled(enabled: Bool)
 }
 
 struct OAuthProfile {
@@ -173,7 +179,7 @@ class RootPresenter {
             }
 
             if !view.mainStackIs(LoginNavigationController.self) {
-                view.startMainStack(LoginNavigationController.self)
+                view.startMainStack(LoginNavigationController())
             }
 
             switch loginAction {
@@ -211,14 +217,28 @@ class RootPresenter {
                 view.dismissModals()
             }
 
+            if self.shouldDisplaySidebar {
+                view.setSidebarEnabled(enabled: true)
+
+                if !view.sidebarStackIs(MainNavigationController.self) {
+                    view.startSidebarStack(MainNavigationController())
+                }
+            }
+
             if !view.mainStackIs(MainNavigationController.self) {
-                view.startMainStack(MainNavigationController.self)
+                view.startMainStack(MainNavigationController(storyboardName: "ItemDetail", identifier: ""))
             }
 
             switch mainAction {
             case .list:
-                if !view.topViewIs(ItemListView.self) {
-                    view.pushMainView(view: .list)
+                if self.shouldDisplaySidebar {
+                    if !view.sidebarViewIs(ItemListView.self) {
+                        view.pushSidebarView(view: .list)
+                    }
+                } else {
+                    if !view.topViewIs(ItemListView.self) {
+                        view.pushMainView(view: .list)
+                    }
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
@@ -239,7 +259,7 @@ class RootPresenter {
             }
 
             if !view.mainStackIs(SettingNavigationController.self) {
-                view.startMainStack(SettingNavigationController.self)
+                view.startMainStack(SettingNavigationController())
             }
 
             switch settingAction {
@@ -284,6 +304,10 @@ class RootPresenter {
             }
         }.asObserver()
     }()
+
+    private var shouldDisplaySidebar: Bool {
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
+    }
 }
 
 extension RootPresenter {

@@ -5,33 +5,75 @@
 
 import UIKit
 
-class RootView: UIViewController, RootViewProtocol {
-    internal var presenter: RootPresenter?
-
-    private var currentViewController: UINavigationController? {
-        didSet {
-            if let currentViewController = self.currentViewController {
-                self.addChild(currentViewController)
-                currentViewController.view.frame = self.view.bounds
-                self.view.addSubview(currentViewController.view)
-                currentViewController.didMove(toParent: self)
-
-                if oldValue != nil {
-                    self.view.sendSubviewToBack(currentViewController.view)
-                }
-            }
-
-            guard let oldViewController = oldValue else {
-                return
-            }
-            oldViewController.willMove(toParent: nil)
-            oldViewController.view.removeFromSuperview()
-            oldViewController.removeFromParent()
+class RootView: UISplitViewController, RootViewProtocol {
+    func sidebarViewIs<T>(_ type: T.Type) -> Bool where T: UIViewController {
+        if self.viewControllers.count != 2 {
+            return false
         }
+
+        if let navController = self.viewControllers.first as? UINavigationController {
+            return navController.topViewController is T
+        }
+
+        return false
     }
 
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+    func sidebarStackIs<T>(_ type: T.Type) -> Bool where T: UINavigationController {
+        if self.viewControllers.count != 2 {
+            return false
+        }
+
+        if let navController = self.viewControllers.first as? UINavigationController {
+            return navController is T
+        }
+
+        return false
+    }
+
+    func startSidebarStack<T>(_ navigationController: T) where T: UINavigationController {
+        self.show(navigationController, sender: self)
+    }
+
+    internal var presenter: RootPresenter?
+
+//    private var currentViewController: UIViewController? {
+//        didSet {
+//            if let currentViewController = self.currentViewController {
+//                self.addChild(currentViewController)
+//                currentViewController.view.frame = self.view.bounds
+//                self.view.addSubview(currentViewController.view)
+//                currentViewController.didMove(toParent: self)
+//
+//                if oldValue != nil {
+//                    self.view.sendSubviewToBack(currentViewController.view)
+//                }
+//            }
+//
+//            guard let oldViewController = oldValue else {
+//                return
+//            }
+//            oldViewController.willMove(toParent: nil)
+//            oldViewController.view.removeFromSuperview()
+//            oldViewController.removeFromParent()
+//        }
+//    }
+//
+//    private var mainNavigationController: UINavigationController? {
+//        if let currentViewController = self.currentViewController as? UINavigationController {
+//            return currentViewController
+//        }
+//
+//        if let currentViewController = self.currentViewController as? UISplit
+//    }
+
+
+//
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+//    }
+
+    private var currentNaivgationController: UINavigationController? {
+        return self.viewControllers.last as? UINavigationController
     }
 
     init() {
@@ -46,67 +88,107 @@ class RootView: UIViewController, RootViewProtocol {
         self.presenter?.onViewReady()
     }
 
+    func setSidebarEnabled(enabled: Bool) {
+        self.preferredDisplayMode = enabled ? UISplitViewController.DisplayMode.allVisible : UISplitViewController.DisplayMode.primaryOverlay
+    }
+
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        return self.currentViewController?.topViewController is T
+        if let navController = self.viewControllers.last as? UINavigationController {
+            return navController.topViewController is T
+        }
+
+        return self.viewControllers.last.self is T
     }
 
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        return (self.currentViewController?.presentedViewController as? UINavigationController)?.topViewController is T
+        if let presentedViewController = self.presentedViewController {
+            if let navController = presentedViewController as? UINavigationController {
+                return navController.topViewController is T
+            }
+
+            return presentedViewController is T
+        }
+
+        return false
     }
 
     func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
-        return self.currentViewController is T
+        if let navController = currentNaivgationController {
+            return navController is T
+        }
+
+        return false
     }
 
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
-        return self.currentViewController?.presentedViewController is T
+        if let presentedViewController = self.presentedViewController as? UINavigationController {
+            return presentedViewController is T
+        }
+
+        return false
     }
 
     var modalStackPresented: Bool {
-        return self.currentViewController?.presentedViewController is UINavigationController
+        // FIXME
+        return false
+//        return self.presentedViewController != nil
     }
 
-    func startMainStack<T: UINavigationController>(_ type: T.Type) {
-        self.currentViewController = type.init()
+    func startSidebarStack<T: UINavigationController>(_ type: T.Type) {
+        let vc = type.init()
+        self.show(vc, sender: self)
+    }
+
+    func startMainStack<T: UINavigationController>(_ navigationController: T) {
+        self.showDetailViewController(navigationController, sender: self)
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
-        self.currentViewController?.present(navigationController, animated: true)
+        self.present(navigationController, animated: !isRunningTest, completion: nil)
     }
 
     func dismissModals() {
-        self.currentViewController?.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
+        self.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
     }
 
     func pushLoginView(view: LoginRouteAction) {
         switch view {
         case .welcome:
-            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
+            self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
         case .fxa:
-            self.currentViewController?.pushViewController(FxAView(), animated: !isRunningTest)
+            self.currentNaivgationController?.pushViewController(FxAView(), animated: !isRunningTest)
         case .onboardingConfirmation:
             if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
-                self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
+                self.currentNaivgationController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
             }
         case .autofillOnboarding:
             if let autofillOnboardingView = UIStoryboard(name: "AutofillOnboarding", bundle: nil).instantiateViewController(withIdentifier: "autofillonboarding") as? AutofillOnboardingView {
-                self.currentViewController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
+                self.currentNaivgationController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
             }
         case .autofillInstructions:
             if let autofillInstructionsView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentViewController?.pushViewController(autofillInstructionsView, animated: !isRunningTest)
+                self.currentNaivgationController?.pushViewController(autofillInstructionsView, animated: !isRunningTest)
             }
+        }
+    }
+
+    func pushSidebarView(view: MainRouteAction) {
+        switch view {
+        case .list:
+            (self.viewControllers.first as? UINavigationController)?.popToRootViewController(animated: !isRunningTest)
+        case .detail(let itemId):
+            break
         }
     }
 
     func pushMainView(view: MainRouteAction) {
         switch view {
         case .list:
-            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
+            self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
         case .detail(let id):
             if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
                 itemDetailView.itemId = id
-                self.currentViewController?.pushViewController(itemDetailView, animated: !isRunningTest)
+                self.currentNaivgationController?.pushViewController(itemDetailView, animated: !isRunningTest)
             }
         }
     }
@@ -114,18 +196,18 @@ class RootView: UIViewController, RootViewProtocol {
     func pushSettingView(view: SettingRouteAction) {
         switch view {
         case .list:
-            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
+            self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
         case .account:
             if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView {
-                self.currentViewController?.pushViewController(accountSettingView, animated: !isRunningTest)
+                self.currentNaivgationController?.pushViewController(accountSettingView, animated: !isRunningTest)
             }
         case .autoLock:
-            self.currentViewController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
+            self.currentNaivgationController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
         case .preferredBrowser:
-            self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
+            self.currentNaivgationController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
         case .autofillInstructions:
             if let autofillSettingView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentViewController?.pushViewController(autofillSettingView, animated: !isRunningTest)
+                self.currentNaivgationController?.pushViewController(autofillSettingView, animated: !isRunningTest)
             }
         }
     }
