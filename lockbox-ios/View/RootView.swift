@@ -5,59 +5,51 @@
 
 import UIKit
 
-class RootView: UISplitViewController, RootViewProtocol {
-    func sidebarViewIs<T>(_ type: T.Type) -> Bool where T: UIViewController {
-        if self.viewControllers.count != 2 {
-            return false
-        }
-
-        if let navController = self.viewControllers.first as? UINavigationController {
-            return navController.topViewController is T
-        }
-
-        return false
-    }
-
-    func sidebarStackIs<T>(_ type: T.Type) -> Bool where T: UINavigationController {
-        if self.viewControllers.count != 2 {
-            return false
-        }
-
-        if let navController = self.viewControllers.first as? UINavigationController {
-            return navController is T
+class RootView: UIViewController, RootViewProtocol {
+    func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            if let navController = splitViewController.viewControllers.first as? UINavigationController {
+                return navController.topViewController is T
+            }
         }
 
         return false
     }
 
-    func startSidebarStack<T>(_ navigationController: T) where T: UINavigationController {
-        self.show(navigationController, sender: self)
+    func sidebarStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            if let navController = splitViewController.viewControllers.first as? UINavigationController {
+                return navController is T
+            }
+        }
+
+        return false
     }
 
     internal var presenter: RootPresenter?
 
-//    private var currentViewController: UIViewController? {
-//        didSet {
-//            if let currentViewController = self.currentViewController {
-//                self.addChild(currentViewController)
-//                currentViewController.view.frame = self.view.bounds
-//                self.view.addSubview(currentViewController.view)
-//                currentViewController.didMove(toParent: self)
-//
-//                if oldValue != nil {
-//                    self.view.sendSubviewToBack(currentViewController.view)
-//                }
-//            }
-//
-//            guard let oldViewController = oldValue else {
-//                return
-//            }
-//            oldViewController.willMove(toParent: nil)
-//            oldViewController.view.removeFromSuperview()
-//            oldViewController.removeFromParent()
-//        }
-//    }
-//
+    private var currentViewController: UIViewController? {
+        didSet {
+            if let currentViewController = self.currentViewController {
+                self.addChild(currentViewController)
+                currentViewController.view.frame = self.view.bounds
+                self.view.addSubview(currentViewController.view)
+                currentViewController.didMove(toParent: self)
+
+                if oldValue != nil {
+                    self.view.sendSubviewToBack(currentViewController.view)
+                }
+            }
+
+            guard let oldViewController = oldValue else {
+                return
+            }
+            oldViewController.willMove(toParent: nil)
+            oldViewController.view.removeFromSuperview()
+            oldViewController.removeFromParent()
+        }
+    }
+
 //    private var mainNavigationController: UINavigationController? {
 //        if let currentViewController = self.currentViewController as? UINavigationController {
 //            return currentViewController
@@ -67,13 +59,21 @@ class RootView: UISplitViewController, RootViewProtocol {
 //    }
 
 
-//
+
 //    override var preferredStatusBarStyle: UIStatusBarStyle {
 //        return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
 //    }
 
     private var currentNaivgationController: UINavigationController? {
-        return self.viewControllers.last as? UINavigationController
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            if splitViewController.viewControllers.count != 2 {
+                return nil
+            }
+
+            return splitViewController.viewControllers.last as? UINavigationController
+        }
+
+        return self.currentViewController as? UINavigationController
     }
 
     init() {
@@ -88,16 +88,22 @@ class RootView: UISplitViewController, RootViewProtocol {
         self.presenter?.onViewReady()
     }
 
-    func setSidebarEnabled(enabled: Bool) {
-        self.preferredDisplayMode = enabled ? UISplitViewController.DisplayMode.allVisible : UISplitViewController.DisplayMode.primaryOverlay
+    func showSidebar() {
+        if self.currentViewController is UISplitViewController {
+            return
+        }
+        
+        let splitViewController = UISplitViewController()
+        splitViewController.preferredDisplayMode = .allVisible
+        self.currentViewController = splitViewController
     }
 
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        if let navController = self.viewControllers.last as? UINavigationController {
+        if let navController = self.currentViewController as? UINavigationController {
             return navController.topViewController is T
         }
 
-        return self.viewControllers.last.self is T
+        return self.currentViewController is T
     }
 
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
@@ -112,35 +118,36 @@ class RootView: UISplitViewController, RootViewProtocol {
         return false
     }
 
-    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
-        if let navController = currentNaivgationController {
-            return navController is T
+    func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        if let splitViewController = currentViewController as? UISplitViewController {
+            if splitViewController.viewControllers.count != 2 {
+                return false
+            }
+
+            return splitViewController.viewControllers.last is T
         }
 
-        return false
+        return currentViewController is T
     }
 
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
-        if let presentedViewController = self.presentedViewController as? UINavigationController {
-            return presentedViewController is T
-        }
-
-        return false
+        return self.currentViewController?.presentedViewController is T
     }
 
     var modalStackPresented: Bool {
-        // FIXME
-        return false
-//        return self.presentedViewController != nil
+        return self.currentViewController?.presentedViewController is UINavigationController
     }
 
-    func startSidebarStack<T: UINavigationController>(_ type: T.Type) {
-        let vc = type.init()
-        self.show(vc, sender: self)
+    func startSidebarStack<T: UINavigationController>(_ navigationController: T) {
+        self.show(navigationController, sender: self)
     }
 
     func startMainStack<T: UINavigationController>(_ navigationController: T) {
-        self.showDetailViewController(navigationController, sender: self)
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            splitViewController.showDetailViewController(navigationController, sender: self)
+        } else {
+            self.currentViewController = navigationController
+        }
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
@@ -175,8 +182,10 @@ class RootView: UISplitViewController, RootViewProtocol {
     func pushSidebarView(view: MainRouteAction) {
         switch view {
         case .list:
-            (self.viewControllers.first as? UINavigationController)?.popToRootViewController(animated: !isRunningTest)
-        case .detail(let itemId):
+            if let splitViewController = self.currentViewController as? UISplitViewController {
+                (splitViewController.viewControllers.first as? UINavigationController)?.popToRootViewController(animated: !isRunningTest)
+            }
+        case .detail:
             break
         }
     }

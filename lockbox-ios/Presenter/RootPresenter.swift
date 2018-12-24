@@ -12,7 +12,7 @@ protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
-    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+    func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
     func sidebarStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
 
@@ -28,7 +28,7 @@ protocol RootViewProtocol: class {
     func pushSettingView(view: SettingRouteAction)
     func pushSidebarView(view: MainRouteAction)
 
-    func setSidebarEnabled(enabled: Bool)
+    func showSidebar()
 }
 
 struct OAuthProfile {
@@ -218,15 +218,20 @@ class RootPresenter {
             }
 
             if self.shouldDisplaySidebar {
-                view.setSidebarEnabled(enabled: true)
+                view.showSidebar()
 
                 if !view.sidebarStackIs(MainNavigationController.self) {
-                    view.startSidebarStack(MainNavigationController())
+//                    view.startSidebarStack(MainNavigationController(storyboardName:"ItemList", identifier: "itemlist"))
+                    view.startSidebarStack(UINavigationController())
                 }
-            }
 
-            if !view.mainStackIs(MainNavigationController.self) {
-                view.startMainStack(MainNavigationController(storyboardName: "ItemDetail", identifier: ""))
+                if !view.mainStackIs(MainNavigationController.self) {
+                    view.startMainStack(MainNavigationController(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                }
+            } else {
+                if !view.mainStackIs(MainNavigationController.self) {
+                    view.startMainStack(MainNavigationController(storyboardName: "ItemList", identifier: "itemlist"))
+                }
             }
 
             switch mainAction {
