@@ -11,7 +11,6 @@ import RxTest
 
 @testable import Lockbox
 
-@available(iOS 11.0, *)
 var biometryTypeStub: LABiometryType!
 
 class BiometryManagerSpec: QuickSpec {
@@ -29,7 +28,6 @@ class BiometryManagerSpec: QuickSpec {
             return self.canEvaluatePolicyStub
         }
 
-        @available(iOS 11.0, *)
         override var biometryType: LABiometryType {
             return biometryTypeStub
         }
@@ -55,25 +53,17 @@ class BiometryManagerSpec: QuickSpec {
 
                     describe("when the biometry type is faceID") {
                         beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .faceID
-                            }
+                            biometryTypeStub = .faceID
                         }
 
                         it("returns true") {
-                            if #available(iOS 11.0, *) {
-                                expect(self.subject.usesFaceID).to(beTrue())
-                            } else {
-                                expect(self.subject.usesFaceID).to(beFalse())
-                            }
+                            expect(self.subject.usesFaceID).to(beTrue())
                         }
                     }
 
                     describe("when the biometry type is not faceID") {
                         beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .touchID
-                            }
+                            biometryTypeStub = .touchID
                         }
 
                         it("returns false") {
@@ -101,33 +91,21 @@ class BiometryManagerSpec: QuickSpec {
 
                     describe("when the biometry type is touchID") {
                         beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .touchID
-                            }
+                            biometryTypeStub = .touchID
                         }
 
                         it("returns true") {
-                            if #available(iOS 11.0, *) {
-                                expect(self.subject.usesTouchID).to(beTrue())
-                            } else {
-                                expect(self.subject.usesTouchID).to(beTrue())
-                            }
+                            expect(self.subject.usesTouchID).to(beTrue())
                         }
                     }
 
                     describe("when the biometry type is not touchID") {
                         beforeEach {
-                            if #available(iOS 11.0, *) {
-                                biometryTypeStub = .faceID
-                            }
+                            biometryTypeStub = .faceID
                         }
 
                         it("returns false") {
-                            if #available(iOS 11.0, *) {
-                                expect(self.subject.usesTouchID).to(beFalse())
-                            } else {
-                                expect(self.subject.usesTouchID).to(beTrue())
-                            }
+                            expect(self.subject.usesTouchID).to(beFalse())
                         }
                     }
                 }

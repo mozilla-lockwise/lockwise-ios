@@ -90,50 +90,46 @@ class BaseItemListView: UIViewController {
             .font: UIFont.navigationTitleFont
         ]
 
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .always
 
-            let searchController = UISearchController(searchResultsController: nil)
-            searchController.obscuresBackgroundDuringPresentation = false
-            searchController.hidesNavigationBarDuringPresentation = true
-            searchController.searchResultsUpdater = self
-            searchController.delegate = self
-            searchController.isActive = true
-            searchController.searchBar.backgroundColor = Constant.color.navBackgroundColor
-            searchController.searchBar.tintColor = UIColor.white // Cancel button
-            searchController.searchBar.barStyle = .black // White text color
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchController.isActive = true
+        searchController.searchBar.backgroundColor = Constant.color.navBackgroundColor
+        searchController.searchBar.tintColor = UIColor.white // Cancel button
+        searchController.searchBar.barStyle = .black // White text color
 
-            searchController.searchBar.sizeToFit()
+        searchController.searchBar.sizeToFit()
 
-            searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
+        searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
 
-            searchController.searchBar.barTintColor = UIColor.clear // Constant.color.navSearchBackgroundColor
+        searchController.searchBar.barTintColor = UIColor.clear // Constant.color.navSearchBackgroundColor
 
-            self.navigationItem.searchController = searchController
-            self.navigationItem.hidesSearchBarWhenScrolling = false
-            self.definesPresentationContext = true
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        self.definesPresentationContext = true
 
-            let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(Constant.color.navSearchPlaceholderTextColor)
-            searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
-            searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
+        let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(Constant.color.navSearchPlaceholderTextColor)
+        searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
+        searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
 
-            searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
-            if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+        searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
+        if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
 
-                if let backgroundview = searchField.subviews.first {
-                    backgroundview.backgroundColor = Constant.color.navSearchBackgroundColor
-                    backgroundview.layer.cornerRadius = 10
-                    backgroundview.clipsToBounds = true
-                }
+            if let backgroundview = searchField.subviews.first {
+                backgroundview.backgroundColor = Constant.color.navSearchBackgroundColor
+                backgroundview.layer.cornerRadius = 10
+                backgroundview.clipsToBounds = true
             }
-
-            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
-            UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
-
-            self.searchController = searchController
-        } else {
-            // Fallback on earlier versions
         }
+
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
+
+        self.searchController = searchController
     }
 }
 
