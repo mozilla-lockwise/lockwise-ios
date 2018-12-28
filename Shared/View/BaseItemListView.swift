@@ -117,6 +117,7 @@ class BaseItemListView: UIViewController {
         searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
 
         searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
+        searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0) // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
 
             if let backgroundview = searchField.subviews.first {
