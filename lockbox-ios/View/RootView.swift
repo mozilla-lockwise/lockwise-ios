@@ -18,7 +18,7 @@ class RootView: UIViewController, RootViewProtocol {
 
     func sidebarStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
         if let splitViewController = self.currentViewController as? UISplitViewController {
-            if let navController = splitViewController.viewControllers.first as? UINavigationController {
+            if let navController = splitViewController.viewControllers.last as? UINavigationController {
                 return navController is T
             }
         }
@@ -70,7 +70,7 @@ class RootView: UIViewController, RootViewProtocol {
                 return nil
             }
 
-            return splitViewController.viewControllers.last as? UINavigationController
+            return splitViewController.viewControllers[1] as? UINavigationController
         }
 
         return self.currentViewController as? UINavigationController
@@ -92,8 +92,9 @@ class RootView: UIViewController, RootViewProtocol {
         if self.currentViewController is UISplitViewController {
             return
         }
-        
+
         let splitViewController = UISplitViewController()
+        splitViewController.viewControllers = [UINavigationController(), UINavigationController()]
         splitViewController.preferredDisplayMode = .allVisible
         self.currentViewController = splitViewController
     }
@@ -119,13 +120,13 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        if let splitViewController = currentViewController as? UISplitViewController {
-            if splitViewController.viewControllers.count != 2 {
-                return false
-            }
-
-            return splitViewController.viewControllers.last is T
-        }
+//        if let splitViewController = currentViewController as? UISplitViewController {
+//            if splitViewController.viewControllers.count != 2 {
+//                return false
+//            }
+//
+//            return splitViewController.viewControllers[1] is T
+//        }
 
         return currentViewController is T
     }
@@ -139,15 +140,19 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func startSidebarStack<T: UINavigationController>(_ navigationController: T) {
-        self.show(navigationController, sender: self)
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            splitViewController.viewControllers[0] = navigationController
+        }
+//        (self.currentViewController as? UISplitViewController)?.show(navigationController, sender: self)
     }
 
-    func startMainStack<T: UINavigationController>(_ navigationController: T) {
-        if let splitViewController = self.currentViewController as? UISplitViewController {
-            splitViewController.showDetailViewController(navigationController, sender: self)
-        } else {
-            self.currentViewController = navigationController
-        }
+    func startMainStack<T: UIViewController>(_ viewController: T) {
+//        if let splitViewController = self.currentViewController as? UISplitViewController {
+////            splitViewController.showDetailViewController(navigationController, sender: self)
+//            splitViewController.viewControllers[1] = navigationController
+//        } else {
+            self.currentViewController = viewController
+//        }
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
@@ -197,8 +202,24 @@ class RootView: UIViewController, RootViewProtocol {
         case .detail(let id):
             if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
                 itemDetailView.itemId = id
+
                 self.currentNaivgationController?.pushViewController(itemDetailView, animated: !isRunningTest)
             }
+        }
+    }
+
+    func pushDetailView(view: MainRouteAction) {
+        switch view {
+        case .detail(let id):
+            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
+                itemDetailView.itemId = id
+
+                if let splitView = self.currentViewController as? SplitView {
+                    splitView.detailView?.setViewControllers([itemDetailView], animated: false)
+                }
+            }
+        case .list:
+            break
         }
     }
 

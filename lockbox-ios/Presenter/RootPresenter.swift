@@ -18,7 +18,7 @@ protocol RootViewProtocol: class {
 
     var modalStackPresented: Bool { get }
 
-    func startMainStack<T: UINavigationController>(_ navigationController: T)
+    func startMainStack<T: UIViewController>(_ viewController: T)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
     func startSidebarStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
@@ -27,6 +27,7 @@ protocol RootViewProtocol: class {
     func pushMainView(view: MainRouteAction)
     func pushSettingView(view: SettingRouteAction)
     func pushSidebarView(view: MainRouteAction)
+    func pushDetailView(view: MainRouteAction)
 
     func showSidebar()
 }
@@ -218,15 +219,15 @@ class RootPresenter {
             }
 
             if self.shouldDisplaySidebar {
-                view.showSidebar()
+//                view.showSidebar()
+//
+//                if !view.sidebarStackIs(MainNavigationController.self) {
+//                    view.startSidebarStack(MainNavigationController(storyboardName: "ItemList", identifier: "itemlist"))
+////                    view.startSidebarStack(UINavigationController())
+//                }
 
-                if !view.sidebarStackIs(MainNavigationController.self) {
-//                    view.startSidebarStack(MainNavigationController(storyboardName:"ItemList", identifier: "itemlist"))
-                    view.startSidebarStack(UINavigationController())
-                }
-
-                if !view.mainStackIs(MainNavigationController.self) {
-                    view.startMainStack(MainNavigationController(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                if !view.mainStackIs(SplitView.self) {
+                    view.startMainStack(SplitView())
                 }
             } else {
                 if !view.mainStackIs(MainNavigationController.self) {
@@ -247,7 +248,11 @@ class RootPresenter {
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
-                    view.pushMainView(view: .detail(itemId: id))
+                    if self.shouldDisplaySidebar {
+                        view.pushDetailView(view: .detail(itemId: id))
+                    } else {
+                        view.pushMainView(view: .detail(itemId: id))
+                    }
                 }
             }
         }.asObserver()
