@@ -11,6 +11,7 @@ import Storage
 protocol ItemDetailViewProtocol: class, StatusAlertView {
     var itemId: String { get }
     var learnHowToEditTapped: Observable<Void> { get }
+    func enableBackButton(enabled: Bool)
     func bind(titleText: Driver<String>)
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
 }
@@ -23,6 +24,7 @@ class ItemDetailPresenter {
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyDisplayStore
+    private var tabletHelper: TabletHelper
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -80,12 +82,14 @@ class ItemDetailPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
-         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared) {
+         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared,
+         tabletHelper: TabletHelper = TabletHelper.shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
+        self.tabletHelper = tabletHelper
 
         self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
@@ -96,6 +100,10 @@ class ItemDetailPresenter {
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
         let viewConfigDriver = Driver.combineLatest(itemDriver, self.itemDetailStore.itemDetailDisplay)
                 .map { e -> [ItemDetailSectionModel] in
+                    if e.0 == nil {
+                        return []
+                    }
+
                     if case let .togglePassword(passwordDisplayed) = e.1 {
                         return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
                     }
@@ -105,6 +113,10 @@ class ItemDetailPresenter {
 
         let titleDriver = itemObservable
                 .map { item -> String in
+                    if item == nil {
+                        return ""
+                    }
+
                     guard let title = item?.hostname.titleFromHostname() else {
                         return Constant.string.unnamedEntry
                     }
@@ -142,12 +154,17 @@ class ItemDetailPresenter {
                     )
                 }
                 .disposed(by: self.disposeBag)
+
+        self.view?.enableBackButton(enabled: !tabletHelper.shouldDisplaySidebar)
     }
 }
 
 // helpers
 extension ItemDetailPresenter {
     private func configurationForLogin(_ login: Login?, passwordDisplayed: Bool) -> [ItemDetailSectionModel] {
+
+
+
         var passwordText: String
         let itemPassword: String = login?.password ?? ""
 
