@@ -162,9 +162,6 @@ class ItemDetailPresenter {
 // helpers
 extension ItemDetailPresenter {
     private func configurationForLogin(_ login: Login?, passwordDisplayed: Bool) -> [ItemDetailSectionModel] {
-
-
-
         var passwordText: String
         let itemPassword: String = login?.password ?? ""
 

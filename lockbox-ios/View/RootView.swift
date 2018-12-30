@@ -40,19 +40,9 @@ class RootView: UIViewController, RootViewProtocol {
         }
     }
 
-//    private var mainNavigationController: UINavigationController? {
-//        if let currentViewController = self.currentViewController as? UINavigationController {
-//            return currentViewController
-//        }
-//
-//        if let currentViewController = self.currentViewController as? UISplit
-//    }
-
-
-
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
-//    }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return self.currentNaivgationController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+    }
 
     private var currentNaivgationController: UINavigationController? {
         if let splitViewController = self.currentViewController as? UISplitViewController {
@@ -110,14 +100,6 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
-//        if let splitViewController = currentViewController as? UISplitViewController {
-//            if splitViewController.viewControllers.count != 2 {
-//                return false
-//            }
-//
-//            return splitViewController.viewControllers[1] is T
-//        }
-
         return currentViewController is T
     }
 
