@@ -16,16 +16,6 @@ class RootView: UIViewController, RootViewProtocol {
         return false
     }
 
-    func sidebarStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
-        if let splitViewController = self.currentViewController as? UISplitViewController {
-            if let navController = splitViewController.viewControllers.last as? UINavigationController {
-                return navController is T
-            }
-        }
-
-        return false
-    }
-
     internal var presenter: RootPresenter?
 
     private var currentViewController: UIViewController? {
@@ -139,20 +129,8 @@ class RootView: UIViewController, RootViewProtocol {
         return self.currentViewController?.presentedViewController is UINavigationController
     }
 
-    func startSidebarStack<T: UINavigationController>(_ navigationController: T) {
-        if let splitViewController = self.currentViewController as? UISplitViewController {
-            splitViewController.viewControllers[0] = navigationController
-        }
-//        (self.currentViewController as? UISplitViewController)?.show(navigationController, sender: self)
-    }
-
     func startMainStack<T: UIViewController>(_ viewController: T) {
-//        if let splitViewController = self.currentViewController as? UISplitViewController {
-////            splitViewController.showDetailViewController(navigationController, sender: self)
-//            splitViewController.viewControllers[1] = navigationController
-//        } else {
-            self.currentViewController = viewController
-//        }
+        self.currentViewController = viewController
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {

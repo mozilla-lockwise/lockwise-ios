@@ -14,13 +14,10 @@ protocol RootViewProtocol: class {
     func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
-    func sidebarStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
-
     var modalStackPresented: Bool { get }
 
     func startMainStack<T: UIViewController>(_ viewController: T)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
-    func startSidebarStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
 
     func pushLoginView(view: LoginRouteAction)
@@ -59,6 +56,7 @@ class RootPresenter {
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: Sentry
     fileprivate let adjustManager: AdjustManager
+    fileprivate let tabletHelper: TabletHelper
 
     var fxa: FirefoxAccount?
 
@@ -73,7 +71,8 @@ class RootPresenter {
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: Sentry = Sentry.shared,
-         adjustManager: AdjustManager = AdjustManager.shared
+         adjustManager: AdjustManager = AdjustManager.shared,
+         tabletHelper: TabletHelper = TabletHelper.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -87,6 +86,7 @@ class RootPresenter {
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
         self.adjustManager = adjustManager
+        self.tabletHelper = tabletHelper
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -219,13 +219,6 @@ class RootPresenter {
             }
 
             if self.shouldDisplaySidebar {
-//                view.showSidebar()
-//
-//                if !view.sidebarStackIs(MainNavigationController.self) {
-//                    view.startSidebarStack(MainNavigationController(storyboardName: "ItemList", identifier: "itemlist"))
-////                    view.startSidebarStack(UINavigationController())
-//                }
-
                 if !view.mainStackIs(SplitView.self) {
                     view.startMainStack(SplitView())
                 }
@@ -316,7 +309,7 @@ class RootPresenter {
     }()
 
     private var shouldDisplaySidebar: Bool {
-        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
+        return self.tabletHelper.shouldDisplaySidebar
     }
 }
 
