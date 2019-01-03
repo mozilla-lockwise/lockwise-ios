@@ -92,6 +92,10 @@ class BaseItemListView: UIViewController {
 
         self.navigationItem.largeTitleDisplayMode = .always
 
+        self.searchController = self.getStyledSearchController()
+    }
+
+    func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = true
@@ -130,7 +134,7 @@ class BaseItemListView: UIViewController {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
 
-        self.searchController = searchController
+        return searchController
     }
 }
 
