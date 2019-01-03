@@ -265,6 +265,7 @@
 		D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBD211954E00056B24A /* AdjustSdk.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81B21D437AB00E19118 /* SplitView.swift */; };
 		D85CB81E21D97C5D00E19118 /* TabletHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81D21D97C5D00E19118 /* TabletHelper.swift */; };
+		D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */; };
 		D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86A307520829B7F00589CA8 /* UIApplication+.swift */; };
 		D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */; };
 		D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */; };
@@ -581,6 +582,7 @@
 		D8551EBD211954E00056B24A /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		D85CB81B21D437AB00E19118 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		D85CB81D21D97C5D00E19118 /* TabletHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabletHelper.swift; sourceTree = "<group>"; };
+		D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewSpec.swift; sourceTree = "<group>"; };
 		D86A307520829B7F00589CA8 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebView.swift; sourceTree = "<group>"; };
 		D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebViewSpec.swift; sourceTree = "<group>"; };
@@ -1061,6 +1063,7 @@
 				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
 				D82FF5152172DAC600018346 /* FakeProfile.swift */,
 				D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */,
+				D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1545,6 +1548,7 @@
 				D8D0293020686B6D00CC01C6 /* AutoLockSettingsPresenterSpec.swift in Sources */,
 				7AA54DF06588E3B35E010980 /* DispatcherSpec.swift in Sources */,
 				7AA541BD28063282A0B8B352 /* Observable+Spec.swift in Sources */,
+				D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */,
 				7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */,
 				7AA54A58F7F289BAD2CE21C3 /* ErrorActionSpec.swift in Sources */,
 				7AA5439445A0DE14E73A038A /* DataStoreSpec.swift in Sources */,

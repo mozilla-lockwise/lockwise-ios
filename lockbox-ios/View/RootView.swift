@@ -68,17 +68,6 @@ class RootView: UIViewController, RootViewProtocol {
         self.presenter?.onViewReady()
     }
 
-    func showSidebar() {
-        if self.currentViewController is UISplitViewController {
-            return
-        }
-
-        let splitViewController = UISplitViewController()
-        splitViewController.viewControllers = [UINavigationController(), UINavigationController()]
-        splitViewController.preferredDisplayMode = .allVisible
-        self.currentViewController = splitViewController
-    }
-
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
         if let navController = self.currentViewController as? UINavigationController {
             return navController.topViewController is T

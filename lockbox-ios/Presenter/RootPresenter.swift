@@ -25,8 +25,6 @@ protocol RootViewProtocol: class {
     func pushSettingView(view: SettingRouteAction)
     func pushSidebarView(view: MainRouteAction)
     func pushDetailView(view: MainRouteAction)
-
-    func showSidebar()
 }
 
 struct OAuthProfile {

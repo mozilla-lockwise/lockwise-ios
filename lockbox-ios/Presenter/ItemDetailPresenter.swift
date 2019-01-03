@@ -98,12 +98,8 @@ class ItemDetailPresenter {
         let itemObservable = self.dataStore.get(self.view?.itemId ?? "")
 
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-        let viewConfigDriver = Driver.combineLatest(itemDriver, self.itemDetailStore.itemDetailDisplay)
+        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
                 .map { e -> [ItemDetailSectionModel] in
-                    if e.0 == nil {
-                        return []
-                    }
-
                     if case let .togglePassword(passwordDisplayed) = e.1 {
                         return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
                     }
@@ -112,15 +108,9 @@ class ItemDetailPresenter {
                 }
 
         let titleDriver = itemObservable
+                .filterNil()
                 .map { item -> String in
-                    if item == nil {
-                        return ""
-                    }
-
-                    guard let title = item?.hostname.titleFromHostname() else {
-                        return Constant.string.unnamedEntry
-                    }
-
+                    let title = item.hostname.titleFromHostname()
                     return title.isEmpty ? Constant.string.unnamedEntry : title
                 }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
 
