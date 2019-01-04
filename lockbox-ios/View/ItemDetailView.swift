@@ -104,6 +104,20 @@ extension ItemDetailView: ItemDetailViewProtocol {
             let leftButton = UIButton(title: Constant.string.back, imageName: "back")
             leftButton.titleLabel?.font = .navigationButtonFont
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
+
+            if let presenter = self.presenter {
+                leftButton.rx.tap
+                    .bind(to: presenter.onCancel)
+                    .disposed(by: self.disposeBag)
+
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+                self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                    .map { _ -> Void in
+                        return ()
+                    }
+                    .bind(to: presenter.onCancel)
+                    .disposed(by: self.disposeBag)
+            }
         } else {
             self.navigationItem.leftBarButtonItem = nil
         }
@@ -113,10 +127,6 @@ extension ItemDetailView: ItemDetailViewProtocol {
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
-        let leftButton = UIButton(title: Constant.string.back, imageName: "back")
-        leftButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-
         if #available(iOS 11.0, *) {
             self.navigationItem.largeTitleDisplayMode = .always
         }
@@ -126,20 +136,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
-
-        if let presenter = self.presenter {
-            leftButton.rx.tap
-                    .bind(to: presenter.onCancel)
-                    .disposed(by: self.disposeBag)
-
-            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-            self.navigationController?.interactivePopGestureRecognizer?.rx.event
-                    .map { _ -> Void in
-                        return ()
-                    }
-                    .bind(to: presenter.onCancel)
-                    .disposed(by: self.disposeBag)
-        }
     }
 
     fileprivate func setupDataSource() {

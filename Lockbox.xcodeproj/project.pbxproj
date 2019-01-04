@@ -266,6 +266,7 @@
 		D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81B21D437AB00E19118 /* SplitView.swift */; };
 		D85CB81E21D97C5D00E19118 /* TabletHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81D21D97C5D00E19118 /* TabletHelper.swift */; };
 		D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */; };
+		D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB82221DED0E100E19118 /* ViewFactory.swift */; };
 		D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86A307520829B7F00589CA8 /* UIApplication+.swift */; };
 		D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */; };
 		D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */; };
@@ -583,6 +584,7 @@
 		D85CB81B21D437AB00E19118 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		D85CB81D21D97C5D00E19118 /* TabletHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabletHelper.swift; sourceTree = "<group>"; };
 		D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewSpec.swift; sourceTree = "<group>"; };
+		D85CB82221DED0E100E19118 /* ViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactory.swift; sourceTree = "<group>"; };
 		D86A307520829B7F00589CA8 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebView.swift; sourceTree = "<group>"; };
 		D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebViewSpec.swift; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
 				D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */,
 				D85CB81D21D97C5D00E19118 /* TabletHelper.swift */,
+				D85CB82221DED0E100E19118 /* ViewFactory.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1682,6 +1685,7 @@
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
 				D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */,
 				7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */,
+				D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */,
 				3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */,
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,

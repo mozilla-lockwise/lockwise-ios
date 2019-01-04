@@ -1,7 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
- // swiftlint:disable line_length
 
 import UIKit
 
@@ -112,82 +111,27 @@ class RootView: UIViewController, RootViewProtocol {
         self.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
     }
 
-    func pushLoginView(view: LoginRouteAction) {
-        switch view {
-        case .welcome:
-            self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
-        case .fxa:
-            self.currentNaivgationController?.pushViewController(FxAView(), animated: !isRunningTest)
-        case .onboardingConfirmation:
-            if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
-                self.currentNaivgationController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
-            }
-        case .autofillOnboarding:
-            if let autofillOnboardingView = UIStoryboard(name: "AutofillOnboarding", bundle: nil).instantiateViewController(withIdentifier: "autofillonboarding") as? AutofillOnboardingView {
-                self.currentNaivgationController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
-            }
-        case .autofillInstructions:
-            if let autofillInstructionsView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentNaivgationController?.pushViewController(autofillInstructionsView, animated: !isRunningTest)
-            }
+    func push(view: UIViewController) {
+        self.currentNaivgationController?.pushViewController(view, animated: !isRunningTest)
+    }
+
+    func popView() {
+        self.currentNaivgationController?.popViewController(animated: !isRunningTest)
+    }
+
+    func popToRoot() {
+        self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
+    }
+
+    func pushSidebar(view: UIViewController) {
+        if let splitView = self.currentViewController as? SplitView {
+            splitView.showSidebar(vc: view)
         }
     }
 
-    func pushSidebarView(view: MainRouteAction) {
-        switch view {
-        case .list:
-            if let splitViewController = self.currentViewController as? UISplitViewController {
-                (splitViewController.viewControllers.first as? UINavigationController)?.popToRootViewController(animated: !isRunningTest)
-            }
-        case .detail:
-            break
-        }
-    }
-
-    func pushMainView(view: MainRouteAction) {
-        switch view {
-        case .list:
-            self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
-        case .detail(let id):
-            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
-                itemDetailView.itemId = id
-
-                self.currentNaivgationController?.pushViewController(itemDetailView, animated: !isRunningTest)
-            }
-        }
-    }
-
-    func pushDetailView(view: MainRouteAction) {
-        switch view {
-        case .detail(let id):
-            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
-                itemDetailView.itemId = id
-
-                if let splitView = self.currentViewController as? SplitView {
-                    splitView.detailView?.setViewControllers([itemDetailView], animated: false)
-                }
-            }
-        case .list:
-            break
-        }
-    }
-
-    func pushSettingView(view: SettingRouteAction) {
-        switch view {
-        case .list:
-            self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
-        case .account:
-            if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView {
-                self.currentNaivgationController?.pushViewController(accountSettingView, animated: !isRunningTest)
-            }
-        case .autoLock:
-            self.currentNaivgationController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
-        case .preferredBrowser:
-            self.currentNaivgationController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
-        case .autofillInstructions:
-            if let autofillSettingView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentNaivgationController?.pushViewController(autofillSettingView, animated: !isRunningTest)
-            }
+    func pushDetail(view: UIViewController) {
+        if let splitView = self.currentViewController as? SplitView {
+            splitView.detailView?.setViewControllers([view], animated: false)
         }
     }
 
