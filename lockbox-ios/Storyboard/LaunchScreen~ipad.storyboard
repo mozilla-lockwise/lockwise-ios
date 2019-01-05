@@ -19,11 +19,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qft-mi-z9V">
-                                <rect key="frame" x="0.0" y="256" width="834" height="918"/>
+                                <rect key="frame" x="0.0" y="232" width="834" height="942"/>
                                 <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="3kf-Am-KPJ">
-                                <rect key="frame" x="0.0" y="184" width="834" height="144"/>
+                                <rect key="frame" x="0.0" y="160" width="834" height="144"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="QvJ-XO-y87"/>
                                 </constraints>
@@ -34,7 +34,7 @@
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="Qft-mi-z9V" secondAttribute="trailing" id="1nb-fY-aZY"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="Qft-mi-z9V" secondAttribute="bottom" id="MBE-Td-IpT"/>
                             <constraint firstItem="Qft-mi-z9V" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="dsK-eO-FcH"/>
-                            <constraint firstItem="3kf-Am-KPJ" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="160" id="efD-37-xOC"/>
+                            <constraint firstItem="3kf-Am-KPJ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="160" id="efD-37-xOC"/>
                             <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="3kf-Am-KPJ" secondAttribute="trailing" id="j4i-El-KFY"/>
                             <constraint firstItem="Qft-mi-z9V" firstAttribute="top" secondItem="3kf-Am-KPJ" secondAttribute="centerY" id="ptC-oh-Dh7"/>
                             <constraint firstItem="3kf-Am-KPJ" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="z5d-gF-IkW"/>
@@ -48,6 +48,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="nessie" width="476" height="194"/>
+        <image name="nessie" width="1024" height="144"/>
     </resources>
 </document>
