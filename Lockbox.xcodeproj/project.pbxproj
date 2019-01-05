@@ -267,6 +267,7 @@
 		D85CB81E21D97C5D00E19118 /* TabletHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81D21D97C5D00E19118 /* TabletHelper.swift */; };
 		D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */; };
 		D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB82221DED0E100E19118 /* ViewFactory.swift */; };
+		D85CB82521E0295900E19118 /* LaunchScreen~ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D85CB82421E0295900E19118 /* LaunchScreen~ipad.storyboard */; };
 		D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D86A307520829B7F00589CA8 /* UIApplication+.swift */; };
 		D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */; };
 		D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */; };
@@ -585,6 +586,7 @@
 		D85CB81D21D97C5D00E19118 /* TabletHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabletHelper.swift; sourceTree = "<group>"; };
 		D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewSpec.swift; sourceTree = "<group>"; };
 		D85CB82221DED0E100E19118 /* ViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactory.swift; sourceTree = "<group>"; };
+		D85CB82421E0295900E19118 /* LaunchScreen~ipad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "LaunchScreen~ipad.storyboard"; sourceTree = "<group>"; };
 		D86A307520829B7F00589CA8 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		D878360E207ABDF100C19BC7 /* StaticURLWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebView.swift; sourceTree = "<group>"; };
 		D8783610207BE40A00C19BC7 /* StaticURLWebViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticURLWebViewSpec.swift; sourceTree = "<group>"; };
@@ -816,6 +818,7 @@
 				7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */,
 				D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */,
 				D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */,
+				D85CB82421E0295900E19118 /* LaunchScreen~ipad.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -1402,6 +1405,7 @@
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				391233892092155300CB0233 /* FxASignIn.js in Resources */,
+				D85CB82521E0295900E19118 /* LaunchScreen~ipad.storyboard in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
 				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
 				7D578D22207573B000DC9C73 /* SettingList.storyboard in Resources */,
