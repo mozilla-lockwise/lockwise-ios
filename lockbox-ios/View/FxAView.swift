@@ -42,6 +42,10 @@ class FxAView: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
     }
+
+    convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.init(webView: WKWebView())
+    }
 }
 
 extension FxAView: FxAViewProtocol {
