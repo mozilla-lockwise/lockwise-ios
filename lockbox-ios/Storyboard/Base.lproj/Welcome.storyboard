@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4k3-9F-Bvv">
-                                <rect key="frame" x="0.0" y="196" width="834" height="998"/>
+                                <rect key="frame" x="0.0" y="124" width="834" height="1070"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
                                 <rect key="frame" x="-95" y="124" width="1024" height="144"/>
@@ -155,7 +155,7 @@
                             </constraint>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="vVj-mn-ajo"/>
                             <constraint firstItem="8rH-vt-4bG" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="xWZ-zz-0tm"/>
-                            <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="centerY" id="yDD-xq-H1w"/>
+                            <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="top" id="yDD-xq-H1w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="31L-bn-Z4L"/>
                     </view>
