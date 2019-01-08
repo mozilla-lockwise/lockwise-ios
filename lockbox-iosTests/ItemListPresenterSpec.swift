@@ -423,6 +423,22 @@ class ItemListPresenterSpec: QuickSpec {
                 }
             }
 
+            describe("cancelClicked") {
+                beforeEach {
+                    let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
+                    cancelObservable.bind(to: self.subject.cancelObserver).disposed(by: self.disposeBag)
+                    self.scheduler.start()
+                }
+
+                it("dispatches the filtertext item list display action and editing action") {
+                    let editingAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterEditAction
+                    expect(editingAction.editing).to(beFalse())
+
+                    let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
+                    expect(filterAction.filteringText).to(equal(""))
+                }
+            }
+
             describe("itemSelected") {
                 describe("when the item has an id") {
                     let id = "fsjksdfjklsdfjlkdsf"
