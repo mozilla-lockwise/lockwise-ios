@@ -22,21 +22,25 @@ class RootPresenterSpec: QuickSpec {
         var modalViewIsArgument: UIViewController.Type?
         var modalViewIsVar: Bool!
 
-        var mainStackIsArgument: UINavigationController.Type?
+        var mainStackIsArgument: UIViewController.Type?
         var mainStackIsVar: Bool!
 
         var modalStackIsArgument: UINavigationController.Type?
         var modalStackIsVar: Bool!
 
-        var startMainStackArgument: UINavigationController.Type?
-        var startModalStackArgument: UINavigationController?
+        var startMainStackArgument: UIViewController?
+        var startModalStackArgument: UIViewController?
         var dismissModalCalled: Bool = false
 
-        var pushLoginViewRouteArgument: LoginRouteAction?
-        var pushMainViewArgument: MainRouteAction?
-        var pushSettingViewArgument: SettingRouteAction?
+        var sidebarViewIsArgument: UIViewController.Type?
+        var sidebarViewIsVar: Bool!
 
-        var modalStackPresented = true
+        var pushArgument: UIViewController?
+        var pushDetailArgument: UIViewController?
+        var pushSidebarArgument: UIViewController?
+
+        var popViewCalled = false
+        var popToRootCalled = false
 
         func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.topViewIsArgument = type
@@ -48,7 +52,12 @@ class RootPresenterSpec: QuickSpec {
             return self.modalViewIsVar
         }
 
-        func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+        func sidebarViewIs<T>(_ type: T.Type) -> Bool where T: UIViewController {
+            self.sidebarViewIsArgument = type
+            return self.sidebarViewIsVar
+        }
+
+        func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.mainStackIsArgument = type
             return self.mainStackIsVar
         }
@@ -58,8 +67,10 @@ class RootPresenterSpec: QuickSpec {
             return self.modalStackIsVar
         }
 
-        func startMainStack<T: UINavigationController>(_ type: T.Type) {
-            self.startMainStackArgument = type
+        var modalStackPresented = true
+
+        func startMainStack<T>(_ viewController: T) where T: UIViewController {
+            self.startMainStackArgument = viewController
         }
 
         func startModalStack<T: UINavigationController>(_ navigationController: T) {
@@ -70,16 +81,24 @@ class RootPresenterSpec: QuickSpec {
             self.dismissModalCalled = true
         }
 
-        func pushLoginView(view: LoginRouteAction) {
-            self.pushLoginViewRouteArgument = view
+        func push(view: UIViewController) {
+            self.pushArgument = view
         }
 
-        func pushMainView(view: MainRouteAction) {
-            self.pushMainViewArgument = view
+        func pushSidebar(view: UIViewController) {
+            self.pushSidebarArgument = view
         }
 
-        func pushSettingView(view: SettingRouteAction) {
-            self.pushSettingViewArgument = view
+        func pushDetail(view: UIViewController) {
+            self.pushDetailArgument = view
+        }
+
+        func popView() {
+            self.popViewCalled = true
+        }
+
+        func popToRoot() {
+            self.popToRootCalled = true
         }
     }
 
