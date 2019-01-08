@@ -93,6 +93,8 @@ class BaseItemListView: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .always
 
         self.searchController = self.getStyledSearchController()
+
+        self.extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
     }
 
     func getStyledSearchController() -> UISearchController {
