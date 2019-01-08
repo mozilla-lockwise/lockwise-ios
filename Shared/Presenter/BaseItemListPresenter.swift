@@ -13,6 +13,7 @@ protocol BaseItemListViewProtocol: class {
     func bind(items: Driver<[ItemSectionModel]>)
     var sortingButtonHidden: AnyObserver<Bool>? { get }
     func dismissKeyboard()
+    func setFilterEnabled(enabled: Bool)
 }
 
 struct LoginListTextSort {
@@ -59,63 +60,19 @@ class BaseItemListPresenter {
             }.asObserver()
     }()
 
-    lazy private(set) var filterCancelObserver: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            target.baseView?.dismissKeyboard()
-            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
-            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
-            }.asObserver()
-    }()
-
-    lazy private(set) var editEndedObserver: AnyObserver<Void> = {
-        return Binder(self) { target, _ in
-            target.baseView?.dismissKeyboard()
-            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
-            }.asObserver()
-    }()
-
     lazy fileprivate var emptyPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem +
-            [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
+        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
         )
     ]
 
     lazy fileprivate var noResultsPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem +
-            [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
+        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
         )
     ]
 
     lazy internal var syncPlaceholderItems = [
-        ItemSectionModel(model: 0, items: self.searchItem + [LoginListCellConfiguration.SyncListPlaceholder])
+        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.SyncListPlaceholder])
     ]
-
-    lazy fileprivate var searchItem: [LoginListCellConfiguration] = {
-        let enabledObservable = self.dataStore.list
-            .map { !$0.isEmpty }
-
-        let emptyTextObservable = self.itemListDisplayStore.listDisplay
-            .filterByType(class: ItemListFilterAction.self)
-            .map { $0.filteringText.isEmpty }
-
-        let editingTextObservable = self.itemListDisplayStore.listDisplay
-            .filterByType(class: ItemListFilterEditAction.self)
-            .map { $0.editing }
-
-        let cancelHiddenObservable = Observable.combineLatest(emptyTextObservable, editingTextObservable)
-            .map { !(!$0.0 && $0.1) }
-            .distinctUntilChanged()
-
-        let externalTextChangeObservable = self.itemListDisplayStore.listDisplay
-            .filterByType(class: ItemListFilterAction.self)
-            .map { $0.filteringText }
-
-        return [LoginListCellConfiguration.Search(
-            enabled: enabledObservable,
-            cancelHidden: cancelHiddenObservable,
-            text: externalTextChangeObservable
-            )]
-    }()
 
     var helpTextItems: [LoginListCellConfiguration] {
         return []
@@ -148,6 +105,13 @@ class BaseItemListPresenter {
         )
 
         self.baseView?.bind(items: listDriver)
+
+        self.dataStore.list
+            .map { !$0.isEmpty }
+            .subscribe { (evt) in
+                self.baseView?.setFilterEnabled(enabled: evt.element ?? false)
+            }
+            .disposed(by: self.disposeBag)
 
         self.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
     }
@@ -223,7 +187,7 @@ extension BaseItemListPresenter {
             return LoginListCellConfiguration.Item(title: titleText, username: usernameText, guid: login.guid)
         }
 
-        return self.searchItem + self.helpTextItems + loginCells
+        return self.helpTextItems + loginCells
     }
 
     fileprivate func filterItemsForText(_ text: String, items: [Login]) -> [Login] {
