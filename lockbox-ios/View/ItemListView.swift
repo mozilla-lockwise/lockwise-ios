@@ -106,6 +106,7 @@ extension ItemListView {
     fileprivate func setupRefresh() {
         if let presenter = self.presenter {
             let refreshControl = UIRefreshControl()
+            refreshControl.tintColor = UIColor.white
             self.tableView.refreshControl = refreshControl
             refreshControl.rx.controlEvent(.valueChanged)
                 .bind(to: presenter.refreshObserver)

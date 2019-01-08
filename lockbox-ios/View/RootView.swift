@@ -44,6 +44,7 @@ class RootView: UIViewController, RootViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.presenter?.onViewReady()
+        self.view.backgroundColor = Constant.color.navBackgroundColor
     }
 
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {

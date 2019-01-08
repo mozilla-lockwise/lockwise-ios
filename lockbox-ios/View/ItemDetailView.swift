@@ -106,9 +106,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         let leftButton = UIButton(title: Constant.string.back, imageName: "back")
         leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-
-        self.navigationItem.largeTitleDisplayMode = .always
-
+        
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
