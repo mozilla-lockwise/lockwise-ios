@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.4.0 (Build 2769)
+
+We've improved the search experience (and coming soon: added iPad support)! This is a big update and we hope you enjoy it. Here's the full list of changes:
+
+- Updated the search experience to leverage built-in iOS features to help keep it stable and working consistently (which means we now require iOS 11)
+
+A big "thanks" to all the contributors that helped along the way!
+
 ## 1.3.3 (Build 2731)
 
 _Date: 2018-12-19_
