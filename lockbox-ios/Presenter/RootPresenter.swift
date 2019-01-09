@@ -12,6 +12,7 @@ protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
     var modalStackPresented: Bool { get }

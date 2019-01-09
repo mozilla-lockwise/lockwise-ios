@@ -101,7 +101,7 @@ class RootViewSpec: QuickSpec {
                     it("makes the settings controller the modal view") {
                         expect(self.subject.modalViewIs(SettingListView.self)).to(beTrue())
                     }
-                    
+
                     it("makes the settings nav the stack") {
                         expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beTrue())
                     }
@@ -154,78 +154,37 @@ class RootViewSpec: QuickSpec {
                 }
 
                 it("sets the detail view to the item detail screen") {
-                    exepct(self.subject.pushDetail(view: <#T##UIViewController#>))
-                }
-            }
-            
-
-            describe("pushing main views") {
-                describe("list") {
-                    beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.pushMainView(view: .list)
-                    }
-
-                    it("makes a listview the top view") {
-                        expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
-                    }
-                }
-
-                describe("detail") {
-                    beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.pushMainView(view: .detail(itemId: "dffsdfs"))
-                    }
-
-                    it("makes a detailview the top view") {
-                        expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
-                    }
+                    expect(self.subject.detailViewIs(ItemDetailView.self)).to(beTrue())
                 }
             }
 
-            describe("pushing settings views") {
+            describe("popView") {
                 beforeEach {
-                    self.subject.startMainStack(SettingNavigationController.self)
+                    self.subject.startMainStack(UINavigationController())
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "SettingList", identifier: "settinglist"))
+                    expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
+                    self.subject.popView()
                 }
 
-                describe("list") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .list)
-                    }
+                it("removes only one view") {
+                    expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
+                }
+            }
 
-                    it("makes the list view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
-                    }
+            describe("pop to root") {
+                beforeEach {
+                    self.subject.startMainStack(UINavigationController())
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "SettingList", identifier: "settinglist"))
+                    expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
+                    self.subject.popView()
                 }
 
-                describe("account") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .account)
-                    }
-
-                    it("makes the account view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AccountSettingView.self)).to(beTrue())
-                    }
-                }
-
-                describe("autolock") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .autoLock)
-                    }
-
-                    it("makes the autolock view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AutoLockSettingView.self)).to(beTrue())
-                    }
-                }
-
-                describe("autofillInsturctions") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .autofillInstructions)
-                    }
-
-                    it("makes the autofill instructions view the new modal") {
-                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
-                    }
+                it("removes only one view") {
+                    expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
                 }
             }
         }

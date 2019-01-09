@@ -15,6 +15,14 @@ class RootView: UIViewController, RootViewProtocol {
         return false
     }
 
+    func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        if let splitViewController = self.currentViewController as? SplitView {
+            return splitViewController.detailView?.viewControllers.first is T
+        }
+
+        return false
+    }
+
     internal var presenter: RootPresenter?
 
     private var currentViewController: UIViewController? {
@@ -40,10 +48,10 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.currentNaivgationController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+        return self.currentNavigationController?.topViewController?.preferredStatusBarStyle ?? .lightContent
     }
 
-    private var currentNaivgationController: UINavigationController? {
+    private var currentNavigationController: UINavigationController? {
         if let splitViewController = self.currentViewController as? UISplitViewController {
             if splitViewController.viewControllers.count != 2 {
                 return nil
@@ -113,15 +121,15 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func push(view: UIViewController) {
-        self.currentNaivgationController?.pushViewController(view, animated: !isRunningTest)
+        self.currentNavigationController?.pushViewController(view, animated: !isRunningTest)
     }
 
     func popView() {
-        self.currentNaivgationController?.popViewController(animated: !isRunningTest)
+        self.currentNavigationController?.popViewController(animated: !isRunningTest)
     }
 
     func popToRoot() {
-        self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
+        self.currentNavigationController?.popToRootViewController(animated: !isRunningTest)
     }
 
     func pushSidebar(view: UIViewController) {
