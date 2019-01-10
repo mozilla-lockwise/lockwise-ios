@@ -17,12 +17,12 @@
     },
     {
       "idiom" : "ipad",
-      "filename" : "nessie@2x.png",
+      "filename" : "nessie.png",
       "scale" : "1x"
     },
     {
       "idiom" : "ipad",
-      "filename" : "nessie@3x.png",
+      "filename" : "nessie@2x.png",
       "scale" : "2x"
     }
   ],

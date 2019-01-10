@@ -18,13 +18,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4k3-9F-Bvv">
-                                <rect key="frame" x="0.0" y="124" width="834" height="1070"/>
+                                <rect key="frame" x="0.0" y="160" width="834" height="1034"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
-                                <rect key="frame" x="-95" y="124" width="1024" height="144"/>
+                                <rect key="frame" x="-95" y="160" width="1024" height="144"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-2v-Rbb" userLabel="Lockbox">
-                                <rect key="frame" x="302" y="341" width="230" height="40"/>
+                                <rect key="frame" x="302" y="377" width="230" height="40"/>
                                 <accessibility key="accessibilityConfiguration" label="Firefox Lockbox">
                                     <bool key="isElement" value="YES"/>
                                 </accessibility>
@@ -33,13 +33,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Take your passwords everywhere" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
-                                <rect key="frame" x="317" y="389" width="200.5" height="16"/>
+                                <rect key="frame" x="317" y="425" width="200.5" height="16"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" red="0.97651267051696777" green="0.97638332843780518" blue="0.98039662837982178" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
-                                <rect key="frame" x="259.5" y="505" width="315" height="45"/>
+                                <rect key="frame" x="259.5" y="541" width="315" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VuQ-t5-UWT"/>
@@ -54,7 +54,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="375.5" y="633" width="83" height="32"/>
+                                <rect key="frame" x="375.5" y="669" width="83" height="32"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -66,7 +66,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="269.5" y="590" width="295" height="38"/>
+                                <rect key="frame" x="269.5" y="626" width="295" height="38"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="295" id="TPg-0Q-joi"/>
                                 </constraints>
@@ -85,7 +85,7 @@
                                 </variation>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVE-e1-PIT">
-                                <rect key="frame" x="461.5" y="644" width="7" height="10"/>
+                                <rect key="frame" x="461.5" y="680" width="7" height="10"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="OMw-3E-xHo"/>
@@ -93,10 +93,10 @@
                                 </constraints>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="Fls-Mq-402">
-                                <rect key="frame" x="401" y="436" width="32" height="37"/>
+                                <rect key="frame" x="401" y="472" width="32" height="37"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8rH-vt-4bG">
-                                <rect key="frame" x="30" y="493" width="774" height="45"/>
+                                <rect key="frame" x="30" y="529" width="774" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591969999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <accessibility key="accessibilityConfiguration" identifier="unlock.button"/>
                                 <constraints>
@@ -135,7 +135,7 @@
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="Zt0-sn-zOs"/>
                             <constraint firstAttribute="bottom" secondItem="4k3-9F-Bvv" secondAttribute="bottom" id="aGi-Kj-ckL"/>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="top" secondItem="Zs6-ts-YH0" secondAttribute="top" id="aZr-YV-g8U">
-                                <variation key="heightClass=regular-widthClass=regular" constant="124"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="160"/>
                             </constraint>
                             <constraint firstItem="8rH-vt-4bG" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" constant="88" id="byD-Zk-AXv"/>
                             <constraint firstItem="31L-bn-Z4L" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hwO-wS-oS4" secondAttribute="trailing" constant="30" id="cv3-ET-9pr"/>
