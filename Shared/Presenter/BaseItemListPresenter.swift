@@ -60,6 +60,13 @@ class BaseItemListPresenter {
             }.asObserver()
     }()
 
+    lazy private(set) var cancelObserver: AnyObserver<Void> = {
+        return Binder(self) { target, filterText in
+            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
+        }.asObserver()
+    }()
+
     lazy fileprivate var emptyPlaceholderItems = [
         ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
         )
