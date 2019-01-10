@@ -14,19 +14,11 @@ class BiometryManager {
     private let context: LAContext
 
     var usesFaceID: Bool {
-        if #available(iOS 11.0, *) {
-            return self.usesBiometric(.faceID)
-        }
-
-        return false
+        return self.usesBiometric(.faceID)
     }
 
     var usesTouchID: Bool {
-        if #available(iOS 11.0, *) {
-            return self.usesBiometric(.touchID)
-        }
-
-        return self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        return self.usesBiometric(.touchID)
     }
 
     var deviceAuthenticationAvailable: Bool {
@@ -55,7 +47,6 @@ class BiometryManager {
         return Single.error(LocalError.LAError)
     }
 
-    @available(iOS 11.0, *)
     private func usesBiometric(_ biometry: LABiometryType) -> Bool {
         if self.context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             return self.context.biometryType == biometry

@@ -9,6 +9,18 @@ class RootView: UIViewController, RootViewProtocol {
         if let splitViewController = self.currentViewController as? UISplitViewController {
             if let navController = splitViewController.viewControllers.first as? UINavigationController {
                 return navController.topViewController is T
+            } else {
+                return splitViewController.viewControllers.first is T
+            }
+        }
+
+        return false
+    }
+
+    func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        if let splitViewController = self.currentViewController as? SplitView {
+            if let navController = splitViewController.detailView {
+                return navController.topViewController is T
             }
         }
 
@@ -40,10 +52,10 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.currentNaivgationController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+        return self.currentNavigationController?.topViewController?.preferredStatusBarStyle ?? .lightContent
     }
 
-    private var currentNaivgationController: UINavigationController? {
+    private var currentNavigationController: UINavigationController? {
         if let splitViewController = self.currentViewController as? UISplitViewController {
             if splitViewController.viewControllers.count != 2 {
                 return nil
@@ -65,6 +77,7 @@ class RootView: UIViewController, RootViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.presenter?.onViewReady()
+        self.view.backgroundColor = Constant.color.navBackgroundColor
     }
 
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
@@ -104,23 +117,23 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
-        self.present(navigationController, animated: !isRunningTest, completion: nil)
+        self.currentViewController?.present(navigationController, animated: !isRunningTest, completion: nil)
     }
 
     func dismissModals() {
-        self.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
+        self.currentViewController?.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
     }
 
     func push(view: UIViewController) {
-        self.currentNaivgationController?.pushViewController(view, animated: !isRunningTest)
+        self.currentNavigationController?.pushViewController(view, animated: !isRunningTest)
     }
 
     func popView() {
-        self.currentNaivgationController?.popViewController(animated: !isRunningTest)
+        self.currentNavigationController?.popViewController(animated: !isRunningTest)
     }
 
     func popToRoot() {
-        self.currentNaivgationController?.popToRootViewController(animated: !isRunningTest)
+        self.currentNavigationController?.popToRootViewController(animated: !isRunningTest)
     }
 
     func pushSidebar(view: UIViewController) {

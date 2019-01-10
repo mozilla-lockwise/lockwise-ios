@@ -9,23 +9,12 @@ class AppearanceHelper {
     static let shared = AppearanceHelper()
 
     func setupAppearance() {
-        let navBarImage = UIImage.createGradientImage(
-            frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height),
-            colors: [Constant.color.lockBoxBlue, Constant.color.lockBoxTeal],
-            locations: [0.15, 0]
-        )
-        if #available(iOS 11.0, *) {
-            UINavigationBar.appearance().barTintColor = UIColor(patternImage: navBarImage!)
-            UINavigationBar.appearance().isTranslucent = true
-            UINavigationBar.appearance().prefersLargeTitles = true
-            UINavigationBar.appearance().largeTitleTextAttributes = [
-                NSAttributedString.Key.foregroundColor: UIColor.white
-            ]
-        } else {
-            UINavigationBar.appearance().setBackgroundImage(navBarImage, for: .default)
-            UINavigationBar.appearance().isTranslucent = false
-        }
-
+        UINavigationBar.appearance().barTintColor = Constant.color.navBackgroundColor
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().prefersLargeTitles = true
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: Constant.color.navTextColor
+        ]
         UITextField.appearance().tintColor = .black
     }
 }

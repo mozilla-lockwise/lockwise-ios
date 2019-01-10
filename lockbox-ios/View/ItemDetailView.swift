@@ -127,10 +127,6 @@ extension ItemDetailView: ItemDetailViewProtocol {
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .always
-        }
-
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,

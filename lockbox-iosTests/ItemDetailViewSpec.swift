@@ -163,6 +163,7 @@ class ItemDetailViewSpec: QuickSpec {
 
             describe("tapping cancel button") {
                 beforeEach {
+                    self.subject.enableBackButton(enabled: true)
                     let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
                     _ = button.sendActions(for: .touchUpInside)
                 }
