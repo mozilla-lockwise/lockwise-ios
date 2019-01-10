@@ -95,6 +95,7 @@ class RootViewSpec: QuickSpec {
             describe("startModalStack") {
                 describe("SettingNavigationController") {
                     beforeEach {
+                        self.subject.startMainStack(MainNavigationController())
                         self.subject.startModalStack(SettingNavigationController())
                     }
 
@@ -110,6 +111,7 @@ class RootViewSpec: QuickSpec {
 
             describe("dismissModals") {
                 beforeEach {
+                    self.subject.startMainStack(MainNavigationController())
                     self.subject.startModalStack(SettingNavigationController())
                     expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beTrue())
                     expect(self.subject.modalStackPresented).to(beTrue())
@@ -117,11 +119,11 @@ class RootViewSpec: QuickSpec {
                 }
 
                 it("modalStackPresented is false") {
-                    expect(self.subject.modalStackPresented).to(beFalse())
+                    expect(self.subject.modalStackPresented).toEventually(beFalse())
                 }
 
                 it("removes the modal stack") {
-                    expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beFalse())
+                    expect(self.subject.modalStackIs(SettingNavigationController.self)).toEventually(beFalse())
                 }
             }
 
@@ -136,25 +138,27 @@ class RootViewSpec: QuickSpec {
                 }
             }
 
-            describe("pushing sidebar views") {
-                beforeEach {
-                    self.subject.startMainStack(MainNavigationController())
-                    self.subject.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+            if TabletHelper().shouldDisplaySidebar {
+                describe("pushing sidebar views") {
+                    beforeEach {
+                        self.subject.startMainStack(SplitView())
+                        self.subject.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+                    }
+
+                    it("sets the sidebar view to the list") {
+                        expect(self.subject.sidebarViewIs(ItemListView.self)).to(beTrue())
+                    }
                 }
 
-                it("sets the sidebar view to the list") {
-                    expect(self.subject.sidebarViewIs(ItemListView.self)).to(beTrue())
-                }
-            }
+                describe("pushing detail views") {
+                    beforeEach {
+                        self.subject.startMainStack(SplitView())
+                        self.subject.pushDetail(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                    }
 
-            describe("pushing detail views") {
-                beforeEach {
-                    self.subject.startMainStack(MainNavigationController())
-                    self.subject.pushDetail(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
-                }
-
-                it("sets the detail view to the item detail screen") {
-                    expect(self.subject.detailViewIs(ItemDetailView.self)).to(beTrue())
+                    it("sets the detail view to the item detail screen") {
+                        expect(self.subject.detailViewIs(ItemDetailView.self)).to(beTrue())
+                    }
                 }
             }
 

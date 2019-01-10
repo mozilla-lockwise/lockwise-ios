@@ -9,6 +9,8 @@ class RootView: UIViewController, RootViewProtocol {
         if let splitViewController = self.currentViewController as? UISplitViewController {
             if let navController = splitViewController.viewControllers.first as? UINavigationController {
                 return navController.topViewController is T
+            } else {
+                return splitViewController.viewControllers.first is T
             }
         }
 
@@ -17,7 +19,9 @@ class RootView: UIViewController, RootViewProtocol {
 
     func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
         if let splitViewController = self.currentViewController as? SplitView {
-            return splitViewController.detailView?.viewControllers.first is T
+            if let navController = splitViewController.detailView {
+                return navController.topViewController is T
+            }
         }
 
         return false
@@ -113,11 +117,11 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
-        self.present(navigationController, animated: !isRunningTest, completion: nil)
+        self.currentViewController?.present(navigationController, animated: !isRunningTest, completion: nil)
     }
 
     func dismissModals() {
-        self.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
+        self.currentViewController?.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
     }
 
     func push(view: UIViewController) {

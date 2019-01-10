@@ -14,7 +14,7 @@ class MainNavigationControllerSpec: QuickSpec {
     override func spec() {
         describe("MainNavigationController") {
             beforeEach {
-                self.mainNavigationController = MainNavigationController()
+                self.mainNavigationController = MainNavigationController(storyboardName: "ItemList", identifier: "itemlist")
             }
 
             it("sets item list as root") {
