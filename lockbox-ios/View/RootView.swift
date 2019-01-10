@@ -1,14 +1,35 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
- // swiftlint:disable line_length
 
 import UIKit
 
 class RootView: UIViewController, RootViewProtocol {
+    func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            if let navController = splitViewController.viewControllers.first as? UINavigationController {
+                return navController.topViewController is T
+            } else {
+                return splitViewController.viewControllers.first is T
+            }
+        }
+
+        return false
+    }
+
+    func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        if let splitViewController = self.currentViewController as? SplitView {
+            if let navController = splitViewController.detailView {
+                return navController.topViewController is T
+            }
+        }
+
+        return false
+    }
+
     internal var presenter: RootPresenter?
 
-    private var currentViewController: UINavigationController? {
+    private var currentViewController: UIViewController? {
         didSet {
             if let currentViewController = self.currentViewController {
                 self.addChild(currentViewController)
@@ -31,7 +52,19 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.currentViewController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+        return self.currentNavigationController?.topViewController?.preferredStatusBarStyle ?? .lightContent
+    }
+
+    private var currentNavigationController: UINavigationController? {
+        if let splitViewController = self.currentViewController as? UISplitViewController {
+            if splitViewController.viewControllers.count != 2 {
+                return nil
+            }
+
+            return splitViewController.viewControllers[1] as? UINavigationController
+        }
+
+        return self.currentViewController as? UINavigationController
     }
 
     init() {
@@ -48,15 +81,27 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        return self.currentViewController?.topViewController is T
+        if let navController = self.currentViewController as? UINavigationController {
+            return navController.topViewController is T
+        }
+
+        return self.currentViewController is T
     }
 
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        return (self.currentViewController?.presentedViewController as? UINavigationController)?.topViewController is T
+        if let presentedViewController = self.presentedViewController {
+            if let navController = presentedViewController as? UINavigationController {
+                return navController.topViewController is T
+            }
+
+            return presentedViewController is T
+        }
+
+        return false
     }
 
-    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
-        return self.currentViewController is T
+    func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
+        return currentViewController is T
     }
 
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
@@ -67,67 +112,39 @@ class RootView: UIViewController, RootViewProtocol {
         return self.currentViewController?.presentedViewController is UINavigationController
     }
 
-    func startMainStack<T: UINavigationController>(_ type: T.Type) {
-        self.currentViewController = type.init()
+    func startMainStack<T: UIViewController>(_ viewController: T) {
+        self.currentViewController = viewController
     }
 
     func startModalStack<T: UINavigationController>(_ navigationController: T) {
-        self.currentViewController?.present(navigationController, animated: true)
+        self.currentViewController?.present(navigationController, animated: !isRunningTest, completion: nil)
     }
 
     func dismissModals() {
         self.currentViewController?.presentedViewController?.dismiss(animated: !isRunningTest, completion: nil)
     }
 
-    func pushLoginView(view: LoginRouteAction) {
-        switch view {
-        case .welcome:
-            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
-        case .fxa:
-            self.currentViewController?.pushViewController(FxAView(), animated: !isRunningTest)
-        case .onboardingConfirmation:
-            if let onboardingConfirmationView = UIStoryboard(name: "OnboardingConfirmation", bundle: nil).instantiateViewController(withIdentifier: "onboardingconfirmation") as? OnboardingConfirmationView {
-                self.currentViewController?.pushViewController(onboardingConfirmationView, animated: !isRunningTest)
-            }
-        case .autofillOnboarding:
-            if let autofillOnboardingView = UIStoryboard(name: "AutofillOnboarding", bundle: nil).instantiateViewController(withIdentifier: "autofillonboarding") as? AutofillOnboardingView {
-                self.currentViewController?.pushViewController(autofillOnboardingView, animated: !isRunningTest)
-            }
-        case .autofillInstructions:
-            if let autofillInstructionsView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentViewController?.pushViewController(autofillInstructionsView, animated: !isRunningTest)
-            }
+    func push(view: UIViewController) {
+        self.currentNavigationController?.pushViewController(view, animated: !isRunningTest)
+    }
+
+    func popView() {
+        self.currentNavigationController?.popViewController(animated: !isRunningTest)
+    }
+
+    func popToRoot() {
+        self.currentNavigationController?.popToRootViewController(animated: !isRunningTest)
+    }
+
+    func pushSidebar(view: UIViewController) {
+        if let splitView = self.currentViewController as? SplitView {
+            splitView.showSidebar(vc: view)
         }
     }
 
-    func pushMainView(view: MainRouteAction) {
-        switch view {
-        case .list:
-            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
-        case .detail(let id):
-            if let itemDetailView = UIStoryboard(name: "ItemDetail", bundle: nil).instantiateViewController(withIdentifier: "itemdetailview") as? ItemDetailView {
-                itemDetailView.itemId = id
-                self.currentViewController?.pushViewController(itemDetailView, animated: !isRunningTest)
-            }
-        }
-    }
-
-    func pushSettingView(view: SettingRouteAction) {
-        switch view {
-        case .list:
-            self.currentViewController?.popToRootViewController(animated: !isRunningTest)
-        case .account:
-            if let accountSettingView = UIStoryboard(name: "AccountSetting", bundle: nil).instantiateViewController(withIdentifier: "accountsetting") as? AccountSettingView {
-                self.currentViewController?.pushViewController(accountSettingView, animated: !isRunningTest)
-            }
-        case .autoLock:
-            self.currentViewController?.pushViewController(AutoLockSettingView(), animated: !isRunningTest)
-        case .preferredBrowser:
-            self.currentViewController?.pushViewController(PreferredBrowserSettingView(), animated: !isRunningTest)
-        case .autofillInstructions:
-            if let autofillSettingView = UIStoryboard(name: "SetupAutofill", bundle: nil).instantiateViewController(withIdentifier: "autofillinstructions") as? AutofillInstructionsView {
-                self.currentViewController?.pushViewController(autofillSettingView, animated: !isRunningTest)
-            }
+    func pushDetail(view: UIViewController) {
+        if let splitView = self.currentViewController as? SplitView {
+            splitView.detailView?.setViewControllers([view], animated: false)
         }
     }
 

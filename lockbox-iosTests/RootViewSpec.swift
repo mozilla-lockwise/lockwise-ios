@@ -19,6 +19,7 @@ class RootViewSpec: QuickSpec {
 
     private var presenter: FakeRootPresenter!
     var subject: RootView!
+    var viewFactory: ViewFactory!
 
     override func spec() {
         let window = UIWindow()
@@ -27,6 +28,7 @@ class RootViewSpec: QuickSpec {
             beforeEach {
                 self.subject = RootView()
                 self.presenter = FakeRootPresenter(view: self.subject)
+                self.viewFactory = ViewFactory()
                 self.subject.presenter = self.presenter
 
                 window.rootViewController = self.subject
@@ -46,7 +48,7 @@ class RootViewSpec: QuickSpec {
 
                 describe("displaying a stack") {
                     beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startMainStack(MainNavigationController())
                     }
 
                     it("returns true") {
@@ -64,7 +66,7 @@ class RootViewSpec: QuickSpec {
 
                 describe("displaying an initialized navigation controller") {
                     beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
+                        self.subject.startMainStack(MainNavigationController())
                         self.subject.startModalStack(SettingNavigationController())
                     }
 
@@ -74,142 +76,119 @@ class RootViewSpec: QuickSpec {
                 }
             }
 
-            describe("pushing login views") {
-                describe("login") {
+            describe("startMainStack") {
+                describe("LoginNavigationController") {
                     beforeEach {
-                        self.subject.startMainStack(LoginNavigationController.self)
-                        self.subject.pushLoginView(view: LoginRouteAction.welcome)
+                        self.subject.startMainStack(LoginNavigationController())
                     }
 
-                    it("makes a loginview the top view") {
+                    it("makes a loginnav the stack") {
+                        expect(self.subject.mainStackIs(LoginNavigationController.self)).to(beTrue())
+                    }
+
+                    it("sets the welcome view as the top view") {
                         expect(self.subject.topViewIs(WelcomeView.self)).to(beTrue())
                     }
                 }
+            }
 
-                describe("fxa") {
+            describe("startModalStack") {
+                describe("SettingNavigationController") {
                     beforeEach {
-                        self.subject.startMainStack(LoginNavigationController.self)
-                        self.subject.pushLoginView(view: LoginRouteAction.fxa)
+                        self.subject.startMainStack(MainNavigationController())
+                        self.subject.startModalStack(SettingNavigationController())
                     }
 
-                    it("makes an fxaview the top view") {
-                        expect(self.subject.topViewIs(FxAView.self)).to(beTrue())
-                    }
-                }
-
-                describe("onboardingConfirmation") {
-                    beforeEach {
-                        self.subject.startMainStack(LoginNavigationController.self)
-                        self.subject.pushLoginView(view: LoginRouteAction.onboardingConfirmation)
+                    it("makes the settings controller the modal view") {
+                        expect(self.subject.modalViewIs(SettingListView.self)).to(beTrue())
                     }
 
-                    it("makes the onboardingconfirmation the top view") {
-                        expect(self.subject.topViewIs(OnboardingConfirmationView.self)).to(beTrue())
-                    }
-                }
-
-                describe("autofillOnboarding") {
-                    beforeEach {
-                        self.subject.startMainStack(LoginNavigationController.self)
-                        self.subject.pushLoginView(view: LoginRouteAction.autofillOnboarding)
-                    }
-
-                    it("makes the autofillOnboarding the top view") {
-                        expect(self.subject.topViewIs(AutofillOnboardingView.self)).to(beTrue())
-                    }
-                }
-
-                describe("autofillInstructions") {
-                    beforeEach {
-                        self.subject.startMainStack(LoginNavigationController.self)
-                        self.subject.pushLoginView(view: LoginRouteAction.autofillInstructions)
-                    }
-
-                    it("makes the autofillInsutrctions the top view") {
-                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    it("makes the settings nav the stack") {
+                        expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beTrue())
                     }
                 }
             }
 
-            describe("displaying main stack after login stack") {
+            describe("dismissModals") {
                 beforeEach {
-                    self.subject.startMainStack(LoginNavigationController.self)
-                    self.subject.startMainStack(MainNavigationController.self)
+                    self.subject.startMainStack(MainNavigationController())
+                    self.subject.startModalStack(SettingNavigationController())
+                    expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beTrue())
+                    expect(self.subject.modalStackPresented).to(beTrue())
+                    self.subject.dismissModals()
                 }
 
-                it("displays the main stack only") {
-                    expect(self.subject.mainStackIs(LoginNavigationController.self)).to(beFalse())
-                    expect(self.subject.mainStackIs(MainNavigationController.self)).to(beTrue())
-                }
-            }
-
-            describe("pushing main views") {
-                describe("list") {
-                    beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.pushMainView(view: .list)
-                    }
-
-                    it("makes a listview the top view") {
-                        expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
-                    }
+                xit("modalStackPresented is false") {
+                    expect(self.subject.modalStackPresented).to(beFalse())
                 }
 
-                describe("detail") {
-                    beforeEach {
-                        self.subject.startMainStack(MainNavigationController.self)
-                        self.subject.pushMainView(view: .detail(itemId: "dffsdfs"))
-                    }
-
-                    it("makes a detailview the top view") {
-                        expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
-                    }
+                xit("removes the modal stack") {
+                    expect(self.subject.modalStackIs(SettingNavigationController.self)).to(beFalse())
                 }
             }
 
-            describe("pushing settings views") {
+            describe("pushing views") {
                 beforeEach {
-                    self.subject.startMainStack(SettingNavigationController.self)
+                    self.subject.startMainStack(MainNavigationController())
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
                 }
 
-                describe("list") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .list)
-                    }
-
-                    it("makes the list view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
-                    }
+                it("sets the view to the list") {
+                    expect(self.subject.topViewIs(ItemListView.self)).to(beTrue())
                 }
+            }
 
-                describe("account") {
+            if TabletHelper().shouldDisplaySidebar {
+                describe("pushing sidebar views") {
                     beforeEach {
-                        self.subject.pushSettingView(view: .account)
+                        self.subject.startMainStack(SplitView())
+                        self.subject.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
                     }
 
-                    it("makes the account view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AccountSettingView.self)).to(beTrue())
-                    }
-                }
-
-                describe("autolock") {
-                    beforeEach {
-                        self.subject.pushSettingView(view: .autoLock)
-                    }
-
-                    it("makes the autolock view the top view of the modal stack") {
-                        expect(self.subject.topViewIs(AutoLockSettingView.self)).to(beTrue())
+                    it("sets the sidebar view to the list") {
+                        expect(self.subject.sidebarViewIs(ItemListView.self)).to(beTrue())
                     }
                 }
 
-                describe("autofillInsturctions") {
+                describe("pushing detail views") {
                     beforeEach {
-                        self.subject.pushSettingView(view: .autofillInstructions)
+                        self.subject.startMainStack(SplitView())
+                        self.subject.pushDetail(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
                     }
 
-                    it("makes the autofill instructions view the new modal") {
-                        expect(self.subject.topViewIs(AutofillInstructionsView.self)).to(beTrue())
+                    it("sets the detail view to the item detail screen") {
+                        expect(self.subject.detailViewIs(ItemDetailView.self)).to(beTrue())
                     }
+                }
+            }
+
+            describe("popView") {
+                beforeEach {
+                    self.subject.startMainStack(UINavigationController())
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "SettingList", identifier: "settinglist"))
+                    expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
+                    self.subject.popView()
+                }
+
+                it("removes only one view") {
+                    expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
+                }
+            }
+
+            describe("pop to root") {
+                beforeEach {
+                    self.subject.startMainStack(UINavigationController())
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
+                    self.subject.push(view: self.viewFactory.make(storyboardName: "SettingList", identifier: "settinglist"))
+                    expect(self.subject.topViewIs(SettingListView.self)).to(beTrue())
+                    self.subject.popView()
+                }
+
+                it("removes only one view") {
+                    expect(self.subject.topViewIs(ItemDetailView.self)).to(beTrue())
                 }
             }
         }

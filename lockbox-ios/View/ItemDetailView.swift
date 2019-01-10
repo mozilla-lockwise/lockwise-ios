@@ -98,34 +98,40 @@ extension ItemDetailView: ItemDetailViewProtocol {
                 .drive(self.navigationItem.rx.title)
                 .disposed(by: self.disposeBag)
     }
-}
 
-// view styling
-extension ItemDetailView: UIGestureRecognizerDelegate {
-    fileprivate func setupNavigation() {
-        let leftButton = UIButton(title: Constant.string.back, imageName: "back")
-        leftButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-        
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.navigationTitleFont
-        ]
+    func enableBackButton(enabled: Bool) {
+        if enabled {
+            let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+            leftButton.titleLabel?.font = .navigationButtonFont
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
-        if let presenter = self.presenter {
-            leftButton.rx.tap
+            if let presenter = self.presenter {
+                leftButton.rx.tap
                     .bind(to: presenter.onCancel)
                     .disposed(by: self.disposeBag)
 
-            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+                self.navigationController?.interactivePopGestureRecognizer?.rx.event
                     .map { _ -> Void in
                         return ()
                     }
                     .bind(to: presenter.onCancel)
                     .disposed(by: self.disposeBag)
+            }
+        } else {
+            self.navigationItem.leftBarButtonItem = nil
         }
+    }
+}
+
+// view styling
+extension ItemDetailView: UIGestureRecognizerDelegate {
+    fileprivate func setupNavigation() {
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
+        ]
     }
 
     fileprivate func setupDataSource() {

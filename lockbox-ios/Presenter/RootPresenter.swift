@@ -11,18 +11,21 @@ import FxAClient
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
-    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+    func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
-
     var modalStackPresented: Bool { get }
 
-    func startMainStack<T: UINavigationController>(_ type: T.Type)
+    func startMainStack<T: UIViewController>(_ viewController: T)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
 
-    func pushLoginView(view: LoginRouteAction)
-    func pushMainView(view: MainRouteAction)
-    func pushSettingView(view: SettingRouteAction)
+    func push(view: UIViewController)
+    func pushSidebar(view: UIViewController)
+    func pushDetail(view: UIViewController)
+    func popView()
+    func popToRoot()
 }
 
 struct OAuthProfile {
@@ -52,6 +55,8 @@ class RootPresenter {
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: Sentry
     fileprivate let adjustManager: AdjustManager
+    fileprivate let tabletHelper: TabletHelper
+    fileprivate let viewFactory: ViewFactory
 
     var fxa: FirefoxAccount?
 
@@ -66,7 +71,9 @@ class RootPresenter {
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: Sentry = Sentry.shared,
-         adjustManager: AdjustManager = AdjustManager.shared
+         adjustManager: AdjustManager = AdjustManager.shared,
+         tabletHelper: TabletHelper = TabletHelper.shared,
+         viewFactory: ViewFactory = ViewFactory.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -80,6 +87,8 @@ class RootPresenter {
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
         self.adjustManager = adjustManager
+        self.tabletHelper = tabletHelper
+        self.viewFactory = viewFactory
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -173,29 +182,29 @@ class RootPresenter {
             }
 
             if !view.mainStackIs(LoginNavigationController.self) {
-                view.startMainStack(LoginNavigationController.self)
+                view.startMainStack(LoginNavigationController())
             }
 
             switch loginAction {
             case .welcome:
                 if !view.topViewIs(WelcomeView.self) {
-                    view.pushLoginView(view: .welcome)
+                    view.popToRoot()
                 }
             case .fxa:
                 if !view.topViewIs(FxAView.self) {
-                    view.pushLoginView(view: .fxa)
+                    view.push(view: self.viewFactory.make(FxAView.self))
                 }
             case .onboardingConfirmation:
                 if !view.topViewIs(OnboardingConfirmationView.self) {
-                    view.pushLoginView(view: .onboardingConfirmation)
+                    view.push(view: self.viewFactory.make(storyboardName: "OnboardingConfirmation", identifier: "onboardingconfirmation"))
                 }
             case .autofillOnboarding:
                 if !view.topViewIs(AutofillOnboardingView.self) {
-                    view.pushLoginView(view: .autofillOnboarding)
+                    view.push(view: self.viewFactory.make(storyboardName: "AutofillOnboarding", identifier: "autofillonboarding"))
                 }
             case .autofillInstructions:
                 if !view.topViewIs(AutofillInstructionsView.self) {
-                    view.pushLoginView(view: .autofillInstructions)
+                    view.push(view: self.viewFactory.make(storyboardName: "SetupAutofill", identifier: "autofillinstructions"))
                 }
             }
         }.asObserver()
@@ -211,18 +220,37 @@ class RootPresenter {
                 view.dismissModals()
             }
 
-            if !view.mainStackIs(MainNavigationController.self) {
-                view.startMainStack(MainNavigationController.self)
+            if self.shouldDisplaySidebar {
+                if !view.mainStackIs(SplitView.self) {
+                    view.startMainStack(SplitView())
+                }
+            } else {
+                if !view.mainStackIs(MainNavigationController.self) {
+                    view.startMainStack(MainNavigationController(storyboardName: "ItemList", identifier: "itemlist"))
+                }
             }
 
             switch mainAction {
             case .list:
-                if !view.topViewIs(ItemListView.self) {
-                    view.pushMainView(view: .list)
+                if self.shouldDisplaySidebar {
+                    if !view.sidebarViewIs(ItemListView.self) {
+                        view.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
+                    }
+                } else {
+                    if !view.topViewIs(ItemListView.self) {
+                        view.popToRoot()
+                    }
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
-                    view.pushMainView(view: .detail(itemId: id))
+                    let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+                    detailView.itemId = id
+
+                    if self.shouldDisplaySidebar {
+                        view.pushDetail(view: detailView)
+                    } else {
+                        view.push(view: detailView)
+                    }
                 }
             }
         }.asObserver()
@@ -239,25 +267,25 @@ class RootPresenter {
             }
 
             if !view.mainStackIs(SettingNavigationController.self) {
-                view.startMainStack(SettingNavigationController.self)
+                view.startMainStack(SettingNavigationController())
             }
 
             switch settingAction {
             case .list:
                 if !view.topViewIs(SettingListView.self) {
-                    view.pushSettingView(view: .list)
+                    view.popToRoot()
                 }
             case .account:
                 if !view.topViewIs(AccountSettingView.self) {
-                    view.pushSettingView(view: .account)
+                    view.push(view: self.viewFactory.make(storyboardName: "AccountSetting", identifier: "accountsetting"))
                 }
             case .autoLock:
                 if !view.topViewIs(AutoLockSettingView.self) {
-                    view.pushSettingView(view: .autoLock)
+                    view.push(view: self.viewFactory.make(AutoLockSettingView.self))
                 }
             case .preferredBrowser:
                 if !view.topViewIs(PreferredBrowserSettingView.self) {
-                    view.pushSettingView(view: .preferredBrowser)
+                    view.push(view: self.viewFactory.make(PreferredBrowserSettingView.self))
                 }
             case .autofillInstructions:
                 if !view.modalStackIs(AutofillInstructionsNavigationController.self) {
@@ -284,6 +312,10 @@ class RootPresenter {
             }
         }.asObserver()
     }()
+
+    private var shouldDisplaySidebar: Bool {
+        return self.tabletHelper.shouldDisplaySidebar
+    }
 }
 
 extension RootPresenter {
