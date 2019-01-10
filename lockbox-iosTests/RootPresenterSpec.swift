@@ -22,21 +22,33 @@ class RootPresenterSpec: QuickSpec {
         var modalViewIsArgument: UIViewController.Type?
         var modalViewIsVar: Bool!
 
-        var mainStackIsArgument: UINavigationController.Type?
+        var mainStackIsArgument: UIViewController.Type?
         var mainStackIsVar: Bool!
 
         var modalStackIsArgument: UINavigationController.Type?
         var modalStackIsVar: Bool!
 
-        var startMainStackArgument: UINavigationController.Type?
-        var startModalStackArgument: UINavigationController?
+        var startMainStackArgument: UIViewController?
+        var startModalStackArgument: UIViewController?
         var dismissModalCalled: Bool = false
 
-        var pushLoginViewRouteArgument: LoginRouteAction?
-        var pushMainViewArgument: MainRouteAction?
-        var pushSettingViewArgument: SettingRouteAction?
+        var sidebarViewIsArgument: UIViewController.Type?
+        var sidebarViewIsVar: Bool!
 
-        var modalStackPresented = true
+        var pushArgument: UIViewController?
+        var pushDetailArgument: UIViewController?
+        var pushSidebarArgument: UIViewController?
+
+        var detailViewIsArgument: UIViewController.Type!
+        var detailViewIsVar: Bool!
+
+        var popViewCalled = false
+        var popToRootCalled = false
+
+        func detailViewIs<T>(_ type: T.Type) -> Bool where T: UIViewController {
+            self.detailViewIsArgument = type
+            return self.detailViewIsVar
+        }
 
         func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.topViewIsArgument = type
@@ -48,7 +60,12 @@ class RootPresenterSpec: QuickSpec {
             return self.modalViewIsVar
         }
 
-        func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+        func sidebarViewIs<T>(_ type: T.Type) -> Bool where T: UIViewController {
+            self.sidebarViewIsArgument = type
+            return self.sidebarViewIsVar
+        }
+
+        func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.mainStackIsArgument = type
             return self.mainStackIsVar
         }
@@ -58,8 +75,10 @@ class RootPresenterSpec: QuickSpec {
             return self.modalStackIsVar
         }
 
-        func startMainStack<T: UINavigationController>(_ type: T.Type) {
-            self.startMainStackArgument = type
+        var modalStackPresented = true
+
+        func startMainStack<T>(_ viewController: T) where T: UIViewController {
+            self.startMainStackArgument = viewController
         }
 
         func startModalStack<T: UINavigationController>(_ navigationController: T) {
@@ -70,16 +89,24 @@ class RootPresenterSpec: QuickSpec {
             self.dismissModalCalled = true
         }
 
-        func pushLoginView(view: LoginRouteAction) {
-            self.pushLoginViewRouteArgument = view
+        func push(view: UIViewController) {
+            self.pushArgument = view
         }
 
-        func pushMainView(view: MainRouteAction) {
-            self.pushMainViewArgument = view
+        func pushSidebar(view: UIViewController) {
+            self.pushSidebarArgument = view
         }
 
-        func pushSettingView(view: SettingRouteAction) {
-            self.pushSettingViewArgument = view
+        func pushDetail(view: UIViewController) {
+            self.pushDetailArgument = view
+        }
+
+        func popView() {
+            self.popViewCalled = true
+        }
+
+        func popToRoot() {
+            self.popToRootCalled = true
         }
     }
 
@@ -329,7 +356,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the WelcomeView & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.welcome))
+                                    expect(self.view.popToRootCalled).to(beTrue())
                                 }
                             }
 
@@ -350,7 +377,8 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the WelcomeView & nothing happens") {
                                     expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
+                                    expect(self.view.popToRootCalled).to(beFalse())
                                 }
                             }
                         }
@@ -373,7 +401,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the FxAView & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.welcome))
+                                    expect(self.view.popToRootCalled).to(beTrue())
                                 }
                             }
 
@@ -394,7 +422,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the FxAView & nothing happens") {
                                     expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -417,7 +445,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the onboardingconfirmationview & tells the view to show the onboardingconfirmation") {
                                     expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.onboardingConfirmation))
+                                    expect(self.view.pushArgument is OnboardingConfirmationView).to(beTrue())
                                 }
                             }
 
@@ -438,7 +466,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the FxAView & nothing happens") {
                                     expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -461,7 +489,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the autofillOnboarding & tells the view to show the autofillOnboarding") {
                                     expect(self.view.topViewIsArgument === AutofillOnboardingView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.autofillOnboarding))
+                                    expect(self.view.pushArgument is AutofillOnboardingView).to(beTrue())
                                 }
                             }
 
@@ -482,7 +510,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the FxAView & nothing happens") {
                                     expect(self.view.topViewIsArgument === AutofillOnboardingView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -506,12 +534,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the fxa stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the WelcomeView & tells the view to show the fxaview") {
                                     expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.fxa))
+                                    expect(self.view.pushArgument is FxAView).to(beTrue())
                                 }
                             }
 
@@ -527,12 +555,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the WelcomeView & nothing happens") {
                                     expect(self.view.topViewIsArgument === WelcomeView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -550,12 +578,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the FxAView & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.fxa))
+                                    expect(self.view.pushArgument is FxAView).to(beTrue())
                                 }
                             }
 
@@ -571,12 +599,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the FxAView & nothing happens") {
                                     expect(self.view.topViewIsArgument === FxAView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -594,12 +622,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the onboardingconfirmationview & tells the view to show the it") {
                                     expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.onboardingConfirmation))
+                                    expect(self.view.pushArgument is OnboardingConfirmationView).to(beTrue())
                                 }
                             }
 
@@ -615,12 +643,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the onboardingconfimrationview & nothing happens") {
                                     expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -638,12 +666,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the autofillOnboadingView & tells the view to show the it") {
                                     expect(self.view.topViewIsArgument === AutofillOnboardingView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.autofillOnboarding))
+                                    expect(self.view.pushArgument is AutofillOnboardingView).to(beTrue())
                                 }
                             }
 
@@ -659,12 +687,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the onboardingconfimrationview & nothing happens") {
                                     expect(self.view.topViewIsArgument === OnboardingConfirmationView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -682,12 +710,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the autofillOnboadingView & tells the view to show the it") {
                                     expect(self.view.topViewIsArgument === AutofillInstructionsView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(equal(LoginRouteAction.autofillInstructions))
+                                    expect(self.view.pushArgument is AutofillInstructionsView).to(beTrue())
                                 }
                             }
 
@@ -703,12 +731,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the login stack") {
                                     expect(self.view.mainStackIsArgument === LoginNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === LoginNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is LoginNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the autofillinstructions & nothing happens") {
                                     expect(self.view.topViewIsArgument === AutofillInstructionsView.self).to(beTrue())
-                                    expect(self.view.pushLoginViewRouteArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -725,7 +753,7 @@ class RootPresenterSpec: QuickSpec {
                         it("does nothing") {
                             expect(self.view.mainStackIsArgument).to(beNil())
                             expect(self.view.topViewIsArgument).to(beNil())
-                            expect(self.view.pushMainViewArgument).to(beNil())
+                            expect(self.view.pushArgument).to(beNil())
                         }
                     }
 
@@ -753,7 +781,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the ListView & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.list))
+                                    expect(self.view.popToRootCalled).to(beTrue())
                                 }
                             }
 
@@ -774,7 +802,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the ListView & nothing happens") {
                                     expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -798,8 +826,9 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the DetailView & tells the view to show the detail view") {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument)
-                                            .to(equal(MainRouteAction.detail(itemId: itemId)))
+                                    expect(self.view.pushArgument is ItemDetailView)
+                                            .to(beTrue())
+                                    expect((self.view.pushArgument as? ItemDetailView)?.itemId).to(equal(itemId))
                                 }
                             }
 
@@ -820,7 +849,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("checks for the DetailView & nothing happens") {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -845,12 +874,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the main stack") {
                                     expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the ListView & tells the view to show the listview") {
                                     expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(equal(MainRouteAction.list))
+                                    expect(self.view.popToRootCalled).to(beTrue())
                                 }
                             }
 
@@ -866,12 +895,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the main stack") {
                                     expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the ListView & nothing happens") {
                                     expect(self.view.topViewIsArgument === ItemListView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -890,13 +919,13 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the main stack") {
                                     expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the DetailView & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument)
-                                            .to(equal(MainRouteAction.detail(itemId: itemId)))
+                                    expect(self.view.pushArgument is ItemDetailView).to(beTrue())
+                                    expect((self.view.pushArgument as? ItemDetailView)?.itemId).to(equal(itemId))
                                 }
                             }
 
@@ -912,12 +941,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the main stack") {
                                     expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
                                 }
 
                                 it("checks for the DetailView & nothing happens") {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
-                                    expect(self.view.pushMainViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }
@@ -934,7 +963,7 @@ class RootPresenterSpec: QuickSpec {
                         it("does nothing") {
                             expect(self.view.mainStackIsArgument).to(beNil())
                             expect(self.view.topViewIsArgument).to(beNil())
-                            expect(self.view.pushSettingViewArgument).to(beNil())
+                            expect(self.view.pushArgument).to(beNil())
                         }
                     }
 
@@ -962,7 +991,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("does not push a new setting view argument") {
                                     expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
 
@@ -983,7 +1012,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("pushes a new setting view argument") {
                                     expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
+                                    expect(self.view.popToRootCalled).to(beTrue())
                                 }
                             }
                         }
@@ -1006,7 +1035,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("does not push a new setting view argument") {
                                     expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
 
@@ -1022,12 +1051,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("does not start the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
+                                    expect(self.view.popToRootCalled).to(beFalse())
                                 }
 
                                 it("pushes a new setting view argument") {
                                     expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
+                                    expect(self.view.pushArgument is AccountSettingView).to(beTrue())
                                 }
                             }
                         }
@@ -1050,7 +1079,7 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("does not push a new setting view argument") {
                                     expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
 
@@ -1066,12 +1095,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("does not start the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
+                                    expect(self.view.pushArgument is PreferredBrowserSettingView).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
                                     expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
+                                    expect(self.view.pushArgument is PreferredBrowserSettingView).to(beTrue())
                                 }
                             }
                         }
@@ -1096,12 +1125,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SettingNavigationController).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
                                     expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
 
@@ -1117,12 +1146,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SettingNavigationController).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
                                     expect(self.view.topViewIsArgument === SettingListView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.list))
+                                    expect(self.view.popToRootCalled).to(beTrue())
                                 }
                             }
                         }
@@ -1140,12 +1169,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SettingNavigationController).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
                                     expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
 
@@ -1161,12 +1190,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SettingNavigationController).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
                                     expect(self.view.topViewIsArgument === AccountSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.account))
+                                    expect(self.view.pushArgument is AccountSettingView).to(beTrue())
                                 }
                             }
                         }
@@ -1184,12 +1213,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SettingNavigationController).to(beTrue())
                                 }
 
                                 it("does not push a new setting view argument") {
                                     expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(beNil())
+                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
 
@@ -1205,12 +1234,12 @@ class RootPresenterSpec: QuickSpec {
 
                                 it("starts the setting stack") {
                                     expect(self.view.mainStackIsArgument === SettingNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument === SettingNavigationController.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SettingNavigationController).to(beTrue())
                                 }
 
                                 it("pushes a new setting view argument") {
                                     expect(self.view.topViewIsArgument === PreferredBrowserSettingView.self).to(beTrue())
-                                    expect(self.view.pushSettingViewArgument).to(equal(SettingRouteAction.preferredBrowser))
+                                    expect(self.view.pushArgument is PreferredBrowserSettingView).to(beTrue())
                                 }
                             }
                         }
