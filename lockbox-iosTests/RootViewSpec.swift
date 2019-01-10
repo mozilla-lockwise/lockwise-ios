@@ -119,11 +119,11 @@ class RootViewSpec: QuickSpec {
                 }
 
                 it("modalStackPresented is false") {
-                    expect(self.subject.modalStackPresented).toEventually(beFalse())
+                    expect(self.subject.modalStackPresented).toEventually(beFalse(), timeout: 5)
                 }
 
                 it("removes the modal stack") {
-                    expect(self.subject.modalStackIs(SettingNavigationController.self)).toEventually(beFalse())
+                    expect(self.subject.modalStackIs(SettingNavigationController.self)).toEventually(beFalse(), timeout: 5)
                 }
             }
 
