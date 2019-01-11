@@ -259,6 +259,11 @@ extension BaseItemListView {
                     .asObservable()
                     .bind(to: presenter.filterTextObserver)
                     .disposed(by: self.disposeBag)
+
+                searchController.searchBar.rx.cancelButtonClicked
+                    .asObservable()
+                    .bind(to: presenter.cancelObserver)
+                    .disposed(by: self.disposeBag)
             }
 
             self.tableView.rx.itemSelected
