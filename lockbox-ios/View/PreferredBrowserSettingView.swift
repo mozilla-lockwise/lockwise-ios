@@ -10,14 +10,16 @@ import RxDataSources
 
 typealias PreferredBrowserSettingSectionModel = AnimatableSectionModel<Int, CheckmarkSettingCellConfiguration>
 
-class PreferredBrowserSettingView: UITableViewController {
+class PreferredBrowserSettingView: UIViewController, UITableViewDelegate {
     var presenter: PreferredBrowserSettingPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<PreferredBrowserSettingSectionModel>?
+    private var tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
     init() {
-        super.init(style: UITableView.Style.grouped)
+        super.init(nibName: nil, bundle: nil)
         self.presenter = PreferredBrowserSettingPresenter(view: self)
+        self.tableView.delegate = self
         view.backgroundColor = Constant.color.viewBackground
     }
 
@@ -31,6 +33,7 @@ class PreferredBrowserSettingView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.setupTableview()
         self.setupNavbar()
         self.setupFooter()
     }
@@ -42,7 +45,7 @@ class PreferredBrowserSettingView: UITableViewController {
         self.presenter?.onViewReady()
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return UITableViewCell()
     }
 }
@@ -50,6 +53,24 @@ class PreferredBrowserSettingView: UITableViewController {
 extension PreferredBrowserSettingView {
     private func setupFooter() {
         self.tableView.tableFooterView = UIView()
+    }
+
+    private func setupTableview() {
+        self.view.addSubview(self.tableView)
+        self.tableView.backgroundColor = Constant.color.viewBackground
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraints([
+            NSLayoutConstraint(item: self.tableView, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.tableView, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.tableView, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+            ])
+
+        if self.view.traitCollection.horizontalSizeClass == .regular &&
+            self.view.traitCollection.verticalSizeClass == .regular {
+            self.view.addConstraints([
+                NSLayoutConstraint(item: self.tableView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 568)
+                ])
+        }
     }
 
     private func setupDataSource() {
