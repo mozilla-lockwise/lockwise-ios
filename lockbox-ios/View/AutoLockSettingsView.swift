@@ -14,7 +14,7 @@ class AutoLockSettingView: UIViewController, UITableViewDelegate {
     var presenter: AutoLockSettingPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<AutoLockSettingSectionModel>?
-    private var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
     init() {
         super.init(nibName: nil, bundle: nil)
