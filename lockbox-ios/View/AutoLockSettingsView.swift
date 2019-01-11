@@ -10,14 +10,16 @@ import RxDataSources
 
 typealias AutoLockSettingSectionModel = AnimatableSectionModel<Int, CheckmarkSettingCellConfiguration>
 
-class AutoLockSettingView: UITableViewController {
+class AutoLockSettingView: UIViewController, UITableViewDelegate {
     var presenter: AutoLockSettingPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<AutoLockSettingSectionModel>?
+    private var tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
     init() {
-        super.init(style: UITableView.Style.grouped)
+        super.init(nibName: nil, bundle: nil)
         self.presenter = AutoLockSettingPresenter(view: self)
+        self.tableView.delegate = self
         view.backgroundColor = Constant.color.viewBackground
     }
 
@@ -31,6 +33,7 @@ class AutoLockSettingView: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.setupTableview()
         self.setupNavbar()
         self.setupFooter()
     }
@@ -42,7 +45,7 @@ class AutoLockSettingView: UITableViewController {
         self.presenter?.onViewReady()
     }
 
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
         cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
@@ -56,6 +59,22 @@ class AutoLockSettingView: UITableViewController {
 extension AutoLockSettingView {
     private func setupFooter() {
         self.tableView.tableFooterView = UIView()
+    }
+
+    private func setupTableview() {
+        self.view.addSubview(self.tableView)
+        self.tableView.backgroundColor = Constant.color.viewBackground
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraints([
+            NSLayoutConstraint(item: self.tableView, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.tableView, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.tableView, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+            ])
+
+        if self.view.traitCollection.horizontalSizeClass == .regular &&
+            self.view.traitCollection.verticalSizeClass == .regular {
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 568))
+        }
     }
 
     private func setupDataSource() {
