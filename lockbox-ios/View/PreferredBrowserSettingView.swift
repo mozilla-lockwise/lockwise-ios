@@ -14,7 +14,7 @@ class PreferredBrowserSettingView: UIViewController, UITableViewDelegate {
     var presenter: PreferredBrowserSettingPresenter?
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<PreferredBrowserSettingSectionModel>?
-    private var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
     init() {
         super.init(nibName: nil, bundle: nil)
