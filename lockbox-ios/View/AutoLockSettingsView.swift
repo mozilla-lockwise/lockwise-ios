@@ -45,10 +45,19 @@ class AutoLockSettingView: UIViewController, UITableViewDelegate {
         self.presenter?.onViewReady()
     }
 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if self.view.traitCollection.horizontalSizeClass == .regular &&
+            self.view.traitCollection.verticalSizeClass == .regular {
+            return 55
+        }
+
+        return UITableView.automaticDimension
+    }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
-        cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
         cell.textLabel?.text = Constant.string.autoLockHeader
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.textLabel?.numberOfLines = 0
