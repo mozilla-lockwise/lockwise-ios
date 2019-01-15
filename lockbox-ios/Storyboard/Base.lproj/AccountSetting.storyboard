@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad11_0rounded" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,70 +15,127 @@
             <objects>
                 <viewController storyboardIdentifier="accountsetting" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UPp-Js-xvK" customClass="AccountSettingView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9B0-EH-D9l">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To make changes to your account, log in to your Firefox Account from any browser." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
-                                <rect key="frame" x="62" y="167" width="250" height="58"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
-                                <rect key="frame" x="0.0" y="533" width="375" height="44"/>
-                                <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <accessibility key="accessibilityConfiguration" identifier="disconnectFirefoxLockbox.button"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9sM-pd-E4K">
+                                <rect key="frame" x="133" y="285" width="568" height="628"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To make changes to your account, log in to your Firefox Account from any browser." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
+                                        <rect key="frame" x="62" y="146.5" width="444" height="38"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
+                                        <rect key="frame" x="0.0" y="494" width="568" height="44"/>
+                                        <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="disconnectFirefoxLockbox.button"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="mIY-nI-JMy"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Disconnect Firefox Lockbox">
+                                            <color key="titleColor" red="0.99718213081359863" green="0.2334609180688858" blue="0.1882847398519516" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="disconnectFirefoxLockbox.button"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="This removes synced entries from Firefox Lockbox, but will not delete your entries from Firefox." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
+                                        <rect key="frame" x="15" y="136.5" width="345" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="404" id="BD7-a4-4si"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                        <color key="textColor" red="0.42766761779785156" green="0.42717477679252625" blue="0.44713732600212097" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="BD7-a4-4si"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <mask key="constraints">
+                                                <include reference="BD7-a4-4si"/>
+                                            </mask>
+                                        </variation>
+                                    </label>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" image="avatar-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="meC-vW-3bR">
+                                        <rect key="frame" x="243" y="10" width="82" height="82"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="82" id="09u-j0-1Ew"/>
+                                            <constraint firstAttribute="height" constant="82" id="44S-4F-zOU"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firefox Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f32-KR-4Nm">
+                                        <rect key="frame" x="240" y="102" width="88.5" height="14.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                        <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="username.Label"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="mIY-nI-JMy"/>
+                                    <constraint firstItem="dKb-ji-8VE" firstAttribute="top" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="5" id="4mW-td-T8E"/>
+                                    <constraint firstAttribute="bottom" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="90" id="9vv-2H-Crk"/>
+                                    <constraint firstItem="meC-vW-3bR" firstAttribute="centerX" secondItem="9sM-pd-E4K" secondAttribute="centerX" id="B0n-F9-Zsy"/>
+                                    <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9sM-pd-E4K" secondAttribute="top" constant="10" id="Dcy-c1-Llw"/>
+                                    <constraint firstItem="dKb-ji-8VE" firstAttribute="leading" secondItem="9sM-pd-E4K" secondAttribute="leading" constant="15" id="GOZ-T7-JLB"/>
+                                    <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="dKb-ji-8VE" secondAttribute="bottom" constant="50" id="Gm2-uC-cSv"/>
+                                    <constraint firstAttribute="trailing" secondItem="htf-cl-VXU" secondAttribute="trailing" id="RIP-FJ-gQd"/>
+                                    <constraint firstItem="f32-KR-4Nm" firstAttribute="centerX" secondItem="9sM-pd-E4K" secondAttribute="centerX" id="ScS-RG-sOd"/>
+                                    <constraint firstAttribute="width" constant="568" id="XX7-Cb-zI8"/>
+                                    <constraint firstItem="htf-cl-VXU" firstAttribute="leading" secondItem="9sM-pd-E4K" secondAttribute="leading" id="bcl-le-W14"/>
+                                    <constraint firstItem="6A6-i9-hvw" firstAttribute="top" secondItem="f32-KR-4Nm" secondAttribute="bottom" constant="30" id="fjP-ia-Dpt"/>
+                                    <constraint firstItem="dKb-ji-8VE" firstAttribute="centerX" secondItem="9sM-pd-E4K" secondAttribute="centerX" id="g2P-aC-pyR"/>
+                                    <constraint firstAttribute="height" constant="628" id="nKL-oH-eoF"/>
+                                    <constraint firstItem="6A6-i9-hvw" firstAttribute="centerX" secondItem="9sM-pd-E4K" secondAttribute="centerX" id="qbV-u2-Lhs"/>
+                                    <constraint firstItem="f32-KR-4Nm" firstAttribute="top" secondItem="meC-vW-3bR" secondAttribute="bottom" constant="10" id="tq2-7f-tkf"/>
+                                    <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9sM-pd-E4K" secondAttribute="leading" constant="62" id="xmd-8K-bjJ"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <state key="normal" title="Disconnect Firefox Lockbox">
-                                    <color key="titleColor" red="0.99718213081359863" green="0.2334609180688858" blue="0.1882847398519516" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="disconnectFirefoxLockbox.button"/>
-                                </userDefinedRuntimeAttributes>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This removes synced entries from Firefox Lockbox, but will not delete your entries from Firefox." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
-                                <rect key="frame" x="15" y="582" width="345" height="35"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                <color key="textColor" red="0.42766761779785156" green="0.42717477679252625" blue="0.44713732600212097" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" image="avatar-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="meC-vW-3bR">
-                                <rect key="frame" x="146" y="30" width="82" height="82"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="82" id="09u-j0-1Ew"/>
-                                    <constraint firstAttribute="height" constant="82" id="44S-4F-zOU"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firefox Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f32-KR-4Nm">
-                                <rect key="frame" x="144" y="122" width="88.5" height="14.5"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                                <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="username.Label"/>
-                                </userDefinedRuntimeAttributes>
-                            </label>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="XX7-Cb-zI8"/>
+                                        <exclude reference="nKL-oH-eoF"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <include reference="XX7-Cb-zI8"/>
+                                        <include reference="nKL-oH-eoF"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9B0-EH-D9l" secondAttribute="top" constant="30" id="0tC-Tq-dmb"/>
-                            <constraint firstItem="dKb-ji-8VE" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="15" id="0tG-IM-h0B"/>
-                            <constraint firstItem="htf-cl-VXU" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" id="6W4-Fs-nDO"/>
-                            <constraint firstItem="6A6-i9-hvw" firstAttribute="leading" secondItem="9B0-EH-D9l" secondAttribute="leading" constant="62" id="7bq-qv-41L"/>
-                            <constraint firstItem="dKb-ji-8VE" firstAttribute="top" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="5" id="CNN-2E-rJd"/>
-                            <constraint firstAttribute="bottom" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="90" id="OOO-8n-6MF"/>
-                            <constraint firstAttribute="trailing" secondItem="htf-cl-VXU" secondAttribute="trailing" id="Rk4-d2-iOq"/>
-                            <constraint firstItem="f32-KR-4Nm" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="bSG-y6-P71"/>
-                            <constraint firstItem="6A6-i9-hvw" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="g2N-6t-uHz"/>
-                            <constraint firstItem="f32-KR-4Nm" firstAttribute="top" secondItem="meC-vW-3bR" secondAttribute="bottom" constant="10" id="jUe-ph-ux4"/>
-                            <constraint firstItem="meC-vW-3bR" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="sBd-U0-dtZ"/>
-                            <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="dKb-ji-8VE" secondAttribute="bottom" constant="50" id="tEA-Ex-Vaa"/>
-                            <constraint firstItem="6A6-i9-hvw" firstAttribute="top" secondItem="f32-KR-4Nm" secondAttribute="bottom" constant="30" id="wWu-hi-qyR"/>
-                            <constraint firstItem="dKb-ji-8VE" firstAttribute="centerX" secondItem="9B0-EH-D9l" secondAttribute="centerX" id="ztw-Hb-70m"/>
+                            <constraint firstItem="9sM-pd-E4K" firstAttribute="trailing" secondItem="PPt-yW-Jkp" secondAttribute="trailing" id="AtF-NU-nuq"/>
+                            <constraint firstItem="9sM-pd-E4K" firstAttribute="centerX" secondItem="PPt-yW-Jkp" secondAttribute="centerX" id="NGb-Ne-8UJ"/>
+                            <constraint firstItem="9sM-pd-E4K" firstAttribute="centerY" secondItem="PPt-yW-Jkp" secondAttribute="centerY" id="Vhq-4j-JTQ"/>
+                            <constraint firstItem="PPt-yW-Jkp" firstAttribute="bottom" secondItem="9sM-pd-E4K" secondAttribute="bottom" id="gga-Gd-GMY"/>
+                            <constraint firstItem="9sM-pd-E4K" firstAttribute="top" secondItem="PPt-yW-Jkp" secondAttribute="top" id="jWl-Ka-13P"/>
+                            <constraint firstItem="9sM-pd-E4K" firstAttribute="leading" secondItem="PPt-yW-Jkp" secondAttribute="leading" id="rld-y3-OGY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PPt-yW-Jkp"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="NGb-Ne-8UJ"/>
+                                <exclude reference="Vhq-4j-JTQ"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="constraints">
+                                <exclude reference="gga-Gd-GMY"/>
+                                <exclude reference="AtF-NU-nuq"/>
+                                <include reference="NGb-Ne-8UJ"/>
+                                <include reference="Vhq-4j-JTQ"/>
+                                <exclude reference="jWl-Ka-13P"/>
+                                <exclude reference="rld-y3-OGY"/>
+                            </mask>
+                        </variation>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
