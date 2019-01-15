@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="ipad11_0rounded" orientation="portrait">
+    <device id="ipad12_9rounded" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,15 +15,15 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qft-mi-z9V">
-                                <rect key="frame" x="0.0" y="232" width="834" height="942"/>
+                                <rect key="frame" x="0.0" y="232" width="1366" height="772"/>
                                 <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="3kf-Am-KPJ">
-                                <rect key="frame" x="0.0" y="160" width="834" height="144"/>
+                                <rect key="frame" x="0.0" y="160" width="1366" height="144"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="144" id="QvJ-XO-y87"/>
                                 </constraints>
@@ -48,6 +48,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="nessie" width="1024" height="144"/>
+        <image name="nessie" width="1366" height="144"/>
     </resources>
 </document>
