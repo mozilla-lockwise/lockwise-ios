@@ -43,8 +43,8 @@ class FxAView: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("not implemented")
+    required convenience init?(coder aDecoder: NSCoder) {
+        self.init(webView: WKWebView())
     }
 }
 
