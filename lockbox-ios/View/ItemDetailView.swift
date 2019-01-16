@@ -6,6 +6,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import CoreServices
 
 typealias ItemDetailSectionModel = AnimatableSectionModel<Int, ItemDetailCellConfiguration>
 
@@ -18,6 +19,7 @@ struct ItemDetailCellConfiguration {
     let accessibilityId: String
     let showCopyButton: Bool
     let showOpenButton: Bool
+    let dragValue: String?
 
     init(title: String,
          value: String,
@@ -26,7 +28,8 @@ struct ItemDetailCellConfiguration {
          valueFontColor: UIColor = UIColor.black,
          accessibilityId: String,
          showCopyButton: Bool = false,
-         showOpenButton: Bool = false) {
+         showOpenButton: Bool = false,
+         dragValue: String? = nil) {
         self.title = title
         self.value = value
         self.accessibilityLabel = accessibilityLabel
@@ -35,6 +38,7 @@ struct ItemDetailCellConfiguration {
         self.accessibilityId = accessibilityId
         self.showCopyButton = showCopyButton
         self.showOpenButton = showOpenButton
+        self.dragValue = dragValue
     }
 }
 
@@ -72,6 +76,7 @@ class ItemDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
+        self.tableView.dragDelegate = self
         self.learnHowToEditArrow.tintColor = Constant.color.lockBoxBlue
         self.setupNavigation()
         self.setupDataSource()
@@ -153,6 +158,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.openButton.isHidden = !cellConfiguration.showOpenButton
                     cell.copyButton.isHidden = !cellConfiguration.showCopyButton
 
+                    cell.dragValue = cellConfiguration.dragValue
+
                     if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
                         cell.valueLabel.preferredMaxLayoutWidth = 250
@@ -200,5 +207,22 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .bind(to: presenter.onCellTapped)
             .disposed(by: self.disposeBag)
         }
+    }
+}
+
+extension ItemDetailView: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let cell = tableView.cellForRow(at: indexPath)
+        let data = (cell as? ItemDetailCell)?.dragValue?.data(using: .utf8)
+        let itemProvider = NSItemProvider()
+
+        itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypePlainText as String, visibility: .all) { completion in
+            completion(data, nil)
+            return nil
+        }
+
+        return [
+            UIDragItem(itemProvider: itemProvider)
+        ]
     }
 }
