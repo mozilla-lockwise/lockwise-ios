@@ -56,12 +56,8 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     private var currentNavigationController: UINavigationController? {
-        if let splitViewController = self.currentViewController as? UISplitViewController {
-            if splitViewController.viewControllers.count != 2 {
-                return nil
-            }
-
-            return splitViewController.viewControllers[1] as? UINavigationController
+        if let splitViewController = self.currentViewController as? SplitView {
+            return splitViewController.sidebarView
         }
 
         return self.currentViewController as? UINavigationController
@@ -138,7 +134,7 @@ class RootView: UIViewController, RootViewProtocol {
 
     func pushSidebar(view: UIViewController) {
         if let splitView = self.currentViewController as? SplitView {
-            splitView.showSidebar(vc: view)
+            splitView.sidebarView = MainNavigationController(rootViewController: view)
         }
     }
 
@@ -150,5 +146,20 @@ class RootView: UIViewController, RootViewProtocol {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("not implemented")
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        let hasDetailView = RootView.hasDetailView(traitCollection: newCollection)
+        self.presenter?.changeDisplay(isDisplayingSidebar: hasDetailView)
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.presenter?.changeDisplay(isDisplayingSidebar: RootView.hasDetailView(traitCollection: self.view.traitCollection))
+    }
+
+    static func hasDetailView(traitCollection: UITraitCollection) -> Bool {
+        return traitCollection.horizontalSizeClass == .regular
     }
 }

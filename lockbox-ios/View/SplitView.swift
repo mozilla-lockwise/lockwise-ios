@@ -5,9 +5,10 @@
 import UIKit
 
 class SplitView: UISplitViewController {
-    init() {
+    init(delegate: UISplitViewControllerDelegate) {
         super.init(nibName: nil, bundle: nil)
         self.preferredDisplayMode = UISplitViewController.DisplayMode.allVisible
+        self.delegate = delegate
         self.viewControllers = [
             MainNavigationController(storyboardName: "ItemList", identifier: "itemlist"),
             MainNavigationController(storyboardName: "ItemDetail", identifier: "itemdetailview")
@@ -18,8 +19,15 @@ class SplitView: UISplitViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func showSidebar(vc: UIViewController) {
-        self.viewControllers[0] = vc
+    public var sidebarView: UINavigationController? {
+        get {
+            return self.viewControllers[0] as? UINavigationController
+        }
+        set {
+            if let navController = newValue {
+                self.viewControllers[0] = navController
+            }
+        }
     }
 
     public var detailView: UINavigationController? {
