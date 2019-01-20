@@ -489,16 +489,16 @@ class ItemDetailPresenterSpec: QuickSpec {
 
             describe("dndStarted") {
                 beforeEach {
-                    let item = Login(guid: "fsdfds", hostname: "www.example.com", username: "asdf", password: "meow")
+                    let item = Login(guid:  self.view.itemId, hostname: "www.example.com", username: "asdf", password: "meow")
                     self.dataStore.onItemStub.onNext(item)
 
                     self.subject.dndStarted(itemId: self.view.itemId, value: "Username")
                 }
 
-                it("sends copy action") {
+                it("sends toucb action") {
                     expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                    let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                    expect(action).to(equal(CopyAction(text: "asdf", field: .username, itemID: self.view.itemId, actionType: .dnd)))
+                    let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                    expect(action).to(equal(DataStoreAction.touch(id: self.view.itemId)))
                 }
             }
         }
