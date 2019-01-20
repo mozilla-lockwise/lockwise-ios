@@ -775,7 +775,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the login stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -796,7 +796,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -820,7 +820,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -843,7 +843,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -873,8 +873,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the ListView & tells the view to show the listview") {
@@ -894,8 +894,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the ListView & nothing happens") {
@@ -918,8 +918,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the DetailView & tells the view to show the loginview") {
@@ -940,8 +940,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the DetailView & nothing happens") {
