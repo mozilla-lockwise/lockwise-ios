@@ -198,7 +198,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "", actionType: .tap)))
                             }
                         }
 
@@ -211,7 +211,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action with no text") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "", actionType: .tap)))
                             }
                         }
                     }
@@ -244,7 +244,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "", actionType: .tap)))
                             }
                         }
 
@@ -257,7 +257,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action with no text") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "", actionType: .tap)))
                             }
                         }
                     }
@@ -484,6 +484,21 @@ class ItemDetailPresenterSpec: QuickSpec {
                                                 returnRoute: MainRouteAction.detail(itemId: self.view.itemId))
                                 ))
                     }
+                }
+            }
+
+            describe("dndStarted") {
+                beforeEach {
+                    let item = Login(guid: "fsdfds", hostname: "www.example.com", username: "asdf", password: "meow")
+                    self.dataStore.onItemStub.onNext(item)
+
+                    self.subject.dndStarted(itemId: self.view.itemId, value: "Username")
+                }
+
+                it("sends copy action") {
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                    expect(action).to(equal(CopyAction(text: "asdf", field: .username, itemID: self.view.itemId, actionType: .dnd)))
                 }
             }
         }

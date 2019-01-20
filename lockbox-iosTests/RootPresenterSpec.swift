@@ -1278,7 +1278,7 @@ class RootPresenterSpec: QuickSpec {
                 }
 
                 describe("telemetry") {
-                    let action = CopyAction(text: "somethin", field: .password, itemID: "fsdsdfsf") as TelemetryAction
+                    let action = CopyAction(text: "somethin", field: .password, itemID: "fsdsdfsf", actionType: .tap) as TelemetryAction
 
                     describe("when usage data can be recorded") {
                         beforeEach {

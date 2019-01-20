@@ -46,7 +46,7 @@ class CopyDisplayStoreSpec: QuickSpec {
             describe("receiving copyactions") {
                 let text = "myspecialtext"
                 let fieldName = CopyField.password
-                let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd")
+                let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd", actionType: .tap)
                 var fieldObserver = self.scheduler.createObserver(CopyField.self)
 
                 beforeEach {
