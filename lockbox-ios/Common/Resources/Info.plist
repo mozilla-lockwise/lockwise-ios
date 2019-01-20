@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIRequiresFullScreen</key>
+	<string>true</string>
+	<key>UIRequiresFullScreen~ipad</key>
+	<string>false</string>
 	<key>UILaunchStoryboardName~ipad</key>
 	<string>LaunchScreen~ipad.storyboard</string>
 	<key>CFBundleDevelopmentRegion</key>
