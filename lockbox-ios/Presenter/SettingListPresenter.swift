@@ -75,7 +75,7 @@ class SettingListPresenter {
             SettingCellConfiguration(
                     text: Constant.string.faq,
                     routeAction: ExternalWebsiteRouteAction(
-                            urlString: Constant.app.faqURL,
+                            urlString: Constant.app.faqURLtop,
                             title: Constant.string.faq,
                             returnRoute: SettingRouteAction.list),
                             accessibilityId: "faqSettingOption")
@@ -207,7 +207,7 @@ extension SettingListPresenter {
     @objc private func learnMoreTapped() {
         self.onSettingCellTapped.onNext(
                 ExternalWebsiteRouteAction(
-                        urlString: Constant.app.faqURL,
+                        urlString: Constant.app.faqURLtop,
                         title: Constant.string.faq,
                         returnRoute: SettingRouteAction.list
                 ))
