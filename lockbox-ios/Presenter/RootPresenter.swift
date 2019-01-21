@@ -56,6 +56,7 @@ class RootPresenter {
     fileprivate let sentryManager: Sentry
     fileprivate let adjustManager: AdjustManager
     fileprivate let viewFactory: ViewFactory
+    fileprivate let sizeClassStore: SizeClassStore
 
     private var isDisplayingSidebar: Bool?
 
@@ -73,7 +74,8 @@ class RootPresenter {
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: Sentry = Sentry.shared,
          adjustManager: AdjustManager = AdjustManager.shared,
-         viewFactory: ViewFactory = ViewFactory.shared
+         viewFactory: ViewFactory = ViewFactory.shared,
+         sizeClassStore: SizeClassStore = SizeClassStore.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -88,6 +90,7 @@ class RootPresenter {
         self.sentryManager = sentryManager
         self.adjustManager = adjustManager
         self.viewFactory = viewFactory
+        self.sizeClassStore = sizeClassStore
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -170,8 +173,8 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
     }
 
-    func changeDisplay(isDisplayingSidebar: Bool) {
-        self.isDisplayingSidebar = isDisplayingSidebar
+    func changeDisplay(traitCollection: UITraitCollection) {
+        self.dispatcher.dispatch(action: SizeClassAction.changed(traitCollection: traitCollection))
     }
 
     lazy private var showLogin: AnyObserver<LoginRouteAction> = { [unowned self] in
@@ -237,11 +240,16 @@ class RootPresenter {
                     let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
                     detailView.itemId = id
 
-                    if self.shouldDisplaySplitView {
-                        view.pushDetail(view: detailView)
-                    } else {
-                        view.push(view: detailView)
-                    }
+                    self.sizeClassStore.shouldDisplaySidebar
+                        .take(1)
+                        .subscribe(onNext: { enableSidebar in
+                            if enableSidebar {
+                                view.pushDetail(view: detailView)
+                            } else {
+                                view.push(view: detailView)
+                            }
+                        })
+                        .disposed(by: self.disposeBag)
                 }
             }
         }.asObserver()
@@ -303,14 +311,6 @@ class RootPresenter {
             }
         }.asObserver()
     }()
-
-    private var shouldDisplaySplitView: Bool {
-        if let isDisplayingSidebar = self.isDisplayingSidebar {
-            return isDisplayingSidebar
-        }
-
-        return false
-    }
 }
 
 extension RootPresenter {

@@ -150,16 +150,11 @@ class RootView: UIViewController, RootViewProtocol {
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        let hasDetailView = RootView.hasDetailView(traitCollection: newCollection)
-        self.presenter?.changeDisplay(isDisplayingSidebar: hasDetailView)
+        self.presenter?.changeDisplay(traitCollection: newCollection)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        self.presenter?.changeDisplay(isDisplayingSidebar: RootView.hasDetailView(traitCollection: self.view.traitCollection))
-    }
-
-    static func hasDetailView(traitCollection: UITraitCollection) -> Bool {
-        return traitCollection.horizontalSizeClass == .regular
+        self.presenter?.changeDisplay(traitCollection: traitCollection)
     }
 }

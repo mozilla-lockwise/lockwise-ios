@@ -247,6 +247,10 @@
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
+		D80D41B821F65E91008A7B11 /* SizeClassStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B721F65E91008A7B11 /* SizeClassStore.swift */; };
+		D80D41BA21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
+		D80D41BC21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
+		D80D41BE21F67E95008A7B11 /* SizeClassStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */; };
 		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
 		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
@@ -564,6 +568,9 @@
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
+		D80D41B721F65E91008A7B11 /* SizeClassStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStore.swift; sourceTree = "<group>"; };
+		D80D41B921F677A5008A7B11 /* SizeClassAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassAction.swift; sourceTree = "<group>"; };
+		D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStoreSpec.swift; sourceTree = "<group>"; };
 		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
 		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
@@ -888,6 +895,7 @@
 				7AA549ACA818E06061329FE7 /* BaseSettingAction.swift */,
 				7AA54E02364E77393B85C6FE /* ItemListDisplayAction.swift */,
 				7D4396522135B0C200B96FA9 /* CredentialProviderAction.swift */,
+				D80D41B921F677A5008A7B11 /* SizeClassAction.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -903,6 +911,7 @@
 				7D078EEE2124DF6500D10D1B /* BaseAccountStore.swift */,
 				7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */,
 				7D43964F2135AFBD00B96FA9 /* CredentialProviderStore.swift */,
+				D80D41B721F65E91008A7B11 /* SizeClassStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -1066,6 +1075,7 @@
 				D82FF5152172DAC600018346 /* FakeProfile.swift */,
 				D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */,
 				D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */,
+				D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1542,6 +1552,7 @@
 				D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */,
 				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
 				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
+				D80D41BE21F67E95008A7B11 /* SizeClassStoreSpec.swift in Sources */,
 				7DFF2EF2213854BA00F001ED /* Login+Spec.swift in Sources */,
 				7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */,
 				D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */,
@@ -1705,10 +1716,12 @@
 				7AA5429FC403FDC52F2034F0 /* EmptyPlaceholderCell.swift in Sources */,
 				7AA54C565CB9C3C8651D97C8 /* ExternalWebsiteNavigationController.swift in Sources */,
 				7D09B24F2125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */,
+				D80D41B821F65E91008A7B11 /* SizeClassStore.swift in Sources */,
 				7AA5493A70D5B26D3FF1808B /* StaticURLPresenter.swift in Sources */,
 				7AA54B6847373D3FEDA56FC9 /* OnboardingConfirmationPresenter.swift in Sources */,
 				7AA54C349A0ACDFCCC1E043A /* UserDefaultStore.swift in Sources */,
 				7AA543E59B8E38A18A8BE54D /* FxAClient+.swift in Sources */,
+				D80D41BA21F677A5008A7B11 /* SizeClassAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1763,6 +1776,7 @@
 				7D9722C4213461510071D82B /* UIColor+.swift in Sources */,
 				7D078EE92124DC9300D10D1B /* BiometryManager.swift in Sources */,
 				7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */,
+				D80D41BC21F677A5008A7B11 /* SizeClassAction.swift in Sources */,
 				7D4396542135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7D9722C3213461510071D82B /* UIImage+.swift in Sources */,
 				7D09B24D2125E1E200794CA2 /* BaseUserDefaults+.swift in Sources */,
