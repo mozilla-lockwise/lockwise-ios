@@ -213,16 +213,11 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 extension ItemDetailView: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let cell = tableView.cellForRow(at: indexPath) as? ItemDetailCell
-        let data = cell?.dragValue?.data(using: .utf8)
-        let itemProvider = NSItemProvider()
+        guard let data = cell?.dragValue as NSString? else { return [] }
 
         self.presenter?.dndStarted(itemId: self.itemId, value: cell?.titleLabel.text)
 
-        itemProvider.registerDataRepresentation(forTypeIdentifier: kUTTypePlainText as String, visibility: .all) { completion in
-            completion(data, nil)
-            return nil
-        }
-
+        let itemProvider = NSItemProvider(object: data as NSString)
         return [
             UIDragItem(itemProvider: itemProvider)
         ]
