@@ -46,26 +46,46 @@ class CopyDisplayStoreSpec: QuickSpec {
             describe("receiving copyactions") {
                 let text = "myspecialtext"
                 let fieldName = CopyField.password
-                let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd", actionType: .tap)
                 var fieldObserver = self.scheduler.createObserver(CopyField.self)
 
                 beforeEach {
                     fieldObserver = self.scheduler.createObserver(CopyField.self)
 
                     self.subject.copyDisplay.drive(fieldObserver).disposed(by: self.disposeBag)
-
-                    self.dispatcher.fakeRegistration.onNext(action)
                 }
 
-                it("adds the item to the pasteboard with item and timeout option") {
-                    let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
+                describe("tap events") {
+                    beforeEach {
+                        let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd", actionType: .tap)
+                        self.dispatcher.fakeRegistration.onNext(action)
+                    }
 
-                    expect(self.pasteboard.passedItems![0][UIPasteboard.typeAutomatic] as? String).to(equal(text))
-                    expect(self.pasteboard.options![UIPasteboard.OptionsKey.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
+                    it("adds the item to the pasteboard with item and timeout option") {
+                        let expireDate = Date().addingTimeInterval(TimeInterval(Constant.number.copyExpireTimeSecs))
+
+                        expect(self.pasteboard.passedItems![0][UIPasteboard.typeAutomatic] as? String).to(equal(text))
+                        expect(self.pasteboard.options![UIPasteboard.OptionsKey.expirationDate] as! NSDate).to(beCloseTo(expireDate, within: 0.1))
+                    }
+
+                    it("pushes the copied field") {
+                        expect(fieldObserver.events.last!.value.element).to(equal(fieldName))
+                    }
                 }
 
-                it("pushes the copied field") {
-                    expect(fieldObserver.events.last!.value.element).to(equal(fieldName))
+                describe("dnd events") {
+                    beforeEach {
+                        let action = CopyAction(text: text, field: fieldName, itemID: "dsdfssd", actionType: .dnd)
+                        self.dispatcher.fakeRegistration.onNext(action)
+                    }
+
+                    it("does not add the item to the pasteboard") {
+                        expect(self.pasteboard.passedItems).to(beNil())
+                        expect(self.pasteboard.options).to(beNil())
+                    }
+
+                    it("does not push the copied field") {
+                        expect(fieldObserver.events.count).to(equal(0))
+                    }
                 }
             }
         }
