@@ -51,18 +51,10 @@ class ItemDetailPresenter {
                 target.dataStore.get(itemId)
                         .take(1)
                         .subscribe(onNext: { item in
-                            var field = CopyField.username
-                            var text = ""
-                            if value == Constant.string.username {
-                                text = item?.username ?? ""
-                                field = CopyField.username
-                            } else if value == Constant.string.password {
-                                text = item?.password ?? ""
-                                field = CopyField.password
-                            }
-
                             target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
-                            target.dispatcher.dispatch(action: CopyAction(text: text, field: field, itemID: itemId))
+
+                            let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap)
+                            target.dispatcher.dispatch(action: copyAction)
                         })
                         .disposed(by: target.disposeBag)
             } else if value == Constant.string.webAddress {
@@ -147,6 +139,16 @@ class ItemDetailPresenter {
 
         self.view?.enableBackButton(enabled: !tabletHelper.shouldDisplaySidebar)
     }
+
+    func dndStarted(itemId: String, value: String?) {
+        self.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
+        self.dataStore.get(itemId)
+            .take(1)
+            .subscribe(onNext: { item in
+                let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd)
+                self.dispatcher.dispatch(action: copyAction)
+            }).disposed(by: self.disposeBag)
+    }
 }
 
 // helpers
@@ -172,7 +174,8 @@ extension ItemDetailPresenter {
                         password: false,
                         valueFontColor: Constant.color.lockBoxBlue,
                         accessibilityId: "webAddressItemDetail",
-                        showOpenButton: true)
+                        showOpenButton: true,
+                        dragValue: hostname)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
@@ -181,7 +184,8 @@ extension ItemDetailPresenter {
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
                         password: false,
                         accessibilityId: "userNameItemDetail",
-                        showCopyButton: true),
+                        showCopyButton: true,
+                        dragValue: username),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
@@ -190,10 +194,25 @@ extension ItemDetailPresenter {
                             passwordText),
                         password: true,
                         accessibilityId: "passwordItemDetail",
-                        showCopyButton: true)
+                        showCopyButton: true,
+                        dragValue: login?.password)
             ])
         ]
 
         return sectionModels
+    }
+
+    private static func getCopyActionFor(_ item: Login?, value: String?, actionType: CopyActionType) -> CopyAction {
+        var field = CopyField.username
+        var text = ""
+        if value == Constant.string.username {
+            text = item?.username ?? ""
+            field = CopyField.username
+        } else if value == Constant.string.password {
+            text = item?.password ?? ""
+            field = CopyField.password
+        }
+
+        return CopyAction(text: text, field: field, itemID: item?.guid ?? "", actionType: actionType)
     }
 }

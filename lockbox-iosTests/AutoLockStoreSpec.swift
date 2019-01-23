@@ -160,7 +160,7 @@ class AutoLockStoreSpec: QuickSpec {
                     }
 
                     itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
-                        [AutoLockStoreSpecContext.Action.rawValue: CopyAction(text: "something", field: CopyField.username, itemID: "wfewefsd")]
+                        [AutoLockStoreSpecContext.Action.rawValue: CopyAction(text: "something", field: CopyField.username, itemID: "wfewefsd", actionType: .tap)]
                     }
 
                     itBehavesLike(AutoLockStoreSpecSharedExample.TimerReset.rawValue) {
