@@ -172,7 +172,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
-                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="162"/>
+                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="162.5"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XXw-4F-3gz"/>

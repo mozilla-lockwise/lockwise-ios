@@ -90,13 +90,15 @@ class ItemListPresenter: BaseItemListPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
-         userDefaultStore: UserDefaultStore = .shared) {
+         userDefaultStore: UserDefaultStore = .shared,
+         itemDetailStore: ItemDetailStore = .shared) {
 
         super.init(view: view,
                    dispatcher: dispatcher,
                    dataStore: dataStore,
                    itemListDisplayStore: itemListDisplayStore,
-                   userDefaultStore: userDefaultStore)
+                   userDefaultStore: userDefaultStore,
+                   itemDetailStore: itemDetailStore)
     }
 
     override func onViewReady() {

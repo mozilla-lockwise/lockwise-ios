@@ -6,11 +6,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class ItemDetailStore {
-    static let shared = ItemDetailStore()
-
-    private var dispatcher: Dispatcher
-    private var disposeBag = DisposeBag()
+class ItemDetailStore: BaseItemDetailStore {
+    public static let shared = ItemDetailStore()
 
     private var _itemDetailDisplay = ReplaySubject<ItemDetailDisplayAction>.create(bufferSize: 1)
 
@@ -18,12 +15,23 @@ class ItemDetailStore {
         return self._itemDetailDisplay.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
     }()
 
-    init(dispatcher: Dispatcher = Dispatcher.shared) {
-        self.dispatcher = dispatcher
+    override init(dispatcher: Dispatcher = Dispatcher.shared) {
+        super.init(dispatcher: dispatcher)
 
         self.dispatcher.register
-                .filterByType(class: ItemDetailDisplayAction.self)
-                .bind(to: self._itemDetailDisplay)
-                .disposed(by: self.disposeBag)
+            .filterByType(class: ItemDetailDisplayAction.self)
+            .bind(to: self._itemDetailDisplay)
+            .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+            .filterByType(class: MainRouteAction.self)
+            .subscribe(onNext: { (route) in
+                switch route {
+                case .detail(let itemId):
+                    self._itemDetailId.onNext(itemId)
+                case .list:
+                    self._itemDetailId.onNext("")
+                }
+            }).disposed(by: self.disposeBag)
     }
 }
