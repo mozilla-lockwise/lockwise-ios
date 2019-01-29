@@ -9,7 +9,7 @@ import RxDataSources
 import Storage
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
-    var itemId: String { get }
+//    var itemId: String { get }
     var learnHowToEditTapped: Observable<Void> { get }
     func enableBackButton(enabled: Bool)
     func bind(titleText: Driver<String>)
@@ -24,7 +24,7 @@ class ItemDetailPresenter {
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyDisplayStore
-    private var tabletHelper: TabletHelper
+    private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -45,28 +45,31 @@ class ItemDetailPresenter {
                 return
             }
 
-            let itemId = target.view?.itemId ?? ""
+            target.itemDetailStore.itemDetailId
+                .take(1)
+                .subscribe(onNext: { itemId in
+                    if copyableFields.contains(value) {
+                        target.dataStore.get(itemId)
+                                .take(1)
+                                .subscribe(onNext: { item in
+                                    target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
 
-            if copyableFields.contains(value) {
-                target.dataStore.get(itemId)
-                        .take(1)
-                        .subscribe(onNext: { item in
-                            target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
-
-                            let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap)
-                            target.dispatcher.dispatch(action: copyAction)
-                        })
-                        .disposed(by: target.disposeBag)
-            } else if value == Constant.string.webAddress {
-                target.dataStore.get(self.view?.itemId ?? "")
-                        .take(1)
-                        .subscribe(onNext: { item in
-                            if let origin = item?.hostname {
-                                target.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: origin))
-                            }
-                        })
-                        .disposed(by: target.disposeBag)
-            }
+                                    let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap)
+                                    target.dispatcher.dispatch(action: copyAction)
+                                })
+                                .disposed(by: target.disposeBag)
+                    } else if value == Constant.string.webAddress {
+                        target.dataStore.get(itemId)
+                                .take(1)
+                                .subscribe(onNext: { item in
+                                    if let origin = item?.hostname {
+                                        target.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: origin))
+                                    }
+                                })
+                                .disposed(by: target.disposeBag)
+                    }
+            })
+            .disposed(by: target.disposeBag)
         }.asObserver()
     }()
 
@@ -75,69 +78,77 @@ class ItemDetailPresenter {
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
          copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared,
-         tabletHelper: TabletHelper = TabletHelper.shared) {
+         sizeClassStore: SizeClassStore = SizeClassStore.shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
-        self.tabletHelper = tabletHelper
+        self.sizeClassStore = sizeClassStore
 
         self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
 
     func onViewReady() {
-        let itemObservable = self.dataStore.get(self.view?.itemId ?? "")
+        self.itemDetailStore.itemDetailId
+            .subscribe(onNext: { (itemId) in
+                let itemObservable = self.dataStore.get(itemId)
 
-        let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
-                .map { e -> [ItemDetailSectionModel] in
-                    if case let .togglePassword(passwordDisplayed) = e.1 {
-                        return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
-                    }
+                let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
+                let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
+                        .map { e -> [ItemDetailSectionModel] in
+                            if case let .togglePassword(passwordDisplayed) = e.1 {
+                                return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
+                            }
 
-                    return self.configurationForLogin(e.0, passwordDisplayed: false)
-                }
+                            return self.configurationForLogin(e.0, passwordDisplayed: false)
+                        }
 
-        let titleDriver = itemObservable
-                .filterNil()
-                .map { item -> String in
-                    let title = item.hostname.titleFromHostname()
-                    return title.isEmpty ? Constant.string.unnamedEntry : title
-                }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
+                let titleDriver = itemObservable
+                        .filterNil()
+                        .map { item -> String in
+                            let title = item.hostname.titleFromHostname()
+                            return title.isEmpty ? Constant.string.unnamedEntry : title
+                        }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
 
-        self.view?.bind(itemDetail: viewConfigDriver)
-        self.view?.bind(titleText: titleDriver)
+                self.view?.bind(itemDetail: viewConfigDriver)
+                self.view?.bind(titleText: titleDriver)
 
-        self.copyDisplayStore.copyDisplay
-                .drive(onNext: { field in
-                    let fieldName: String
-                    switch field {
-                    case .password: fieldName = Constant.string.password
-                    case .username: fieldName = Constant.string.username
-                    }
+                self.copyDisplayStore.copyDisplay
+                        .drive(onNext: { field in
+                            let fieldName: String
+                            switch field {
+                            case .password: fieldName = Constant.string.password
+                            case .username: fieldName = Constant.string.username
+                            }
 
-                    let message = String(format: Constant.string.fieldNameCopied, fieldName)
-                    self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
-                })
-                .disposed(by: self.disposeBag)
+                            let message = String(format: Constant.string.fieldNameCopied, fieldName)
+                            self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
+                        })
+                        .disposed(by: self.disposeBag)
+        })
+        .disposed(by: self.disposeBag)
 
         self.view?.learnHowToEditTapped
-                .subscribe { _ in
-                    guard let itemID = self.view?.itemId else {
-                        return
-                    }
-
-                    self.dispatcher.dispatch(action:
+            .subscribe { _ in
+                self.itemDetailStore.itemDetailId
+                    .take(1)
+                    .subscribe(onNext: { itemId in
+                        self.dispatcher.dispatch(action:
                             ExternalWebsiteRouteAction(
-                                    urlString: Constant.app.editExistingEntriesFAQ,
-                                    title: Constant.string.faq,
-                                    returnRoute: MainRouteAction.detail(itemId: itemID))
-                    )
-                }
-                .disposed(by: self.disposeBag)
+                                urlString: Constant.app.editExistingEntriesFAQ,
+                                title: Constant.string.faq,
+                                returnRoute: MainRouteAction.detail(itemId: itemId))
+                        )
+                    }).disposed(by: self.disposeBag)
+            }
+            .disposed(by: self.disposeBag)
 
-        self.view?.enableBackButton(enabled: !tabletHelper.shouldDisplaySidebar)
+        self.sizeClassStore.shouldDisplaySidebar
+            .subscribe(onNext: { (enableSidebar) in
+                self.view?.enableBackButton(enabled: !enableSidebar)
+            })
+            .disposed(by: self.disposeBag)
     }
 
     func dndStarted(itemId: String, value: String?) {

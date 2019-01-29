@@ -9,13 +9,21 @@ import RxCocoa
 class ItemDetailStore: BaseItemDetailStore {
     public static let shared = ItemDetailStore()
 
+    private var dataStore: DataStore
+    private var sizeClassStore: SizeClassStore
+
     private var _itemDetailDisplay = ReplaySubject<ItemDetailDisplayAction>.create(bufferSize: 1)
 
     lazy private(set) var itemDetailDisplay: Driver<ItemDetailDisplayAction> = {
         return self._itemDetailDisplay.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
     }()
 
-    override init(dispatcher: Dispatcher = Dispatcher.shared) {
+    init(dispatcher: Dispatcher = Dispatcher.shared,
+         dataStore: DataStore = DataStore.shared,
+         sizeClassStore: SizeClassStore = SizeClassStore.shared) {
+        self.dataStore = dataStore
+        self.sizeClassStore = sizeClassStore
+
         super.init(dispatcher: dispatcher)
 
         self.dispatcher.register
@@ -30,8 +38,38 @@ class ItemDetailStore: BaseItemDetailStore {
                 case .detail(let itemId):
                     self._itemDetailId.onNext(itemId)
                 case .list:
-                    self._itemDetailId.onNext("")
+                    break
                 }
             }).disposed(by: self.disposeBag)
+
+        // If the splitview is being show
+        // then after sync, select one item from the datastore to show
+        Observable.combineLatest(sizeClassStore.shouldDisplaySidebar, self.dataStore.syncState)
+            .subscribe(onNext: { (displayingSidebar, syncState) in
+                if displayingSidebar && syncState == SyncState.Synced {
+                    self._itemDetailId
+                        .ifEmpty(switchTo: Observable.just(""))
+                        .subscribe(onNext: { (itemId) in
+                            if itemId == "" {
+                                self.showFirstLogin()
+                            }
+                        })
+                        .disposed(by: self.disposeBag)
+                }
+            })
+            .disposed(by: self.disposeBag)
+    }
+
+    private func showFirstLogin() {
+        self.dataStore.list
+            .take(1)
+            .subscribe(onNext: { (logins) in
+                if let firstLogin = logins.first {
+                    DispatchQueue.main.async {
+                        self._itemDetailId.onNext(firstLogin.guid)
+                    }
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
