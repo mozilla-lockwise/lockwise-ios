@@ -55,8 +55,10 @@ class RootPresenter {
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: Sentry
     fileprivate let adjustManager: AdjustManager
-    fileprivate let tabletHelper: TabletHelper
     fileprivate let viewFactory: ViewFactory
+    fileprivate let sizeClassStore: SizeClassStore
+
+    private var isDisplayingSidebar: Bool?
 
     var fxa: FirefoxAccount?
 
@@ -72,8 +74,8 @@ class RootPresenter {
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: Sentry = Sentry.shared,
          adjustManager: AdjustManager = AdjustManager.shared,
-         tabletHelper: TabletHelper = TabletHelper.shared,
-         viewFactory: ViewFactory = ViewFactory.shared
+         viewFactory: ViewFactory = ViewFactory.shared,
+         sizeClassStore: SizeClassStore = SizeClassStore.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -87,8 +89,8 @@ class RootPresenter {
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
         self.adjustManager = adjustManager
-        self.tabletHelper = tabletHelper
         self.viewFactory = viewFactory
+        self.sizeClassStore = sizeClassStore
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -171,6 +173,10 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
     }
 
+    func changeDisplay(traitCollection: UITraitCollection) {
+        self.dispatcher.dispatch(action: SizeClassAction.changed(traitCollection: traitCollection))
+    }
+
     lazy private var showLogin: AnyObserver<LoginRouteAction> = { [unowned self] in
         return Binder(self) { target, loginAction in
             guard let view = target.view else {
@@ -220,37 +226,30 @@ class RootPresenter {
                 view.dismissModals()
             }
 
-            if self.shouldDisplaySidebar {
-                if !view.mainStackIs(SplitView.self) {
-                    view.startMainStack(SplitView())
-                }
-            } else {
-                if !view.mainStackIs(MainNavigationController.self) {
-                    view.startMainStack(MainNavigationController(storyboardName: "ItemList", identifier: "itemlist"))
-                }
+            if !view.mainStackIs(SplitView.self) {
+                view.startMainStack(SplitView(delegate: self))
             }
 
             switch mainAction {
             case .list:
-                if self.shouldDisplaySidebar {
-                    if !view.sidebarViewIs(ItemListView.self) {
-                        view.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
-                    }
-                } else {
-                    if !view.topViewIs(ItemListView.self) {
-                        view.popToRoot()
-                    }
+                if !view.topViewIs(ItemListView.self) {
+                    view.popToRoot()
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
                     let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
                     detailView.itemId = id
 
-                    if self.shouldDisplaySidebar {
-                        view.pushDetail(view: detailView)
-                    } else {
-                        view.push(view: detailView)
-                    }
+                    self.sizeClassStore.shouldDisplaySidebar
+                        .take(1)
+                        .subscribe(onNext: { enableSidebar in
+                            if enableSidebar {
+                                view.pushDetail(view: detailView)
+                            } else {
+                                view.push(view: detailView)
+                            }
+                        })
+                        .disposed(by: self.disposeBag)
                 }
             }
         }.asObserver()
@@ -312,10 +311,6 @@ class RootPresenter {
             }
         }.asObserver()
     }()
-
-    private var shouldDisplaySidebar: Bool {
-        return self.tabletHelper.shouldDisplaySidebar
-    }
 }
 
 extension RootPresenter {
@@ -339,5 +334,51 @@ extension RootPresenter {
             .subscribe(onNext: { enabled in
                 self.sentryManager.setup(sendUsageData: enabled)
         }).disposed(by: self.disposeBag)
+    }
+}
+
+extension RootPresenter: UISplitViewControllerDelegate {
+    func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
+        let newNavController = MainNavigationController(storyboardName: "ItemList", identifier: "itemlist")
+        if let splitView = splitViewController as? SplitView {
+            if let vc = splitView.detailView?.topViewController as? ItemDetailView {
+                if vc.itemId != "" {
+                    let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+                    detailView.itemId = vc.itemId
+                    newNavController.pushViewController(detailView, animated: false)
+                }
+            }
+        }
+
+        return newNavController
+    }
+
+    func primaryViewController(forExpanding splitViewController: UISplitViewController) -> UIViewController? {
+        if let splitView = splitViewController as? SplitView {
+            return splitView.sidebarView
+        }
+
+        return nil
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        return true
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+
+        if let navController = primaryViewController as? UINavigationController {
+            if let itemDetail = navController.popViewController(animated: false) as? ItemDetailView {
+                let newDetailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+                newDetailView.itemId = itemDetail.itemId
+                return MainNavigationController(rootViewController: newDetailView)
+            }
+        }
+
+        return nil
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+        return true
     }
 }

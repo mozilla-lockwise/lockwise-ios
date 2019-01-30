@@ -225,6 +225,14 @@ class RootPresenterSpec: QuickSpec {
         FakeProfile()
     }
 
+    class FakeSizeClassStore: SizeClassStore {
+        var showSidebarStub = PublishSubject<Bool>()
+
+        override var shouldDisplaySidebar: Observable<Bool> {
+            return self.showSidebarStub.asObservable()
+        }
+    }
+
     private var view: FakeRootView!
     private var dispatcher: FakeDispatcher!
     private var routeStore: FakeRouteStore!
@@ -236,6 +244,7 @@ class RootPresenterSpec: QuickSpec {
     private var biometryManager: FakeBiometryManager!
     private var sentryManager: FakeSentryManager!
     private var adjustManager: FakeAdjustManager!
+    private var sizeClassStore: FakeSizeClassStore!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -255,6 +264,7 @@ class RootPresenterSpec: QuickSpec {
                 self.adjustManager = FakeAdjustManager()
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
                 self.biometryManager.deviceAuthAvailableStub = true
+                self.sizeClassStore = FakeSizeClassStore()
 
                 self.subject = RootPresenter(
                         view: self.view,
@@ -266,7 +276,8 @@ class RootPresenterSpec: QuickSpec {
                         userDefaultStore: self.userDefaultStore,
                         telemetryActionHandler: self.telemetryActionHandler,
                         biometryManager: self.biometryManager,
-                        adjustManager: self.adjustManager
+                        adjustManager: self.adjustManager,
+                        sizeClassStore: self.sizeClassStore
                 )
             }
 
@@ -775,7 +786,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the login stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -796,7 +807,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -812,7 +823,8 @@ class RootPresenterSpec: QuickSpec {
                             describe("if the top view is not already the detail view") {
                                 beforeEach {
                                     self.view.topViewIsVar = false
-                                    self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
+                                self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
+                                    self.sizeClassStore.showSidebarStub.onNext(false)
                                 }
 
                                 it("dismisses any modals") {
@@ -820,7 +832,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -843,7 +855,7 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("does not start the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
 
@@ -873,8 +885,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the ListView & tells the view to show the listview") {
@@ -894,8 +906,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the ListView & nothing happens") {
@@ -911,6 +923,7 @@ class RootPresenterSpec: QuickSpec {
                                 beforeEach {
                                     self.view.topViewIsVar = false
                                     self.routeStore.onRouteSubject.onNext(MainRouteAction.detail(itemId: itemId))
+                                    self.sizeClassStore.showSidebarStub.onNext(false)
                                 }
 
                                 it("dismisses any modals") {
@@ -918,8 +931,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the DetailView & tells the view to show the loginview") {
@@ -940,8 +953,8 @@ class RootPresenterSpec: QuickSpec {
                                 }
 
                                 it("starts the main stack") {
-                                    expect(self.view.mainStackIsArgument === MainNavigationController.self).to(beTrue())
-                                    expect(self.view.startMainStackArgument is MainNavigationController).to(beTrue())
+                                    expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
+                                    expect(self.view.startMainStackArgument is SplitView).to(beTrue())
                                 }
 
                                 it("checks for the DetailView & nothing happens") {

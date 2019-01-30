@@ -17,8 +17,13 @@ class RootViewSpec: QuickSpec {
         }
     }
 
+    class SVDelegate: UISplitViewControllerDelegate {
+
+    }
+
     private var presenter: FakeRootPresenter!
     var subject: RootView!
+    private var svDelegate: SVDelegate!
     var viewFactory: ViewFactory!
 
     override func spec() {
@@ -27,6 +32,7 @@ class RootViewSpec: QuickSpec {
         describe("RootView") {
             beforeEach {
                 self.subject = RootView()
+                self.svDelegate = SVDelegate()
                 self.presenter = FakeRootPresenter(view: self.subject)
                 self.viewFactory = ViewFactory()
                 self.subject.presenter = self.presenter
@@ -141,7 +147,7 @@ class RootViewSpec: QuickSpec {
             if TabletHelper().shouldDisplaySidebar {
                 describe("pushing sidebar views") {
                     beforeEach {
-                        self.subject.startMainStack(SplitView())
+                        self.subject.startMainStack(SplitView(delegate: self.svDelegate))
                         self.subject.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
                     }
 
@@ -152,7 +158,7 @@ class RootViewSpec: QuickSpec {
 
                 describe("pushing detail views") {
                     beforeEach {
-                        self.subject.startMainStack(SplitView())
+                        self.subject.startMainStack(SplitView(delegate: self.svDelegate))
                         self.subject.pushDetail(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
                     }
 
