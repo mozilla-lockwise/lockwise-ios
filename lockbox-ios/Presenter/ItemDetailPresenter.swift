@@ -151,14 +151,20 @@ class ItemDetailPresenter {
             .disposed(by: self.disposeBag)
     }
 
-    func dndStarted(itemId: String, value: String?) {
-        self.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
-        self.dataStore.get(itemId)
+    func dndStarted(value: String?) {
+        self.itemDetailStore.itemDetailId
             .take(1)
-            .subscribe(onNext: { item in
-                let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd)
-                self.dispatcher.dispatch(action: copyAction)
-            }).disposed(by: self.disposeBag)
+            .subscribe(onNext: { itemId in
+                self.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
+
+                self.dataStore.get(itemId)
+                    .take(1)
+                    .subscribe(onNext: { item in
+                        let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd)
+                        self.dispatcher.dispatch(action: copyAction)
+                    }).disposed(by: self.disposeBag)
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 

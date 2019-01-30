@@ -18,6 +18,9 @@ class ItemDetailStore: BaseItemDetailStore {
         return self._itemDetailDisplay.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
     }()
 
+    // RootPresenter needs a synchronous way to find out if the detail screen has a login or not
+    private(set) var itemDetailHasId = false
+
     init(dispatcher: Dispatcher = Dispatcher.shared,
          dataStore: DataStore = DataStore.shared,
          sizeClassStore: SizeClassStore = SizeClassStore.shared) {
@@ -41,6 +44,12 @@ class ItemDetailStore: BaseItemDetailStore {
                     break
                 }
             }).disposed(by: self.disposeBag)
+
+        self.itemDetailId
+            .subscribe(onNext: { itemId in
+                self.itemDetailHasId = itemId != ""
+            })
+            .disposed(by: self.disposeBag)
 
         // If the splitview is being show
         // then after sync, select one item from the datastore to show

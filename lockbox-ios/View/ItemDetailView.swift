@@ -61,7 +61,6 @@ class ItemDetailView: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var learnHowToEditButton: UIButton!
     @IBOutlet private weak var learnHowToEditArrow: UIImageView!
-    var itemId: String = ""
     let longPress = UILongPressGestureRecognizer()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -215,7 +214,7 @@ extension ItemDetailView: UITableViewDragDelegate {
         let cell = tableView.cellForRow(at: indexPath) as? ItemDetailCell
         guard let data = cell?.dragValue as NSString? else { return [] }
 
-        self.presenter?.dndStarted(itemId: self.itemId, value: cell?.titleLabel.text)
+        self.presenter?.dndStarted(value: cell?.titleLabel.text)
 
         let itemProvider = NSItemProvider(object: data as NSString)
         return [
