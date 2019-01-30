@@ -42,6 +42,7 @@ class BaseItemListPresenter {
     internal let itemListDisplayStore: ItemListDisplayStore
     internal let userDefaultStore: UserDefaultStore
     internal let itemDetailStore: BaseItemDetailStore
+    internal let sizeClassStore: SizeClassStore
     internal let disposeBag = DisposeBag()
 
     var itemSelectedObserver: AnyObserver<String?> {
@@ -93,13 +94,15 @@ class BaseItemListPresenter {
          dataStore: DataStore = .shared,
          itemListDisplayStore: ItemListDisplayStore = .shared,
          userDefaultStore: UserDefaultStore = .shared,
-         itemDetailStore: ItemDetailStore = .shared) {
+         itemDetailStore: ItemDetailStore = .shared,
+         sizeClassStore: SizeClassStore = .shared) {
         self.baseView = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaultStore = userDefaultStore
         self.itemDetailStore = itemDetailStore
+        self.sizeClassStore = sizeClassStore
     }
 
     func onViewReady() {
@@ -113,7 +116,9 @@ class BaseItemListPresenter {
             filterTextObservable: filterTextObservable,
             itemSortObservable: itemSortObservable,
             syncStateObservable: self.dataStore.syncState,
-            storageStateObservable: self.dataStore.storageState
+            storageStateObservable: self.dataStore.storageState,
+            itemDetailIdObservable: self.itemDetailStore.itemDetailId,
+            sidebarObservable: self.sizeClassStore.shouldDisplaySidebar
         )
 
         self.baseView?.bind(items: listDriver)
@@ -126,12 +131,6 @@ class BaseItemListPresenter {
             .disposed(by: self.disposeBag)
 
         self.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
-
-//        self.itemDetailStore.itemDetailId
-//            .subscribe(onNext: { (itemId) in
-//                self.baseView.selectRow(itemId)
-//            })
-//            .disposed(by: self.disposeBag)
     }
 }
 
@@ -140,7 +139,9 @@ extension BaseItemListPresenter {
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
-                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+                                          storageStateObservable: Observable<LoginStoreState>,
+                                          itemDetailIdObservable: Observable<String>,
+                                          sidebarObservable: Observable<Bool>) -> Driver<[ItemSectionModel]> {
         // only run on a delay for UI purposes; keep tests from blocking
         let listThrottle = isRunningTest ? 0.0 : 1.0
         let stateThrottle = isRunningTest ? 0.0 : 2.0
@@ -157,16 +158,17 @@ extension BaseItemListPresenter {
             itemSortObservable,
             throttledSyncStateObservable,
             throttledStorageStateObservable,
-            self.itemDetailStore.itemDetailId
+            itemDetailIdObservable,
+            sidebarObservable
             )
-            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, String)) -> LoginListTextSort in
+            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, String, Bool)) -> LoginListTextSort in
                 return LoginListTextSort(
                     logins: latest.0,
                     text: latest.1.filteringText,
                     sortingOption: latest.2,
                     syncState: latest.3,
                     storeState: latest.4,
-                    detailItemId: latest.5
+                    detailItemId: latest.6 ? latest.5 : "" // only pass along the detailItemId if we are showing the sidebar
                 )
             }
             .distinctUntilChanged()
