@@ -144,6 +144,22 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeItemDetailStore: ItemDetailStore {
+        var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
+
+        override var itemDetailId: Observable<String> {
+            return self.itemDetailIdStub.asObservable()
+        }
+    }
+
+    class FakeSizeClassStore: SizeClassStore {
+        var shouldDisplaySidebarStub = ReplaySubject<Bool>.create(bufferSize: 1)
+
+        override var shouldDisplaySidebar: Observable<Bool> {
+            return self.shouldDisplaySidebarStub.asObservable()
+        }
+    }
+
     private let fakeProfileFactory: ProfileFactory = { reset in
         FakeProfile()
     }
@@ -153,6 +169,8 @@ class ItemListPresenterSpec: QuickSpec {
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
     private var userDefaultStore: FakeUserDefaultStore!
+    private var itemDetailStore: FakeItemDetailStore!
+    private var sizeClassStore: FakeSizeClassStore!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
     var subject: ItemListPresenter!
@@ -165,6 +183,8 @@ class ItemListPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory)
                 self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.userDefaultStore = FakeUserDefaultStore()
+                self.itemDetailStore = FakeItemDetailStore()
+                self.sizeClassStore = FakeSizeClassStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
                 self.view.scrollActionObserver = self.scheduler.createObserver(ScrollAction.self)
@@ -178,13 +198,17 @@ class ItemListPresenterSpec: QuickSpec {
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemListDisplayStore: self.itemListDisplayStore,
-                        userDefaultStore: self.userDefaultStore
+                        userDefaultStore: self.userDefaultStore,
+                        itemDetailStore: self.itemDetailStore,
+                        sizeClassStore: self.sizeClassStore
                 )
             }
 
             describe(".onViewReady()") {
                 describe("when the datastore pushes an empty list of items") {
                     beforeEach {
+                        self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
+                        self.itemDetailStore.itemDetailIdStub.onNext("1234")
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
@@ -311,76 +335,104 @@ class ItemListPresenterSpec: QuickSpec {
                     let items = [
                         Login(guid: id1, hostname: webAddress1, username: username, password: ""),
                         Login(guid: id2, hostname: "", username: "", password: ""),
-                        Login(guid: "", hostname: webAddress2, username: "", password: "fdsfdsfd")
+                        Login(guid: "ff", hostname: webAddress2, username: "", password: "fdsfdsfd")
                     ]
 
-                    beforeEach {
-                        self.subject.onViewReady()
-                        self.dataStore.itemListStub.onNext(items)
-                        self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
-                        self.dataStore.syncStateStub.onNext(SyncState.Synced)
-                        self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
-                    }
-
-                    it("tells the view to display the items in alphabetic order by title") {
-                        let expectedItemConfigurations = [
-                            LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
-                            LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: ""),
-                            LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1)
-                        ]
-                        expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
-                        let configuration = self.view.itemsObserver.events.first!.value.element!
-                        expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                    }
-
-                    describe("when text is entered into the search bar") {
-                        describe("when the text matches an item's username") {
-                            beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "cat"))
-                            }
-
-                            it("updates the view with the appropriate items") {
-                                let expectedItemConfigurations = [
-                                    LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1)
-                                ]
-
-                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                                let configuration = self.view.itemsObserver.events.last!.value.element!
-                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                            }
+                    describe("when in wide view with sidebar") {
+                        beforeEach {
+                            self.itemDetailStore.itemDetailIdStub.onNext("ff")
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                            self.subject.onViewReady()
+                            self.dataStore.itemListStub.onNext(items)
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                            self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                            self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
 
-                        describe("when the text matches an item's origins") {
-                            beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "meow"))
-                            }
+                        it("highlights the selected item") {
+                            let expectedItemConfigurations = [
+                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: "ff", highlight: true),
+                                LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1, highlight: false)
+                            ]
+                            expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
+                            let configuration = self.view.itemsObserver.events.first!.value.element!
+                            expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                        }
+                    }
 
-                            it("updates the view with the appropriate items") {
-                                let expectedItemConfigurations = [
-                                    LoginListCellConfiguration.Item(title: "meow", username: username, guid: "")
-                                ]
-
-                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                                let configuration = self.view.itemsObserver.events.last!.value.element!
-                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
-                            }
+                    describe("when in narrow view") {
+                        beforeEach {
+                            self.itemDetailStore.itemDetailIdStub.onNext("ff")
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
+                            self.subject.onViewReady()
+                            self.dataStore.itemListStub.onNext(items)
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                            self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                            self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
 
-                        describe("when there are no results") {
-                            beforeEach {
-                                self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "blahblahblah"))
+                        it("tells the view to display the items in alphabetic order by title") {
+                            let expectedItemConfigurations = [
+                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: "ff", highlight: false),
+                                LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1, highlight: false)
+                            ]
+                            expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
+                            let configuration = self.view.itemsObserver.events.first!.value.element!
+                            expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                        }
+
+                        describe("when text is entered into the search bar") {
+                            describe("when the text matches an item's username") {
+                                beforeEach {
+                                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "cat"))
+                                }
+
+                                it("updates the view with the appropriate items") {
+                                    let expectedItemConfigurations = [
+                                        LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1, highlight: false)
+                                    ]
+
+                                    expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                    let configuration = self.view.itemsObserver.events.last!.value.element!
+                                    expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                                }
                             }
 
-                            it("updates the view with the appropriate items") {
-                                let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
-                                let expectedItemConfigurations = [
-                                    LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver)
-                                ]
+                            describe("when the text matches an item's origins") {
+                                beforeEach {
+                                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "meow"))
+                                }
 
-                                expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
-                                let configuration = self.view.itemsObserver.events.last!.value.element!
-                                expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                                it("updates the view with the appropriate items") {
+                                    let expectedItemConfigurations = [
+                                        LoginListCellConfiguration.Item(title: "meow", username: username, guid: "", highlight: false)
+                                    ]
+
+                                    expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                    let configuration = self.view.itemsObserver.events.last!.value.element!
+                                    expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                                }
+                            }
+
+                            describe("when there are no results") {
+                                beforeEach {
+                                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: "blahblahblah"))
+                                }
+
+                                it("updates the view with the appropriate items") {
+                                    let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
+                                    let expectedItemConfigurations = [
+                                        LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver)
+                                    ]
+
+                                    expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
+                                    let configuration = self.view.itemsObserver.events.last!.value.element!
+                                    expect(configuration.first!.items).to(equal(expectedItemConfigurations))
+                                }
                             }
                         }
                     }
@@ -393,9 +445,9 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("pushes the new configuration with the items") {
                             let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1),
-                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2),
-                                LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: "fdssdf")
+                                LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1, highlight: false),
+                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: "fdssdf", highlight: false)
                             ]
                             expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
                             let configuration = self.view.itemsObserver.events.last!.value.element!

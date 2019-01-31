@@ -14,7 +14,6 @@ import Storage
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
-        fileprivate(set) var itemId: String = "somefakeitemidinhere"
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
         let learnHowToEditStub = PublishSubject<Void>()
@@ -85,15 +84,22 @@ class ItemDetailPresenterSpec: QuickSpec {
 
     class FakeItemDetailStore: ItemDetailStore {
         var itemDetailDisplayStub = PublishSubject<ItemDetailDisplayAction>()
+        var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
 
         override var itemDetailDisplay: Driver<ItemDetailDisplayAction> {
             return itemDetailDisplayStub.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
         }
+
+        override var itemDetailId: Observable<String> {
+            return itemDetailIdStub.asObservable()
+        }
     }
 
-    class FakeTabletHelper: TabletHelper {
-        override var shouldDisplaySidebar: Bool {
-            return false
+    class FakeSizeClassStore: SizeClassStore {
+        var shouldDisplaySidebarStub = ReplaySubject<Bool>.create(bufferSize: 1)
+
+        override var shouldDisplaySidebar: Observable<Bool> {
+            return shouldDisplaySidebarStub.asObservable()
         }
     }
 
@@ -102,7 +108,7 @@ class ItemDetailPresenterSpec: QuickSpec {
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
-    private var tabletHelper: FakeTabletHelper!
+    private var sizeClassStore: FakeSizeClassStore!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -115,7 +121,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
-                self.tabletHelper = FakeTabletHelper()
+                self.sizeClassStore = FakeSizeClassStore()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
@@ -123,7 +129,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
                         copyDisplayStore: self.copyDisplayStore,
-                        tabletHelper: self.tabletHelper
+                        sizeClassStore: self.sizeClassStore
                 )
             }
 
@@ -173,6 +179,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             describe("onCellTapped") {
                 describe("when the title of the tapped cell is the username constant") {
                     beforeEach {
+                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.username)])
 
                         cellTappedObservable
@@ -219,6 +226,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("when the title of the tapped cell is the password constant") {
                     beforeEach {
+                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.password)])
 
                         cellTappedObservable
@@ -265,6 +273,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("when the title of the tapped cell is the web address constant") {
                     beforeEach {
+                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
 
                         cellTappedObservable
@@ -320,11 +329,13 @@ class ItemDetailPresenterSpec: QuickSpec {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
                     self.view.titleTextObserver = self.scheduler.createObserver(String.self)
 
+                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                     self.subject.onViewReady()
                 }
 
                 it("requests the correct item from the datastore") {
-                    expect(self.dataStore.loginIDArg).to(equal(self.view.itemId))
+                    expect(self.dataStore.loginIDArg).to(equal("1234"))
                 }
 
                 it("enables back button") {
@@ -472,6 +483,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("onLearnHowToEditTapped") {
                     beforeEach {
                         self.view.learnHowToEditStub.onNext(())
+
+                        self.itemDetailStore.itemDetailIdStub.onNext("1234")
                     }
 
                     it("dispatches the faq link action") {
@@ -481,24 +494,42 @@ class ItemDetailPresenterSpec: QuickSpec {
                                         ExternalWebsiteRouteAction(
                                                 urlString: Constant.app.editExistingEntriesFAQ,
                                                 title: Constant.string.faq,
-                                                returnRoute: MainRouteAction.detail(itemId: self.view.itemId))
+                                                returnRoute: MainRouteAction.detail(itemId: "1234"))
                                 ))
                     }
                 }
             }
 
+            describe(".onViewReady for view with sidebar") {
+                let item = Login(guid: "sdfsdfdfs", hostname: "www.cats.com", username: "meow", password: "iluv kats")
+
+                beforeEach {
+                    self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
+                    self.view.titleTextObserver = self.scheduler.createObserver(String.self)
+
+                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                    self.subject.onViewReady()
+                }
+
+                it("does not show back button") {
+                    expect(self.view.enableBackButtonValue).to(beFalse())
+                }
+            }
+
             describe("dndStarted") {
                 beforeEach {
-                    let item = Login(guid:  self.view.itemId, hostname: "www.example.com", username: "asdf", password: "meow")
+                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    let item = Login(guid: "1234", hostname: "www.example.com", username: "asdf", password: "meow")
                     self.dataStore.onItemStub.onNext(item)
 
-                    self.subject.dndStarted(itemId: self.view.itemId, value: "Username")
+                    self.subject.dndStarted(value: "Username")
                 }
 
                 it("sends toucb action") {
                     expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                     let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
-                    expect(action).to(equal(DataStoreAction.touch(id: self.view.itemId)))
+                    expect(action).to(equal(DataStoreAction.touch(id: "1234")))
                 }
             }
         }
