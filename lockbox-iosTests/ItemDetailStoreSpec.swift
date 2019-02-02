@@ -158,19 +158,8 @@ class ItemDetailStoreSpec: QuickSpec {
                         }
 
                         it("sets the detailId") {
-                            expect(detailIdObserver.events.count).to(equal(2))
-
-                            let predicate = NSPredicate(block: { (observer, _) -> Bool in
-                                return (observer as? RxTest.TestableObserver<String>)!.events.last!.value.element! == "5678"
-                            })
-
-                            self.expectation(for: predicate, evaluatedWith: detailIdObserver, handler: .none)
-
-                            self.waitForExpectations(timeout: 10, handler: { (error) in
-                                if let error = error {
-                                    XCTFail("waitForExpectations timeout setting detailId \(error)")
-                                }
-                            })
+                            expect(detailIdObserver.events.count).to(equal(3))
+                            expect(detailIdObserver.events.last!.value.element!).to(equal("5678"))
                         }
                     }
                 }

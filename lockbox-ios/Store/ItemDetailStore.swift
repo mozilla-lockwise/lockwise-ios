@@ -73,8 +73,18 @@ class ItemDetailStore: BaseItemDetailStore {
 
     private func showFirstLogin(_ login: Login?) {
         if let login = login {
-            DispatchQueue.main.async {
+            runOnMainThread {
                 self._itemDetailId.onNext(login.guid)
+            }
+        }
+    }
+
+    private func runOnMainThread(completion: @escaping () -> Void) {
+        if Thread.isMainThread {
+            completion()
+        } else {
+            DispatchQueue.main.async {
+                completion()
             }
         }
     }
