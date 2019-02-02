@@ -144,7 +144,7 @@ class RootViewSpec: QuickSpec {
                 }
             }
 
-            if TabletHelper().shouldDisplaySidebar {
+            if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
                 describe("pushing sidebar views") {
                     beforeEach {
                         self.subject.startMainStack(SplitView(delegate: self.svDelegate))

@@ -269,7 +269,6 @@
 		D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBB211950BF0056B24A /* iAd.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBD211954E00056B24A /* AdjustSdk.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81B21D437AB00E19118 /* SplitView.swift */; };
-		D85CB81E21D97C5D00E19118 /* TabletHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81D21D97C5D00E19118 /* TabletHelper.swift */; };
 		D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */; };
 		D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB82221DED0E100E19118 /* ViewFactory.swift */; };
 		D85CB82521E0295900E19118 /* LaunchScreen~ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D85CB82421E0295900E19118 /* LaunchScreen~ipad.storyboard */; };
@@ -593,7 +592,6 @@
 		D8551EBB211950BF0056B24A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		D8551EBD211954E00056B24A /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		D85CB81B21D437AB00E19118 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
-		D85CB81D21D97C5D00E19118 /* TabletHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabletHelper.swift; sourceTree = "<group>"; };
 		D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewSpec.swift; sourceTree = "<group>"; };
 		D85CB82221DED0E100E19118 /* ViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactory.swift; sourceTree = "<group>"; };
 		D85CB82421E0295900E19118 /* LaunchScreen~ipad.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "LaunchScreen~ipad.storyboard"; sourceTree = "<group>"; };
@@ -769,7 +767,6 @@
 				3931871D214C12C5003C9E4A /* AppearanceHelper.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
 				D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */,
-				D85CB81D21D97C5D00E19118 /* TabletHelper.swift */,
 				D85CB82221DED0E100E19118 /* ViewFactory.swift */,
 			);
 			path = Helpers;
@@ -1710,7 +1707,6 @@
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
 				7AA54BE3C277CF8AC0C4306A /* Date+.swift in Sources */,
-				D85CB81E21D97C5D00E19118 /* TabletHelper.swift in Sources */,
 				D8D029342074166800CC01C6 /* PreferredBrowserSettingView.swift in Sources */,
 				39318722214C19A8003C9E4A /* UIButton+.swift in Sources */,
 				7AA5462CD711A33ACB5E48A2 /* UIView+.swift in Sources */,
