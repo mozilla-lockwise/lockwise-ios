@@ -5,6 +5,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Storage
 
 class ItemDetailStore: BaseItemDetailStore {
     public static let shared = ItemDetailStore()
@@ -53,15 +54,15 @@ class ItemDetailStore: BaseItemDetailStore {
 
         // If the splitview is being show
         // then after sync, select one item from the datastore to show
-        Observable.combineLatest(sizeClassStore.shouldDisplaySidebar, self.dataStore.syncState)
-            .subscribe(onNext: { (displayingSidebar, syncState) in
-                if displayingSidebar && syncState == SyncState.Synced {
+        Observable.combineLatest(sizeClassStore.shouldDisplaySidebar, self.dataStore.list)
+            .subscribe(onNext: { (displayingSidebar, list) in
+                if displayingSidebar && list.count > 0 {
                     self._itemDetailId
                         .take(1)
                         .ifEmpty(switchTo: Observable.just(""))
                         .subscribe(onNext: { (itemId) in
                             if itemId == "" {
-                                self.showFirstLogin()
+                                self.showFirstLogin(list.first)
                             }
                         })
                         .disposed(by: self.disposeBag)
@@ -70,16 +71,11 @@ class ItemDetailStore: BaseItemDetailStore {
             .disposed(by: self.disposeBag)
     }
 
-    private func showFirstLogin() {
-        self.dataStore.list
-            .take(1)
-            .subscribe(onNext: { (logins) in
-                if let firstLogin = logins.first {
-                    DispatchQueue.main.async {
-                        self._itemDetailId.onNext(firstLogin.guid)
-                    }
-                }
-            })
-            .disposed(by: self.disposeBag)
+    private func showFirstLogin(_ login: Login?) {
+        if let login = login {
+            DispatchQueue.main.async {
+                self._itemDetailId.onNext(login.guid)
+            }
+        }
     }
 }

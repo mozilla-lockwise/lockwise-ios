@@ -166,12 +166,11 @@ class ItemDetailStoreSpec: QuickSpec {
 
                             self.expectation(for: predicate, evaluatedWith: detailIdObserver, handler: .none)
 
-                            self.waitForExpectations(timeout: 1, handler: { (error) in
+                            self.waitForExpectations(timeout: 3, handler: { (error) in
                                 if let error = error {
                                     XCTFail("waitForExpectations timeout setting detailId \(error)")
                                 }
                             })
-
                         }
                     }
                 }
