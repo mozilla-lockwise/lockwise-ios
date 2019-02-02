@@ -57,6 +57,7 @@ class ItemDetailStore: BaseItemDetailStore {
             .subscribe(onNext: { (displayingSidebar, syncState) in
                 if displayingSidebar && syncState == SyncState.Synced {
                     self._itemDetailId
+                        .take(1)
                         .ifEmpty(switchTo: Observable.just(""))
                         .subscribe(onNext: { (itemId) in
                             if itemId == "" {
