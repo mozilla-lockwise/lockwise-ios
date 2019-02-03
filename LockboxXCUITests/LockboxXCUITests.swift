@@ -170,7 +170,7 @@ class LockboxXCUITests: BaseTestCase {
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
         // Lets see if this is fixed now
         // Disable the label check until BB failure is not present
-        let firstCellRecent = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
+        let firstCellRecent = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellRecent, "wopr.norad.org")
 
         app.buttons["sorting.button"].tap()
@@ -180,7 +180,7 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
         sleep(2)
-        let firstCellAlphabetically = app.tables.cells.element(boundBy: 1).staticTexts.element(boundBy: 0).label
+        let firstCellAlphabetically = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellAlphabetically, "accounts.google.com")
     }
 
@@ -199,27 +199,28 @@ class LockboxXCUITests: BaseTestCase {
 
     func test8SearchOptions() {
         navigator.goto(Screen.LockboxMainPage)
-        let searchTextField = app.cells.textFields["filterEntries.textField"]
+        let searchTextField = app.searchFields.firstMatch
+        waitforExistence(searchTextField)
         searchTextField.tap()
         searchTextField.typeText("a")
         // There should be two matches
-        let twoMatches = app.tables.cells.count - 1
+        let twoMatches = app.tables.cells.count
         XCTAssertEqual(twoMatches, 2)
 
         // There should be one match
         searchTextField.typeText("cc")
-        let oneMatches = app.tables.cells.count - 1
+        let oneMatches = app.tables.cells.count
         XCTAssertEqual(oneMatches, 1)
 
         // There should not be any matches
         searchTextField.typeText("x")
         waitforExistence(app.cells.staticTexts["noMatchingEntries.label"])
-        let noMatches = app.tables.cells.count - 1
+        let noMatches = app.tables.cells.count
         XCTAssertEqual(noMatches, 1)
 
         // Tap on cacel
-        app.buttons["cancelFilterTextEntry.button"].tap()
-        let searchFieldValueAfterCancel = searchTextField.value as! String
+        app.buttons["Cancel"].tap()
+        let searchFieldValueAfterCancel = searchTextField.placeholderValue
         XCTAssertEqual(searchFieldValueAfterCancel, "Search your entries")
 
         // Tap on 'x'
@@ -306,7 +307,8 @@ class LockboxXCUITests: BaseTestCase {
             XCTAssertTrue(safari.buttons.otherElements["iosmztest@gmail.com, for this website — Lockbox"].exists)
         } else if (safari.otherElements["Password Auto-fill"].exists) {
             safari.otherElements["Password Auto-fill"].tap()
-            XCTAssertTrue(safari.buttons["iosmztest@gmail.com, for this website — Lockbox"].exists)
+            waitforExistence(safari.buttons["Lockbox…"], timeout: 3)
+            XCTAssertTrue(safari.buttons["Lockbox…"].exists)
         } else {
             XCTAssertTrue(safari.buttons["Use “iosmztest@gmail.com”"].exists)
         }

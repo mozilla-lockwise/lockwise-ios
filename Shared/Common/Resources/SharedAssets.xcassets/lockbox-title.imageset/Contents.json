@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "lockbox.png",
+      "filename" : "lockbox-1.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "lockbox@2x.png",
+      "filename" : "lockbox@2x-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "lockbox@3x.png",
+      "filename" : "lockbox@3x-1.png",
       "scale" : "3x"
     }
   ],

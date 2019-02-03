@@ -10,7 +10,6 @@ import RxDataSources
 typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
 enum LoginListCellConfiguration {
-    case Search(enabled: Observable<Bool>, cancelHidden: Observable<Bool>, text: Observable<String>)
     case Item(title: String, username: String, guid: String)
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>?)
@@ -21,8 +20,6 @@ enum LoginListCellConfiguration {
 extension LoginListCellConfiguration: IdentifiableType {
     var identity: String {
         switch self {
-        case .Search:
-            return "search"
         case .Item(_, _, let guid):
             return guid
         case .SyncListPlaceholder:
@@ -40,7 +37,6 @@ extension LoginListCellConfiguration: IdentifiableType {
 extension LoginListCellConfiguration: Equatable {
     static func ==(lhs: LoginListCellConfiguration, rhs: LoginListCellConfiguration) -> Bool {
         switch (lhs, rhs) {
-        case (.Search, .Search): return true
         case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
             return lhTitle == rhTitle && lhUsername == rhUsername
         case (.SyncListPlaceholder, .SyncListPlaceholder): return true
@@ -57,6 +53,8 @@ class BaseItemListView: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     internal var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
+
+    var searchController: UISearchController?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -92,9 +90,53 @@ class BaseItemListView: UIViewController {
             .font: UIFont.navigationTitleFont
         ]
 
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .never
+        self.navigationItem.largeTitleDisplayMode = .always
+
+        self.searchController = self.getStyledSearchController()
+
+        self.extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+    }
+
+    func getStyledSearchController() -> UISearchController {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchController.isActive = true
+        searchController.searchBar.backgroundColor = Constant.color.navBackgroundColor
+        searchController.searchBar.tintColor = UIColor.white // Cancel button
+        searchController.searchBar.barStyle = .black // White text color
+
+        searchController.searchBar.sizeToFit()
+
+        searchController.searchBar.searchBarStyle = UISearchBar.Style.minimal
+
+        searchController.searchBar.barTintColor = UIColor.clear // Constant.color.navSearchBackgroundColor
+
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+        self.definesPresentationContext = true
+
+        let searchIcon = UIImage(named: "search-icon")?.withRenderingMode(.alwaysTemplate).tinted(Constant.color.navSearchPlaceholderTextColor)
+        searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
+        searchController.searchBar.setImage(UIImage(named: "clear-icon"), for: UISearchBar.Icon.clear, state: .normal)
+
+        searchController.searchBar.setSearchFieldBackgroundImage(UIImage.color(UIColor.clear, size:  CGSize(width: 50, height: 38)), for: .normal) // Clear the background image
+        searchController.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 5.0, vertical: 0) // calling setSearchFieldBackgroundImage removes the spacing between the search icon and text
+        if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+
+            if let backgroundview = searchField.subviews.first {
+                backgroundview.backgroundColor = Constant.color.navSearchBackgroundColor
+                backgroundview.layer.cornerRadius = 10
+                backgroundview.clipsToBounds = true
+            }
         }
+
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
+
+        return searchController
     }
 }
 
@@ -114,13 +156,21 @@ extension BaseItemListView: BaseItemListViewProtocol {
     }
 
     func dismissKeyboard() {
-        if let cell = self.getFilterCell() {
-            cell.filterTextField.resignFirstResponder()
+        if let searchBar = self.searchController?.searchBar {
+            searchBar.resignFirstResponder()
         }
     }
 
-    private func getFilterCell() -> FilterCell? {
-        return self.tableView.cellForRow(at: [0, 0]) as? FilterCell
+    func bind(titleText: Driver<String>) {
+        titleText
+            .drive(self.navigationItem.rx.title)
+            .disposed(by: self.disposeBag)
+    }
+
+    func setFilterEnabled(enabled: Bool) {
+        DispatchQueue.main.async {
+            self.searchController?.searchBar.isUserInteractionEnabled = enabled
+        }
     }
 }
 
@@ -132,30 +182,6 @@ extension BaseItemListView {
 
                     var retCell: UITableViewCell
                     switch cellConfiguration {
-                    case .Search(let enabled, let cancelHidden, let text):
-                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "filtercell") as? FilterCell,
-                              let presenter = self.basePresenter else {
-                            fatalError("couldn't find the right cell or presenter!")
-                        }
-                        enabled
-                                .bind(to: cell.rx.isUserInteractionEnabled)
-                                .disposed(by: cell.disposeBag)
-
-                        cell.filterTextField.rx.text
-                                .orEmpty
-                                .asObservable()
-                                .bind(to: presenter.filterTextObserver)
-                                .disposed(by: cell.disposeBag)
-
-                        self.configureFilterCell(
-                                cell,
-                                presenter: presenter,
-                                enabled: enabled,
-                                cancelHidden: cancelHidden,
-                                text: text
-                        )
-
-                        retCell = cell
                     case .Item(let title, let username, _):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else {
                             fatalError("couldn't find the right cell!")
@@ -226,6 +252,20 @@ extension BaseItemListView {
 
     fileprivate func setupDelegate() {
         if let presenter = self.basePresenter {
+
+            if let searchController = self.searchController {
+                searchController.searchBar.rx.text
+                    .orEmpty
+                    .asObservable()
+                    .bind(to: presenter.filterTextObserver)
+                    .disposed(by: self.disposeBag)
+
+                searchController.searchBar.rx.cancelButtonClicked
+                    .asObservable()
+                    .bind(to: presenter.cancelObserver)
+                    .disposed(by: self.disposeBag)
+            }
+
             self.tableView.rx.itemSelected
                     .map { (path: IndexPath) -> String? in
                         guard let config = self.dataSource?[path] else {
@@ -252,70 +292,14 @@ extension BaseItemListView {
         backgroundView.backgroundColor = Constant.color.viewBackground
         self.tableView.backgroundView = backgroundView
     }
+}
 
-    fileprivate func configureFilterCell(_ cell: FilterCell,
-                                         presenter: BaseItemListPresenter,
-                                         enabled: Observable<Bool>,
-                                         cancelHidden: Observable<Bool>,
-                                         text: Observable<String>) {
-        let searchImage = UIImage(named: "search")
-        let searchImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 40.0, height: cell.frame.height))
-        searchImageView.contentMode = .center
-        searchImageView.image = searchImage
+extension BaseItemListView: UISearchControllerDelegate {
 
-        cell.filterTextField.leftView = searchImageView
-        cell.filterTextField.leftViewMode = .always
+}
 
-        cell.accessibilityCustomActions = [
-            UIAccessibilityCustomAction(name: "Edit text", target: self, selector: #selector(editFilterCell)),
-            UIAccessibilityCustomAction(name: Constant.string.cancel, target: self, selector: #selector(accessibleCancel))
-        ]
+extension BaseItemListView: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
 
-        enabled
-                .bind(to: cell.rx.isUserInteractionEnabled)
-                .disposed(by: cell.disposeBag)
-
-        cell.filterTextField.rx.text
-                .orEmpty
-                .asObservable()
-                .bind(to: presenter.filterTextObserver)
-                .disposed(by: cell.disposeBag)
-
-        cell.cancelButton.rx.tap
-                .bind(to: presenter.filterCancelObserver)
-                .disposed(by: cell.disposeBag)
-
-        cell.filterTextField.rx.controlEvent(.editingDidEnd)
-                .bind(to: presenter.editEndedObserver)
-                .disposed(by: cell.disposeBag)
-
-        cancelHidden
-                .bind(to: cell.cancelButton.rx.isHidden)
-                .disposed(by: cell.disposeBag)
-
-        cancelHidden
-                .subscribe(onNext: { _ in
-                    UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
-                })
-                .disposed(by: cell.disposeBag)
-
-        text
-                .bind(to: cell.filterTextField.rx.text)
-                .disposed(by: cell.disposeBag)
-
-        let borderView = UIView()
-        borderView.frame = CGRect(x: 0, y: 0, width: 1, height: cell.frame.height)
-        borderView.backgroundColor = Constant.color.cellBorderGrey
-        cell.cancelButton.addSubview(borderView)
-    }
-
-    @objc internal func accessibleCancel() {
-        self.basePresenter?.filterCancelObserver.onNext(())
-    }
-
-    @objc internal func editFilterCell() {
-        if let cell = self.getFilterCell() {
-            cell.filterTextField.becomeFirstResponder()
-        }
     }
 }

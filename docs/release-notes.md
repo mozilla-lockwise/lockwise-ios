@@ -1,5 +1,40 @@
 # Release Notes
 
+## 1.4.0 (Build 2769)
+
+_Date: 2019-01-08_
+
+We've improved the search experience (and coming soon: added iPad support)! This is a big update and we hope you enjoy it. Here's the full list of changes:
+
+- Updated the search experience to leverage built-in iOS features to help keep it stable and working consistently (which means we now require iOS 11)
+
+A big "thanks" to all the contributors that helped along the way!
+
+## 1.3.3 (Build 2731)
+
+_Date: 2018-12-19_
+
+We fixed more bugs and added some (hopefully) helpful icons to the item detail view. You should see some slight improvements but nothing major. Here's the full list of changes:
+
+- We added icons to show that you can open the webpage and/or copy the username and password with one tap
+- We fully close the database so it can't crash in the background, this means you should see AutoFill work more reliably
+- If you don't have any saved logins in your Firefox Account and try to enable AutoFill, we gracefully stop trying to set that up for you (since there's nothing to set up yet!)
+- We also updated some underlying libraries to keep up with other fixes and improvements
+
+A big "thanks" to all the contributors that helped along the way!
+
+## 1.3.3 (Build 2717)
+
+_Date: 2018-12-17_
+
+We fixed more bugs! You should see some slight improvements but nothing major.
+
+Here's the full list of changes:
+
+- Upgrade to RxSwift, application services dependencies
+- Add Copy and Open icons to item detail screen
+- Properly close DB when app is backgrounded
+
 ## 1.3.2 (Build 2635)
 
 _Date: 2018-11-03_

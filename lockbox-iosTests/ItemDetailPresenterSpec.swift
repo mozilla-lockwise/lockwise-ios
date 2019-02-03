@@ -20,6 +20,7 @@ class ItemDetailPresenterSpec: QuickSpec {
         let learnHowToEditStub = PublishSubject<Void>()
         var tempAlertMessage: String?
         var tempAlertTimeout: TimeInterval?
+        var enableBackButtonValue: Bool?
 
         private let disposeBag = DisposeBag()
 
@@ -42,6 +43,10 @@ class ItemDetailPresenterSpec: QuickSpec {
         func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
             self.tempAlertMessage = message
             self.tempAlertTimeout = timeout
+        }
+
+        func enableBackButton(enabled: Bool) {
+            self.enableBackButtonValue = enabled
         }
     }
 
@@ -86,11 +91,18 @@ class ItemDetailPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeTabletHelper: TabletHelper {
+        override var shouldDisplaySidebar: Bool {
+            return false
+        }
+    }
+
     private var view: FakeItemDetailView!
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
+    private var tabletHelper: FakeTabletHelper!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -103,13 +115,15 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
+                self.tabletHelper = FakeTabletHelper()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
-                        copyDisplayStore: self.copyDisplayStore
+                        copyDisplayStore: self.copyDisplayStore,
+                        tabletHelper: self.tabletHelper
                 )
             }
 
@@ -184,7 +198,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "", actionType: .tap)))
                             }
                         }
 
@@ -197,7 +211,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action with no text") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "", actionType: .tap)))
                             }
                         }
                     }
@@ -230,7 +244,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "", actionType: .tap)))
                             }
                         }
 
@@ -243,7 +257,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action with no text") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "", actionType: .tap)))
                             }
                         }
                     }
@@ -311,6 +325,10 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 it("requests the correct item from the datastore") {
                     expect(self.dataStore.loginIDArg).to(equal(self.view.itemId))
+                }
+
+                it("enables back button") {
+                    expect(self.view.enableBackButtonValue).to(beTrue())
                 }
 
                 describe("getting an item with the password displayed") {
@@ -466,6 +484,21 @@ class ItemDetailPresenterSpec: QuickSpec {
                                                 returnRoute: MainRouteAction.detail(itemId: self.view.itemId))
                                 ))
                     }
+                }
+            }
+
+            describe("dndStarted") {
+                beforeEach {
+                    let item = Login(guid:  self.view.itemId, hostname: "www.example.com", username: "asdf", password: "meow")
+                    self.dataStore.onItemStub.onNext(item)
+
+                    self.subject.dndStarted(itemId: self.view.itemId, value: "Username")
+                }
+
+                it("sends toucb action") {
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
+                    expect(action).to(equal(DataStoreAction.touch(id: self.view.itemId)))
                 }
             }
         }

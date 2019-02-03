@@ -135,9 +135,7 @@ extension SettingListView {
         ]
         self.navigationController?.navigationBar.accessibilityIdentifier = "settings.navigationBar"
 
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .never
-        }
+        self.navigationItem.largeTitleDisplayMode = .never
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done,
                 style: .plain,

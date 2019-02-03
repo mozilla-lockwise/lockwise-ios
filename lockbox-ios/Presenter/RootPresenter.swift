@@ -11,18 +11,21 @@ import FxAClient
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalViewIs<T: UIViewController>(_ type: T.Type) -> Bool
-    func mainStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+    func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool
+    func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool
     func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
-
     var modalStackPresented: Bool { get }
 
-    func startMainStack<T: UINavigationController>(_ type: T.Type)
+    func startMainStack<T: UIViewController>(_ viewController: T)
     func startModalStack<T: UINavigationController>(_ navigationController: T)
     func dismissModals()
 
-    func pushLoginView(view: LoginRouteAction)
-    func pushMainView(view: MainRouteAction)
-    func pushSettingView(view: SettingRouteAction)
+    func push(view: UIViewController)
+    func pushSidebar(view: UIViewController)
+    func pushDetail(view: UIViewController)
+    func popView()
+    func popToRoot()
 }
 
 struct OAuthProfile {
@@ -53,6 +56,10 @@ class RootPresenter {
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: Sentry
     fileprivate let adjustManager: AdjustManager
+    fileprivate let viewFactory: ViewFactory
+    fileprivate let sizeClassStore: SizeClassStore
+
+    private var isDisplayingSidebar: Bool?
 
     var fxa: FirefoxAccount?
 
@@ -67,7 +74,9 @@ class RootPresenter {
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: Sentry = Sentry.shared,
-         adjustManager: AdjustManager = AdjustManager.shared
+         adjustManager: AdjustManager = AdjustManager.shared,
+         viewFactory: ViewFactory = ViewFactory.shared,
+         sizeClassStore: SizeClassStore = SizeClassStore.shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -81,6 +90,8 @@ class RootPresenter {
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
         self.adjustManager = adjustManager
+        self.viewFactory = viewFactory
+        self.sizeClassStore = sizeClassStore
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile, self.accountStore.account)
@@ -164,6 +175,10 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
     }
 
+    func changeDisplay(traitCollection: UITraitCollection) {
+        self.dispatcher.dispatch(action: SizeClassAction.changed(traitCollection: traitCollection))
+    }
+
     lazy private var showLogin: AnyObserver<LoginRouteAction> = { [unowned self] in
         return Binder(self) { target, loginAction in
             guard let view = target.view else {
@@ -175,29 +190,29 @@ class RootPresenter {
             }
 
             if !view.mainStackIs(LoginNavigationController.self) {
-                view.startMainStack(LoginNavigationController.self)
+                view.startMainStack(LoginNavigationController())
             }
 
             switch loginAction {
             case .welcome:
                 if !view.topViewIs(WelcomeView.self) {
-                    view.pushLoginView(view: .welcome)
+                    view.popToRoot()
                 }
             case .fxa:
                 if !view.topViewIs(FxAView.self) {
-                    view.pushLoginView(view: .fxa)
+                    view.push(view: self.viewFactory.make(FxAView.self))
                 }
             case .onboardingConfirmation:
                 if !view.topViewIs(OnboardingConfirmationView.self) {
-                    view.pushLoginView(view: .onboardingConfirmation)
+                    view.push(view: self.viewFactory.make(storyboardName: "OnboardingConfirmation", identifier: "onboardingconfirmation"))
                 }
             case .autofillOnboarding:
                 if !view.topViewIs(AutofillOnboardingView.self) {
-                    view.pushLoginView(view: .autofillOnboarding)
+                    view.push(view: self.viewFactory.make(storyboardName: "AutofillOnboarding", identifier: "autofillonboarding"))
                 }
             case .autofillInstructions:
                 if !view.topViewIs(AutofillInstructionsView.self) {
-                    view.pushLoginView(view: .autofillInstructions)
+                    view.push(view: self.viewFactory.make(storyboardName: "SetupAutofill", identifier: "autofillinstructions"))
                 }
             }
         }.asObserver()
@@ -213,18 +228,30 @@ class RootPresenter {
                 view.dismissModals()
             }
 
-            if !view.mainStackIs(MainNavigationController.self) {
-                view.startMainStack(MainNavigationController.self)
+            if !view.mainStackIs(SplitView.self) {
+                view.startMainStack(SplitView(delegate: self))
             }
 
             switch mainAction {
             case .list:
                 if !view.topViewIs(ItemListView.self) {
-                    view.pushMainView(view: .list)
+                    view.popToRoot()
                 }
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
-                    view.pushMainView(view: .detail(itemId: id))
+                    let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+                    detailView.itemId = id
+
+                    self.sizeClassStore.shouldDisplaySidebar
+                        .take(1)
+                        .subscribe(onNext: { enableSidebar in
+                            if enableSidebar {
+                                view.pushDetail(view: detailView)
+                            } else {
+                                view.push(view: detailView)
+                            }
+                        })
+                        .disposed(by: self.disposeBag)
                 }
             }
         }.asObserver()
@@ -241,25 +268,25 @@ class RootPresenter {
             }
 
             if !view.mainStackIs(SettingNavigationController.self) {
-                view.startMainStack(SettingNavigationController.self)
+                view.startMainStack(SettingNavigationController())
             }
 
             switch settingAction {
             case .list:
                 if !view.topViewIs(SettingListView.self) {
-                    view.pushSettingView(view: .list)
+                    view.popToRoot()
                 }
             case .account:
                 if !view.topViewIs(AccountSettingView.self) {
-                    view.pushSettingView(view: .account)
+                    view.push(view: self.viewFactory.make(storyboardName: "AccountSetting", identifier: "accountsetting"))
                 }
             case .autoLock:
                 if !view.topViewIs(AutoLockSettingView.self) {
-                    view.pushSettingView(view: .autoLock)
+                    view.push(view: self.viewFactory.make(AutoLockSettingView.self))
                 }
             case .preferredBrowser:
                 if !view.topViewIs(PreferredBrowserSettingView.self) {
-                    view.pushSettingView(view: .preferredBrowser)
+                    view.push(view: self.viewFactory.make(PreferredBrowserSettingView.self))
                 }
             case .autofillInstructions:
                 if !view.modalStackIs(AutofillInstructionsNavigationController.self) {
@@ -309,5 +336,51 @@ extension RootPresenter {
             .subscribe(onNext: { enabled in
                 self.sentryManager.setup(sendUsageData: enabled)
         }).disposed(by: self.disposeBag)
+    }
+}
+
+extension RootPresenter: UISplitViewControllerDelegate {
+    func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
+        let newNavController = MainNavigationController(storyboardName: "ItemList", identifier: "itemlist")
+        if let splitView = splitViewController as? SplitView {
+            if let vc = splitView.detailView?.topViewController as? ItemDetailView {
+                if vc.itemId != "" {
+                    let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+                    detailView.itemId = vc.itemId
+                    newNavController.pushViewController(detailView, animated: false)
+                }
+            }
+        }
+
+        return newNavController
+    }
+
+    func primaryViewController(forExpanding splitViewController: UISplitViewController) -> UIViewController? {
+        if let splitView = splitViewController as? SplitView {
+            return splitView.sidebarView
+        }
+
+        return nil
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+        return true
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+
+        if let navController = primaryViewController as? UINavigationController {
+            if let itemDetail = navController.popViewController(animated: false) as? ItemDetailView {
+                let newDetailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+                newDetailView.itemId = itemDetail.itemId
+                return MainNavigationController(rootViewController: newDetailView)
+            }
+        }
+
+        return nil
+    }
+
+    func splitViewController(_ splitViewController: UISplitViewController, showDetail vc: UIViewController, sender: Any?) -> Bool {
+        return true
     }
 }

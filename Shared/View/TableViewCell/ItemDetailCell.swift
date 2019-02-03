@@ -11,6 +11,7 @@ class ItemDetailCell: UITableViewCell {
     @IBOutlet weak var revealButton: UIButton!
     @IBOutlet weak var copyButton: UIButton!
     @IBOutlet weak var openButton: UIButton!
+    var dragValue: String?
 
     var disposeBag = DisposeBag()
 

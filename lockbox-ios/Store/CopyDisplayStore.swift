@@ -26,6 +26,7 @@ class CopyDisplayStore {
 
         self.dispatcher.register
                 .filterByType(class: CopyAction.self)
+                .filter { $0.actionType == .tap }
                 .bind { self.copy($0) }
                 .disposed(by: self.disposeBag)
     }

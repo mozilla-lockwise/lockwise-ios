@@ -53,9 +53,7 @@ class StaticURLWebView: UIViewController {
             .font: UIFont.navigationTitleFont
         ]
 
-        if #available(iOS 11.0, *) {
-            self.navigationItem.largeTitleDisplayMode = .never
-        }
+        self.navigationItem.largeTitleDisplayMode = .never
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
                 title: Constant.string.close,
