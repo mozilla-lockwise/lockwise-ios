@@ -10,7 +10,7 @@ import SwiftyJSON
 import FxAClient
 
 enum DataStoreAction: Action {
-    case updateCredentials(oauthInfo: FxAClient.OAuthInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount)
+    case updateCredentials(oauthInfo: FxAClient.AccessTokenInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount)
     case lock
     case unlock
     case reset

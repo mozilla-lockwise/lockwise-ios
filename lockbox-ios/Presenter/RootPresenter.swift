@@ -29,7 +29,7 @@ protocol RootViewProtocol: class {
 }
 
 struct OAuthProfile {
-    let oauthInfo: OAuthInfo?
+    let oauthInfo: AccessTokenInfo?
     let profile: Profile?
     let account: FirefoxAccount?
 }

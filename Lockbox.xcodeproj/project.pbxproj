@@ -244,9 +244,10 @@
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
-		D819A4B121B96F93004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
-		D819A4B221B97000004EE6F3 /* Sync15Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; };
-		D819A4B421B975D2004EE6F3 /* Sync15Logins.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D80D41B821F65E91008A7B11 /* SizeClassStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B721F65E91008A7B11 /* SizeClassStore.swift */; };
+		D80D41BA21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
+		D80D41BC21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
+		D80D41BE21F67E95008A7B11 /* SizeClassStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */; };
 		D819A4B921BAF988004EE6F3 /* LoginRecord+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */; };
 		D819A4BA21BAF988004EE6F3 /* LoginRecord+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */; };
 		D819A4BC21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */; };
@@ -259,10 +260,6 @@
 		D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */; };
 		D819A4C821BB3351004EE6F3 /* NSData+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C721BB3351004EE6F3 /* NSData+.swift */; };
 		D819A4C921BB3351004EE6F3 /* NSData+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C721BB3351004EE6F3 /* NSData+.swift */; };
-		D80D41B821F65E91008A7B11 /* SizeClassStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B721F65E91008A7B11 /* SizeClassStore.swift */; };
-		D80D41BA21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
-		D80D41BC21F677A5008A7B11 /* SizeClassAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B921F677A5008A7B11 /* SizeClassAction.swift */; };
-		D80D41BE21F67E95008A7B11 /* SizeClassStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */; };
 		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
 		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
@@ -290,6 +287,7 @@
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
 		D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */; };
 		D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
+		D8C20D6E2207842C001B4A27 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C20D6D2207842C001B4A27 /* Logins.framework */; };
 		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
 		D8D029282064441600CC01C6 /* AutoLockSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */; };
@@ -341,7 +339,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D819A4B421B975D2004EE6F3 /* Sync15Logins.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -574,16 +571,15 @@
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
-		D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sync15Logins.framework; sourceTree = "<group>"; };
+		D80D41B721F65E91008A7B11 /* SizeClassStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStore.swift; sourceTree = "<group>"; };
+		D80D41B921F677A5008A7B11 /* SizeClassAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassAction.swift; sourceTree = "<group>"; };
+		D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStoreSpec.swift; sourceTree = "<group>"; };
 		D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginRecord+.swift"; sourceTree = "<group>"; };
 		D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccessor.swift; sourceTree = "<group>"; };
 		D819A4BE21BB2622004EE6F3 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		D819A4C121BB2686004EE6F3 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift .swift"; sourceTree = "<group>"; };
 		D819A4C721BB3351004EE6F3 /* NSData+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+.swift"; sourceTree = "<group>"; };
-		D80D41B721F65E91008A7B11 /* SizeClassStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStore.swift; sourceTree = "<group>"; };
-		D80D41B921F677A5008A7B11 /* SizeClassAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassAction.swift; sourceTree = "<group>"; };
-		D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStoreSpec.swift; sourceTree = "<group>"; };
 		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
 		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
@@ -612,6 +608,7 @@
 		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
 		D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockStoreSpec.swift; sourceTree = "<group>"; };
 		D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAutoLockStore.swift; sourceTree = "<group>"; };
+		D8C20D6D2207842C001B4A27 /* Logins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Logins.framework; path = "Carthage-15/Build/iOS/Logins.framework"; sourceTree = "<group>"; };
 		D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingViewSpec.swift; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
@@ -656,7 +653,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D819A4B121B96F93004EE6F3 /* Sync15Logins.framework in Frameworks */,
+				D8C20D6E2207842C001B4A27 /* Logins.framework in Frameworks */,
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */,
 				D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */,
@@ -681,12 +678,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D819A4B221B97000004EE6F3 /* Sync15Logins.framework in Frameworks */,
 				7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */,
-				7D80F3082118DCC700DA191B /* AuthenticationServices.framework in Frameworks */,
 				7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */,
-				7D078EF72124E52B00D10D1B /* RxOptional.framework in Frameworks */,
-				7D078EF82124E58000D10D1B /* Differentiator.framework in Frameworks */,
 				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
 				7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */,
 			);
@@ -995,7 +988,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D819A4B021B96F93004EE6F3 /* Sync15Logins.framework */,
+				D8C20D6D2207842C001B4A27 /* Logins.framework */,
 				7D4396562135D79700B96FA9 /* Sentry.framework */,
 				D8551EBD211954E00056B24A /* AdjustSdk.framework */,
 				D8551EBB211950BF0056B24A /* iAd.framework */,
@@ -1426,7 +1419,6 @@
 				D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
-				391233892092155300CB0233 /* FxASignIn.js in Resources */,
 				D85CB82521E0295900E19118 /* LaunchScreen~ipad.storyboard in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
 				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
@@ -1784,7 +1776,6 @@
 				D819A4C021BB2622004EE6F3 /* AppInfo.swift in Sources */,
 				399641802148218D000A1984 /* CredentialItemListPresenter.swift in Sources */,
 				D819A4C321BB2686004EE6F3 /* Bytes.swift in Sources */,
-				7DB9DE9C2140CB0600239D31 /* FilterCell.swift in Sources */,
 				7DB9DEA32140D04700239D31 /* ItemListDisplayAction.swift in Sources */,
 				7DB9DEA42140D41E00239D31 /* UIFont+.swift in Sources */,
 				7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */,
@@ -2163,10 +2154,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage-15/Build/iOS",
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2202,10 +2194,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage-15/Build/iOS",
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2380,10 +2373,11 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage-15/Build/iOS",
 				);
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "lockbox-ios/Common/Resources/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

@@ -297,8 +297,8 @@ class BaseDataStore {
 }
 
 extension BaseDataStore {
-    public func updateCredentials(_ oauthInfo: OAuthInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount) {
-        guard let keysString = oauthInfo.keys else {
+    public func updateCredentials(_ oauthInfo: AccessTokenInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount) {
+        guard let keysString = oauthInfo.key else {
             return
         }
 
@@ -321,7 +321,7 @@ extension BaseDataStore {
         let kid = scopedKey["kid"].stringValue
 
         do {
-            self.syncUnlockInfo = try SyncUnlockInfo(kid: kid, fxaAccessToken: oauthInfo.accessToken, syncKey: syncKey, tokenserverURL: account.getTokenServerEndpointURL().absoluteString)
+            self.syncUnlockInfo = try SyncUnlockInfo(kid: kid, fxaAccessToken: oauthInfo.token, syncKey: syncKey, tokenserverURL: account.getTokenServerEndpointURL().absoluteString)
 
         } catch let error {
             print("Sync15: \(error)")

@@ -16,7 +16,7 @@ class Constant {
         static let oldSyncScope = "https://identity.mozilla.com/apps/oldsync"
         static let lockboxScope = "https://identity.mozilla.com/apps/lockbox"
         static let profileScope = "profile"
-        static let scopes = [oldSyncScope, lockboxScope, profileScope]
+        static let scopes = [oldSyncScope, lockboxScope, profileScope].joined(separator: ",")
     }
 
     struct setting {

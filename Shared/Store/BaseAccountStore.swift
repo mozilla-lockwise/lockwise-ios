@@ -13,11 +13,11 @@ class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper
 
     internal var fxa: FirefoxAccount?
-    internal var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
+    internal var _oauthInfo = ReplaySubject<AccessTokenInfo?>.create(bufferSize: 1)
     internal var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
     internal var _account = ReplaySubject<FirefoxAccount?>.create(bufferSize: 1)
 
-    public var oauthInfo: Observable<OAuthInfo?> {
+    public var oauthInfo: Observable<AccessTokenInfo?> {
         return _oauthInfo.asObservable()
     }
 
@@ -52,7 +52,7 @@ class BaseAccountStore {
 
         self._account.onNext(fxa)
 
-        fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
+        fxa.getAccessToken(scope: Constant.fxa.scopes) { (info: AccessTokenInfo?, _) in
             self._oauthInfo.onNext(info)
 
             if let json = try? fxa.toJSON() {

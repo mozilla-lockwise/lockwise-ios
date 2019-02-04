@@ -5,8 +5,8 @@
 import Foundation
 import FxAClient
 
-extension OAuthInfo: Equatable {
-    public static func ==(lhs: OAuthInfo, rhs: OAuthInfo) -> Bool {
+extension AccessTokenInfo: Equatable {
+    public static func ==(lhs: AccessTokenInfo, rhs: OAuthInfo) -> Bool {
         return lhs.keys == rhs.keys &&
                 lhs.accessToken == rhs.accessToken &&
                 lhs.scopes == rhs.scopes

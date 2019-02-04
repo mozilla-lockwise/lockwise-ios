@@ -174,7 +174,7 @@ extension AccountStore {
             return
         }
 
-        self.fxa?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
+        self.fxa?.completeOAuthFlow(code: code, state: state) { (info: AccessTokenInfo?, _) in
             self._oauthInfo.onNext(info)
 
             guard let fxa = self.fxa else {
