@@ -501,8 +501,6 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             describe(".onViewReady for view with sidebar") {
-                let item = Login(guid: "sdfsdfdfs", hostname: "www.cats.com", username: "meow", password: "iluv kats")
-
                 beforeEach {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
                     self.view.titleTextObserver = self.scheduler.createObserver(String.self)
@@ -520,16 +518,15 @@ class ItemDetailPresenterSpec: QuickSpec {
             describe("dndStarted") {
                 beforeEach {
                     self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.subject.dndStarted(value: "Username")
                     let item = Login(guid: "1234", hostname: "www.example.com", username: "asdf", password: "meow")
                     self.dataStore.onItemStub.onNext(item)
-
-                    self.subject.dndStarted(value: "Username")
                 }
 
-                it("sends toucb action") {
+                it("sends copy action") {
                     expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                    let action = self.dispatcher.dispatchActionArgument as! DataStoreAction
-                    expect(action).to(equal(DataStoreAction.touch(id: "1234")))
+                    let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                    expect(action).to(equal(CopyAction(text: "asdf", field: CopyField.username, itemID: "1234", actionType: CopyActionType.dnd)))
                 }
             }
         }
