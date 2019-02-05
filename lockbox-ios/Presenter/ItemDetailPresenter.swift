@@ -9,7 +9,6 @@ import RxDataSources
 import Storage
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
-//    var itemId: String { get }
     var learnHowToEditTapped: Observable<Void> { get }
     func enableBackButton(enabled: Bool)
     func bind(titleText: Driver<String>)
@@ -47,29 +46,26 @@ class ItemDetailPresenter {
 
             target.itemDetailStore.itemDetailId
                 .take(1)
-                .subscribe(onNext: { itemId in
+                .flatMap { target.dataStore.get($0) }
+                .take(1)
+                .flatMap { item -> Observable<[Action]> in
+                    var actions: [Action] = []
                     if copyableFields.contains(value) {
-                        target.dataStore.get(itemId)
-                                .take(1)
-                                .subscribe(onNext: { item in
-                                    target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
-
-                                    let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap)
-                                    target.dispatcher.dispatch(action: copyAction)
-                                })
-                                .disposed(by: target.disposeBag)
+                        if let item = item {
+                            actions.append(DataStoreAction.touch(id: item.guid))
+                            actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap))
+                        }
                     } else if value == Constant.string.webAddress {
-                        target.dataStore.get(itemId)
-                                .take(1)
-                                .subscribe(onNext: { item in
-                                    if let origin = item?.hostname {
-                                        target.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: origin))
-                                    }
-                                })
-                                .disposed(by: target.disposeBag)
+                        if let origin = item?.hostname {
+                            actions.append(ExternalLinkAction(baseURLString: origin))
+                        }
                     }
-            })
-            .disposed(by: target.disposeBag)
+                    return Observable.just(actions)
+                }.subscribe(onNext: { actions in
+                    for action in actions {
+                        target.dispatcher.dispatch(action: action)
+                    }
+                }).disposed(by: target.disposeBag)
         }.asObserver()
     }()
 
@@ -90,43 +86,40 @@ class ItemDetailPresenter {
     }
 
     func onViewReady() {
-        self.itemDetailStore.itemDetailId
-            .subscribe(onNext: { (itemId) in
-                let itemObservable = self.dataStore.get(itemId)
+        let itemObservable = self.itemDetailStore.itemDetailId
+            .flatMap { self.dataStore.get($0) }
 
-                let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-                let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
-                        .map { e -> [ItemDetailSectionModel] in
-                            if case let .togglePassword(passwordDisplayed) = e.1 {
-                                return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
-                            }
+        let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
+        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
+                .map { e -> [ItemDetailSectionModel] in
+                    if case let .togglePassword(passwordDisplayed) = e.1 {
+                        return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
+                    }
 
-                            return self.configurationForLogin(e.0, passwordDisplayed: false)
-                        }
+                    return self.configurationForLogin(e.0, passwordDisplayed: false)
+                }
 
-                let titleDriver = itemObservable
-                        .filterNil()
-                        .map { item -> String in
-                            let title = item.hostname.titleFromHostname()
-                            return title.isEmpty ? Constant.string.unnamedEntry : title
-                        }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
+        let titleDriver = itemObservable
+                .filterNil()
+                .map { item -> String in
+                    let title = item.hostname.titleFromHostname()
+                    return title.isEmpty ? Constant.string.unnamedEntry : title
+                }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
 
-                self.view?.bind(itemDetail: viewConfigDriver)
-                self.view?.bind(titleText: titleDriver)
+        self.view?.bind(itemDetail: viewConfigDriver)
+        self.view?.bind(titleText: titleDriver)
 
-                self.copyDisplayStore.copyDisplay
-                        .drive(onNext: { field in
-                            let fieldName: String
-                            switch field {
-                            case .password: fieldName = Constant.string.password
-                            case .username: fieldName = Constant.string.username
-                            }
+        self.copyDisplayStore.copyDisplay
+                .drive(onNext: { field in
+                    let fieldName: String
+                    switch field {
+                    case .password: fieldName = Constant.string.password
+                    case .username: fieldName = Constant.string.username
+                    }
 
-                            let message = String(format: Constant.string.fieldNameCopied, fieldName)
-                            self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
-                        })
-                        .disposed(by: self.disposeBag)
-        })
+                    let message = String(format: Constant.string.fieldNameCopied, fieldName)
+                    self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
+                })
         .disposed(by: self.disposeBag)
 
         self.view?.learnHowToEditTapped
@@ -154,17 +147,21 @@ class ItemDetailPresenter {
     func dndStarted(value: String?) {
         self.itemDetailStore.itemDetailId
             .take(1)
-            .subscribe(onNext: { itemId in
-                self.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
+            .flatMap { self.dataStore.get($0) }
+            .take(1)
+            .flatMap { item -> Observable<[Action]> in
+                var actions: [Action] = []
+                if let item = item {
+                    actions.append(DataStoreAction.touch(id: item.guid))
+                    actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
+                }
 
-                self.dataStore.get(itemId)
-                    .take(1)
-                    .subscribe(onNext: { item in
-                        let copyAction = ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd)
-                        self.dispatcher.dispatch(action: copyAction)
-                    }).disposed(by: self.disposeBag)
-            })
-            .disposed(by: self.disposeBag)
+                return Observable.just(actions)
+            }.subscribe(onNext: { actions in
+                for action in actions {
+                    self.dispatcher.dispatch(action: action)
+                }
+            }).disposed(by: self.disposeBag)
     }
 }
 
