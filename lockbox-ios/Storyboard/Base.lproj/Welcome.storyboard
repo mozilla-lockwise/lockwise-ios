@@ -101,13 +101,14 @@
                                 </constraints>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="Fls-Mq-402">
-                                <rect key="frame" x="667" y="488" width="32" height="37"/>
+                                <rect key="frame" x="667" y="540" width="32" height="37"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8rH-vt-4bG">
-                                <rect key="frame" x="30" y="545" width="1306" height="45"/>
+                                <rect key="frame" x="535.5" y="597" width="295" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591969999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <accessibility key="accessibilityConfiguration" identifier="unlock.button"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="295" id="Ck3-md-yee"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="315" id="E06-9X-jTv"/>
                                     <constraint firstAttribute="height" constant="45" id="dDb-XO-UVr"/>
                                 </constraints>
@@ -118,6 +119,11 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="getStarted.button"/>
                                 </userDefinedRuntimeAttributes>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <exclude reference="E06-9X-jTv"/>
+                                    </mask>
+                                </variation>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.92941176470588238" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -150,7 +156,9 @@
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="top" secondItem="Zs6-ts-YH0" secondAttribute="top" id="aZr-YV-g8U">
                                 <variation key="heightClass=regular-widthClass=regular" constant="160"/>
                             </constraint>
-                            <constraint firstItem="8rH-vt-4bG" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" constant="88" id="byD-Zk-AXv"/>
+                            <constraint firstItem="8rH-vt-4bG" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" constant="88" id="byD-Zk-AXv">
+                                <variation key="heightClass=regular-widthClass=regular" constant="140"/>
+                            </constraint>
                             <constraint firstItem="31L-bn-Z4L" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hwO-wS-oS4" secondAttribute="trailing" constant="30" id="cv3-ET-9pr"/>
                             <constraint firstAttribute="trailing" secondItem="4k3-9F-Bvv" secondAttribute="trailing" id="dQQ-8g-Mhl"/>
                             <constraint firstItem="31L-bn-Z4L" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xyY-bk-Xw8" secondAttribute="trailing" constant="40" id="gPv-IL-Ur6"/>
@@ -171,6 +179,11 @@
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="top" id="yDD-xq-H1w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="31L-bn-Z4L"/>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="constraints">
+                                <exclude reference="qZy-NR-94o"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="accessLockboxMessage" destination="xyY-bk-Xw8" id="GG2-Fn-0Dz"/>
