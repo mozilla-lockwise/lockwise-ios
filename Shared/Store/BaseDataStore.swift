@@ -7,7 +7,7 @@ import FxAClient
 import RxSwift
 import RxCocoa
 import RxOptional
-import Sync15Logins
+import Logins
 import SwiftyJSON
 import SwiftKeychainWrapper
 
@@ -182,7 +182,7 @@ class BaseDataStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .background:
-                        self.loginsStorage?.doDestroy()
+                        self.loginsStorage?.close()
 //                        self.profile.syncManager?.applicationDidEnterBackground()
 //                        var taskId = UIBackgroundTaskIdentifier.invalid
 //                        taskId = application.beginBackgroundTask (expirationHandler: {
@@ -270,14 +270,7 @@ class BaseDataStore {
     }
 
     private func shutdown() {
-        do {
-            try self.loginsStorage?.doDestroy()
-        } catch let error {
-            print("Sync15: \(error)")
-        }
-//        if !self.profile.isShutdown {
-//            self.profile.shutdown()
-//        }
+        self.loginsStorage?.close()
     }
 
     internal func doSync() {
@@ -334,7 +327,7 @@ extension BaseDataStore {
         do {
             try self.loginsStorage?.touch(id: id)
         } catch let error {
-            print("Sync15: \(error)")
+            print("Logins: \(error)")
         }
     }
 }
@@ -344,7 +337,7 @@ extension BaseDataStore {
         do {
             try self.loginsStorage?.reset()
         } catch let error {
-            print("Sync15: \(error)")
+            print("Logins: \(error)")
         }
     }
 }

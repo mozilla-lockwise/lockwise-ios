@@ -287,6 +287,7 @@
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
 		D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */; };
 		D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
+		D8B0D553220A9F8C004CD9FE /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C20D6D2207842C001B4A27 /* Logins.framework */; };
 		D8C20D6E2207842C001B4A27 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C20D6D2207842C001B4A27 /* Logins.framework */; };
 		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
@@ -678,6 +679,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8B0D553220A9F8C004CD9FE /* Logins.framework in Frameworks */,
 				7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */,
 				7DDEAA632124B26F00A7D521 /* FxAClient.framework in Frameworks */,
 				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
@@ -1489,6 +1491,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Logins.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
@@ -1505,6 +1508,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XCGLogger.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAClient.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Logins.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2228,6 +2232,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage-15/Build/iOS",
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -2254,6 +2259,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage-15/Build/iOS",
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -2279,6 +2285,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Carthage-15/Build/iOS",
 				);
 				INFOPLIST_FILE = CredentialProvider/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

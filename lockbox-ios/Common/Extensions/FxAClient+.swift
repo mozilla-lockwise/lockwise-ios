@@ -6,10 +6,11 @@ import Foundation
 import FxAClient
 
 extension AccessTokenInfo: Equatable {
-    public static func ==(lhs: AccessTokenInfo, rhs: OAuthInfo) -> Bool {
-        return lhs.keys == rhs.keys &&
-                lhs.accessToken == rhs.accessToken &&
-                lhs.scopes == rhs.scopes
+    public static func ==(lhs: AccessTokenInfo, rhs: AccessTokenInfo) -> Bool {
+        return lhs.key == rhs.key &&
+                lhs.token == rhs.token &&
+                lhs.scope == rhs.scope &&
+                lhs.expiresAt == rhs.expiresAt
     }
 }
 
@@ -17,7 +18,14 @@ extension Profile: Equatable {
     public static func ==(lhs: Profile, rhs: Profile) -> Bool {
         return lhs.email == rhs.email &&
                 lhs.displayName == rhs.displayName &&
-                lhs.avatar == rhs.displayName &&
+                lhs.avatar == rhs.avatar &&
                 lhs.uid == rhs.uid
+    }
+}
+
+extension Avatar: Equatable {
+    public static func ==(lhs: Avatar, rhs: Avatar) -> Bool {
+        return lhs.isDefault == rhs.isDefault &&
+                lhs.url == rhs.url
     }
 }

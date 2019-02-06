@@ -6,7 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Sync15Logins
+import Logins
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
     var itemId: String { get }
@@ -202,7 +202,7 @@ extension ItemDetailPresenter {
         return sectionModels
     }
 
-    private static func getCopyActionFor(_ item: Login?, value: String?, actionType: CopyActionType) -> CopyAction {
+    private static func getCopyActionFor(_ item: LoginRecord?, value: String?, actionType: CopyActionType) -> CopyAction {
         var field = CopyField.username
         var text = ""
         if value == Constant.string.username {
@@ -213,6 +213,6 @@ extension ItemDetailPresenter {
             field = CopyField.password
         }
 
-        return CopyAction(text: text, field: field, itemID: item?.guid ?? "", actionType: actionType)
+        return CopyAction(text: text, field: field, itemID: item?.id ?? "", actionType: actionType)
     }
 }

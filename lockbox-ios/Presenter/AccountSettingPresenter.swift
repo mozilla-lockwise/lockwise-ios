@@ -54,7 +54,11 @@ class AccountSettingPresenter {
 
         let avatarImageDriver = profileObservable
                 .flatMap { info -> Observable<Data?> in
-                    guard let avatarURL = URL(string: info.avatar?.url) else {
+                    guard let urlString = info.avatar?.url else {
+                        return Observable.just(nil)
+                    }
+
+                    guard let avatarURL = URL(string: urlString) else {
                         return Observable.just(nil)
                     }
 

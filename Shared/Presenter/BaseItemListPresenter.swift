@@ -6,7 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Sync15Logins
+import Logins
 
 protocol BaseItemListViewProtocol: class {
     func bind(items: Driver<[ItemSectionModel]>)

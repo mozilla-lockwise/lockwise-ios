@@ -105,24 +105,21 @@ extension AccountStore {
             self.generateLoginURL()
             self.populateAccountInformation()
         } else {
-            FxAConfig.release { (config: FxAConfig?, _) in
-                if let config = config {
-                    self.fxa = try? FirefoxAccount(
-                        config: config,
-                        clientId: Constant.fxa.clientID,
-                        redirectUri: Constant.fxa.redirectURI)
+            let config = FxAConfig.release(clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
+            self.fxa = try? FirefoxAccount(config: config)
 
-                    self.generateLoginURL()
-                }
+            self.generateLoginURL()
 
-                self._oauthInfo.onNext(nil)
-                self._profile.onNext(nil)
-            }
+            self._oauthInfo.onNext(nil)
+            self._profile.onNext(nil)
+            self._account.onNext(nil)
         }
     }
 
     private func generateLoginURL() {
-        self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
+        self.fxa?.beginOAuthFlow(scopes: [Constant.fxa.lockboxScope,
+                                          Constant.fxa.oldSyncScope,
+                                          Constant.fxa.profileScope], wantsKeys: true) { url, _ in
             if let url = url {
                 self._loginURL.onNext(url)
             }
@@ -174,20 +171,32 @@ extension AccountStore {
             return
         }
 
-        self.fxa?.completeOAuthFlow(code: code, state: state) { (info: AccessTokenInfo?, _) in
-            self._oauthInfo.onNext(info)
-
-            guard let fxa = self.fxa else {
+        self.fxa?.completeOAuthFlow(code: code, state: state, completionHandler: { (_, error) in
+            if let error = error {
+                print(error)
                 return
             }
 
-            if let accountJSON = try? fxa.toJSON() {
-                self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
-            }
+            self.fxa?.getAccessToken(scope: Constant.fxa.scopes, completionHandler: { (info, error) in
+                if let error = error {
+                    print(error)
+                    return
+                }
 
-            fxa.getProfile { (profile: Profile?, _) in
-                self._profile.onNext(profile)
-            }
-        }
+                self._oauthInfo.onNext(info)
+
+                guard let fxa = self.fxa else {
+                    return
+                }
+
+                if let accountJSON = try? fxa.toJSON() {
+                    self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
+                }
+
+                fxa.getProfile { (profile: Profile?, _) in
+                    self._profile.onNext(profile)
+                }
+            })
+        })
     }
 }
