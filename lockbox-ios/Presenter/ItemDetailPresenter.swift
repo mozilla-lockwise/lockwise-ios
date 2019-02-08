@@ -47,8 +47,7 @@ class ItemDetailPresenter {
             target.itemDetailStore.itemDetailId
                 .take(1)
                 .flatMap { target.dataStore.get($0) }
-                .take(1)
-                .flatMap { item -> Observable<[Action]> in
+                .map { item -> [Action] in
                     var actions: [Action] = []
                     if copyableFields.contains(value) {
                         if let item = item {
@@ -60,12 +59,14 @@ class ItemDetailPresenter {
                             actions.append(ExternalLinkAction(baseURLString: origin))
                         }
                     }
-                    return Observable.just(actions)
-                }.subscribe(onNext: { actions in
+                    return actions
+                }
+                .subscribe(onNext: { actions in
                     for action in actions {
                         target.dispatcher.dispatch(action: action)
                     }
-                }).disposed(by: target.disposeBag)
+                })
+                .disposed(by: target.disposeBag)
         }.asObserver()
     }()
 
@@ -123,18 +124,19 @@ class ItemDetailPresenter {
         .disposed(by: self.disposeBag)
 
         self.view?.learnHowToEditTapped
-            .subscribe { _ in
-                self.itemDetailStore.itemDetailId
-                    .take(1)
-                    .subscribe(onNext: { itemId in
-                        self.dispatcher.dispatch(action:
-                            ExternalWebsiteRouteAction(
-                                urlString: Constant.app.editExistingEntriesFAQ,
-                                title: Constant.string.faq,
-                                returnRoute: MainRouteAction.detail(itemId: itemId))
-                        )
-                    }).disposed(by: self.disposeBag)
-            }
+            .flatMap({ _ -> Observable<String> in
+                return self.itemDetailStore.itemDetailId
+            })
+            .take(1)
+            .map({ (itemId) -> Action in
+                return ExternalWebsiteRouteAction(
+                    urlString: Constant.app.editExistingEntriesFAQ,
+                    title: Constant.string.faq,
+                    returnRoute: MainRouteAction.detail(itemId: itemId))
+            })
+            .subscribe(onNext: { (action) in
+                self.dispatcher.dispatch(action: action)
+            })
             .disposed(by: self.disposeBag)
 
         self.sizeClassStore.shouldDisplaySidebar
