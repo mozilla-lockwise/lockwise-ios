@@ -43,6 +43,10 @@ class ItemListView: BaseItemListView, ItemListViewProtocol {
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
     }
+
+    override func shouldHidesNavigationBarDuringPresentation() -> Bool {
+        return UIDevice.current.userInterfaceIdiom != UIUserInterfaceIdiom.pad
+    }
 }
 
 extension ItemListView {

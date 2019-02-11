@@ -100,7 +100,7 @@ class BaseItemListView: UIViewController {
     func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = self.shouldHidesNavigationBarDuringPresentation()
         searchController.searchResultsUpdater = self
         searchController.delegate = self
         searchController.isActive = true
@@ -137,6 +137,10 @@ class BaseItemListView: UIViewController {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
 
         return searchController
+    }
+
+    func shouldHidesNavigationBarDuringPresentation() -> Bool {
+        return true
     }
 }
 
