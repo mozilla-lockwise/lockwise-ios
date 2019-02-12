@@ -82,8 +82,8 @@ class ItemListViewSpec: QuickSpec {
                     let item2Title = "sum item"
                     let item2Username = "meh"
                     let items = [
-                        LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs"),
-                        LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads")
+                        LoginListCellConfiguration.Item(title: item1Title, username: item1Username, guid: "fdssdfdfs", highlight: false),
+                        LoginListCellConfiguration.Item(title: item2Title, username: item2Username, guid: "sdfsdads", highlight: true)
                     ]
 
                     beforeEach {
@@ -93,6 +93,24 @@ class ItemListViewSpec: QuickSpec {
                     it("configures the number of rows correctly") {
                         expect(self.subject.tableView.dataSource!.tableView(self.subject.tableView, numberOfRowsInSection: 0))
                                 .to(equal(items.count))
+                    }
+
+                    it("does not set selected state on the first cell") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as! ItemListCell
+
+                        expect(cell.backgroundView).to(beNil())
+                    }
+
+                    it("sets selected state on the second cell") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                            self.subject.tableView,
+                            cellForRowAt: IndexPath(row: 1, section: 0)
+                            ) as! ItemListCell
+
+                        expect(cell.backgroundView).toNot(beNil())
                     }
 
                     it("configures cells correctly when the item has a username and a title") {
@@ -225,7 +243,7 @@ class ItemListViewSpec: QuickSpec {
             describe("tapping a row") {
                 let id = "fdssdfdfs"
                 let items = [
-                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id),
+                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: id, highlight: false),
                     LoginListCellConfiguration.SyncListPlaceholder
                 ]
 
@@ -285,7 +303,7 @@ class ItemListViewSpec: QuickSpec {
 
             describe("ItemListCell") {
                 let items = [
-                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: "fdssdfdfs")
+                    LoginListCellConfiguration.Item(title: "item1", username: "bleh", guid: "fdssdfdfs", highlight: false)
                 ]
 
                 beforeEach {
@@ -311,7 +329,7 @@ class ItemListViewSpec: QuickSpec {
             describe("IdentifiableType") {
                 it("uses either the item title or just returns a static string") {
                     let guid = "sfsdsdffsd"
-                    expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: guid).identity).to(equal(guid))
+                    expect(LoginListCellConfiguration.Item(title: "something", username: "", guid: guid, highlight: false).identity).to(equal(guid))
                     expect(LoginListCellConfiguration.SyncListPlaceholder.identity).to(equal("syncplaceholder"))
                     let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
                     expect(LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver).identity).to(equal("emptyplaceholder"))

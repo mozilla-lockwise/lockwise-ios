@@ -57,6 +57,7 @@ class RootPresenter {
     fileprivate let adjustManager: AdjustManager
     fileprivate let viewFactory: ViewFactory
     fileprivate let sizeClassStore: SizeClassStore
+    fileprivate let itemDetailStore: ItemDetailStore
 
     private var isDisplayingSidebar: Bool?
 
@@ -75,7 +76,8 @@ class RootPresenter {
          sentryManager: Sentry = Sentry.shared,
          adjustManager: AdjustManager = AdjustManager.shared,
          viewFactory: ViewFactory = ViewFactory.shared,
-         sizeClassStore: SizeClassStore = SizeClassStore.shared
+         sizeClassStore: SizeClassStore = SizeClassStore.shared,
+         itemDetailStore: ItemDetailStore = .shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
@@ -91,6 +93,7 @@ class RootPresenter {
         self.adjustManager = adjustManager
         self.viewFactory = viewFactory
         self.sizeClassStore = sizeClassStore
+        self.itemDetailStore = itemDetailStore
 
         // todo: update tests with populated oauth and profile info
         Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
@@ -238,7 +241,6 @@ class RootPresenter {
             case .detail(let id):
                 if !view.topViewIs(ItemDetailView.self) {
                     let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
-                    detailView.itemId = id
 
                     self.sizeClassStore.shouldDisplaySidebar
                         .take(1)
@@ -340,14 +342,9 @@ extension RootPresenter {
 extension RootPresenter: UISplitViewControllerDelegate {
     func primaryViewController(forCollapsing splitViewController: UISplitViewController) -> UIViewController? {
         let newNavController = MainNavigationController(storyboardName: "ItemList", identifier: "itemlist")
-        if let splitView = splitViewController as? SplitView {
-            if let vc = splitView.detailView?.topViewController as? ItemDetailView {
-                if vc.itemId != "" {
-                    let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
-                    detailView.itemId = vc.itemId
-                    newNavController.pushViewController(detailView, animated: false)
-                }
-            }
+        if itemDetailStore.itemDetailHasId {
+            let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
+            newNavController.pushViewController(detailView, animated: false)
         }
 
         return newNavController
@@ -368,9 +365,8 @@ extension RootPresenter: UISplitViewControllerDelegate {
     func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
 
         if let navController = primaryViewController as? UINavigationController {
-            if let itemDetail = navController.popViewController(animated: false) as? ItemDetailView {
+            if navController.popViewController(animated: false) as? ItemDetailView != nil {
                 let newDetailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
-                newDetailView.itemId = itemDetail.itemId
                 return MainNavigationController(rootViewController: newDetailView)
             }
         }

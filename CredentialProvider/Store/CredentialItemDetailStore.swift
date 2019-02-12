@@ -3,12 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import UIKit
 
-class TabletHelper {
-    public static let shared = TabletHelper()
-
-    public var shouldDisplaySidebar: Bool {
-        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
-    }
+class ItemDetailStore: BaseItemDetailStore {
+    static let shared = ItemDetailStore()
 }

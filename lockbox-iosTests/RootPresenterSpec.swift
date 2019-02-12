@@ -840,7 +840,6 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
                                     expect(self.view.pushArgument is ItemDetailView)
                                             .to(beTrue())
-                                    expect((self.view.pushArgument as? ItemDetailView)?.itemId).to(equal(itemId))
                                 }
                             }
 
@@ -938,7 +937,6 @@ class RootPresenterSpec: QuickSpec {
                                 it("checks for the DetailView & tells the view to show the loginview") {
                                     expect(self.view.topViewIsArgument === ItemDetailView.self).to(beTrue())
                                     expect(self.view.pushArgument is ItemDetailView).to(beTrue())
-                                    expect((self.view.pushArgument as? ItemDetailView)?.itemId).to(equal(itemId))
                                 }
                             }
 
