@@ -7,6 +7,9 @@ import Quick
 import Nimble
 import RxSwift
 import RxTest
+import SwiftKeychainWrapper
+import FxAUtils
+import Storage
 
 @testable import Lockbox
 
@@ -19,7 +22,40 @@ class ItemDetailStoreSpec: QuickSpec {
         }
     }
 
+    class FakeSizeClassStore: SizeClassStore {
+        let shouldDisplaySidebarStub = ReplaySubject<Bool>.create(bufferSize: 1)
+
+        override var shouldDisplaySidebar: Observable<Bool> {
+            return self.shouldDisplaySidebarStub.asObservable()
+        }
+    }
+
+    class FakeDataStore: DataStore {
+        let syncStateStub = ReplaySubject<SyncState>.create(bufferSize: 1)
+
+        init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
+            super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+
+            self.disposeBag = DisposeBag()
+        }
+
+        override var syncState: Observable<SyncState> {
+            return self.syncStateStub.asObservable()
+        }
+
+        let listStub = ReplaySubject<[Login]>.create(bufferSize: 1)
+        override var list: Observable<[Login]> {
+            return self.listStub.asObservable()
+        }
+    }
+
+    private let fakeProfileFactory: ProfileFactory = { reset in
+        FakeProfile()
+    }
+
     private var dispatcher: FakeDispatcher!
+    private var sizeClassStore: FakeSizeClassStore!
+    private var dataStore: FakeDataStore!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailStore!
@@ -28,7 +64,128 @@ class ItemDetailStoreSpec: QuickSpec {
         describe("ItemDetailStore") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
-                self.subject = ItemDetailStore(dispatcher: self.dispatcher)
+                self.sizeClassStore = FakeSizeClassStore()
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher,
+                                               profileFactory: self.fakeProfileFactory)
+                self.subject = ItemDetailStore(dispatcher: self.dispatcher,
+                                               dataStore: self.dataStore,
+                                               sizeClassStore: self.sizeClassStore)
+            }
+
+            describe("itemDetailId") {
+                var detailIdObserver = self.scheduler.createObserver(String.self)
+
+                beforeEach {
+                    detailIdObserver = self.scheduler.createObserver(String.self)
+
+                    self.subject.itemDetailId
+                        .subscribe(detailIdObserver)
+                        .disposed(by: self.disposeBag)
+                }
+
+                it("initalizes to empty string") {
+                    expect(detailIdObserver.events.count).to(equal(1))
+                    expect(detailIdObserver.events.first!.value.element!).to(equal(""))
+                }
+
+                it("itemDetailHasId is false") {
+                    expect(self.subject.itemDetailHasId).to(beFalse())
+                }
+
+                describe("MainRouteAction") {
+                    describe(".list") {
+                        beforeEach {
+                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.list)
+                        }
+
+                        it("does nothing") {
+                            expect(detailIdObserver.events.count).to(equal(1))
+                        }
+
+                        it("does not change itemDetailHasId") {
+                            expect(self.subject.itemDetailHasId).to(beFalse())
+                        }
+                    }
+
+                    describe(".detail") {
+                        beforeEach {
+                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "asdf"))
+                        }
+
+                        it("sets detailId") {
+                            expect(detailIdObserver.events.count).to(equal(2))
+                            expect(detailIdObserver.events.last!.value.element!).to(equal("asdf"))
+                        }
+
+                        it("sets itemDeatilHasId") {
+                            expect(self.subject.itemDetailHasId).to(beTrue())
+                        }
+                    }
+                }
+            }
+
+            describe("showFirstLogin") {
+                describe("when showing sidebar") {
+                    var detailIdObserver = self.scheduler.createObserver(String.self)
+
+                    beforeEach {
+                        self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                        self.dataStore.listStub.onNext([Login(guid: "5678", hostname: "asdf", username: "asdf", password: "asdf")])
+
+                        detailIdObserver = self.scheduler.createObserver(String.self)
+
+                        self.subject.itemDetailId
+                            .subscribe(detailIdObserver)
+                            .disposed(by: self.disposeBag)
+                    }
+
+                    describe("when there is a detailId set") {
+                        beforeEach {
+                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "1234"))
+                            expect(detailIdObserver.events.count).to(equal(2))
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                        }
+
+                        it("does not change detailId") {
+                            expect(detailIdObserver.events.count).to(equal(2))
+                        }
+                    }
+
+                    describe("when there is not a detailId set") {
+                        beforeEach {
+                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: ""))
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                        }
+
+                        it("sets the detailId") {
+                            expect(detailIdObserver.events.count).to(equal(3))
+                            expect(detailIdObserver.events.last!.value.element!).to(equal("5678"))
+                        }
+                    }
+                }
+
+                describe("when not showing sidebar") {
+                    var detailIdObserver = self.scheduler.createObserver(String.self)
+
+                    beforeEach {
+                        self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                        self.dataStore.listStub.onNext([Login(guid: "5678", hostname: "asdf", username: "asdf", password: "asdf")])
+
+                        detailIdObserver = self.scheduler.createObserver(String.self)
+
+                        self.subject.itemDetailId
+                            .subscribe(detailIdObserver)
+                            .disposed(by: self.disposeBag)
+
+                        self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "1234"))
+                        expect(detailIdObserver.events.count).to(equal(2))
+                        self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
+                    }
+
+                    it("does not change detail id") {
+                        expect(detailIdObserver.events.count).to(equal(2))
+                    }
+                }
             }
 
             describe("itemDetailDisplay") {

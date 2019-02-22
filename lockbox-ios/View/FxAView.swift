@@ -25,6 +25,10 @@ class FxAView: UIViewController {
         self.presenter = FxAPresenter(view: self, adjustManager: AdjustManager.shared)
     }
 
+    convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        self.init(webView: WKWebView())
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.webView.navigationDelegate = self
@@ -39,8 +43,8 @@ class FxAView: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("not implemented")
+    required convenience init?(coder aDecoder: NSCoder) {
+        self.init(webView: WKWebView())
     }
 }
 

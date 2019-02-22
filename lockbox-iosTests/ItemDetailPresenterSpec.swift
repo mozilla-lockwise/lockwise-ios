@@ -14,12 +14,12 @@ import Storage
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
-        fileprivate(set) var itemId: String = "somefakeitemidinhere"
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
         let learnHowToEditStub = PublishSubject<Void>()
         var tempAlertMessage: String?
         var tempAlertTimeout: TimeInterval?
+        var enableBackButtonValue: Bool?
 
         private let disposeBag = DisposeBag()
 
@@ -42,6 +42,10 @@ class ItemDetailPresenterSpec: QuickSpec {
         func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
             self.tempAlertMessage = message
             self.tempAlertTimeout = timeout
+        }
+
+        func enableBackButton(enabled: Bool) {
+            self.enableBackButtonValue = enabled
         }
     }
 
@@ -80,9 +84,22 @@ class ItemDetailPresenterSpec: QuickSpec {
 
     class FakeItemDetailStore: ItemDetailStore {
         var itemDetailDisplayStub = PublishSubject<ItemDetailDisplayAction>()
+        var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
 
         override var itemDetailDisplay: Driver<ItemDetailDisplayAction> {
             return itemDetailDisplayStub.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
+        }
+
+        override var itemDetailId: Observable<String> {
+            return itemDetailIdStub.asObservable()
+        }
+    }
+
+    class FakeSizeClassStore: SizeClassStore {
+        var shouldDisplaySidebarStub = ReplaySubject<Bool>.create(bufferSize: 1)
+
+        override var shouldDisplaySidebar: Observable<Bool> {
+            return shouldDisplaySidebarStub.asObservable()
         }
     }
 
@@ -91,6 +108,7 @@ class ItemDetailPresenterSpec: QuickSpec {
     private var dataStore: FakeDataStore!
     private var copyDisplayStore: FakeCopyDisplayStore!
     private var itemDetailStore: FakeItemDetailStore!
+    private var sizeClassStore: FakeSizeClassStore!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailPresenter!
@@ -103,13 +121,15 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
                 self.itemDetailStore = FakeItemDetailStore()
+                self.sizeClassStore = FakeSizeClassStore()
 
                 self.subject = ItemDetailPresenter(
                         view: self.view,
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemDetailStore: self.itemDetailStore,
-                        copyDisplayStore: self.copyDisplayStore
+                        copyDisplayStore: self.copyDisplayStore,
+                        sizeClassStore: self.sizeClassStore
                 )
             }
 
@@ -159,6 +179,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             describe("onCellTapped") {
                 describe("when the title of the tapped cell is the username constant") {
                     beforeEach {
+                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.username)])
 
                         cellTappedObservable
@@ -184,7 +205,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "", actionType: .tap)))
                             }
                         }
 
@@ -197,7 +218,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action with no text") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "", actionType: .tap)))
                             }
                         }
                     }
@@ -205,6 +226,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("when the title of the tapped cell is the password constant") {
                     beforeEach {
+                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.password)])
 
                         cellTappedObservable
@@ -230,7 +252,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "", actionType: .tap)))
                             }
                         }
 
@@ -243,7 +265,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             it("dispatches the copy action with no text") {
                                 expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
                                 let action = self.dispatcher.dispatchActionArgument as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "")))
+                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "", actionType: .tap)))
                             }
                         }
                     }
@@ -251,6 +273,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("when the title of the tapped cell is the web address constant") {
                     beforeEach {
+                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
                         let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
 
                         cellTappedObservable
@@ -306,11 +329,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
                     self.view.titleTextObserver = self.scheduler.createObserver(String.self)
 
+                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                     self.subject.onViewReady()
                 }
 
                 it("requests the correct item from the datastore") {
-                    expect(self.dataStore.loginIDArg).to(equal(self.view.itemId))
+                    expect(self.dataStore.loginIDArg).to(equal("1234"))
+                }
+
+                it("enables back button") {
+                    expect(self.view.enableBackButtonValue).to(beTrue())
                 }
 
                 describe("getting an item with the password displayed") {
@@ -454,6 +483,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("onLearnHowToEditTapped") {
                     beforeEach {
                         self.view.learnHowToEditStub.onNext(())
+
+                        self.itemDetailStore.itemDetailIdStub.onNext("1234")
                     }
 
                     it("dispatches the faq link action") {
@@ -463,9 +494,39 @@ class ItemDetailPresenterSpec: QuickSpec {
                                         ExternalWebsiteRouteAction(
                                                 urlString: Constant.app.editExistingEntriesFAQ,
                                                 title: Constant.string.faq,
-                                                returnRoute: MainRouteAction.detail(itemId: self.view.itemId))
+                                                returnRoute: MainRouteAction.detail(itemId: "1234"))
                                 ))
                     }
+                }
+            }
+
+            describe(".onViewReady for view with sidebar") {
+                beforeEach {
+                    self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
+                    self.view.titleTextObserver = self.scheduler.createObserver(String.self)
+
+                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                    self.subject.onViewReady()
+                }
+
+                it("does not show back button") {
+                    expect(self.view.enableBackButtonValue).to(beFalse())
+                }
+            }
+
+            describe("dndStarted") {
+                beforeEach {
+                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.subject.dndStarted(value: "Username")
+                    let item = Login(guid: "1234", hostname: "www.example.com", username: "asdf", password: "meow")
+                    self.dataStore.onItemStub.onNext(item)
+                }
+
+                it("sends copy action") {
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
+                    let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                    expect(action).to(equal(CopyAction(text: "asdf", field: CopyField.username, itemID: "1234", actionType: CopyActionType.dnd)))
                 }
             }
         }

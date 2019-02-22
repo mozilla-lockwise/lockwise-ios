@@ -10,7 +10,7 @@ import RxDataSources
 typealias ItemSectionModel = AnimatableSectionModel<Int, LoginListCellConfiguration>
 
 enum LoginListCellConfiguration {
-    case Item(title: String, username: String, guid: String)
+    case Item(title: String, username: String, guid: String, highlight: Bool)
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>?)
     case NoResults(learnMoreObserver: AnyObserver<Void>?)
@@ -20,7 +20,7 @@ enum LoginListCellConfiguration {
 extension LoginListCellConfiguration: IdentifiableType {
     var identity: String {
         switch self {
-        case .Item(_, _, let guid):
+        case .Item(_, _, let guid, _):
             return guid
         case .SyncListPlaceholder:
             return "syncplaceholder"
@@ -37,8 +37,8 @@ extension LoginListCellConfiguration: IdentifiableType {
 extension LoginListCellConfiguration: Equatable {
     static func ==(lhs: LoginListCellConfiguration, rhs: LoginListCellConfiguration) -> Bool {
         switch (lhs, rhs) {
-        case (.Item(let lhTitle, let lhUsername, _), .Item(let rhTitle, let rhUsername, _)):
-            return lhTitle == rhTitle && lhUsername == rhUsername
+        case (.Item(let lhTitle, let lhUsername, _, let lhHighlight), .Item(let rhTitle, let rhUsername, _, let rhHighlight)):
+            return lhTitle == rhTitle && lhUsername == rhUsername && lhHighlight == rhHighlight
         case (.SyncListPlaceholder, .SyncListPlaceholder): return true
         case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
         case (.NoResults, .NoResults): return true
@@ -100,7 +100,7 @@ class BaseItemListView: UIViewController {
     func getStyledSearchController() -> UISearchController {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.hidesNavigationBarDuringPresentation = self.shouldHidesNavigationBarDuringPresentation()
         searchController.searchResultsUpdater = self
         searchController.delegate = self
         searchController.isActive = true
@@ -137,6 +137,10 @@ class BaseItemListView: UIViewController {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
 
         return searchController
+    }
+
+    func shouldHidesNavigationBarDuringPresentation() -> Bool {
+        return true
     }
 }
 
@@ -182,14 +186,18 @@ extension BaseItemListView {
 
                     var retCell: UITableViewCell
                     switch cellConfiguration {
-                    case .Item(let title, let username, _):
+                    case .Item(let title, let username, _, let highlight):
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemlistcell") as? ItemListCell else {
                             fatalError("couldn't find the right cell!")
                         }
 
                         cell.titleLabel.text = title
                         cell.detailLabel.text = username
-                        
+
+                        let view = UIView()
+                        view.backgroundColor = Constant.color.tableViewCellHighlighted
+                        cell.backgroundView = highlight ? view : nil
+
                         if (self.extensionContext == nil) {
                             cell.accessoryType = .disclosureIndicator
                         }
@@ -245,7 +253,7 @@ extension BaseItemListView {
 
         self.dataSource?.animationConfiguration = AnimationConfiguration(
                 insertAnimation: .fade,
-                reloadAnimation: .automatic,
+                reloadAnimation: .none,
                 deleteAnimation: .fade
         )
     }
@@ -259,16 +267,22 @@ extension BaseItemListView {
                     .asObservable()
                     .bind(to: presenter.filterTextObserver)
                     .disposed(by: self.disposeBag)
+
+                searchController.searchBar.rx.cancelButtonClicked
+                    .asObservable()
+                    .bind(to: presenter.cancelObserver)
+                    .disposed(by: self.disposeBag)
             }
 
             self.tableView.rx.itemSelected
                     .map { (path: IndexPath) -> String? in
+                        self.tableView.deselectRow(at: path, animated: false)
                         guard let config = self.dataSource?[path] else {
                             return nil
                         }
 
                         switch config {
-                        case .Item(_, _, let id):
+                        case .Item(_, _, let id, _):
                             return id
                         default:
                             return nil

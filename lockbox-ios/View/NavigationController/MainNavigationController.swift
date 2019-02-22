@@ -5,9 +5,9 @@
 import UIKit
 
 class MainNavigationController: UINavigationController {
-    convenience init() {
-        let listView = UIStoryboard(name: "ItemList", bundle: .main)
-                .instantiateViewController(withIdentifier: "itemlist")
+    convenience init(storyboardName: String = "ItemList", identifier: String = "itemlist") {
+        let listView = UIStoryboard(name: storyboardName, bundle: .main)
+                .instantiateViewController(withIdentifier: identifier)
         self.init(rootViewController: listView)
     }
 }

@@ -6,6 +6,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import CoreServices
 
 typealias ItemDetailSectionModel = AnimatableSectionModel<Int, ItemDetailCellConfiguration>
 
@@ -18,6 +19,7 @@ struct ItemDetailCellConfiguration {
     let accessibilityId: String
     let showCopyButton: Bool
     let showOpenButton: Bool
+    let dragValue: String?
 
     init(title: String,
          value: String,
@@ -26,7 +28,8 @@ struct ItemDetailCellConfiguration {
          valueFontColor: UIColor = UIColor.black,
          accessibilityId: String,
          showCopyButton: Bool = false,
-         showOpenButton: Bool = false) {
+         showOpenButton: Bool = false,
+         dragValue: String? = nil) {
         self.title = title
         self.value = value
         self.accessibilityLabel = accessibilityLabel
@@ -35,6 +38,7 @@ struct ItemDetailCellConfiguration {
         self.accessibilityId = accessibilityId
         self.showCopyButton = showCopyButton
         self.showOpenButton = showOpenButton
+        self.dragValue = dragValue
     }
 }
 
@@ -57,7 +61,6 @@ class ItemDetailView: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var learnHowToEditButton: UIButton!
     @IBOutlet private weak var learnHowToEditArrow: UIImageView!
-    var itemId: String = ""
     let longPress = UILongPressGestureRecognizer()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -72,6 +75,7 @@ class ItemDetailView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
+        self.tableView.dragDelegate = self
         self.learnHowToEditArrow.tintColor = Constant.color.lockBoxBlue
         self.setupNavigation()
         self.setupDataSource()
@@ -98,34 +102,40 @@ extension ItemDetailView: ItemDetailViewProtocol {
                 .drive(self.navigationItem.rx.title)
                 .disposed(by: self.disposeBag)
     }
-}
 
-// view styling
-extension ItemDetailView: UIGestureRecognizerDelegate {
-    fileprivate func setupNavigation() {
-        let leftButton = UIButton(title: Constant.string.back, imageName: "back")
-        leftButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-        
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.navigationTitleFont
-        ]
+    func enableBackButton(enabled: Bool) {
+        if enabled {
+            let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+            leftButton.titleLabel?.font = .navigationButtonFont
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
-        if let presenter = self.presenter {
-            leftButton.rx.tap
+            if let presenter = self.presenter {
+                leftButton.rx.tap
                     .bind(to: presenter.onCancel)
                     .disposed(by: self.disposeBag)
 
-            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+                self.navigationController?.interactivePopGestureRecognizer?.rx.event
                     .map { _ -> Void in
                         return ()
                     }
                     .bind(to: presenter.onCancel)
                     .disposed(by: self.disposeBag)
+            }
+        } else {
+            self.navigationItem.leftBarButtonItem = nil
         }
+    }
+}
+
+// view styling
+extension ItemDetailView: UIGestureRecognizerDelegate {
+    fileprivate func setupNavigation() {
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        self.navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.navigationTitleFont
+        ]
     }
 
     fileprivate func setupDataSource() {
@@ -146,6 +156,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.revealButton.isHidden = !cellConfiguration.password
                     cell.openButton.isHidden = !cellConfiguration.showOpenButton
                     cell.copyButton.isHidden = !cellConfiguration.showCopyButton
+
+                    cell.dragValue = cellConfiguration.dragValue
 
                     if cellConfiguration.password {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
@@ -194,5 +206,19 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .bind(to: presenter.onCellTapped)
             .disposed(by: self.disposeBag)
         }
+    }
+}
+
+extension ItemDetailView: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let cell = tableView.cellForRow(at: indexPath) as? ItemDetailCell
+        guard let data = cell?.dragValue as NSString? else { return [] }
+
+        self.presenter?.dndStarted(value: cell?.titleLabel.text)
+
+        let itemProvider = NSItemProvider(object: data as NSString)
+        return [
+            UIDragItem(itemProvider: itemProvider)
+        ]
     }
 }

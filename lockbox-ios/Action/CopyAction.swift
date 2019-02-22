@@ -8,15 +8,25 @@ enum CopyField {
     case username, password
 }
 
+enum CopyActionType {
+    case tap, dnd
+}
+
 struct CopyAction: Action {
     let text: String
     let field: CopyField
     let itemID: String
+    let actionType: CopyActionType
 }
 
 extension CopyAction: TelemetryAction {
     var eventMethod: TelemetryEventMethod {
-        return .tap
+        switch self.actionType {
+        case .tap:
+            return .tap
+        case .dnd:
+            return .dnd
+        }
     }
 
     var eventObject: TelemetryEventObject {
@@ -40,6 +50,7 @@ extension CopyAction: TelemetryAction {
 extension CopyAction: Equatable {
     static func ==(lhs: CopyAction, rhs: CopyAction) -> Bool {
         return lhs.text == rhs.text &&
-                lhs.field == rhs.field
+                lhs.field == rhs.field &&
+                lhs.actionType == rhs.actionType
     }
 }

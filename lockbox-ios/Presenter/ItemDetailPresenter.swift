@@ -9,8 +9,8 @@ import RxDataSources
 import Storage
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
-    var itemId: String { get }
     var learnHowToEditTapped: Observable<Void> { get }
+    func enableBackButton(enabled: Bool)
     func bind(titleText: Driver<String>)
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
 }
@@ -23,6 +23,7 @@ class ItemDetailPresenter {
     private var dataStore: DataStore
     private var itemDetailStore: ItemDetailStore
     private var copyDisplayStore: CopyDisplayStore
+    private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
@@ -43,36 +44,29 @@ class ItemDetailPresenter {
                 return
             }
 
-            let itemId = target.view?.itemId ?? ""
-
-            if copyableFields.contains(value) {
-                target.dataStore.get(itemId)
-                        .take(1)
-                        .subscribe(onNext: { item in
-                            var field = CopyField.username
-                            var text = ""
-                            if value == Constant.string.username {
-                                text = item?.username ?? ""
-                                field = CopyField.username
-                            } else if value == Constant.string.password {
-                                text = item?.password ?? ""
-                                field = CopyField.password
-                            }
-
-                            target.dispatcher.dispatch(action: DataStoreAction.touch(id: itemId))
-                            target.dispatcher.dispatch(action: CopyAction(text: text, field: field, itemID: itemId))
-                        })
-                        .disposed(by: target.disposeBag)
-            } else if value == Constant.string.webAddress {
-                target.dataStore.get(self.view?.itemId ?? "")
-                        .take(1)
-                        .subscribe(onNext: { item in
-                            if let origin = item?.hostname {
-                                target.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: origin))
-                            }
-                        })
-                        .disposed(by: target.disposeBag)
-            }
+            target.itemDetailStore.itemDetailId
+                .take(1)
+                .flatMap { target.dataStore.get($0) }
+                .map { item -> [Action] in
+                    var actions: [Action] = []
+                    if copyableFields.contains(value) {
+                        if let item = item {
+                            actions.append(DataStoreAction.touch(id: item.guid))
+                            actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap))
+                        }
+                    } else if value == Constant.string.webAddress {
+                        if let origin = item?.hostname {
+                            actions.append(ExternalLinkAction(baseURLString: origin))
+                        }
+                    }
+                    return actions
+                }
+                .subscribe(onNext: { actions in
+                    for action in actions {
+                        target.dispatcher.dispatch(action: action)
+                    }
+                })
+                .disposed(by: target.disposeBag)
         }.asObserver()
     }()
 
@@ -80,21 +74,24 @@ class ItemDetailPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemDetailStore: ItemDetailStore = ItemDetailStore.shared,
-         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared) {
+         copyDisplayStore: CopyDisplayStore = CopyDisplayStore.shared,
+         sizeClassStore: SizeClassStore = SizeClassStore.shared) {
         self.view = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
+        self.sizeClassStore = sizeClassStore
 
         self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
 
     func onViewReady() {
-        let itemObservable = self.dataStore.get(self.view?.itemId ?? "")
+        let itemObservable = self.itemDetailStore.itemDetailId
+            .flatMap { self.dataStore.get($0) }
 
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-        let viewConfigDriver = Driver.combineLatest(itemDriver, self.itemDetailStore.itemDetailDisplay)
+        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
                 .map { e -> [ItemDetailSectionModel] in
                     if case let .togglePassword(passwordDisplayed) = e.1 {
                         return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
@@ -104,11 +101,9 @@ class ItemDetailPresenter {
                 }
 
         let titleDriver = itemObservable
+                .filterNil()
                 .map { item -> String in
-                    guard let title = item?.hostname.titleFromHostname() else {
-                        return Constant.string.unnamedEntry
-                    }
-
+                    let title = item.hostname.titleFromHostname()
                     return title.isEmpty ? Constant.string.unnamedEntry : title
                 }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
 
@@ -126,22 +121,49 @@ class ItemDetailPresenter {
                     let message = String(format: Constant.string.fieldNameCopied, fieldName)
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
                 })
-                .disposed(by: self.disposeBag)
+        .disposed(by: self.disposeBag)
 
         self.view?.learnHowToEditTapped
-                .subscribe { _ in
-                    guard let itemID = self.view?.itemId else {
-                        return
-                    }
+            .flatMap({ _ -> Observable<String> in
+                return self.itemDetailStore.itemDetailId
+            })
+            .take(1)
+            .map({ (itemId) -> Action in
+                return ExternalWebsiteRouteAction(
+                    urlString: Constant.app.editExistingEntriesFAQ,
+                    title: Constant.string.faq,
+                    returnRoute: MainRouteAction.detail(itemId: itemId))
+            })
+            .subscribe(onNext: { (action) in
+                self.dispatcher.dispatch(action: action)
+            })
+            .disposed(by: self.disposeBag)
 
-                    self.dispatcher.dispatch(action:
-                            ExternalWebsiteRouteAction(
-                                    urlString: Constant.app.editExistingEntriesFAQ,
-                                    title: Constant.string.faq,
-                                    returnRoute: MainRouteAction.detail(itemId: itemID))
-                    )
+        self.sizeClassStore.shouldDisplaySidebar
+            .subscribe(onNext: { (enableSidebar) in
+                self.view?.enableBackButton(enabled: !enableSidebar)
+            })
+            .disposed(by: self.disposeBag)
+    }
+
+    func dndStarted(value: String?) {
+        self.itemDetailStore.itemDetailId
+            .take(1)
+            .flatMap { self.dataStore.get($0) }
+            .take(1)
+            .flatMap { item -> Observable<[Action]> in
+                var actions: [Action] = []
+                if let item = item {
+                    actions.append(DataStoreAction.touch(id: item.guid))
+                    actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
                 }
-                .disposed(by: self.disposeBag)
+
+                return Observable.just(actions)
+            }.subscribe(onNext: { actions in
+                for action in actions {
+                    self.dispatcher.dispatch(action: action)
+                }
+            }).disposed(by: self.disposeBag)
     }
 }
 
@@ -168,7 +190,8 @@ extension ItemDetailPresenter {
                         password: false,
                         valueFontColor: Constant.color.lockBoxBlue,
                         accessibilityId: "webAddressItemDetail",
-                        showOpenButton: true)
+                        showOpenButton: true,
+                        dragValue: hostname)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
@@ -177,7 +200,8 @@ extension ItemDetailPresenter {
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
                         password: false,
                         accessibilityId: "userNameItemDetail",
-                        showCopyButton: true),
+                        showCopyButton: true,
+                        dragValue: username),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordText,
@@ -186,10 +210,25 @@ extension ItemDetailPresenter {
                             passwordText),
                         password: true,
                         accessibilityId: "passwordItemDetail",
-                        showCopyButton: true)
+                        showCopyButton: true,
+                        dragValue: login?.password)
             ])
         ]
 
         return sectionModels
+    }
+
+    private static func getCopyActionFor(_ item: Login?, value: String?, actionType: CopyActionType) -> CopyAction {
+        var field = CopyField.username
+        var text = ""
+        if value == Constant.string.username {
+            text = item?.username ?? ""
+            field = CopyField.username
+        } else if value == Constant.string.password {
+            text = item?.password ?? ""
+            field = CopyField.password
+        }
+
+        return CopyAction(text: text, field: field, itemID: item?.guid ?? "", actionType: actionType)
     }
 }

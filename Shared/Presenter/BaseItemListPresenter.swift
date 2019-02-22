@@ -22,6 +22,7 @@ struct LoginListTextSort {
     let sortingOption: Setting.ItemListSort
     let syncState: SyncState
     let storeState: LoginStoreState
+    let detailItemId: String
 }
 
 extension LoginListTextSort: Equatable {
@@ -29,7 +30,8 @@ extension LoginListTextSort: Equatable {
         return lhs.logins == rhs.logins &&
             lhs.text == rhs.text &&
             lhs.sortingOption == rhs.sortingOption &&
-            lhs.syncState == rhs.syncState
+            lhs.syncState == rhs.syncState &&
+            lhs.detailItemId == rhs.detailItemId
     }
 }
 
@@ -39,6 +41,8 @@ class BaseItemListPresenter {
     internal let dataStore: DataStore
     internal let itemListDisplayStore: ItemListDisplayStore
     internal let userDefaultStore: UserDefaultStore
+    internal let itemDetailStore: BaseItemDetailStore
+    internal let sizeClassStore: SizeClassStore
     internal let disposeBag = DisposeBag()
 
     var itemSelectedObserver: AnyObserver<String?> {
@@ -58,6 +62,13 @@ class BaseItemListPresenter {
             target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: filterText))
             target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: true))
             }.asObserver()
+    }()
+
+    lazy private(set) var cancelObserver: AnyObserver<Void> = {
+        return Binder(self) { target, filterText in
+            target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
+            target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
+        }.asObserver()
     }()
 
     lazy fileprivate var emptyPlaceholderItems = [
@@ -82,12 +93,16 @@ class BaseItemListPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = .shared,
          itemListDisplayStore: ItemListDisplayStore = .shared,
-         userDefaultStore: UserDefaultStore = .shared) {
+         userDefaultStore: UserDefaultStore = .shared,
+         itemDetailStore: ItemDetailStore = .shared,
+         sizeClassStore: SizeClassStore = .shared) {
         self.baseView = view
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaultStore = userDefaultStore
+        self.itemDetailStore = itemDetailStore
+        self.sizeClassStore = sizeClassStore
     }
 
     func onViewReady() {
@@ -101,7 +116,9 @@ class BaseItemListPresenter {
             filterTextObservable: filterTextObservable,
             itemSortObservable: itemSortObservable,
             syncStateObservable: self.dataStore.syncState,
-            storageStateObservable: self.dataStore.storageState
+            storageStateObservable: self.dataStore.storageState,
+            itemDetailIdObservable: self.itemDetailStore.itemDetailId,
+            sidebarObservable: self.sizeClassStore.shouldDisplaySidebar
         )
 
         self.baseView?.bind(items: listDriver)
@@ -122,7 +139,9 @@ extension BaseItemListPresenter {
                                           filterTextObservable: Observable<ItemListFilterAction>,
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
-                                          storageStateObservable: Observable<LoginStoreState>) -> Driver<[ItemSectionModel]> {
+                                          storageStateObservable: Observable<LoginStoreState>,
+                                          itemDetailIdObservable: Observable<String>,
+                                          sidebarObservable: Observable<Bool>) -> Driver<[ItemSectionModel]> {
         // only run on a delay for UI purposes; keep tests from blocking
         let listThrottle = isRunningTest ? 0.0 : 1.0
         let stateThrottle = isRunningTest ? 0.0 : 2.0
@@ -138,15 +157,18 @@ extension BaseItemListPresenter {
             filterTextObservable,
             itemSortObservable,
             throttledSyncStateObservable,
-            throttledStorageStateObservable
+            throttledStorageStateObservable,
+            itemDetailIdObservable,
+            sidebarObservable
             )
-            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState)) -> LoginListTextSort in
+            .map { (latest: ([Login], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, String, Bool)) -> LoginListTextSort in
                 return LoginListTextSort(
                     logins: latest.0,
                     text: latest.1.filteringText,
                     sortingOption: latest.2,
                     syncState: latest.3,
-                    storeState: latest.4
+                    storeState: latest.4,
+                    detailItemId: latest.6 ? latest.5 : "" // only pass along the detailItemId if we are showing the sidebar
                 )
             }
             .distinctUntilChanged()
@@ -173,18 +195,22 @@ extension BaseItemListPresenter {
                     return self.noResultsPlaceholderItems
                 }
 
-                return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems))]
+                return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems, detailItemId: latest.detailItemId))]
             }
             .asDriver(onErrorJustReturn: [])
     }
 
-    fileprivate func configurationsFromItems(_ items: [Login]) -> [LoginListCellConfiguration] {
+    fileprivate func configurationsFromItems(_ items: [Login], detailItemId: String) -> [LoginListCellConfiguration] {
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname.titleFromHostname()
             let usernameEmpty = login.username == "" || login.username == nil
             let usernameText = usernameEmpty ? Constant.string.usernamePlaceholder : login.username!
 
-            return LoginListCellConfiguration.Item(title: titleText, username: usernameText, guid: login.guid)
+            return LoginListCellConfiguration.Item(
+                title: titleText,
+                username: usernameText,
+                guid: login.guid,
+                highlight: login.guid == detailItemId)
         }
 
         return self.helpTextItems + loginCells

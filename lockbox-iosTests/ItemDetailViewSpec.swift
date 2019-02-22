@@ -64,18 +64,6 @@ class ItemDetailViewSpec: QuickSpec {
                 expect(self.presenter.onViewReadyCalled).to(beTrue())
             }
 
-            describe("itemId") {
-                it("returns an empty string when it hasn't been configured") {
-                    expect(self.subject.itemId).to(equal(""))
-                }
-
-                it("returns the itemId it was configured with") {
-                    let id = "fdssdfdfsdf"
-                    self.subject.itemId = id
-                    expect(self.subject.itemId).to(equal(id))
-                }
-            }
-
             describe("tableview datasource configuration") {
                 let configDriver = PublishSubject<[ItemDetailSectionModel]>()
                 let sectionModels = [
@@ -163,6 +151,7 @@ class ItemDetailViewSpec: QuickSpec {
 
             describe("tapping cancel button") {
                 beforeEach {
+                    self.subject.enableBackButton(enabled: true)
                     let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
                     _ = button.sendActions(for: .touchUpInside)
                 }
