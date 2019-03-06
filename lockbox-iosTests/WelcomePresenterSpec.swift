@@ -72,7 +72,8 @@ class WelcomePresenterSpec: QuickSpec {
         func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                     title: String?,
                                     message: String?,
-                                    style: UIAlertController.Style) {
+                                    style: UIAlertController.Style,
+                                    barButtonItem: UIBarButtonItem?) {
             self.alertControllerButtons = buttons
             self.alertControllerTitle = title
             self.alertControllerMessage = message

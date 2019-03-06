@@ -42,6 +42,10 @@ class ItemListView: BaseItemListView {
 }
 
 extension ItemListView: ItemListViewProtocol {
+    var sortButton: UIBarButtonItem? {
+        return self.navigationItem.leftBarButtonItem
+    }
+
     func bind(sortingButtonTitle: Driver<String>) {
         if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
             sortingButtonTitle

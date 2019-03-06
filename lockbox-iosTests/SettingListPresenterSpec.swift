@@ -17,7 +17,7 @@ class SettingListPresenterSpec: QuickSpec {
         var displayAlertControllerCalled = false
         var displayAlertControllerButtons: [AlertActionButtonConfiguration]?
         var fakeOnDoneButtonPressed = PublishSubject<Void>()
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style, barButtonItem: UIBarButtonItem?) {
             displayAlertControllerCalled = true
             displayAlertControllerButtons = buttons
         }

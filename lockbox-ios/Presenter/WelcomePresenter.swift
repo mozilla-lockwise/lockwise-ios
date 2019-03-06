@@ -153,7 +153,8 @@ extension WelcomePresenter {
                 buttons: self.passcodeButtonsConfiguration,
                 title: Constant.string.notUsingPasscode,
                 message: Constant.string.passcodeInformation,
-                style: .alert)
+                style: .alert,
+                barButtonItem:  nil)
     }
 
     private func handleBiometrics(_ infoLockedObservable: Observable<(Profile?, Bool)>) {
@@ -218,6 +219,7 @@ extension WelcomePresenter {
             ],
             title: Constant.string.reauthenticationRequired,
             message: Constant.string.appUpdateDisclaimer,
-            style: .alert)
+            style: .alert,
+            barButtonItem: nil)
     }
 }

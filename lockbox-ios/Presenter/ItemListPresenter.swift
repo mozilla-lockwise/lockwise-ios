@@ -17,6 +17,7 @@ protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemLi
     var pullToRefreshActive: AnyObserver<Bool>? { get }
     var onSettingsButtonPressed: ControlEvent<Void>? { get }
     var onSortingButtonPressed: ControlEvent<Void>? { get }
+    var sortButton: UIBarButtonItem? { get }
 }
 
 struct SyncStateManual {
@@ -160,7 +161,8 @@ class ItemListPresenter: BaseItemListPresenter {
                             ],
                             title: Constant.string.sortEntries,
                             message: nil,
-                            style: .actionSheet)
+                            style: .actionSheet,
+                            barButtonItem: self?.view?.sortButton)
                     })
                     .disposed(by: self.disposeBag)
             }
