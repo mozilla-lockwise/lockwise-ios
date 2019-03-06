@@ -294,6 +294,17 @@ class CredentialProviderPresenterSpec: QuickSpec {
                     }
                 }
             }
+
+            describe("change display") {
+                var traits = UITraitCollection()
+                beforeEach {
+                    self.subject.changeDisplay(traitCollection: traits)
+                }
+
+                it("sends action") {
+                    expect(self.dispatcher.actionArguments.popLast()! as? SizeClassAction).to(equal(SizeClassAction.changed(traitCollection: traits)))
+                }
+            }
         }
     }
 }

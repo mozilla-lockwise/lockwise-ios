@@ -51,6 +51,11 @@ class CredentialProviderView: ASCredentialProviderViewController {
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
         self.presenter?.credentialProvisionRequested(for: credentialIdentity)
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.presenter?.changeDisplay(traitCollection: traitCollection)
+    }
 }
 
 extension CredentialProviderView: CredentialProviderViewProtocol {

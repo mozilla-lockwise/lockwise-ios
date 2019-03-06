@@ -44,7 +44,8 @@ class CredentialProviderPresenter {
          dataStore: DataStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          credentialProviderStore: CredentialProviderStore = .shared,
-         autoLockStore: AutoLockStore = .shared) {
+         autoLockStore: AutoLockStore = .shared,
+         sizeClassStore: SizeClassStore = .shared) { // SizeClassStore needs to be initialized
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
@@ -118,6 +119,10 @@ class CredentialProviderPresenter {
                     self?.provideCredential(for: credentialIdentity, relock: locked)
                 }
                 .disposed(by: self.disposeBag)
+    }
+
+    func changeDisplay(traitCollection: UITraitCollection) {
+        self.dispatcher.dispatch(action: SizeClassAction.changed(traitCollection: traitCollection))
     }
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
