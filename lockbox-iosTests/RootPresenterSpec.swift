@@ -25,7 +25,7 @@ class RootPresenterSpec: QuickSpec {
         var mainStackIsArgument: UIViewController.Type?
         var mainStackIsVar: Bool!
 
-        var modalStackIsArgument: UINavigationController.Type?
+        var modalStackIsArgument: UIViewController.Type?
         var modalStackIsVar: Bool!
 
         var startMainStackArgument: UIViewController?
@@ -70,7 +70,7 @@ class RootPresenterSpec: QuickSpec {
             return self.mainStackIsVar
         }
 
-        func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+        func modalStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
             self.modalStackIsArgument = type
             return self.modalStackIsVar
         }
@@ -81,8 +81,8 @@ class RootPresenterSpec: QuickSpec {
             self.startMainStackArgument = viewController
         }
 
-        func startModalStack<T: UINavigationController>(_ navigationController: T) {
-            self.startModalStackArgument = navigationController
+        func startModalStack<T: UIViewController>(_ viewController: T) {
+            self.startModalStackArgument = viewController
         }
 
         func dismissModals() {
@@ -233,6 +233,14 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeLifecycleStore: LifecycleStore {
+        var filterStub = PublishSubject<LifecycleAction>()
+
+        override var lifecycleFilter: Observable<LifecycleAction> {
+            return self.filterStub.asObservable()
+        }
+    }
+
     private var view: FakeRootView!
     private var dispatcher: FakeDispatcher!
     private var routeStore: FakeRouteStore!
@@ -245,6 +253,7 @@ class RootPresenterSpec: QuickSpec {
     private var sentryManager: FakeSentryManager!
     private var adjustManager: FakeAdjustManager!
     private var sizeClassStore: FakeSizeClassStore!
+    private var lifecycleStore: FakeLifecycleStore!
     private let scheduler = TestScheduler(initialClock: 0)
     var subject: RootPresenter!
 
@@ -265,6 +274,7 @@ class RootPresenterSpec: QuickSpec {
                 self.telemetryActionHandler.telemetryListener = self.scheduler.createObserver(TelemetryAction.self)
                 self.biometryManager.deviceAuthAvailableStub = true
                 self.sizeClassStore = FakeSizeClassStore()
+                self.lifecycleStore = FakeLifecycleStore()
 
                 self.subject = RootPresenter(
                         view: self.view,
@@ -274,6 +284,7 @@ class RootPresenterSpec: QuickSpec {
                         telemetryStore: self.telemetryStore,
                         accountStore: self.accountStore,
                         userDefaultStore: self.userDefaultStore,
+                        lifecycleStore: self.lifecycleStore,
                         telemetryActionHandler: self.telemetryActionHandler,
                         biometryManager: self.biometryManager,
                         adjustManager: self.adjustManager,
@@ -1348,6 +1359,29 @@ class RootPresenterSpec: QuickSpec {
                         }
                         it("does not send data to Adjust") {
                             // TODO: add Adjust spec
+                        }
+                    }
+                }
+
+                describe("life cycle actions") {
+                    describe("enters background") {
+                        beforeEach {
+                            self.lifecycleStore.filterStub.onNext(LifecycleAction.background)
+                        }
+
+                        it("sets privacy screen") {
+                            expect(self.view.startModalStackArgument is PrivacyView).to(beTrue())
+                        }
+                    }
+
+                    describe("enters foreground") {
+                        beforeEach {
+                            self.view.modalStackIsVar = true
+                            self.lifecycleStore.filterStub.onNext(LifecycleAction.foreground)
+                        }
+
+                        it("sets privacy screen") {
+                            expect(self.view.dismissModalCalled).to(beTrue())
                         }
                     }
                 }

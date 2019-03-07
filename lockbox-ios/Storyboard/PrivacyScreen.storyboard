@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--PrivacyScreen-->
+        <scene sceneID="6CU-Uj-tKT">
+            <objects>
+                <viewController storyboardIdentifier="privacyview" id="u26-pk-ELb" userLabel="PrivacyScreen" customClass="PrivacyView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QLr-Nd-0UP">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="9rs-kq-AZt">
+                                <rect key="frame" x="-288.5" y="0.0" width="952" height="388"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="XxX-uc-Qbs" userLabel="Lockbox">
+                                <rect key="frame" x="73" y="267" width="230" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="230" id="PY6-Gi-aDY"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="9rs-kq-AZt" firstAttribute="centerX" secondItem="QLr-Nd-0UP" secondAttribute="centerX" id="K6v-a9-byp"/>
+                            <constraint firstItem="XxX-uc-Qbs" firstAttribute="centerX" secondItem="QLr-Nd-0UP" secondAttribute="centerX" id="MAF-gk-6h8"/>
+                            <constraint firstItem="XxX-uc-Qbs" firstAttribute="top" secondItem="9rs-kq-AZt" secondAttribute="bottom" constant="73" id="iVX-bx-UoE"/>
+                            <constraint firstItem="9rs-kq-AZt" firstAttribute="top" secondItem="QLr-Nd-0UP" secondAttribute="top" id="pAl-a4-ruj"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="XOp-uo-qiX"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NJw-1a-ZvA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="lockbox-title" width="448" height="56"/>
+        <image name="nessie" width="952" height="388"/>
+    </resources>
+</document>
