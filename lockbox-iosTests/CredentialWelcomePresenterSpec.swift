@@ -18,7 +18,7 @@ class CredentialWelcomePresenterSpec: QuickSpec {
         var spinnerMessage: String?
         var spinnerCompletionMessage: String?
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style, barButtonItem: UIBarButtonItem?) {
 
         }
 

@@ -113,7 +113,8 @@ extension CredentialWelcomePresenter {
                         style: UIAlertAction.Style.default)],
                 title: Constant.string.signInRequired,
                 message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
-                style: .alert)
+                style: .alert,
+                barButtonItem: nil)
     }
 
     private func populateCredentials() {

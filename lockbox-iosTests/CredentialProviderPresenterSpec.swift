@@ -52,7 +52,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
             self.displayItemListCalled = true
         }
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style, barButtonItem: UIBarButtonItem?) {
 
         }
     }

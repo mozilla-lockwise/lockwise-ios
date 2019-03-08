@@ -54,7 +54,8 @@ class ViewControllerSpec: QuickSpec {
                 self.subject.displayAlertController(buttons: buttons,
                                                     title: title,
                                                     message: nil,
-                                                    style: .actionSheet)
+                                                    style: .actionSheet,
+                                                    barButtonItem: nil)
             }
 
             it("displays an optionsheet alert controller") {

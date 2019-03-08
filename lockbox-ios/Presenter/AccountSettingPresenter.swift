@@ -88,7 +88,8 @@ class AccountSettingPresenter {
                 ],
                 title: Constant.string.confirmDialogTitle,
                 message: Constant.string.confirmDialogMessage,
-                style: .alert)
+                style: .alert,
+                barButtonItem: nil)
         }
         .disposed(by: self.disposeBag)
     }
