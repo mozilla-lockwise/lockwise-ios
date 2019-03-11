@@ -100,7 +100,7 @@ class RootView: UIViewController, RootViewProtocol {
         return currentViewController is T
     }
 
-    func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool {
+    func modalStackIs<T: UIViewController>(_ type: T.Type) -> Bool {
         return self.currentViewController?.presentedViewController is T
     }
 
@@ -112,8 +112,8 @@ class RootView: UIViewController, RootViewProtocol {
         self.currentViewController = viewController
     }
 
-    func startModalStack<T: UINavigationController>(_ navigationController: T) {
-        self.currentViewController?.present(navigationController, animated: !isRunningTest, completion: nil)
+    func startModalStack<T: UIViewController>(_ viewController: T) {
+        self.currentViewController?.present(viewController, animated: !isRunningTest, completion: nil)
     }
 
     func dismissModals() {
