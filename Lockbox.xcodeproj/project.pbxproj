@@ -254,6 +254,8 @@
 		D80D41BF21FD67A2008A7B11 /* BaseItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E126924935F1ADF4E8E /* BaseItemDetailStore.swift */; };
 		D80D41C121FD6856008A7B11 /* ItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41C021FD6856008A7B11 /* ItemDetailStore.swift */; };
 		D80D41C321FD6D48008A7B11 /* CredentialItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41C221FD6D48008A7B11 /* CredentialItemDetailStore.swift */; };
+		D81526352230CDE10056EC54 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81526342230CDE10056EC54 /* PrivacyView.swift */; };
+		D81526372230CF180056EC54 /* PrivacyScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D81526362230CF180056EC54 /* PrivacyScreen.storyboard */; };
 		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
 		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
@@ -576,6 +578,8 @@
 		D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStoreSpec.swift; sourceTree = "<group>"; };
 		D80D41C021FD6856008A7B11 /* ItemDetailStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailStore.swift; sourceTree = "<group>"; };
 		D80D41C221FD6D48008A7B11 /* CredentialItemDetailStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialItemDetailStore.swift; sourceTree = "<group>"; };
+		D81526342230CDE10056EC54 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
+		D81526362230CF180056EC54 /* PrivacyScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PrivacyScreen.storyboard; sourceTree = "<group>"; };
 		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
 		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
@@ -825,6 +829,7 @@
 				D8DD9303213F863700F8041D /* AutofillOnboarding.storyboard */,
 				D8DA03D5215B29C300656455 /* SetupAutofill.storyboard */,
 				D85CB82421E0295900E19118 /* LaunchScreen~ipad.storyboard */,
+				D81526362230CF180056EC54 /* PrivacyScreen.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -871,6 +876,7 @@
 				7DB9DEA02140CC0300239D31 /* ItemListView.swift */,
 				D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */,
 				D85CB81B21D437AB00E19118 /* SplitView.swift */,
+				D81526342230CDE10056EC54 /* PrivacyView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1423,6 +1429,7 @@
 				D8DD9304213F863700F8041D /* AutofillOnboarding.storyboard in Resources */,
 				7AA547E098053DFF64A3C0F9 /* Assets.xcassets in Resources */,
 				7D2D2F0B20C5A8B300339D9B /* OnboardingConfirmation.storyboard in Resources */,
+				D81526372230CF180056EC54 /* PrivacyScreen.storyboard in Resources */,
 				D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */,
 				7D7AD94B204EFBA4002D35EE /* StatusAlert.xib in Resources */,
 				7DC3899C20B600820057929D /* ItemDetail.storyboard in Resources */,
@@ -1654,6 +1661,7 @@
 				224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */,
 				D86A307620829B7F00589CA8 /* UIApplication+.swift in Sources */,
 				7B50F371215A52B900ADC28D /* ScrollAction.swift in Sources */,
+				D81526352230CDE10056EC54 /* PrivacyView.swift in Sources */,
 				7AA548BBE384D40397D26E9B /* RootView.swift in Sources */,
 				7D9722C62134622F0071D82B /* BaseWelcomePresenter.swift in Sources */,
 				7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */,

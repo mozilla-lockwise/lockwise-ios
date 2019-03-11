@@ -14,11 +14,11 @@ protocol RootViewProtocol: class {
     func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func detailViewIs<T: UIViewController>(_ type: T.Type) -> Bool
     func mainStackIs<T: UIViewController>(_ type: T.Type) -> Bool
-    func modalStackIs<T: UINavigationController>(_ type: T.Type) -> Bool
+    func modalStackIs<T: UIViewController>(_ type: T.Type) -> Bool
     var modalStackPresented: Bool { get }
 
     func startMainStack<T: UIViewController>(_ viewController: T)
-    func startModalStack<T: UINavigationController>(_ navigationController: T)
+    func startModalStack<T: UIViewController>(_ viewController: T)
     func dismissModals()
 
     func push(view: UIViewController)
@@ -133,6 +133,19 @@ class RootPresenter {
             .subscribe(onNext: { syncState in
                 if syncState == .NotSyncable {
                     self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                }
+            })
+            .disposed(by: self.disposeBag)
+
+        self.lifecycleStore.lifecycleFilter
+            .subscribe(onNext: { lifecycleAction in
+                switch lifecycleAction {
+                case .foreground:
+                    self.hidePrivacyView()
+                case .background:
+                    self.showPrivacyView()
+                default:
+                    return
                 }
             })
             .disposed(by: self.disposeBag)
@@ -336,6 +349,19 @@ extension RootPresenter {
             .subscribe(onNext: { enabled in
                 self.sentryManager.setup(sendUsageData: enabled)
         }).disposed(by: self.disposeBag)
+    }
+
+    private func hidePrivacyView() {
+        guard let view = self.view else { return }
+
+        if view.modalStackIs(PrivacyView.self) {
+            view.dismissModals()
+        }
+    }
+
+    private func showPrivacyView() {
+        let vc = self.viewFactory.make(storyboardName: "PrivacyScreen", identifier: "privacyview")
+        self.view?.startModalStack(vc)
     }
 }
 

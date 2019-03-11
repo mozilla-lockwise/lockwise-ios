@@ -32,7 +32,8 @@ protocol AlertControllerView {
     func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                 title: String?,
                                 message: String?,
-                                style: UIAlertController.Style)
+                                style: UIAlertController.Style,
+                                barButtonItem: UIBarButtonItem?)
 }
 
 protocol SpinnerAlertView {
@@ -65,8 +66,14 @@ extension UIViewController: AlertControllerView {
     func displayAlertController(buttons: [AlertActionButtonConfiguration],
                                 title: String?,
                                 message: String?,
-                                style: UIAlertController.Style) {
+                                style: UIAlertController.Style,
+                                barButtonItem: UIBarButtonItem?) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
+
+        if let barButtonItem = barButtonItem {
+            let presentationController = alertController.popoverPresentationController
+            presentationController?.barButtonItem = barButtonItem
+        }
 
         for buttonConfig in buttons {
             let action = UIAlertAction(title: buttonConfig.title, style: buttonConfig.style) { _ in
