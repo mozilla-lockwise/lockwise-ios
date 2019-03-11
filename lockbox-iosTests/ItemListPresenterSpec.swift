@@ -17,6 +17,7 @@ import FxAUtils
 
 class ItemListPresenterSpec: QuickSpec {
     class FakeItemListView: ItemListViewProtocol {
+        var sortButton: UIBarButtonItem?
         var sortingButtonHidden: AnyObserver<Bool>?
         var itemsObserver: TestableObserver<[ItemSectionModel]>!
         var sortButtonEnableObserver: TestableObserver<Bool>!
@@ -49,7 +50,7 @@ class ItemListPresenterSpec: QuickSpec {
             scrollAction.drive(scrollActionObserver).disposed(by: self.disposeBag)
         }
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style, barButtonItem: UIBarButtonItem?) {
             self.displayOptionSheetButtons = buttons
             self.displayOptionSheetTitle = title
         }

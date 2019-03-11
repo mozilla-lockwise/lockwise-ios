@@ -52,7 +52,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
             self.displayItemListCalled = true
         }
 
-        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style) {
+        func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style, barButtonItem: UIBarButtonItem?) {
 
         }
     }
@@ -292,6 +292,17 @@ class CredentialProviderPresenterSpec: QuickSpec {
                             }
                         }
                     }
+                }
+            }
+
+            describe("change display") {
+                var traits = UITraitCollection()
+                beforeEach {
+                    self.subject.changeDisplay(traitCollection: traits)
+                }
+
+                it("sends action") {
+                    expect(self.dispatcher.actionArguments.popLast()! as? SizeClassAction).to(equal(SizeClassAction.changed(traitCollection: traits)))
                 }
             }
         }

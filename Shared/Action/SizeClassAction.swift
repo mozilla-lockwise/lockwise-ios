@@ -7,3 +7,12 @@ import UIKit
 enum SizeClassAction: Action {
     case changed(traitCollection: UITraitCollection)
 }
+
+extension SizeClassAction: Equatable {
+    static func ==(lhs: SizeClassAction, rhs: SizeClassAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.changed(let lhTraits), .changed(let rhTraits)):
+            return lhTraits == rhTraits
+        }
+    }
+}

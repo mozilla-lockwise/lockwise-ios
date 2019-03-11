@@ -119,7 +119,8 @@ class SettingListPresenter {
                             buttons: self.passcodeButtonsConfiguration,
                             title: Constant.string.notUsingPasscode,
                             message: Constant.string.passcodeDetailInformation,
-                            style: .alert)
+                            style: .alert,
+                            barButtonItem: nil)
                     }
                 }
                 .disposed(by: self.disposeBag)
