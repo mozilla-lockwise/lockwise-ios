@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="ipad10_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,14 +15,14 @@
             <objects>
                 <viewController storyboardIdentifier="privacyview" id="u26-pk-ELb" userLabel="PrivacyScreen" customClass="PrivacyView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QLr-Nd-0UP">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="9rs-kq-AZt">
-                                <rect key="frame" x="-288.5" y="0.0" width="952" height="388"/>
+                                <rect key="frame" x="-59" y="0.0" width="952" height="388"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="XxX-uc-Qbs" userLabel="Lockbox">
-                                <rect key="frame" x="73" y="267" width="230" height="40"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="XxX-uc-Qbs" userLabel="Lockbox">
+                                <rect key="frame" x="302" y="461" width="230" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="PY6-Gi-aDY"/>
                                 </constraints>
