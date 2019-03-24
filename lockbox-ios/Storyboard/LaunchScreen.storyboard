@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="ipad11_0rounded" orientation="landscape">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,30 +15,30 @@
             <objects>
                 <viewController id="01J-lp-oVM" userLabel="Launch View" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="1194" height="834"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lq4-q7-MSJ" userLabel="Ocean">
-                                <rect key="frame" x="0.0" y="256" width="1194" height="558"/>
+                                <rect key="frame" x="0.0" y="214" width="375" height="453"/>
                                 <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="wCL-jn-auR">
-                                <rect key="frame" x="121" y="24" width="952" height="388"/>
+                                <rect key="frame" x="-288.5" y="20" width="952" height="388"/>
                                 <variation key="widthClass=regular" hidden="YES"/>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie-ipad" translatesAutoresizingMaskIntoConstraints="NO" id="qO8-pl-kvW" userLabel="nessie-wide">
-                                <rect key="frame" x="0.0" y="184" width="1194" height="144"/>
+                                <rect key="frame" x="0.0" y="180" width="375" height="144"/>
                                 <variation key="heightClass=regular-widthClass=regular" hidden="NO"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ccq-W9-Eei" userLabel="Lockbox">
-                                <rect key="frame" x="482" y="485" width="230" height="56"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ccq-W9-Eei" userLabel="Lockbox">
+                                <rect key="frame" x="72.5" y="481" width="230" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="wCu-ol-s9J"/>
                                 </constraints>
                                 <variation key="widthClass=regular" hidden="YES"/>
                             </imageView>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="JiV-R4-O2D" userLabel="Lockbox-wide">
-                                <rect key="frame" x="434.5" y="401" width="325" height="40"/>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="JiV-R4-O2D" userLabel="Lockbox-wide">
+                                <rect key="frame" x="25" y="401" width="325" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="325" id="tF6-Bv-1Jl"/>
                                 </constraints>
