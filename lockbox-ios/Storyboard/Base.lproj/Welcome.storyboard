@@ -17,21 +17,26 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4k3-9F-Bvv">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4k3-9F-Bvv">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="453"/>
                             </imageView>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
-                                <rect key="frame" x="-288.5" y="20" width="952" height="388"/>
+                            <imageView multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="Bmh-p1-P0W">
+                                <rect key="frame" x="207" y="20" width="952" height="388"/>
+                                <variation key="widthClass=regular" hidden="YES"/>
+                            </imageView>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie-ipad" translatesAutoresizingMaskIntoConstraints="NO" id="p04-dg-iiz" userLabel="nessie wide">
+                                <rect key="frame" x="0.0" y="180" width="1366" height="144"/>
+                                <variation key="widthClass=regular" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="yFv-xC-dm2" userLabel="Lockbox wide">
-                                <rect key="frame" x="25" y="481" width="325" height="43"/>
+                                <rect key="frame" x="520.5" y="497" width="325" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="325" id="vXG-4R-shZ"/>
                                 </constraints>
                                 <variation key="heightClass=regular-widthClass=regular" hidden="NO"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ehm-2v-Rbb" userLabel="Lockbox">
-                                <rect key="frame" x="72.5" y="468" width="230" height="56"/>
+                                <rect key="frame" x="568" y="481" width="230" height="56"/>
                                 <accessibility key="accessibilityConfiguration" label="Firefox Lockbox">
                                     <bool key="isElement" value="YES"/>
                                 </accessibility>
@@ -41,13 +46,13 @@
                                 <variation key="heightClass=regular-widthClass=regular" hidden="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Take your passwords everywhere" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
-                                <rect key="frame" x="87.5" y="529" width="200.5" height="16"/>
+                                <rect key="frame" x="583" y="542" width="200.5" height="16"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" red="0.97651267051696777" green="0.97638332843780518" blue="0.98039662837982178" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
-                                <rect key="frame" x="30" y="633" width="315" height="45"/>
+                                <rect key="frame" x="525.5" y="646" width="315" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VuQ-t5-UWT"/>
@@ -62,7 +67,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="146" y="751" width="83" height="32"/>
+                                <rect key="frame" x="641.5" y="744" width="83" height="32"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -74,7 +79,7 @@
                                 </state>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="60" y="708" width="255" height="38"/>
+                                <rect key="frame" x="439" y="721" width="488" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="295" id="TPg-0Q-joi"/>
                                 </constraints>
@@ -93,7 +98,7 @@
                                 </variation>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVE-e1-PIT">
-                                <rect key="frame" x="232" y="762" width="7" height="10"/>
+                                <rect key="frame" x="727.5" y="755" width="7" height="10"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="OMw-3E-xHo"/>
@@ -101,10 +106,10 @@
                                 </constraints>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="Fls-Mq-402">
-                                <rect key="frame" x="171.5" y="576" width="32" height="37"/>
+                                <rect key="frame" x="667" y="589" width="32" height="37"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8rH-vt-4bG">
-                                <rect key="frame" x="40" y="633" width="295" height="45"/>
+                                <rect key="frame" x="535.5" y="646" width="295" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.99997591969999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <accessibility key="accessibilityConfiguration" identifier="unlock.button"/>
                                 <constraints>
@@ -126,17 +131,19 @@
                                 </variation>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.92941176470588238" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="yFv-xC-dm2" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="73" id="17l-F6-JTL"/>
                             <constraint firstItem="yFv-xC-dm2" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="23Y-0h-vMH"/>
                             <constraint firstItem="DVE-e1-PIT" firstAttribute="centerY" secondItem="JTP-OD-6TF" secondAttribute="centerY" id="4Fd-OK-C8l"/>
+                            <constraint firstItem="p04-dg-iiz" firstAttribute="leading" secondItem="31L-bn-Z4L" secondAttribute="leading" id="5bD-Rj-Axt"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="5w6-4I-b3t"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="8gy-fK-aY4"/>
                             <constraint firstItem="8rH-vt-4bG" firstAttribute="top" secondItem="Fls-Mq-402" secondAttribute="bottom" constant="20" id="9Wq-Zj-2Zg"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="top" secondItem="cuz-yd-F4J" secondAttribute="bottom" constant="30" id="A7D-Dh-eaj">
                                 <variation key="heightClass=regular-widthClass=regular" constant="40"/>
                             </constraint>
+                            <constraint firstItem="31L-bn-Z4L" firstAttribute="trailing" secondItem="p04-dg-iiz" secondAttribute="trailing" id="FvP-m6-Lb8"/>
+                            <constraint firstItem="p04-dg-iiz" firstAttribute="top" secondItem="31L-bn-Z4L" secondAttribute="top" constant="160" id="HlE-GY-3Yt"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="31L-bn-Z4L" secondAttribute="leading" constant="30" id="IAY-QS-6jh"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="leading" secondItem="Zs6-ts-YH0" secondAttribute="leading" id="KIj-hv-llI"/>
                             <constraint firstItem="xyY-bk-Xw8" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="LNJ-R5-ggO"/>
@@ -147,6 +154,7 @@
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="yFv-xC-dm2" secondAttribute="bottom" constant="5" id="U01-h5-en8">
                                 <variation key="heightClass=regular-widthClass=regular" constant="8"/>
                             </constraint>
+                            <constraint firstItem="yFv-xC-dm2" firstAttribute="top" secondItem="p04-dg-iiz" secondAttribute="bottom" constant="73" id="VQv-Nj-fhQ"/>
                             <constraint firstItem="cuz-yd-F4J" firstAttribute="top" secondItem="hwO-wS-oS4" secondAttribute="bottom" priority="750" constant="88" id="WWA-h0-rTG">
                                 <variation key="heightClass=regular-widthClass=regular" constant="100"/>
                             </constraint>
@@ -163,7 +171,7 @@
                             <constraint firstAttribute="trailing" secondItem="4k3-9F-Bvv" secondAttribute="trailing" id="dQQ-8g-Mhl"/>
                             <constraint firstItem="31L-bn-Z4L" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xyY-bk-Xw8" secondAttribute="trailing" constant="40" id="gPv-IL-Ur6"/>
                             <constraint firstItem="ehm-2v-Rbb" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="hez-iz-r81"/>
-                            <constraint firstItem="ehm-2v-Rbb" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="60" id="htJ-IO-AQJ"/>
+                            <constraint firstItem="ehm-2v-Rbb" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="bottom" constant="73" id="htJ-IO-AQJ"/>
                             <constraint firstItem="hwO-wS-oS4" firstAttribute="top" secondItem="ehm-2v-Rbb" secondAttribute="bottom" constant="5" id="ieo-1p-rxW">
                                 <variation key="heightClass=regular-widthClass=regular" constant="8"/>
                             </constraint>
@@ -175,11 +183,26 @@
                                 <variation key="heightClass=regular-widthClass=regular" constant="40"/>
                             </constraint>
                             <constraint firstItem="Bmh-p1-P0W" firstAttribute="centerX" secondItem="Zs6-ts-YH0" secondAttribute="centerX" id="vVj-mn-ajo"/>
+                            <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="p04-dg-iiz" secondAttribute="centerY" id="vxk-vg-cI1"/>
                             <constraint firstItem="8rH-vt-4bG" firstAttribute="centerX" secondItem="31L-bn-Z4L" secondAttribute="centerX" id="xWZ-zz-0tm"/>
                             <constraint firstItem="4k3-9F-Bvv" firstAttribute="top" secondItem="Bmh-p1-P0W" secondAttribute="top" id="yDD-xq-H1w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="31L-bn-Z4L"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="vxk-vg-cI1"/>
+                                <exclude reference="VQv-Nj-fhQ"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=regular">
+                            <mask key="constraints">
+                                <include reference="vxk-vg-cI1"/>
+                                <exclude reference="yDD-xq-H1w"/>
+                                <include reference="VQv-Nj-fhQ"/>
+                            </mask>
+                        </variation>
                         <variation key="heightClass=regular-widthClass=regular">
+                            <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             <mask key="constraints">
                                 <exclude reference="qZy-NR-94o"/>
                             </mask>
@@ -206,5 +229,6 @@
         <image name="lockbox-title" width="448" height="56"/>
         <image name="lockbox-title-wide" width="325" height="40"/>
         <image name="nessie" width="952" height="388"/>
+        <image name="nessie-ipad" width="1366" height="144"/>
     </resources>
 </document>

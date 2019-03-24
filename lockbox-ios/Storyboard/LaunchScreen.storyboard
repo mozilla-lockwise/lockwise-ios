@@ -38,7 +38,7 @@
                                 <variation key="widthClass=regular" hidden="YES"/>
                             </imageView>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="JiV-R4-O2D" userLabel="Lockbox-wide">
-                                <rect key="frame" x="25" y="401" width="325" height="40"/>
+                                <rect key="frame" x="25" y="397" width="325" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="325" id="tF6-Bv-1Jl"/>
                                 </constraints>
