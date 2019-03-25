@@ -6,7 +6,7 @@ import Foundation
 import AuthenticationServices
 import RxSwift
 import RxCocoa
-import Sync15Logins
+import Logins
 
 enum CredentialProviderStoreState {
     case NotAllowed, Populating, Populated, Allowed

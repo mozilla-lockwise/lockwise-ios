@@ -7,6 +7,7 @@ import RxSwift
 import RxCocoa
 import UIKit
 import FxAClient
+import Logins
 
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool
@@ -29,7 +30,7 @@ protocol RootViewProtocol: class {
 }
 
 struct OAuthProfile {
-    let oauthInfo: OAuthInfo?
+    let oauthInfo: SyncUnlockInfo?
     let profile: Profile?
     let account: FirefoxAccount?
 }

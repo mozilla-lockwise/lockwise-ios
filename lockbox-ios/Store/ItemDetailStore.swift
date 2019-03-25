@@ -5,7 +5,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import Storage
+import Logins
 
 class ItemDetailStore: BaseItemDetailStore {
     public static let shared = ItemDetailStore()
@@ -79,10 +79,10 @@ class ItemDetailStore: BaseItemDetailStore {
             .disposed(by: self.disposeBag)
     }
 
-    private func showFirstLogin(_ login: Login?) {
+    private func showFirstLogin(_ login: LoginRecord?) {
         if let login = login {
             runOnMainThread {
-                self._itemDetailId.onNext(login.guid)
+                self._itemDetailId.onNext(login.id)
             }
         }
     }

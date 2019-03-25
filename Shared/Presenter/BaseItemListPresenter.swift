@@ -6,7 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Sync15Logins
+import Logins
 
 protocol BaseItemListViewProtocol: class {
     func bind(items: Driver<[ItemSectionModel]>)
@@ -208,8 +208,8 @@ extension BaseItemListPresenter {
             return LoginListCellConfiguration.Item(
                 title: titleText,
                 username: usernameText,
-                guid: login.guid,
-                highlight: login.guid == detailItemId)
+                guid: login.id,
+                highlight: login.id == detailItemId)
         }
 
         return self.helpTextItems + loginCells

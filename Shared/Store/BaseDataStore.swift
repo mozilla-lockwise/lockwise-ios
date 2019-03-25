@@ -7,7 +7,7 @@ import FxAClient
 import RxSwift
 import RxCocoa
 import RxOptional
-import Sync15Logins
+import Logins
 import SwiftyJSON
 import SwiftKeychainWrapper
 
@@ -131,26 +131,18 @@ class BaseDataStore {
     var unlockInfo: SyncUnlockInfo?
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-//         profileFactory: @escaping ProfileFactory = defaultProfileFactory,
-//         fxaLoginHelper: FxALoginHelper = FxALoginHelper.sharedInstance,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
          userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!,
          accountStore: BaseAccountStore = AccountStore.shared,
          application: UIApplication = UIApplication.shared) {
-//        self.profileFactory = profileFactory
-//        self.fxaLoginHelper = fxaLoginHelper
         self.keychainWrapper = keychainWrapper
         self.userDefaults = userDefaults
         self.application = application
         self.accountStore = accountStore
 
         self.dispatcher = dispatcher
-//        self.profile = profileFactory(false)
 
         self.initializeLoginsStorage()
-
-//        self.initializeProfile()
-//        self.registerNotificationCenter()
 
         dispatcher.register
                 .filterByType(class: DataStoreAction.self)
@@ -169,10 +161,6 @@ class BaseDataStore {
                         self.lock()
                     case .unlock:
                         self.unlock()
-//                    case let .add(item: login):
-//                        self.add(item: login)
-//                    case let .remove(id:id):
-//                        self.remove(id: id)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -182,7 +170,8 @@ class BaseDataStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .background:
-                        self.loginsStorage?.doDestroy()
+                        print("backgrounding")
+//                        self.loginsStorage?.doDestroy()
 //                        self.profile.syncManager?.applicationDidEnterBackground()
 //                        var taskId = UIBackgroundTaskIdentifier.invalid
 //                        taskId = application.beginBackgroundTask (expirationHandler: {
@@ -270,13 +259,10 @@ class BaseDataStore {
     }
 
     private func shutdown() {
-        do {
-            try self.loginsStorage?.doDestroy()
-        } catch let error {
-            print("Sync15: \(error)")
-        }
-//        if !self.profile.isShutdown {
-//            self.profile.shutdown()
+//        do {
+//            try self.loginsStorage?.doDestroy()
+//        } catch let error {
+//            print("Sync15: \(error)")
 //        }
     }
 
@@ -297,35 +283,8 @@ class BaseDataStore {
 }
 
 extension BaseDataStore {
-    public func updateCredentials(_ oauthInfo: OAuthInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount) {
-        guard let keysString = oauthInfo.keys else {
-            return
-        }
-
-        let keys = JSON(parseJSON: keysString)
-        let scopedKey = keys[Constant.fxa.oldSyncScope]
-
-//        guard let profileAccount = profile.getAccount() else {
-//            _ = fxaLoginHelper.application(UIApplication.shared,
-//                                           email: fxaProfile.email,
-//                                           accessToken: oauthInfo.accessToken,
-//                                           oauthKeys: scopedKey)
-//            return
-//        }
-//
-//        if let oauthInfoKey = OAuthInfoKey(from: scopedKey) {
-//            profileAccount.makeOAuthLinked(accessToken: oauthInfo.accessToken, oauthInfo: oauthInfoKey)
-//        }
-
-        let syncKey = scopedKey["k"].stringValue
-        let kid = scopedKey["kid"].stringValue
-
-        do {
-            self.syncUnlockInfo = try SyncUnlockInfo(kid: kid, fxaAccessToken: oauthInfo.accessToken, syncKey: syncKey, tokenserverURL: account.getTokenServerEndpointURL().absoluteString)
-
-        } catch let error {
-            print("Sync15: \(error)")
-        }
+    public func updateCredentials(_ oauthInfo: SyncUnlockInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount) {
+        // what do we need to do in here to link account info with the logins storage?
     }
 }
 
