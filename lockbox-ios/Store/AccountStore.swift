@@ -8,6 +8,7 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
+import Logins
 
 /* These UserDefault keys are maintained separately from the `UserDefaultKey`
  * enum in BaseConstants.swift because, for the time being, they are only
@@ -81,15 +82,14 @@ class AccountStore: BaseAccountStore {
         self.dispatcher.register
                 .filterByType(class: LifecycleAction.self)
                 .subscribe(onNext: { [weak self] action in
-                    guard case let .upgrade(previous, _) = action,
-                        let self = self else {
+                    guard case let .upgrade(previous, _) = action else {
                         return
                     }
 
                     if previous <= 1 {
-                        self._oauthInfo.onNext(nil)
-                        self._profile.onNext(nil)
-                        self._oldAccountPresence.accept(true)
+                        self?._oauthInfo.onNext(nil)
+                        self?._profile.onNext(nil)
+                        self?._oldAccountPresence.accept(true)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -105,19 +105,13 @@ extension AccountStore {
             self.generateLoginURL()
             self.populateAccountInformation()
         } else {
-//            FxAConfig.release { (config: FxAConfig?, _) in
-//                if let config = config {
-//                    self.fxa = try? FirefoxAccount(
-//                        config: config,
-//                        clientId: Constant.fxa.clientID,
-//                        redirectUri: Constant.fxa.redirectURI)
-//
-//                    self.generateLoginURL()
-//                }
-//
-//                self._oauthInfo.onNext(nil)
-//                self._profile.onNext(nil)
-//            }
+            let config = FxAConfig.release(clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
+
+            self.fxa = try? FirefoxAccount(config: config)
+            self.generateLoginURL()
+
+            self._oauthInfo.onNext(nil)
+            self._profile.onNext(nil)
         }
     }
 
@@ -174,21 +168,35 @@ extension AccountStore {
             return
         }
 
-        self.fxa?.completeOAuthFlow(code: code, state: state) { (_, _) in
-            // do something when completed? no longer getting access token
-//            self._oauthInfo.onNext(info)
-//
-//            guard let fxa = self.fxa else {
-//                return
-//            }
-//
-//            if let accountJSON = try? fxa.toJSON() {
-//                self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
-//            }
-//
-//            fxa.getProfile { (profile: Profile?, _) in
-//                self._profile.onNext(profile)
-//            }
+        self.fxa?.completeOAuthFlow(code: code, state: state) { [weak self] (_, _) in
+            self?.fxa?.getAccessToken(scope: Constant.fxa.lockboxScope) { accessToken, err in
+                guard let key = accessToken?.key,
+                        let token = accessToken?.token
+                        else { return }
+
+                guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else { return }
+
+                self?._oauthInfo.onNext(
+                        SyncUnlockInfo(
+                                kid: key.kid,
+                                fxaAccessToken: token,
+                                syncKey: key.k,
+                                tokenserverURL: tokenURL!.absoluteString
+                        )
+                )
+            }
+
+            guard let fxa = self?.fxa else {
+                return
+            }
+
+            if let accountJSON = try? fxa.toJSON() {
+                self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
+            }
+
+            fxa.getProfile { (profile: Profile?, _) in
+                self?._profile.onNext(profile)
+            }
         }
     }
 }

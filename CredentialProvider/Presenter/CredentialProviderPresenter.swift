@@ -60,7 +60,7 @@ class CredentialProviderPresenter {
                 if let oauthInfo = oauthInfo,
                     let profile = profile,
                     let account = account {
-                    self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile, account: account))
+                    self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: oauthInfo, fxaProfile: profile))
                 }
             }
             .disposed(by: self.disposeBag)

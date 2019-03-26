@@ -74,23 +74,14 @@ public enum LoginStoreError: Error {
     case Locked
 }
 
-//public typealias ProfileFactory = (_ reset: Bool) -> FxAUtils.Profile
-//
-//private let defaultProfileFactory: ProfileFactory = { reset in
-//    BrowserProfile(localName: "lockbox-profile", clear: reset)
-//}
-
 class BaseDataStore {
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
     internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
-//    private let fxaLoginHelper: FxALoginHelper
-//    private let profileFactory: ProfileFactory
     private let keychainWrapper: KeychainWrapper
     internal let userDefaults: UserDefaults
-//    internal var profile: FxAUtils.Profile
     internal let dispatcher: Dispatcher
     private let application: UIApplication
     internal var syncUnlockInfo: SyncUnlockInfo?
@@ -149,8 +140,8 @@ class BaseDataStore {
                 .subscribe(onNext: { action in
                     print("Sync15 Action: \(action)")
                     switch action {
-                    case .updateCredentials(let oauthInfo, let fxaProfile, let account):
-                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile, account: account)
+                    case .updateCredentials(let oauthInfo, let fxaProfile):
+                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile)
                     case .reset:
                         self.reset()
                     case .sync:
@@ -244,7 +235,7 @@ class BaseDataStore {
                     }
                 }
             } catch let error {
-                print("Sync15: \(error)")
+                print("LoginsError: \(error)")
             }
         }
 
@@ -283,7 +274,7 @@ class BaseDataStore {
 }
 
 extension BaseDataStore {
-    public func updateCredentials(_ oauthInfo: SyncUnlockInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount) {
+    public func updateCredentials(_ oauthInfo: SyncUnlockInfo, fxaProfile: FxAClient.Profile) {
         // what do we need to do in here to link account info with the logins storage?
     }
 }
@@ -334,58 +325,8 @@ extension BaseDataStore {
         }
 
         self.doSync()
-//        self.profile.syncManager.syncEverything(why: .syncNow)
     }
 
-//    private func registerNotificationCenter() {
-//        let names = [NotificationNames.FirefoxAccountVerified,
-//                     NotificationNames.ProfileDidStartSyncing,
-//                     NotificationNames.ProfileDidFinishSyncing
-//        ]
-//        names.forEach { name in
-//            NotificationCenter.default.rx
-//                    .notification(name)
-//                    .subscribe(onNext: { self.updateSyncState(from: $0) })
-//                    .disposed(by: self.disposeBag)
-//        }
-//    }
-
-//    private func updateSyncState(from notification: Notification) {
-//        Observable.combineLatest(self.storageState, self.syncState)
-//            .take(1)
-//            .subscribe(onNext: { latest in
-//                self.update(storageState: latest.0, syncState: latest.1, from: notification)
-//            })
-//            .disposed(by: self.disposeBag)
-//    }
-
-//    private func update(storageState: LoginStoreState, syncState: SyncState, from notification: Notification) {
-//        // LoginStoreState: Unprepared, Preparing, Locked, Unlocked, Errored(cause: LoginStoreError)
-//        //      Store state goes from:
-//        //          * Unprepared to Preparing when a valid username and password are detected.
-//        //          * Preparing to Unlocked when first sync (including email confirmation) has finished.
-//        //          * Unlocked to Locked on locking (not sync related).
-//
-//        // SyncState: NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
-//        //      Sync state goes from:
-//        //          * NotSyncable to Syncing after email confirmation.
-//        //          * Anything to Syncing at the start of sync after the first syncing starts
-//        //          * Syncing to Synced after all syncs.
-//        //
-//        //      (in sync world email confirmation happens as part of sync, and sync end happens even if not confirmed).
-//        switch (storageState, syncState, notification.name) {
-//        case (.Unprepared, _, NotificationNames.ProfileDidStartSyncing):
-//            syncSubject.onNext(.Syncing)
-//        case (_, _, NotificationNames.ProfileDidStartSyncing):
-//            // fall through for the locked and unlocked states.
-//            syncSubject.onNext(.Syncing)
-//        case (_, _, NotificationNames.ProfileDidFinishSyncing):
-//            // end of all syncs
-//            syncSubject.onNext(.Synced)
-//        default:
-//            print("Unexpected state combination: \(storageState) | \(syncState), \(notification.name)")
-//        }
-//    }
 
     private func updateList() {
         do {

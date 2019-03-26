@@ -11,7 +11,7 @@ import Logins
 import FxAClient
 
 enum DataStoreAction: Action {
-    case updateCredentials(oauthInfo: SyncUnlockInfo, fxaProfile: FxAClient.Profile, account: FxAClient.FirefoxAccount)
+    case updateCredentials(syncInfo: SyncUnlockInfo, fxaProfile: FxAClient.Profile)
     case lock
     case unlock
     case reset

@@ -120,7 +120,6 @@
 		7AA54FF1E300E6DEEFD77717 /* UIColor+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54EDDE9ECFDD6DFC4DEC5 /* UIColor+Spec.swift */; };
 		7B50F371215A52B900ADC28D /* ScrollAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B50F370215A52B900ADC28D /* ScrollAction.swift */; };
 		7B50F372215BE13100ADC28D /* ScrollAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B50F370215A52B900ADC28D /* ScrollAction.swift */; };
-		7D01A0B6224954C5008DF59C /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D01A0B5224954C5008DF59C /* Logins.framework */; };
 		7D078EE72124DC5800D10D1B /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EE62124DC5800D10D1B /* UserDefaults+.swift */; };
 		7D078EE92124DC9300D10D1B /* BiometryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5408D5D52952F11E20EEC /* BiometryManager.swift */; };
 		7D078EEB2124DCE100D10D1B /* SettingAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EEA2124DCE100D10D1B /* SettingAction.swift */; };
@@ -153,6 +152,8 @@
 		7D1B22042033C57F0098C3A3 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22032033C57F0098C3A3 /* ItemDetailView.swift */; };
 		7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */; };
 		7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */; };
+		7D1E758B224A7A8800C06B4C /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
+		7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */; };
 		7D2D2F0B20C5A8B300339D9B /* OnboardingConfirmation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */; };
 		7D302BE81FD7106B00D2FD4B /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; };
 		7D302BE91FD7108300D2FD4B /* RxBlocking.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -236,6 +237,7 @@
 		7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		7DFCD570224A72740000E287 /* Logins.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D01A0B5224954C5008DF59C /* Logins.framework */; };
 		7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
@@ -277,8 +279,6 @@
 		D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */; };
 		D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */; };
 		D84BF22A2160067900990618 /* AutofillInstructionsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */; };
-		D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EB9211950AF0056B24A /* AdSupport.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBB211950BF0056B24A /* iAd.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBD211954E00056B24A /* AdjustSdk.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81B21D437AB00E19118 /* SplitView.swift */; };
 		D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */; };
@@ -337,16 +337,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		391233702090E52800CB0233 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7D1B1AD01F9902AC00C1F5FF /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -511,7 +501,10 @@
 		7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerAlert.swift; sourceTree = "<group>"; };
 		7D1D2F0620AA39700011BFC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/SpinnerAlert.xib; sourceTree = "<group>"; };
 		7D1D2F0920AA39710011BFC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
+		7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MozillaAppServices.framework; path = Carthage/Build/iOS/MozillaAppServices.framework; sourceTree = "<group>"; };
+		7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OnboardingConfirmation.storyboard; sourceTree = "<group>"; };
+		7D2D8148224A70B00032CF36 /* FxA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxA.framework; path = Carthage/Build/iOS/FxA.framework; sourceTree = "<group>"; };
 		7D320B3420360F9000891F73 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
 		7D43964F2135AFBD00B96FA9 /* CredentialProviderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderStore.swift; sourceTree = "<group>"; };
 		7D4396522135B0C200B96FA9 /* CredentialProviderAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderAction.swift; sourceTree = "<group>"; };
@@ -660,8 +653,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
-				D8551EBC211950BF0056B24A /* iAd.framework in Frameworks */,
-				D8551EBA211950AF0056B24A /* AdSupport.framework in Frameworks */,
+				7D1E758B224A7A8800C06B4C /* MozillaAppServices.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
 				7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */,
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
@@ -670,10 +662,11 @@
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
 				391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */,
+				7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */,
 				391233842090E63000CB0233 /* Alamofire.framework in Frameworks */,
-				7D01A0B6224954C5008DF59C /* Logins.framework in Frameworks */,
 				39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */,
 				391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */,
+				7DFCD570224A72740000E287 /* Logins.framework in Frameworks */,
 				7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */,
 				7D4396572135D79800B96FA9 /* Sentry.framework in Frameworks */,
 				7D73BD7020D3135E0075D1CE /* FxAClient.framework in Frameworks */,
@@ -995,6 +988,9 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */,
+				7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */,
+				7D2D8148224A70B00032CF36 /* FxA.framework */,
 				7D01A0B5224954C5008DF59C /* Logins.framework */,
 				7D4396562135D79700B96FA9 /* Sentry.framework */,
 				D8551EBD211954E00056B24A /* AdjustSdk.framework */,
@@ -1302,11 +1298,10 @@
 			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Firefox Lockbox" */;
 			buildPhases = (
 				7D651D68203CE50700BD9B6E /* ShellScript */,
-				7D5F1D792086693F00688DEA /* ShellScript */,
+				7D5F1D792086693F00688DEA /* Run Script */,
 				7D5DF86F1F87F2600039B23E /* Sources */,
 				7D5DF8701F87F2600039B23E /* Frameworks */,
 				7D5DF8711F87F2600039B23E /* Resources */,
-				391233702090E52800CB0233 /* Embed Frameworks */,
 				7D80F3182118DCC700DA191B /* Embed App Extensions */,
 			);
 			buildRules = (
@@ -1478,7 +1473,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
-		7D5F1D792086693F00688DEA /* ShellScript */ = {
+		7D5F1D792086693F00688DEA /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1499,7 +1494,11 @@
 				"$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Logins.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/MozillaAppServices.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 			);
+			name = "Run Script";
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxSwift.framework",
@@ -1509,12 +1508,13 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differentiator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftKeychainWrapper.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftyJSON.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sync.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XCGLogger.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAClient.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Logins.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/MozillaAppServices.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

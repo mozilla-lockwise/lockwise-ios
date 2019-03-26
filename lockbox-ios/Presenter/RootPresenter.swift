@@ -105,7 +105,7 @@ class RootPresenter {
                     if let oauthInfo = latest.oauthInfo,
                         let profile = latest.profile,
                         let account = latest.account {
-                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile, account: account))
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: oauthInfo, fxaProfile: profile))
                     } else if latest.oauthInfo == nil && latest.profile == nil {
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                         self.dispatcher.dispatch(action: DataStoreAction.reset)
