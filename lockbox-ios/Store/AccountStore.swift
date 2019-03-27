@@ -169,7 +169,7 @@ extension AccountStore {
         }
 
         self.fxa?.completeOAuthFlow(code: code, state: state) { [weak self] (_, err) in
-            guard err != nil else {
+            guard err == nil else {
                 print(err.debugDescription)
                 return
             }

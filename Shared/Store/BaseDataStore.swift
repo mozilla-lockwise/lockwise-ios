@@ -199,7 +199,7 @@ class BaseDataStore {
         self.storageState
                 .subscribe(onNext: { state in
                     if state == .Unlocked {
-                        self.updateList()
+                        self.sync()
                     } else if state == .Locked {
                         self.clearList()
                     }
@@ -224,29 +224,20 @@ class BaseDataStore {
     }
 
     public func unlock() {
-        func performUnlock() {
-            guard let loginsStorage = self.loginsStorage,
-                let loginsKey = BaseDataStore.loginsKey else { return }
-    
-            do {
-                if loginsStorage.isLocked() {
-                    try loginsStorage.unlock(withEncryptionKey: loginsKey)
-                    self.storageStateSubject.onNext(.Unlocked)
-                    self.sync()
-                }
-            } catch let error {
-                print("LoginsError: \(error)")
-            }
-        }
 
-        self.storageState
-            .take(1)
-            .subscribe(onNext: { state in
-                if state == .Locked {
-                    performUnlock()
-                }
-            })
-            .disposed(by: self.disposeBag)
+        guard let loginsStorage = self.loginsStorage,
+            let loginsKey = BaseDataStore.loginsKey else { return }
+
+        do {
+            if loginsStorage.isLocked() {
+                try loginsStorage.unlock(withEncryptionKey: loginsKey)
+                self.storageStateSubject.onNext(.Unlocked)
+            } else {
+                self.storageStateSubject.onNext(.Unlocked)
+            }
+        } catch let error {
+            print("LoginsError: \(error)")
+        }
     }
 
     private func shutdown() {
@@ -261,7 +252,16 @@ class BaseDataStore {
 extension BaseDataStore {
     public func updateCredentials(_ syncInfo: SyncUnlockInfo) {
         self.syncUnlockInfo = syncInfo
-        self.sync()
+
+        guard let loginsStorage = self.loginsStorage else { return }
+        
+        queue.async {
+            if (loginsStorage.isLocked()) {
+                self.unlock()
+            } else {
+                self.storageStateSubject.onNext(.Unlocked)
+            }
+        }
     }
 }
 
@@ -284,7 +284,6 @@ extension BaseDataStore {
             do {
                 try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
                 try loginsStorage.wipeLocal()
-                self.clearList()
                 self.storageStateSubject.onNext(.Unprepared)
             } catch let error {
                 print("Sync15 wipe error: \(error.localizedDescription)")
@@ -298,7 +297,6 @@ extension BaseDataStore {
         queue.async {
             loginsStorage.ensureLocked()
             self.storageStateSubject.onNext(.Locked)
-            self.clearList()
         }
     }
 
@@ -317,7 +315,6 @@ extension BaseDataStore {
                 print("Sync15 Sync Error: \(error)")
             }
             self.syncSubject.onNext(SyncState.Synced)
-            self.updateList()
         }
     }
 
@@ -329,7 +326,7 @@ extension BaseDataStore {
                 let loginRecords = try loginsStorage.list()
                 self.listSubject.accept(loginRecords)
             } catch let error {
-                print("Sync15: \(error)")
+                print("Sync15 list update error: \(error)")
             }
         }
     }

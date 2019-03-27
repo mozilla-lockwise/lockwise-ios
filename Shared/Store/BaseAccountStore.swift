@@ -46,7 +46,7 @@ class BaseAccountStore {
             return
         }
 
-        fxa.getAccessToken(scope: Constant.fxa.lockboxScope) { [weak self] (accessToken, err) in
+        fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
             guard let key = accessToken?.key,
                 let token = accessToken?.token
                 else { return }
