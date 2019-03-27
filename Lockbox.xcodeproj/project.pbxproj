@@ -130,7 +130,6 @@
 		7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EF22124E24100D10D1B /* BaseConstants.swift */; };
 		7D078EF42124E24100D10D1B /* BaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EF22124E24100D10D1B /* BaseConstants.swift */; };
 		7D078EF62124E48300D10D1B /* Observable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */; };
-		7D07A31B21385C4300772283 /* Login+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEE21384FB800F001ED /* Login+.swift */; };
 		7D07A31C21385C6F00772283 /* CredentialStatusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722DF21349B9F0071D82B /* CredentialStatusAction.swift */; };
 		7D07A31D213885C900772283 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
 		7D07A31F2138863400772283 /* AutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07A31E2138863400772283 /* AutoLockStore.swift */; };
@@ -240,7 +239,6 @@
 		7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
-		7DFF2EEF21384FB800F001ED /* Login+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEE21384FB800F001ED /* Login+.swift */; };
 		7DFF2EF2213854BA00F001ED /* Login+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF1213854BA00F001ED /* Login+Spec.swift */; };
 		7DFF2EF4213857E100F001ED /* CredentialProviderPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */; };
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
@@ -263,10 +261,8 @@
 		D819A4C021BB2622004EE6F3 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BE21BB2622004EE6F3 /* AppInfo.swift */; };
 		D819A4C221BB2686004EE6F3 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C121BB2686004EE6F3 /* Bytes.swift */; };
 		D819A4C321BB2686004EE6F3 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C121BB2686004EE6F3 /* Bytes.swift */; };
-		D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */; };
-		D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift .swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */; };
-		D819A4C821BB3351004EE6F3 /* NSData+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C721BB3351004EE6F3 /* NSData+.swift */; };
-		D819A4C921BB3351004EE6F3 /* NSData+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C721BB3351004EE6F3 /* NSData+.swift */; };
+		D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */; };
+		D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */; };
 		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
 		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
@@ -562,7 +558,6 @@
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
 		7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
-		7DFF2EEE21384FB800F001ED /* Login+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Login+.swift"; sourceTree = "<group>"; };
 		7DFF2EF1213854BA00F001ED /* Login+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Login+Spec.swift"; sourceTree = "<group>"; };
 		7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenterSpec.swift; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -579,8 +574,7 @@
 		D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccessor.swift; sourceTree = "<group>"; };
 		D819A4BE21BB2622004EE6F3 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		D819A4C121BB2686004EE6F3 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
-		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift .swift"; sourceTree = "<group>"; };
-		D819A4C721BB3351004EE6F3 /* NSData+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+.swift"; sourceTree = "<group>"; };
+		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift"; sourceTree = "<group>"; };
 		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
 		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
@@ -945,11 +939,9 @@
 				7AA542A3362BE85B313A88B8 /* UIImage+.swift */,
 				7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */,
 				7AA54D3C8D454F79BD580AAF /* BaseUserDefaults+.swift */,
-				7DFF2EEE21384FB800F001ED /* Login+.swift */,
 				7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */,
 				D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */,
-				D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift .swift */,
-				D819A4C721BB3351004EE6F3 /* NSData+.swift */,
+				D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1625,7 +1617,7 @@
 				393F9E7820E6DA4F0004C503 /* OnboardingConfirmationView.swift in Sources */,
 				D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */,
 				7DB9DE962140C5F400239D31 /* BaseItemListPresenter.swift in Sources */,
-				D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift .swift in Sources */,
+				D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift in Sources */,
 				7D078EE72124DC5800D10D1B /* UserDefaults+.swift in Sources */,
 				7DA4C6862028F85A00B61DD8 /* ItemListPresenter.swift in Sources */,
 				7AA54C8928B257655856C516 /* AppDelegate.swift in Sources */,
@@ -1697,9 +1689,7 @@
 				7D4396532135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7AA547376945C001B151491A /* ItemDetailAction.swift in Sources */,
 				D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */,
-				7DFF2EEF21384FB800F001ED /* Login+.swift in Sources */,
 				7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */,
-				D819A4C821BB3351004EE6F3 /* NSData+.swift in Sources */,
 				7AA545D6182E36466BC8256A /* CopyDisplayStore.swift in Sources */,
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
 				D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */,
@@ -1763,7 +1753,6 @@
 				3996417E21482068000A1984 /* CredentialItemListView.swift in Sources */,
 				D819A4BA21BAF988004EE6F3 /* LoginRecord+.swift in Sources */,
 				7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */,
-				7D07A31B21385C4300772283 /* Login+.swift in Sources */,
 				7D09B24A2125DD8C00794CA2 /* DataStoreAction.swift in Sources */,
 				7DDEAA6A2124B60F00A7D521 /* Action.swift in Sources */,
 				3996418421486BE2000A1984 /* String+.swift in Sources */,
@@ -1797,10 +1786,9 @@
 				7D4396542135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7D9722C3213461510071D82B /* UIImage+.swift in Sources */,
 				7D09B24D2125E1E200794CA2 /* BaseUserDefaults+.swift in Sources */,
-				D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift .swift in Sources */,
+				D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift in Sources */,
 				3931871F214C12C7003C9E4A /* AppearanceHelper.swift in Sources */,
 				7D078EED2124DCF500D10D1B /* TelemetryAction.swift in Sources */,
-				D819A4C921BB3351004EE6F3 /* NSData+.swift in Sources */,
 				7AA548349DDB5D1CF52DD82E /* CredentialWelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
