@@ -15,7 +15,7 @@ class DataStore: BaseDataStore {
                 if let loginsKey = BaseDataStore.loginsKey {
                     try self.loginsStorage?.unlock(withEncryptionKey: loginsKey)
                     self.storageStateSubject.onNext(.Unlocked)
-                    self.doSync()
+                    self.sync()
                 }
             } catch let error {
                 print("Sync15: \(error)")

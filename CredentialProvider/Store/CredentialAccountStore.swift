@@ -14,7 +14,7 @@ class AccountStore: BaseAccountStore {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.populateAccountInformation()
         } else {
-            self._oauthInfo.onNext(nil)
+            self._syncCredentials.onNext(nil)
             self._profile.onNext(nil)
         }
     }

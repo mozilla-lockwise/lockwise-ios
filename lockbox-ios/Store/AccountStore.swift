@@ -87,7 +87,7 @@ class AccountStore: BaseAccountStore {
                     }
 
                     if previous <= 1 {
-                        self?._oauthInfo.onNext(nil)
+                        self?._syncCredentials.onNext(nil)
                         self?._profile.onNext(nil)
                         self?._oldAccountPresence.accept(true)
                     }
@@ -110,7 +110,7 @@ extension AccountStore {
             self.fxa = try? FirefoxAccount(config: config)
             self.generateLoginURL()
 
-            self._oauthInfo.onNext(nil)
+            self._syncCredentials.onNext(nil)
             self._profile.onNext(nil)
         }
     }
@@ -135,7 +135,7 @@ extension AccountStore {
         self.urlCache.removeAllCachedResponses()
 
         self._profile.onNext(nil)
-        self._oauthInfo.onNext(nil)
+        self._syncCredentials.onNext(nil)
 
         self.initFxa()
     }
@@ -168,35 +168,12 @@ extension AccountStore {
             return
         }
 
-        self.fxa?.completeOAuthFlow(code: code, state: state) { [weak self] (_, _) in
-            self?.fxa?.getAccessToken(scope: Constant.fxa.lockboxScope) { accessToken, err in
-                guard let key = accessToken?.key,
-                        let token = accessToken?.token
-                        else { return }
-
-                guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else { return }
-
-                self?._oauthInfo.onNext(
-                        SyncUnlockInfo(
-                                kid: key.kid,
-                                fxaAccessToken: token,
-                                syncKey: key.k,
-                                tokenserverURL: tokenURL!.absoluteString
-                        )
-                )
-            }
-
-            guard let fxa = self?.fxa else {
+        self.fxa?.completeOAuthFlow(code: code, state: state) { [weak self] (_, err) in
+            guard err != nil else {
+                print(err.debugDescription)
                 return
             }
-
-            if let accountJSON = try? fxa.toJSON() {
-                self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
-            }
-
-            fxa.getProfile { (profile: Profile?, _) in
-                self?._profile.onNext(profile)
-            }
+            self?.populateAccountInformation()
         }
     }
 }

@@ -29,16 +29,15 @@ protocol RootViewProtocol: class {
     func popToRoot()
 }
 
-struct OAuthProfile {
-    let oauthInfo: SyncUnlockInfo?
+struct SyncCredProfile {
+    let syncCredentials: SyncUnlockInfo?
     let profile: Profile?
-    let account: FirefoxAccount?
 }
 
-extension OAuthProfile: Equatable {
-    static func ==(lh: OAuthProfile, rh: OAuthProfile) -> Bool {
+extension SyncCredProfile: Equatable {
+    static func ==(lh: SyncCredProfile, rh: SyncCredProfile) -> Bool {
         return lh.profile == rh.profile &&
-                lh.oauthInfo == rh.oauthInfo
+                lh.syncCredentials == rh.syncCredentials
     }
 }
 
@@ -97,16 +96,12 @@ class RootPresenter {
         self.sizeClassStore = sizeClassStore
         self.itemDetailStore = itemDetailStore
 
-        // todo: update tests with populated oauth and profile info
-        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile, self.accountStore.account)
-                .map { OAuthProfile(oauthInfo: $0.0, profile: $0.1, account: $0.2) }
+        self.accountStore.syncCredentials
                 .distinctUntilChanged()
-                .bind { latest in
-                    if let oauthInfo = latest.oauthInfo,
-                        let profile = latest.profile,
-                        let account = latest.account {
-                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: oauthInfo, fxaProfile: profile))
-                    } else if latest.oauthInfo == nil && latest.profile == nil {
+                .bind {
+                    if let credentials = $0 {
+                        self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: credentials))
+                    } else if $0 == nil {
                         self.dispatcher.dispatch(action: LoginRouteAction.welcome)
                         self.dispatcher.dispatch(action: DataStoreAction.reset)
                         self.dispatcher.dispatch(action: CredentialProviderAction.clear)
@@ -116,16 +111,19 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
-            .subscribe(onNext: { storageState in
+            .map({ (storageState) -> [Action]? in
                 switch storageState {
                 case .Unprepared, .Locked:
-                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
+                    return [LoginRouteAction.welcome]
                 case .Unlocked:
-                    self.dispatcher.dispatch(action: MainRouteAction.list)
-                    self.dispatcher.dispatch(action: CredentialProviderAction.refresh)
+                    return [MainRouteAction.list, CredentialProviderAction.refresh]
                 default:
-                    break
+                    return nil
                 }
+            })
+            .filterNil()
+            .subscribe(onNext: { actions in
+                actions.forEach { dispatcher.dispatch(action: $0) }
             })
             .disposed(by: self.disposeBag)
 

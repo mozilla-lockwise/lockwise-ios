@@ -75,6 +75,8 @@ public enum LoginStoreError: Error {
 }
 
 class BaseDataStore {
+    private let queue = DispatchQueue(label: "Logins queue", attributes: [])
+
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
@@ -138,10 +140,9 @@ class BaseDataStore {
         dispatcher.register
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
-                    print("Sync15 Action: \(action)")
                     switch action {
-                    case .updateCredentials(let oauthInfo, let fxaProfile):
-                        self.updateCredentials(oauthInfo, fxaProfile: fxaProfile)
+                    case .updateCredentials(let syncInfo):
+                        self.updateCredentials(syncInfo)
                     case .reset:
                         self.reset()
                     case .sync:
@@ -160,8 +161,7 @@ class BaseDataStore {
                 .filterByType(class: LifecycleAction.self)
                 .subscribe(onNext: { action in
                     switch action {
-                    case .background:
-                        print("backgrounding")
+//                    case .background:
 //                        self.loginsStorage?.doDestroy()
 //                        self.profile.syncManager?.applicationDidEnterBackground()
 //                        var taskId = UIBackgroundTaskIdentifier.invalid
@@ -191,7 +191,7 @@ class BaseDataStore {
                     if state == .Synced {
                         self.updateList()
                     } else if state == .NotSyncable {
-                        self.makeEmptyList()
+                        self.clearList()
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -201,15 +201,15 @@ class BaseDataStore {
                     if state == .Unlocked {
                         self.updateList()
                     } else if state == .Locked {
-                        self.makeEmptyList()
+                        self.clearList()
                     }
                 })
                 .disposed(by: self.disposeBag)
 
-        self.setInitialState()
+        self.initializeLoginsStorage()
         self.initialized()
     }
-    
+
     public func initialized() {
         fatalError("not implemented!")
     }
@@ -225,14 +225,14 @@ class BaseDataStore {
 
     public func unlock() {
         func performUnlock() {
+            guard let loginsStorage = self.loginsStorage,
+                let loginsKey = BaseDataStore.loginsKey else { return }
+    
             do {
-                if let loginsKey = BaseDataStore.loginsKey {
-                    guard let loginsStorage = self.loginsStorage else { return }
-                    if loginsStorage.isLocked() {
-                        try loginsStorage.unlock(withEncryptionKey: loginsKey)
-                        self.storageStateSubject.onNext(.Unlocked)
-                        self.doSync()
-                    }
+                if loginsStorage.isLocked() {
+                    try loginsStorage.unlock(withEncryptionKey: loginsKey)
+                    self.storageStateSubject.onNext(.Unlocked)
+                    self.sync()
                 }
             } catch let error {
                 print("LoginsError: \(error)")
@@ -256,26 +256,12 @@ class BaseDataStore {
 //            print("Sync15: \(error)")
 //        }
     }
-
-    internal func doSync() {
-        if let syncUnlockInfo = self.syncUnlockInfo {
-            self.syncSubject.onNext(SyncState.Syncing)
-
-            DispatchQueue.global(qos: .background).async {
-                do {
-                    try self.loginsStorage?.sync(unlockInfo: syncUnlockInfo)
-                    self.syncSubject.onNext(SyncState.Synced)
-                } catch let error {
-                    print("Sync15 Sync Error: \(error)")
-                }
-            }
-        }
-    }
 }
 
 extension BaseDataStore {
-    public func updateCredentials(_ oauthInfo: SyncUnlockInfo, fxaProfile: FxAClient.Profile) {
-        // what do we need to do in here to link account info with the logins storage?
+    public func updateCredentials(_ syncInfo: SyncUnlockInfo) {
+        self.syncUnlockInfo = syncInfo
+        self.sync()
     }
 }
 
@@ -291,79 +277,66 @@ extension BaseDataStore {
 
 extension BaseDataStore {
     private func reset() {
-        do {
-            try self.loginsStorage?.reset()
-        } catch let error {
-            print("Sync15: \(error)")
+        guard let loginsStorage = self.loginsStorage,
+            let loginsKey = BaseDataStore.loginsKey else { return }
+        
+        queue.async {
+            do {
+                try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
+                try loginsStorage.wipeLocal()
+                self.clearList()
+                self.storageStateSubject.onNext(.Unprepared)
+            } catch let error {
+                print("Sync15 wipe error: \(error.localizedDescription)")
+            }
         }
     }
-}
 
-extension BaseDataStore {
     func lock() {
         guard let loginsStorage = self.loginsStorage else { return }
 
-        if loginsStorage.isLocked() {
-            return
-        }
-
-        do {
-            try loginsStorage.lock()
+        queue.async {
+            loginsStorage.ensureLocked()
             self.storageStateSubject.onNext(.Locked)
-        } catch let error {
-            print("Sync15: \(error)")
+            self.clearList()
         }
     }
-}
 
-extension BaseDataStore {
     public func sync() {
-        guard let loginsStorage = self.loginsStorage else { return }
+        guard let loginsStorage = self.loginsStorage,
+            let syncInfo = self.syncUnlockInfo,
+            !loginsStorage.isLocked()
+            else { return }
 
-        if loginsStorage.isLocked() {
-            return
+        self.syncSubject.onNext(SyncState.Syncing)
+
+        queue.async {
+            do {
+                try self.loginsStorage?.sync(unlockInfo: syncInfo)
+            } catch let error {
+                print("Sync15 Sync Error: \(error)")
+            }
+            self.syncSubject.onNext(SyncState.Synced)
+            self.updateList()
         }
-
-        self.doSync()
     }
-
 
     private func updateList() {
-        do {
-            if let loginsStorage = self.loginsStorage {
-                if loginsStorage.isLocked() {
-                    return
-                }
-
+        guard let loginsStorage = self.loginsStorage,
+            !loginsStorage.isLocked() else { return }
+        queue.async {
+            do {
                 let loginRecords = try loginsStorage.list()
                 self.listSubject.accept(loginRecords)
-//                let oldStyleLogins = loginRecords.map { (record: LoginRecord) -> Login in
-//                    return Login(guid: record.id, hostname: record.hostname, username: record.username ?? "", password: record.password)
-//                }
-//                self.listSubject.accept(oldStyleLogins)
+            } catch let error {
+                print("Sync15: \(error)")
             }
-        } catch let error {
-            print("Sync15: \(error)")
         }
     }
 
-    private func makeEmptyList() {
+    private func clearList() {
         self.listSubject.accept([])
     }
-}
-
-extension BaseDataStore {
-//    public func remove(id: String) {
-//        self.profile.logins.removeLoginByGUID(id) >>== {
-//            self.syncSubject.onNext(.ReadyToSync)
-//        }
-//    }
-
-//    public func add(item: LoginData) {
-//        self.profile.logins.addLogin(item) >>== {
-//            self.syncSubject.onNext(.ReadyToSync)
-//        }
-//    }
 }
 
 // initialization
@@ -387,43 +360,6 @@ extension BaseDataStore {
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
         self.loginsStorage = LoginsStorage(databasePath: file)
-    }
-
-//    private func initializeProfile() {
-//        self.profile.syncManager?.applicationDidBecomeActive()
-//
-//        self.fxaLoginHelper.application(UIApplication.shared, didLoadProfile: profile)
-//    }
-
-    private func setInitialState() {
-        self.accountStore.account
-            .take(1)
-            .subscribe(onNext: { (account) in
-                if account == nil {
-                    self.storageStateSubject.onNext(.Unprepared)
-                    self.syncSubject.onNext(.NotSyncable)
-                } else {
-                    self.syncSubject.onNext(.ReadyToSync)
-
-                    // default to locked state on initialized
-                    self.storageStateSubject.onNext(.Locked)
-                    self.handleLock()
-                }
-            }).disposed(by: self.disposeBag)
-//        guard profile.hasSyncableAccount() else {
-//            if !profile.hasAccount() {
-//                // first run.
-//                self.storageStateSubject.onNext(.Unprepared)
-//            }
-//
-//            self.syncSubject.onNext(.NotSyncable)
-//            return
-//        }
-//        self.syncSubject.onNext(.ReadyToSync)
-//
-//        // default to locked state on initialized
-//        self.storageStateSubject.onNext(.Locked)
-//        self.handleLock()
     }
 
     internal func handleLock() {

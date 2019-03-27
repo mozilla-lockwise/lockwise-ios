@@ -55,13 +55,10 @@ class CredentialProviderPresenter {
         self.credentialProviderStore = credentialProviderStore
         self.autoLockStore = autoLockStore
 
-        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile, self.accountStore.account)
-            .bind { [weak self] (oauthInfo, profile, account) in
-                if let oauthInfo = oauthInfo,
-                    let profile = profile,
-                    let account = account {
-                    self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: oauthInfo, fxaProfile: profile))
-                }
+        self.accountStore.syncCredentials
+            .filterNil()
+            .bind { [weak self] (syncInfo) in
+                self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncInfo))
             }
             .disposed(by: self.disposeBag)
 

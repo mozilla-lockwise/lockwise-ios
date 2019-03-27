@@ -14,20 +14,15 @@ class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper
 
     internal var fxa: FirefoxAccount?
-    internal var _oauthInfo = ReplaySubject<SyncUnlockInfo?>.create(bufferSize: 1)
+    internal var _syncCredentials = ReplaySubject<SyncUnlockInfo?>.create(bufferSize: 1)
     internal var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
-    internal var _account = ReplaySubject<FirefoxAccount?>.create(bufferSize: 1)
 
-    public var oauthInfo: Observable<SyncUnlockInfo?> {
-        return _oauthInfo.asObservable()
+    public var syncCredentials: Observable<SyncUnlockInfo?> {
+        return _syncCredentials.asObservable()
     }
 
     public var profile: Observable<Profile?> {
         return _profile.asObservable()
-    }
-
-    public var account: Observable<FirefoxAccount?> {
-        return _account.asObservable()
     }
 
     internal var storedAccountJSON: String? {
@@ -51,20 +46,26 @@ class BaseAccountStore {
             return
         }
 
-        self._account.onNext(fxa)
+        fxa.getAccessToken(scope: Constant.fxa.lockboxScope) { [weak self] (accessToken, err) in
+            guard let key = accessToken?.key,
+                let token = accessToken?.token
+                else { return }
 
-        fxa.getAccessToken(scope: Constant.fxa.lockboxScope) { (info, err) in
-            // convert to syncunlockinfo here?
-//            self._oauthInfo.onNext()
-            if let json = try? fxa.toJSON() {
-                self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
+            guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else { return }
+
+            self?._syncCredentials.onNext(
+                SyncUnlockInfo(
+                    kid: key.kid,
+                    fxaAccessToken: token,
+                    syncKey: key.k,
+                    tokenserverURL: tokenURL!.absoluteString
+                )
+            )
+
+            if let accountJSON = try? fxa.toJSON() {
+                self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
         }
-//        { (info: OAuthInfo?, _) in
-//            self._oauthInfo.onNext(info)
-//
-
-//        }
 
         fxa.getProfile { (profile: Profile?, _) in
             self._profile.onNext(profile)

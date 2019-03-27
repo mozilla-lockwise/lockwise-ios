@@ -84,7 +84,7 @@ extension CredentialProviderStore {
     }
 
     private func refresh() {
-        Observable.combineLatest(self.dataStore.list, self.accountStore.oauthInfo, self.accountStore.profile)
+        Observable.combineLatest(self.dataStore.list, self.accountStore.syncCredentials, self.accountStore.profile)
             .filter { $0.1 != nil && $0.2 != nil }
             .map { $0.0 }
             .filter { $0.isEmpty }

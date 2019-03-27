@@ -44,7 +44,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     }
 
     override func onViewReady() {
-        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
+        Observable.combineLatest(self.accountStore.syncCredentials, self.accountStore.profile)
                 .take(1)
                 .subscribe(onNext: { latest in
                     if latest.0 == nil && latest.1 == nil {
