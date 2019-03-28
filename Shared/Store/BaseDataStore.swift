@@ -161,18 +161,10 @@ class BaseDataStore {
                 .filterByType(class: LifecycleAction.self)
                 .subscribe(onNext: { action in
                     switch action {
-//                    case .background:
-//                        self.loginsStorage?.doDestroy()
-//                        self.profile.syncManager?.applicationDidEnterBackground()
-//                        var taskId = UIBackgroundTaskIdentifier.invalid
-//                        taskId = application.beginBackgroundTask (expirationHandler: {
-//                            self.profile.shutdown()
-//                            application.endBackgroundTask(taskId)
-//                        })
+                    case .background:
+                        break
                     case .foreground:
-//                        self.profile.syncManager?.applicationDidBecomeActive()
                         self.initializeLoginsStorage()
-                        self.sync()
                         self.handleLock()
                     case .upgrade(let previous, _):
                         if previous <= 2 {
@@ -361,9 +353,15 @@ extension BaseDataStore {
     internal func handleLock() {
         Observable.combineLatest(
             self.userDefaults.onAutoLockTime,
-            self.userDefaults.onForceLock)
+            self.userDefaults.onForceLock,
+            storageState
+            )
             .take(1)
-            .subscribe(onNext: { autoLockSetting, forceLock in
+            .subscribe(onNext: { autoLockSetting, forceLock, state in
+                if state == .Unprepared {
+                    return
+                }
+
                 if forceLock {
                     self.lock()
                 } else if autoLockSetting == .Never {
