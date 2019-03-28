@@ -8,11 +8,7 @@ import Nimble
 import RxTest
 import RxSwift
 import RxBlocking
-import Shared
-import Storage
 import SwiftKeychainWrapper
-import FxAUtils
-import Account
 
 @testable import Lockbox
 
@@ -23,10 +19,6 @@ class DataStoreSpec: QuickSpec {
         override var register: Observable<Action> {
             return self.fakeRegistration.asObservable()
         }
-    }
-
-    class FakeFxALoginHelper: FxALoginHelper {
-
     }
 
     class FakeKeychainWrapper: KeychainWrapper {
@@ -46,10 +38,6 @@ class DataStoreSpec: QuickSpec {
         init() { super.init(serviceName: "blah") }
     }
 
-    private let fakeProfileFactory: ProfileFactory = { reset in
-        return FakeProfile()
-    }
-
     private var scheduler: TestScheduler = TestScheduler(initialClock: 1)
     private var disposeBag = DisposeBag()
 
@@ -64,22 +52,8 @@ class DataStoreSpec: QuickSpec {
                 self.keychainWrapper = FakeKeychainWrapper()
                 self.subject = DataStore(
                         dispatcher: self.dispatcher,
-                        profileFactory: self.fakeProfileFactory,
                         keychainWrapper: self.keychainWrapper
                 )
-            }
-
-            describe("lifecycleActions") {
-                describe("shutdown") {
-                    beforeEach {
-                        (self.subject.profile as! FakeProfile).isShudownReturnValue = false
-                        self.dispatcher.fakeRegistration.onNext(LifecycleAction.shutdown)
-                    }
-
-                    it("shutdown on profile called") {
-                        expect((self.subject.profile as! FakeProfile).shutdownCalled).to(beTrue())
-                    }
-                }
             }
         }
     }

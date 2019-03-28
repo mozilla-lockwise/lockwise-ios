@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Storage
+import Logins
 import AuthenticationServices
 import Quick
 import Nimble
@@ -11,14 +11,14 @@ import Nimble
 @testable import Lockbox
 
 @available(iOS 12, *)
-class LoginSpec: QuickSpec {
+class LoginRecordSpec: QuickSpec {
     override func spec() {
         describe("Login+") {
             let guid = "fsdsdf"
             let hostname = "http://www.mozilla.org"
             let username = "dogs@dogs.com"
             let password = "iluvcatz"
-            let login = Login(guid: guid, hostname: hostname, username: username, password: password)
+            let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": hostname, "username": username, "password": password])
 
             describe("passwordCredentialIdentity") {
                 it("makes a credential identity with the login parameters") {

@@ -8,8 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import SwiftKeychainWrapper
-import FxAUtils
-import Storage
+import Logins
 
 @testable import Lockbox
 
@@ -33,8 +32,8 @@ class ItemDetailStoreSpec: QuickSpec {
     class FakeDataStore: DataStore {
         let syncStateStub = ReplaySubject<SyncState>.create(bufferSize: 1)
 
-        init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
-            super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+        init(dispatcher: Dispatcher) {
+            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
 
             self.disposeBag = DisposeBag()
         }
@@ -43,14 +42,10 @@ class ItemDetailStoreSpec: QuickSpec {
             return self.syncStateStub.asObservable()
         }
 
-        let listStub = ReplaySubject<[Login]>.create(bufferSize: 1)
-        override var list: Observable<[Login]> {
+        let listStub = ReplaySubject<[LoginRecord]>.create(bufferSize: 1)
+        override var list: Observable<[LoginRecord]> {
             return self.listStub.asObservable()
         }
-    }
-
-    private let fakeProfileFactory: ProfileFactory = { reset in
-        FakeProfile()
     }
 
     private var dispatcher: FakeDispatcher!
@@ -65,8 +60,7 @@ class ItemDetailStoreSpec: QuickSpec {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.sizeClassStore = FakeSizeClassStore()
-                self.dataStore = FakeDataStore(dispatcher: self.dispatcher,
-                                               profileFactory: self.fakeProfileFactory)
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
                 self.subject = ItemDetailStore(dispatcher: self.dispatcher,
                                                dataStore: self.dataStore,
                                                sizeClassStore: self.sizeClassStore)
@@ -130,7 +124,9 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     beforeEach {
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
-                        self.dataStore.listStub.onNext([Login(guid: "5678", hostname: "asdf", username: "asdf", password: "asdf")])
+                        self.dataStore.listStub.onNext([
+                            LoginRecord(fromJSONDict: ["id": "5678", "hostname": "asdf", "username": "asdf", "password": "asdf"])
+                            ])
 
                         detailIdObserver = self.scheduler.createObserver(String.self)
 
@@ -169,7 +165,7 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     beforeEach {
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
-                        self.dataStore.listStub.onNext([Login(guid: "5678", hostname: "asdf", username: "asdf", password: "asdf")])
+                        self.dataStore.listStub.onNext([LoginRecord(fromJSONDict: ["id": "5678", "hostname": "asdf", "username": "asdf", "password": "asdf"])])
 
                         detailIdObserver = self.scheduler.createObserver(String.self)
 

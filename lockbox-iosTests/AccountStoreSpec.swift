@@ -77,16 +77,7 @@ class AccountStoreSpec: QuickSpec {
 
             xdescribe("loginURL") {
                 it("populates the loginURL for the Lockbox configuration on initialization") {
-                    let loginURL = try! self.subject.loginURL.toBlocking().first()!
 
-                    FxAConfig.release { config, _ in
-                        guard let config = config else { return }
-
-                        let fxa = try! FirefoxAccount(config: config, clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
-                        fxa.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
-                            expect(loginURL.path).to(equal(url!.path))
-                        }
-                    }
                 }
             }
 
@@ -146,12 +137,12 @@ class AccountStoreSpec: QuickSpec {
 
                     it("pushes a non-nil oauthinfo") {
                         // can't check anything more detailed because we can't construct FxAClient.OAuthInfo
-                        let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()
-                        expect(oauthInfo).notTo(beNil())
+                        let syncInfo = try! self.subject.syncCredentials.toBlocking().first()
+                        expect(syncInfo).notTo(beNil())
                     }
 
                     it("saves the refreshed JSON to the shared keychain after pushing the oauth info") {
-                        _ = try! self.subject.oauthInfo.toBlocking().first()
+                        _ = try! self.subject.syncCredentials.toBlocking().first()
                         expect(self.keychainManager.saveArguments[KeychainKey.accountJSON.rawValue]).notTo(beNil())
                     }
                 }
@@ -168,20 +159,20 @@ class AccountStoreSpec: QuickSpec {
 
                     it("pushes a non-nil oauthinfo") {
                         // can't check anything more detailed because we can't construct FxAClient.OAuthInfo
-                        let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()
-                        expect(oauthInfo).notTo(beNil())
+                        let syncInfo = try! self.subject.syncCredentials.toBlocking().first()
+                        expect(syncInfo).notTo(beNil())
                     }
 
                     it("saves the refreshed JSON to the shared keychain") {
-                        _ = try! self.subject.oauthInfo.toBlocking().first()
+                        _ = try! self.subject.syncCredentials.toBlocking().first()
                         expect(self.keychainManager.saveArguments[KeychainKey.accountJSON.rawValue]).notTo(beNil())
                     }
                 }
 
                 describe("when the keychain does not have a valid fxa account") {
                     it("pushes a nil oauthinfo") {
-                        let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()!
-                        expect(oauthInfo).to(beNil())
+                        let syncInfo = try! self.subject.syncCredentials.toBlocking().first()!
+                        expect(syncInfo).to(beNil())
                     }
                 }
             }
@@ -208,15 +199,15 @@ class AccountStoreSpec: QuickSpec {
 
             // tricky to test because OAuth is hard to fake out :p
             xdescribe("oauthRedirect") {
-                var oauthObserver = self.scheduler.createObserver(OAuthInfo?.self)
+                var syncCredObserver = self.scheduler.createObserver(SyncCredential?.self)
                 var profileObserver = self.scheduler.createObserver(Profile?.self)
 
                 beforeEach {
-                    oauthObserver = self.scheduler.createObserver(OAuthInfo?.self)
+                    syncCredObserver = self.scheduler.createObserver(SyncCredential?.self)
                     profileObserver = self.scheduler.createObserver(Profile?.self)
 
-                    self.subject.oauthInfo
-                            .bind(to: oauthObserver)
+                    self.subject.syncCredentials
+                            .bind(to: syncCredObserver)
                             .disposed(by: self.disposeBag)
 
                     self.subject.profile
@@ -231,7 +222,7 @@ class AccountStoreSpec: QuickSpec {
                 }
 
                 it("pushes populated profile and oauthInfo objects to observers") {
-                    expect(oauthObserver.events.first!.value.element!).notTo(beNil())
+                    expect(syncCredObserver.events.first!.value.element!).notTo(beNil())
                     expect(profileObserver.events.first!.value.element!).notTo(beNil())
                 }
             }
@@ -252,8 +243,8 @@ class AccountStoreSpec: QuickSpec {
                 }
 
                 it("pushes nil profile and oauth info to observers") {
-                    let oauthInfo = try! self.subject.oauthInfo.toBlocking().first()!
-                    expect(oauthInfo).to(beNil())
+                    let syncInfo = try! self.subject.syncCredentials.toBlocking().first()!
+                    expect(syncInfo).to(beNil())
 
                     let profile = try! self.subject.profile.toBlocking().first()!
                     expect(profile).to(beNil())

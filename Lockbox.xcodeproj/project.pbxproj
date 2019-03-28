@@ -242,7 +242,7 @@
 		7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
 		7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
-		7DFF2EF2213854BA00F001ED /* Login+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF1213854BA00F001ED /* Login+Spec.swift */; };
+		7DFF2EF2213854BA00F001ED /* LoginRecord+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF1213854BA00F001ED /* LoginRecord+Spec.swift */; };
 		7DFF2EF4213857E100F001ED /* CredentialProviderPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */; };
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
@@ -268,7 +268,6 @@
 		D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */; };
 		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
 		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
-		D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82FF5152172DAC600018346 /* FakeProfile.swift */; };
 		D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDD204C925100EAE19A /* SettingListView.swift */; };
 		D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */; };
 		D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */; };
@@ -562,7 +561,7 @@
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
 		7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
-		7DFF2EF1213854BA00F001ED /* Login+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Login+Spec.swift"; sourceTree = "<group>"; };
+		7DFF2EF1213854BA00F001ED /* LoginRecord+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginRecord+Spec.swift"; sourceTree = "<group>"; };
 		7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenterSpec.swift; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -581,7 +580,6 @@
 		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift"; sourceTree = "<group>"; };
 		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
 		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
-		D82FF5152172DAC600018346 /* FakeProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeProfile.swift; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenter.swift; sourceTree = "<group>"; };
 		D831FEE3205C518400EAE19A /* SettingListPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenterSpec.swift; sourceTree = "<group>"; };
@@ -1073,13 +1071,12 @@
 				7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */,
 				D8DD93052140D7CA00F8041D /* AutofillOnboardingPresenterSpec.swift */,
 				D8DD93082140DB1100F8041D /* AutofillOnboardingViewSpec.swift */,
-				7DFF2EF1213854BA00F001ED /* Login+Spec.swift */,
+				7DFF2EF1213854BA00F001ED /* LoginRecord+Spec.swift */,
 				7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */,
 				7DA4B08D2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift */,
 				7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */,
 				D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */,
 				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
-				D82FF5152172DAC600018346 /* FakeProfile.swift */,
 				D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */,
 				D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */,
 				D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */,
@@ -1561,7 +1558,7 @@
 				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
 				7AA5479682C7E2145B08BC07 /* Data+Spec.swift in Sources */,
 				D80D41BE21F67E95008A7B11 /* SizeClassStoreSpec.swift in Sources */,
-				7DFF2EF2213854BA00F001ED /* Login+Spec.swift in Sources */,
+				7DFF2EF2213854BA00F001ED /* LoginRecord+Spec.swift in Sources */,
 				7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */,
 				D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */,
 				D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */,
@@ -1607,7 +1604,6 @@
 				7AA54306397C76D229BA199A /* SettingActionSpec.swift in Sources */,
 				7AA54AA7964A1C95FDB7AA6E /* UserDefaults+Spec.swift in Sources */,
 				7DA4B09021401C2D00C9EFEA /* CredentialStatusActionSpec.swift in Sources */,
-				D82FF5162172DAC600018346 /* FakeProfile.swift in Sources */,
 				7AA540CB2BA73DB82EDDAED1 /* SettingNavigationControllerSpec.swift in Sources */,
 				7DA4B08E2140143000C9EFEA /* CredentialWelcomePresenterSpec.swift in Sources */,
 				7AA54C2A679E7AAF3C34E7E6 /* BiometryManagerSpec.swift in Sources */,

@@ -47,11 +47,6 @@ class DataStoreActionSpec: QuickSpec {
                 expect(DataStoreAction.touch(id: "meow")).notTo(equal(DataStoreAction.touch(id: "woof")))
             }
 
-            it("remove is equal based on IDs") {
-                expect(DataStoreAction.remove(id: "meow")).to(equal(DataStoreAction.remove(id: "meow")))
-                expect(DataStoreAction.remove(id: "meow")).notTo(equal(DataStoreAction.remove(id: "woof")))
-            }
-
             it("different enum types are never equal") {
                 expect(DataStoreAction.unlock).notTo(equal(DataStoreAction.lock))
                 expect(DataStoreAction.lock).notTo(equal(DataStoreAction.unlock))

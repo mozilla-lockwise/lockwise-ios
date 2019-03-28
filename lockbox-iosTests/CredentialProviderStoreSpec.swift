@@ -9,7 +9,7 @@ import AuthenticationServices
 import RxSwift
 import RxCocoa
 import RxBlocking
-import Storage
+import Logins
 
 @testable import Lockbox
 
@@ -24,9 +24,9 @@ class CredentialProviderStoreSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        let listStub = PublishSubject<[Login]>()
+        let listStub = PublishSubject<[LoginRecord]>()
 
-        override var list: Observable<[Login]> {
+        override var list: Observable<[LoginRecord]> {
             return self.listStub.asObservable()
         }
     }
@@ -148,9 +148,9 @@ class CredentialProviderStoreSpec: QuickSpec {
                     let username2 = "dogs@dogs.com"
                     let password2 = "iwudnvrreusemypw"
 
-                    let logins: [Login] = [
-                        Login(guid: guid1, hostname: hostname1, username: username1, password: password1),
-                        Login(guid: guid2, hostname: hostname2, username: username2, password: password2)
+                    let logins: [LoginRecord] = [
+                        LoginRecord(fromJSONDict: ["id": guid1, "hostname": hostname1, "username": username1, "password": password1]),
+                        LoginRecord(fromJSONDict: ["id": guid2, "hostname": hostname2, "username": username2, "password": password2])
                     ]
 
                     beforeEach {
