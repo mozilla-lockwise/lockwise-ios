@@ -61,7 +61,7 @@ class AccountStoreSpec: QuickSpec {
     var subject: AccountStore!
 
     override func spec() {
-        xdescribe("AccountStore") {
+        describe("AccountStore") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
                 self.keychainManager = FakeKeychainManager()
@@ -75,7 +75,7 @@ class AccountStoreSpec: QuickSpec {
                 )
             }
 
-            xdescribe("loginURL") {
+            describe("loginURL") {
                 it("populates the loginURL for the Lockbox configuration on initialization") {
 
                 }
@@ -124,7 +124,7 @@ class AccountStoreSpec: QuickSpec {
                 }
             }
 
-            describe("oauthInfo") {
+            describe("synccredentials") {
                 describe("when the shared keychain has a valid fxa account") {
                     beforeEach {
                         self.keychainManager.retrieveResult[KeychainKey.accountJSON.rawValue] = "{\"schema_version\":\"V1\",\"client_id\":\"98adfa37698f255b\",\"redirect_uri\":\"https://lockbox.firefox.com/fxa/ios-redirect.html\",\"config\":{\"content_url\":\"https://accounts.firefox.com\",\"auth_url\":\"https://api.accounts.firefox.com/\",\"oauth_url\":\"https://oauth.accounts.firefox.com/\",\"profile_url\":\"https://profile.accounts.firefox.com/\",\"token_server_endpoint_url\":\"https://token.services.mozilla.com/1.0/sync/1.5\",\"authorization_endpoint\":\"https://accounts.firefox.com/authorization\",\"issuer\":\"https://accounts.firefox.com\",\"jwks_uri\":\"https://oauth.accounts.firefox.com/v1/jwks\",\"token_endpoint\":\"https://oauth.accounts.firefox.com/v1/token\",\"userinfo_endpoint\":\"https://profile.accounts.firefox.com/v1/profile\"},\"oauth_cache\":{\"https://identity.mozilla.com/apps/oldsync https://identity.mozilla.com/apps/lockbox profile\":{\"access_token\":\"abd1a1e02fc7afa5ddcba9e5d768297e2c883ff3926ee075bca226067a944685\",\"keys\":\"{\\\"https://identity.mozilla.com/apps/oldsync\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/oldsync\\\",\\\"k\\\":\\\"VEZDYJ3Jd1Ui0ZVtW8pPHD6LZ48Jd30p-y-PLQQYa0PRcMZtiM6zJO4_I2lxEg__qkxXldPyLiM5PYY9VBD64w\\\",\\\"kid\\\":\\\"1519160140602-WMF1HOhJbtMVueuy3tV4vA\\\"},\\\"https://identity.mozilla.com/apps/lockbox\\\":{\\\"kty\\\":\\\"oct\\\",\\\"scope\\\":\\\"https://identity.mozilla.com/apps/lockbox\\\",\\\"k\\\":\\\"oGGfsZk8xMXtBzGzy2WY3QGPNOTer0VGIC3Uyz9Jy9w\\\",\\\"kid\\\":\\\"1519160141-YqmShzWPQhHp0RNiZs25zg\\\"}}\",\"refresh_token\":\"2b5a070455ba24cdc2ce7bb7ce43aef5b6e0b28bc6cd76b0083a50604e1bba00\",\"expires_at\":1533664155,\"scopes\":[\"https://identity.mozilla.com/apps/oldsync\",\"https://identity.mozilla.com/apps/lockbox\",\"profile\"]}}}"
@@ -157,7 +157,7 @@ class AccountStoreSpec: QuickSpec {
                         )
                     }
 
-                    it("pushes a non-nil oauthinfo") {
+                    it("pushes a non-nil synccredential") {
                         // can't check anything more detailed because we can't construct FxAClient.OAuthInfo
                         let syncInfo = try! self.subject.syncCredentials.toBlocking().first()
                         expect(syncInfo).notTo(beNil())
@@ -170,7 +170,7 @@ class AccountStoreSpec: QuickSpec {
                 }
 
                 describe("when the keychain does not have a valid fxa account") {
-                    it("pushes a nil oauthinfo") {
+                    it("pushes a nil synccredential") {
                         let syncInfo = try! self.subject.syncCredentials.toBlocking().first()!
                         expect(syncInfo).to(beNil())
                     }

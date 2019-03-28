@@ -6,7 +6,6 @@ import WebKit
 import UIKit
 import RxSwift
 import RxCocoa
-import SwiftyJSON
 import FxAClient
 
 class FxAView: UIViewController {

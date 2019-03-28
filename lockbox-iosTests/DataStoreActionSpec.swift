@@ -9,11 +9,9 @@ import Nimble
 import WebKit
 import RxTest
 import RxSwift
+import FxAClient
 
 @testable import Lockbox
-import Storage
-import SwiftyJSON
-import FxAClient
 
 class DataStoreActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {

@@ -10,7 +10,6 @@ import RxSwift
 import RxTest
 
 @testable import Lockbox
-import SwiftyJSON
 
 class FxAPresenterSpec: QuickSpec {
     class FakeFxAView: FxAViewProtocol {

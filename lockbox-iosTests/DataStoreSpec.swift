@@ -27,7 +27,7 @@ class DataStoreSpec: QuickSpec {
         var retrieveResult: [String: String] = [:]
 
         override func set(_ value: String, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> Bool {
-//            self.saveArguments[key] = string
+            self.saveArguments[key] = value
             return saveSuccess
         }
 

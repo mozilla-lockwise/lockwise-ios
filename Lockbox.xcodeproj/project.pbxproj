@@ -16,10 +16,7 @@
 		2C2EC56020ADAA8100AF8C44 /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */; };
 		2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */; };
 		2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */; };
-		391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233712090E56E00CB0233 /* SwiftyJSON.framework */; };
 		391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */; };
-		391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233802090E60A00CB0233 /* XCGLogger.framework */; };
-		391233842090E63000CB0233 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233832090E63000CB0233 /* Alamofire.framework */; };
 		3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
 		3931871F214C12C7003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
 		39318722214C19A8003C9E4A /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39318721214C19A8003C9E4A /* UIButton+.swift */; };
@@ -32,7 +29,6 @@
 		3996418521486BE5000A1984 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996418321486BE2000A1984 /* String+.swift */; };
 		3996418721486C0E000A1984 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996418621486C0E000A1984 /* Data+.swift */; };
 		399641882148714D000A1984 /* Data+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3996418621486C0E000A1984 /* Data+.swift */; };
-		39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39B1508820878E42007497E5 /* Deferred.framework */; };
 		4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C61CC5020B4E47A001CE00E /* UIButton+Spec.swift */; };
 		7AA540053B184518789CDA12 /* ItemDetailActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54A831379DFCD181B2362 /* ItemDetailActionSpec.swift */; };
 		7AA5400E231CF2E6FB1A5EEA /* BaseItemDetailStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E126924935F1ADF4E8E /* BaseItemDetailStore.swift */; };
@@ -655,11 +651,7 @@
 				7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */,
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
-				391233732090E56F00CB0233 /* SwiftyJSON.framework in Frameworks */,
 				7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */,
-				391233842090E63000CB0233 /* Alamofire.framework in Frameworks */,
-				39DB366B208E25710026DA92 /* Deferred.framework in Frameworks */,
-				391233812090E60A00CB0233 /* XCGLogger.framework in Frameworks */,
 				7DFCD570224A72740000E287 /* Logins.framework in Frameworks */,
 				7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */,
 				7D4396572135D79800B96FA9 /* Sentry.framework in Frameworks */,
@@ -1486,11 +1478,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Differentiator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/XCGLogger.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Deferred.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/FxAClient.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
@@ -1506,13 +1493,11 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Telemetry.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differentiator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftKeychainWrapper.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftyJSON.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Deferred.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XCGLogger.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAClient.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Logins.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AdjustSdk.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FxAClient.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sentry.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

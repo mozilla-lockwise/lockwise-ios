@@ -8,7 +8,6 @@ import RxSwift
 import RxCocoa
 import RxOptional
 import Logins
-import SwiftyJSON
 import SwiftKeychainWrapper
 
 enum SyncError: Error {
