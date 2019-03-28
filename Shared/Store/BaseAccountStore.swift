@@ -14,10 +14,10 @@ class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper
 
     internal var fxa: FirefoxAccount?
-    internal var _syncCredentials = ReplaySubject<SyncUnlockInfo?>.create(bufferSize: 1)
+    internal var _syncCredentials = ReplaySubject<SyncCredential?>.create(bufferSize: 1)
     internal var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
 
-    public var syncCredentials: Observable<SyncUnlockInfo?> {
+    public var syncCredentials: Observable<SyncCredential?> {
         return _syncCredentials.asObservable()
     }
 
@@ -41,7 +41,7 @@ class BaseAccountStore {
         fatalError("not implemented!")
     }
 
-    internal func populateAccountInformation() {
+    internal func populateAccountInformation(_ isNew: Bool) {
         guard let fxa = self.fxa else {
             return
         }
@@ -53,13 +53,15 @@ class BaseAccountStore {
 
             guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else { return }
 
+            let syncInfo = SyncUnlockInfo(
+                kid: key.kid,
+                fxaAccessToken: token,
+                syncKey: key.k,
+                tokenserverURL: tokenURL!.absoluteString
+            )
+
             self?._syncCredentials.onNext(
-                SyncUnlockInfo(
-                    kid: key.kid,
-                    fxaAccessToken: token,
-                    syncKey: key.k,
-                    tokenserverURL: tokenURL!.absoluteString
-                )
+                SyncCredential(syncInfo: syncInfo, isNew: isNew)
             )
 
             if let accountJSON = try? fxa.toJSON() {

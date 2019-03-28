@@ -103,7 +103,7 @@ extension AccountStore {
         if let accountJSON = self.storedAccountJSON {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.generateLoginURL()
-            self.populateAccountInformation()
+            self.populateAccountInformation(false)
         } else {
             let config = FxAConfig.release(clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
 
@@ -173,7 +173,7 @@ extension AccountStore {
                 print(err.debugDescription)
                 return
             }
-            self?.populateAccountInformation()
+            self?.populateAccountInformation(true)
         }
     }
 }

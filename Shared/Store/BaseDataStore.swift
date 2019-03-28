@@ -141,13 +141,13 @@ class BaseDataStore {
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
                     switch action {
-                    case .updateCredentials(let syncInfo):
-                        self.updateCredentials(syncInfo)
+                    case .updateCredentials(let syncCredential):
+                        self.updateCredentials(syncCredential)
                     case .reset:
                         self.reset()
                     case .sync:
                         self.sync()
-                    case let .touch(id:id):
+                    case .touch(let id):
                         self.touch(id: id)
                     case .lock:
                         self.lock()
@@ -190,18 +190,16 @@ class BaseDataStore {
                 .subscribe(onNext: { state in
                     if state == .Synced {
                         self.updateList()
-                    } else if state == .NotSyncable {
-                        self.clearList()
                     }
                 })
                 .disposed(by: self.disposeBag)
 
         self.storageState
                 .subscribe(onNext: { state in
-                    if state == .Unlocked {
-                        self.sync()
-                    } else if state == .Locked {
-                        self.clearList()
+                    switch state {
+                    case .Unlocked: self.sync()
+                    case .Locked, .Unprepared: self.clearList()
+                    default: break
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -224,7 +222,6 @@ class BaseDataStore {
     }
 
     public func unlock() {
-
         guard let loginsStorage = self.loginsStorage,
             let loginsKey = BaseDataStore.loginsKey else { return }
 
@@ -250,17 +247,19 @@ class BaseDataStore {
 }
 
 extension BaseDataStore {
-    public func updateCredentials(_ syncInfo: SyncUnlockInfo) {
-        self.syncUnlockInfo = syncInfo
+    public func updateCredentials(_ syncCredential: SyncCredential) {
+        self.syncUnlockInfo = syncCredential.syncInfo
 
         guard let loginsStorage = self.loginsStorage else { return }
-        
-        queue.async {
+
+        if syncCredential.isNew {
             if (loginsStorage.isLocked()) {
                 self.unlock()
             } else {
                 self.storageStateSubject.onNext(.Unlocked)
             }
+        } else {
+            self.handleLock()
         }
     }
 }

@@ -152,6 +152,8 @@
 		7D1B22062033C5880098C3A3 /* ItemDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1B22052033C5880098C3A3 /* ItemDetailPresenter.swift */; };
 		7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */; };
 		7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */; };
+		7D2712B9224D70E900E6C4CA /* SyncCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2712B8224D70E900E6C4CA /* SyncCredential.swift */; };
+		7D2712BA224D758C00E6C4CA /* SyncCredential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D2712B8224D70E900E6C4CA /* SyncCredential.swift */; };
 		7D2D2F0B20C5A8B300339D9B /* OnboardingConfirmation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */; };
 		7D302BE81FD7106B00D2FD4B /* RxBlocking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; };
 		7D302BE91FD7108300D2FD4B /* RxBlocking.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C71F9F8FD500375C74 /* RxBlocking.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -185,6 +187,7 @@
 		7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D80F30A2118DCC700DA191B /* CredentialProviderView.swift */; };
 		7D80F30E2118DCC700DA191B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D80F30C2118DCC700DA191B /* MainInterface.storyboard */; };
 		7D80F3132118DCC700DA191B /* CredentialProvider.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D80F3062118DCC700DA191B /* CredentialProvider.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */; };
 		7D9722C3213461510071D82B /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542A3362BE85B313A88B8 /* UIImage+.swift */; };
 		7D9722C4213461510071D82B /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6902028FB0900B61DD8 /* UIColor+.swift */; };
 		7D9722C62134622F0071D82B /* BaseWelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722C52134622F0071D82B /* BaseWelcomePresenter.swift */; };
@@ -498,6 +501,7 @@
 		7D1D2F0920AA39710011BFC8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
 		7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MozillaAppServices.framework; path = Carthage/Build/iOS/MozillaAppServices.framework; sourceTree = "<group>"; };
 		7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
+		7D2712B8224D70E900E6C4CA /* SyncCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCredential.swift; sourceTree = "<group>"; };
 		7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OnboardingConfirmation.storyboard; sourceTree = "<group>"; };
 		7D2D8148224A70B00032CF36 /* FxA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxA.framework; path = Carthage/Build/iOS/FxA.framework; sourceTree = "<group>"; };
 		7D320B3420360F9000891F73 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
@@ -830,7 +834,6 @@
 				7AA5404248F72FC87CC4978B /* Date+.swift */,
 				7AA54BF70B374C370B51ECB9 /* UIView+.swift */,
 				D86A307520829B7F00589CA8 /* UIApplication+.swift */,
-				7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */,
 				7D078EE62124DC5800D10D1B /* UserDefaults+.swift */,
 			);
 			path = Extensions;
@@ -874,6 +877,7 @@
 		7D078EE12124DC0A00D10D1B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				7D2712B7224D70D700E6C4CA /* Model */,
 				7D9722BE21345FE60071D82B /* Storyboard */,
 				7D9722BD21345FD50071D82B /* Presenter */,
 				7D9722BC21345FCE0071D82B /* View */,
@@ -942,6 +946,7 @@
 				7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */,
 				D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */,
 				D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */,
+				7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1080,6 +1085,14 @@
 				D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */,
 			);
 			path = "lockbox-iosTests";
+			sourceTree = "<group>";
+		};
+		7D2712B7224D70D700E6C4CA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7D2712B8224D70E900E6C4CA /* SyncCredential.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		7D43965F2135D8B000B96FA9 /* Helpers */ = {
@@ -1673,6 +1686,7 @@
 				226E3FF02127759C00185D11 /* ExternalLinkStore.swift in Sources */,
 				7AA5465C5FE10715567F5E83 /* LoginNavigationController.swift in Sources */,
 				D8DD9300213F83D600F8041D /* AutofillOnboardingView.swift in Sources */,
+				7D2712B9224D70E900E6C4CA /* SyncCredential.swift in Sources */,
 				7AA54869D92433B631B6560B /* MainNavigationController.swift in Sources */,
 				D80D41C121FD6856008A7B11 /* ItemDetailStore.swift in Sources */,
 				D8D0292A2064445100CC01C6 /* AutoLockSettingsPresenter.swift in Sources */,
@@ -1742,6 +1756,7 @@
 				7D07A321213886C100772283 /* CredentialAutoLockStore.swift in Sources */,
 				7DB9DEA52140D56E00239D31 /* ItemListDisplayStore.swift in Sources */,
 				7D09B2482125DD4800794CA2 /* CredentialDataStore.swift in Sources */,
+				7D2712BA224D758C00E6C4CA /* SyncCredential.swift in Sources */,
 				7DB9DE9D2140CB0900239D31 /* SettingCell.swift in Sources */,
 				39964182214863D5000A1984 /* CredentialUserDefaultStore.swift in Sources */,
 				7DB9DE9E2140CB0B00239D31 /* EmptyPlaceholderCell.swift in Sources */,
@@ -1779,6 +1794,7 @@
 				7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */,
 				D80D41C321FD6D48008A7B11 /* CredentialItemDetailStore.swift in Sources */,
 				7D09B2492125DD6100794CA2 /* BaseDataStore.swift in Sources */,
+				7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */,
 				7D9722C4213461510071D82B /* UIColor+.swift in Sources */,
 				7D078EE92124DC9300D10D1B /* BiometryManager.swift in Sources */,
 				7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */,
@@ -2220,6 +2236,7 @@
 				CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -2246,6 +2263,7 @@
 				CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
@@ -2271,6 +2289,7 @@
 				CODE_SIGN_ENTITLEMENTS = CredentialProvider/CredentialProvider.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
