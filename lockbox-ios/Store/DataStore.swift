@@ -8,27 +8,4 @@ class DataStore: BaseDataStore {
     public static let shared = DataStore()
 
     override func initialized() { }
-
-    override func unlock() {
-        func performUnlock() {
-            do {
-                if let loginsKey = BaseDataStore.loginsKey {
-                    try self.loginsStorage?.unlock(withEncryptionKey: loginsKey)
-                    self.storageStateSubject.onNext(.Unlocked)
-                    self.sync()
-                }
-            } catch let error {
-                print("Sync15: \(error)")
-            }
-        }
-
-        self.storageState
-            .take(1)
-            .subscribe(onNext: {
-                if $0 == .Locked {
-                    performUnlock()
-                }
-            })
-            .disposed(by: self.disposeBag)
-    }
 }

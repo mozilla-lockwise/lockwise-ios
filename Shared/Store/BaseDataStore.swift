@@ -352,15 +352,10 @@ extension BaseDataStore {
     internal func handleLock() {
         Observable.combineLatest(
             self.userDefaults.onAutoLockTime,
-            self.userDefaults.onForceLock,
-            storageState
+            self.userDefaults.onForceLock
             )
             .take(1)
-            .subscribe(onNext: { autoLockSetting, forceLock, state in
-                if state == .Unprepared {
-                    return
-                }
-
+            .subscribe(onNext: { autoLockSetting, forceLock in
                 if forceLock {
                     self.lock()
                 } else if autoLockSetting == .Never {
