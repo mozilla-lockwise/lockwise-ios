@@ -84,10 +84,9 @@ extension CredentialProviderStore {
     }
 
     private func refresh() {
-        Observable.combineLatest(self.dataStore.list, self.accountStore.syncCredentials, self.accountStore.profile)
-            .filter { $0.1 != nil && $0.2 != nil }
+        Observable.combineLatest(self.dataStore.list, self.accountStore.syncCredentials)
+            .filter { !$0.0.isEmpty && $0.1 != nil }
             .map { $0.0 }
-            .filter { $0.isEmpty }
             .bind { _ in
                 self._stateSubject.onNext(.Populated)
             }
@@ -146,12 +145,5 @@ extension CredentialProviderStore {
 
             return Disposables.create()
         }
-    }
-
-    private func credentialIdentityFromLogin(_ login: LoginRecord) -> ASPasswordCredentialIdentity {
-        let serviceIdentifier = ASCredentialServiceIdentifier(identifier: login.hostname, type: .URL)
-        let username = login.username ?? "" // todo: what should the default value be?
-
-        return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: username, recordIdentifier: login.id)
     }
 }

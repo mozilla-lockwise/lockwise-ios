@@ -209,7 +209,7 @@ class BaseDataStore {
                     return items.filter { item in
                         return item.id == id
                     }.first
-                }.asObservable()
+                }
     }
 
     public func unlock() {

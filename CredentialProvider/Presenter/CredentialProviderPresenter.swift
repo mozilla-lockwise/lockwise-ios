@@ -149,12 +149,12 @@ class CredentialProviderPresenter {
 @available(iOS 12, *)
 extension CredentialProviderPresenter {
     private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity, relock: Bool) {
-        guard let guid = credentialIdentity.recordIdentifier else {
+        guard let id = credentialIdentity.recordIdentifier else {
             self.cancelWith(.credentialIdentityNotFound)
             return
         }
 
-        self.dataStore.get(guid)
+        self.dataStore.get(id)
                 .bind { [weak self] login in
                     guard let login = login else {
                         self?.cancelWith(.credentialIdentityNotFound)
