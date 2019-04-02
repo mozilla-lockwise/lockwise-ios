@@ -229,11 +229,7 @@ class BaseDataStore {
     }
 
     private func shutdown() {
-//        do {
-//            try self.loginsStorage?.doDestroy()
-//        } catch let error {
-//            print("Sync15: \(error)")
-//        }
+        self.loginsStorage?.close()
     }
 }
 
