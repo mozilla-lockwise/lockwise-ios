@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+    <device id="ipad12_9rounded" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -14,28 +14,81 @@
         <scene sceneID="6CU-Uj-tKT">
             <objects>
                 <viewController storyboardIdentifier="privacyview" id="u26-pk-ELb" userLabel="PrivacyScreen" customClass="PrivacyView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="QLr-Nd-0UP">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <view key="view" contentMode="scaleToFill" id="Soy-y4-ARZ">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="9rs-kq-AZt">
-                                <rect key="frame" x="-288.5" y="0.0" width="952" height="388"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="XxX-uc-Qbs" userLabel="Lockbox">
-                                <rect key="frame" x="73" y="267" width="230" height="40"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dbD-Gg-4v0">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UoD-in-nWf" userLabel="Ocean">
+                                        <rect key="frame" x="0.0" y="256" width="1024" height="1066"/>
+                                        <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </view>
+                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="ga1-zx-LOZ">
+                                        <rect key="frame" x="36" y="24" width="952" height="388"/>
+                                        <variation key="widthClass=regular" hidden="YES"/>
+                                    </imageView>
+                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie-ipad" translatesAutoresizingMaskIntoConstraints="NO" id="QZW-9d-hOa" userLabel="nessie-wide">
+                                        <rect key="frame" x="0.0" y="184" width="1024" height="144"/>
+                                        <variation key="heightClass=regular-widthClass=regular" hidden="NO"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="emI-93-1Vl" userLabel="Lockbox">
+                                        <rect key="frame" x="397" y="485" width="230" height="56"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="230" id="ge5-gF-gZ2"/>
+                                        </constraints>
+                                        <variation key="widthClass=regular" hidden="YES"/>
+                                    </imageView>
+                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="ePH-hH-xKe" userLabel="Lockbox-wide">
+                                        <rect key="frame" x="349.5" y="401" width="325" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="325" id="dvd-h6-hlr"/>
+                                        </constraints>
+                                        <variation key="widthClass=regular" hidden="NO"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="230" id="PY6-Gi-aDY"/>
+                                    <constraint firstItem="Ox6-sk-qnq" firstAttribute="trailing" secondItem="UoD-in-nWf" secondAttribute="trailing" id="1Ie-yN-giV"/>
+                                    <constraint firstItem="ga1-zx-LOZ" firstAttribute="top" secondItem="Ox6-sk-qnq" secondAttribute="top" id="1e9-Bj-Acd"/>
+                                    <constraint firstItem="ga1-zx-LOZ" firstAttribute="centerX" secondItem="dbD-Gg-4v0" secondAttribute="centerX" id="3er-EP-Qir"/>
+                                    <constraint firstItem="QZW-9d-hOa" firstAttribute="leading" secondItem="Ox6-sk-qnq" secondAttribute="leading" id="G8p-5J-sUT"/>
+                                    <constraint firstItem="UoD-in-nWf" firstAttribute="top" secondItem="QZW-9d-hOa" secondAttribute="centerY" id="I0J-UK-s0J"/>
+                                    <constraint firstItem="emI-93-1Vl" firstAttribute="centerX" secondItem="dbD-Gg-4v0" secondAttribute="centerX" id="ILy-xw-M33"/>
+                                    <constraint firstItem="UoD-in-nWf" firstAttribute="top" secondItem="ga1-zx-LOZ" secondAttribute="centerY" id="IbJ-4y-suD"/>
+                                    <constraint firstItem="ePH-hH-xKe" firstAttribute="centerX" secondItem="Ox6-sk-qnq" secondAttribute="centerX" id="LXI-xK-cPU"/>
+                                    <constraint firstItem="UoD-in-nWf" firstAttribute="leading" secondItem="Ox6-sk-qnq" secondAttribute="leading" id="U9D-5r-uqj"/>
+                                    <constraint firstItem="QZW-9d-hOa" firstAttribute="trailing" secondItem="Ox6-sk-qnq" secondAttribute="trailing" id="c35-na-DzH"/>
+                                    <constraint firstItem="emI-93-1Vl" firstAttribute="top" secondItem="ga1-zx-LOZ" secondAttribute="bottom" constant="73" id="gt2-fu-nHf"/>
+                                    <constraint firstItem="ePH-hH-xKe" firstAttribute="top" secondItem="QZW-9d-hOa" secondAttribute="bottom" constant="73" id="kSH-M3-7Mp"/>
+                                    <constraint firstItem="QZW-9d-hOa" firstAttribute="top" secondItem="Ox6-sk-qnq" secondAttribute="top" constant="160" id="okG-MC-ZRt"/>
+                                    <constraint firstItem="Ox6-sk-qnq" firstAttribute="bottom" secondItem="UoD-in-nWf" secondAttribute="bottom" id="pyv-GF-2PK"/>
                                 </constraints>
-                            </imageView>
+                                <viewLayoutGuide key="safeArea" id="Ox6-sk-qnq"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="I0J-UK-s0J"/>
+                                        <exclude reference="kSH-M3-7Mp"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    <mask key="constraints">
+                                        <include reference="I0J-UK-s0J"/>
+                                        <exclude reference="IbJ-4y-suD"/>
+                                        <include reference="kSH-M3-7Mp"/>
+                                        <exclude reference="gt2-fu-nHf"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="9rs-kq-AZt" firstAttribute="centerX" secondItem="QLr-Nd-0UP" secondAttribute="centerX" id="K6v-a9-byp"/>
-                            <constraint firstItem="XxX-uc-Qbs" firstAttribute="centerX" secondItem="QLr-Nd-0UP" secondAttribute="centerX" id="MAF-gk-6h8"/>
-                            <constraint firstItem="XxX-uc-Qbs" firstAttribute="top" secondItem="9rs-kq-AZt" secondAttribute="bottom" constant="73" id="iVX-bx-UoE"/>
-                            <constraint firstItem="9rs-kq-AZt" firstAttribute="top" secondItem="QLr-Nd-0UP" secondAttribute="top" id="pAl-a4-ruj"/>
+                            <constraint firstItem="dbD-Gg-4v0" firstAttribute="width" secondItem="0pN-V5-SLo" secondAttribute="width" id="dxF-nQ-Iww"/>
+                            <constraint firstItem="dbD-Gg-4v0" firstAttribute="height" secondItem="0pN-V5-SLo" secondAttribute="height" id="nUS-bE-wzf"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="XOp-uo-qiX"/>
+                        <viewLayoutGuide key="safeArea" id="0pN-V5-SLo"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NJw-1a-ZvA" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -45,6 +98,8 @@
     </scenes>
     <resources>
         <image name="lockbox-title" width="448" height="56"/>
+        <image name="lockbox-title-wide" width="325" height="40"/>
         <image name="nessie" width="952" height="388"/>
+        <image name="nessie-ipad" width="1366" height="144"/>
     </resources>
 </document>

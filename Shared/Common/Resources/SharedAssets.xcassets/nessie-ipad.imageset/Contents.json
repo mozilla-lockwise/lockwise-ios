@@ -2,17 +2,16 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Creature-1.png",
+      "filename" : "nessie.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Creature@2x-1.png",
+      "filename" : "nessie@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Creature@3x-1.png",
       "scale" : "3x"
     }
   ],

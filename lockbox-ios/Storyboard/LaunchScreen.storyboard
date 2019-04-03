@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="ipad12_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,27 +15,69 @@
             <objects>
                 <viewController id="01J-lp-oVM" userLabel="Launch View" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lq4-q7-MSJ" userLabel="Ocean">
+                                <rect key="frame" x="0.0" y="252" width="1024" height="1114"/>
+                                <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="wCL-jn-auR">
-                                <rect key="frame" x="-50.5" y="0.0" width="476" height="194"/>
+                                <rect key="frame" x="36" y="20" width="952" height="388"/>
+                                <variation key="widthClass=regular" hidden="YES"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ccq-W9-Eei" userLabel="Lockbox">
-                                <rect key="frame" x="73" y="267" width="230" height="40"/>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie-ipad" translatesAutoresizingMaskIntoConstraints="NO" id="qO8-pl-kvW" userLabel="nessie-wide">
+                                <rect key="frame" x="0.0" y="180" width="1024" height="144"/>
+                                <variation key="widthClass=regular" hidden="NO"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="ccq-W9-Eei" userLabel="Lockbox">
+                                <rect key="frame" x="397" y="481" width="230" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="wCu-ol-s9J"/>
                                 </constraints>
+                                <variation key="widthClass=regular" hidden="YES"/>
+                            </imageView>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="JiV-R4-O2D" userLabel="Lockbox-wide">
+                                <rect key="frame" x="349.5" y="397" width="325" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="325" id="tF6-Bv-1Jl"/>
+                                </constraints>
+                                <variation key="widthClass=regular" hidden="NO"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.93725490196078431" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="wCL-jn-auR" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="Ncv-FK-HVT"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="trailing" secondItem="lq4-q7-MSJ" secondAttribute="trailing" id="2ap-S2-4Lu"/>
+                            <constraint firstItem="qO8-pl-kvW" firstAttribute="trailing" secondItem="Bcu-3y-fUS" secondAttribute="trailing" id="3if-Mn-FCa"/>
+                            <constraint firstItem="JiV-R4-O2D" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="5n5-A7-7ul"/>
+                            <constraint firstItem="lq4-q7-MSJ" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="CCz-UJ-oLT"/>
+                            <constraint firstItem="lq4-q7-MSJ" firstAttribute="top" secondItem="qO8-pl-kvW" secondAttribute="centerY" id="FE7-dj-LNu"/>
+                            <constraint firstItem="wCL-jn-auR" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" id="Ncv-FK-HVT"/>
                             <constraint firstItem="ccq-W9-Eei" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="P2L-sd-fgp"/>
                             <constraint firstItem="ccq-W9-Eei" firstAttribute="top" secondItem="wCL-jn-auR" secondAttribute="bottom" constant="73" id="Pn8-OP-4lw"/>
+                            <constraint firstItem="lq4-q7-MSJ" firstAttribute="top" secondItem="wCL-jn-auR" secondAttribute="centerY" id="SIH-JU-9pp"/>
+                            <constraint firstItem="qO8-pl-kvW" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="160" id="U6h-yK-jRB"/>
+                            <constraint firstItem="qO8-pl-kvW" firstAttribute="leading" secondItem="Bcu-3y-fUS" secondAttribute="leading" id="f20-RF-WtH"/>
+                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="lq4-q7-MSJ" secondAttribute="bottom" id="fht-KP-QmM"/>
+                            <constraint firstItem="JiV-R4-O2D" firstAttribute="top" secondItem="qO8-pl-kvW" secondAttribute="bottom" constant="73" id="oE0-I3-KFh"/>
                             <constraint firstItem="wCL-jn-auR" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="w4k-WE-ibc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="FE7-dj-LNu"/>
+                                <exclude reference="oE0-I3-KFh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
+                            <mask key="constraints">
+                                <include reference="FE7-dj-LNu"/>
+                                <exclude reference="SIH-JU-9pp"/>
+                                <include reference="oE0-I3-KFh"/>
+                                <exclude reference="Pn8-OP-4lw"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -44,7 +86,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="lockbox-title" width="224" height="28"/>
-        <image name="nessie" width="476" height="194"/>
+        <image name="lockbox-title" width="448" height="56"/>
+        <image name="lockbox-title-wide" width="325" height="40"/>
+        <image name="nessie" width="952" height="388"/>
+        <image name="nessie-ipad" width="1366" height="144"/>
     </resources>
 </document>

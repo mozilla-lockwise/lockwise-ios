@@ -1,8 +1,20 @@
 # Release Notes
 
+## 1.4.0 (Build 2908)
+
+_Date: 2019-03-11_
+
+This is a big update and we hope you enjoy it! Here's are the two major changes:
+
+1. We've improved the search experience to use newer iOS features to help keep it stable and working consistently (which means we now require you use iOS 11).
+
+2. We added iPad support so you can browse your logins in a full-screen app. On top of that, you can drag-and-drop your usernames and passwords into websites and apps if you use multitasking mode (Split View, Slide Over).
+
+A big "thanks" to all the contributors that helped along the way!
+
 ## 1.4.0 (Build 2880)
 
-_Date: 2019-02_22_
+_Date: 2019-02-22_
 
 This is a big update and we hope you enjoy it! Here's are the two major changes:
 
