@@ -254,8 +254,8 @@
 		D81526372230CF180056EC54 /* PrivacyScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D81526362230CF180056EC54 /* PrivacyScreen.storyboard */; };
 		D819A4B921BAF988004EE6F3 /* LoginRecord+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */; };
 		D819A4BA21BAF988004EE6F3 /* LoginRecord+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */; };
-		D819A4BC21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */; };
-		D819A4BD21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */; };
+		D819A4BC21BAFA6F004EE6F3 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* File.swift */; };
+		D819A4BD21BAFA6F004EE6F3 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BB21BAFA6F004EE6F3 /* File.swift */; };
 		D819A4BF21BB2622004EE6F3 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BE21BB2622004EE6F3 /* AppInfo.swift */; };
 		D819A4C021BB2622004EE6F3 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4BE21BB2622004EE6F3 /* AppInfo.swift */; };
 		D819A4C221BB2686004EE6F3 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C121BB2686004EE6F3 /* Bytes.swift */; };
@@ -570,7 +570,7 @@
 		D81526342230CDE10056EC54 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		D81526362230CF180056EC54 /* PrivacyScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PrivacyScreen.storyboard; sourceTree = "<group>"; };
 		D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginRecord+.swift"; sourceTree = "<group>"; };
-		D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileAccessor.swift; sourceTree = "<group>"; };
+		D819A4BB21BAFA6F004EE6F3 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		D819A4BE21BB2622004EE6F3 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		D819A4C121BB2686004EE6F3 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift"; sourceTree = "<group>"; };
@@ -754,7 +754,7 @@
 				3931871D214C12C5003C9E4A /* AppearanceHelper.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
 				D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */,
-				D819A4BB21BAFA6F004EE6F3 /* FileAccessor.swift */,
+				D819A4BB21BAFA6F004EE6F3 /* File.swift */,
 				D819A4BE21BB2622004EE6F3 /* AppInfo.swift */,
 				D819A4C121BB2686004EE6F3 /* Bytes.swift */,
 				D85CB82221DED0E100E19118 /* ViewFactory.swift */,
@@ -1414,8 +1414,6 @@
 				D8DA03D6215B29C300656455 /* SetupAutofill.storyboard in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
 				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
-				D85CB82521E0295900E19118 /* LaunchScreen~ipad.storyboard in Resources */,
-				391233892092155300CB0233 /* FxASignIn.js in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
 				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
 				7D578D22207573B000DC9C73 /* SettingList.storyboard in Resources */,
@@ -1676,7 +1674,7 @@
 				7DB9DEA12140CC0300239D31 /* ItemListView.swift in Sources */,
 				7D4396612135D8BD00B96FA9 /* SentryManager.swift in Sources */,
 				D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */,
-				D819A4BC21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */,
+				D819A4BC21BAFA6F004EE6F3 /* File.swift in Sources */,
 				08454B9A21486BCF00328040 /* TelemetryStore.swift in Sources */,
 				7DA4B08C2140141E00C9EFEA /* CredentialWelcomePresenter.swift in Sources */,
 				7AA5400E231CF2E6FB1A5EEA /* BaseItemDetailStore.swift in Sources */,
@@ -1724,7 +1722,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D819A4BD21BAFA6F004EE6F3 /* FileAccessor.swift in Sources */,
+				D819A4BD21BAFA6F004EE6F3 /* File.swift in Sources */,
 				7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */,
 				7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */,
 				7DB9DE9B2140CB0300239D31 /* ItemDetailCell.swift in Sources */,

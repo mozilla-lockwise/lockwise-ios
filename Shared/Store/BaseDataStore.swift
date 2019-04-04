@@ -195,7 +195,6 @@ class BaseDataStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        self.initializeLoginsStorage()
         self.initialized()
     }
 
@@ -265,12 +264,12 @@ extension BaseDataStore {
     private func reset() {
         guard let loginsStorage = self.loginsStorage,
             let loginsKey = BaseDataStore.loginsKey else { return }
-        
+
         queue.async {
             do {
+                self.storageStateSubject.onNext(.Unprepared)
                 try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
                 try loginsStorage.wipeLocal()
-                self.storageStateSubject.onNext(.Unprepared)
             } catch let error {
                 print("Sync15 wipe error: \(error.localizedDescription)")
             }
@@ -338,8 +337,8 @@ extension BaseDataStore {
             print("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
             rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         }
-
-        let files = FileAccessor(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
+        
+        let files = File(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
         self.loginsStorage = LoginsStorage(databasePath: file)

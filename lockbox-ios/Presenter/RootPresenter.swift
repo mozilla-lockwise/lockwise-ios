@@ -111,17 +111,16 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
-            .map({ (storageState) -> [Action]? in
+            .map({ (storageState) -> [Action] in
                 switch storageState {
                 case .Unprepared, .Locked:
                     return [LoginRouteAction.welcome]
                 case .Unlocked:
                     return [MainRouteAction.list, CredentialProviderAction.refresh]
                 default:
-                    return nil
+                    return []
                 }
             })
-            .filterNil()
             .subscribe(onNext: { actions in
                 actions.forEach { dispatcher.dispatch(action: $0) }
             })

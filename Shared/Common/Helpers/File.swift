@@ -12,8 +12,8 @@ import Foundation
  * under the root, this is not strictly enforced: clients can go outside
  * the path using ".." or symlinks.
  */
-open class FileAccessor {
-    open let rootPath: String
+open class File {
+    public let rootPath: String
 
     public init(rootPath: String) {
         self.rootPath = rootPath

@@ -20,7 +20,7 @@ extension LoginRecord {
         let serviceIdentifier = ASCredentialServiceIdentifier(identifier: self.hostname, type: .URL)
         return ASPasswordCredentialIdentity(serviceIdentifier: serviceIdentifier, user: self.username ?? "", recordIdentifier: self.id)
     }
-    
+
     open var passwordCredential: ASPasswordCredential {
         return ASPasswordCredential(user: self.username ?? "", password: self.password)
     }
