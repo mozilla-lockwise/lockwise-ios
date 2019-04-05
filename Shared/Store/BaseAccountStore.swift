@@ -46,6 +46,14 @@ class BaseAccountStore {
         }
 
         fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
+            if let err = err as? FirefoxAccountError,
+                case .Network = err {
+                self?._syncCredentials.onNext(OfflineSyncCredential)
+                // no token refresh has occurred, so we won't worry about re-saving
+                // the firefox account at this stage
+                return
+            }
+
             guard let key = accessToken?.key,
                 let token = accessToken?.token
                 else { return }
