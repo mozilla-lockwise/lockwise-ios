@@ -6,7 +6,6 @@ import AuthenticationServices
 import Foundation
 import RxSwift
 import RxCocoa
-import Storage
 
 @available(iOS 12, *)
 protocol CredentialProviderViewProtocol: class, AlertControllerView {
@@ -56,12 +55,10 @@ class CredentialProviderPresenter {
         self.credentialProviderStore = credentialProviderStore
         self.autoLockStore = autoLockStore
 
-        Observable.combineLatest(self.accountStore.oauthInfo, self.accountStore.profile)
-            .bind { [weak self] (oauthInfo, profile) in
-                if let oauthInfo = oauthInfo,
-                    let profile = profile {
-                    self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(oauthInfo: oauthInfo, fxaProfile: profile))
-                }
+        self.accountStore.syncCredentials
+            .filterNil()
+            .bind { [weak self] (syncInfo) in
+                self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncInfo))
             }
             .disposed(by: self.disposeBag)
 
@@ -73,7 +70,7 @@ class CredentialProviderPresenter {
                     self?.view?.extensionContext.completeExtensionConfigurationRequest()
                 case .loginSelected(let login, let relock):
                     self?.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
-                        self?.dispatcher.dispatch(action: DataStoreAction.touch(id: login.guid))
+                        self?.dispatcher.dispatch(action: DataStoreAction.touch(id: login.id))
 
                         if relock {
                             self?.dispatcher.dispatch(action: DataStoreAction.lock)
@@ -152,12 +149,12 @@ class CredentialProviderPresenter {
 @available(iOS 12, *)
 extension CredentialProviderPresenter {
     private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity, relock: Bool) {
-        guard let guid = credentialIdentity.recordIdentifier else {
+        guard let id = credentialIdentity.recordIdentifier else {
             self.cancelWith(.credentialIdentityNotFound)
             return
         }
 
-        self.dataStore.get(guid)
+        self.dataStore.get(id)
                 .bind { [weak self] login in
                     guard let login = login else {
                         self?.cancelWith(.credentialIdentityNotFound)

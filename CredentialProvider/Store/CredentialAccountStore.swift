@@ -12,9 +12,9 @@ class AccountStore: BaseAccountStore {
     override func initialized() {
         if let accountJSON = self.storedAccountJSON {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
-            self.populateAccountInformation()
+            self.populateAccountInformation(false)
         } else {
-            self._oauthInfo.onNext(nil)
+            self._syncCredentials.onNext(nil)
             self._profile.onNext(nil)
         }
     }

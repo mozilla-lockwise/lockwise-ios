@@ -8,11 +8,7 @@ import Nimble
 import RxTest
 import RxSwift
 import RxBlocking
-import Shared
-import Storage
 import SwiftKeychainWrapper
-import FxAUtils
-import Account
 
 @testable import Lockbox
 
@@ -25,17 +21,13 @@ class DataStoreSpec: QuickSpec {
         }
     }
 
-    class FakeFxALoginHelper: FxALoginHelper {
-
-    }
-
     class FakeKeychainWrapper: KeychainWrapper {
         var saveArguments: [String: String] = [:]
         var saveSuccess: Bool!
         var retrieveResult: [String: String] = [:]
 
         override func set(_ value: String, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> Bool {
-//            self.saveArguments[key] = string
+            self.saveArguments[key] = value
             return saveSuccess
         }
 
@@ -44,10 +36,6 @@ class DataStoreSpec: QuickSpec {
         }
 
         init() { super.init(serviceName: "blah") }
-    }
-
-    private let fakeProfileFactory: ProfileFactory = { reset in
-        return FakeProfile()
     }
 
     private var scheduler: TestScheduler = TestScheduler(initialClock: 1)
@@ -64,22 +52,8 @@ class DataStoreSpec: QuickSpec {
                 self.keychainWrapper = FakeKeychainWrapper()
                 self.subject = DataStore(
                         dispatcher: self.dispatcher,
-                        profileFactory: self.fakeProfileFactory,
                         keychainWrapper: self.keychainWrapper
                 )
-            }
-
-            describe("lifecycleActions") {
-                describe("shutdown") {
-                    beforeEach {
-                        (self.subject.profile as! FakeProfile).isShudownReturnValue = false
-                        self.dispatcher.fakeRegistration.onNext(LifecycleAction.shutdown)
-                    }
-
-                    it("shutdown on profile called") {
-                        expect((self.subject.profile as! FakeProfile).shutdownCalled).to(beTrue())
-                    }
-                }
             }
         }
     }

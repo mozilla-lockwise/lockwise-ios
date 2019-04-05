@@ -5,7 +5,7 @@
 import Foundation
 import Quick
 import Nimble
-import Storage
+import Logins
 
 @testable import Lockbox
 
@@ -22,8 +22,8 @@ class CredentialStatusActionSpec: QuickSpec {
                 }
 
                 it("loginSelected is equalbased on login and relock values") {
-                    let login1 = Login(guid: "fasasdf", hostname: "www.mozilla.com", username: "dogs@dogs.com", password: "meow")
-                    let login2 = Login(guid: ";l;iiojlkljk", hostname: "www.neopets.com", username: "cats@cats.com", password: "woof")
+                    let login1 = LoginRecord(fromJSONDict: ["id": "fasasdf", "hostname": "www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
+                    let login2 = LoginRecord(fromJSONDict: ["id": ";l;iiojlkljk", "hostname": "www.neopets.com", "username": "cats@cats.com", "password": "woof"])
 
                     expect(CredentialStatusAction.loginSelected(login: login1, relock: true)).to(equal(CredentialStatusAction.loginSelected(login: login1, relock: true)))
                     expect(CredentialStatusAction.loginSelected(login: login2, relock: true)).notTo(equal(CredentialStatusAction.loginSelected(login: login1, relock: true)))

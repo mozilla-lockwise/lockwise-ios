@@ -8,10 +8,9 @@ import Nimble
 import RxSwift
 import RxCocoa
 import RxTest
-import Storage
+import Logins
 import FxAClient
 import SwiftKeychainWrapper
-import FxAUtils
 
 @testable import Lockbox
 
@@ -103,20 +102,20 @@ class ItemListPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var itemListStub: PublishSubject<[Login]>
+        var itemListStub: PublishSubject<[LoginRecord]>
         var syncStateStub: PublishSubject<SyncState>
         var storageStateStub: PublishSubject<LoginStoreState>
 
-        init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
-            self.itemListStub = PublishSubject<[Login]>()
+        init(dispatcher: Dispatcher) {
+            self.itemListStub = PublishSubject<[LoginRecord]>()
             self.syncStateStub = PublishSubject<SyncState>()
             self.storageStateStub = PublishSubject<LoginStoreState>()
-            super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
 
             self.disposeBag = DisposeBag()
         }
 
-        override var list: Observable<[Login]> {
+        override var list: Observable<[LoginRecord]> {
             return self.itemListStub.asObservable()
         }
 
@@ -161,10 +160,6 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
-    private let fakeProfileFactory: ProfileFactory = { reset in
-        FakeProfile()
-    }
-
     private var view: FakeItemListView!
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
@@ -181,7 +176,7 @@ class ItemListPresenterSpec: QuickSpec {
             beforeEach {
                 self.view = FakeItemListView()
                 self.dispatcher = FakeDispatcher()
-                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory)
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
                 self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.itemDetailStore = FakeItemDetailStore()
@@ -334,9 +329,9 @@ class ItemListPresenterSpec: QuickSpec {
                     let id1 = "fdsdfsfdsfds"
                     let id2 = "ghfhghgff"
                     let items = [
-                        Login(guid: id1, hostname: webAddress1, username: username, password: ""),
-                        Login(guid: id2, hostname: "", username: "", password: ""),
-                        Login(guid: "ff", hostname: webAddress2, username: "", password: "fdsfdsfd")
+                        LoginRecord(fromJSONDict: ["id": id1, "hostname": webAddress1, "username": username, "password": ""]),
+                        LoginRecord(fromJSONDict: ["id": id2, "hostname": "", "username": "", "password": ""]),
+                        LoginRecord(fromJSONDict: ["id": "ff", "hostname": webAddress2, "username": "", "password": "fdsfdsfd"])
                     ]
 
                     describe("when in wide view with sidebar") {
@@ -634,7 +629,7 @@ class ItemListPresenterSpec: QuickSpec {
             describe("setFilter with populated list") {
                 beforeEach {
                     self.subject.onViewReady()
-                    self.dataStore.itemListStub.onNext([Login(guid: "asdf", hostname: "mozilla.com", username: "asdf", password: "fdsa")])
+                    self.dataStore.itemListStub.onNext([LoginRecord(fromJSONDict: ["id": "asdf", "hostname": "mozilla.com", "username": "asdf", "password": "fdsa"])])
                 }
 
                 it("enables the filter") {

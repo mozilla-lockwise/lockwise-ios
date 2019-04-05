@@ -6,19 +6,16 @@ import Foundation
 import WebKit
 import RxSwift
 import RxCocoa
-import Storage
-import SwiftyJSON
+import Logins
 import FxAClient
 
 enum DataStoreAction: Action {
-    case updateCredentials(oauthInfo: FxAClient.OAuthInfo, fxaProfile: FxAClient.Profile)
+    case updateCredentials(syncInfo: SyncCredential)
     case lock
     case unlock
     case reset
     case sync
     case touch(id: String)
-    case add(item: LoginData)
-    case remove(id: String)
 }
 
 extension DataStoreAction: Equatable {
@@ -30,10 +27,6 @@ extension DataStoreAction: Equatable {
         case (.reset, .reset): return true
         case (.sync, .sync): return true
         case (.touch(let lhID), .touch(let rhID)):
-            return lhID == rhID
-        case (.add, .add):
-            return true
-        case (.remove(let lhID), .remove(let rhID)):
             return lhID == rhID
         default: return false
         }

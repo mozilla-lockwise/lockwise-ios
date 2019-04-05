@@ -8,17 +8,17 @@ import RxCocoa
 import FxAClient
 import SwiftKeychainWrapper
 import WebKit
-import Shared
+import Logins
 
 class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper
 
     internal var fxa: FirefoxAccount?
-    internal var _oauthInfo = ReplaySubject<OAuthInfo?>.create(bufferSize: 1)
+    internal var _syncCredentials = ReplaySubject<SyncCredential?>.create(bufferSize: 1)
     internal var _profile = ReplaySubject<Profile?>.create(bufferSize: 1)
 
-    public var oauthInfo: Observable<OAuthInfo?> {
-        return _oauthInfo.asObservable()
+    public var syncCredentials: Observable<SyncCredential?> {
+        return _syncCredentials.asObservable()
     }
 
     public var profile: Observable<Profile?> {
@@ -41,16 +41,31 @@ class BaseAccountStore {
         fatalError("not implemented!")
     }
 
-    internal func populateAccountInformation() {
+    internal func populateAccountInformation(_ isNew: Bool) {
         guard let fxa = self.fxa else {
             return
         }
 
-        fxa.getOAuthToken(scopes: Constant.fxa.scopes) { (info: OAuthInfo?, _) in
-            self._oauthInfo.onNext(info)
+        fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
+            guard let key = accessToken?.key,
+                let token = accessToken?.token
+                else { return }
 
-            if let json = try? fxa.toJSON() {
-                self.keychainWrapper.set(json, forKey: KeychainKey.accountJSON.rawValue)
+            guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else { return }
+
+            let syncInfo = SyncUnlockInfo(
+                kid: key.kid,
+                fxaAccessToken: token,
+                syncKey: key.k,
+                tokenserverURL: tokenURL!.absoluteString
+            )
+
+            self?._syncCredentials.onNext(
+                SyncCredential(syncInfo: syncInfo, isNew: isNew)
+            )
+
+            if let accountJSON = try? fxa.toJSON() {
+                self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
         }
 

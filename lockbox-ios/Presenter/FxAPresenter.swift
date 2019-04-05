@@ -6,7 +6,6 @@ import Foundation
 import WebKit
 import RxSwift
 import RxCocoa
-import SwiftyJSON
 
 protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)

@@ -7,7 +7,7 @@ import RxSwift
 import AuthenticationServices
 import Quick
 import Nimble
-import Storage
+import Logins
 
 @testable import Lockbox
 
@@ -72,7 +72,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
 
     class FakeDataStore: DataStore {
         let lockedStub = PublishSubject<Bool>()
-        let getStub = PublishSubject<Login?>()
+        let getStub = PublishSubject<LoginRecord?>()
 
         var getGuid: String?
 
@@ -80,7 +80,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
             return self.lockedStub.asObservable()
         }
 
-        override func get(_ id: String) -> Observable<Login?> {
+        override func get(_ id: String) -> Observable<LoginRecord?> {
             self.getGuid = id
             return self.getStub.asObservable()
         }
@@ -125,7 +125,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
 
                 describe("loginSelected:relock:") {
                     let guid = "afsdfdasfdsasf"
-                    let login = Login(guid: guid, hostname: "http://www.mozilla.com", username: "dogs@dogs.com", password: "meow")
+                    let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
 
                     describe("relock = true") {
                         beforeEach {
@@ -248,7 +248,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
                         }
 
                         describe("when the login is not nil and the password fill completes") {
-                            let login = Login(guid: guid, hostname: "http://www.mozilla.com", username: "dogs@dogs.com", password: "meow")
+                            let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
 
                             beforeEach {
                                 self.dataStore.getStub.onNext(login)
@@ -281,7 +281,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
                         }
 
                         describe("when the login is not nil and the password fill completes") {
-                            let login = Login(guid: guid, hostname: "http://www.mozilla.com", username: "dogs@dogs.com", password: "meow")
+                            let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
 
                             beforeEach {
                                 self.dataStore.getStub.onNext(login)

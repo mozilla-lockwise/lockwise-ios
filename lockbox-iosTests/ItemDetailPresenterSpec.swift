@@ -8,9 +8,9 @@ import Nimble
 import RxTest
 import RxSwift
 import RxCocoa
+import Logins
 
 @testable import Lockbox
-import Storage
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
@@ -58,17 +58,17 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var onItemStub: PublishSubject<Login?>
+        var onItemStub: PublishSubject<LoginRecord?>
         var loginIDArg: String?
 
         init() {
-            self.onItemStub = PublishSubject<Login?>()
+            self.onItemStub = PublishSubject<LoginRecord?>()
             super.init()
 
             self.disposeBag = DisposeBag()
         }
 
-        override func get(_ id: String) -> Observable<Login?> {
+        override func get(_ id: String) -> Observable<LoginRecord?> {
             self.loginIDArg = id
             return onItemStub.asObservable()
         }
@@ -198,7 +198,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let username = "some username"
 
                             beforeEach {
-                                let item = Login(guid: "fsdfds", hostname: "www.example.com", username: username, password: "meow")
+                                let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": username, "password": "meow"])
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -211,7 +211,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         describe("when the item does not have a username") {
                             beforeEach {
-                                let item = Login(guid: "", hostname: "", username: "", password: "")
+                                let item = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -245,7 +245,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             let password = "some password"
 
                             beforeEach {
-                                let item = Login(guid: "sdfdsf", hostname: "www.example.com", username: "", password: password)
+                                let item = LoginRecord(fromJSONDict: ["id": "sdfdsf", "hostname": "www.example.com", "username": "", "password": password])
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -258,7 +258,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         describe("when the item does not have a password") {
                             beforeEach {
-                                let item = Login(guid: "", hostname: "", username: "", password: "")
+                                let item = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
                                 self.dataStore.onItemStub.onNext(item)
                             }
 
@@ -291,7 +291,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let webAddress = "https://www.mozilla.org"
 
                         beforeEach {
-                            let item = Login(guid: "sdfdfsfd", hostname: webAddress, username: "ffs", password: "ilikecatz")
+                            let item = LoginRecord(fromJSONDict: ["id": "sdfdfsfd", "hostname": webAddress, "username": "ffs", "password": "ilikecatz"])
 
                             self.dataStore.onItemStub.onNext(item)
                         }
@@ -323,7 +323,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             describe(".onViewReady") {
-                let item = Login(guid: "sdfsdfdfs", hostname: "www.cats.com", username: "meow", password: "iluv kats")
+                let item = LoginRecord(fromJSONDict: ["id": "sdfsdfdfs", "hostname": "www.cats.com", "username": "meow", "password": "iluv kats"])
 
                 beforeEach {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
@@ -433,7 +433,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("when there is no title, origin, username, or notes") {
                     beforeEach {
-                        let emptyItem = Login(guid: "", hostname: "", username: "", password: "")
+                        let emptyItem = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
                         self.dataStore.onItemStub.onNext(emptyItem)
                         self.itemDetailStore.itemDetailDisplayStub
                                 .onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
@@ -519,7 +519,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 beforeEach {
                     self.itemDetailStore.itemDetailIdStub.onNext("1234")
                     self.subject.dndStarted(value: "Username")
-                    let item = Login(guid: "1234", hostname: "www.example.com", username: "asdf", password: "meow")
+                    let item = LoginRecord(fromJSONDict: ["id": "1234", "hostname": "www.example.com", "username": "asdf", "password": "meow"])
                     self.dataStore.onItemStub.onNext(item)
                 }
 

@@ -5,7 +5,6 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import Storage
 
 class SizeClassStore {
     internal let disposeBag = DisposeBag()

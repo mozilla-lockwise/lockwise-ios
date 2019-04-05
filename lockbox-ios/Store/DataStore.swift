@@ -8,22 +8,4 @@ class DataStore: BaseDataStore {
     public static let shared = DataStore()
 
     override func initialized() { }
-
-    override func unlock() {
-        func performUnlock() {
-            self.storageStateSubject.onNext(.Unlocked)
-            self.profile.reopen()
-            self.profile.syncManager?.beginTimedSyncs()
-            self.profile.syncManager.syncEverything(why: .startup)
-        }
-
-        self.storageState
-            .take(1)
-            .subscribe(onNext: {
-                if $0 == .Locked {
-                    performUnlock()
-                }
-            })
-            .disposed(by: self.disposeBag)
-    }
 }

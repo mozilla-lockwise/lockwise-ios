@@ -7,8 +7,6 @@ import Quick
 import Nimble
 import RxSwift
 import RxCocoa
-import Account
-import FxAUtils
 
 @testable import Lockbox
 
