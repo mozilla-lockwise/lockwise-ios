@@ -6,7 +6,7 @@ import WebKit
 import UIKit
 import RxSwift
 import RxCocoa
-import FxAClient
+import MozillaAppServices
 
 class FxAView: UIViewController {
     internal var presenter: FxAPresenter?

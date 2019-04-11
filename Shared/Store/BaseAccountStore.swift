@@ -5,10 +5,9 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 import WebKit
-import Logins
 
 class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper

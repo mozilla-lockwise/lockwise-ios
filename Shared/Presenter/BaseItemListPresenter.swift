@@ -6,7 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Logins
+import MozillaAppServices
 
 protocol BaseItemListViewProtocol: class {
     func bind(items: Driver<[ItemSectionModel]>)

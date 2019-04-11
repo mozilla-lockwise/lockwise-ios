@@ -5,7 +5,7 @@
 import Foundation
 import AuthenticationServices
 import RxSwift
-import FxAClient
+import MozillaAppServices
 import RxCocoa
 import LocalAuthentication
 

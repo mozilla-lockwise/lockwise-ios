@@ -9,7 +9,7 @@ import Nimble
 import WebKit
 import RxTest
 import RxSwift
-import FxAClient
+import MozillaAppServices
 
 @testable import Lockbox
 

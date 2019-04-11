@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 
 class AccountStore: BaseAccountStore {

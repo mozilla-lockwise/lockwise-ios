@@ -5,7 +5,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import Logins
+import MozillaAppServices
 
 class ItemDetailStore: BaseItemDetailStore {
     public static let shared = ItemDetailStore()

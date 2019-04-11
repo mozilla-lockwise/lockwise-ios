@@ -3,8 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import FxAClient
-import Logins
+import MozillaAppServices
 
 extension SyncUnlockInfo: Equatable {
     public static func ==(lhs: SyncUnlockInfo, rhs: SyncUnlockInfo) -> Bool {

@@ -8,8 +8,7 @@ import Nimble
 import RxSwift
 import RxCocoa
 import RxTest
-import Logins
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 
 @testable import Lockbox

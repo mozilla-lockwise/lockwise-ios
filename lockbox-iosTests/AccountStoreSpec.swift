@@ -7,7 +7,7 @@ import Nimble
 import RxSwift
 import RxTest
 import RxBlocking
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 import WebKit
 

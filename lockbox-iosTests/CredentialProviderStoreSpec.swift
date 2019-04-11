@@ -9,7 +9,7 @@ import AuthenticationServices
 import RxSwift
 import RxCocoa
 import RxBlocking
-import Logins
+import MozillaAppServices
 
 @testable import Lockbox
 

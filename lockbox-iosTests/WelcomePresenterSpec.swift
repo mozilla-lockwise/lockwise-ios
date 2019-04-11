@@ -11,7 +11,7 @@ import RxTest
 import UIKit
 import CoreGraphics
 import LocalAuthentication
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 
 @testable import Lockbox
@@ -89,10 +89,10 @@ class WelcomePresenterSpec: QuickSpec {
     }
 
     class FakeAccountStore: AccountStore {
-        var fakeProfile = PublishSubject<FxAClient.Profile?>()
+        var fakeProfile = PublishSubject<Profile?>()
         var fakeOldAccountInformation = PublishSubject<Bool>()
 
-        override var profile: Observable<FxAClient.Profile?> {
+        override var profile: Observable<Profile?> {
             return self.fakeProfile.asObservable()
         }
 

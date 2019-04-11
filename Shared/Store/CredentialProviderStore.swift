@@ -6,7 +6,7 @@ import Foundation
 import AuthenticationServices
 import RxSwift
 import RxCocoa
-import Logins
+import MozillaAppServices
 
 enum CredentialProviderStoreState {
     case NotAllowed, Populating, Populated, Allowed
