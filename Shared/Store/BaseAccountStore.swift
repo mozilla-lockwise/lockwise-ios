@@ -11,6 +11,7 @@ import WebKit
 
 class BaseAccountStore {
     internal var keychainWrapper: KeychainWrapper
+    internal let networkHelper: NetworkHelper
 
     internal var fxa: FirefoxAccount?
     internal var _syncCredentials = ReplaySubject<SyncCredential?>.create(bufferSize: 1)
@@ -30,8 +31,10 @@ class BaseAccountStore {
         return self.keychainWrapper.string(forKey: key)
     }
 
-    init(keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain) {
+    init(keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
+         networkHelper: NetworkHelper = NetworkHelper.shared) {
         self.keychainWrapper = keychainWrapper
+        self.networkHelper = networkHelper
 
         self.initialized()
     }
@@ -42,6 +45,11 @@ class BaseAccountStore {
 
     internal func populateAccountInformation(_ isNew: Bool) {
         guard let fxa = self.fxa else {
+            return
+        }
+
+        if !networkHelper.isConnectedToNetwork {
+            self._syncCredentials.onNext(OfflineSyncCredential)
             return
         }
 
