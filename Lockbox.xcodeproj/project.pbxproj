@@ -141,6 +141,8 @@
 		7D09B24F2125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
+		7D11623A225FAF11009097C7 /* AutoLockSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D116239225FAF11009097C7 /* AutoLockSupport.swift */; };
+		7D11623B225FAF11009097C7 /* AutoLockSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D116239225FAF11009097C7 /* AutoLockSupport.swift */; };
 		7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D116242225FE11C009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D1B1ACE1F9902A500C1F5FF /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */; };
@@ -486,6 +488,7 @@
 		7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialDataStore.swift; sourceTree = "<group>"; };
 		7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUserDefaultStore.swift; sourceTree = "<group>"; };
 		7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
+		7D116239225FAF11009097C7 /* AutoLockSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSupport.swift; sourceTree = "<group>"; };
 		7D11623E225FDD27009097C7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		7D1B1A8D1F98F86600C1F5FF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -761,6 +764,7 @@
 				D819A4BE21BB2622004EE6F3 /* AppInfo.swift */,
 				D819A4C121BB2686004EE6F3 /* Bytes.swift */,
 				D85CB82221DED0E100E19118 /* ViewFactory.swift */,
+				7D116239225FAF11009097C7 /* AutoLockSupport.swift */,
 				7D897EAE2261074700257946 /* NetworkProtocols.swift */,
 			);
 			path = Helpers;
@@ -1685,6 +1689,7 @@
 				7AA54B00F88A2EF6FDFA2892 /* SettingNavigationController.swift in Sources */,
 				7AA54C0AFF50DFF42D405014 /* BaseSettingAction.swift in Sources */,
 				7AA542395C9C6379C27909B5 /* BaseUserDefaults+.swift in Sources */,
+				7D11623A225FAF11009097C7 /* AutoLockSupport.swift in Sources */,
 				7AA54D3D19DB0AC7D0B59812 /* BiometryManager.swift in Sources */,
 				7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */,
 				7AA546B578EBABE3543AB466 /* TelemetryAction.swift in Sources */,
@@ -1723,6 +1728,7 @@
 				7D09B2482125DD4800794CA2 /* CredentialDataStore.swift in Sources */,
 				7D2712BA224D758C00E6C4CA /* SyncCredential.swift in Sources */,
 				7DB9DE9D2140CB0900239D31 /* SettingCell.swift in Sources */,
+				7D11623B225FAF11009097C7 /* AutoLockSupport.swift in Sources */,
 				39964182214863D5000A1984 /* CredentialUserDefaultStore.swift in Sources */,
 				7DB9DE9E2140CB0B00239D31 /* EmptyPlaceholderCell.swift in Sources */,
 				7DB9DE982140C68000239D31 /* BaseItemListView.swift in Sources */,
