@@ -5,10 +5,9 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 import WebKit
-import Logins
 
 /* These UserDefault keys are maintained separately from the `UserDefaultKey`
  * enum in BaseConstants.swift because, for the time being, they are only

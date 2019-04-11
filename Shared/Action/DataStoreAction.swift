@@ -6,8 +6,7 @@ import Foundation
 import WebKit
 import RxSwift
 import RxCocoa
-import Logins
-import FxAClient
+import MozillaAppServices
 
 enum DataStoreAction: Action {
     case updateCredentials(syncInfo: SyncCredential)

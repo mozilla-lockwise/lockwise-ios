@@ -5,7 +5,7 @@
 import Foundation
 import Quick
 import Nimble
-import Logins
+import MozillaAppServices
 
 @testable import Lockbox
 

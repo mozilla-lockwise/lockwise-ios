@@ -8,7 +8,7 @@ import Nimble
 import AuthenticationServices
 import RxSwift
 import RxCocoa
-import FxAClient
+import MozillaAppServices
 
 @testable import Lockbox
 

@@ -6,8 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import UIKit
-import FxAClient
-import Logins
+import MozillaAppServices
 
 protocol RootViewProtocol: class {
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool

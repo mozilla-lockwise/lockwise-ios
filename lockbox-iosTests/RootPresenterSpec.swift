@@ -8,7 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import UIKit
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 
 @testable import Lockbox
@@ -158,7 +158,7 @@ class RootPresenterSpec: QuickSpec {
 
     class FakeAccountStore: AccountStore {
         let syncCredStub = PublishSubject<SyncCredential?>()
-        let profileInfoStub = PublishSubject<FxAClient.Profile?>()
+        let profileInfoStub = PublishSubject<Profile?>()
 
         override func initialized() {
             //noop
@@ -168,7 +168,7 @@ class RootPresenterSpec: QuickSpec {
             return self.syncCredStub.asObservable()
         }
 
-        override var profile: Observable<FxAClient.Profile?> {
+        override var profile: Observable<Profile?> {
             return self.profileInfoStub.asObservable()
         }
     }

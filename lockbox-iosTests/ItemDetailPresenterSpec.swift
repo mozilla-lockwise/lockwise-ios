@@ -8,7 +8,7 @@ import Nimble
 import RxTest
 import RxSwift
 import RxCocoa
-import Logins
+import MozillaAppServices
 
 @testable import Lockbox
 

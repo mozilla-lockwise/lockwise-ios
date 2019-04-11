@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 import RxOptional
 import CoreGraphics
-import FxAClient
+import MozillaAppServices
 
 class ItemListPresenter: BaseItemListPresenter {
     weak var view: ItemListViewProtocol? {

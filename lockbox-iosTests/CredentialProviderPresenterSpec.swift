@@ -7,7 +7,7 @@ import RxSwift
 import AuthenticationServices
 import Quick
 import Nimble
-import Logins
+import MozillaAppServices
 
 @testable import Lockbox
 

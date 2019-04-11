@@ -3,11 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import FxAClient
+import MozillaAppServices
 import RxSwift
 import RxCocoa
 import RxOptional
-import Logins
 import SwiftKeychainWrapper
 
 enum SyncError: Error {
