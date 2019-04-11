@@ -139,8 +139,8 @@
 		7D09B24F2125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
-		7D11623C225FB659009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
+		7D116242225FE11C009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D1B1ACE1F9902A500C1F5FF /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */; };
 		7D1B1ACF1F9902A800C1F5FF /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8D1F98F86600C1F5FF /* Quick.framework */; };
 		7D1B1AD11F9902B300C1F5FF /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7D1B1A8D1F98F86600C1F5FF /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -222,7 +222,6 @@
 		7DB9DEA52140D56E00239D31 /* ItemListDisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */; };
 		7DC3899C20B600820057929D /* ItemDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC3899E20B600820057929D /* ItemDetail.storyboard */; };
 		7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC75D7B206AD01C007CDDBB /* AccountSetting.storyboard */; };
-		7DDEAA612124B0B000A7D521 /* Frameworks.xcfilelist in Resources */ = {isa = PBXBuildFile; fileRef = 7DDEAA602124B0B000A7D521 /* Frameworks.xcfilelist */; };
 		7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CDEA56C47263160AD0E /* Dispatcher.swift */; };
 		7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
 		7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D320B3420360F9000891F73 /* RxDataSources.framework */; };
@@ -367,10 +366,7 @@
 		2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MappaMundi.framework; path = Carthage/Build/iOS/MappaMundi.framework; sourceTree = "<group>"; };
 		2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockBoxScreenGraph.swift; sourceTree = "<group>"; };
 		2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
-		391233712090E56E00CB0233 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
-		391233802090E60A00CB0233 /* XCGLogger.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCGLogger.framework; path = Carthage/Build/iOS/XCGLogger.framework; sourceTree = "<group>"; };
-		391233832090E63000CB0233 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		3931871D214C12C5003C9E4A /* AppearanceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceHelper.swift; sourceTree = "<group>"; };
 		39318721214C19A8003C9E4A /* UIButton+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		3996417D21482068000A1984 /* CredentialItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialItemListView.swift; sourceTree = "<group>"; };
@@ -473,7 +469,6 @@
 		7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+.swift"; sourceTree = "<group>"; };
 		7AA54FFBEBCACA7A506F5C16 /* DispatcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatcherSpec.swift; sourceTree = "<group>"; };
 		7B50F370215A52B900ADC28D /* ScrollAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollAction.swift; sourceTree = "<group>"; };
-		7D01A0B5224954C5008DF59C /* Logins.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Logins.framework; path = Carthage/Build/iOS/Logins.framework; sourceTree = "<group>"; };
 		7D078EE62124DC5800D10D1B /* UserDefaults+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
 		7D078EEA2124DCE100D10D1B /* SettingAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAction.swift; sourceTree = "<group>"; };
 		7D078EEE2124DF6500D10D1B /* BaseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAccountStore.swift; sourceTree = "<group>"; };
@@ -497,7 +492,6 @@
 		7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
 		7D2712B8224D70E900E6C4CA /* SyncCredential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCredential.swift; sourceTree = "<group>"; };
 		7D2D2F0A20C5A8B300339D9B /* OnboardingConfirmation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = OnboardingConfirmation.storyboard; sourceTree = "<group>"; };
-		7D2D8148224A70B00032CF36 /* FxA.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxA.framework; path = Carthage/Build/iOS/FxA.framework; sourceTree = "<group>"; };
 		7D320B3420360F9000891F73 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
 		7D43964F2135AFBD00B96FA9 /* CredentialProviderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderStore.swift; sourceTree = "<group>"; };
 		7D4396522135B0C200B96FA9 /* CredentialProviderAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderAction.swift; sourceTree = "<group>"; };
@@ -515,7 +509,6 @@
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D64EC65211B57F200D726F4 /* Firefox Lockbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Firefox Lockbox.entitlements"; sourceTree = "<group>"; };
 		7D6FB87A204F00E2005E23AA /* StatusAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAlert.swift; sourceTree = "<group>"; };
-		7D73BD6F20D3135E0075D1CE /* FxAClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FxAClient.framework; path = Carthage/Build/iOS/FxAClient.framework; sourceTree = "<group>"; };
 		7D7AD94A204EFBA4002D35EE /* StatusAlert.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatusAlert.xib; sourceTree = "<group>"; };
 		7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderStoreSpec.swift; sourceTree = "<group>"; };
 		7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASCredentialIdentityStore+.swift"; sourceTree = "<group>"; };
@@ -548,7 +541,6 @@
 		7DC389A020B600830057929D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemDetail.strings; sourceTree = "<group>"; };
 		7DC75D7A206AD01C007CDDBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AccountSetting.storyboard; sourceTree = "<group>"; };
 		7DC75D7D206AD01E007CDDBB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AccountSetting.strings; sourceTree = "<group>"; };
-		7DDEAA602124B0B000A7D521 /* Frameworks.xcfilelist */ = {isa = PBXFileReference; lastKnownFileType = text.xcfilelist; path = Frameworks.xcfilelist; sourceTree = "<group>"; };
 		7DDEAA702124CEB100A7D521 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAccountStore.swift; sourceTree = "<group>"; };
 		7DEA1C4120362E09008AD7C4 /* Differentiator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differentiator.framework; path = Carthage/Build/iOS/Differentiator.framework; sourceTree = "<group>"; };
@@ -652,8 +644,8 @@
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
 				7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */,
 				7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */,
-				7D11623C225FB659009097C7 /* MozillaAppServices.framework in Frameworks */,
 				7D4396572135D79800B96FA9 /* Sentry.framework in Frameworks */,
+				7D116242225FE11C009097C7 /* MozillaAppServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,18 +965,12 @@
 			children = (
 				7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */,
 				7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */,
-				7D2D8148224A70B00032CF36 /* FxA.framework */,
-				7D01A0B5224954C5008DF59C /* Logins.framework */,
 				7D4396562135D79700B96FA9 /* Sentry.framework */,
 				D8551EBD211954E00056B24A /* AdjustSdk.framework */,
 				D8551EBB211950BF0056B24A /* iAd.framework */,
 				D8551EB9211950AF0056B24A /* AdSupport.framework */,
 				2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */,
-				7D73BD6F20D3135E0075D1CE /* FxAClient.framework */,
-				391233832090E63000CB0233 /* Alamofire.framework */,
-				391233802090E60A00CB0233 /* XCGLogger.framework */,
 				391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */,
-				391233712090E56E00CB0233 /* SwiftyJSON.framework */,
 				7D92DAF220586FBA00195A1B /* RxOptional.framework */,
 				7DEA1C4120362E09008AD7C4 /* Differentiator.framework */,
 				7D320B3420360F9000891F73 /* RxDataSources.framework */,
@@ -1149,7 +1135,6 @@
 				7D9722DE21349B920071D82B /* Action */,
 				7D09B2542125FDBB00794CA2 /* Presenter */,
 				7D09B2532125FDB600794CA2 /* View */,
-				7DDEAA6D2124CBF100A7D521 /* Resources */,
 				7DE5896C2125D200005CFF47 /* Store */,
 				7D80F30C2118DCC700DA191B /* MainInterface.storyboard */,
 				7D80F30F2118DCC700DA191B /* Info.plist */,
@@ -1202,22 +1187,6 @@
 				7D9722E32134A6770071D82B /* CredentialWelcome.storyboard */,
 			);
 			path = Storyboard;
-			sourceTree = "<group>";
-		};
-		7DDEAA6D2124CBF100A7D521 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				7DDEAA6E2124CC0000A7D521 /* FileLists */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		7DDEAA6E2124CC0000A7D521 /* FileLists */ = {
-			isa = PBXGroup;
-			children = (
-				7DDEAA602124B0B000A7D521 /* Frameworks.xcfilelist */,
-			);
-			path = FileLists;
 			sourceTree = "<group>";
 		};
 		7DE5896C2125D200005CFF47 /* Store */ = {
@@ -1433,7 +1402,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D80F30E2118DCC700DA191B /* MainInterface.storyboard in Resources */,
-				7DDEAA612124B0B000A7D521 /* Frameworks.xcfilelist in Resources */,
 				7D9722E52134A6770071D82B /* CredentialWelcome.storyboard in Resources */,
 				7D9722D42134872E0071D82B /* Welcome.storyboard in Resources */,
 				7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */,
@@ -1477,7 +1445,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/MozillaAppServices.framework",
 			);
 			name = "Run Script";
 			outputPaths = (
@@ -1491,7 +1458,6 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AdjustSdk.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sentry.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/MozillaAppServices.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
