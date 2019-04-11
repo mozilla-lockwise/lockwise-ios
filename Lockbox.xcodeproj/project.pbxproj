@@ -142,6 +142,7 @@
 		7D09B24F2125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
+		7D11623F225FDD27009097C7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11623E225FDD27009097C7 /* SystemConfiguration.framework */; };
 		7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D116242225FE11C009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D1B1ACE1F9902A500C1F5FF /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */; };
@@ -483,6 +484,7 @@
 		7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialDataStore.swift; sourceTree = "<group>"; };
 		7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUserDefaultStore.swift; sourceTree = "<group>"; };
 		7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
+		7D11623E225FDD27009097C7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		7D1B1A8D1F98F86600C1F5FF /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockboxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -639,6 +641,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D11623F225FDD27009097C7 /* SystemConfiguration.framework in Frameworks */,
 				7D07FE92225E2DB60000B030 /* Network.framework in Frameworks */,
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
@@ -970,6 +973,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7D11623E225FDD27009097C7 /* SystemConfiguration.framework */,
 				7D07FE91225E2DB60000B030 /* Network.framework */,
 				7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */,
 				7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */,

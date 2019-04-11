@@ -52,6 +52,13 @@ class AutoLockStore: BaseAutoLockStore {
             })
             .disposed(by: self.disposeBag)
 
+        self.dispatcher.register
+            .filterByType(class: ExternalWebsiteRouteAction.self)
+            .subscribe(onNext: { [weak self] _ in
+                self?.pauseTimer()
+            })
+            .disposed(by: self.disposeBag)
+
         Observable.combineLatest(self.dispatcher.register, self.dataStore.locked)
             .filter { !$0.1 }
             .map { $0.0 }

@@ -6,6 +6,7 @@ import Foundation
 import Network
 import RxSwift
 import RxCocoa
+import SystemConfiguration
 
 class NetworkHelper {
     static let shared = NetworkHelper()
@@ -39,6 +40,5 @@ class NetworkHelper {
         } else {
             // Fallback on earlier versions
         }
-
     }
 }
