@@ -146,22 +146,11 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
     }
 
-    func test5SendUsageDataSwitch() {
-//        navigator.goto(Screen.SettingsMenu)
-//        // Disable the send usage data
-//        navigator.performAction(Action.SendUsageData)
-//        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "0")
-//
-//        // Enable it again
-//        navigator.performAction(Action.SendUsageData)
-//        XCTAssertEqual(app.switches["sendUsageData.switch"].value as? String, "1")
-    }
-
     func test6SortEntries() {
         navigator.goto(Screen.LockboxMainPage)
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"], timeout: 10)
         // Checking if doing the steps directly works on bb
-        waitforExistence(app.buttons["sorting.button"])
+        waitforExistence(app.buttons["sorting.button"], timeout: 3)
         app.buttons["sorting.button"].tap()
         waitforExistence(app.buttons["Recently Used"])
         app.buttons["Recently Used"].tap()
@@ -196,7 +185,7 @@ class LockboxXCUITests: BaseTestCase {
         app.activate()
         waitforExistence(app.tables.cells.staticTexts["iosmztest@gmail.com"])
     }
-
+    
     func test8SearchOptions() {
         navigator.goto(Screen.LockboxMainPage)
         sleep(5)
@@ -206,18 +195,29 @@ class LockboxXCUITests: BaseTestCase {
         searchTextField.typeText("a")
         // There should be two matches
         let twoMatches = app.tables.cells.count
-        XCTAssertEqual(twoMatches, 2)
-
+        if  iPad() {
+            XCTAssertEqual(twoMatches, 5)
+        } else {
+            XCTAssertEqual(twoMatches, 2)
+        }
+        
         // There should be one match
         searchTextField.typeText("cc")
         let oneMatches = app.tables.cells.count
-        XCTAssertEqual(oneMatches, 1)
-
+        if  iPad() {
+            XCTAssertEqual(oneMatches, 4)
+        } else {
+            XCTAssertEqual(oneMatches, 1)
+        }
         // There should not be any matches
         searchTextField.typeText("x")
         waitforExistence(app.cells.staticTexts["noMatchingEntries.label"])
         let noMatches = app.tables.cells.count
-        XCTAssertEqual(noMatches, 1)
+        if  iPad() {
+            XCTAssertEqual(noMatches, 4)
+        } else {
+            XCTAssertEqual(noMatches, 1)
+        }
 
         // Tap on cacel
         app.buttons["Cancel"].tap()
