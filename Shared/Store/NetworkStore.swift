@@ -24,12 +24,10 @@ class NetworkStore {
         return _connectedToNetwork.value
     }
 
-    init(
-        reachability: ReachabilityProtocol? = Reachability(queueQoS: .background, targetQueue: DispatchQueue.main)
-        ) {
+    init(reachability: ReachabilityProtocol? = Reachability()) {
         self.reachability = reachability
 
-        self.reachability?.whenReachable = { [weak self] _ in
+        self.reachability?.whenReachable = { [weak self] reachable in
             self?._connectedToNetwork.accept(true)
         }
 

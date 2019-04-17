@@ -130,7 +130,6 @@
 		7D07A31D213885C900772283 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
 		7D07A31F2138863400772283 /* AutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07A31E2138863400772283 /* AutoLockStore.swift */; };
 		7D07A321213886C100772283 /* CredentialAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07A320213886C100772283 /* CredentialAutoLockStore.swift */; };
-		7D07FE92225E2DB60000B030 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D07FE91225E2DB60000B030 /* Network.framework */; };
 		7D07FE94225E32C40000B030 /* NetworkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07FE93225E32C40000B030 /* NetworkStore.swift */; };
 		7D07FE95225E32C40000B030 /* NetworkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07FE93225E32C40000B030 /* NetworkStore.swift */; };
 		7D09B2482125DD4800794CA2 /* CredentialDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */; };
@@ -143,7 +142,6 @@
 		7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
 		7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
-		7D11623F225FDD27009097C7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D11623E225FDD27009097C7 /* SystemConfiguration.framework */; };
 		7D116242225FE11C009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
 		7D1B1ACE1F9902A500C1F5FF /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */; };
 		7D1B1ACF1F9902A800C1F5FF /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1B1A8D1F98F86600C1F5FF /* Quick.framework */; };
@@ -648,8 +646,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D11623F225FDD27009097C7 /* SystemConfiguration.framework in Frameworks */,
-				7D07FE92225E2DB60000B030 /* Network.framework in Frameworks */,
 				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
 				7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */,

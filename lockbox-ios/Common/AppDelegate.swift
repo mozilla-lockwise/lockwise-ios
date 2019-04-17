@@ -15,15 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        if !isRunningTest {
-            _ = AccountStore.shared
-            _ = DataStore.shared
-            _ = AutoLockStore.shared
-            _ = ExternalLinkStore.shared
-            _ = UserDefaultStore.shared
-            if #available(iOS 12, *) {
-                _ = CredentialProviderStore.shared
-            }
+        _ = AccountStore.shared
+        _ = DataStore.shared
+        _ = AutoLockStore.shared
+        _ = ExternalLinkStore.shared
+        _ = UserDefaultStore.shared
+        if #available(iOS 12, *) {
+            _ = CredentialProviderStore.shared
         }
         return true
     }

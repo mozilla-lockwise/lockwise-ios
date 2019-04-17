@@ -14,11 +14,11 @@ import Reachability
 class NetworkStoreSpec: QuickSpec {
     class FakeReachability: ReachabilityProtocol {
         var startCalled = false
-        
+
         var whenReachable: Reachability.NetworkReachable?
-        
+
         var whenUnreachable: Reachability.NetworkUnreachable?
-        
+
         func startNotifier() throws {
             startCalled = true
         }
@@ -27,7 +27,7 @@ class NetworkStoreSpec: QuickSpec {
     var dispatcher: Dispatcher!
     var reachability: FakeReachability!
     var subject: NetworkStore!
-    
+
     override func spec() {
         describe("NetworkStore") {
             beforeEach {
@@ -35,10 +35,24 @@ class NetworkStoreSpec: QuickSpec {
                 self.reachability = FakeReachability()
                 self.subject = NetworkStore(reachability: self.reachability)
             }
-            
-            describe("init") {
-                it("calls start") {
-                    
+
+            describe("reachable call") {
+                beforeEach {
+                    self.reachability.whenReachable!(Reachability()!)
+                }
+
+                it("updates the connectedtonetwork status") {
+                    expect(self.subject.isConnectedToNetwork).to(beTrue())
+                }
+            }
+
+            describe("unreachable call") {
+                beforeEach {
+                    self.reachability.whenUnreachable!(Reachability()!)
+                }
+
+                it("updates the connectedtonetwork status") {
+                    expect(self.subject.isConnectedToNetwork).to(beFalse())
                 }
             }
         }
