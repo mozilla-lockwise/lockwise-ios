@@ -82,7 +82,7 @@ class BaseDataStore {
 
     private let keychainWrapper: KeychainWrapper
     internal let userDefaults: UserDefaults
-    private let networkHelper: NetworkHelper
+    private let networkStore: NetworkStore
     internal let dispatcher: Dispatcher
     private let application: UIApplication
     internal var syncUnlockInfo: SyncUnlockInfo?
@@ -126,13 +126,13 @@ class BaseDataStore {
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
          userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!,
          accountStore: BaseAccountStore = AccountStore.shared,
-         networkHelper: NetworkHelper = NetworkHelper.shared,
+         networkStore: NetworkStore = NetworkStore.shared,
          application: UIApplication = UIApplication.shared) {
         self.keychainWrapper = keychainWrapper
         self.userDefaults = userDefaults
         self.application = application
         self.accountStore = accountStore
-        self.networkHelper = networkHelper
+        self.networkStore = networkStore
 
         self.dispatcher = dispatcher
 
@@ -293,7 +293,7 @@ extension BaseDataStore {
             !loginsStorage.isLocked()
             else { return }
 
-        if (networkHelper.isConnectedToNetwork) {
+        if (networkStore.isConnectedToNetwork) {
             self.syncSubject.onNext(SyncState.Syncing)
         } else {
             self.syncSubject.onNext(SyncState.Synced)

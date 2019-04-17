@@ -52,6 +52,7 @@ class AccountStore: BaseAccountStore {
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
+         networkStore: NetworkStore = NetworkStore.shared,
          keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          urlCache: URLCache = URLCache.shared,
          webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
@@ -60,7 +61,7 @@ class AccountStore: BaseAccountStore {
         self.urlCache = urlCache
         self.webData = webData
 
-        super.init(keychainWrapper: keychainWrapper)
+        super.init(keychainWrapper: keychainWrapper, networkStore: networkStore)
     }
 
     override func initialized() {

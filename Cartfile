@@ -9,3 +9,4 @@ github "mozilla-mobile/MappaMundi" "master"
 github "mozilla/application-services" "v0.22.1"
 github "adjust/ios_sdk" ~> 4.14.1
 github "getsentry/sentry-cocoa" "4.1.0"
+github "ashleymills/Reachability.swift" "v4.3.0"

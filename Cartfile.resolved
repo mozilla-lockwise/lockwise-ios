@@ -5,6 +5,7 @@ github "RxSwiftCommunity/RxDataSources" "81b709c28b8ceb5cddc8c2262d009ea8735f089
 github "RxSwiftCommunity/RxOptional" "3.6.2"
 github "adjust/ios_sdk" "v4.17.2"
 github "apple/swift-protobuf" "1.4.0"
+github "ashleymills/Reachability.swift" "v4.3.0"
 github "getsentry/sentry-cocoa" "4.1.0"
 github "jrendel/SwiftKeychainWrapper" "3.2.0"
 github "mozilla-mobile/MappaMundi" "203e8e5cec7de355eafdff6809ec15b382d00033"
