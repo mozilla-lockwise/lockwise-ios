@@ -39,6 +39,6 @@ Note that some test fixtures use source code from third-party services, and are 
 [docs-link]: docs/
 [org-website]: https://lockbox.firefox.com/
 [contributing-link]: docs/contributing.md
-[coc-link]: docs/code_of_conduct.md
+[coc-link]: /CODE_OF_CONDUCT.md
 [security-link]: docs/SECURITY.md
 [license-link]: /LICENSE
