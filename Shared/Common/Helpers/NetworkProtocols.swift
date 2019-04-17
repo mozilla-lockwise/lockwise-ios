@@ -9,6 +9,7 @@ public protocol ReachabilityProtocol {
     var whenReachable: Reachability.NetworkReachable? { get set }
     var whenUnreachable: Reachability.NetworkUnreachable? { get set }
     func startNotifier() throws
+    var connection: Reachability.Connection { get }
 }
 
 extension Reachability: ReachabilityProtocol {}

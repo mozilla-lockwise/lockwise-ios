@@ -15,6 +15,10 @@ class NetworkStoreSpec: QuickSpec {
     class FakeReachability: ReachabilityProtocol {
         var startCalled = false
 
+        var connectionStub: Reachability.Connection = .none
+        var connection: Reachability.Connection {
+            return .none
+        }
         var whenReachable: Reachability.NetworkReachable?
 
         var whenUnreachable: Reachability.NetworkUnreachable?

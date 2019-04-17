@@ -26,6 +26,9 @@ class NetworkStore {
 
     init(reachability: ReachabilityProtocol? = Reachability()) {
         self.reachability = reachability
+        let currentlyReachable = (reachability?.connection ?? Reachability.Connection.none) != .none
+
+        self._connectedToNetwork.accept(currentlyReachable)
 
         self.reachability?.whenReachable = { [weak self] reachable in
             self?._connectedToNetwork.accept(true)
