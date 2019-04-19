@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.5.0 (Build 2999)
+
+First TestFlight build testing the new logins library from application-services. Known issue: autofill doesn't work.
+
+- integrate a-s logins (#891)
+- use mozillaappservices.framework (#911)
+- update RxSwift and MappaMundi dependencies (#912)
+- fix app start up when there's no network (#905)
+
 ## 1.4.1 (Build 2943)
 
 We made minor fixes to visual inconsistencies between the iPhone and iPad.
