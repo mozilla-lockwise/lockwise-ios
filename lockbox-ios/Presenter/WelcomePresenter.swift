@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 import RxOptional
 import CoreGraphics
-import FxAClient
+import MozillaAppServices
 
 protocol WelcomeViewProtocol: BaseWelcomeViewProtocol {
     var loginButtonHidden: AnyObserver<Bool> { get }

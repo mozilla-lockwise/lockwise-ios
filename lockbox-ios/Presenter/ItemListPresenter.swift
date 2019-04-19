@@ -6,8 +6,6 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
-import Storage
-import Shared
 
 protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)

@@ -11,9 +11,8 @@ import RxTest
 import UIKit
 import CoreGraphics
 import LocalAuthentication
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
-import FxAUtils
 
 @testable import Lockbox
 
@@ -90,10 +89,10 @@ class WelcomePresenterSpec: QuickSpec {
     }
 
     class FakeAccountStore: AccountStore {
-        var fakeProfile = PublishSubject<FxAClient.Profile?>()
+        var fakeProfile = PublishSubject<Profile?>()
         var fakeOldAccountInformation = PublishSubject<Bool>()
 
-        override var profile: Observable<FxAClient.Profile?> {
+        override var profile: Observable<Profile?> {
             return self.fakeProfile.asObservable()
         }
 
@@ -105,9 +104,9 @@ class WelcomePresenterSpec: QuickSpec {
     class FakeDataStore: DataStore {
         let fakeLocked: ReplaySubject<Bool>
 
-        init(dispatcher: Dispatcher, profileFactory: @escaping ProfileFactory) {
+        init(dispatcher: Dispatcher) {
             self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
-            super.init(dispatcher: dispatcher, profileFactory: profileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
 
             self.disposeBag = DisposeBag()
         }
@@ -150,10 +149,6 @@ class WelcomePresenterSpec: QuickSpec {
         }
     }
 
-    private let fakeProfileFactory: ProfileFactory = { reset in
-        FakeProfile()
-    }
-
     private var view: FakeWelcomeView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
@@ -177,7 +172,7 @@ class WelcomePresenterSpec: QuickSpec {
 
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
-                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory)
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
                 self.lifecycleStore = FakeLifecycleStore()
                 self.biometryManager = FakeBiometryManager()
                 self.subject = WelcomePresenter(

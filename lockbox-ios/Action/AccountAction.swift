@@ -6,7 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxOptional
-import FxAClient
+import MozillaAppServices
 
 enum AccountAction: Action {
     // invoked when redirecting from a successful OAuth authentication

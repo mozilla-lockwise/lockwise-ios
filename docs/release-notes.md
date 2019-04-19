@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.4.1 (Build 2943)
+
+We made minor fixes to visual inconsistencies between the iPhone and iPad.
+
+"Thanks" as always to the contributors who have helped along the way!
+
 ## 1.4.0 (Build 2908)
 
 _Date: 2019-03-11_

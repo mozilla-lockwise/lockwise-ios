@@ -199,6 +199,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func test8SearchOptions() {
         navigator.goto(Screen.LockboxMainPage)
+        sleep(5)
         let searchTextField = app.searchFields.firstMatch
         waitforExistence(searchTextField)
         searchTextField.tap()

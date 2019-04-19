@@ -8,7 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import RxCocoa
-import FxAClient
+import MozillaAppServices
 
 @testable import Lockbox
 
@@ -61,6 +61,10 @@ class AccountSettingPresenterSpec: QuickSpec {
         override var profile: Observable<Profile?> {
             return self.profileStub.asObservable()
         }
+
+        init(networkStore: AccountStoreSpec.FakeNetworkStore = AccountStoreSpec.FakeNetworkStore()) {
+            super.init(networkStore: networkStore)
+        }
     }
 
     private var view: FakeAccountSettingView!
@@ -79,7 +83,6 @@ class AccountSettingPresenterSpec: QuickSpec {
                 self.view.displayNameObserver = self.scheduler.createObserver(String.self)
 
                 self.dispatcher = FakeDispatcher()
-                self.accountStore = FakeAccountStore()
                 self.accountStore = FakeAccountStore()
                 self.subject = AccountSettingPresenter(
                         view: self.view,

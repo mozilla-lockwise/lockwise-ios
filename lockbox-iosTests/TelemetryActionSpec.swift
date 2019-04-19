@@ -7,7 +7,7 @@ import Telemetry
 import Quick
 import Nimble
 import RxSwift
-import FxAClient
+import MozillaAppServices
 
 @testable import Lockbox
 

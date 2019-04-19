@@ -9,11 +9,9 @@ import Nimble
 import WebKit
 import RxTest
 import RxSwift
+import MozillaAppServices
 
 @testable import Lockbox
-import Storage
-import SwiftyJSON
-import FxAClient
 
 class DataStoreActionSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {
@@ -45,11 +43,6 @@ class DataStoreActionSpec: QuickSpec {
             it("touch is equal based on IDs") {
                 expect(DataStoreAction.touch(id: "meow")).to(equal(DataStoreAction.touch(id: "meow")))
                 expect(DataStoreAction.touch(id: "meow")).notTo(equal(DataStoreAction.touch(id: "woof")))
-            }
-
-            it("remove is equal based on IDs") {
-                expect(DataStoreAction.remove(id: "meow")).to(equal(DataStoreAction.remove(id: "meow")))
-                expect(DataStoreAction.remove(id: "meow")).notTo(equal(DataStoreAction.remove(id: "woof")))
             }
 
             it("different enum types are never equal") {

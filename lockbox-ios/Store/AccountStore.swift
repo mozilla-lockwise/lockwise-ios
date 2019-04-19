@@ -5,10 +5,9 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
 import WebKit
-import Shared
 
 /* These UserDefault keys are maintained separately from the `UserDefaultKey`
  * enum in BaseConstants.swift because, for the time being, they are only
@@ -53,6 +52,7 @@ class AccountStore: BaseAccountStore {
     }
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
+         networkStore: NetworkStore = NetworkStore.shared,
          keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          urlCache: URLCache = URLCache.shared,
          webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
@@ -61,7 +61,7 @@ class AccountStore: BaseAccountStore {
         self.urlCache = urlCache
         self.webData = webData
 
-        super.init(keychainWrapper: keychainWrapper)
+        super.init(keychainWrapper: keychainWrapper, networkStore: networkStore)
     }
 
     override func initialized() {
@@ -82,15 +82,14 @@ class AccountStore: BaseAccountStore {
         self.dispatcher.register
                 .filterByType(class: LifecycleAction.self)
                 .subscribe(onNext: { [weak self] action in
-                    guard case let .upgrade(previous, _) = action,
-                        let self = self else {
+                    guard case let .upgrade(previous, _) = action else {
                         return
                     }
 
                     if previous <= 1 {
-                        self._oauthInfo.onNext(nil)
-                        self._profile.onNext(nil)
-                        self._oldAccountPresence.accept(true)
+                        self?._syncCredentials.onNext(nil)
+                        self?._profile.onNext(nil)
+                        self?._oldAccountPresence.accept(true)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -104,21 +103,15 @@ extension AccountStore {
         if let accountJSON = self.storedAccountJSON {
             self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
             self.generateLoginURL()
-            self.populateAccountInformation()
+            self.populateAccountInformation(false)
         } else {
-            FxAConfig.release { (config: FxAConfig?, _) in
-                if let config = config {
-                    self.fxa = try? FirefoxAccount(
-                        config: config,
-                        clientId: Constant.fxa.clientID,
-                        redirectUri: Constant.fxa.redirectURI)
+            let config = FxAConfig.release(clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
 
-                    self.generateLoginURL()
-                }
+            self.fxa = try? FirefoxAccount(config: config)
+            self.generateLoginURL()
 
-                self._oauthInfo.onNext(nil)
-                self._profile.onNext(nil)
-            }
+            self._syncCredentials.onNext(nil)
+            self._profile.onNext(nil)
         }
     }
 
@@ -142,7 +135,7 @@ extension AccountStore {
         self.urlCache.removeAllCachedResponses()
 
         self._profile.onNext(nil)
-        self._oauthInfo.onNext(nil)
+        self._syncCredentials.onNext(nil)
 
         self.initFxa()
     }
@@ -175,20 +168,12 @@ extension AccountStore {
             return
         }
 
-        self.fxa?.completeOAuthFlow(code: code, state: state) { (info: OAuthInfo?, _) in
-            self._oauthInfo.onNext(info)
-
-            guard let fxa = self.fxa else {
+        self.fxa?.completeOAuthFlow(code: code, state: state) { [weak self] (_, err) in
+            guard err == nil else {
+                print(err.debugDescription)
                 return
             }
-
-            if let accountJSON = try? fxa.toJSON() {
-                self.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
-            }
-
-            fxa.getProfile { (profile: Profile?, _) in
-                self._profile.onNext(profile)
-            }
+            self?.populateAccountInformation(true)
         }
     }
 }

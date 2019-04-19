@@ -8,9 +8,8 @@ import Nimble
 import RxSwift
 import RxTest
 import UIKit
-import FxAClient
+import MozillaAppServices
 import SwiftKeychainWrapper
-import FxAUtils
 
 @testable import Lockbox
 
@@ -158,18 +157,18 @@ class RootPresenterSpec: QuickSpec {
     }
 
     class FakeAccountStore: AccountStore {
-        let oauthInfoStub = PublishSubject<OAuthInfo?>()
-        let profileInfoStub = PublishSubject<FxAClient.Profile?>()
+        let syncCredStub = PublishSubject<SyncCredential?>()
+        let profileInfoStub = PublishSubject<Profile?>()
 
         override func initialized() {
             //noop
         }
 
-        override var oauthInfo: Observable<OAuthInfo?> {
-            return self.oauthInfoStub.asObservable()
+        override var syncCredentials: Observable<SyncCredential?> {
+            return self.syncCredStub.asObservable()
         }
 
-        override var profile: Observable<FxAClient.Profile?> {
+        override var profile: Observable<Profile?> {
             return self.profileInfoStub.asObservable()
         }
     }
@@ -221,10 +220,6 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    private let fakeProfileFactory: ProfileFactory = { reset in
-        FakeProfile()
-    }
-
     class FakeSizeClassStore: SizeClassStore {
         var showSidebarStub = PublishSubject<Bool>()
 
@@ -263,7 +258,7 @@ class RootPresenterSpec: QuickSpec {
                 self.view = FakeRootView()
                 self.dispatcher = FakeDispatcher()
                 self.routeStore = FakeRouteStore()
-                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, profileFactory: self.fakeProfileFactory, fxaLoginHelper: FxALoginHelper.sharedInstance, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
                 self.telemetryStore = FakeTelemetryStore()
                 self.accountStore = FakeAccountStore()
                 self.userDefaultStore = FakeUserDefaultStore()
@@ -294,7 +289,7 @@ class RootPresenterSpec: QuickSpec {
 
             describe("when the oauth info is not available") {
                 beforeEach {
-                    self.accountStore.oauthInfoStub.onNext(nil)
+                    self.accountStore.syncCredStub.onNext(nil)
                     self.accountStore.profileInfoStub.onNext(nil)
                 }
 
