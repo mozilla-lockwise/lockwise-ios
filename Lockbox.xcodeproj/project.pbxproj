@@ -170,6 +170,7 @@
 		7D522EA620334C8200295FF8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7D522EA820334C8200295FF8 /* Localizable.strings */; };
 		7D578D22207573B000DC9C73 /* SettingList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D578D24207573B000DC9C73 /* SettingList.storyboard */; };
 		7D5889F8205706AA0087DF89 /* ItemList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D5889FA205706AA0087DF89 /* ItemList.storyboard */; };
+		7D5C8BDF226A273800D9BFD9 /* AutoLockSupportSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5C8BDE226A273800D9BFD9 /* AutoLockSupportSpec.swift */; };
 		7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
 		7D5F1D7B20866A9400688DEA /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D320B3420360F9000891F73 /* RxDataSources.framework */; };
 		7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D92DAF220586FBA00195A1B /* RxOptional.framework */; };
@@ -511,6 +512,7 @@
 		7D578D26207573B100DC9C73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingList.strings; sourceTree = "<group>"; };
 		7D5889F9205706AA0087DF89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ItemList.storyboard; sourceTree = "<group>"; };
 		7D5889FC205706AB0087DF89 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
+		7D5C8BDE226A273800D9BFD9 /* AutoLockSupportSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSupportSpec.swift; sourceTree = "<group>"; };
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D64EC65211B57F200D726F4 /* Firefox Lockbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Firefox Lockbox.entitlements"; sourceTree = "<group>"; };
 		7D6FB87A204F00E2005E23AA /* StatusAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAlert.swift; sourceTree = "<group>"; };
@@ -1067,6 +1069,7 @@
 				D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */,
 				D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */,
 				7D897EAA2260F96100257946 /* NetworkStoreSpec.swift */,
+				7D5C8BDE226A273800D9BFD9 /* AutoLockSupportSpec.swift */,
 			);
 			path = "lockbox-iosTests";
 			sourceTree = "<group>";
@@ -1553,6 +1556,7 @@
 				7AA54A03CA11221087E4F9F8 /* Date+Spec.swift in Sources */,
 				D8DD93072140D8D900F8041D /* AutofillOnboardingPresenterSpec.swift in Sources */,
 				7AA5469948A8AE091E024CC7 /* ItemListDisplayStoreSpec.swift in Sources */,
+				7D5C8BDF226A273800D9BFD9 /* AutoLockSupportSpec.swift in Sources */,
 				7AA54850D6DE1CD66D8C43AE /* AccountActionSpec.swift in Sources */,
 				7AA54E2C7C6639BCA7C37A1F /* AccountSettingPresenterSpec.swift in Sources */,
 				4C61CC5120B4E47A001CE00E /* UIButton+Spec.swift in Sources */,
