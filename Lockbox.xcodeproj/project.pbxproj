@@ -285,7 +285,6 @@
 		D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783612207C080300C19BC7 /* ExternalLinkAction.swift */; };
 		D8783615207D303E00C19BC7 /* ExternalLinkStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783614207D303E00C19BC7 /* ExternalLinkStoreSpec.swift */; };
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
-		D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */; };
 		D8C20D6C22013A0D001B4A27 /* SizeClassStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B721F65E91008A7B11 /* SizeClassStore.swift */; };
 		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
@@ -597,7 +596,6 @@
 		D8783612207C080300C19BC7 /* ExternalLinkAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkAction.swift; sourceTree = "<group>"; };
 		D8783614207D303E00C19BC7 /* ExternalLinkStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStoreSpec.swift; sourceTree = "<group>"; };
 		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
-		D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockStoreSpec.swift; sourceTree = "<group>"; };
 		D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingViewSpec.swift; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
@@ -1053,7 +1051,6 @@
 				7AA545541FB802B047FACA4C /* ApplicationLifecycleActionSpec.swift */,
 				7AA544D5B320BB5C55723EB0 /* TelemetryActionSpec.swift */,
 				7AA542CB670BA12339305AC7 /* TelemetryStoreSpec.swift */,
-				D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */,
 				7AA54B2BAE0933D9BCD573D4 /* LifecycleStoreSpec.swift */,
 				7AA54DF673E124AA32EF8EBC /* OnboardingConfirmationViewSpec.swift */,
 				7AA5445216A3C61522245622 /* UserDefaultStoreSpec.swift */,
@@ -1520,7 +1517,6 @@
 				D80D41BE21F67E95008A7B11 /* SizeClassStoreSpec.swift in Sources */,
 				7DFF2EF2213854BA00F001ED /* LoginRecord+Spec.swift in Sources */,
 				7AA54684402DC450E11CDAAA /* FxAPresenterSpec.swift in Sources */,
-				D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */,
 				D8783611207BE40A00C19BC7 /* StaticURLWebViewSpec.swift in Sources */,
 				7AA54D41D654320B1C2F9753 /* FxAViewSpec.swift in Sources */,
 				7DA4C68E2028F99500B61DD8 /* ItemListPresenterSpec.swift in Sources */,
