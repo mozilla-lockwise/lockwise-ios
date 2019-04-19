@@ -87,6 +87,7 @@ class BaseDataStore {
     private let application: UIApplication
     internal var syncUnlockInfo: SyncUnlockInfo?
     internal let accountStore: BaseAccountStore
+    private let autoLockSupport: AutoLockSupport
 
     internal var loginsStorage: LoginsStorage?
 
@@ -126,6 +127,7 @@ class BaseDataStore {
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
          userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!,
          accountStore: BaseAccountStore = AccountStore.shared,
+         autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
          networkStore: NetworkStore = NetworkStore.shared,
          application: UIApplication = UIApplication.shared) {
         self.keychainWrapper = keychainWrapper
@@ -133,6 +135,7 @@ class BaseDataStore {
         self.application = application
         self.accountStore = accountStore
         self.networkStore = networkStore
+        self.autoLockSupport = autoLockSupport
 
         self.dispatcher = dispatcher
 
@@ -163,10 +166,11 @@ class BaseDataStore {
                 .subscribe(onNext: { action in
                     switch action {
                     case .background:
-                        break
+                        self.autoLockSupport.storeNextAutolockTime()
                     case .foreground:
                         self.initializeLoginsStorage()
                         self.handleLock()
+                        self.userDefaults.set(false, forKey: UserDefaultKey.forceLock.rawValue)
                     case .upgrade(let previous, _):
                         if previous <= 2 {
                             self.handleLock()
@@ -344,7 +348,7 @@ extension BaseDataStore {
             print("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
             rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         }
-        
+
         let files = File(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
@@ -352,28 +356,17 @@ extension BaseDataStore {
     }
 
     internal func handleLock() {
-        Observable.combineLatest(
-            self.userDefaults.onAutoLockTime,
-            self.userDefaults.onForceLock
-            )
+        self.userDefaults.onForceLock
             .take(1)
-            .subscribe(onNext: { autoLockSetting, forceLock in
+            .subscribe(onNext: { forceLock in
                 if forceLock {
                     self.lock()
-                } else if autoLockSetting == .Never {
+                } else if self.autoLockSupport.lockCurrentlyRequired {
+                    self.lock()
+                } else if !self.autoLockSupport.lockCurrentlyRequired {
                     self.unlock()
-                } else {
-                    let date = NSDate(
-                        timeIntervalSince1970: self.userDefaults.double(
-                            forKey: UserDefaultKey.autoLockTimerDate.rawValue))
-
-                    if date.timeIntervalSince1970 > 0 && date.timeIntervalSinceNow > 0 {
-                        self.unlock()
-                    } else {
-                        self.lock()
-                    }
                 }
             })
-        .disposed(by: self.disposeBag)
+            .disposed(by: self.disposeBag)
     }
 }

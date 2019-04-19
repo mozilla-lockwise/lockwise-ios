@@ -3,12 +3,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import RxSwift
 
 class AutoLockSupport {
     static let shared = AutoLockSupport()
 
     private let userDefaultStore: UserDefaultStore
     private let userDefaults: UserDefaults
+    private let disposeBag = DisposeBag()
+
+    var lockCurrentlyRequired: Bool {
+        let autoLockTimerDate = userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
+        let currentSystemTime = NSTimeIntervalSince1970
+
+        return autoLockTimerDate <= currentSystemTime
+    }
 
     init(userDefaultStore: UserDefaultStore = UserDefaultStore.shared,
          userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard) {
@@ -16,11 +25,28 @@ class AutoLockSupport {
         self.userDefaults = userDefaults
     }
 
-    private func lockCurrentlyRequired() -> Bool {
-        let autoLockTimerDate = userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
-        let currentSystemTime = Date().timeIntervalSince1970
+    func storeNextAutolockTime() {
+        userDefaultStore.autoLockTime
+            .take(1)
+            .subscribe(onNext: { [weak self] autoLockSetting in self?.updateNextLockTime(autoLockSetting)
+            })
+            .disposed(by: self.disposeBag)
+    }
 
-        return autoLockTimerDate >= currentSystemTime
+    func backDateNextLockTime() {
+        storeAutoLockTimerDate(dateTime: 0)
+    }
+
+    func forwardDateNextLockTime() {
+        storeAutoLockTimerDate(dateTime: Double.greatestFiniteMagnitude)
+    }
+
+    private func updateNextLockTime(_ autoLockTime: Setting.AutoLock) {
+        if (autoLockTime == Setting.AutoLock.Never) {
+            forwardDateNextLockTime()
+        } else {
+            storeAutoLockTimerDate(dateTime: NSTimeIntervalSince1970 + Double(autoLockTime.seconds))
+        }
     }
 
     private func storeAutoLockTimerDate(dateTime: Double) {

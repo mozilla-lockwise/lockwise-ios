@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         _ = AccountStore.shared
         _ = DataStore.shared
-        _ = AutoLockStore.shared
         _ = ExternalLinkStore.shared
         _ = UserDefaultStore.shared
         if #available(iOS 12, *) {

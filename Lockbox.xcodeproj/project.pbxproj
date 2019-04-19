@@ -127,9 +127,6 @@
 		7D078EF42124E24100D10D1B /* BaseConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D078EF22124E24100D10D1B /* BaseConstants.swift */; };
 		7D078EF62124E48300D10D1B /* Observable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54FE4F9D6DAEF984F63E6 /* Observable+.swift */; };
 		7D07A31C21385C6F00772283 /* CredentialStatusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722DF21349B9F0071D82B /* CredentialStatusAction.swift */; };
-		7D07A31D213885C900772283 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
-		7D07A31F2138863400772283 /* AutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07A31E2138863400772283 /* AutoLockStore.swift */; };
-		7D07A321213886C100772283 /* CredentialAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07A320213886C100772283 /* CredentialAutoLockStore.swift */; };
 		7D07FE94225E32C40000B030 /* NetworkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07FE93225E32C40000B030 /* NetworkStore.swift */; };
 		7D07FE95225E32C40000B030 /* NetworkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07FE93225E32C40000B030 /* NetworkStore.swift */; };
 		7D09B2482125DD4800794CA2 /* CredentialDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */; };
@@ -289,7 +286,6 @@
 		D8783615207D303E00C19BC7 /* ExternalLinkStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783614207D303E00C19BC7 /* ExternalLinkStoreSpec.swift */; };
 		D8783617207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */; };
 		D88C40C6209CF27E0022696B /* AutoLockStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */; };
-		D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */; };
 		D8C20D6C22013A0D001B4A27 /* SizeClassStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D41B721F65E91008A7B11 /* SizeClassStore.swift */; };
 		D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */; };
 		D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */; };
@@ -481,8 +477,6 @@
 		7D078EEA2124DCE100D10D1B /* SettingAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingAction.swift; sourceTree = "<group>"; };
 		7D078EEE2124DF6500D10D1B /* BaseAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAccountStore.swift; sourceTree = "<group>"; };
 		7D078EF22124E24100D10D1B /* BaseConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseConstants.swift; sourceTree = "<group>"; };
-		7D07A31E2138863400772283 /* AutoLockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockStore.swift; sourceTree = "<group>"; };
-		7D07A320213886C100772283 /* CredentialAutoLockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAutoLockStore.swift; sourceTree = "<group>"; };
 		7D07FE91225E2DB60000B030 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
 		7D07FE93225E32C40000B030 /* NetworkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkStore.swift; sourceTree = "<group>"; };
 		7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialDataStore.swift; sourceTree = "<group>"; };
@@ -604,7 +598,6 @@
 		D8783614207D303E00C19BC7 /* ExternalLinkStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStoreSpec.swift; sourceTree = "<group>"; };
 		D8783616207D70D100C19BC7 /* PreferredBrowserSettingPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingPresenterSpec.swift; sourceTree = "<group>"; };
 		D88C40C5209CF27E0022696B /* AutoLockStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockStoreSpec.swift; sourceTree = "<group>"; };
-		D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAutoLockStore.swift; sourceTree = "<group>"; };
 		D8C9C51F207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferredBrowserSettingViewSpec.swift; sourceTree = "<group>"; };
 		D8D029252062F46600CC01C6 /* MainNavigationControllerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationControllerSpec.swift; sourceTree = "<group>"; };
 		D8D029272064441600CC01C6 /* AutoLockSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSettingsView.swift; sourceTree = "<group>"; };
@@ -748,7 +741,6 @@
 				7AA54247F60B5BDC1BA90AD4 /* CopyDisplayStore.swift */,
 				7DDEAA702124CEB100A7D521 /* DataStore.swift */,
 				226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */,
-				7D07A31E2138863400772283 /* AutoLockStore.swift */,
 				D80D41C021FD6856008A7B11 /* ItemDetailStore.swift */,
 			);
 			path = Store;
@@ -905,7 +897,6 @@
 			isa = PBXGroup;
 			children = (
 				7D07FE93225E32C40000B030 /* NetworkStore.swift */,
-				D895605B20967C5300CC7E47 /* BaseAutoLockStore.swift */,
 				7AA54E126924935F1ADF4E8E /* BaseItemDetailStore.swift */,
 				7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */,
 				7AA54EAE6E8D8E78F37BEA82 /* BaseDataStore.swift */,
@@ -1218,7 +1209,6 @@
 				08454B9621486AAC00328040 /* CredentialUserDefaultStore.swift */,
 				7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */,
 				7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */,
-				7D07A320213886C100772283 /* CredentialAutoLockStore.swift */,
 				39964181214863D5000A1984 /* CredentialUserDefaultStore.swift */,
 				D80D41C221FD6D48008A7B11 /* CredentialItemDetailStore.swift */,
 			);
@@ -1634,7 +1624,6 @@
 				7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */,
 				D8D029362074169700CC01C6 /* PreferredBrowserSettingPresenter.swift in Sources */,
 				D819A4C221BB2686004EE6F3 /* Bytes.swift in Sources */,
-				7D07A31F2138863400772283 /* AutoLockStore.swift in Sources */,
 				7AA54E848015F62023D3689C /* DataStoreAction.swift in Sources */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift in Sources */,
 				D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift in Sources */,
@@ -1674,7 +1663,6 @@
 				7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */,
 				7AA545D6182E36466BC8256A /* CopyDisplayStore.swift in Sources */,
 				7AA5481C275E5373AE047857 /* AccountSettingView.swift in Sources */,
-				D895605C20967C5300CC7E47 /* BaseAutoLockStore.swift in Sources */,
 				7AA54E29E3F225AFFE2A8B1E /* AccountSettingPresenter.swift in Sources */,
 				D819A4B921BAF988004EE6F3 /* LoginRecord+.swift in Sources */,
 				D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */,
@@ -1723,7 +1711,6 @@
 				7D9722C8213464020071D82B /* UIViewController+.swift in Sources */,
 				7D9722E021349B9F0071D82B /* CredentialStatusAction.swift in Sources */,
 				7D078EF42124E24100D10D1B /* BaseConstants.swift in Sources */,
-				7D07A321213886C100772283 /* CredentialAutoLockStore.swift in Sources */,
 				7DB9DEA52140D56E00239D31 /* ItemListDisplayStore.swift in Sources */,
 				7D09B2482125DD4800794CA2 /* CredentialDataStore.swift in Sources */,
 				7D2712BA224D758C00E6C4CA /* SyncCredential.swift in Sources */,
@@ -1744,7 +1731,6 @@
 				7DDEAA6A2124B60F00A7D521 /* Action.swift in Sources */,
 				3996418421486BE2000A1984 /* String+.swift in Sources */,
 				7D09B24B2125DDB600794CA2 /* LifecycleStore.swift in Sources */,
-				7D07A31D213885C900772283 /* BaseAutoLockStore.swift in Sources */,
 				7DB9DE9F2140CB0E00239D31 /* NoResultsCell.swift in Sources */,
 				7D4396512135AFBD00B96FA9 /* CredentialProviderStore.swift in Sources */,
 				7D9722D0213485C90071D82B /* SpinnerAlert.swift in Sources */,
