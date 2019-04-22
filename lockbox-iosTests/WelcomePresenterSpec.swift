@@ -106,7 +106,7 @@ class WelcomePresenterSpec: QuickSpec {
 
         init(dispatcher: Dispatcher) {
             self.fakeLocked = ReplaySubject<Bool>.create(bufferSize: 1)
-            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard)
 
             self.disposeBag = DisposeBag()
         }

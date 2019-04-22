@@ -60,9 +60,9 @@ class AutoLockSupportSpec: QuickSpec {
                     }
 
                     it("stores the next expected autolocktime") {
-                        let expected = Double(currentAutoLock.seconds) + NSTimeIntervalSince1970
+                        let expected = Double(currentAutoLock.seconds) + Date.timeIntervalSinceReferenceDate
 
-                        expect(self.userDefaults.setArg).to(equal(expected))
+                        expect(self.userDefaults.setArg).to(beCloseTo(expected))
                         expect(self.userDefaults.setArgKey).to(equal(UserDefaultKey.autoLockTimerDate.rawValue))
                     }
                 }

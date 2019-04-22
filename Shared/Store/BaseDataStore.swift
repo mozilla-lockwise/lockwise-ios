@@ -199,13 +199,6 @@ class BaseDataStore {
         self.initialized()
     }
 
-    public func initialized() {
-        fatalError("not implemented!")
-    }
-}
-
-// login entry operations
-extension BaseDataStore {
     public func get(_ id: String) -> Observable<LoginRecord?> {
         return self.listSubject
             .map { items -> LoginRecord? in
@@ -215,6 +208,13 @@ extension BaseDataStore {
         }
     }
 
+    public func initialized() {
+        fatalError("not implemented!")
+    }
+}
+
+// login entry operations
+extension BaseDataStore {
     public func touch(id: String) {
         do {
             try self.loginsStorage?.touch(id: id)
