@@ -65,6 +65,13 @@ class BaseTestCase: XCTestCase {
 
         waitforNoExistence(progressIndicator, timeoutValue: 20.0)
     }
+   
+    func iPad() -> Bool {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return true
+        }
+        return false
+    }
 }
 
 extension XCUIElement {
