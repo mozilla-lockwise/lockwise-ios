@@ -10,6 +10,11 @@ struct SyncCredential {
     let isNew: Bool
 }
 
+let OfflineSyncCredential = SyncCredential(
+    syncInfo: SyncUnlockInfo(kid: "", fxaAccessToken: "", syncKey: "", tokenserverURL: ""),
+    isNew: false
+)
+
 extension SyncCredential: Equatable {
     public static func ==(lhs: SyncCredential, rhs: SyncCredential) -> Bool {
         return lhs.isNew == rhs.isNew &&
