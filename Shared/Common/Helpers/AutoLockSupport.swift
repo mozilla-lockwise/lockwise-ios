@@ -14,7 +14,7 @@ class AutoLockSupport {
 
     var lockCurrentlyRequired: Bool {
         let autoLockTimerDate = userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
-        let currentSystemTime = NSTimeIntervalSince1970
+        let currentSystemTime = Date.timeIntervalSinceReferenceDate
 
         return autoLockTimerDate <= currentSystemTime
     }
@@ -45,7 +45,7 @@ class AutoLockSupport {
         if (autoLockTime == Setting.AutoLock.Never) {
             forwardDateNextLockTime()
         } else {
-            storeAutoLockTimerDate(dateTime: NSTimeIntervalSince1970 + Double(autoLockTime.seconds))
+            storeAutoLockTimerDate(dateTime: Date.timeIntervalSinceReferenceDate + Double(autoLockTime.seconds))
         }
     }
 

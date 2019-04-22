@@ -81,7 +81,6 @@ class BaseDataStore {
     internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
     private let keychainWrapper: KeychainWrapper
-    internal let userDefaults: UserDefaults
     private let networkStore: NetworkStore
     internal let dispatcher: Dispatcher
     private let application: UIApplication
@@ -125,18 +124,15 @@ class BaseDataStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group)!,
          accountStore: BaseAccountStore = AccountStore.shared,
          autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
          networkStore: NetworkStore = NetworkStore.shared,
          application: UIApplication = UIApplication.shared) {
         self.keychainWrapper = keychainWrapper
-        self.userDefaults = userDefaults
         self.application = application
         self.accountStore = accountStore
         self.networkStore = networkStore
         self.autoLockSupport = autoLockSupport
-
         self.dispatcher = dispatcher
 
         self.initializeLoginsStorage()
@@ -170,7 +166,6 @@ class BaseDataStore {
                     case .foreground:
                         self.initializeLoginsStorage()
                         self.handleLock()
-                        self.userDefaults.set(false, forKey: UserDefaultKey.forceLock.rawValue)
                     case .upgrade(let previous, _):
                         if previous <= 2 {
                             self.handleLock()
@@ -207,56 +202,19 @@ class BaseDataStore {
     public func initialized() {
         fatalError("not implemented!")
     }
+}
 
+// login entry operations
+extension BaseDataStore {
     public func get(_ id: String) -> Observable<LoginRecord?> {
         return self.listSubject
-                .map { items -> LoginRecord? in
-                    return items.filter { item in
-                        return item.id == id
+            .map { items -> LoginRecord? in
+                return items.filter { item in
+                    return item.id == id
                     }.first
-                }
-    }
-
-    public func unlock() {
-        guard let loginsStorage = self.loginsStorage,
-            let loginsKey = BaseDataStore.loginsKey else { return }
-
-        do {
-            if loginsStorage.isLocked() {
-                try loginsStorage.unlock(withEncryptionKey: loginsKey)
-                self.storageStateSubject.onNext(.Unlocked)
-            } else {
-                self.storageStateSubject.onNext(.Unlocked)
-            }
-        } catch let error {
-            print("LoginsError: \(error)")
         }
     }
 
-    private func shutdown() {
-        self.loginsStorage?.close()
-    }
-}
-
-extension BaseDataStore {
-    public func updateCredentials(_ syncCredential: SyncCredential) {
-        self.syncUnlockInfo = syncCredential.syncInfo
-
-        guard let loginsStorage = self.loginsStorage else { return }
-
-        if syncCredential.isNew {
-            if (loginsStorage.isLocked()) {
-                self.unlock()
-            } else {
-                self.storageStateSubject.onNext(.Unlocked)
-            }
-        } else {
-            self.handleLock()
-        }
-    }
-}
-
-extension BaseDataStore {
     public func touch(id: String) {
         do {
             try self.loginsStorage?.touch(id: id)
@@ -266,31 +224,8 @@ extension BaseDataStore {
     }
 }
 
+// list operations
 extension BaseDataStore {
-    private func reset() {
-        guard let loginsStorage = self.loginsStorage,
-            let loginsKey = BaseDataStore.loginsKey else { return }
-
-        queue.async {
-            do {
-                self.storageStateSubject.onNext(.Unprepared)
-                try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
-                try loginsStorage.wipeLocal()
-            } catch let error {
-                print("Sync15 wipe error: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    func lock() {
-        guard let loginsStorage = self.loginsStorage else { return }
-
-        queue.async {
-            loginsStorage.ensureLocked()
-            self.storageStateSubject.onNext(.Locked)
-        }
-    }
-
     public func sync() {
         guard let loginsStorage = self.loginsStorage,
             let syncInfo = self.syncUnlockInfo,
@@ -332,8 +267,85 @@ extension BaseDataStore {
     }
 }
 
-// initialization
+// locking management
 extension BaseDataStore {
+    public func unlock() {
+        self.autoLockSupport.forwardDateNextLockTime()
+        self.unlockInternal()
+    }
+    
+    public func lock() {
+        self.autoLockSupport.backDateNextLockTime()
+        self.lockInternal()
+    }
+
+    private func lockInternal() {
+        guard let loginsStorage = self.loginsStorage else { return }
+        
+        queue.async {
+            loginsStorage.ensureLocked()
+            self.storageStateSubject.onNext(.Locked)
+        }
+    }
+
+    private func unlockInternal() {
+        guard let loginsStorage = self.loginsStorage,
+            let loginsKey = BaseDataStore.loginsKey else { return }
+
+        do {
+            try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
+            self.storageStateSubject.onNext(.Unlocked)
+        } catch let error {
+            print("LoginsError: \(error)")
+        }
+    }
+
+    private func handleLock() {
+        if self.autoLockSupport.lockCurrentlyRequired {
+            self.lockInternal()
+        } else {
+            self.unlockInternal()
+        }
+    }
+}
+
+// lifecycle management
+extension BaseDataStore {
+    public func updateCredentials(_ syncCredential: SyncCredential) {
+        self.syncUnlockInfo = syncCredential.syncInfo
+
+        guard let loginsStorage = self.loginsStorage else { return }
+
+        if syncCredential.isNew {
+            if (loginsStorage.isLocked()) {
+                self.unlockInternal()
+            } else {
+                self.storageStateSubject.onNext(.Unlocked)
+            }
+        } else {
+            self.handleLock()
+        }
+    }
+
+    private func reset() {
+        guard let loginsStorage = self.loginsStorage,
+            let loginsKey = BaseDataStore.loginsKey else { return }
+
+        queue.async {
+            do {
+                self.storageStateSubject.onNext(.Unprepared)
+                try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
+                try loginsStorage.wipeLocal()
+            } catch let error {
+                print("Sync15 wipe error: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func shutdown() {
+        self.loginsStorage?.close()
+    }
+
     private func initializeLoginsStorage() {
         let filename = "logins.db"
 
@@ -353,20 +365,5 @@ extension BaseDataStore {
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
         self.loginsStorage = LoginsStorage(databasePath: file)
-    }
-
-    internal func handleLock() {
-        self.userDefaults.onForceLock
-            .take(1)
-            .subscribe(onNext: { forceLock in
-                if forceLock {
-                    self.lock()
-                } else if self.autoLockSupport.lockCurrentlyRequired {
-                    self.lock()
-                } else if !self.autoLockSupport.lockCurrentlyRequired {
-                    self.unlock()
-                }
-            })
-            .disposed(by: self.disposeBag)
     }
 }
