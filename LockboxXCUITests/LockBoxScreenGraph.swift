@@ -6,6 +6,18 @@ import Foundation
 import MappaMundi
 import XCTest
 
+let appName = "Lockbox"
+let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
+
+let emailTestAccountLogins = "firefoxlockbox@gmail.com"
+let passwordTestAccountLogins = "aabbcc112233!"
+let websiteDetailView = "https://accounts.firefox.com"
+
+let firstEntryEmail = "firefoxlockbox@gmail.com"
+let userNameAccountSetting = "Lockbox Tester"
+
 class Screen {
     static let WelcomeScreen = "WelcomeScreen"
     static let OnboardingWelcomeScreen = "OnboardingWelcomeScreen"
@@ -22,7 +34,7 @@ class Screen {
     static let LockedScreen = "LockedScreen"
     static let AccountSettingsMenu = "AccountSettingsMenu"
     static let AutolockSettingsMenu = "AutolockSettingsMenu"
-    static let AutoFillPasswordSetUpInstructionsSettings = "AutoFillPasswordSetUpInstructionsSettings"
+    static let AutoFillSetUpInstructionsSettings = "AutoFillSetUpInstructionsSettings"
 
     static let SortEntriesMenu = "SortEntriesMenu"
 
@@ -158,7 +170,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells["openWebSitesInSettingOption"], to: Screen.OpenSitesInMenu)
         screenState.tap(app.tables.cells["accountSettingOption"], to: Screen.AccountSettingsMenu)
         screenState.tap(app.tables.cells["autoLockSettingOption"], to: Screen.AutolockSettingsMenu)
-        screenState.tap(app.tables.cells["autoFillSettingsOption"], to: Screen.AutoFillPasswordSetUpInstructionsSettings)
+        screenState.tap(app.tables.cells["autoFillSettingsOption"], to: Screen.AutoFillSetUpInstructionsSettings)
 
         screenState.gesture(forAction: Action.SendUsageData) { userState in
             app.switches["sendUsageData.switch"].tap()
@@ -188,7 +200,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(Screen.AutoFillPasswordSetUpInstructionsSettings) { screenState in
+    map.addScreenState(Screen.AutoFillSetUpInstructionsSettings) { screenState in
         screenState.tap(app.buttons["gotIt.button"], to: Screen.SettingsMenu)
     }
 
@@ -201,8 +213,39 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 }
 
 extension BaseTestCase {
+    func loginFxAccount() {
+        userState.fxaPassword = passwordTestAccountLogins
+        userState.fxaUsername = emailTestAccountLogins
+        navigator.goto(Screen.FxASigninScreenEmail)
+        waitforExistence(app.navigationBars["Lockbox.FxAView"])
+        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        navigator.performAction(Action.FxATypeEmail)
+        waitforExistence(app.webViews.secureTextFields["Password"])
+        navigator.performAction(Action.FxATypePassword)
+    }
 
-   func disconnectAndConnectAccount() {
+    func skipAutofillConfiguration() {
+        if #available(iOS 12.0, *) {
+            //If autofill is set this option will not appear
+            sleep(5)
+            if (app.buttons["setupAutofill.button"].exists) {
+                app.buttons["notNow.button"].tap()
+            }
+        }
+    }
+
+    func tapOnFinishButton() {
+        waitforExistence(app.buttons["finish.button"])
+        app.buttons["finish.button"].tap()
+    }
+
+    func waitForLockboxEntriesListView() {
+        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        navigator.nowAt(Screen.LockboxMainPage)
+    }
+
+    func disconnectAndConnectAccount() {
         navigator.performAction(Action.DisconnectFirefoxLockbox)
         // And, connect it again
         waitforExistence(app.buttons["getStarted.button"])
@@ -215,88 +258,25 @@ extension BaseTestCase {
         navigator.performAction(Action.FxATypePassword)
     }
 
-    func checkIfAccountIsVerified() {
-        if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
-            let group = DispatchGroup()
-            group.enter()
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.verifyAccount() {
-                    group.leave()
-                }
-            }
-            group.wait()
-        }
+    func configureAutofillSettings() {
+        settings.cells.staticTexts["Passwords & Accounts"].tap()
+        settings.cells.staticTexts["AutoFill Passwords"].tap()
+        waitforExistence(settings.switches["AutoFill Passwords"], timeout: 3)
+        settings.switches["AutoFill Passwords"].tap()
+        waitforExistence(settings.cells.staticTexts["Lockbox"])
+        settings.cells.staticTexts["Lockbox"].tap()
     }
 
-    func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
-        // POST to EndPoint api.accounts.firefox.com/v1/recovery_email/verify_code
-        let restUrl = URL(string: postEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-
-        request.httpMethod = "POST"
-
-        let jsonObject: [String: Any] = ["uid": uid, "code":code]
-        let data = try! JSONSerialization.data(withJSONObject: jsonObject, options: JSONSerialization.WritingOptions.prettyPrinted)
-        let json = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-        if let json = json {
-            print("json \(json)")
+    func deleteApp(name: String) {
+        app.terminate()
+        let icon = springboard.icons[appName]
+        if icon.exists {
+            let iconFrame = icon.frame
+            let springboardFrame = springboard.frame
+            icon.press(forDuration: 1.3)
+            springboard.coordinate(withNormalizedOffset: CGVector(dx: (iconFrame.minX + 3 * UIScreen.main.scale) / springboardFrame.maxX, dy: (iconFrame.minY + 3 * UIScreen.main.scale) / springboardFrame.maxY)).tap()
+            waitforExistence(springboard.alerts.buttons["Delete"])
+            springboard.alerts.buttons["Delete"].tap()
         }
-        let jsonData = json?.data(using: String.Encoding.utf8.rawValue)
-
-        request.httpBody = jsonData
-        print("json \(jsonData!)")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("error:", error)
-                return
-            }
-            done()
-        }
-        task.resume()
-    }
-
-    func verifyAccount(done: @escaping () -> ()) {
-        // GET to EndPoint/mail/test-9876@restmail.net
-        let restUrl = URL(string: getEndPoint)
-        var request = URLRequest(url: restUrl!)
-        request.httpMethod = "GET"
-
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if(error != nil) {
-                print("Error: \(error ?? "Get Error" as! Error)")
-            }
-            let responseString = String(data: data!, encoding: .utf8)
-            print("responseString = \(String(describing: responseString))")
-
-            let regexpUid = "(uid=[a-z0-9]{0,32}$?)"
-            let regexCode = "(code=[a-z0-9]{0,32}$?)"
-            if let rangeUid = responseString?.range(of:regexpUid, options: .regularExpression) {
-                uid = String(responseString![rangeUid])
-            }
-
-            if let rangeCode = responseString?.range(of:regexCode, options: .regularExpression) {
-                code = String(responseString![rangeCode])
-            }
-
-            if (code != nil && uid != nil) {
-                let codeNumber = self.getPostValues(value: code)
-                let uidNumber = self.getPostValues(value: uid)
-
-                self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
-                    done()
-                }
-            } else {
-                done()
-            }
-        }
-        task.resume()
-    }
-
-    func getPostValues(value: String) -> String {
-        // From the regExp it is necessary to get only the number to add it to a json and send in POST request
-        let finalNumberIndex = value.index(value.endIndex, offsetBy: -32);
-        let numberValue = value[finalNumberIndex...];
-        return String(numberValue)
     }
 }
