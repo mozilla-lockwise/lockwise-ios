@@ -118,7 +118,7 @@ class SettingListPresenter {
                         self.view?.displayAlertController(
                             buttons: self.passcodeButtonsConfiguration,
                             title: Constant.string.notUsingPasscode,
-                            message: Constant.string.passcodeDetailInformation,
+                            message: String(format: Constant.string.passcodeDetailInformation, Constant.string.productName),
                             style: .alert,
                             barButtonItem: nil)
                     }
@@ -173,7 +173,7 @@ extension SettingListPresenter {
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
-                string: Constant.string.settingsUsageDataSubtitle,
+            string: String(format: Constant.string.settingsUsageDataSubtitle, Constant.string.productName),
                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         subtitle.append(NSAttributedString(
                 string: Constant.string.learnMore,

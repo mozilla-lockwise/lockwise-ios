@@ -82,7 +82,7 @@ class BaseItemListView: UIViewController {
     internal func styleNavigationBar() {
         self.navigationController?.navigationBar.tintColor = UIColor.white
 
-        self.navigationItem.title = Constant.string.yourLockbox
+        self.navigationItem.title = Constant.string.productName
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockbox.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
