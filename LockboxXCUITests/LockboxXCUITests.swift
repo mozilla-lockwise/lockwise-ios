@@ -63,6 +63,7 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func test1SettingsAccountUI() {
+        self.unlockApp()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         snapshot("03Settings" + CONTENT_SIZE)
 
@@ -314,5 +315,13 @@ class LockboxXCUITests: BaseTestCase {
             XCTAssertTrue(safari.buttons["Use “iosmztest@gmail.com”"].exists)
         }
         safari.terminate()
+    }
+    
+    private func unlockApp() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitforExistence(springboard.secureTextFields["Passcode field"])
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("0000\r")
     }
 }
