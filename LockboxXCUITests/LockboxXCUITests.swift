@@ -143,12 +143,12 @@ class LockboxXCUITests: BaseTestCase {
         }
         waitforExistence(app.buttons["finish.button"], timeout: 10)
         app.buttons["finish.button"].tap()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
     }
 
     func test6SortEntries() {
         navigator.goto(Screen.LockboxMainPage)
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"], timeout: 10)
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
         // Checking if doing the steps directly works on bb
         waitforExistence(app.buttons["sorting.button"], timeout: 3)
         app.buttons["sorting.button"].tap()
