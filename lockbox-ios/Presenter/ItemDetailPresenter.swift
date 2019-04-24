@@ -47,6 +47,7 @@ class ItemDetailPresenter {
             target.itemDetailStore.itemDetailId
                 .take(1)
                 .flatMap { target.dataStore.get($0) }
+                .take(1)
                 .map { item -> [Action] in
                     var actions: [Action] = []
                     if copyableFields.contains(value) {
