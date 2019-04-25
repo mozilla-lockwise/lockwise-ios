@@ -62,7 +62,6 @@ class LockboxXCUITests: BaseTestCase {
         safari.terminate()
 
         app.launch()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
     }
 
     func testSettingsAccountUI() {
@@ -223,7 +222,7 @@ class LockboxXCUITests: BaseTestCase {
     func testSetAutofill() {
         if #available(iOS 12.0, *) {
             let testingURL = "accounts.google.com"
-            let safariButtons1 = "firefoxlockbox@example.com, for this website — Lockbox"
+            let safariButtons1 = "firefoxlockbox@gmail.com, for this website — Lockbox"
             let safariButtons2 = "Use “firefoxlockbox@example.com”"
             loginFxAccount()
             waitforExistence(app.buttons["setupAutofill.button"])
@@ -238,11 +237,6 @@ class LockboxXCUITests: BaseTestCase {
             waitforExistence(settings.cells.staticTexts["Passwords & Accounts"])
             // Configure Passwords & Accounts settings
             configureAutofillSettings()
-            // Wait until the app is updated
-            waitforExistence(settings.alerts["Sign in Required"].buttons["OK"], timeout: 10)
-            settings.alerts["Sign in Required"].buttons["OK"].tap()
-            sleep(5)
-            settings.terminate()
 
             //Open Safari
             safari.launch()
@@ -253,8 +247,7 @@ class LockboxXCUITests: BaseTestCase {
             waitforExistence(safari.otherElements["WebView"].webViews.textFields["Email or phone"], timeout: 15)
             safari.buttons["ReloadButton"].tap()
             waitforExistence(safari.otherElements["WebView"].webViews.textFields["Email or phone"], timeout: 15)
-            safari.otherElements["WebView"].webViews.textFields["Email or phone"].tap()
-            sleep(10)
+
             // Need to confirm what is shown here, different elements have appeared and
             if (safari.buttons["Other passwords"].exists) {
                 safari.buttons["Other passwords"].tap()
