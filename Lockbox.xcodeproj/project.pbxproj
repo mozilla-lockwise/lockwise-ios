@@ -226,6 +226,8 @@
 		7DB9DEA32140D04700239D31 /* ItemListDisplayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54E02364E77393B85C6FE /* ItemListDisplayAction.swift */; };
 		7DB9DEA42140D41E00239D31 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224A6C7C212C8C2B008C7A3F /* UIFont+.swift */; };
 		7DB9DEA52140D56E00239D31 /* ItemListDisplayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54766081BC269C5C33884 /* ItemListDisplayStore.swift */; };
+		7DBDBBC822726E1E00A4EF14 /* DataStoreSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBDBBC722726E1E00A4EF14 /* DataStoreSupport.swift */; };
+		7DBDBBC922726E1E00A4EF14 /* DataStoreSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBDBBC722726E1E00A4EF14 /* DataStoreSupport.swift */; };
 		7DC3899C20B600820057929D /* ItemDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC3899E20B600820057929D /* ItemDetail.storyboard */; };
 		7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC75D7B206AD01C007CDDBB /* AccountSetting.storyboard */; };
 		7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CDEA56C47263160AD0E /* Dispatcher.swift */; };
@@ -547,6 +549,7 @@
 		7DA4C6902028FB0900B61DD8 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		7DB9DE952140C5F400239D31 /* BaseItemListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseItemListPresenter.swift; sourceTree = "<group>"; };
 		7DB9DEA02140CC0300239D31 /* ItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListView.swift; sourceTree = "<group>"; };
+		7DBDBBC722726E1E00A4EF14 /* DataStoreSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStoreSupport.swift; sourceTree = "<group>"; };
 		7DC3899D20B600820057929D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ItemDetail.storyboard; sourceTree = "<group>"; };
 		7DC389A020B600830057929D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemDetail.strings; sourceTree = "<group>"; };
 		7DC75D7A206AD01C007CDDBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AccountSetting.storyboard; sourceTree = "<group>"; };
@@ -758,6 +761,7 @@
 				D85CB82221DED0E100E19118 /* ViewFactory.swift */,
 				7D116239225FAF11009097C7 /* AutoLockSupport.swift */,
 				7D897EAE2261074700257946 /* NetworkProtocols.swift */,
+				7DBDBBC722726E1E00A4EF14 /* DataStoreSupport.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1684,6 +1688,7 @@
 				D819A4BF21BB2622004EE6F3 /* AppInfo.swift in Sources */,
 				7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */,
 				7AA54E336336462A6DEB79EE /* LifecycleStore.swift in Sources */,
+				7DBDBBC822726E1E00A4EF14 /* DataStoreSupport.swift in Sources */,
 				7AA5429FC403FDC52F2034F0 /* EmptyPlaceholderCell.swift in Sources */,
 				7AA54C565CB9C3C8651D97C8 /* ExternalWebsiteNavigationController.swift in Sources */,
 				7D07FE94225E32C40000B030 /* NetworkStore.swift in Sources */,
@@ -1701,6 +1706,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7DBDBBC922726E1E00A4EF14 /* DataStoreSupport.swift in Sources */,
 				D819A4BD21BAFA6F004EE6F3 /* File.swift in Sources */,
 				7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */,
 				7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */,

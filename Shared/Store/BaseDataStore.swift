@@ -78,18 +78,18 @@ class BaseDataStore {
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
-    internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
+    private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
+    private let dispatcher: Dispatcher
     private let keychainWrapper: KeychainWrapper
+    private let autoLockSupport: AutoLockSupport
+    private let dataStoreSupport: DataStoreSupport
     private let networkStore: NetworkStore
     private let lifecycleStore: LifecycleStore
-    internal let dispatcher: Dispatcher
-    private let application: UIApplication
-    internal var syncUnlockInfo: SyncUnlockInfo?
-    internal let accountStore: BaseAccountStore
-    private let autoLockSupport: AutoLockSupport
+    private let accountStore: BaseAccountStore
 
-    internal var loginsStorage: LoginsStorage?
+    private var loginsStorage: LoginsStorageProtocol?
+    private var syncUnlockInfo: SyncUnlockInfo?
 
     public var list: Observable<[LoginRecord]> {
         return self.listSubject.asObservable()
@@ -125,17 +125,17 @@ class BaseDataStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         accountStore: BaseAccountStore = AccountStore.shared,
          autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
+         dataStoreSupport: DataStoreSupport = DataStoreSupport.shared,
+         accountStore: BaseAccountStore = AccountStore.shared,
          networkStore: NetworkStore = NetworkStore.shared,
-         lifecycleStore: LifecycleStore = LifecycleStore.shared,
-         application: UIApplication = UIApplication.shared) {
+         lifecycleStore: LifecycleStore = LifecycleStore.shared) {
         self.keychainWrapper = keychainWrapper
-        self.application = application
         self.accountStore = accountStore
         self.networkStore = networkStore
         self.lifecycleStore = lifecycleStore
         self.autoLockSupport = autoLockSupport
+        self.dataStoreSupport = dataStoreSupport
         self.dispatcher = dispatcher
 
         self.initializeLoginsStorage()
@@ -224,7 +224,7 @@ class BaseDataStore {
 
 // login entry operations
 extension BaseDataStore {
-    public func touch(id: String) {
+    private func touch(id: String) {
         do {
             try self.loginsStorage?.touch(id: id)
         } catch let error {
@@ -235,7 +235,7 @@ extension BaseDataStore {
 
 // list operations
 extension BaseDataStore {
-    public func sync() {
+    private func sync() {
         guard let loginsStorage = self.loginsStorage,
             let syncInfo = self.syncUnlockInfo,
             !loginsStorage.isLocked()
@@ -278,12 +278,12 @@ extension BaseDataStore {
 
 // locking management
 extension BaseDataStore {
-    public func unlock() {
+    private func unlock() {
         self.autoLockSupport.forwardDateNextLockTime()
         self.unlockInternal()
     }
     
-    public func lock() {
+    private func lock() {
         self.autoLockSupport.backDateNextLockTime()
         self.lockInternal()
     }
@@ -330,7 +330,7 @@ extension BaseDataStore {
 
 // lifecycle management
 extension BaseDataStore {
-    public func updateCredentials(_ syncCredential: SyncCredential) {
+    private func updateCredentials(_ syncCredential: SyncCredential) {
         self.syncUnlockInfo = syncCredential.syncInfo
 
         guard let loginsStorage = self.loginsStorage else { return }
@@ -383,6 +383,6 @@ extension BaseDataStore {
         let files = File(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
-        self.loginsStorage = LoginsStorage(databasePath: file)
+        self.loginsStorage = dataStoreSupport.createLoginsStorage(databasePath: file)
     }
 }
