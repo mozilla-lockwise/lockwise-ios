@@ -266,17 +266,4 @@ extension BaseTestCase {
         waitforExistence(settings.cells.staticTexts["Lockbox"])
         settings.cells.staticTexts["Lockbox"].tap()
     }
-
-    func deleteApp(name: String) {
-        app.terminate()
-        let icon = springboard.icons[appName]
-        if icon.exists {
-            let iconFrame = icon.frame
-            let springboardFrame = springboard.frame
-            icon.press(forDuration: 1.3)
-            springboard.coordinate(withNormalizedOffset: CGVector(dx: (iconFrame.minX + 3 * UIScreen.main.scale) / springboardFrame.maxX, dy: (iconFrame.minY + 3 * UIScreen.main.scale) / springboardFrame.maxY)).tap()
-            waitforExistence(springboard.alerts.buttons["Delete"])
-            springboard.alerts.buttons["Delete"].tap()
-        }
-    }
 }

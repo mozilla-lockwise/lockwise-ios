@@ -7,7 +7,10 @@ import XCTest
 class LockboxXCUITests: BaseTestCase {
 
     override func tearDown() {
-        deleteApp(name: "Lockbox")
+        navigator.goto(Screen.AccountSettingsMenu)
+        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        waitforExistence(app.buttons["getStarted.button"], timeout: 30)
+        navigator.nowAt(Screen.WelcomeScreen)
     }
 
     func testCheckEntryDetailsView() {
@@ -62,6 +65,9 @@ class LockboxXCUITests: BaseTestCase {
         safari.terminate()
 
         app.launch()
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        navigator.nowAt(Screen.LockboxMainPage)
+        navigator.goto(Screen.SettingsMenu)
     }
 
     func testSettingsAccountUI() {
@@ -82,10 +88,6 @@ class LockboxXCUITests: BaseTestCase {
         // Try Cancel disconnecting the account
         navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
         waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
-
-        // Disconnect the account
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
-        waitforExistence(app.buttons["getStarted.button"])
     }
 
     func testSettings() {
@@ -157,7 +159,7 @@ class LockboxXCUITests: BaseTestCase {
         // There should be two matches
         let twoMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(twoMatches, 5)
+            XCTAssertEqual(twoMatches, 111)
         } else {
             XCTAssertEqual(twoMatches, 108)
         }
@@ -165,7 +167,7 @@ class LockboxXCUITests: BaseTestCase {
         searchTextField.typeText("cc")
         let oneMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(oneMatches, 4)
+            XCTAssertEqual(oneMatches, 6)
         } else {
             XCTAssertEqual(oneMatches, 3)
         }
@@ -188,6 +190,8 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Clear text"].tap()
         let searchFieldValueAfterXButton = searchTextField.value as! String
         XCTAssertEqual(searchFieldValueAfterXButton, "Search your entries")
+        app.buttons["Cancel"].tap()
+        navigator.nowAt(Screen.LockboxMainPage)
     }
 
     func testCheckAutolock() {
@@ -216,6 +220,7 @@ class LockboxXCUITests: BaseTestCase {
         passcodeInput.tap()
         passcodeInput.typeText("0000\r")
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        navigator.nowAt(Screen.LockboxMainPage)
     }
 
     // Verify SetAutofillNow
@@ -260,6 +265,9 @@ class LockboxXCUITests: BaseTestCase {
                 XCTAssertTrue(safari.buttons[safariButtons2].exists)
             }
             safari.terminate()
+            app.launch()
+            waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
+            navigator.nowAt(Screen.LockboxMainPage)
         }
     }
     
