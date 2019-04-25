@@ -1,6 +1,6 @@
 # External Dependencies
 
-With the addition of the Credential Provider API in iOS 12, you will need to use **Xcode 10** (beta 6) and **Swift 4.2** (`swiftlang-1000.0.36 clang-1000.10.44`) to work on Lockbox.
+With the addition of the Credential Provider API in iOS 12, you will need to use **Xcode 10.1** and **Swift 4.2.1** (`swiftlang-1000.0.36 clang-1000.10.44`) to work on Lockbox.
 
 And if you are running the beta, and haven't already: `sudo xcode-select --switch` to point to the beta Xcode app
 
