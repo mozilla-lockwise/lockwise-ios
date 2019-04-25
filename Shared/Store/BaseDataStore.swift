@@ -82,6 +82,7 @@ class BaseDataStore {
 
     private let keychainWrapper: KeychainWrapper
     private let networkStore: NetworkStore
+    private let lifecycleStore: LifecycleStore
     internal let dispatcher: Dispatcher
     private let application: UIApplication
     internal var syncUnlockInfo: SyncUnlockInfo?
@@ -127,11 +128,13 @@ class BaseDataStore {
          accountStore: BaseAccountStore = AccountStore.shared,
          autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
          networkStore: NetworkStore = NetworkStore.shared,
+         lifecycleStore: LifecycleStore = LifecycleStore.shared,
          application: UIApplication = UIApplication.shared) {
         self.keychainWrapper = keychainWrapper
         self.application = application
         self.accountStore = accountStore
         self.networkStore = networkStore
+        self.lifecycleStore = lifecycleStore
         self.autoLockSupport = autoLockSupport
         self.dispatcher = dispatcher
 
@@ -157,18 +160,24 @@ class BaseDataStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        dispatcher.register
-                .filterByType(class: LifecycleAction.self)
-                .subscribe(onNext: { action in
-                    switch action {
+        Observable.combineLatest(lifecycleStore.lifecycleEvents, self.storageState)
+                // We care what the storage state when lifecycle events change,
+                // not when the lifecycle state when there are new storage state events.
+                .distinctUntilChanged { (lhLifecycleStorageEvent, rhLifecycleStorageEvent) -> Bool in
+                    return lhLifecycleStorageEvent.0 != rhLifecycleStorageEvent.0
+                }
+                .subscribe(onNext: { (lifecycle, state) in
+                    switch lifecycle {
                     case .background:
+                        self.shutdown()
+                        guard state == .Unlocked else { break }
                         self.autoLockSupport.storeNextAutolockTime()
                     case .foreground:
                         self.initializeLoginsStorage()
-                        self.handleLock()
+                        self.lockIfPrepared()
                     case .upgrade(let previous, _):
                         if previous <= 2 {
-                            self.handleLock()
+                            self.lockIfPrepared()
                         }
                     case .shutdown:
                         self.shutdown()
@@ -306,6 +315,16 @@ extension BaseDataStore {
         } else {
             self.unlockInternal()
         }
+    }
+
+    private func lockIfPrepared() {
+        self.storageState
+            .take(1)
+            .filter { $0 != .Unprepared}
+            .subscribe(onNext: { _ in
+                self.handleLock()
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 

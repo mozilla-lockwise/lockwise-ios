@@ -13,7 +13,7 @@ class LifecycleStore {
     private let dispatcher: Dispatcher
     private let _lifecycleFilter = PublishSubject<LifecycleAction>()
 
-    public var lifecycleFilter: Observable<LifecycleAction> {
+    public var lifecycleEvents: Observable<LifecycleAction> {
         return _lifecycleFilter.asObservable()
     }
 
