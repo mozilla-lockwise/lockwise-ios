@@ -8,7 +8,11 @@ class LockboxXCUITests: BaseTestCase {
 
     override func tearDown() {
         navigator.goto(Screen.AccountSettingsMenu)
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"], timeout: 3)
+        // Using taps directly because the action is intermittently failing on BB
+        app.buttons["disconnectFirefoxLockbox.button"].tap()
+        waitforExistence(app.buttons["Disconnect"], timeout: 3)
+        app.buttons["Disconnect"].tap()
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
         navigator.nowAt(Screen.WelcomeScreen)
     }
@@ -76,9 +80,7 @@ class LockboxXCUITests: BaseTestCase {
         tapOnFinishButton()
 
         waitForLockboxEntriesListView()
-        self.unlockApp()
         snapshot("03Settings" + CONTENT_SIZE)
-
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
@@ -269,13 +271,5 @@ class LockboxXCUITests: BaseTestCase {
             waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
             navigator.nowAt(Screen.LockboxMainPage)
         }
-    }
-    
-    private func unlockApp() {
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitforExistence(springboard.secureTextFields["Passcode field"])
-        let passcodeInput = springboard.secureTextFields["Passcode field"]
-        passcodeInput.tap()
-        passcodeInput.typeText("0000\r")
     }
 }
