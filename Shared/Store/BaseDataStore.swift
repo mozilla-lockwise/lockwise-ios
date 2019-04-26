@@ -159,9 +159,16 @@ class BaseDataStore {
                 .disposed(by: self.disposeBag)
 
         self.lifecycleStore.lifecycleEvents
-                .filter { $0 == .shutdown }
-                .subscribe(onNext: { _ in
-                    self.shutdown()
+                .filter { $0 == .shutdown || $0 == .background }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.shutdown()
+                })
+                .disposed(by: self.disposeBag)
+
+        self.lifecycleStore.lifecycleEvents
+                .filter { $0 == .foreground }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.initializeLoginsStorage()
                 })
                 .disposed(by: self.disposeBag)
 
@@ -260,7 +267,6 @@ extension BaseDataStore {
         Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
                 .filter { $0.0 == .background }
                 .subscribe(onNext: { [weak self] (lifecycle, state) in
-                    self?.shutdown()
                     guard state == .Unlocked else { return }
 
                     self?.autoLockSupport.storeNextAutolockTime()
@@ -270,7 +276,6 @@ extension BaseDataStore {
         Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
                 .filter { $0.0 == .foreground }
                 .subscribe(onNext: { [weak self] (lifecycle, state) in
-                    self?.initializeLoginsStorage()
                     guard state != .Unprepared else { return }
 
                     self?.handleLock()

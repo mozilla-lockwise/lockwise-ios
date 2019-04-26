@@ -86,6 +86,10 @@ class DataStoreSpec: QuickSpec {
             self.createArgument = databasePath
             return self.loginsStorage
         }
+
+        func clearInvocations() {
+            self.createArgument = nil
+        }
     }
 
     class FakeAutoLockSupport: AutoLockSupport {
@@ -231,21 +235,28 @@ class DataStoreSpec: QuickSpec {
                 }
 
                 it("pushes unprepared and wipes the loginsstorage") {
-                    expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                    expect(self.loginsStorage.wipeLocalCalled).to(beTrue())
                     expect(self.listObserver.events.last!.value.element!).to(beEmpty())
                     expect(self.stateObserver.events.last!.value.element!).to(equal(LoginStoreState.Unprepared))
                 }
 
                 describe("getting background events") {
-                    beforeEach {
-                        self.loginsStorage.clearInvocations()
-                        self.lifecycleStore.fakeCycle.onNext(.background)
-                    }
-
                     it("closes the database and does not interact with autolock support") {
+                        self.lifecycleStore.fakeCycle.onNext(.background)
                         expect(self.autoLockSupport.storeNextTimeCalled).to(beFalse())
                         expect(self.loginsStorage.closeCalled).to(beTrue())
+                    }
+                }
+
+                describe("getting foreground events") {
+                    it("re-opens the database and does not interact with locking or state") {
+                        self.loginsStorage.clearInvocations()
+                        self.dataStoreSupport.clearInvocations()
+                        self.lifecycleStore.fakeCycle.onNext(.foreground)
+                        expect(self.dataStoreSupport.createArgument).notTo(beNil())
+                        expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
+                        expect(self.loginsStorage.ensureLockedCalled).to(beFalse())
+                        expect(self.listObserver.events.last!.value.element!).to(beEmpty())
+                        expect(self.stateObserver.events.last!.value.element!).to(equal(LoginStoreState.Unprepared))
                     }
                 }
             }
