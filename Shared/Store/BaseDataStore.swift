@@ -107,23 +107,22 @@ class BaseDataStore {
     }
 
     // From: https://github.com/mozilla-lockbox/lockbox-ios-fxa-sync/blob/120bcb10967ea0f2015fc47bbf8293db57043568/Providers/Profile.swift#L168
-    internal static var loginsKey: String? {
+    internal var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
-        if keychain.hasValue(forKey: key) {
-            return keychain.string(forKey: key)
+        if self.keychainWrapper.hasValue(forKey: key) {
+            return self.keychainWrapper.string(forKey: key)
         }
 
         let Length: UInt = 256
         let secret = Bytes.generateRandomBytes(Length).base64EncodedString(options: [])
-        keychain.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
+        self.keychainWrapper.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
         return secret
     }
 
     var unlockInfo: SyncUnlockInfo?
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
+         keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
          dataStoreSupport: DataStoreSupport = DataStoreSupport.shared,
          networkStore: NetworkStore = NetworkStore.shared,
@@ -264,7 +263,12 @@ extension BaseDataStore {
 // locking management
 extension BaseDataStore {
     private func setupAutolock() {
-        Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
+        let emitsOnNewLifecycleObservable = Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
+                .distinctUntilChanged { (lhLifecycleState, rhLifecycleState) -> Bool in
+                    return lhLifecycleState.0 == rhLifecycleState.0
+                }
+
+        emitsOnNewLifecycleObservable
                 .filter { $0.0 == .background }
                 .subscribe(onNext: { [weak self] (lifecycle, state) in
                     guard state == .Unlocked else { return }
@@ -273,7 +277,7 @@ extension BaseDataStore {
                 })
                 .disposed(by: disposeBag)
 
-        Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
+        emitsOnNewLifecycleObservable
                 .filter { $0.0 == .foreground }
                 .subscribe(onNext: { [weak self] (lifecycle, state) in
                     guard state != .Unprepared else { return }
@@ -287,7 +291,7 @@ extension BaseDataStore {
         self.autoLockSupport.forwardDateNextLockTime()
         self.unlockInternal()
     }
-    
+
     private func lock() {
         self.autoLockSupport.backDateNextLockTime()
         self.lockInternal()
@@ -295,7 +299,7 @@ extension BaseDataStore {
 
     private func lockInternal() {
         guard let loginsStorage = self.loginsStorage else { return }
-        
+
         queue.async {
             loginsStorage.ensureLocked()
             self.storageStateSubject.onNext(.Locked)
@@ -304,7 +308,7 @@ extension BaseDataStore {
 
     private func unlockInternal() {
         guard let loginsStorage = self.loginsStorage,
-            let loginsKey = BaseDataStore.loginsKey else { return }
+            let loginsKey = self.loginsKey else { return }
 
         do {
             try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
@@ -343,7 +347,7 @@ extension BaseDataStore {
 
     private func reset() {
         guard let loginsStorage = self.loginsStorage,
-            let loginsKey = BaseDataStore.loginsKey else { return }
+            let loginsKey = self.loginsKey else { return }
 
         queue.async {
             do {

@@ -13,7 +13,7 @@ import MozillaAppServices
 
 @testable import Lockbox
 
-class DataStoreSpec: QuickSpec {
+class BaseDataStoreSpec: QuickSpec {
     class FakeLoginsStorage: LoginsStorageProtocol {
         var closeCalled = false
         var lockedStub = false
@@ -116,10 +116,10 @@ class DataStoreSpec: QuickSpec {
     }
 
     class FakeKeychainWrapper: KeychainWrapper {
-        var hasValueStub: Bool = false
+        var hasValueStub: Bool = true
         var saveArguments: [String: String] = [:]
-        var saveSuccess: Bool!
-        var retrieveResult: [String: String] = [:]
+        var saveSuccess: Bool = true
+        var retrieveResult: [String: String] = ["sqlcipher.key.logins.db": "sdffdsfds"]
 
         override func set(_ value: String, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> Bool {
             self.saveArguments[key] = value
@@ -149,11 +149,11 @@ class DataStoreSpec: QuickSpec {
 
     class FakeDataStoreImpl: BaseDataStore {
         override init(dispatcher: Dispatcher,
-             keychainWrapper: KeychainWrapper,
-             autoLockSupport: AutoLockSupport,
-             dataStoreSupport: DataStoreSupport,
-             networkStore: NetworkStore = NetworkStore.shared,
-             lifecycleStore: LifecycleStore) {
+                      keychainWrapper: KeychainWrapper,
+                      autoLockSupport: AutoLockSupport,
+                      dataStoreSupport: DataStoreSupport,
+                      networkStore: NetworkStore = NetworkStore.shared,
+                      lifecycleStore: LifecycleStore) {
             super.init(
                     dispatcher: dispatcher,
                     keychainWrapper: keychainWrapper,
@@ -164,7 +164,8 @@ class DataStoreSpec: QuickSpec {
             )
         }
 
-        override func initialized() {}
+        override func initialized() {
+        }
     }
 
     private var loginsStorage: FakeLoginsStorage!
@@ -175,6 +176,12 @@ class DataStoreSpec: QuickSpec {
         LoginRecord(fromJSONDict: [:]),
         LoginRecord(fromJSONDict: [:])
     ]
+    private var syncInfo = SyncUnlockInfo(
+            kid: "fdsfdssd",
+            fxaAccessToken: "fsdffds",
+            syncKey: "lkfskjlfds",
+            tokenserverURL: "www.mozilla.org"
+    )
 
     private let scheduler = TestScheduler.init(initialClock: 0)
     private let disposeBag = DisposeBag()
@@ -190,7 +197,7 @@ class DataStoreSpec: QuickSpec {
     var subject: BaseDataStore!
 
     override func spec() {
-        describe("DataStore") {
+        describe("BaseDataStoreSpec") {
             beforeEach {
                 self.loginsStorage = FakeLoginsStorage()
                 self.dispatcher = Dispatcher()
@@ -213,16 +220,16 @@ class DataStoreSpec: QuickSpec {
                 self.syncObserver = self.scheduler.createObserver(SyncState.self)
 
                 self.subject.list
-                    .subscribe(self.listObserver)
-                    .disposed(by: self.disposeBag)
+                        .subscribe(self.listObserver)
+                        .disposed(by: self.disposeBag)
 
                 self.subject.syncState
-                    .subscribe(self.syncObserver)
-                    .disposed(by: self.disposeBag)
+                        .subscribe(self.syncObserver)
+                        .disposed(by: self.disposeBag)
 
                 self.subject.storageState
-                    .subscribe(self.stateObserver)
-                    .disposed(by: self.disposeBag)
+                        .subscribe(self.stateObserver)
+                        .disposed(by: self.disposeBag)
             }
 
             it("takes initialization steps") {
@@ -257,6 +264,53 @@ class DataStoreSpec: QuickSpec {
                         expect(self.loginsStorage.ensureLockedCalled).to(beFalse())
                         expect(self.listObserver.events.last!.value.element!).to(beEmpty())
                         expect(self.stateObserver.events.last!.value.element!).to(equal(LoginStoreState.Unprepared))
+                    }
+                }
+            }
+
+            describe("when the datastore is unlocked") {
+                beforeEach {
+                    let syncCred = SyncCredential(syncInfo: self.syncInfo, isNew: true)
+                    self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncCred))
+                }
+
+                describe("backgrounding actions") {
+                    beforeEach {
+                        self.lifecycleStore.fakeCycle.onNext(.background)
+                    }
+
+                    it("stores the next autolock time") {
+                        expect(self.autoLockSupport.storeNextTimeCalled).to(beTrue())
+                    }
+                }
+
+                describe("foregrounding actions") {
+                    beforeEach {
+                        self.loginsStorage.clearInvocations()
+                    }
+
+                    describe("when the app should lock") {
+                        beforeEach {
+                            self.autoLockSupport.lockRequiredStub = true
+                            self.lifecycleStore.fakeCycle.onNext(.foreground)
+                        }
+
+                        it("locks") {
+                            expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
+                            expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Locked))
+                        }
+                    }
+
+                    describe("when the app should not lock") {
+                        beforeEach {
+                            self.autoLockSupport.lockRequiredStub = false
+                            self.lifecycleStore.fakeCycle.onNext(.foreground)
+                        }
+
+                        it("stays unlocked & emits no new values") {
+                            expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
+                            expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Unlocked))
+                        }
                     }
                 }
             }
