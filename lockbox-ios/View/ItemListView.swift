@@ -65,6 +65,7 @@ extension ItemListView: ItemListViewProtocol {
     func bind(scrollAction: Driver<ScrollAction>) {
         scrollAction.delay(RxTimeInterval(0.1))
                     .drive(onNext: { action in
+                        guard self.tableView.dataSource?.tableView(self.tableView, numberOfRowsInSection: 0) ?? 0 > 0 else { return }
                         switch action {
                         case .toTop:
                             self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .none, animated: true)

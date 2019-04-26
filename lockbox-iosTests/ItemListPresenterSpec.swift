@@ -109,7 +109,7 @@ class ItemListPresenterSpec: QuickSpec {
             self.itemListStub = PublishSubject<[LoginRecord]>()
             self.syncStateStub = PublishSubject<SyncState>()
             self.storageStateStub = PublishSubject<LoginStoreState>()
-            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard)
 
             self.disposeBag = DisposeBag()
         }

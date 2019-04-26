@@ -33,7 +33,7 @@ class ItemDetailStoreSpec: QuickSpec {
         let syncStateStub = ReplaySubject<SyncState>.create(bufferSize: 1)
 
         init(dispatcher: Dispatcher) {
-            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+            super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard)
 
             self.disposeBag = DisposeBag()
         }

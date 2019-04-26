@@ -1,4 +1,4 @@
-1. Install Xcode version 9.4.1
+1. Install Xcode version 10.1
 
 2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
 

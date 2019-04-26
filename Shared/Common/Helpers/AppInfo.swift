@@ -12,7 +12,12 @@
     /// of the *base* bundle identifier.
     public static var baseBundleIdentifier: String {
         let bundle = Bundle.main
+        let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as! String
         let baseBundleIdentifier = bundle.bundleIdentifier!
+        if packageType == "XPC!" {
+            let components = baseBundleIdentifier.components(separatedBy: ".")
+            return components[0..<components.count-1].joined(separator: ".")
+        }
 
         return baseBundleIdentifier
     }
