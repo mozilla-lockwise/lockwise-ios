@@ -83,6 +83,7 @@ class DataStoreSpec: QuickSpec {
         }
 
         override func createLoginsStorage(databasePath: String) -> LoginsStorageProtocol {
+            self.createArgument = databasePath
             return self.loginsStorage
         }
     }
@@ -111,6 +112,7 @@ class DataStoreSpec: QuickSpec {
     }
 
     class FakeKeychainWrapper: KeychainWrapper {
+        var hasValueStub: Bool = false
         var saveArguments: [String: String] = [:]
         var saveSuccess: Bool!
         var retrieveResult: [String: String] = [:]
@@ -118,6 +120,10 @@ class DataStoreSpec: QuickSpec {
         override func set(_ value: String, forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> Bool {
             self.saveArguments[key] = value
             return saveSuccess
+        }
+
+        override func hasValue(forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> Bool {
+            return hasValueStub
         }
 
         override func string(forKey key: String, withAccessibility accessibility: KeychainItemAccessibility? = nil) -> String? {
@@ -138,19 +144,17 @@ class DataStoreSpec: QuickSpec {
     }
 
     class FakeDataStoreImpl: BaseDataStore {
-        override init(dispatcher: Dispatcher = Dispatcher.shared,
-             keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-             autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
-             dataStoreSupport: DataStoreSupport = DataStoreSupport.shared,
-             accountStore: BaseAccountStore = AccountStore.shared,
+        override init(dispatcher: Dispatcher,
+             keychainWrapper: KeychainWrapper,
+             autoLockSupport: AutoLockSupport,
+             dataStoreSupport: DataStoreSupport,
              networkStore: NetworkStore = NetworkStore.shared,
-             lifecycleStore: LifecycleStore = LifecycleStore.shared) {
+             lifecycleStore: LifecycleStore) {
             super.init(
                     dispatcher: dispatcher,
                     keychainWrapper: keychainWrapper,
                     autoLockSupport: autoLockSupport,
                     dataStoreSupport: dataStoreSupport,
-                    accountStore: accountStore,
                     networkStore: networkStore,
                     lifecycleStore: lifecycleStore
             )
@@ -231,6 +235,18 @@ class DataStoreSpec: QuickSpec {
                     expect(self.loginsStorage.wipeLocalCalled).to(beTrue())
                     expect(self.listObserver.events.last!.value.element!).to(beEmpty())
                     expect(self.stateObserver.events.last!.value.element!).to(equal(LoginStoreState.Unprepared))
+                }
+
+                describe("getting background events") {
+                    beforeEach {
+                        self.loginsStorage.clearInvocations()
+                        self.lifecycleStore.fakeCycle.onNext(.background)
+                    }
+
+                    it("closes the database and does not interact with autolock support") {
+                        expect(self.autoLockSupport.storeNextTimeCalled).to(beFalse())
+                        expect(self.loginsStorage.closeCalled).to(beTrue())
+                    }
                 }
             }
         }

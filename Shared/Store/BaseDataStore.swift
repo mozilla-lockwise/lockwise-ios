@@ -86,7 +86,6 @@ class BaseDataStore {
     private let dataStoreSupport: DataStoreSupport
     private let networkStore: NetworkStore
     private let lifecycleStore: LifecycleStore
-    private let accountStore: BaseAccountStore
 
     private var loginsStorage: LoginsStorageProtocol?
     private var syncUnlockInfo: SyncUnlockInfo?
@@ -127,11 +126,9 @@ class BaseDataStore {
          keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
          autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
          dataStoreSupport: DataStoreSupport = DataStoreSupport.shared,
-         accountStore: BaseAccountStore = AccountStore.shared,
          networkStore: NetworkStore = NetworkStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared) {
         self.keychainWrapper = keychainWrapper
-        self.accountStore = accountStore
         self.networkStore = networkStore
         self.lifecycleStore = lifecycleStore
         self.autoLockSupport = autoLockSupport
@@ -139,8 +136,9 @@ class BaseDataStore {
         self.dispatcher = dispatcher
 
         self.initializeLoginsStorage()
+        self.setupAutolock()
 
-        dispatcher.register
+        self.dispatcher.register
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
                     switch action {
@@ -160,32 +158,12 @@ class BaseDataStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        Observable.combineLatest(lifecycleStore.lifecycleEvents, self.storageState)
-                // We care what the storage state when lifecycle events change,
-                // not when the lifecycle state when there are new storage state events.
-                .distinctUntilChanged { (lhLifecycleStorageEvent, rhLifecycleStorageEvent) -> Bool in
-                    return lhLifecycleStorageEvent.0 != rhLifecycleStorageEvent.0
-                }
-                .subscribe(onNext: { (lifecycle, state) in
-                    switch lifecycle {
-                    case .background:
-                        self.shutdown()
-                        guard state == .Unlocked else { break }
-                        self.autoLockSupport.storeNextAutolockTime()
-                    case .foreground:
-                        self.initializeLoginsStorage()
-                        self.lockIfPrepared()
-                    case .upgrade(let previous, _):
-                        if previous <= 2 {
-                            self.lockIfPrepared()
-                        }
-                    case .shutdown:
-                        self.shutdown()
-                    default:
-                        break
-                    }
+        self.lifecycleStore.lifecycleEvents
+                .filter { $0 == .shutdown }
+                .subscribe(onNext: { _ in
+                    self.shutdown()
                 })
-                .disposed(by: disposeBag)
+                .disposed(by: self.disposeBag)
 
         self.syncState
                 .subscribe(onNext: { state in
@@ -278,6 +256,28 @@ extension BaseDataStore {
 
 // locking management
 extension BaseDataStore {
+    private func setupAutolock() {
+        Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
+                .filter { $0.0 == .background }
+                .subscribe(onNext: { [weak self] (lifecycle, state) in
+                    self?.shutdown()
+                    guard state == .Unlocked else { return }
+
+                    self?.autoLockSupport.storeNextAutolockTime()
+                })
+                .disposed(by: disposeBag)
+
+        Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
+                .filter { $0.0 == .foreground }
+                .subscribe(onNext: { [weak self] (lifecycle, state) in
+                    self?.initializeLoginsStorage()
+                    guard state != .Unprepared else { return }
+
+                    self?.handleLock()
+                })
+                .disposed(by: self.disposeBag)
+    }
+
     private func unlock() {
         self.autoLockSupport.forwardDateNextLockTime()
         self.unlockInternal()
@@ -315,16 +315,6 @@ extension BaseDataStore {
         } else {
             self.unlockInternal()
         }
-    }
-
-    private func lockIfPrepared() {
-        self.storageState
-            .take(1)
-            .filter { $0 != .Unprepared}
-            .subscribe(onNext: { _ in
-                self.handleLock()
-            })
-            .disposed(by: self.disposeBag)
     }
 }
 
