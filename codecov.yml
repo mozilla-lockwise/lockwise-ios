@@ -1,6 +1,3 @@
 ignore:
     - "LockboxXCUITests/*"
-    - "Shared/Store/BaseDataStore.swift"
-    - "lockbox-ios/Store/DataStore.swift"
-    - "CredentialProvider/Store/Datastore.swift"
     - "lockbox-iosTests/*"
