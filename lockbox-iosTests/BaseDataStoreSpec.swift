@@ -113,6 +113,12 @@ class BaseDataStoreSpec: QuickSpec {
         override func backDateNextLockTime() {
             self.backdateCalled = true
         }
+
+        func clearInvocations() {
+            self.storeNextTimeCalled = false
+            self.backdateCalled = false
+            self.forwardDateCalled = false
+        }
     }
 
     class FakeKeychainWrapper: KeychainWrapper {
@@ -243,7 +249,7 @@ class BaseDataStoreSpec: QuickSpec {
 
                 it("pushes unprepared and wipes the loginsstorage") {
                     expect(self.listObserver.events.last!.value.element!).to(beEmpty())
-                    expect(self.stateObserver.events.last!.value.element!).to(equal(LoginStoreState.Unprepared))
+                    expect(self.loginsStorage.wipeLocalCalled).to(beTrue())
                 }
 
                 describe("getting background events") {
@@ -263,12 +269,11 @@ class BaseDataStoreSpec: QuickSpec {
                         expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
                         expect(self.loginsStorage.ensureLockedCalled).to(beFalse())
                         expect(self.listObserver.events.last!.value.element!).to(beEmpty())
-                        expect(self.stateObserver.events.last!.value.element!).to(equal(LoginStoreState.Unprepared))
                     }
                 }
             }
 
-            describe("when the datastore is unlocked") {
+            describe("when the datastore is unlocked from new credentials") {
                 beforeEach {
                     let syncCred = SyncCredential(syncInfo: self.syncInfo, isNew: true)
                     self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncCred))
@@ -311,6 +316,76 @@ class BaseDataStoreSpec: QuickSpec {
                             expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
                             expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Unlocked))
                         }
+                    }
+                }
+
+                describe("external lock actions") {
+                    beforeEach {
+                        self.loginsStorage.clearInvocations()
+                        self.autoLockSupport.clearInvocations()
+                        self.dispatcher.dispatch(action: DataStoreAction.lock)
+                    }
+
+                    it("backdates the next lock time and locks the db") {
+                        expect(self.autoLockSupport.backdateCalled).to(beTrue())
+                        expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
+                        expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Locked))
+                    }
+                }
+            }
+
+            describe("when the datastore is locked") {
+                beforeEach {
+                    let syncCred = SyncCredential(syncInfo: self.syncInfo, isNew: true)
+                    self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncCred))
+                    self.dispatcher.dispatch(action: DataStoreAction.lock)
+                }
+
+                describe("external unlock actions") {
+                    beforeEach {
+                        self.loginsStorage.clearInvocations()
+                        self.autoLockSupport.clearInvocations()
+                        self.dispatcher.dispatch(action: DataStoreAction.unlock)
+                    }
+
+                    it("forward dates the next lock time and unlocks the db") {
+                        expect(self.autoLockSupport.forwardDateCalled).to(beTrue())
+                        expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
+                    }
+                }
+            }
+
+            describe("lifecycle interactions") {
+                describe("background events") {
+                    beforeEach {
+                        self.loginsStorage.clearInvocations()
+                        self.lifecycleStore.fakeCycle.onNext(.background)
+                    }
+
+                    it("closes the db") {
+                        expect(self.loginsStorage.closeCalled).to(beTrue())
+                    }
+                }
+
+                describe("shutdown events") {
+                    beforeEach {
+                        self.loginsStorage.clearInvocations()
+                        self.lifecycleStore.fakeCycle.onNext(.shutdown)
+                    }
+
+                    it("closes the db") {
+                        expect(self.loginsStorage.closeCalled).to(beTrue())
+                    }
+                }
+
+                describe("foreground events") {
+                    beforeEach {
+                        self.dataStoreSupport.clearInvocations()
+                        self.lifecycleStore.fakeCycle.onNext(.foreground)
+                    }
+
+                    it("re-inits the datastore") {
+                        expect(self.dataStoreSupport.createArgument).notTo(beNil())
                     }
                 }
             }
