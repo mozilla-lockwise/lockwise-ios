@@ -47,6 +47,9 @@ class ItemDetailPresenter {
             target.itemDetailStore.itemDetailId
                 .take(1)
                 .flatMap { target.dataStore.get($0) }
+                // The first `take(1)` call does not push a completion after it emits, so a second one is necessary here
+                // to ensure that subsequent updates to the item do not result in subsequent dispacthed actions.
+                .take(1)
                 .map { item -> [Action] in
                     var actions: [Action] = []
                     if copyableFields.contains(value) {
