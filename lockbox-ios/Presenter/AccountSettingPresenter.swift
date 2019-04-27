@@ -87,7 +87,8 @@ class AccountSettingPresenter {
                         style: .destructive)
                 ],
                 title: String(format: Constant.string.confirmDialogTitle, Constant.string.productName),
-                message: Constant.string.confirmDialogMessage,
+                message: String(format: Constant.string.confirmDialogMessage,
+                    Constant.string.productName),
                 style: .alert,
                 barButtonItem: nil)
         }
