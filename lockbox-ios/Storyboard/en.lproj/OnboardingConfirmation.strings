@@ -1,0 +1,15 @@
+
+/* Class = "UILabel"; text = "Welcome to Firefox Lockbox"; ObjectID = "1X7-W0-IdI"; */
+"1X7-W0-IdI.text" = "Welcome to Firefox Lockbox";
+
+/* Class = "UIButton"; normalTitle = "Finish"; ObjectID = "GdN-75-tz4"; */
+"GdN-75-tz4.normalTitle" = "Finish";
+
+/* Class = "UILabel"; text = "Access logins saved to Firefox for desktop from your iPhone"; ObjectID = "afK-Kw-Hqs"; */
+"afK-Kw-Hqs.text" = "Access logins saved to Firefox for desktop from your iPhone";
+
+/* Class = "UITextView"; text = "Sync between devices with secure 256-bit encryption"; ObjectID = "o0t-1T-rrA"; */
+"o0t-1T-rrA.text" = "Sync between devices with secure 256-bit encryption";
+
+/* Class = "UILabel"; text = "Unlock the app with ease using Touch ID or Face ID"; ObjectID = "sKa-b5-lgD"; */
+"sKa-b5-lgD.text" = "Unlock the app with ease using Touch ID or Face ID";
