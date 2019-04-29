@@ -26,7 +26,7 @@ class CredentialProviderPresenter {
     private let dataStore: DataStore
     private let telemetryActionHandler: TelemetryActionHandler
     private let credentialProviderStore: CredentialProviderStore
-    private let autoLockStore: AutoLockStore
+    private let autoLockSupport: AutoLockSupport
     private let disposeBag = DisposeBag()
 
     private var dismissObserver: AnyObserver<Void> {
@@ -43,7 +43,7 @@ class CredentialProviderPresenter {
          dataStore: DataStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          credentialProviderStore: CredentialProviderStore = .shared,
-         autoLockStore: AutoLockStore = .shared,
+         autoLockSupport: AutoLockSupport = .shared,
          sizeClassStore: SizeClassStore = .shared) { // SizeClassStore needs to be initialized
         self.view = view
         self.dispatcher = dispatcher
@@ -53,7 +53,7 @@ class CredentialProviderPresenter {
         self.dataStore = dataStore
         self.telemetryActionHandler = telemetryActionHandler
         self.credentialProviderStore = credentialProviderStore
-        self.autoLockStore = autoLockStore
+        self.autoLockSupport = autoLockSupport
 
         self.accountStore.syncCredentials
             .filterNil()

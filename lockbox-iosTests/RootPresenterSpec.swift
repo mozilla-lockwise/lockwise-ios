@@ -258,7 +258,7 @@ class RootPresenterSpec: QuickSpec {
                 self.view = FakeRootView()
                 self.dispatcher = FakeDispatcher()
                 self.routeStore = FakeRouteStore()
-                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, keychainWrapper: KeychainWrapper.standard, userDefaults: UserDefaults.standard)
+                self.dataStore = FakeDataStore(dispatcher: self.dispatcher, keychainWrapper: KeychainWrapper.standard)
                 self.telemetryStore = FakeTelemetryStore()
                 self.accountStore = FakeAccountStore()
                 self.userDefaultStore = FakeUserDefaultStore()

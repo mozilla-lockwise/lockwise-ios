@@ -92,7 +92,7 @@ extension Constant.string {
     static let usernameCellAccessibilityLabel = NSLocalizedString("username_accessibility_instructions", value: "Username: double tap to copy %@", comment: "Accessibility label and instructions for username section of entry details")
     static let passwordCellAccessibilityLabel = NSLocalizedString("password_accessibility_instructions", value: "Password: double tap to copy %@", comment: "Accessibility label and instructions for password section of entry details")
     static let syncingYourEntries = NSLocalizedString("syncing_entries", value: "Syncing your entries", comment: "Label and accessibility callout for syncing your entries spinner and HUD")
-    static let doneSyncingYourEntries = NSLocalizedString("syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
+    static let doneSyncingYourEntries = NSLocalizedString("done_syncing_entries", value: "Done syncing your entries", comment: "Accessibility callout for finishing syncing your entries")
     static let installBrowserAccessibilityLabel = NSLocalizedString("install_browser_prompt", value: "%@ disabled, install this browser to make it available", comment: "Accessibility instructions for disabled web browser options")
     static let onboardingSecurityPostfix = NSLocalizedString("onboarding.encryption", value: "256-bit encryption", comment: "Name of link to algorithm used by Lockbox for encryption")
     static let reauthenticationRequired = NSLocalizedString("reauth_required", value: "Reauthentication Required", comment: "Title of dialog box displayed when users need to reauthenticate")

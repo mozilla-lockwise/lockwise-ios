@@ -50,10 +50,10 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     class FakeDispatcher: Dispatcher {
-        var dispatchActionArgument: Action?
+        var dispatchActionArgument: [Action] = []
 
         override func dispatch(action: Action) {
-            self.dispatchActionArgument = action
+            self.dispatchActionArgument.append(action)
         }
     }
 
@@ -134,8 +134,8 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             it("starts the password display as hidden") {
-                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                let action = self.dispatcher.dispatchActionArgument as! ItemDetailDisplayAction
+                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                let action = self.dispatcher.dispatchActionArgument.first as! ItemDetailDisplayAction
                 expect(action).to(equal(.togglePassword(displayed: false)))
             }
 
@@ -152,8 +152,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("dispatches the password action with the value") {
-                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                    let action = self.dispatcher.dispatchActionArgument as! ItemDetailDisplayAction
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                    let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
                     expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
                 }
             }
@@ -170,8 +170,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("routes to the item list") {
-                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                    let argument = self.dispatcher.dispatchActionArgument as! MainRouteAction
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                    let argument = self.dispatcher.dispatchActionArgument.last as! MainRouteAction
                     expect(argument).to(equal(.list))
                 }
             }
@@ -203,8 +203,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
                                 expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "", actionType: .tap)))
                             }
                         }
@@ -216,8 +216,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action with no text") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
                                 expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "", actionType: .tap)))
                             }
                         }
@@ -250,8 +250,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
                                 expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "", actionType: .tap)))
                             }
                         }
@@ -263,8 +263,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the copy action with no text") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                                let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
                                 expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "", actionType: .tap)))
                             }
                         }
@@ -289,17 +289,26 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                     describe("getting the item") {
                         let webAddress = "https://www.mozilla.org"
+                        let item = LoginRecord(fromJSONDict: ["id": "sdfdfsfd", "hostname": webAddress, "username": "ffs", "password": "ilikecatz"])
 
                         beforeEach {
-                            let item = LoginRecord(fromJSONDict: ["id": "sdfdfsfd", "hostname": webAddress, "username": "ffs", "password": "ilikecatz"])
-
                             self.dataStore.onItemStub.onNext(item)
                         }
 
                         it("dispatches the externalLink action") {
-                            expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                            let action = self.dispatcher.dispatchActionArgument as! ExternalLinkAction
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                            let action = self.dispatcher.dispatchActionArgument.last as! ExternalLinkAction
                             expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
+                        }
+
+                        describe("subsequent pushes of the same item") {
+                            beforeEach {
+                                self.dataStore.onItemStub.onNext(item)
+                            }
+
+                            it("dispatches nothing new") {
+                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(2))
+                            }
                         }
                     }
                 }
@@ -488,8 +497,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("dispatches the faq link action") {
-                        expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                        let argument = self.dispatcher.dispatchActionArgument as! ExternalWebsiteRouteAction
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let argument = self.dispatcher.dispatchActionArgument.last as! ExternalWebsiteRouteAction
                         expect(argument).to(equal(
                                         ExternalWebsiteRouteAction(
                                                 urlString: Constant.app.editExistingEntriesFAQ,
@@ -524,8 +533,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 it("sends copy action") {
-                    expect(self.dispatcher.dispatchActionArgument).notTo(beNil())
-                    let action = self.dispatcher.dispatchActionArgument as! CopyAction
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                    let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
                     expect(action).to(equal(CopyAction(text: "asdf", field: CopyField.username, itemID: "1234", actionType: CopyActionType.dnd)))
                 }
             }
