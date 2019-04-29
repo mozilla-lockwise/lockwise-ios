@@ -213,6 +213,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 }
 
 extension BaseTestCase {
+    func loginToEntryListView() {
+        loginFxAccount()
+        skipAutofillConfiguration()
+        tapOnFinishButton()
+        waitForLockboxEntriesListView()
+    }
+
     func loginFxAccount() {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = emailTestAccountLogins

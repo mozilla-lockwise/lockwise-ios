@@ -19,10 +19,7 @@ class LockboxXCUITests: BaseTestCase {
 
     func testCheckEntryDetailsView() {
         snapshot("01Welcome" + CONTENT_SIZE)
-        loginFxAccount()
-        skipAutofillConfiguration()
-        tapOnFinishButton()
-        waitForLockboxEntriesListView()
+        loginToEntryListView()
 
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
@@ -69,17 +66,13 @@ class LockboxXCUITests: BaseTestCase {
         safari.terminate()
 
         app.launch()
-        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 5)
         navigator.nowAt(Screen.LockboxMainPage)
         navigator.goto(Screen.SettingsMenu)
     }
 
     func testSettingsAccountUI() {
-        loginFxAccount()
-        skipAutofillConfiguration()
-        tapOnFinishButton()
-
-        waitForLockboxEntriesListView()
+        loginToEntryListView()
         snapshot("03Settings" + CONTENT_SIZE)
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
@@ -93,11 +86,7 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func testSettings() {
-        loginFxAccount()
-        // Check if the account is verified and if not, verify it
-        skipAutofillConfiguration()
-        tapOnFinishButton()
-        waitForLockboxEntriesListView()
+        loginToEntryListView()
 
         // Check OpenSitesIn Menu option
         navigator.goto(Screen.OpenSitesInMenu)
@@ -122,10 +111,7 @@ class LockboxXCUITests: BaseTestCase {
     func testEntriesSortAndSearch() {
         let firstEntryRecentOrder = "bmo.com"
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
-        loginFxAccount()
-        skipAutofillConfiguration()
-        tapOnFinishButton()
-        waitForLockboxEntriesListView()
+        loginToEntryListView()
 
         // Checking if doing the steps directly works on bb
         waitforExistence(app.buttons["sorting.button"], timeout: 3)
@@ -146,38 +132,37 @@ class LockboxXCUITests: BaseTestCase {
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
-        sleep(2)
 
         // Check that the order has changed again to its initial state
         let firstCellAlphabetically = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellAlphabetically, firstEntryAphabeticallyOrder)
 
         // Search entries options
-        sleep(5)
         let searchTextField = app.searchFields.firstMatch
-        waitforExistence(searchTextField)
+        waitforExistence(searchTextField, timeout: 3)
         searchTextField.tap()
         searchTextField.typeText("a")
-        // There should be two matches
-        let twoMatches = app.tables.cells.count
+        // There should be the correct number of matches
+        let aMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(twoMatches, 111)
+            XCTAssertEqual(aMatches, 111)
         } else {
-            XCTAssertEqual(twoMatches, 108)
+            XCTAssertEqual(aMatches, 108)
         }
-        // There should be one match
+        // There should be less number of matches
         searchTextField.typeText("cc")
-        let oneMatches = app.tables.cells.count
+        let accMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(oneMatches, 6)
+            XCTAssertEqual(accMatches, 6)
         } else {
-            XCTAssertEqual(oneMatches, 3)
+            XCTAssertEqual(accMatches, 3)
         }
         // There should not be any matches
         searchTextField.typeText("x")
         waitforExistence(app.cells.staticTexts["noMatchingEntries.label"])
         let noMatches = app.tables.cells.count
         if  iPad() {
+            // There are not matches but the number of rows shown, more on iPad
             XCTAssertEqual(noMatches, 4)
         } else {
             XCTAssertEqual(noMatches, 1)
@@ -197,11 +182,7 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func testCheckAutolock() {
-        loginFxAccount()
-        // Check if the account is verified and if not, verify it
-        skipAutofillConfiguration()
-        tapOnFinishButton()
-        waitForLockboxEntriesListView()
+        loginToEntryListView()
 
         navigator.goto(Screen.SettingsMenu)
         waitforExistence(app.navigationBars["settings.navigationBar"])
