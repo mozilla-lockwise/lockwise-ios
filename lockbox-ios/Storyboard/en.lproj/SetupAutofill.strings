@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "Got it"; ObjectID = "KnK-nY-NyH"; */
+"KnK-nY-NyH.normalTitle" = "Got it";
+
+/* Class = "UILabel"; text = "Tap into AutoFill Passwords"; ObjectID = "YaL-kM-bTV"; */
+"YaL-kM-bTV.text" = "Tap into AutoFill Passwords";
+
+/* Class = "UILabel"; text = "Turn on AutoFill Passwords"; ObjectID = "Ys5-RP-RQg"; */
+"Ys5-RP-RQg.text" = "Turn on AutoFill Passwords";
+
+/* Class = "UILabel"; text = "Tap into Passwords & Accounts"; ObjectID = "daO-QU-3p5"; */
+"daO-QU-3p5.text" = "Tap into Passwords & Accounts";
+
+/* Class = "UILabel"; text = "How to Set up AutoFill"; ObjectID = "dbo-05-zWe"; */
+"dbo-05-zWe.text" = "How to Set up AutoFill";
+
+/* Class = "UILabel"; text = "Select Lockbox"; ObjectID = "r0I-o4-2Ym"; */
+"r0I-o4-2Ym.text" = "Select Lockbox";
+
+/* Class = "UILabel"; text = "Open the Settings app"; ObjectID = "xig-s8-dim"; */
+"xig-s8-dim.text" = "Open the Settings app";
