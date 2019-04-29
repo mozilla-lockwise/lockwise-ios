@@ -17,6 +17,7 @@ public protocol LoginsStorageProtocol {
     func list() throws -> [LoginRecord]
 }
 
+// We decorate the LoginsStorage with the LoginsStorageProtocol so that it's easy to mock and inject for unit testing.
 extension LoginsStorage: LoginsStorageProtocol { }
 
 class DataStoreSupport {
