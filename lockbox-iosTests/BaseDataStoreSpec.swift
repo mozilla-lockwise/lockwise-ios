@@ -192,7 +192,6 @@ class BaseDataStoreSpec: QuickSpec {
     private let scheduler = TestScheduler.init(initialClock: 0)
     private let disposeBag = DisposeBag()
     private var listObserver: TestableObserver<[LoginRecord]>!
-    private var stateObserver: TestableObserver<LoginStoreState>!
     private var syncObserver: TestableObserver<SyncState>!
 
     private var dispatcher: Dispatcher!
@@ -221,7 +220,6 @@ class BaseDataStoreSpec: QuickSpec {
 
                 self.loginsStorage.listStub = self.logins
 
-                self.stateObserver = self.scheduler.createObserver(LoginStoreState.self)
                 self.listObserver = self.scheduler.createObserver([LoginRecord].self)
                 self.syncObserver = self.scheduler.createObserver(SyncState.self)
 
@@ -231,10 +229,6 @@ class BaseDataStoreSpec: QuickSpec {
 
                 self.subject.syncState
                         .subscribe(self.syncObserver)
-                        .disposed(by: self.disposeBag)
-
-                self.subject.storageState
-                        .subscribe(self.stateObserver)
                         .disposed(by: self.disposeBag)
             }
 
@@ -248,7 +242,8 @@ class BaseDataStoreSpec: QuickSpec {
                 }
 
                 it("pushes unprepared and wipes the loginsstorage") {
-                    expect(self.listObserver.events.last!.value.element!).to(beEmpty())
+                    let state = try! self.subject.storageState.toBlocking().first()
+                    expect(state).to(equal(.Unprepared))
                     expect(self.loginsStorage.wipeLocalCalled).to(beTrue())
                 }
 
@@ -265,6 +260,7 @@ class BaseDataStoreSpec: QuickSpec {
                         self.loginsStorage.clearInvocations()
                         self.dataStoreSupport.clearInvocations()
                         self.lifecycleStore.fakeCycle.onNext(.foreground)
+                        _ = try! self.subject.storageState.toBlocking().first()
                         expect(self.dataStoreSupport.createArgument).notTo(beNil())
                         expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
                         expect(self.loginsStorage.ensureLockedCalled).to(beFalse())
@@ -301,8 +297,9 @@ class BaseDataStoreSpec: QuickSpec {
                         }
 
                         it("locks") {
+                            let state = try! self.subject.storageState.toBlocking().first()
                             expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
-                            expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Locked))
+                            expect(state).to(equal(LoginStoreState.Locked))
                         }
                     }
 
@@ -313,8 +310,9 @@ class BaseDataStoreSpec: QuickSpec {
                         }
 
                         it("stays unlocked & emits no new values") {
+                            let state = try! self.subject.storageState.toBlocking().first()
                             expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                            expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Unlocked))
+                            expect(state).to(equal(LoginStoreState.Unlocked))
                         }
                     }
                 }
@@ -328,8 +326,9 @@ class BaseDataStoreSpec: QuickSpec {
 
                     it("backdates the next lock time and locks the db") {
                         expect(self.autoLockSupport.backdateCalled).to(beTrue())
+                        let state = try! self.subject.storageState.toBlocking().first()
                         expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
-                        expect(self.stateObserver.events.last!.value.element).to(equal(LoginStoreState.Locked))
+                        expect(state).to(equal(LoginStoreState.Locked))
                     }
                 }
             }
@@ -350,6 +349,7 @@ class BaseDataStoreSpec: QuickSpec {
 
                     it("forward dates the next lock time and unlocks the db") {
                         expect(self.autoLockSupport.forwardDateCalled).to(beTrue())
+                        _ = try! self.subject.storageState.toBlocking().first()
                         expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
                     }
                 }
