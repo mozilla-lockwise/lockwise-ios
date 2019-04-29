@@ -86,8 +86,9 @@ class AccountSettingPresenter {
                         tapObserver: self?.unlinkAccountObserver,
                         style: .destructive)
                 ],
-                title: Constant.string.confirmDialogTitle,
-                message: Constant.string.confirmDialogMessage,
+                title: String(format: Constant.string.confirmDialogTitle, Constant.string.productName),
+                message: String(format: Constant.string.confirmDialogMessage,
+                    Constant.string.productName),
                 style: .alert,
                 barButtonItem: nil)
         }
