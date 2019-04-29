@@ -263,23 +263,24 @@ extension BaseDataStore {
 // locking management
 extension BaseDataStore {
     private func setupAutolock() {
-        let emitsOnNewLifecycleObservable = Observable.combineLatest(self.lifecycleStore.lifecycleEvents, self.storageState)
-                .distinctUntilChanged { (lhLifecycleState, rhLifecycleState) -> Bool in
-                    return lhLifecycleState.0 == rhLifecycleState.0
-                }
-
-        emitsOnNewLifecycleObservable
-                .filter { $0.0 == .background }
-                .subscribe(onNext: { [weak self] (lifecycle, state) in
+        self.lifecycleStore.lifecycleEvents
+                .distinctUntilChanged()
+                .filter { $0 == .background }
+                .flatMap { _ in self.storageState }
+                .take(1)
+                .subscribe(onNext: { [weak self] state in
                     guard state == .Unlocked else { return }
 
                     self?.autoLockSupport.storeNextAutolockTime()
                 })
                 .disposed(by: disposeBag)
 
-        emitsOnNewLifecycleObservable
-                .filter { $0.0 == .foreground }
-                .subscribe(onNext: { [weak self] (lifecycle, state) in
+        self.lifecycleStore.lifecycleEvents
+                .distinctUntilChanged()
+                .filter { $0 == .foreground }
+                .flatMap { _ in self.storageState }
+                .take(1)
+                .subscribe(onNext: { [weak self] state in
                     guard state != .Unprepared else { return }
 
                     self?.handleLock()
