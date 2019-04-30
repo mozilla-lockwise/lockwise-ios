@@ -78,17 +78,17 @@ class BaseDataStore {
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
     private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
-    internal var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
+    private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
+    private let dispatcher: Dispatcher
     private let keychainWrapper: KeychainWrapper
-    private let networkStore: NetworkStore
-    internal let dispatcher: Dispatcher
-    private let application: UIApplication
-    internal var syncUnlockInfo: SyncUnlockInfo?
-    internal let accountStore: BaseAccountStore
     private let autoLockSupport: AutoLockSupport
+    private let dataStoreSupport: DataStoreSupport
+    private let networkStore: NetworkStore
+    private let lifecycleStore: LifecycleStore
 
-    internal var loginsStorage: LoginsStorage?
+    private var loginsStorage: LoginsStorageProtocol?
+    private var syncUnlockInfo: SyncUnlockInfo?
 
     public var list: Observable<[LoginRecord]> {
         return self.listSubject.asObservable()
@@ -107,37 +107,37 @@ class BaseDataStore {
     }
 
     // From: https://github.com/mozilla-lockbox/lockbox-ios-fxa-sync/blob/120bcb10967ea0f2015fc47bbf8293db57043568/Providers/Profile.swift#L168
-    internal static var loginsKey: String? {
+    internal var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
-        if keychain.hasValue(forKey: key) {
-            return keychain.string(forKey: key)
+        if self.keychainWrapper.hasValue(forKey: key) {
+            return self.keychainWrapper.string(forKey: key)
         }
 
         let Length: UInt = 256
         let secret = Bytes.generateRandomBytes(Length).base64EncodedString(options: [])
-        keychain.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
+        self.keychainWrapper.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
         return secret
     }
 
     var unlockInfo: SyncUnlockInfo?
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
-         keychainWrapper: KeychainWrapper = KeychainWrapper.standard,
-         accountStore: BaseAccountStore = AccountStore.shared,
+         keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          autoLockSupport: AutoLockSupport = AutoLockSupport.shared,
+         dataStoreSupport: DataStoreSupport = DataStoreSupport.shared,
          networkStore: NetworkStore = NetworkStore.shared,
-         application: UIApplication = UIApplication.shared) {
+         lifecycleStore: LifecycleStore = LifecycleStore.shared) {
         self.keychainWrapper = keychainWrapper
-        self.application = application
-        self.accountStore = accountStore
         self.networkStore = networkStore
+        self.lifecycleStore = lifecycleStore
         self.autoLockSupport = autoLockSupport
+        self.dataStoreSupport = dataStoreSupport
         self.dispatcher = dispatcher
 
         self.initializeLoginsStorage()
+        self.setupAutolock()
 
-        dispatcher.register
+        self.dispatcher.register
                 .filterByType(class: DataStoreAction.self)
                 .subscribe(onNext: { action in
                     switch action {
@@ -157,26 +157,19 @@ class BaseDataStore {
                 })
                 .disposed(by: self.disposeBag)
 
-        dispatcher.register
-                .filterByType(class: LifecycleAction.self)
-                .subscribe(onNext: { action in
-                    switch action {
-                    case .background:
-                        self.autoLockSupport.storeNextAutolockTime()
-                    case .foreground:
-                        self.initializeLoginsStorage()
-                        self.handleLock()
-                    case .upgrade(let previous, _):
-                        if previous <= 2 {
-                            self.handleLock()
-                        }
-                    case .shutdown:
-                        self.shutdown()
-                    default:
-                        break
-                    }
+        self.lifecycleStore.lifecycleEvents
+                .filter { $0 == .shutdown || $0 == .background }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.shutdown()
                 })
-                .disposed(by: disposeBag)
+                .disposed(by: self.disposeBag)
+
+        self.lifecycleStore.lifecycleEvents
+                .filter { $0 == .foreground }
+                .subscribe(onNext: { [weak self] _ in
+                    self?.initializeLoginsStorage()
+                })
+                .disposed(by: self.disposeBag)
 
         self.syncState
                 .subscribe(onNext: { state in
@@ -215,7 +208,7 @@ class BaseDataStore {
 
 // login entry operations
 extension BaseDataStore {
-    public func touch(id: String) {
+    private func touch(id: String) {
         do {
             try self.loginsStorage?.touch(id: id)
         } catch let error {
@@ -226,7 +219,7 @@ extension BaseDataStore {
 
 // list operations
 extension BaseDataStore {
-    public func sync() {
+    private func sync() {
         guard let loginsStorage = self.loginsStorage,
             let syncInfo = self.syncUnlockInfo,
             !loginsStorage.isLocked()
@@ -269,19 +262,45 @@ extension BaseDataStore {
 
 // locking management
 extension BaseDataStore {
-    public func unlock() {
+    private func setupAutolock() {
+        self.lifecycleStore.lifecycleEvents
+                .distinctUntilChanged()
+                .filter { $0 == .background }
+                .flatMap { _ in self.storageState }
+                .take(1)
+                .subscribe(onNext: { [weak self] state in
+                    guard state == .Unlocked else { return }
+
+                    self?.autoLockSupport.storeNextAutolockTime()
+                })
+                .disposed(by: disposeBag)
+
+        self.lifecycleStore.lifecycleEvents
+                .distinctUntilChanged()
+                .filter { $0 == .foreground }
+                .flatMap { _ in self.storageState }
+                .take(1)
+                .subscribe(onNext: { [weak self] state in
+                    guard state != .Unprepared else { return }
+
+                    self?.handleLock()
+                })
+                .disposed(by: self.disposeBag)
+    }
+
+    private func unlock() {
         self.autoLockSupport.forwardDateNextLockTime()
         self.unlockInternal()
     }
-    
-    public func lock() {
+
+    private func lock() {
         self.autoLockSupport.backDateNextLockTime()
         self.lockInternal()
     }
 
     private func lockInternal() {
         guard let loginsStorage = self.loginsStorage else { return }
-        
+
         queue.async {
             loginsStorage.ensureLocked()
             self.storageStateSubject.onNext(.Locked)
@@ -290,7 +309,7 @@ extension BaseDataStore {
 
     private func unlockInternal() {
         guard let loginsStorage = self.loginsStorage,
-            let loginsKey = BaseDataStore.loginsKey else { return }
+            let loginsKey = self.loginsKey else { return }
 
         do {
             try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
@@ -311,7 +330,7 @@ extension BaseDataStore {
 
 // lifecycle management
 extension BaseDataStore {
-    public func updateCredentials(_ syncCredential: SyncCredential) {
+    private func updateCredentials(_ syncCredential: SyncCredential) {
         self.syncUnlockInfo = syncCredential.syncInfo
 
         guard let loginsStorage = self.loginsStorage else { return }
@@ -329,7 +348,7 @@ extension BaseDataStore {
 
     private func reset() {
         guard let loginsStorage = self.loginsStorage,
-            let loginsKey = BaseDataStore.loginsKey else { return }
+            let loginsKey = self.loginsKey else { return }
 
         queue.async {
             do {
@@ -364,6 +383,6 @@ extension BaseDataStore {
         let files = File(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
-        self.loginsStorage = LoginsStorage(databasePath: file)
+        self.loginsStorage = dataStoreSupport.createLoginsStorage(databasePath: file)
     }
 }

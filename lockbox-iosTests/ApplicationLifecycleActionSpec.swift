@@ -43,6 +43,27 @@ class ApplicationLifecycleActionSpec: QuickSpec {
                     expect(LifecycleAction.startup.extras).to(beNil())
                 }
             }
+
+            describe("equality") {
+                it("basic lifecycles") {
+                    expect(LifecycleAction.foreground).to(equal(LifecycleAction.foreground))
+                    expect(LifecycleAction.background).to(equal(LifecycleAction.background))
+                    expect(LifecycleAction.startup).to(equal(LifecycleAction.startup))
+                    expect(LifecycleAction.shutdown).to(equal(LifecycleAction.shutdown))
+                    expect(LifecycleAction.foreground).notTo(equal(LifecycleAction.background))
+                    expect(LifecycleAction.background).notTo(equal(LifecycleAction.startup))
+                    expect(LifecycleAction.startup).notTo(equal(LifecycleAction.shutdown))
+                    expect(LifecycleAction.shutdown).notTo(equal(LifecycleAction.foreground))
+                }
+
+                it("upgrade") {
+                    expect(LifecycleAction.upgrade(from: 1, to: 1)).to(equal(LifecycleAction.upgrade(from: 1, to: 1)))
+                    expect(LifecycleAction.upgrade(from: 1, to: 2)).to(equal(LifecycleAction.upgrade(from: 1, to: 2)))
+                    expect(LifecycleAction.upgrade(from: 1, to: 2)).notTo(equal(LifecycleAction.upgrade(from: 2, to: 2)))
+                    expect(LifecycleAction.upgrade(from: 1, to: 2)).notTo(equal(LifecycleAction.upgrade(from: 2, to: 3)))
+                    expect(LifecycleAction.upgrade(from: 2, to: 2)).notTo(equal(LifecycleAction.upgrade(from: 2, to: 3)))
+                }
+            }
         }
     }
 }
