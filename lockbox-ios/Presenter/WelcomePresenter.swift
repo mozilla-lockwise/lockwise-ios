@@ -112,7 +112,7 @@ extension WelcomePresenter {
     }
 
     private func setupBiometricLaunchers() {
-        let lifecycleObservable = self.lifecycleStore.lifecycleFilter
+        let lifecycleObservable = self.lifecycleStore.lifecycleEvents
                 .filter { action -> Bool in
             return action == LifecycleAction.foreground
         }
