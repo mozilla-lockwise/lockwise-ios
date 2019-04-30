@@ -7,6 +7,7 @@ import RxSwift
 
 class EmptyPlaceholderCell: UITableViewCell {
     @IBOutlet weak var learnMoreButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
     var disposeBag = DisposeBag()
 
     override func prepareForReuse() {

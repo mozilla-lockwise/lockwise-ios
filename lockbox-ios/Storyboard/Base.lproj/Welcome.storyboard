@@ -67,7 +67,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="470.5" y="953" width="83" height="32"/>
+                                <rect key="frame" x="470.5" y="915" width="83" height="32"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -78,8 +78,8 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To use Firefox Lockbox, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="364.5" y="910" width="295" height="38"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
+                                <rect key="frame" x="364.5" y="910" width="295" height="0.0"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="295" id="TPg-0Q-joi"/>
                                 </constraints>
@@ -98,7 +98,7 @@
                                 </variation>
                             </label>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVE-e1-PIT">
-                                <rect key="frame" x="556.5" y="964" width="7" height="10"/>
+                                <rect key="frame" x="556.5" y="926" width="7" height="10"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="10" id="OMw-3E-xHo"/>
@@ -118,7 +118,7 @@
                                     <constraint firstAttribute="height" constant="45" id="dDb-XO-UVr"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
-                                <state key="normal" title="Unlock Firefox Lockbox">
+                                <state key="normal">
                                     <color key="titleColor" red="0.05975659564" green="0.3597700298" blue="0.87457323070000004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>

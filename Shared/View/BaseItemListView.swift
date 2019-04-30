@@ -214,6 +214,8 @@ extension BaseItemListView {
                             fatalError("couldn't find the right cell!")
                         }
 
+                        cell.titleLabel.text = String(format: Constant.string.emptyListPlaceholder, Constant.string.productName)
+
                         if let observer = learnMoreObserver {
                             cell.learnMoreButton.rx.tap
                                     .bind(to: observer)

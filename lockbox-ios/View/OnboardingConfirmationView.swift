@@ -10,6 +10,7 @@ class OnboardingConfirmationView: UIViewController {
     internal var presenter: OnboardingConfirmationPresenter?
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var encryptionTextView: UITextView!
+    @IBOutlet weak var headerLabel: UILabel!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -19,6 +20,7 @@ class OnboardingConfirmationView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.styleButtonsAndText()
+        self.setupStrings()
         self.presenter?.onViewReady()
     }
 
@@ -69,5 +71,9 @@ extension OnboardingConfirmationView {
 
             self.encryptionTextView.attributedText = text
         }
+    }
+
+    private func setupStrings() {
+        self.headerLabel.text = String(format: Constant.string.onboardingTitle, Constant.string.productName)
     }
 }
