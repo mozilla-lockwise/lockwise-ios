@@ -98,4 +98,9 @@ extension Constant.string {
     static let reauthenticationRequired = NSLocalizedString("reauth_required", value: "Reauthentication Required", comment: "Title of dialog box displayed when users need to reauthenticate")
     static let appUpdateDisclaimer = NSLocalizedString("app_update_explanation", value: "Due to a recent app update, we will need you to sign in again. Apologies for the inconvenience.", comment: "Message in dialog box when users need to reauthenticate explaining application update")
     static let continueText = NSLocalizedString("continue", value: "Continue", comment: "Button title when agreeing to proceed to access Lockbox.")
+    static let accessProduct = NSLocalizedString("welcome.accessProduct", value: "To use %@, you’ll need a Firefox Account with saved logins.", comment: "Access message displayed to user on welcome screen")
+    static let unlockAppButton = NSLocalizedString("welcome.unlockButton", value: "Unlock %@", comment: "Text on button to unlock app")
+    static let unlinkAccountButton = NSLocalizedString("settings.unlinkAccount", value: "Disconnect Firefox Lockbox", comment: "Text on button to unlink account")
+    static let disclaimerLabel = NSLocalizedString("settings.unlinkDisclaimer", value: "This removes synced entries from %@, but will not delete your entries from Firefox.", comment: "Label on account setting explaining unlink")
+    static let onboardingTitle = NSLocalizedString("onboarding.title", value: "Welcome to %@", comment: "Title on onboarding screen")
 }
