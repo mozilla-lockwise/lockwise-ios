@@ -231,7 +231,7 @@ class RootPresenterSpec: QuickSpec {
     class FakeLifecycleStore: LifecycleStore {
         var filterStub = PublishSubject<LifecycleAction>()
 
-        override var lifecycleFilter: Observable<LifecycleAction> {
+        override var lifecycleEvents: Observable<LifecycleAction> {
             return self.filterStub.asObservable()
         }
     }

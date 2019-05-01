@@ -21,8 +21,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0zQ-uj-aBq" userLabel="Container View">
                                 <rect key="frame" x="334.5" y="441" width="355" height="504"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to Firefox Lockbox" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1X7-W0-IdI">
-                                        <rect key="frame" x="0.0" y="0.0" width="355" height="33.5"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1X7-W0-IdI">
+                                        <rect key="frame" x="0.0" y="0.0" width="355" height="0.0"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="280" id="UEQ-zs-kt8">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="355"/>
@@ -45,7 +45,7 @@
                                         </state>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ILz-8a-YAs" userLabel="Access login in view">
-                                        <rect key="frame" x="17.5" y="93.5" width="320" height="50"/>
+                                        <rect key="frame" x="17.5" y="60" width="320" height="50"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Access logins saved to Firefox for desktop from your iPhone" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afK-Kw-Hqs">
                                                 <rect key="frame" x="72" y="2" width="248" height="40.5"/>
@@ -79,7 +79,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="anP-8K-MP2" userLabel="Sync between devices view">
-                                        <rect key="frame" x="17.5" y="185.5" width="320" height="60"/>
+                                        <rect key="frame" x="17.5" y="152" width="320" height="60"/>
                                         <subviews>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-security" translatesAutoresizingMaskIntoConstraints="NO" id="eQV-Fs-Zzb">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
@@ -115,7 +115,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2G-1m-pMw" userLabel="Unlock the app view">
-                                        <rect key="frame" x="17.5" y="287.5" width="320" height="50"/>
+                                        <rect key="frame" x="17.5" y="254" width="320" height="50"/>
                                         <subviews>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-convenience" translatesAutoresizingMaskIntoConstraints="NO" id="mx9-SP-qEc">
                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
@@ -213,6 +213,7 @@
                     <connections>
                         <outlet property="encryptionTextView" destination="o0t-1T-rrA" id="9by-hj-Ot7"/>
                         <outlet property="finishButton" destination="GdN-75-tz4" id="1zS-W1-6zE"/>
+                        <outlet property="headerLabel" destination="1X7-W0-IdI" id="Pkl-q1-tjQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V0n-No-Xh0" userLabel="First Responder" sceneMemberID="firstResponder"/>

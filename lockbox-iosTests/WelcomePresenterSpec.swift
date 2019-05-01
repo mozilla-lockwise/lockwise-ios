@@ -119,7 +119,7 @@ class WelcomePresenterSpec: QuickSpec {
     class FakeLifecycleStore: LifecycleStore {
         var fakeCycle = PublishSubject<LifecycleAction>()
 
-        override var lifecycleFilter: Observable<LifecycleAction> {
+        override var lifecycleEvents: Observable<LifecycleAction> {
             return self.fakeCycle.asObservable()
         }
     }

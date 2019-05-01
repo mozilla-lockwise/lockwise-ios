@@ -136,7 +136,7 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        self.lifecycleStore.lifecycleFilter
+        self.lifecycleStore.lifecycleEvents
             .subscribe(onNext: { lifecycleAction in
                 switch lifecycleAction {
                 case .foreground:

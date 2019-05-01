@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.5.0 (Build 3088)
+
+Second TestFlight build testing the new logins library from application-services.
+
+- fix autofill to work with new logins library (#928)
+- only autolock in the background (#916)
+- fix recurring web address (#932)
+
 ## 1.5.0 (Build 2999)
 
 First TestFlight build testing the new logins library from application-services. Known issue: autofill doesn't work.

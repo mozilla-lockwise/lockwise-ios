@@ -82,7 +82,7 @@ class BaseItemListView: UIViewController {
     internal func styleNavigationBar() {
         self.navigationController?.navigationBar.tintColor = UIColor.white
 
-        self.navigationItem.title = Constant.string.yourLockbox
+        self.navigationItem.title = Constant.string.productName
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockbox.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
@@ -213,6 +213,8 @@ extension BaseItemListView {
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "emptylistplaceholder") as? EmptyPlaceholderCell else { // swiftlint:disable:this line_length
                             fatalError("couldn't find the right cell!")
                         }
+
+                        cell.titleLabel.text = String(format: Constant.string.emptyListPlaceholder, Constant.string.productName)
 
                         if let observer = learnMoreObserver {
                             cell.learnMoreButton.rx.tap

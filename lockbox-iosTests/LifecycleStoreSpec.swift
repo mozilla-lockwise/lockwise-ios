@@ -37,7 +37,7 @@ class LifecycleStoreSpec: QuickSpec {
                 beforeEach {
                     lifecycleObserver = self.scheduler.createObserver(LifecycleAction.self)
 
-                    self.subject.lifecycleFilter
+                    self.subject.lifecycleEvents
                             .bind(to: lifecycleObserver)
                             .disposed(by: self.disposeBag)
                 }

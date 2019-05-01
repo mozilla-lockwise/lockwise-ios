@@ -29,6 +29,7 @@ class WelcomeView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.roundButtons()
+        self.setupStrings()
         self.presenter?.onViewReady()
     }
 
@@ -49,6 +50,11 @@ class WelcomeView: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    private func setupStrings() {
+        self.accessLockboxMessage.text = String(format: Constant.string.accessProduct, Constant.string.productName)
+        self.unlockButton.setTitle(String(format: Constant.string.unlockAppButton, Constant.string.productName), for: .normal)
     }
 }
 

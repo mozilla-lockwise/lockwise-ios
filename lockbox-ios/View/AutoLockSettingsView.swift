@@ -58,7 +58,7 @@ class AutoLockSettingView: UIViewController, UITableViewDelegate {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
         cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        cell.textLabel?.text = Constant.string.autoLockHeader
+        cell.textLabel?.text = String(format: Constant.string.autoLockHeader, Constant.string.productName)
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.textLabel?.numberOfLines = 0
         return cell

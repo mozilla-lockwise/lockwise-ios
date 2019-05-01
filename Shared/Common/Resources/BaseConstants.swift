@@ -66,10 +66,10 @@ class Constant {
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
         static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
-        static let yourLockbox = NSLocalizedString("your_lockbox", value: "Firefox Lockbox", comment: "Title appearing above the list of entries on the main screen of the app")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username")
         static let searchYourEntries = NSLocalizedString("search.placeholder", value: "Search your entries", comment: "Placeholder text for search field")
+        static let emptyListPlaceholder = NSLocalizedString("list.empty", value: "%@ lets you access passwords you've already saved to Firefox. To view your entries here, you'll need to sign in and sync with Firefox for desktop.", comment: "Label shown when there are no logins to list")
     }
 }
 

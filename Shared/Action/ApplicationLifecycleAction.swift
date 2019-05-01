@@ -21,6 +21,8 @@ extension LifecycleAction: Equatable {
             return true
         case (.startup, .startup):
             return true
+        case (.shutdown, .shutdown):
+            return true
         case let (.upgrade(l1, l2), .upgrade(r1, r2)):
             return l1 == r1 && l2 == r2
         default:

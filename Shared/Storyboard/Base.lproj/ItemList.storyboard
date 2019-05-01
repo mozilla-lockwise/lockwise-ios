@@ -47,7 +47,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HqN-xH-UTt">
-                                                    <rect key="frame" x="15" y="59" width="360" height="1"/>
+                                                    <rect key="frame" x="15" y="59" width="1009" height="1"/>
                                                     <color key="backgroundColor" red="0.84313725490196079" green="0.84313725490196079" blue="0.85882352941176465" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="qD6-Z6-y50"/>
@@ -83,7 +83,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" image="item-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="hbE-L4-UGB">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="253"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="1024" height="253"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -105,18 +105,17 @@
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="751" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="VhK-mU-PRG">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smh-ku-Ub5">
-                                                    <rect key="frame" x="47.5" y="182" width="280" height="63"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smh-ku-Ub5">
+                                                    <rect key="frame" x="372" y="182" width="280" height="63"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="WcY-qh-pBg"/>
                                                     </constraints>
-                                                    <string key="text">Firefox Lockbox lets you access passwords you've already saved to Firefox. To view your entries here, you'll need to sign in and sync with Firefox for desktop.</string>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="textColor" red="0.45098039215686275" green="0.45098039215686275" blue="0.45098039215686275" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQB-Vr-ObR">
-                                                    <rect key="frame" x="127.5" y="249" width="120" height="16"/>
+                                                    <rect key="frame" x="452" y="249" width="120" height="16"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="gx1-Wz-pTz"/>
@@ -129,7 +128,7 @@
                                                     </state>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No entries found." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gQr-4J-xpv">
-                                                    <rect key="frame" x="128.5" y="156" width="118.5" height="18"/>
+                                                    <rect key="frame" x="453" y="156" width="118.5" height="18"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -153,6 +152,7 @@
                                         <color key="backgroundColor" red="0.92941176470588238" green="0.92941176470588238" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="learnMoreButton" destination="aQB-Vr-ObR" id="rtw-oq-uuY"/>
+                                            <outlet property="titleLabel" destination="Smh-ku-Ub5" id="w56-1z-RWl"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="noresultsplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="noresultsplaceholder" rowHeight="300" id="k0g-dg-N0G" customClass="NoResultsCell" customModule="CredentialProvider" customModuleProvider="target">
@@ -163,7 +163,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see more entries here, you'll need to save them to Firefox for desktop." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpV-eG-grp">
-                                                    <rect key="frame" x="47.5" y="56" width="280" height="31.5"/>
+                                                    <rect key="frame" x="372" y="56" width="280" height="31.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="gFp-Ms-L2p"/>
                                                     </constraints>
@@ -172,7 +172,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
-                                                    <rect key="frame" x="127.5" y="102.5" width="120" height="162.5"/>
+                                                    <rect key="frame" x="452" y="102.5" width="120" height="162.5"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XXw-4F-3gz"/>
@@ -185,7 +185,7 @@
                                                     </state>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No matching entries." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qZc-w1-SRT">
-                                                    <rect key="frame" x="116.5" y="30" width="142.5" height="18"/>
+                                                    <rect key="frame" x="441" y="30" width="142.5" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>

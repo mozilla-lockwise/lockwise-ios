@@ -10,6 +10,7 @@ class AccountSettingView: UIViewController {
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var unlinkAccountButton: UIButton!
+    @IBOutlet weak var disclaimerLabel: UILabel!
 
     internal var presenter: AccountSettingPresenter?
     private let disposeBag = DisposeBag()
@@ -28,7 +29,13 @@ class AccountSettingView: UIViewController {
         view.backgroundColor = Constant.color.viewBackground
         self.setupUnlinkAccountButton()
         self.setupNavBar()
+        self.setupStrings()
         self.presenter?.onViewReady()
+    }
+
+    private func setupStrings() {
+        self.unlinkAccountButton.setTitle(String(format: Constant.string.unlinkAccountButton, Constant.string.productName), for: .normal)
+        self.disclaimerLabel.text = String(format: Constant.string.disclaimerLabel, Constant.string.productName)
     }
 }
 

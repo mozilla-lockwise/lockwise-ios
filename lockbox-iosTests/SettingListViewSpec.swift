@@ -178,7 +178,7 @@ class SettingListViewSpec: QuickSpec {
                     .disposed(by: self.disposeBag)
 
                 let doneButton = self.subject.navigationItem.rightBarButtonItem!
-                _ = doneButton.target?.perform(doneButton.action)
+                _ = doneButton.target?.perform(doneButton.action, with: nil)
             }
 
             it("tells observers about button taps") {
