@@ -162,7 +162,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="1024" height="300"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see more entries here, you'll need to save them to Firefox for desktop." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpV-eG-grp">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see more entries here, you’ll need to save them to Firefox for desktop." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpV-eG-grp">
                                                     <rect key="frame" x="372" y="56" width="280" height="31.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="gFp-Ms-L2p"/>
