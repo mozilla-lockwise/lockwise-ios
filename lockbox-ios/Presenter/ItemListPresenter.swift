@@ -186,8 +186,7 @@ extension ItemListPresenter {
                 .asDriver(onErrorJustReturn: SyncStateManual(syncState: .Synced, manualSync: false))
                 .throttle(2.0)
                 .drive(onNext: { latest in
-                    if (latest.syncState == SyncState.Syncing || latest.syncState == SyncState.ReadyToSync)
-                               && !latest.manualSync {
+                    if latest.syncState == SyncState.Syncing && !latest.manualSync {
                         self.view?.displaySpinner(hideSpinnerObservable,
                                                   bag: self.disposeBag,
                                                   message: Constant.string.syncingYourEntries,
