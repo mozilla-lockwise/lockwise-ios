@@ -10,4 +10,9 @@ class MainNavigationController: UINavigationController {
                 .instantiateViewController(withIdentifier: identifier)
         self.init(rootViewController: listView)
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+    }
 }
