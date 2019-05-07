@@ -262,8 +262,6 @@ class BaseDataStoreSpec: QuickSpec {
                         self.lifecycleStore.fakeCycle.onNext(.foreground)
                         _ = try! self.subject.storageState.toBlocking().first()
                         expect(self.dataStoreSupport.createArgument).notTo(beNil())
-                        expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                        expect(self.loginsStorage.ensureLockedCalled).to(beFalse())
                         expect(self.listObserver.events.last!.value.element!).to(beEmpty())
                     }
                 }
@@ -305,14 +303,13 @@ class BaseDataStoreSpec: QuickSpec {
 
                     describe("when the app should not lock") {
                         beforeEach {
+                            self.loginsStorage.clearInvocations()
                             self.autoLockSupport.lockRequiredStub = false
                             self.lifecycleStore.fakeCycle.onNext(.foreground)
                         }
 
-                        it("stays unlocked & emits no new values") {
-                            let state = try! self.subject.storageState.toBlocking().first()
+                        it("stays unlocked") {
                             expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                            expect(state).to(equal(LoginStoreState.Unlocked))
                         }
                     }
                 }
