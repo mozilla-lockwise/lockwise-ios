@@ -314,14 +314,13 @@ class BaseDataStoreSpec: QuickSpec {
 
                     describe("when the app should not lock") {
                         beforeEach {
+                            self.loginsStorage.clearInvocations()
                             self.autoLockSupport.lockRequiredStub = false
                             self.lifecycleStore.fakeCycle.onNext(.foreground)
                         }
 
-                        it("stays unlocked & emits no new values") {
-                            let state = try! self.subject.storageState.toBlocking().first()
+                        it("stays unlocked") {
                             expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                            expect(state).to(equal(LoginStoreState.Unlocked))
                         }
                     }
                 }
