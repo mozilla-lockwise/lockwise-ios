@@ -33,15 +33,15 @@ class Constant {
         static let lockBoxBlue = UIColor(hex: 0x0060DF)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
         static let settingsHeader = UIColor(hex: 0x737373)
-        static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
+        static let tableViewCellHighlighted = UIColor(red: 231, green: 223, blue: 255)
         static let buttonTitleColorNormalState = UIColor.white
         static let buttonTitleColorOtherState = UIColor(white: 1.0, alpha: 0.6)
         static let shadowColor = UIColor(red: 12, green: 12, blue: 13)
         static let videoBorderColor = UIColor(hex: 0xD7D7DB)
         static let helpTextBorderColor = UIColor(hex: 0xD8D7DE)
-        static let navBackgroundColor = UIColor(red: 19, green: 125, blue: 181)
+        static let navBackgroundColor = UIColor(red: 57, green: 52, blue: 115)
         static let navTextColor = UIColor(red: 237, green: 237, blue: 240)
-        static let navSearchBackgroundColor = UIColor(red: 11, green: 96, blue: 138)
+        static let navSearchBackgroundColor = UIColor(red: 43, green: 33, blue: 86)
         static let navSerachTextColor = UIColor.white
         static let navSearchPlaceholderTextColor = UIColor(white: 1.0, alpha: 0.8)
     }
@@ -64,7 +64,7 @@ class Constant {
         static let signInRequired = NSLocalizedString("autofill.signInRequired", value: "Sign in Required", comment: "Title for alert dialog explaining that a user must be signed in to use AutoFill.")
         static let signInRequiredBody = NSLocalizedString("autofill.signInRequiredBody", value: "You must be signed in to %@ before AutoFill will allow access to passwords within it.", comment: "Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
-        static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
+        static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockwise", comment: "Product Name")
         static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username.")
