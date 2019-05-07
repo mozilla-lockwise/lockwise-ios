@@ -170,13 +170,13 @@ class LockboxXCUITests: BaseTestCase {
         // Tap on cacel
         app.buttons["Cancel"].tap()
         let searchFieldValueAfterCancel = searchTextField.placeholderValue
-        XCTAssertEqual(searchFieldValueAfterCancel, "Search your entries")
+        XCTAssertEqual(searchFieldValueAfterCancel, "Search logins")
         // Tap on 'x'
         searchTextField.tap()
         searchTextField.typeText("a")
         app.buttons["Clear text"].tap()
         let searchFieldValueAfterXButton = searchTextField.value as! String
-        XCTAssertEqual(searchFieldValueAfterXButton, "Search your entries")
+        XCTAssertEqual(searchFieldValueAfterXButton, "Search logins")
         app.buttons["Cancel"].tap()
         navigator.nowAt(Screen.LockboxMainPage)
     }
