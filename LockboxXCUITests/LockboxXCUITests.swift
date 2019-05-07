@@ -120,7 +120,7 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Recently Used"].tap()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
-        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
+        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
 
         // Check that the order has changed
         let firstCellRecent = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
@@ -131,7 +131,7 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Alphabetically"].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
+        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of logins (currently A-Z)")
 
         // Check that the order has changed again to its initial state
         let firstCellAlphabetically = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
