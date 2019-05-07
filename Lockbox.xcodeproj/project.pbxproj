@@ -198,7 +198,6 @@
 		7D9722CC213485840071D82B /* StatusAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6FB87A204F00E2005E23AA /* StatusAlert.swift */; };
 		7D9722D0213485C90071D82B /* SpinnerAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0320AA394A0011BFC8 /* SpinnerAlert.swift */; };
 		7D9722D32134872E0071D82B /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D9722D12134872E0071D82B /* Welcome.storyboard */; };
-		7D9722D42134872E0071D82B /* Welcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D9722D12134872E0071D82B /* Welcome.storyboard */; };
 		7D9722DB21348C2F0071D82B /* CredentialWelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722DA21348C2F0071D82B /* CredentialWelcomePresenter.swift */; };
 		7D9722E021349B9F0071D82B /* CredentialStatusAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722DF21349B9F0071D82B /* CredentialStatusAction.swift */; };
 		7D9722E52134A6770071D82B /* CredentialWelcome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D9722E32134A6770071D82B /* CredentialWelcome.storyboard */; };
@@ -1423,7 +1422,6 @@
 			files = (
 				7D80F30E2118DCC700DA191B /* MainInterface.storyboard in Resources */,
 				7D9722E52134A6770071D82B /* CredentialWelcome.storyboard in Resources */,
-				7D9722D42134872E0071D82B /* Welcome.storyboard in Resources */,
 				7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */,
 				7DB9DE992140C86500239D31 /* ItemList.storyboard in Resources */,
 				7D4396552135C2FF00B96FA9 /* SpinnerAlert.xib in Resources */,

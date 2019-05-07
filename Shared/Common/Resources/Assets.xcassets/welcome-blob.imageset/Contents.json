@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Lockwise Title.png",
+      "filename" : "WelcomeBlob.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Lockwise Title@2x.png",
+      "filename" : "WelcomeBlob@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Lockwise Title@3x.png",
+      "filename" : "WelcomeBlob@3x.png",
       "scale" : "3x"
     }
   ],
