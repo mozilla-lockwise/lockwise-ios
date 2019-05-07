@@ -22,7 +22,7 @@ If you believe that you've found a security vulnerability, please report it by s
 
 ## How to Request Enhancements
 
-First, please refer to the applicable [GitHub repository](https://github.com/orgs/mozilla-lockbox/) and search [the repository's GitHub issues](https://github.com/mozilla-lockwise/lockwise-ios/issues) to make sure your idea has not been (or is not still) considered.
+First, please refer to the applicable [GitHub repository](https://github.com/orgs/mozilla-lockwise/) and search [the repository's GitHub issues](https://github.com/mozilla-lockwise/lockwise-ios/issues) to make sure your idea has not been (or is not still) considered.
 
 Then, please [create a new issue in the GitHub repository](https://github.com/mozilla-lockwise/lockwise-ios/issues/new) describing your enhancement.
 

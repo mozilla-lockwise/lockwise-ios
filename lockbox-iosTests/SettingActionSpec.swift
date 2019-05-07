@@ -74,11 +74,11 @@ class SettingActionSpec: QuickSpec {
                     }
 
                     it("creates firefox deeplinks") {
-                        expect(Setting.PreferredBrowser.Firefox.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                        expect(Setting.PreferredBrowser.Firefox.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockwise%2Flockbox-ios"))
                     }
 
                     it("creates focus deeplinks") {
-                        expect(Setting.PreferredBrowser.Focus.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                        expect(Setting.PreferredBrowser.Focus.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockwise%2Flockbox-ios"))
                     }
 
                     it("creates chrome https deeplinks") {
