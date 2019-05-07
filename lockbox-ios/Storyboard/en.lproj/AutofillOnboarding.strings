@@ -2,11 +2,11 @@
 /* Class = "UIButton"; normalTitle = "Not Now"; ObjectID = "GdN-75-tz4"; */
 "GdN-75-tz4.normalTitle" = "Not Now";
 
-/* Class = "UILabel"; text = "AutoFill your logins right from your browser or app."; ObjectID = "Krc-YI-yKW"; */
-"Krc-YI-yKW.text" = "AutoFill your logins right from your browser or app.";
+/* Class = "UILabel"; text = "AutoFill your logins from a browser or app."; ObjectID = "Krc-YI-yKW"; */
+"Krc-YI-yKW.text" = "AutoFill your logins from a browser or app.";
 
-/* Class = "UILabel"; text = "No longer are the days of switching between apps in order to copy and paste your logins."; ObjectID = "xVH-GK-wIb"; */
-"xVH-GK-wIb.text" = "No longer are the days of switching between apps in order to copy and paste your logins.";
+/* Class = "UILabel"; text = "Easily fill usernames and passwords where you need them most."; ObjectID = "xVH-GK-wIb"; */
+"xVH-GK-wIb.text" = "Easily fill usernames and passwords where you need them most.";
 
 /* Class = "UIButton"; normalTitle = "Set Up AutoFill"; ObjectID = "yEI-pU-vMZ"; */
 "yEI-pU-vMZ.normalTitle" = "Set Up AutoFill";
