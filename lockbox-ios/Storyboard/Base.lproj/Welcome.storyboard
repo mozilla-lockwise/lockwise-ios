@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="v07-2c-tgh">
-    <device id="ipad9_7" orientation="landscape">
+    <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,7 +15,7 @@
             <objects>
                 <viewController storyboardIdentifier="welcome" useStoryboardIdentifierAsRestorationIdentifier="YES" id="v07-2c-tgh" customClass="WelcomeView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Zs6-ts-YH0">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-illustration-large" translatesAutoresizingMaskIntoConstraints="NO" id="Ajk-4S-0d1">
@@ -23,7 +23,7 @@
                                 <variation key="widthClass=regular" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-illustration" translatesAutoresizingMaskIntoConstraints="NO" id="JBG-Eu-ntQ">
-                                <rect key="frame" x="380" y="30" width="404" height="256"/>
+                                <rect key="frame" x="75" y="54" width="404" height="256"/>
                                 <variation key="widthClass=compact" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-blob-large" translatesAutoresizingMaskIntoConstraints="NO" id="bMW-Yq-Bc5">
@@ -31,7 +31,7 @@
                                 <variation key="widthClass=regular" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome-blob" translatesAutoresizingMaskIntoConstraints="NO" id="DvC-NV-5za">
-                                <rect key="frame" x="-8.5" y="-79" width="841" height="1260"/>
+                                <rect key="frame" x="-313.5" y="-55" width="841" height="1260"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1260" id="Ec0-rX-L5C"/>
                                     <constraint firstAttribute="width" constant="841" id="TwG-Jw-SM1"/>
@@ -39,19 +39,19 @@
                                 <variation key="widthClass=compact" hidden="NO"/>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="lock" translatesAutoresizingMaskIntoConstraints="NO" id="Fls-Mq-402">
-                                <rect key="frame" x="490" y="307" width="44" height="51"/>
+                                <rect key="frame" x="185" y="331" width="44" height="51"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" image="logo-glyph" translatesAutoresizingMaskIntoConstraints="NO" id="HUA-a8-BIa">
-                                <rect key="frame" x="468" y="270" width="88" height="88"/>
+                                <rect key="frame" x="163" y="294" width="88" height="88"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" text="Take your passwords everywhere" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwO-wS-oS4" userLabel="Tagline">
-                                <rect key="frame" x="412" y="436" width="200.5" height="16"/>
+                                <rect key="frame" x="107" y="460" width="200.5" height="16"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" red="0.12549019607843137" green="0.070588235294117646" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
-                                <rect key="frame" x="354.5" y="492" width="315" height="45"/>
+                                <rect key="frame" x="49.5" y="516" width="315" height="45"/>
                                 <color key="backgroundColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="VuQ-t5-UWT"/>
@@ -66,7 +66,7 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8rH-vt-4bG">
-                                <rect key="frame" x="486.5" y="492" width="51" height="45"/>
+                                <rect key="frame" x="49.5" y="516" width="315" height="45"/>
                                 <color key="backgroundColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <accessibility key="accessibilityConfiguration" identifier="unlock.button"/>
                                 <constraints>
@@ -87,7 +87,7 @@
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JTP-OD-6TF" userLabel="Learn More">
-                                <rect key="frame" x="470.5" y="603" width="83" height="32"/>
+                                <rect key="frame" x="165.5" y="627" width="83" height="32"/>
                                 <accessibility key="accessibilityConfiguration" identifier="learnMore.button">
                                     <accessibilityTraits key="traits" link="YES" image="YES"/>
                                 </accessibility>
@@ -99,11 +99,11 @@
                                 </state>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow-right" translatesAutoresizingMaskIntoConstraints="NO" id="hLr-A2-F62">
-                                <rect key="frame" x="557.5" y="614" width="6" height="10"/>
+                                <rect key="frame" x="252.5" y="638" width="6" height="10"/>
                                 <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="To use Lockwise, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
-                                <rect key="frame" x="364.5" y="561" width="295" height="38"/>
+                                <rect key="frame" x="59.5" y="585" width="295" height="38"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="295" id="TPg-0Q-joi"/>
                                     <constraint firstAttribute="width" constant="295" id="msd-uA-Hkd"/>
@@ -124,10 +124,10 @@
                                 </variation>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="755" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="BCd-ia-bwt">
-                                <rect key="frame" x="445.5" y="370" width="133" height="54"/>
+                                <rect key="frame" x="140.5" y="394" width="133" height="54"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xlA-F1-krX">
-                                <rect key="frame" x="0.0" y="675" width="1024" height="127"/>
+                                <rect key="frame" x="0.0" y="699" width="414" height="197"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>

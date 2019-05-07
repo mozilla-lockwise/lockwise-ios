@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "screenshot.png",
+      "filename" : "WhiteBlob.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "screenshot@2x.png",
+      "filename" : "WhiteBlob@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "screenshot@3x.png",
+      "filename" : "WhiteBlob@3x.png",
       "scale" : "3x"
     }
   ],
