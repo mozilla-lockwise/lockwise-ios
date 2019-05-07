@@ -13,6 +13,7 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!
     @IBOutlet internal weak var learnMoreImage: UIImageView!
+    @IBOutlet internal weak var lockwiseGlyph: UIImageView!
     @IBOutlet internal weak var lockImage: UIImageView!
     @IBOutlet internal weak var unlockButton: UIButton!
 
@@ -75,6 +76,10 @@ extension WelcomeView: WelcomeViewProtocol {
 
     public var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> {
         return self.learnMoreImage.rx.isHidden.asObserver()
+    }
+    
+    public var lockwiseGlyphHidden: AnyObserver<Bool> {
+        return self.lockwiseGlyph.rx.isHidden.asObserver()
     }
 
     public var lockImageHidden: AnyObserver<Bool> {

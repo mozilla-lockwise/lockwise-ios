@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -12,7 +13,7 @@
         <!--Welcome View-->
         <scene sceneID="ypc-hY-jNX">
             <objects>
-                <viewController storyboardIdentifier="welcome" useStoryboardIdentifierAsRestorationIdentifier="YES" id="v07-2c-tgh" customClass="WelcomeView" customModule="CredentialProvider" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="welcome" useStoryboardIdentifierAsRestorationIdentifier="YES" id="v07-2c-tgh" customClass="WelcomeView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Zs6-ts-YH0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -165,6 +166,7 @@
                         <outlet property="learnMore" destination="JTP-OD-6TF" id="AUR-8T-44D"/>
                         <outlet property="learnMoreImage" destination="hLr-A2-F62" id="yU3-l9-hS6"/>
                         <outlet property="lockImage" destination="Fls-Mq-402" id="Xwz-Fb-mP1"/>
+                        <outlet property="lockwiseGlyph" destination="HUA-a8-BIa" id="tXf-qU-Ulz"/>
                         <outlet property="unlockButton" destination="8rH-vt-4bG" id="STP-RW-KCU"/>
                     </connections>
                 </viewController>
