@@ -64,7 +64,7 @@ extension OnboardingConfirmationView {
             text.addAttributes(
                     [
                         NSAttributedString.Key.link: NSString(string: Constant.app.securityFAQ),
-                        NSAttributedString.Key.foregroundColor: Constant.color.lockBoxBlue
+                        NSAttributedString.Key.foregroundColor: Constant.color.lockBoxViolet
                     ],
                     range: range
             )

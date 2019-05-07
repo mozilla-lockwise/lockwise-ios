@@ -79,6 +79,7 @@ extension PreferredBrowserSettingView {
                 let cell = SettingCell()
                 cell.textLabel?.text = cellConfiguration.text
                 cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+                cell.tintColor = Constant.color.lockBoxViolet
                 cell.accessoryType = cellConfiguration.isChecked ?
                     UITableViewCell.AccessoryType.checkmark : UITableViewCell.AccessoryType.none
                 cell.selectionStyle = UITableViewCell.SelectionStyle.none

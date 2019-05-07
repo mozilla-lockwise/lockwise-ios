@@ -54,7 +54,8 @@ class AccountSettingPresenter {
 
         let avatarImageDriver = profileObservable
                 .flatMap { info -> Observable<Data?> in
-                    guard let avatarURL = URL(string: info.avatar?.url ?? "") else {
+                    guard info.avatar?.url != "https://firefoxusercontent.com/00000000000000000000000000000000",
+                        let avatarURL = URL(string: info.avatar?.url ?? "") else {
                         return Observable.just(nil)
                     }
 
@@ -86,7 +87,7 @@ class AccountSettingPresenter {
                         tapObserver: self?.unlinkAccountObserver,
                         style: .destructive)
                 ],
-                title: String(format: Constant.string.confirmDialogTitle, Constant.string.productName),
+                title: String(format: Constant.string.confirmDialogTitle, Constant.string.productLabel),
                 message: String(format: Constant.string.confirmDialogMessage,
                     Constant.string.productName),
                 style: .alert,
