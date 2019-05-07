@@ -9,9 +9,9 @@ import UIKit
 extension Constant.app {
     static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     static let appVersionCode = 3 // this is the version of the app that will drive updates.
-    static let faqURL = "https://lockbox.firefox.com/faq.html"
+    static let faqURL = "https://lockwise.firefox.com/faq.html"
     static let faqURLtop = faqURL + "#top"
-    static let privacyURL = "https://lockbox.firefox.com/privacy.html"
+    static let privacyURL = "https://lockwise.firefox.com/privacy.html"
     static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
     static let getSupportURL = "https://discourse.mozilla.org/c/test-pilot/lockbox"
     static let useLockboxFAQ = faqURL + "#how-do-i-use-firefox-lockbox"
