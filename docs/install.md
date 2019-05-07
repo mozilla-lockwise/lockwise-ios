@@ -12,7 +12,7 @@
 4. Clone the repository
 
     ```
-    git clone https://github.com/mozilla-lockbox/lockbox-ios
+    git clone https://github.com/mozilla-lockwise/lockwise-ios
     ```
 
 5. Pull in the project dependencies:

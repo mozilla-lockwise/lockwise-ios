@@ -12,7 +12,7 @@ class ExternalLinkStoreSpec: QuickSpec {
     private var application: FakeApplication!
     private var dispatcher: Dispatcher!
     private var userDefaults: UserDefaults!
-    private var testUrl = "https://github.com/mozilla-lockbox/lockbox-ios"
+    private var testUrl = "https://github.com/mozilla-lockwise/lockwise-ios"
 
     class FakeApplication: OpenUrlProtocol {
         var openArgument: URL?

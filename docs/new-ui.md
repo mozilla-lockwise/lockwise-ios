@@ -1,4 +1,4 @@
-# Adding new UI or features to Firefox Lockbox
+# Adding new UI or features to Firefox Lockwise
 
 ## Testing
 

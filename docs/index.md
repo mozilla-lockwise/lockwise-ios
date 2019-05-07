@@ -1,1 +1,1 @@
-Welcome to the Firefox Lockbox for iOS documentation!
+Welcome to the Firefox Lockwise for iOS documentation!
