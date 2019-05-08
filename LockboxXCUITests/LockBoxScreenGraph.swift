@@ -270,7 +270,7 @@ extension BaseTestCase {
         settings.cells.staticTexts["AutoFill Passwords"].tap()
         waitforExistence(settings.switches["AutoFill Passwords"], timeout: 3)
         settings.switches["AutoFill Passwords"].tap()
-        waitforExistence(settings.cells.staticTexts["Lockbox"])
-        settings.cells.staticTexts["Lockbox"].tap()
+        waitforExistence(settings.cells.staticTexts["Lockwise"])
+        settings.cells.staticTexts["Lockwise"].tap()
     }
 }
