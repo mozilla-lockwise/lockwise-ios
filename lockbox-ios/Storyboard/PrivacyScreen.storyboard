@@ -18,75 +18,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dbD-Gg-4v0">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UoD-in-nWf" userLabel="Ocean">
-                                        <rect key="frame" x="0.0" y="141" width="414" height="677"/>
-                                        <color key="backgroundColor" red="0.0" green="0.37647058820000001" blue="0.87450980389999999" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="ga1-zx-LOZ">
-                                        <rect key="frame" x="-31" y="44" width="476" height="194"/>
-                                        <variation key="widthClass=regular" hidden="YES"/>
-                                    </imageView>
-                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nessie-ipad" translatesAutoresizingMaskIntoConstraints="NO" id="QZW-9d-hOa" userLabel="nessie-wide">
-                                        <rect key="frame" x="0.0" y="204" width="414" height="144"/>
-                                        <variation key="heightClass=regular-widthClass=regular" hidden="NO"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="emI-93-1Vl" userLabel="Lockbox">
-                                        <rect key="frame" x="92" y="311" width="230" height="54"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="230" id="ge5-gF-gZ2"/>
-                                        </constraints>
-                                        <variation key="widthClass=regular" hidden="YES"/>
-                                    </imageView>
-                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title-wide" translatesAutoresizingMaskIntoConstraints="NO" id="ePH-hH-xKe" userLabel="Lockbox-wide">
-                                        <rect key="frame" x="44.5" y="401" width="325" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="325" id="dvd-h6-hlr"/>
-                                        </constraints>
-                                        <variation key="widthClass=regular" hidden="NO"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="Ox6-sk-qnq" firstAttribute="trailing" secondItem="UoD-in-nWf" secondAttribute="trailing" id="1Ie-yN-giV"/>
-                                    <constraint firstItem="ga1-zx-LOZ" firstAttribute="top" secondItem="Ox6-sk-qnq" secondAttribute="top" id="1e9-Bj-Acd"/>
-                                    <constraint firstItem="ga1-zx-LOZ" firstAttribute="centerX" secondItem="dbD-Gg-4v0" secondAttribute="centerX" id="3er-EP-Qir"/>
-                                    <constraint firstItem="QZW-9d-hOa" firstAttribute="leading" secondItem="Ox6-sk-qnq" secondAttribute="leading" id="G8p-5J-sUT"/>
-                                    <constraint firstItem="UoD-in-nWf" firstAttribute="top" secondItem="QZW-9d-hOa" secondAttribute="centerY" id="I0J-UK-s0J"/>
-                                    <constraint firstItem="emI-93-1Vl" firstAttribute="centerX" secondItem="dbD-Gg-4v0" secondAttribute="centerX" id="ILy-xw-M33"/>
-                                    <constraint firstItem="UoD-in-nWf" firstAttribute="top" secondItem="ga1-zx-LOZ" secondAttribute="centerY" id="IbJ-4y-suD"/>
-                                    <constraint firstItem="ePH-hH-xKe" firstAttribute="centerX" secondItem="Ox6-sk-qnq" secondAttribute="centerX" id="LXI-xK-cPU"/>
-                                    <constraint firstItem="UoD-in-nWf" firstAttribute="leading" secondItem="Ox6-sk-qnq" secondAttribute="leading" id="U9D-5r-uqj"/>
-                                    <constraint firstItem="QZW-9d-hOa" firstAttribute="trailing" secondItem="Ox6-sk-qnq" secondAttribute="trailing" id="c35-na-DzH"/>
-                                    <constraint firstItem="emI-93-1Vl" firstAttribute="top" secondItem="ga1-zx-LOZ" secondAttribute="bottom" constant="73" id="gt2-fu-nHf"/>
-                                    <constraint firstItem="ePH-hH-xKe" firstAttribute="top" secondItem="QZW-9d-hOa" secondAttribute="bottom" constant="73" id="kSH-M3-7Mp"/>
-                                    <constraint firstItem="QZW-9d-hOa" firstAttribute="top" secondItem="Ox6-sk-qnq" secondAttribute="top" constant="160" id="okG-MC-ZRt"/>
-                                    <constraint firstItem="Ox6-sk-qnq" firstAttribute="bottom" secondItem="UoD-in-nWf" secondAttribute="bottom" id="pyv-GF-2PK"/>
-                                </constraints>
-                                <viewLayoutGuide key="safeArea" id="Ox6-sk-qnq"/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="I0J-UK-s0J"/>
-                                        <exclude reference="kSH-M3-7Mp"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <color key="backgroundColor" red="0.90980392160000001" green="0.90980392160000001" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
-                                    <mask key="constraints">
-                                        <include reference="I0J-UK-s0J"/>
-                                        <exclude reference="IbJ-4y-suD"/>
-                                        <include reference="kSH-M3-7Mp"/>
-                                        <exclude reference="gt2-fu-nHf"/>
-                                    </mask>
-                                </variation>
-                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-glyph" translatesAutoresizingMaskIntoConstraints="NO" id="zma-1K-obx">
+                                <rect key="frame" x="163" y="359" width="88" height="88"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="FdN-XG-vOI">
+                                <rect key="frame" x="140.5" y="459" width="133" height="54"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="dbD-Gg-4v0" firstAttribute="width" secondItem="0pN-V5-SLo" secondAttribute="width" id="dxF-nQ-Iww"/>
-                            <constraint firstItem="dbD-Gg-4v0" firstAttribute="height" secondItem="0pN-V5-SLo" secondAttribute="height" id="nUS-bE-wzf"/>
+                            <constraint firstItem="zma-1K-obx" firstAttribute="centerX" secondItem="0pN-V5-SLo" secondAttribute="centerX" id="579-uj-NdZ"/>
+                            <constraint firstItem="FdN-XG-vOI" firstAttribute="top" secondItem="zma-1K-obx" secondAttribute="bottom" constant="12" id="RXj-Lk-ikh"/>
+                            <constraint firstItem="FdN-XG-vOI" firstAttribute="centerX" secondItem="0pN-V5-SLo" secondAttribute="centerX" id="X8i-MC-JtC"/>
+                            <constraint firstItem="zma-1K-obx" firstAttribute="centerY" secondItem="0pN-V5-SLo" secondAttribute="centerY" constant="-50" id="jmR-Nt-OIh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="0pN-V5-SLo"/>
                     </view>
@@ -98,8 +42,6 @@
     </scenes>
     <resources>
         <image name="lockbox-title" width="133" height="54"/>
-        <image name="lockbox-title-wide" width="325" height="40"/>
-        <image name="nessie" width="476" height="194"/>
-        <image name="nessie-ipad" width="1366" height="144"/>
+        <image name="logo-glyph" width="88" height="88"/>
     </resources>
 </document>
