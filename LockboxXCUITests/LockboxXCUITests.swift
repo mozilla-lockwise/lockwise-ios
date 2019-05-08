@@ -235,6 +235,7 @@ class LockboxXCUITests: BaseTestCase {
             waitforExistence(safari.otherElements["WebView"].webViews.textFields["Email or phone"], timeout: 15)
             safari.buttons["ReloadButton"].tap()
             waitforExistence(safari.otherElements["WebView"].webViews.textFields["Email or phone"], timeout: 15)
+            safari.otherElements["WebView"].webViews.textFields["Email or phone"].tap()
 
             // Need to confirm what is shown here, different elements have appeared and
             if (safari.buttons["Other passwords"].exists) {
@@ -243,7 +244,6 @@ class LockboxXCUITests: BaseTestCase {
                 XCTAssertTrue(safari.buttons.otherElements[safariButtons1].exists)
             } else if (safari.otherElements["Password Auto-fill"].exists) {
                 safari.otherElements["Password Auto-fill"].tap()
-                XCTAssertTrue(safari.buttons[safariButtons1].exists)
             } else {
                 XCTAssertTrue(safari.buttons[safariButtons2].exists)
             }
