@@ -10,6 +10,10 @@ class AutofillOnboardingView: UIViewController {
     internal var presenter: AutofillOnboardingPresenter?
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var setupAutofillButton: UIButton!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
