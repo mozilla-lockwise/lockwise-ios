@@ -41,7 +41,8 @@ class Constant {
         static let helpTextBorderColor = UIColor(hex: 0xD8D7DE)
         static let navBackgroundColor = UIColor(red: 57, green: 52, blue: 115)
         static let navTextColor = UIColor(red: 237, green: 237, blue: 240)
-        static let navSearchBackgroundColor = UIColor(red: 43, green: 33, blue: 86)
+        static let inactiveNavSearchBackgroundColor = UIColor(red: 43, green: 33, blue: 86)
+        static let activeNavSearchBackgroundColor = UIColor(red: 39, green: 25, blue: 72)
         static let navSerachTextColor = UIColor.white
         static let navSearchPlaceholderTextColor = UIColor(white: 1.0, alpha: 0.8)
     }
