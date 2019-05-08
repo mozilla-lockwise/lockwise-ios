@@ -14,7 +14,7 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" userLabel="Launch View" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                    <view key="view" opaque="NO" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -33,7 +33,8 @@
                                 </variation>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.93725490196078431" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="1gZ-UM-LNF" firstAttribute="centerX" secondItem="Bcu-3y-fUS" secondAttribute="centerX" id="5NY-Wi-jwA"/>
                             <constraint firstItem="ccq-W9-Eei" firstAttribute="top" secondItem="1gZ-UM-LNF" secondAttribute="bottom" constant="12" id="DlU-bu-YQU"/>
@@ -41,9 +42,6 @@
                             <constraint firstItem="ccq-W9-Eei" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="P2L-sd-fgp"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <variation key="heightClass=regular-widthClass=regular">
-                            <color key="backgroundColor" red="0.90980392156862744" green="0.90980392156862744" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
-                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
