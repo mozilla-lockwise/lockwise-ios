@@ -33,11 +33,12 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4">
-                                        <rect key="frame" x="40" y="651" width="295" height="48"/>
+                                        <rect key="frame" x="30" y="651" width="315" height="48"/>
                                         <color key="backgroundColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <accessibility key="accessibilityConfiguration" identifier="finish.button"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="48" id="UMK-pk-Gqs"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="315" id="kal-JM-jxC"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <state key="normal" title="Finish">
@@ -157,14 +158,13 @@
                                     <constraint firstAttribute="height" constant="504" id="Eg4-9P-t06"/>
                                     <constraint firstItem="ILz-8a-YAs" firstAttribute="top" secondItem="1X7-W0-IdI" secondAttribute="bottom" constant="60" id="HcV-I8-Tfk"/>
                                     <constraint firstItem="ILz-8a-YAs" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="Ml1-Dv-3A8"/>
-                                    <constraint firstItem="GdN-75-tz4" firstAttribute="leading" secondItem="0zQ-uj-aBq" secondAttribute="leading" constant="40" id="Suq-Qe-Dqk"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="top" id="WAN-wX-EqH"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="top" constant="95" id="aqj-AM-uFT"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="bNC-vy-1PD"/>
                                     <constraint firstItem="u2G-1m-pMw" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="bottom" constant="42" id="ebT-XZ-z2e"/>
+                                    <constraint firstItem="GdN-75-tz4" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="f3z-n8-Zhi"/>
                                     <constraint firstAttribute="bottom" secondItem="GdN-75-tz4" secondAttribute="bottom" constant="35" id="fRM-va-vnz"/>
                                     <constraint firstItem="anP-8K-MP2" firstAttribute="top" secondItem="ILz-8a-YAs" secondAttribute="bottom" constant="42" id="npO-we-V7J"/>
-                                    <constraint firstAttribute="trailing" secondItem="GdN-75-tz4" secondAttribute="trailing" constant="40" id="oRl-2a-94D"/>
                                     <constraint firstAttribute="width" constant="355" id="peg-nS-mGs"/>
                                 </constraints>
                                 <variation key="default">
