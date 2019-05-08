@@ -77,7 +77,7 @@ extension WelcomeView: WelcomeViewProtocol {
     public var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> {
         return self.learnMoreImage.rx.isHidden.asObserver()
     }
-    
+
     public var lockwiseGlyphHidden: AnyObserver<Bool> {
         return self.lockwiseGlyph.rx.isHidden.asObserver()
     }
