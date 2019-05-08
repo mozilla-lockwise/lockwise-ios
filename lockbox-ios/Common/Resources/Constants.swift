@@ -103,4 +103,5 @@ extension Constant.string {
     static let unlinkAccountButton = NSLocalizedString("settings.unlinkAccount", value: "Disconnect %@", comment: "Text on button to unlink account. %@ will be replaced with the application name")
     static let disclaimerLabel = NSLocalizedString("settings.unlinkDisclaimer", value: "This removes synced logins from %@, but will not delete your logins from Firefox.", comment: "Label on account setting explaining unlink. %@ will be replaced with the application name")
     static let onboardingTitle = NSLocalizedString("onboarding.title", value: "Welcome to %@", comment: "Title on onboarding screen. %@ will be replaced with the application name")
+    static let getStarted = NSLocalizedString("get.started", value: "Get Started", comment: "Title for the FxA login screen.")
 }

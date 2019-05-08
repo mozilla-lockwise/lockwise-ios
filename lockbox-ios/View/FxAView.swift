@@ -78,6 +78,7 @@ extension FxAView: UIGestureRecognizerDelegate {
         leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
+        self.navigationItem.title = Constant.string.getStarted
         self.navigationItem.largeTitleDisplayMode = .never
 
         if let presenter = self.presenter {
