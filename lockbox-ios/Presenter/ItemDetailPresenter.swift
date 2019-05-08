@@ -46,10 +46,7 @@ class ItemDetailPresenter {
 
             target.itemDetailStore.itemDetailId
                 .take(1)
-                .flatMap { target.dataStore.get($0) }
-                // The first `take(1)` call does not push a completion after it emits, so a second one is necessary here
-                // to ensure that subsequent updates to the item do not result in subsequent dispacthed actions.
-                .take(1)
+                .map { target.dataStore.get($0) }
                 .map { item -> [Action] in
                     var actions: [Action] = []
                     if copyableFields.contains(value) {
@@ -91,7 +88,7 @@ class ItemDetailPresenter {
 
     func onViewReady() {
         let itemObservable = self.itemDetailStore.itemDetailId
-            .flatMap { self.dataStore.get($0) }
+            .map { self.dataStore.get($0) }
 
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
         let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
@@ -152,8 +149,7 @@ class ItemDetailPresenter {
     func dndStarted(value: String?) {
         self.itemDetailStore.itemDetailId
             .take(1)
-            .flatMap { self.dataStore.get($0) }
-            .take(1)
+            .map { self.dataStore.get($0) }
             .flatMap { item -> Observable<[Action]> in
                 var actions: [Action] = []
                 if let item = item {

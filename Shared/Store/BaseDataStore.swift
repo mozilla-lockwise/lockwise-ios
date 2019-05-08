@@ -93,7 +93,7 @@ class BaseDataStore {
     }
 
     public var locked: Observable<Bool> {
-        return self.storageState.map { $0 == LoginStoreState.Locked }
+        return self.storageState.map { $0 != LoginStoreState.Unlocked }
     }
 
     public var storageState: Observable<LoginStoreState> {
@@ -161,7 +161,9 @@ class BaseDataStore {
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
                 .subscribe(onNext: { [weak self] _ in
-                    self?.initializeLoginsStorage()
+                    if (self?.loginsStorage == nil) {
+                        self?.initializeLoginsStorage()
+                    }
                 })
                 .disposed(by: self.disposeBag)
 
@@ -186,12 +188,12 @@ class BaseDataStore {
         self.initialized()
     }
 
-    public func get(_ id: String) -> Observable<LoginRecord?> {
-        return self.listSubject
-            .map { items -> LoginRecord? in
-                return items.filter { item in
-                    return item.id == id
-                    }.first
+    public func get(_ id: String) -> LoginRecord? {
+        do {
+            return try self.loginsStorage?.get(id: id)
+        } catch let error {
+            print("Sync15: \(error)")
+            return nil
         }
     }
 
@@ -357,6 +359,7 @@ extension BaseDataStore {
 
     private func shutdown() {
         self.loginsStorage?.close()
+        self.loginsStorage = nil
     }
 
     private func initializeLoginsStorage() {

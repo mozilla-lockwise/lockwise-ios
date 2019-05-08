@@ -43,7 +43,7 @@ class ItemDetailStore: BaseItemDetailStore {
             .subscribe(onNext: { (route) in
                 switch route {
                 case .detail(let itemId):
-                    self._itemDetailId.onNext(itemId)
+                    self._itemDetailId.accept(itemId)
                 case .list:
                     break
                 }
@@ -82,7 +82,7 @@ class ItemDetailStore: BaseItemDetailStore {
     private func showFirstLogin(_ login: LoginRecord?) {
         if let login = login {
             runOnMainThread {
-                self._itemDetailId.onNext(login.id)
+                self._itemDetailId.accept(login.id)
             }
         }
     }

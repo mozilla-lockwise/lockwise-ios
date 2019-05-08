@@ -28,17 +28,12 @@ class ItemListPresenter: BaseItemListPresenter {
                 view.dismissKeyboard()
             }
 
-            self.dataStore.get(id)
-                .take(1)
-                .subscribe(onNext: { login in
-                    if let login = login {
-                        target.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login, relock: false))
-                    } else {
-                        target.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
-                    }
-                })
-                .disposed(by: self.disposeBag)
-            }.asObserver()
+            if let login = self.dataStore.get(id) {
+                target.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login, relock: false))
+            } else {
+                target.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+            }
+        }.asObserver()
     }
 
     override var helpTextItems: [LoginListCellConfiguration] { return [LoginListCellConfiguration.SelectAPasswordHelpText] }
