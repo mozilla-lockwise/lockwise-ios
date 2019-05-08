@@ -58,11 +58,7 @@ class Constant {
     }
 
     class string {
-        static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Updating AutoFill…", comment: "Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature")
-        static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating AutoFill", comment: "Accesibility notification when AutoFill is done being enabled")
         static let unlockPlaceholder = NSLocalizedString("unlock_placeholder", value: "This will unlock the app.", comment: "Placeholder text when the user’s email is unavailable while unlocking Lockbox, shown in Touch ID and passcode prompts")
-        static let signInRequired = NSLocalizedString("autofill.signInRequired", value: "Sign in Required", comment: "Title for alert dialog explaining that a user must be signed in to use AutoFill.")
-        static let signInRequiredBody = NSLocalizedString("autofill.signInRequiredBody", value: "You must be signed in to %@ before AutoFill will allow you to add passwords from %@. Once you have signed in, your entries will start appearing in AutoFill.", comment: "Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
         static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
         static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
