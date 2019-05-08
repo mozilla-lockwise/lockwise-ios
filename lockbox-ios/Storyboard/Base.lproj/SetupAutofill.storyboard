@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_5" orientation="portrait">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,17 +15,17 @@
             <objects>
                 <viewController storyboardIdentifier="autofillinstructions" id="Lfh-H7-t6g" customClass="AutofillInstructionsView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="wli-NL-jKr">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="755" text="How to Set up AutoFill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbo-05-zWe">
-                                <rect key="frame" x="0.0" y="90" width="414" height="27"/>
+                                <rect key="frame" x="0.0" y="90" width="375" height="27"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" text="Complete the following steps in order to use Lockwise as an AutoFill provider." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ycw-sN-cFL">
-                                <rect key="frame" x="72" y="133" width="270" height="36"/>
+                                <rect key="frame" x="52.5" y="133" width="270" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="270" id="CO1-xV-3OH"/>
                                 </constraints>
@@ -34,13 +34,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Open the Settings app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xig-s8-dim">
-                                <rect key="frame" x="120" y="212" width="154" height="18"/>
+                                <rect key="frame" x="100.5" y="212" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcZ-pI-Mgz">
-                                <rect key="frame" x="120" y="435" width="172" height="18"/>
+                                <rect key="frame" x="100.5" y="435" width="172" height="18"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Deselect ">
                                         <attributes>
@@ -60,34 +60,35 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Select Lockwise" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0I-o4-2Ym">
-                                <rect key="frame" x="120" y="392" width="110.66666666666669" height="18"/>
+                                <rect key="frame" x="100.5" y="392" width="110.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Turn on AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ys5-RP-RQg">
-                                <rect key="frame" x="120" y="349" width="185" height="18"/>
+                                <rect key="frame" x="100.5" y="349" width="185" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" text="Tap into AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaL-kM-bTV">
-                                <rect key="frame" x="120" y="304" width="187" height="18"/>
+                                <rect key="frame" x="100.5" y="304" width="187" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="Tap into Passwords &amp; Accounts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daO-QU-3p5">
-                                <rect key="frame" x="120" y="258" width="215" height="18"/>
+                                <rect key="frame" x="100.5" y="258" width="215" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KnK-nY-NyH">
-                                <rect key="frame" x="40" y="653" width="334" height="48"/>
+                                <rect key="frame" x="52.5" y="584" width="270" height="48"/>
                                 <color key="backgroundColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="gyF-Ex-1Rt"/>
+                                    <constraint firstAttribute="width" constant="270" id="zgW-zh-HwI"/>
                                 </constraints>
                                 <inset key="contentEdgeInsets" minX="0.0" minY="13" maxX="0.0" maxY="13"/>
                                 <state key="normal" title="Got it">
@@ -101,22 +102,22 @@
                                 </userDefinedRuntimeAttributes>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="settings-icon" translatesAutoresizingMaskIntoConstraints="NO" id="UTf-nA-sa6">
-                                <rect key="frame" x="77" y="206.66666666666666" width="29" height="29"/>
+                                <rect key="frame" x="57.5" y="206.5" width="29" height="29"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="passwords-accounts-icon" translatesAutoresizingMaskIntoConstraints="NO" id="5iN-kU-ZKf">
-                                <rect key="frame" x="77" y="252.66666666666663" width="29" height="29"/>
+                                <rect key="frame" x="57.5" y="252.5" width="29" height="29"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-icon" translatesAutoresizingMaskIntoConstraints="NO" id="otg-Pn-9qu">
-                                <rect key="frame" x="77" y="298.66666666666669" width="29" height="29"/>
+                                <rect key="frame" x="57.5" y="298.5" width="29" height="29"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="switch-on" translatesAutoresizingMaskIntoConstraints="NO" id="cqp-p8-7f0">
-                                <rect key="frame" x="74" y="346" width="34" height="24"/>
+                                <rect key="frame" x="54.5" y="346" width="34" height="24"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockwise-icon" translatesAutoresizingMaskIntoConstraints="NO" id="3dV-UI-9Mv">
-                                <rect key="frame" x="70" y="378" width="46" height="46"/>
+                                <rect key="frame" x="50.5" y="378" width="46" height="46"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="passwords-accounts-icon" translatesAutoresizingMaskIntoConstraints="NO" id="sH0-d8-GTZ">
-                                <rect key="frame" x="77" y="429.66666666666669" width="29" height="29"/>
+                                <rect key="frame" x="57.5" y="429.5" width="29" height="29"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -125,9 +126,8 @@
                             <constraint firstItem="cqp-p8-7f0" firstAttribute="centerY" secondItem="Ys5-RP-RQg" secondAttribute="centerY" id="7l6-Hn-6t7"/>
                             <constraint firstItem="jQO-vK-4qk" firstAttribute="bottom" secondItem="KnK-nY-NyH" secondAttribute="bottom" constant="35" id="9g9-xg-IVb"/>
                             <constraint firstItem="xig-s8-dim" firstAttribute="leading" secondItem="UTf-nA-sa6" secondAttribute="trailing" constant="14" id="9q1-Qq-dlc"/>
-                            <constraint firstItem="jQO-vK-4qk" firstAttribute="trailing" secondItem="KnK-nY-NyH" secondAttribute="trailing" constant="40" id="Ahw-hh-BVv"/>
+                            <constraint firstItem="KnK-nY-NyH" firstAttribute="centerX" secondItem="wli-NL-jKr" secondAttribute="centerX" id="BTa-2k-vkc"/>
                             <constraint firstItem="Ys5-RP-RQg" firstAttribute="leading" secondItem="YaL-kM-bTV" secondAttribute="leading" id="BuP-F6-I0W"/>
-                            <constraint firstItem="KnK-nY-NyH" firstAttribute="leading" secondItem="jQO-vK-4qk" secondAttribute="leading" constant="40" id="Bz8-xR-UV2"/>
                             <constraint firstItem="xig-s8-dim" firstAttribute="centerX" secondItem="jQO-vK-4qk" secondAttribute="centerX" constant="-10" id="CVI-B5-Nzw"/>
                             <constraint firstItem="otg-Pn-9qu" firstAttribute="centerY" secondItem="YaL-kM-bTV" secondAttribute="centerY" id="Dg3-dz-SFR"/>
                             <constraint firstItem="dbo-05-zWe" firstAttribute="top" secondItem="jQO-vK-4qk" secondAttribute="top" priority="750" constant="70" id="FLm-5X-gKW"/>
