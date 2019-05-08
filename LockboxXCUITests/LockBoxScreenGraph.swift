@@ -224,7 +224,7 @@ extension BaseTestCase {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = emailTestAccountLogins
         navigator.goto(Screen.FxASigninScreenEmail)
-        waitforExistence(app.navigationBars["Lockbox.FxAView"])
+        waitforExistence(app.navigationBars["Get Started"])
         waitforExistence(app.webViews.textFields["Email"], timeout: 10)
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
