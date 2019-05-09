@@ -161,7 +161,7 @@ class BaseDataStore {
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
                 .subscribe(onNext: { [weak self] _ in
-                    if (self?.loginsStorage == nil) {
+                    if let _ = self?.loginsStorage {
                         self?.initializeLoginsStorage()
                     }
                 })
@@ -188,13 +188,19 @@ class BaseDataStore {
         self.initialized()
     }
 
-    public func get(_ id: String) -> LoginRecord? {
-        do {
-            return try self.loginsStorage?.get(id: id)
-        } catch let error {
-            print("Sync15: \(error)")
-            return nil
-        }
+    public func get(_ id: String) -> Observable<LoginRecord?> {
+        return Observable.create({ [weak self] observer -> Disposable in
+            self?.queue.async {
+                do {
+                    let login = try self?.loginsStorage?.get(id: id)
+                    observer.onNext(login)
+                } catch let error {
+                    observer.onError(error)
+                }
+            }
+
+            return Disposables.create()
+        })
     }
 
     public func initialized() {

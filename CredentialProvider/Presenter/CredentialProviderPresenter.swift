@@ -150,7 +150,7 @@ extension CredentialProviderPresenter {
         self.dataStore.locked
                 .filter { !$0 }
                 .take(1)
-                .map { [weak self] _ in self?.dataStore.get(id) }
+                .flatMap { _ in self.dataStore.get(id) }
                 .bind { [weak self] login in
                     guard let login = login else {
                         self?.cancelWith(.credentialIdentityNotFound)

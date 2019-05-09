@@ -28,11 +28,16 @@ class ItemListPresenter: BaseItemListPresenter {
                 view.dismissKeyboard()
             }
 
-            if let login = self.dataStore.get(id) {
-                target.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login, relock: false))
-            } else {
-                target.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
-            }
+            target.dataStore.get(id)
+                .map { login -> CredentialStatusAction in
+                    if let login = login {
+                        return CredentialStatusAction.loginSelected(login: login, relock: false)
+                    } else {
+                        return CredentialStatusAction.userCanceled
+                    }
+                }
+                .subscribe(onNext: { target.dispatcher.dispatch(action: $0) })
+                .disposed(by: target.disposeBag)
         }.asObserver()
     }
 

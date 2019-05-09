@@ -46,7 +46,7 @@ class ItemDetailPresenter {
 
             target.itemDetailStore.itemDetailId
                 .take(1)
-                .map { target.dataStore.get($0) }
+                .flatMap { target.dataStore.get($0) }
                 .map { item -> [Action] in
                     var actions: [Action] = []
                     if copyableFields.contains(value) {
@@ -88,7 +88,7 @@ class ItemDetailPresenter {
 
     func onViewReady() {
         let itemObservable = self.itemDetailStore.itemDetailId
-            .map { self.dataStore.get($0) }
+            .flatMap { self.dataStore.get($0) }
 
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
         let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
@@ -149,7 +149,7 @@ class ItemDetailPresenter {
     func dndStarted(value: String?) {
         self.itemDetailStore.itemDetailId
             .take(1)
-            .map { self.dataStore.get($0) }
+            .flatMap { self.dataStore.get($0) }
             .flatMap { item -> Observable<[Action]> in
                 var actions: [Action] = []
                 if let item = item {
