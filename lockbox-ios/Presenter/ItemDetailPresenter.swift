@@ -61,6 +61,7 @@ class ItemDetailPresenter {
                     }
                     return actions
                 }
+                .observeOn(MainScheduler.instance)
                 .subscribe(onNext: { actions in
                     for action in actions {
                         target.dispatcher.dispatch(action: action)
