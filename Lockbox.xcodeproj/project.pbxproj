@@ -508,7 +508,6 @@
 		7D44088D20178713001873F6 /* WelcomeViewSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewSpec.swift; sourceTree = "<group>"; };
 		7D522EA720334C8200295FF8 /* en */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7D578D23207573B000DC9C73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SettingList.storyboard; sourceTree = "<group>"; };
-		7D578D26207573B100DC9C73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingList.strings; sourceTree = "<group>"; };
 		7D5889F9205706AA0087DF89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ItemList.storyboard; sourceTree = "<group>"; };
 		7D5C8BDE226A273800D9BFD9 /* AutoLockSupportSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSupportSpec.swift; sourceTree = "<group>"; };
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -560,6 +559,8 @@
 		7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenterSpec.swift; sourceTree = "<group>"; };
 		D50920EA22849F6600AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Welcome.strings; sourceTree = "<group>"; };
 		D50920F62284A18100AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
+		D50920F82284A24F00AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingList.strings; sourceTree = "<group>"; };
+		D50920FA2284A31800AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
@@ -581,7 +582,6 @@
 		D8256F81227510B900FA96ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AutofillOnboarding.storyboard; sourceTree = "<group>"; };
 		D8256F84227510C400FA96ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SetupAutofill.storyboard; sourceTree = "<group>"; };
 		D8256F88227510E100FA96ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
-		D8256F89227510E100FA96ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
 		D8256F8B227510F900FA96ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/OnboardingConfirmation.strings; sourceTree = "<group>"; };
 		D831FEDD204C925100EAE19A /* SettingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListView.swift; sourceTree = "<group>"; };
 		D831FEDF204C92CD00EAE19A /* SettingListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingListPresenter.swift; sourceTree = "<group>"; };
@@ -1813,7 +1813,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7D578D23207573B000DC9C73 /* Base */,
-				7D578D26207573B100DC9C73 /* en */,
+				D50920F82284A24F00AC9580 /* en */,
 			);
 			name = SettingList.storyboard;
 			sourceTree = "<group>";
@@ -1884,7 +1884,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				D8256F81227510B900FA96ED /* Base */,
-				D8256F89227510E100FA96ED /* en */,
+				D50920FA2284A31800AC9580 /* en */,
 			);
 			name = AutofillOnboarding.storyboard;
 			sourceTree = "<group>";

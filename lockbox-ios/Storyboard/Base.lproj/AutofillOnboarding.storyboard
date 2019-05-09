@@ -52,6 +52,9 @@
                                 <state key="normal" title="Not Now">
                                     <color key="titleColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
+                                <attributedString key="userComments">
+                                    <fragment content="This is the text on the button to allow the user to bypass the onboarding instructions on how to enable AutoFill"/>
+                                </attributedString>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yEI-pU-vMZ" userLabel="Setup Autofill Button">
                                 <rect key="frame" x="364.5" y="849.5" width="295" height="48"/>
@@ -65,6 +68,11 @@
                                 <state key="normal" title="Set Up AutoFill">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <attributedString key="userComments">
+                                    <fragment>
+                                        <string key="content">This is the text on the button to instruct the user how to enable AutoFill in iOS. AutoFill should be localized to match the proper name for Apple’s system feature</string>
+                                    </fragment>
+                                </attributedString>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="4"/>
@@ -79,6 +87,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.12549019607843137" green="0.070588235294117646" blue="0.22745098039215686" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <attributedString key="userComments">
+                                    <fragment content="This is explaning the value of the AutoFill feature to encourage the user to enable it"/>
+                                </attributedString>
                                 <variation key="heightClass=regular-widthClass=regular">
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 </variation>
@@ -92,6 +103,11 @@
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
+                                <attributedString key="userComments">
+                                    <fragment>
+                                        <string key="content">This is the heading to instruct the user they can use the AutoFill feature in iOS. AutoFill should be localized to match the proper name for Apple’s system feature</string>
+                                    </fragment>
+                                </attributedString>
                                 <variation key="heightClass=regular-widthClass=regular">
                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="28"/>
                                 </variation>
