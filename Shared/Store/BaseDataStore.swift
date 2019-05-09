@@ -93,7 +93,7 @@ class BaseDataStore {
     }
 
     public var locked: Observable<Bool> {
-        return self.storageState.map { $0 != LoginStoreState.Unlocked }
+        return self.storageState.map { $0 == LoginStoreState.Locked }
     }
 
     public var storageState: Observable<LoginStoreState> {
@@ -260,7 +260,6 @@ extension BaseDataStore {
 extension BaseDataStore {
     private func setupAutolock() {
         self.lifecycleStore.lifecycleEvents
-                .distinctUntilChanged()
                 .filter { $0 == .background }
                 .flatMap { _ in self.storageState }
                 .take(1)
@@ -272,7 +271,6 @@ extension BaseDataStore {
                 .disposed(by: disposeBag)
 
         self.lifecycleStore.lifecycleEvents
-                .distinctUntilChanged()
                 .filter { $0 == .foreground }
                 .flatMap { _ in self.storageState }
                 .take(1)
@@ -359,7 +357,6 @@ extension BaseDataStore {
 
     private func shutdown() {
         self.loginsStorage?.close()
-        self.loginsStorage = nil
     }
 
     private func initializeLoginsStorage() {

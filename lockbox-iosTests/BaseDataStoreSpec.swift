@@ -272,7 +272,6 @@ class BaseDataStoreSpec: QuickSpec {
                         self.dataStoreSupport.clearInvocations()
                         self.lifecycleStore.fakeCycle.onNext(.foreground)
                         _ = try! self.subject.storageState.toBlocking().first()
-                        expect(self.dataStoreSupport.createArgument).notTo(beNil())
                         expect(self.listObserver.events.last!.value.element!).to(beEmpty())
                     }
                 }
@@ -306,6 +305,7 @@ class BaseDataStoreSpec: QuickSpec {
                         }
 
                         it("locks") {
+                            _ = try! self.subject.storageState.toBlocking().first()
                             let state = try! self.subject.storageState.toBlocking().first()
                             expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
                             expect(state).to(equal(LoginStoreState.Locked))
@@ -334,6 +334,7 @@ class BaseDataStoreSpec: QuickSpec {
 
                     it("backdates the next lock time and locks the db") {
                         expect(self.autoLockSupport.backdateCalled).to(beTrue())
+                        _ = try! self.subject.storageState.toBlocking().first()
                         let state = try! self.subject.storageState.toBlocking().first()
                         expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
                         expect(state).to(equal(LoginStoreState.Locked))
@@ -433,17 +434,6 @@ class BaseDataStoreSpec: QuickSpec {
 
                     it("closes the db") {
                         expect(self.loginsStorage.closeCalled).to(beTrue())
-                    }
-                }
-
-                describe("foreground events") {
-                    beforeEach {
-                        self.dataStoreSupport.clearInvocations()
-                        self.lifecycleStore.fakeCycle.onNext(.foreground)
-                    }
-
-                    it("re-inits the datastore") {
-                        expect(self.dataStoreSupport.createArgument).notTo(beNil())
                     }
                 }
             }

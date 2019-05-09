@@ -147,8 +147,8 @@ extension CredentialProviderPresenter {
             return
         }
 
-        self.dataStore.storageState
-                .filter { $0 == .Unlocked }
+        self.dataStore.locked
+                .filter { !$0 }
                 .take(1)
                 .map { [weak self] _ in self?.dataStore.get(id) }
                 .bind { [weak self] login in
