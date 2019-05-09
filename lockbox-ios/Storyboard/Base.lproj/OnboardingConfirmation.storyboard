@@ -53,6 +53,11 @@
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
+                                                <attributedString key="userComments">
+                                                    <fragment>
+                                                        <string key="content">Explains the app gives the user the ability to access their Firefox logins. Firefox for desktop should match the intended product name</string>
+                                                    </fragment>
+                                                </attributedString>
                                                 <variation key="heightClass=regular-widthClass=regular">
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 </variation>
@@ -95,6 +100,9 @@
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                                <attributedString key="userComments">
+                                                    <fragment content="Explains the app securely synchronizes the user's data"/>
+                                                </attributedString>
                                                 <variation key="heightClass=regular-widthClass=regular">
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 </variation>
@@ -130,6 +138,11 @@
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
+                                                <attributedString key="userComments">
+                                                    <fragment>
+                                                        <string key="content">Explains the user can lock and unlock using the system biometrics features. Touch ID and Face ID should be consistently translated to match Apple's system feature names</string>
+                                                    </fragment>
+                                                </attributedString>
                                                 <variation key="heightClass=regular-widthClass=regular">
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 </variation>

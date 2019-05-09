@@ -26,6 +26,11 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
+                                        <attributedString key="userComments">
+                                            <fragment>
+                                                <string key="content">Instructions for the user to follow to make account changes outside of the application. Firefox Account should be consistently translated to match the product name</string>
+                                            </fragment>
+                                        </attributedString>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
                                         <rect key="frame" x="0.0" y="582" width="414" height="44"/>
@@ -73,6 +78,11 @@
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                         <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
+                                        <attributedString key="userComments">
+                                            <fragment>
+                                                <string key="content">Placeholder string if the user's Firefox Account name is not returned. Firefox Account should be consistently translated to match the product name</string>
+                                            </fragment>
+                                        </attributedString>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="username.Label"/>
                                         </userDefinedRuntimeAttributes>
