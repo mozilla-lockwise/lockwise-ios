@@ -39,6 +39,9 @@
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                     <nil key="highlightedColor"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="This is a placeholder string for development purposes only"/>
+                                                    </attributedString>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuK-Xc-guT">
                                                     <rect key="frame" x="15" y="14" width="42" height="20.5"/>
@@ -48,6 +51,9 @@
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="This is a placeholder string for development purposes only"/>
+                                                    </attributedString>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhp-Pp-rfw">
                                                     <rect key="frame" x="282" y="-4.5" width="43" height="52.5"/>
@@ -56,17 +62,23 @@
                                                     <state key="normal" image="reveal-eye"/>
                                                     <state key="selected" image="hide-eye"/>
                                                     <state key="highlighted" image="hide-eye"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="This is the screenreader instruction that this button will reveal the password and then can be read"/>
+                                                    </attributedString>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="reveal.button"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tbk-ki-qGK" userLabel="Open Button">
                                                     <rect key="frame" x="327" y="-4.5" width="43" height="52.5"/>
-                                                    <accessibility key="accessibilityConfiguration" label="Reveal password in plaintext"/>
+                                                    <accessibility key="accessibilityConfiguration" label="Open this web address in browser"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="open"/>
                                                     <state key="selected" image="hide-eye"/>
                                                     <state key="highlighted" image="hide-eye"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="This is the screenreader instruction that this button will open the web address in a web browser"/>
+                                                    </attributedString>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="open.button"/>
                                                     </userDefinedRuntimeAttributes>
@@ -78,6 +90,9 @@
                                                     <state key="normal" image="copy"/>
                                                     <state key="selected" image="hide-eye"/>
                                                     <state key="highlighted" image="hide-eye"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="The instruction a screenreader gives that this is how to copy the value of this item"/>
+                                                    </attributedString>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="copy.button"/>
                                                     </userDefinedRuntimeAttributes>
@@ -114,6 +129,9 @@
                                 <state key="normal" title="Learn how to edit this entry">
                                     <color key="titleColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <attributedString key="userComments">
+                                    <fragment content="This is the text on a link to open an informational page on how to edit this entry outside of the application"/>
+                                </attributedString>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="learnEditEntry.button"/>
                                 </userDefinedRuntimeAttributes>
@@ -156,7 +174,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="6" height="10"/>
+        <image name="arrow-right" width="8" height="10"/>
         <image name="copy" width="18" height="18"/>
         <image name="hide-eye" width="18" height="18"/>
         <image name="open" width="18" height="18"/>
