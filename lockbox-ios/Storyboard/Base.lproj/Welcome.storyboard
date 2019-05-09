@@ -49,6 +49,9 @@
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" red="0.12549019607843137" green="0.070588235294117646" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
+                                <attributedString key="userComments">
+                                    <fragment content="This is the sentence consistently used across marketing and other applications"/>
+                                </attributedString>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cuz-yd-F4J">
                                 <rect key="frame" x="259.5" y="694" width="315" height="45"/>
@@ -61,6 +64,9 @@
                                 <state key="normal" title="Get Started">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <attributedString key="userComments">
+                                    <fragment content="This message appears on the button for the user begin the sign in authorization flow"/>
+                                </attributedString>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="getStarted.button"/>
                                 </userDefinedRuntimeAttributes>
@@ -78,6 +84,9 @@
                                 <state key="normal" title="Unlock">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
+                                <attributedString key="userComments">
+                                    <fragment content="This is the text on the unlock button when the app is opened and locked"/>
+                                </attributedString>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="unlock.button"/>
                                 </userDefinedRuntimeAttributes>
@@ -98,9 +107,12 @@
                                 <state key="normal" title="Learn more">
                                     <color key="titleColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
+                                <attributedString key="userComments">
+                                    <fragment content="This is an link for the user to learn more about how the application requires a Firefox Account"/>
+                                </attributedString>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow-right" translatesAutoresizingMaskIntoConstraints="NO" id="hLr-A2-F62">
-                                <rect key="frame" x="462.5" y="816" width="6" height="10"/>
+                                <rect key="frame" x="462.5" y="816" width="8" height="10"/>
                                 <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="To use Lockwise, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
@@ -113,6 +125,11 @@
                                 <color key="textColor" red="0.12549019607843137" green="0.070588235294117646" blue="0.22745098039215686" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="8"/>
+                                <attributedString key="userComments">
+                                    <fragment>
+                                        <string key="content">These are instructions that to use the application, a Firefox Account is need. Firefox Account should be consistently translated to match the product name</string>
+                                    </fragment>
+                                </attributedString>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="TPg-0Q-joi"/>
@@ -126,6 +143,9 @@
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="755" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="BCd-ia-bwt">
                                 <rect key="frame" x="350.5" y="572" width="133" height="54"/>
+                                <attributedString key="userComments">
+                                    <fragment content="This is the full name of the application"/>
+                                </attributedString>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xlA-F1-krX">
                                 <rect key="frame" x="0.0" y="877" width="834" height="269"/>

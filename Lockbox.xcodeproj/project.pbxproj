@@ -510,7 +510,6 @@
 		7D578D23207573B000DC9C73 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SettingList.storyboard; sourceTree = "<group>"; };
 		7D578D26207573B100DC9C73 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SettingList.strings; sourceTree = "<group>"; };
 		7D5889F9205706AA0087DF89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ItemList.storyboard; sourceTree = "<group>"; };
-		7D5889FC205706AB0087DF89 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
 		7D5C8BDE226A273800D9BFD9 /* AutoLockSupportSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSupportSpec.swift; sourceTree = "<group>"; };
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D64EC65211B57F200D726F4 /* Firefox Lockbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Firefox Lockbox.entitlements"; sourceTree = "<group>"; };
@@ -530,7 +529,6 @@
 		7D92DAF220586FBA00195A1B /* RxOptional.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxOptional.framework; path = Carthage/Build/iOS/RxOptional.framework; sourceTree = "<group>"; };
 		7D9722C52134622F0071D82B /* BaseWelcomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseWelcomePresenter.swift; sourceTree = "<group>"; };
 		7D9722D22134872E0071D82B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Welcome.storyboard; sourceTree = "<group>"; };
-		7D9722D9213487440071D82B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Welcome.strings; sourceTree = "<group>"; };
 		7D9722DA21348C2F0071D82B /* CredentialWelcomePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialWelcomePresenter.swift; sourceTree = "<group>"; };
 		7D9722DF21349B9F0071D82B /* CredentialStatusAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialStatusAction.swift; sourceTree = "<group>"; };
 		7D9722E42134A6770071D82B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/CredentialWelcome.storyboard; sourceTree = "<group>"; };
@@ -560,6 +558,8 @@
 		7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = SharedAssets.xcassets; sourceTree = "<group>"; };
 		7DFF2EF1213854BA00F001ED /* LoginRecord+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginRecord+Spec.swift"; sourceTree = "<group>"; };
 		7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenterSpec.swift; sourceTree = "<group>"; };
+		D50920EA22849F6600AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Welcome.strings; sourceTree = "<group>"; };
+		D50920F62284A18100AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
@@ -1822,7 +1822,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7D5889F9205706AA0087DF89 /* Base */,
-				7D5889FC205706AB0087DF89 /* en */,
+				D50920F62284A18100AC9580 /* en */,
 			);
 			name = ItemList.storyboard;
 			sourceTree = "<group>";
@@ -1839,7 +1839,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				7D9722D22134872E0071D82B /* Base */,
-				7D9722D9213487440071D82B /* en */,
+				D50920EA22849F6600AC9580 /* en */,
 			);
 			name = Welcome.storyboard;
 			sourceTree = "<group>";
