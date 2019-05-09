@@ -77,7 +77,7 @@ extension Constant.string {
     static let settingsBrowserKlar = NSLocalizedString("settings.browser.klar", value: "Firefox Klar", comment: "Klar Browser")
     static let settingsBrowserSafari = NSLocalizedString("settings.browser.safari", value: "Safari", comment: "Safari Browser")
     static let settingsUsageData = NSLocalizedString("settings.usageData", value: "Send Usage Data", comment: "Setting to send usage data")
-    static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve %@ for everyone. ", comment: "Setting for send usage data subtitle. %@ will be replaced with the application name")
+    static let settingsUsageDataSubtitle = NSLocalizedString("settings.usageData.subtitle", value: "Mozilla strives to only collect what we need to provide and improve %@ for everyone. ", comment: "The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name")
     static let settingsAppVersion = NSLocalizedString("settings.appVersion", value: "App Version", comment: "App Version setting label")
     static let settingsAutoFillSettings = NSLocalizedString("settings.autoFillSettings", value: "AutoFill Instructions", comment: "Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature")
     static let learnMore = NSLocalizedString("settings.learnMore", value: "Learn More", comment: "Label for link to learn more")
