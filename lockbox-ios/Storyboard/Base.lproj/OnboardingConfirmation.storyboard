@@ -85,7 +85,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="anP-8K-MP2" userLabel="Sync between devices view">
-                                        <rect key="frame" x="52.666666666666657" y="247" width="260" height="60"/>
+                                        <rect key="frame" x="52.666666666666657" y="245" width="260" height="60"/>
                                         <subviews>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-security" translatesAutoresizingMaskIntoConstraints="NO" id="eQV-Fs-Zzb">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="44"/>
@@ -125,7 +125,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2G-1m-pMw" userLabel="Unlock the app view">
-                                        <rect key="frame" x="52.666666666666657" y="349" width="260" height="50"/>
+                                        <rect key="frame" x="52.666666666666657" y="345" width="260" height="50"/>
                                         <subviews>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-convenience" translatesAutoresizingMaskIntoConstraints="NO" id="mx9-SP-qEc">
                                                 <rect key="frame" x="0.0" y="0.0" width="50" height="40"/>
@@ -174,10 +174,10 @@
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="top" id="WAN-wX-EqH"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="top" constant="95" id="aqj-AM-uFT"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="bNC-vy-1PD"/>
-                                    <constraint firstItem="u2G-1m-pMw" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="bottom" constant="42" id="ebT-XZ-z2e"/>
+                                    <constraint firstItem="u2G-1m-pMw" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="bottom" constant="40" id="ebT-XZ-z2e"/>
                                     <constraint firstItem="GdN-75-tz4" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="f3z-n8-Zhi"/>
                                     <constraint firstAttribute="bottom" secondItem="GdN-75-tz4" secondAttribute="bottom" constant="35" id="fRM-va-vnz"/>
-                                    <constraint firstItem="anP-8K-MP2" firstAttribute="top" secondItem="ILz-8a-YAs" secondAttribute="bottom" constant="42" id="npO-we-V7J"/>
+                                    <constraint firstItem="anP-8K-MP2" firstAttribute="top" secondItem="ILz-8a-YAs" secondAttribute="bottom" constant="40" id="npO-we-V7J"/>
                                     <constraint firstAttribute="width" constant="355" id="peg-nS-mGs"/>
                                 </constraints>
                                 <variation key="default">
