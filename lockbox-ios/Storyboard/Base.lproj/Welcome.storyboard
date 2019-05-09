@@ -115,7 +115,7 @@
                                 <rect key="frame" x="462.5" y="816" width="8" height="10"/>
                                 <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="To use Lockwise, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="To use Firefox Lockwise, you’ll need a Firefox Account with saved logins." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xyY-bk-Xw8">
                                 <rect key="frame" x="269.5" y="763" width="295" height="38"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="295" id="TPg-0Q-joi"/>
@@ -127,7 +127,7 @@
                                 <size key="shadowOffset" width="0.0" height="8"/>
                                 <attributedString key="userComments">
                                     <fragment>
-                                        <string key="content">These are instructions that to use the application, a Firefox Account is need. Firefox Account should be consistently translated to match the product name</string>
+                                        <string key="content">These are instructions that to use the application, a Firefox Account is need. Firefox Account and Lockwise should be consistently translated to match the product names</string>
                                     </fragment>
                                 </attributedString>
                                 <variation key="default">
