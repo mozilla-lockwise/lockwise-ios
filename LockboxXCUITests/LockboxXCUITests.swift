@@ -145,9 +145,9 @@ class LockboxXCUITests: BaseTestCase {
         // There should be the correct number of matches
         let aMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(aMatches, 111)
+            XCTAssertEqual(aMatches, 110)
         } else {
-            XCTAssertEqual(aMatches, 108)
+            XCTAssertEqual(aMatches, 107)
         }
         // There should be less number of matches
         searchTextField.typeText("cc")

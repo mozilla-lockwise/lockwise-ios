@@ -125,14 +125,10 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        Observable.combineLatest(self.dataStore.syncState, self.dataStore.storageState)
-            .filter { $0.1 == LoginStoreState.Unprepared }
-            .map { $0.0 }
-            .distinctUntilChanged()
-            .subscribe(onNext: { syncState in
-                if syncState == .NotSyncable {
-                    self.dispatcher.dispatch(action: LoginRouteAction.welcome)
-                }
+        self.dataStore.storageState
+            .filter { $0 == LoginStoreState.Unprepared }
+            .subscribe(onNext: { _ in
+                self.dispatcher.dispatch(action: LoginRouteAction.welcome)
             })
             .disposed(by: self.disposeBag)
 

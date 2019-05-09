@@ -24,19 +24,13 @@ enum SyncError: Error {
 }
 
 enum SyncState: Equatable {
-    case NotSyncable, ReadyToSync, Syncing, Synced, Error(error: SyncError)
+    case Syncing, Synced
 
     public static func ==(lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
-        case (NotSyncable, NotSyncable):
-            return true
-        case (ReadyToSync, ReadyToSync):
-            return true
         case (Syncing, Syncing):
             return true
         case (Synced, Synced):
-            return true
-        case (Error, Error):
             return true
         default:
             return false
