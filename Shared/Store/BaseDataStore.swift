@@ -100,7 +100,7 @@ class BaseDataStore {
         return self.storageStateSubject.asObservable()
     }
 
-    // From: https://github.com/mozilla-lockbox/lockbox-ios-fxa-sync/blob/120bcb10967ea0f2015fc47bbf8293db57043568/Providers/Profile.swift#L168
+    // From: https://github.com/mozilla-lockwise/lockwise-ios-fxa-sync/blob/120bcb10967ea0f2015fc47bbf8293db57043568/Providers/Profile.swift#L168
     internal var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
         if self.keychainWrapper.hasValue(forKey: key) {

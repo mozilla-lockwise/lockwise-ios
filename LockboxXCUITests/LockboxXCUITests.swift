@@ -120,7 +120,7 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Recently Used"].tap()
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
-        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of entries (currently Recent)")
+        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
 
         // Check that the order has changed
         let firstCellRecent = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
@@ -131,7 +131,7 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["Alphabetically"].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of entries (currently A-Z)")
+        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of logins (currently A-Z)")
 
         // Check that the order has changed again to its initial state
         let firstCellAlphabetically = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
@@ -170,13 +170,13 @@ class LockboxXCUITests: BaseTestCase {
         // Tap on cacel
         app.buttons["Cancel"].tap()
         let searchFieldValueAfterCancel = searchTextField.placeholderValue
-        XCTAssertEqual(searchFieldValueAfterCancel, "Search your entries")
+        XCTAssertEqual(searchFieldValueAfterCancel, "Search logins")
         // Tap on 'x'
         searchTextField.tap()
         searchTextField.typeText("a")
         app.buttons["Clear text"].tap()
         let searchFieldValueAfterXButton = searchTextField.value as! String
-        XCTAssertEqual(searchFieldValueAfterXButton, "Search your entries")
+        XCTAssertEqual(searchFieldValueAfterXButton, "Search logins")
         app.buttons["Cancel"].tap()
         navigator.nowAt(Screen.LockboxMainPage)
     }
@@ -195,8 +195,8 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
         navigator.goto(Screen.LockboxMainPage)
         navigator.performAction(Action.LockNow)
-        waitforExistence(app.buttons["Unlock Firefox Lockbox"])
-        app.buttons["Unlock Firefox Lockbox"].tap()
+        waitforExistence(app.buttons["unlock.button"])
+        app.buttons["unlock.button"].tap()
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         waitforExistence(springboard.secureTextFields["Passcode field"])
         let passcodeInput = springboard.secureTextFields["Passcode field"]
@@ -235,6 +235,7 @@ class LockboxXCUITests: BaseTestCase {
             waitforExistence(safari.otherElements["WebView"].webViews.textFields["Email or phone"], timeout: 15)
             safari.buttons["ReloadButton"].tap()
             waitforExistence(safari.otherElements["WebView"].webViews.textFields["Email or phone"], timeout: 15)
+            safari.otherElements["WebView"].webViews.textFields["Email or phone"].tap()
 
             // Need to confirm what is shown here, different elements have appeared and
             if (safari.buttons["Other passwords"].exists) {
@@ -243,7 +244,6 @@ class LockboxXCUITests: BaseTestCase {
                 XCTAssertTrue(safari.buttons.otherElements[safariButtons1].exists)
             } else if (safari.otherElements["Password Auto-fill"].exists) {
                 safari.otherElements["Password Auto-fill"].tap()
-                XCTAssertTrue(safari.buttons[safariButtons1].exists)
             } else {
                 XCTAssertTrue(safari.buttons[safariButtons2].exists)
             }

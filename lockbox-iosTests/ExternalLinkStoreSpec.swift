@@ -12,7 +12,7 @@ class ExternalLinkStoreSpec: QuickSpec {
     private var application: FakeApplication!
     private var dispatcher: Dispatcher!
     private var userDefaults: UserDefaults!
-    private var testUrl = "https://github.com/mozilla-lockbox/lockbox-ios"
+    private var testUrl = "https://github.com/mozilla-lockwise/lockwise-ios"
 
     class FakeApplication: OpenUrlProtocol {
         var openArgument: URL?
@@ -48,12 +48,12 @@ class ExternalLinkStoreSpec: QuickSpec {
                     self.userDefaults.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
                     expect(self.application.openArgument).to(beNil())
                     self.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: self.testUrl))
-                    expect(self.application.openArgument?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                    expect(self.application.openArgument?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockwise%2Flockwise-ios"))
                     self.application.openArgument = nil
                     self.userDefaults.set(Setting.PreferredBrowser.Focus.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
                     expect(self.application.openArgument).to(beNil())
                     self.dispatcher.dispatch(action: ExternalLinkAction(baseURLString: self.testUrl))
-                    expect(self.application.openArgument?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                    expect(self.application.openArgument?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockwise%2Flockwise-ios"))
                 }
             }
 

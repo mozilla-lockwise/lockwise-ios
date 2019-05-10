@@ -98,7 +98,7 @@ extension SettingListView {
                 if let switchSetting = cellConfiguration as? SwitchSettingCellConfiguration {
                     let switchItem = UISwitch()
                     switchItem.accessibilityIdentifier = "sendUsageData.switch"
-                    switchItem.onTintColor = Constant.color.lockBoxBlue
+                    switchItem.onTintColor = Constant.color.lockBoxViolet
                     switchItem.rx.value.changed.asObservable()
                         .bind(to: switchSetting.onChanged)
                         .disposed(by: cell.disposeBag)

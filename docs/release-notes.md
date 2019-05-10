@@ -407,7 +407,7 @@ This build DOES NOT include:
 - the remaining links to final FAQ content and instructions (#172)
 - creating, updating or deleting entries (that's intentional)
 
-Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+Join us at [https://github.com/mozilla-lockwise/lockwise-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1280)
 
@@ -433,7 +433,7 @@ This build DOES NOT include:
 - a few more links to real FAQ content and instructions (#172)
 - creating, updating or deleting entries (that's intentional)
 
-Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+Join us at [https://github.com/mozilla-lockwise/lockwise-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1189)
 
@@ -463,7 +463,7 @@ Some KNOWN ISSUES include:
 - if you delete the app and re-install it, your app may crash once (#374)
 - the autolocking timer was working inconsistently and may not have automatically locked the app, please keep testing this!
 
-Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+Join us at [https://github.com/mozilla-lockwise/lockwise-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1128)
 
@@ -487,4 +487,4 @@ This build does NOT include: actual Sync data (test data only), Face ID nor Touc
 
 Please note: the only data loaded into the app is hard-coded test data (not real Sync data)
 
-[1]: https://github.com/mozilla-lockbox/lockbox-ios/issues
+[1]: https://github.com/mozilla-lockwise/lockwise-ios/issues

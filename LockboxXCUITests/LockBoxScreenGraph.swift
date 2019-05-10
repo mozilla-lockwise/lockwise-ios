@@ -224,7 +224,7 @@ extension BaseTestCase {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = emailTestAccountLogins
         navigator.goto(Screen.FxASigninScreenEmail)
-        waitforExistence(app.navigationBars["Lockbox.FxAView"])
+        waitforExistence(app.navigationBars["Get Started"])
         waitforExistence(app.webViews.textFields["Email"], timeout: 10)
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
@@ -270,7 +270,7 @@ extension BaseTestCase {
         settings.cells.staticTexts["AutoFill Passwords"].tap()
         waitforExistence(settings.switches["AutoFill Passwords"], timeout: 3)
         settings.switches["AutoFill Passwords"].tap()
-        waitforExistence(settings.cells.staticTexts["Lockbox"])
-        settings.cells.staticTexts["Lockbox"].tap()
+        waitforExistence(settings.cells.staticTexts["Lockwise"])
+        settings.cells.staticTexts["Lockwise"].tap()
     }
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad11_0rounded" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,20 +15,25 @@
             <objects>
                 <viewController storyboardIdentifier="accountsetting" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UPp-Js-xvK" customClass="AccountSettingView" customModule="Lockbox" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9B0-EH-D9l">
-                        <rect key="frame" x="0.0" y="0.0" width="834" height="1194"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9sM-pd-E4K">
-                                <rect key="frame" x="133" y="285" width="568" height="628"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="716"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To make changes to your account, log in to your Firefox Account from any browser." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6A6-i9-hvw">
-                                        <rect key="frame" x="62" y="146.5" width="444" height="38"/>
+                                        <rect key="frame" x="62" y="176.66666666666666" width="290" height="38"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
+                                        <attributedString key="userComments">
+                                            <fragment>
+                                                <string key="content">Instructions for the user to follow to make account changes outside of the application. Firefox Account should be consistently translated to match the product name</string>
+                                            </fragment>
+                                        </attributedString>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
-                                        <rect key="frame" x="0.0" y="494" width="568" height="44"/>
+                                        <rect key="frame" x="0.0" y="582" width="414" height="44"/>
                                         <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <accessibility key="accessibilityConfiguration" identifier="disconnectFirefoxLockbox.button"/>
                                         <constraints>
@@ -42,8 +47,8 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="disconnectFirefoxLockbox.button"/>
                                         </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
-                                        <rect key="frame" x="15" y="136.5" width="345" height="35"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
+                                        <rect key="frame" x="15" y="631" width="384" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="404" id="BD7-a4-4si"/>
                                         </constraints>
@@ -62,17 +67,22 @@
                                         </variation>
                                     </label>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" image="avatar-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="meC-vW-3bR">
-                                        <rect key="frame" x="243" y="10" width="82" height="82"/>
+                                        <rect key="frame" x="166" y="40" width="82" height="82"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="82" id="09u-j0-1Ew"/>
                                             <constraint firstAttribute="height" constant="82" id="44S-4F-zOU"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firefox Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f32-KR-4Nm">
-                                        <rect key="frame" x="240" y="102" width="88.5" height="14.5"/>
+                                        <rect key="frame" x="162.66666666666666" y="132" width="89" height="14.666666666666657"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                         <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
+                                        <attributedString key="userComments">
+                                            <fragment>
+                                                <string key="content">Placeholder string if the user's Firefox Account name is not returned. Firefox Account should be consistently translated to match the product name</string>
+                                            </fragment>
+                                        </attributedString>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="username.Label"/>
                                         </userDefinedRuntimeAttributes>
@@ -83,7 +93,7 @@
                                     <constraint firstItem="dKb-ji-8VE" firstAttribute="top" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="5" id="4mW-td-T8E"/>
                                     <constraint firstAttribute="bottom" secondItem="htf-cl-VXU" secondAttribute="bottom" constant="90" id="9vv-2H-Crk"/>
                                     <constraint firstItem="meC-vW-3bR" firstAttribute="centerX" secondItem="9sM-pd-E4K" secondAttribute="centerX" id="B0n-F9-Zsy"/>
-                                    <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9sM-pd-E4K" secondAttribute="top" constant="10" id="Dcy-c1-Llw"/>
+                                    <constraint firstItem="meC-vW-3bR" firstAttribute="top" secondItem="9sM-pd-E4K" secondAttribute="top" constant="40" id="Dcy-c1-Llw"/>
                                     <constraint firstItem="dKb-ji-8VE" firstAttribute="leading" secondItem="9sM-pd-E4K" secondAttribute="leading" constant="15" id="GOZ-T7-JLB"/>
                                     <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="dKb-ji-8VE" secondAttribute="bottom" constant="50" id="Gm2-uC-cSv"/>
                                     <constraint firstAttribute="trailing" secondItem="htf-cl-VXU" secondAttribute="trailing" id="RIP-FJ-gQd"/>
@@ -151,6 +161,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="avatar-placeholder" width="82" height="82"/>
+        <image name="avatar-placeholder" width="80" height="80"/>
     </resources>
 </document>

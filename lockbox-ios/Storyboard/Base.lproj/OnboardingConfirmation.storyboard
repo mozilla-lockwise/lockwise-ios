@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad12_9" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad12_9rounded" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0zQ-uj-aBq" userLabel="Container View">
-                                <rect key="frame" x="334.5" y="441" width="355" height="504"/>
+                                <rect key="frame" x="334.5" y="433" width="355" height="504"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1X7-W0-IdI">
                                         <rect key="frame" x="0.0" y="0.0" width="355" height="0.0"/>
@@ -32,34 +32,27 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4">
-                                        <rect key="frame" x="40" y="421" width="275" height="48"/>
-                                        <color key="backgroundColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="finish.button"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="48" id="UMK-pk-Gqs"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                        <state key="normal" title="Finish">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                    </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ILz-8a-YAs" userLabel="Access login in view">
                                         <rect key="frame" x="17.5" y="60" width="320" height="50"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Access logins saved to Firefox for desktop from your iPhone" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afK-Kw-Hqs">
-                                                <rect key="frame" x="72" y="2" width="248" height="40.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Access logins saved to Firefox for desktop from your device" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afK-Kw-Hqs">
+                                                <rect key="frame" x="82" y="2" width="238" height="40.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
+                                                <attributedString key="userComments">
+                                                    <fragment>
+                                                        <string key="content">Explains the app gives the user the ability to access their Firefox logins. Firefox for desktop should match the intended product name</string>
+                                                    </fragment>
+                                                </attributedString>
                                                 <variation key="heightClass=regular-widthClass=regular">
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 </variation>
                                             </label>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-access" translatesAutoresizingMaskIntoConstraints="NO" id="X4O-Vu-TZh">
-                                                <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="28"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="40" id="Jv6-Yl-KLf"/>
+                                                    <constraint firstAttribute="width" constant="50" id="Jv6-Yl-KLf"/>
                                                 </constraints>
                                             </imageView>
                                         </subviews>
@@ -79,20 +72,24 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="anP-8K-MP2" userLabel="Sync between devices view">
-                                        <rect key="frame" x="17.5" y="152" width="320" height="60"/>
+                                        <rect key="frame" x="17.5" y="150" width="320" height="60"/>
                                         <subviews>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-security" translatesAutoresizingMaskIntoConstraints="NO" id="eQV-Fs-Zzb">
-                                                <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="44"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="40" id="XVz-Zw-eXk"/>
+                                                    <constraint firstAttribute="width" constant="50" id="XVz-Zw-eXk"/>
                                                 </constraints>
                                             </imageView>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="Sync between devices with secure 256-bit encryption" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o0t-1T-rrA">
-                                                <rect key="frame" x="72" y="0.0" width="198" height="65"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" text="Sync between devices with secure 256-bit encryption" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o0t-1T-rrA">
+                                                <rect key="frame" x="82" y="0.0" width="238" height="60"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                                                <attributedString key="userComments">
+                                                    <fragment content="Explains the app securely synchronizes the user's data"/>
+                                                </attributedString>
                                                 <variation key="heightClass=regular-widthClass=regular">
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 </variation>
@@ -100,7 +97,7 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="250" id="5pu-hA-Lw6">
+                                            <constraint firstAttribute="width" constant="260" id="5pu-hA-Lw6">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="320"/>
                                             </constraint>
                                             <constraint firstItem="o0t-1T-rrA" firstAttribute="leading" secondItem="eQV-Fs-Zzb" secondAttribute="trailing" constant="12" id="63d-5V-r0F">
@@ -115,19 +112,24 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u2G-1m-pMw" userLabel="Unlock the app view">
-                                        <rect key="frame" x="17.5" y="254" width="320" height="50"/>
+                                        <rect key="frame" x="17.5" y="250" width="320" height="50"/>
                                         <subviews>
                                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="onboarding-convenience" translatesAutoresizingMaskIntoConstraints="NO" id="mx9-SP-qEc">
-                                                <rect key="frame" x="0.0" y="0.0" width="40" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="50" height="40"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="40" id="goi-0c-HaT"/>
+                                                    <constraint firstAttribute="width" constant="50" id="goi-0c-HaT"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Unlock the app with ease using Touch ID or Face ID" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sKa-b5-lgD">
-                                                <rect key="frame" x="72" y="2" width="248" height="40.5"/>
+                                                <rect key="frame" x="82" y="2" width="238" height="40.5"/>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
+                                                <attributedString key="userComments">
+                                                    <fragment>
+                                                        <string key="content">Explains the user can lock and unlock using the system biometrics features. Touch ID and Face ID should be consistently translated to match Apple's system feature names</string>
+                                                    </fragment>
+                                                </attributedString>
                                                 <variation key="heightClass=regular-widthClass=regular">
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                 </variation>
@@ -142,7 +144,7 @@
                                             </constraint>
                                             <constraint firstItem="sKa-b5-lgD" firstAttribute="top" secondItem="u2G-1m-pMw" secondAttribute="top" constant="2" id="TPB-st-ovg"/>
                                             <constraint firstItem="mx9-SP-qEc" firstAttribute="top" secondItem="u2G-1m-pMw" secondAttribute="top" id="XjG-Ml-9XL"/>
-                                            <constraint firstAttribute="width" constant="250" id="kkr-C5-ggh">
+                                            <constraint firstAttribute="width" constant="260" id="kkr-C5-ggh">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="320"/>
                                             </constraint>
                                             <constraint firstItem="mx9-SP-qEc" firstAttribute="leading" secondItem="u2G-1m-pMw" secondAttribute="leading" id="x0g-Kz-Idb"/>
@@ -156,14 +158,11 @@
                                     <constraint firstAttribute="height" constant="504" id="Eg4-9P-t06"/>
                                     <constraint firstItem="ILz-8a-YAs" firstAttribute="top" secondItem="1X7-W0-IdI" secondAttribute="bottom" constant="60" id="HcV-I8-Tfk"/>
                                     <constraint firstItem="ILz-8a-YAs" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="Ml1-Dv-3A8"/>
-                                    <constraint firstItem="GdN-75-tz4" firstAttribute="leading" secondItem="0zQ-uj-aBq" secondAttribute="leading" constant="40" id="Suq-Qe-Dqk"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="top" id="WAN-wX-EqH"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="top" constant="95" id="aqj-AM-uFT"/>
                                     <constraint firstItem="1X7-W0-IdI" firstAttribute="centerX" secondItem="0zQ-uj-aBq" secondAttribute="centerX" id="bNC-vy-1PD"/>
-                                    <constraint firstItem="u2G-1m-pMw" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="bottom" constant="42" id="ebT-XZ-z2e"/>
-                                    <constraint firstAttribute="bottom" secondItem="GdN-75-tz4" secondAttribute="bottom" constant="35" id="fRM-va-vnz"/>
-                                    <constraint firstItem="anP-8K-MP2" firstAttribute="top" secondItem="ILz-8a-YAs" secondAttribute="bottom" constant="42" id="npO-we-V7J"/>
-                                    <constraint firstAttribute="trailing" secondItem="GdN-75-tz4" secondAttribute="trailing" constant="40" id="oRl-2a-94D"/>
+                                    <constraint firstItem="u2G-1m-pMw" firstAttribute="top" secondItem="anP-8K-MP2" secondAttribute="bottom" constant="40" id="ebT-XZ-z2e"/>
+                                    <constraint firstItem="anP-8K-MP2" firstAttribute="top" secondItem="ILz-8a-YAs" secondAttribute="bottom" constant="40" id="npO-we-V7J"/>
                                     <constraint firstAttribute="width" constant="355" id="peg-nS-mGs"/>
                                 </constraints>
                                 <variation key="default">
@@ -182,31 +181,51 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4">
+                                <rect key="frame" x="354.5" y="1263" width="315" height="48"/>
+                                <color key="backgroundColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <accessibility key="accessibilityConfiguration" identifier="finish.button"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="UMK-pk-Gqs"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="315" id="kal-JM-jxC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <state key="normal" title="Finish">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="faL-BK-34o" firstAttribute="bottom" secondItem="0zQ-uj-aBq" secondAttribute="bottom" id="Aav-sU-aJI"/>
+                            <constraint firstItem="faL-BK-34o" firstAttribute="bottom" secondItem="GdN-75-tz4" secondAttribute="bottom" constant="35" id="Fds-gQ-jvD"/>
+                            <constraint firstItem="GdN-75-tz4" firstAttribute="centerX" secondItem="faL-BK-34o" secondAttribute="centerX" id="Jlm-fy-4kd"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" secondItem="0zQ-uj-aBq" secondAttribute="trailing" id="LwU-Xl-AS9"/>
                             <constraint firstItem="0zQ-uj-aBq" firstAttribute="top" secondItem="faL-BK-34o" secondAttribute="top" id="TPl-sX-mWq"/>
                             <constraint firstItem="0zQ-uj-aBq" firstAttribute="leading" secondItem="faL-BK-34o" secondAttribute="leading" id="ajh-Nf-qVr"/>
                             <constraint firstItem="0zQ-uj-aBq" firstAttribute="centerY" secondItem="faL-BK-34o" secondAttribute="centerY" id="lK7-zb-WQK"/>
                             <constraint firstItem="0zQ-uj-aBq" firstAttribute="centerX" secondItem="faL-BK-34o" secondAttribute="centerX" id="myj-HO-SNU"/>
+                            <constraint firstItem="GdN-75-tz4" firstAttribute="top" secondItem="0zQ-uj-aBq" secondAttribute="bottom" constant="5" id="qfe-Ll-HOP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="faL-BK-34o"/>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="lK7-zb-WQK"/>
                                 <exclude reference="myj-HO-SNU"/>
+                                <exclude reference="qfe-Ll-HOP"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="qfe-Ll-HOP"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
                             <mask key="constraints">
-                                <exclude reference="Aav-sU-aJI"/>
-                                <exclude reference="LwU-Xl-AS9"/>
                                 <exclude reference="TPl-sX-mWq"/>
                                 <exclude reference="ajh-Nf-qVr"/>
                                 <include reference="lK7-zb-WQK"/>
                                 <include reference="myj-HO-SNU"/>
+                                <exclude reference="LwU-Xl-AS9"/>
                             </mask>
                         </variation>
                     </view>
@@ -222,8 +241,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="onboarding-access" width="40" height="46"/>
-        <image name="onboarding-convenience" width="40" height="46"/>
-        <image name="onboarding-security" width="40" height="46"/>
+        <image name="onboarding-access" width="50" height="28"/>
+        <image name="onboarding-convenience" width="37" height="40"/>
+        <image name="onboarding-security" width="50" height="44"/>
     </resources>
 </document>

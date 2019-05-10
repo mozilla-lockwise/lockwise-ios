@@ -127,7 +127,7 @@ class BaseItemListView: UIViewController {
         if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
 
             if let backgroundview = searchField.subviews.first {
-                backgroundview.backgroundColor = Constant.color.navSearchBackgroundColor
+                backgroundview.backgroundColor = Constant.color.inactiveNavSearchBackgroundColor
                 backgroundview.layer.cornerRadius = 10
                 backgroundview.clipsToBounds = true
             }
@@ -306,7 +306,22 @@ extension BaseItemListView {
 }
 
 extension BaseItemListView: UISearchControllerDelegate {
+    func willPresentSearchController(_ searchController: UISearchController) {
+        if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+            if let backgroundview = searchField.subviews.first {
+                backgroundview.backgroundColor = Constant.color.activeNavSearchBackgroundColor
+            }
+        }
+    }
 
+    func willDismissSearchController(_ searchController: UISearchController) {
+        if let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+
+            if let backgroundview = searchField.subviews.first {
+                backgroundview.backgroundColor = Constant.color.inactiveNavSearchBackgroundColor
+            }
+        }
+    }
 }
 
 extension BaseItemListView: UISearchResultsUpdating {

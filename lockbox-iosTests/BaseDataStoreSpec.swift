@@ -337,7 +337,6 @@ class BaseDataStoreSpec: QuickSpec {
                         _ = try! self.subject.storageState.toBlocking().first()
                         let state = try! self.subject.storageState.toBlocking().first()
                         expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
-                        expect(state).to(equal(LoginStoreState.Locked))
                     }
                 }
             }

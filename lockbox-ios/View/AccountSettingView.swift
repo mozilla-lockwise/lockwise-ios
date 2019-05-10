@@ -34,8 +34,11 @@ class AccountSettingView: UIViewController {
     }
 
     private func setupStrings() {
-        self.unlinkAccountButton.setTitle(String(format: Constant.string.unlinkAccountButton, Constant.string.productName), for: .normal)
-        self.disclaimerLabel.text = String(format: Constant.string.disclaimerLabel, Constant.string.productName)
+        self.unlinkAccountButton.setTitle(
+            String(format: Constant.string.unlinkAccountButton, Constant.string.productLabel),
+            for: .normal
+        )
+        self.disclaimerLabel.text = String(format: Constant.string.disclaimerLabel, Constant.string.productLabel)
     }
 }
 

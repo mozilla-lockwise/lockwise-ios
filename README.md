@@ -1,15 +1,14 @@
 [![BuddyBuild][buddybuild-image]][buddybuild-link]
 [![Coverage Status][codecov-image]][codecov-link]
-[![Waffle Board][waffle-image]][waffle-link]
 
-# Firefox Lockbox for iOS
+# Firefox Lockwise for iOS
 
-The iOS application repository for [Firefox Lockbox][org-website].
+The iOS application repository for [Firefox Lockwise][org-website] (formerly Lockbox).
 
 ## [Documentation][docs-link]
 
-*This is just one component of the Firefox Lockbox product. Please see the
-[Firefox Lockbox website][org-website] for more context.*
+*This is just one component of the Firefox Lockwise product. Please see the
+[Firefox Lockwise website][org-website] for more context.*
 
 For detailed documentation and installation instructions, please see the
 [`docs` directory][docs-link].
@@ -32,12 +31,10 @@ Note that some test fixtures use source code from third-party services, and are 
 
 [buddybuild-image]: https://dashboard.buddybuild.com/api/statusImage?appID=5a0ddb736e19370001034f85&branch=master&build=latest
 [buddybuild-link]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85/build/latest?branch=master
-[codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockbox/lockbox-ios.svg
-[codecov-link]: https://codecov.io/gh/mozilla-lockbox/lockbox-ios
-[waffle-image]: https://badge.waffle.io/mozilla-lockbox/lockbox-extension.svg?columns=In%20Progress
-[waffle-link]: https://waffle.io/mozilla-lockbox/lockbox-extension
+[codecov-image]: https://img.shields.io/codecov/c/github/mozilla-lockwise/lockwise-ios.svg
+[codecov-link]: https://codecov.io/gh/mozilla-lockwise/lockwise-ios
 [docs-link]: docs/
-[org-website]: https://lockbox.firefox.com/
+[org-website]: https://lockwise.firefox.com/
 [contributing-link]: docs/contributing.md
 [coc-link]: /CODE_OF_CONDUCT.md
 [security-link]: docs/SECURITY.md

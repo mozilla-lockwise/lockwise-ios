@@ -11,6 +11,10 @@ class OnboardingConfirmationView: UIViewController {
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var encryptionTextView: UITextView!
     @IBOutlet weak var headerLabel: UILabel!
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -64,7 +68,7 @@ extension OnboardingConfirmationView {
             text.addAttributes(
                     [
                         NSAttributedString.Key.link: NSString(string: Constant.app.securityFAQ),
-                        NSAttributedString.Key.foregroundColor: Constant.color.lockBoxBlue
+                        NSAttributedString.Key.foregroundColor: Constant.color.lockBoxViolet
                     ],
                     range: range
             )

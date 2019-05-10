@@ -13,12 +13,12 @@ class WelcomeView: UIViewController {
     @IBOutlet internal weak var accessLockboxMessage: UILabel!
     @IBOutlet internal weak var learnMore: UIButton!
     @IBOutlet internal weak var learnMoreImage: UIImageView!
+    @IBOutlet internal weak var lockwiseGlyph: UIImageView!
     @IBOutlet internal weak var lockImage: UIImageView!
     @IBOutlet internal weak var unlockButton: UIButton!
-    @IBOutlet private weak var oceanView: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.default
+        return UIStatusBarStyle.lightContent
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,15 +31,6 @@ class WelcomeView: UIViewController {
         self.roundButtons()
         self.setupStrings()
         self.presenter?.onViewReady()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        self.oceanView.image = UIImage.createGradientImage(
-                frame: self.oceanView.frame,
-                colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue],
-                locations: [0, 0.85]
-        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -85,6 +76,10 @@ extension WelcomeView: WelcomeViewProtocol {
 
     public var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> {
         return self.learnMoreImage.rx.isHidden.asObserver()
+    }
+
+    public var lockwiseGlyphHidden: AnyObserver<Bool> {
+        return self.lockwiseGlyph.rx.isHidden.asObserver()
     }
 
     public var lockImageHidden: AnyObserver<Bool> {

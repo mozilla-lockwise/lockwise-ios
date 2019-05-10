@@ -1,5 +1,9 @@
-# lockbox-ios code owners
+# lockwise-ios code owners
 # https://help.github.com/articles/about-codeowners/
 
+lockwise-ios/lockbox-ios/Common/Resources/Constants.swift   @mozilla-lockwise/localization
+lockwise-ios/Shared/Common/Resources/BaseConstants.swift    @mozilla-lockwise/localization
+*.strings                                                   @mozilla-lockwise/localization
+
 # everything is to be reviewed by the mobile team (for now..)
-* @mozilla-lockbox/mobile-engineering
+*                                                           @mozilla-lockwise/mobile-engineering
