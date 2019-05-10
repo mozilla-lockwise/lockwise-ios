@@ -71,7 +71,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        let lockedStub = PublishSubject<Bool>()
+        let lockedStub = ReplaySubject<Bool>.create(bufferSize: 1)
         let getStub = PublishSubject<LoginRecord?>()
 
         var getGuid: String?
@@ -179,8 +179,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
                     self.subject.extensionConfigurationRequested()
                 }
 
-                it("foregrounds the datastore and tells the view to display the welcome screen") {
-                    expect(self.dispatcher.actionArguments.popLast() as? LifecycleAction).to(equal(LifecycleAction.foreground))
+                it("tells the view to display the welcome screen") {
                     expect(self.view.displayWelcomeCalled).to(beTrue())
                 }
             }
@@ -231,32 +230,38 @@ class CredentialProviderPresenterSpec: QuickSpec {
                         it("unlocks the datastore") {
                             expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
                         }
-
-                        it("requests the login from the datastore") {
-                            expect(self.dataStore.getGuid).to(equal(passwordIdentity.recordIdentifier))
-                        }
-
-                        describe("when the login is nil") {
+                        describe("after unlocking") {
                             beforeEach {
-                                self.dataStore.getStub.onNext(nil)
+                                self.dataStore.lockedStub.onNext(false)
                             }
 
-                            it("cancels the request with notFound") {
-                                expect(self.view.fakeExtensionContext.error).notTo(beNil())
-                                expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
-                            }
-                        }
-
-                        describe("when the login is not nil and the password fill completes") {
-                            let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
-
-                            beforeEach {
-                                self.dataStore.getStub.onNext(login)
+                            it("requests the login from the datastore") {
+                                expect(self.dataStore.getGuid).to(equal(passwordIdentity.recordIdentifier))
                             }
 
-                            it("dispatches the selected credential action") {
-                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login, relock: true)))
+                            describe("when the login is nil") {
+                                beforeEach {
+                                    self.dataStore.getStub.onNext(nil)
+                                }
+
+                                it("cancels the request with notFound") {
+                                    expect(self.view.fakeExtensionContext.error).notTo(beNil())
+                                    expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
+                                }
                             }
+
+                            describe("when the login is not nil and the password fill completes") {
+                                let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
+
+                                beforeEach {
+                                    self.dataStore.getStub.onNext(login)
+                                }
+
+                                it("dispatches the selected credential action") {
+                                    expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login, relock: true)))
+                                }
+                            }
+
                         }
                     }
 

@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 import Reachability
 
-class NetworkStore {
+open class NetworkStore {
     static let shared = NetworkStore()
 
     private var reachability: ReachabilityProtocol?
@@ -16,11 +16,11 @@ class NetworkStore {
 
     // not using this Observable anywhere yet, but it will be handy to have
     // if we do any further work around offline mode
-    public var connectedToNetwork: Observable<Bool> {
+    open var connectedToNetwork: Observable<Bool> {
         return _connectedToNetwork.asObservable()
     }
 
-    public var isConnectedToNetwork: Bool {
+    open var isConnectedToNetwork: Bool {
         return _connectedToNetwork.value
     }
 

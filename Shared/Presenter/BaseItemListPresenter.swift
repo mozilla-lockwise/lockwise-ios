@@ -172,7 +172,7 @@ extension BaseItemListPresenter {
             }
             .distinctUntilChanged()
             .map { (latest: LoginListTextSort) -> [ItemSectionModel] in
-                if (latest.syncState == .Syncing || latest.syncState == .ReadyToSync) && latest.logins.isEmpty {
+                if latest.syncState == .Syncing && latest.logins.isEmpty {
                     return self.syncPlaceholderItems
                 }
 

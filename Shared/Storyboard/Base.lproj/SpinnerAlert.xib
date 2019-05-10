@@ -18,7 +18,7 @@
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="mO2-mg-hqg">
                     <rect key="frame" x="70.5" y="20" width="37" height="37"/>
                 </activityIndicatorView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Syncing your entries..." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Mj-QY-mDP">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Syncing your entries…" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Mj-QY-mDP">
                     <rect key="frame" x="26" y="67" width="126.5" height="16"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="16" id="VeA-Jt-1TX"/>

@@ -145,6 +145,14 @@ class BaseDataStoreSpec: QuickSpec {
         }
     }
 
+    class FakeNetworkStore: NetworkStore {
+        var connectedStub = false
+
+        override var isConnectedToNetwork: Bool {
+            return self.connectedStub
+        }
+    }
+
     class FakeLifecycleStore: LifecycleStore {
         var fakeCycle = PublishSubject<LifecycleAction>()
 
@@ -158,7 +166,7 @@ class BaseDataStoreSpec: QuickSpec {
                       keychainWrapper: KeychainWrapper,
                       autoLockSupport: AutoLockSupport,
                       dataStoreSupport: DataStoreSupport,
-                      networkStore: NetworkStore = NetworkStore.shared,
+                      networkStore: NetworkStore,
                       lifecycleStore: LifecycleStore) {
             super.init(
                     dispatcher: dispatcher,
@@ -199,6 +207,7 @@ class BaseDataStoreSpec: QuickSpec {
     private var autoLockSupport: FakeAutoLockSupport!
     private var dataStoreSupport: FakeDataStoreSupport!
     private var lifecycleStore: FakeLifecycleStore!
+    private var networkStore: FakeNetworkStore!
     var subject: BaseDataStore!
 
     override func spec() {
@@ -210,11 +219,13 @@ class BaseDataStoreSpec: QuickSpec {
                 self.autoLockSupport = FakeAutoLockSupport()
                 self.dataStoreSupport = FakeDataStoreSupport(loginsStorageStub: self.loginsStorage)
                 self.lifecycleStore = FakeLifecycleStore()
+                self.networkStore = FakeNetworkStore()
                 self.subject = FakeDataStoreImpl(
                         dispatcher: self.dispatcher,
                         keychainWrapper: self.keychainWrapper,
                         autoLockSupport: self.autoLockSupport,
                         dataStoreSupport: self.dataStoreSupport,
+                        networkStore: self.networkStore,
                         lifecycleStore: self.lifecycleStore
                 )
 
@@ -261,9 +272,6 @@ class BaseDataStoreSpec: QuickSpec {
                         self.dataStoreSupport.clearInvocations()
                         self.lifecycleStore.fakeCycle.onNext(.foreground)
                         _ = try! self.subject.storageState.toBlocking().first()
-                        expect(self.dataStoreSupport.createArgument).notTo(beNil())
-                        expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                        expect(self.loginsStorage.ensureLockedCalled).to(beFalse())
                         expect(self.listObserver.events.last!.value.element!).to(beEmpty())
                     }
                 }
@@ -297,6 +305,7 @@ class BaseDataStoreSpec: QuickSpec {
                         }
 
                         it("locks") {
+                            _ = try! self.subject.storageState.toBlocking().first()
                             let state = try! self.subject.storageState.toBlocking().first()
                             expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
                             expect(state).to(equal(LoginStoreState.Locked))
@@ -305,14 +314,13 @@ class BaseDataStoreSpec: QuickSpec {
 
                     describe("when the app should not lock") {
                         beforeEach {
+                            self.loginsStorage.clearInvocations()
                             self.autoLockSupport.lockRequiredStub = false
                             self.lifecycleStore.fakeCycle.onNext(.foreground)
                         }
 
-                        it("stays unlocked & emits no new values") {
-                            let state = try! self.subject.storageState.toBlocking().first()
+                        it("stays unlocked") {
                             expect(self.loginsStorage.ensureUnlockedArgument).notTo(beNil())
-                            expect(state).to(equal(LoginStoreState.Unlocked))
                         }
                     }
                 }
@@ -326,6 +334,7 @@ class BaseDataStoreSpec: QuickSpec {
 
                     it("backdates the next lock time and locks the db") {
                         expect(self.autoLockSupport.backdateCalled).to(beTrue())
+                        _ = try! self.subject.storageState.toBlocking().first()
                         let state = try! self.subject.storageState.toBlocking().first()
                         expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
                         expect(state).to(equal(LoginStoreState.Locked))
@@ -355,6 +364,56 @@ class BaseDataStoreSpec: QuickSpec {
                 }
             }
 
+            describe("sync") {
+                beforeEach {
+                    let syncCred = SyncCredential(syncInfo: self.syncInfo, isNew: true)
+                    self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncCred))
+                }
+
+                describe("when the network is available") {
+                    beforeEach {
+                        self.networkStore.connectedStub = true
+                        self.dispatcher.dispatch(action: DataStoreAction.sync)
+                    }
+
+                    it("syncs + pushes syncing followed by synced") {
+                        _ = try! self.subject.syncState.toBlocking().first()
+                        expect(self.loginsStorage.syncArgument).notTo(beNil())
+                        let syncStates: [SyncState] = self.syncObserver.events.map {
+                            $0.value.element!
+                        }
+                        expect(syncStates).to(equal([SyncState.Synced, SyncState.Syncing, SyncState.Synced]))
+                    }
+                }
+
+                describe("when the network is not available") {
+                    beforeEach {
+                        self.networkStore.connectedStub = false
+                        self.dispatcher.dispatch(action: DataStoreAction.sync)
+                    }
+
+                    it("pushes synced and does nothing else") {
+                        let state = try! self.subject.syncState.toBlocking().first()
+                        expect(state).to(equal(SyncState.Synced))
+                        expect(self.loginsStorage.syncArgument).to(beNil())
+                    }
+                }
+            }
+
+            describe("touch") {
+                let id = "lieksmxhwmldkdmsldlf"
+
+                beforeEach {
+                    let syncCred = SyncCredential(syncInfo: self.syncInfo, isNew: true)
+                    self.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncCred))
+                    self.dispatcher.dispatch(action: DataStoreAction.touch(id: id))
+                }
+
+                it("touches the item in the datastore") {
+                    expect(self.loginsStorage.touchIdArgument).to(equal(id))
+                }
+            }
+
             describe("lifecycle interactions") {
                 describe("background events") {
                     beforeEach {
@@ -377,16 +436,15 @@ class BaseDataStoreSpec: QuickSpec {
                         expect(self.loginsStorage.closeCalled).to(beTrue())
                     }
                 }
+            }
+        }
 
-                describe("foreground events") {
-                    beforeEach {
-                        self.dataStoreSupport.clearInvocations()
-                        self.lifecycleStore.fakeCycle.onNext(.foreground)
-                    }
-
-                    it("re-inits the datastore") {
-                        expect(self.dataStoreSupport.createArgument).notTo(beNil())
-                    }
+        describe("syncstate") {
+            describe("equality") {
+                it("same states are equal") {
+                    expect(SyncState.Syncing).to(equal(SyncState.Syncing))
+                    expect(SyncState.Synced).to(equal(SyncState.Synced))
+                    expect(SyncState.Synced).notTo(equal(SyncState.Syncing))
                 }
             }
         }

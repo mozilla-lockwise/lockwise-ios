@@ -307,7 +307,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches nothing new") {
-                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(2))
+                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(3))
                             }
                         }
                     }
