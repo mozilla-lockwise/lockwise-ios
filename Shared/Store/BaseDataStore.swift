@@ -161,8 +161,9 @@ class BaseDataStore {
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
                 .subscribe(onNext: { [weak self] _ in
-                    if let _ = self?.loginsStorage {
+                    guard let _ = self?.loginsStorage else {
                         self?.initializeLoginsStorage()
+                        return
                     }
                 })
                 .disposed(by: self.disposeBag)
