@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="ipad12_9" orientation="portrait">
+    <device id="ipad12_9rounded" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -19,11 +19,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-illustration" translatesAutoresizingMaskIntoConstraints="NO" id="RNz-0B-NNa">
-                                <rect key="frame" x="674" y="-7" width="350" height="299"/>
+                                <rect key="frame" x="674" y="-3" width="350" height="299"/>
                                 <variation key="widthClass=compact" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-illustration-large" translatesAutoresizingMaskIntoConstraints="NO" id="v6f-Fs-b6L">
-                                <rect key="frame" x="75" y="-80" width="874" height="592"/>
+                                <rect key="frame" x="75" y="-76" width="874" height="592"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="592" id="L9p-dE-3pC"/>
                                     <constraint firstAttribute="width" constant="874" id="vgn-ZM-hHC"/>
@@ -31,33 +31,56 @@
                                 <variation key="widthClass=regular" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-blob" translatesAutoresizingMaskIntoConstraints="NO" id="Uvl-27-8YN">
-                                <rect key="frame" x="218.5" y="210" width="587" height="554"/>
+                                <rect key="frame" x="218.5" y="214" width="587" height="554"/>
                                 <variation key="widthClass=compact" hidden="NO"/>
                             </imageView>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="autofill-blob-large" translatesAutoresizingMaskIntoConstraints="NO" id="cSj-f3-6a4">
-                                <rect key="frame" x="-429" y="305" width="1882" height="1573"/>
+                                <rect key="frame" x="-429" y="309" width="1882" height="1573"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="1573" id="Q5W-na-xqW"/>
                                     <constraint firstAttribute="width" constant="1882" id="iAM-Lu-BeX"/>
                                 </constraints>
                                 <variation key="widthClass=regular" hidden="NO"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4" userLabel="Not Now Button">
-                                <rect key="frame" x="462" y="917.5" width="100" height="30"/>
-                                <accessibility key="accessibilityConfiguration" identifier="notNow.button"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Easily fill usernames and passwords where you need them most." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xVH-GK-wIb">
+                                <rect key="frame" x="373" y="750.5" width="278.5" height="41"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="fas-J1-ty6"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="290" id="sxD-Ul-bOs"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                                <state key="normal" title="Not Now">
-                                    <color key="titleColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </state>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.12549019607843137" green="0.070588235294117646" blue="0.22745098039215686" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
                                 <attributedString key="userComments">
-                                    <fragment content="This is the text on the button to allow the user to bypass the onboarding instructions on how to enable AutoFill"/>
+                                    <fragment content="This is explaning the value of the AutoFill feature to encourage the user to enable it"/>
                                 </attributedString>
-                            </button>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                </variation>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AutoFill your logins right from your browser or app." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Krc-YI-yKW">
+                                <rect key="frame" x="362" y="651.5" width="300.5" height="67"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="260" id="Kiz-nM-4Mb"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="330" id="qjC-hR-Iky"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <attributedString key="userComments">
+                                    <fragment>
+                                        <string key="content">This is the heading to instruct the user they can use the AutoFill feature in iOS. AutoFill should be localized to match the proper name for Apple’s system feature</string>
+                                    </fragment>
+                                </attributedString>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="28"/>
+                                </variation>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B2j-W5-mGD">
+                                <rect key="frame" x="0.0" y="791.5" width="1024" height="588.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yEI-pU-vMZ" userLabel="Setup Autofill Button">
-                                <rect key="frame" x="364.5" y="849.5" width="295" height="48"/>
+                                <rect key="frame" x="364.5" y="1220" width="295" height="48"/>
                                 <color key="backgroundColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="calibratedRGB"/>
                                 <accessibility key="accessibilityConfiguration" identifier="setupAutofill.button"/>
                                 <constraints>
@@ -79,59 +102,36 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Easily fill usernames and passwords where you need them most." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xVH-GK-wIb">
-                                <rect key="frame" x="373" y="758.5" width="278.5" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GdN-75-tz4" userLabel="Not Now Button">
+                                <rect key="frame" x="462" y="1288" width="100" height="23"/>
+                                <accessibility key="accessibilityConfiguration" identifier="notNow.button"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="290" id="sxD-Ul-bOs"/>
+                                    <constraint firstAttribute="height" constant="23" id="Nuu-Yf-tUk"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="fas-J1-ty6"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.12549019607843137" green="0.070588235294117646" blue="0.22745098039215686" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                <state key="normal" title="Not Now">
+                                    <color key="titleColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
                                 <attributedString key="userComments">
-                                    <fragment content="This is explaning the value of the AutoFill feature to encourage the user to enable it"/>
+                                    <fragment content="This is the text on the button to allow the user to bypass the onboarding instructions on how to enable AutoFill"/>
                                 </attributedString>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                </variation>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AutoFill your logins right from your browser or app." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Krc-YI-yKW">
-                                <rect key="frame" x="362" y="659.5" width="300.5" height="67"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="750" constant="260" id="Kiz-nM-4Mb"/>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="330" id="qjC-hR-Iky"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                                <attributedString key="userComments">
-                                    <fragment>
-                                        <string key="content">This is the heading to instruct the user they can use the AutoFill feature in iOS. AutoFill should be localized to match the proper name for Apple’s system feature</string>
-                                    </fragment>
-                                </attributedString>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="28"/>
-                                </variation>
-                            </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B2j-W5-mGD">
-                                <rect key="frame" x="0.0" y="967.5" width="1024" height="432.5"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.22352941176470587" green="0.20392156862745098" blue="0.45098039215686275" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="yEI-pU-vMZ" firstAttribute="top" secondItem="xVH-GK-wIb" secondAttribute="bottom" priority="750" constant="50" id="17S-dl-HlT"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="top" secondItem="v6f-Fs-b6L" secondAttribute="top" constant="100" id="2IJ-Qb-Chr"/>
                             <constraint firstItem="Uvl-27-8YN" firstAttribute="top" secondItem="faL-BK-34o" secondAttribute="top" priority="750" constant="190" id="5LN-zA-ugq"/>
                             <constraint firstItem="GdN-75-tz4" firstAttribute="top" relation="lessThanOrEqual" secondItem="yEI-pU-vMZ" secondAttribute="bottom" constant="20" id="8rx-9b-LR5"/>
+                            <constraint firstItem="B2j-W5-mGD" firstAttribute="top" secondItem="xVH-GK-wIb" secondAttribute="bottom" id="Cu0-2B-t0T"/>
                             <constraint firstItem="Krc-YI-yKW" firstAttribute="centerX" secondItem="faL-BK-34o" secondAttribute="centerX" id="FjE-6r-Tah"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xVH-GK-wIb" secondAttribute="trailing" constant="35" id="Fwp-PX-x65"/>
-                            <constraint firstItem="B2j-W5-mGD" firstAttribute="top" relation="greaterThanOrEqual" secondItem="GdN-75-tz4" secondAttribute="bottom" constant="10" id="GuA-iX-VwP"/>
                             <constraint firstItem="cSj-f3-6a4" firstAttribute="centerX" secondItem="faL-BK-34o" secondAttribute="centerX" id="J4F-e4-CCI"/>
+                            <constraint firstItem="faL-BK-34o" firstAttribute="bottom" secondItem="GdN-75-tz4" secondAttribute="bottom" constant="35" id="JGA-ic-QPv"/>
                             <constraint firstItem="Krc-YI-yKW" firstAttribute="centerY" secondItem="faL-BK-34o" secondAttribute="centerY" id="KLx-td-tOA"/>
                             <constraint firstItem="cSj-f3-6a4" firstAttribute="top" secondItem="faL-BK-34o" secondAttribute="top" constant="285" id="KPx-Zf-l2u"/>
                             <constraint firstItem="B2j-W5-mGD" firstAttribute="leading" secondItem="faL-BK-34o" secondAttribute="leading" id="Ngg-AM-iUE"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" secondItem="RNz-0B-NNa" secondAttribute="trailing" id="Ryd-fg-Sso"/>
-                            <constraint firstItem="yEI-pU-vMZ" firstAttribute="top" relation="lessThanOrEqual" secondItem="xVH-GK-wIb" secondAttribute="bottom" constant="50" id="V2d-Ti-q96"/>
                             <constraint firstItem="B2j-W5-mGD" firstAttribute="bottom" secondItem="faL-BK-34o" secondAttribute="bottom" constant="34" id="VMl-cn-Obc"/>
                             <constraint firstItem="GdN-75-tz4" firstAttribute="top" secondItem="yEI-pU-vMZ" secondAttribute="bottom" priority="750" constant="20" id="ble-Cg-dzb"/>
                             <constraint firstItem="GdN-75-tz4" firstAttribute="centerX" secondItem="AXG-bc-K38" secondAttribute="centerX" id="eR3-pL-8Rv"/>
@@ -140,7 +140,6 @@
                             <constraint firstItem="xVH-GK-wIb" firstAttribute="centerX" secondItem="faL-BK-34o" secondAttribute="centerX" id="i00-G4-Taa"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="trailing" secondItem="B2j-W5-mGD" secondAttribute="trailing" id="jXW-UY-Yv0"/>
                             <constraint firstItem="Uvl-27-8YN" firstAttribute="centerX" secondItem="faL-BK-34o" secondAttribute="centerX" id="m0E-FY-Ql5"/>
-                            <constraint firstItem="B2j-W5-mGD" firstAttribute="top" secondItem="GdN-75-tz4" secondAttribute="bottom" priority="750" constant="20" id="nKx-aE-4xn"/>
                             <constraint firstItem="faL-BK-34o" firstAttribute="top" secondItem="RNz-0B-NNa" secondAttribute="top" constant="27" id="pXi-XV-Ipv"/>
                             <constraint firstItem="xVH-GK-wIb" firstAttribute="top" secondItem="Krc-YI-yKW" secondAttribute="bottom" constant="12" id="r3o-Ea-Ika">
                                 <variation key="heightClass=regular-widthClass=regular" constant="32"/>
