@@ -10,7 +10,7 @@ class BaseItemDetailStore {
     internal var dispatcher: Dispatcher
     internal var disposeBag = DisposeBag()
 
-    internal var _itemDetailId = ReplaySubject<String>.create(bufferSize: 1)
+    internal var _itemDetailId = BehaviorRelay<String>.init(value: "")
 
     lazy private(set) var itemDetailId: Observable<String> = {
         return self._itemDetailId.asObservable()
@@ -18,6 +18,5 @@ class BaseItemDetailStore {
 
     init(dispatcher: Dispatcher = Dispatcher.shared) {
         self.dispatcher = dispatcher
-        self._itemDetailId.onNext("")
     }
 }

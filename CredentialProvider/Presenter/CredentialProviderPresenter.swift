@@ -82,14 +82,11 @@ class CredentialProviderPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        self.dispatcher.dispatch(action: LifecycleAction.foreground)
         self.dispatcher.dispatch(action: DataStoreAction.unlock)
         self.startTelemetry()
     }
 
     func extensionConfigurationRequested() {
-        self.dispatcher.dispatch(action: LifecycleAction.foreground)
-
         self.dataStore.locked
                 .bind { [weak self] locked in
                     if locked {
@@ -104,8 +101,6 @@ class CredentialProviderPresenter {
     }
 
     func credentialProvisionRequested(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.dispatcher.dispatch(action: LifecycleAction.foreground)
-
         self.dataStore.locked
                 .take(1)
                 .bind { [weak self] locked in
@@ -123,8 +118,6 @@ class CredentialProviderPresenter {
     }
 
     func credentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-        self.dispatcher.dispatch(action: LifecycleAction.foreground)
-
         self.dataStore.locked
                 .asDriver(onErrorJustReturn: true)
                 .drive(onNext: { [weak self] locked in
@@ -154,7 +147,10 @@ extension CredentialProviderPresenter {
             return
         }
 
-        self.dataStore.get(id)
+        self.dataStore.locked
+                .filter { !$0 }
+                .take(1)
+                .flatMap { _ in self.dataStore.get(id) }
                 .bind { [weak self] login in
                     guard let login = login else {
                         self?.cancelWith(.credentialIdentityNotFound)

@@ -161,7 +161,10 @@ class BaseDataStore {
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
                 .subscribe(onNext: { [weak self] _ in
-                    self?.initializeLoginsStorage()
+                    guard let _ = self?.loginsStorage else {
+                        self?.initializeLoginsStorage()
+                        return
+                    }
                 })
                 .disposed(by: self.disposeBag)
 
@@ -187,12 +190,18 @@ class BaseDataStore {
     }
 
     public func get(_ id: String) -> Observable<LoginRecord?> {
-        return self.listSubject
-            .map { items -> LoginRecord? in
-                return items.filter { item in
-                    return item.id == id
-                    }.first
-        }
+        return Observable.create({ [weak self] observer -> Disposable in
+            self?.queue.async {
+                do {
+                    let login = try self?.loginsStorage?.get(id: id)
+                    observer.onNext(login)
+                } catch let error {
+                    observer.onError(error)
+                }
+            }
+
+            return Disposables.create()
+        })
     }
 
     public func initialized() {
@@ -258,7 +267,6 @@ extension BaseDataStore {
 extension BaseDataStore {
     private func setupAutolock() {
         self.lifecycleStore.lifecycleEvents
-                .distinctUntilChanged()
                 .filter { $0 == .background }
                 .flatMap { _ in self.storageState }
                 .take(1)
@@ -270,7 +278,6 @@ extension BaseDataStore {
                 .disposed(by: disposeBag)
 
         self.lifecycleStore.lifecycleEvents
-                .distinctUntilChanged()
                 .filter { $0 == .foreground }
                 .flatMap { _ in self.storageState }
                 .take(1)
