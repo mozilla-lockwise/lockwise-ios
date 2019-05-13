@@ -148,7 +148,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.OpenWebsite) { userState in
-            app.cells["webAddressItemDetail"].press(forDuration: 1)
+            app.buttons["open.button"].tap()
         }
 
     }

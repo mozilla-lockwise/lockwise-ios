@@ -109,7 +109,7 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func testEntriesSortAndSearch() {
-        let firstEntryRecentOrder = "bmo.com"
+        let firstEntryRecentOrder = "arncyvuzox.co.uk"
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
 
