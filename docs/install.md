@@ -6,7 +6,7 @@
 
     ```
     brew update
-    brew install carthage
+    brew install carthage swift-protobuf
     ```
 
 4. Clone the repository
