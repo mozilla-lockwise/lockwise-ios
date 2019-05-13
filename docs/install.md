@@ -1,4 +1,4 @@
-1. Install Xcode version 10.2
+1. Install Xcode version 10.2.1. You need this exact version, other versions of xcode won't work.
 
 2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
 
@@ -6,7 +6,7 @@
 
     ```
     brew update
-    brew install carthage swift-protobuf
+    brew install carthage
     ```
 
 4. Clone the repository
@@ -18,7 +18,6 @@
 5. Pull in the project dependencies:
 
     ```
-    rustup target add aarch64-apple-ios armv7-apple-ios armv7s-apple-ios x86_64-apple-ios i386-apple-ios
     cd lockbox-ios
     sh ./bootstrap.sh
     ```
