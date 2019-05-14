@@ -175,6 +175,9 @@
 		7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C31F9F8F8000375C74 /* RxSwift.framework */; };
 		7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83C9FBD1FAD3D5800D08AAE /* Telemetry.framework */; };
 		7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
+		7D6AF216228B746B000CB779 /* ItemEditor.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D6AF215228B746B000CB779 /* ItemEditor.storyboard */; };
+		7D6AF218228B7C59000CB779 /* ItemEditorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AF217228B7C59000CB779 /* ItemEditorCell.swift */; };
+		7D6AF21A228B7E45000CB779 /* ItemEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6AF219228B7E45000CB779 /* ItemEditorView.swift */; };
 		7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6FB87A204F00E2005E23AA /* StatusAlert.swift */; };
 		7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */; };
 		7D8057EC2135E51300D41BDD /* CredentialProviderStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */; };
@@ -520,6 +523,9 @@
 		7D5C8BDE226A273800D9BFD9 /* AutoLockSupportSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSupportSpec.swift; sourceTree = "<group>"; };
 		7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Firefox Lockbox.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D64EC65211B57F200D726F4 /* Firefox Lockbox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Firefox Lockbox.entitlements"; sourceTree = "<group>"; };
+		7D6AF215228B746B000CB779 /* ItemEditor.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ItemEditor.storyboard; sourceTree = "<group>"; };
+		7D6AF217228B7C59000CB779 /* ItemEditorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditorCell.swift; sourceTree = "<group>"; };
+		7D6AF219228B7E45000CB779 /* ItemEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemEditorView.swift; sourceTree = "<group>"; };
 		7D6FB87A204F00E2005E23AA /* StatusAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAlert.swift; sourceTree = "<group>"; };
 		7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderStoreSpec.swift; sourceTree = "<group>"; };
 		7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ASCredentialIdentityStore+.swift"; sourceTree = "<group>"; };
@@ -883,6 +889,7 @@
 				D8256F82227510B900FA96ED /* AutofillOnboarding.storyboard */,
 				D8256F85227510C400FA96ED /* SetupAutofill.storyboard */,
 				D81526362230CF180056EC54 /* PrivacyScreen.storyboard */,
+				7D6AF215228B746B000CB779 /* ItemEditor.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -929,6 +936,8 @@
 				D8DA03D7215B34AA00656455 /* AutofillInstructionsView.swift */,
 				D85CB81B21D437AB00E19118 /* SplitView.swift */,
 				D81526342230CDE10056EC54 /* PrivacyView.swift */,
+				7D6AF217228B7C59000CB779 /* ItemEditorCell.swift */,
+				7D6AF219228B7E45000CB779 /* ItemEditorView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1460,6 +1469,7 @@
 				7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */,
 				D8256F83227510C400FA96ED /* SetupAutofill.storyboard in Resources */,
 				7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */,
+				7D522EA620334C8200295FF8 /* Localizable.strings in Resources */,
 				7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */,
 				D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */,
 				D8B5D8FB229746780049E03C /* StatusAlert.xib in Resources */,
@@ -1666,6 +1676,7 @@
 				D831FEE0204C92CD00EAE19A /* SettingListPresenter.swift in Sources */,
 				7DA4C6832028F84800B61DD8 /* BaseItemListView.swift in Sources */,
 				7AA54E03B01B57D89DE9CF6B /* Action.swift in Sources */,
+				7D6AF218228B7C59000CB779 /* ItemEditorCell.swift in Sources */,
 				7AA541B3BC9C4F5E6A725222 /* FxAView.swift in Sources */,
 				7AA54C4B886A9388A2BCE81A /* FxAPresenter.swift in Sources */,
 				7AA5475B74B7DF69096101CE /* UIViewController+.swift in Sources */,
@@ -1750,6 +1761,7 @@
 				7D11623A225FAF11009097C7 /* AutoLockSupport.swift in Sources */,
 				7AA54D3D19DB0AC7D0B59812 /* BiometryManager.swift in Sources */,
 				7D078EF32124E24100D10D1B /* BaseConstants.swift in Sources */,
+				7D6AF21A228B7E45000CB779 /* ItemEditorView.swift in Sources */,
 				7AA546B578EBABE3543AB466 /* TelemetryAction.swift in Sources */,
 				D819A4BF21BB2622004EE6F3 /* AppInfo.swift in Sources */,
 				7AA541981624DF66E83FFB72 /* ApplicationLifecycleAction.swift in Sources */,
