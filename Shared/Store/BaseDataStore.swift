@@ -279,8 +279,7 @@ extension BaseDataStore {
 
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
-                .flatMap { _ in self.storageState }
-                .take(1)
+                .flatMap { _ in self.storageState.take(1) }
                 .subscribe(onNext: { [weak self] state in
                     guard state != .Unprepared else { return }
 
