@@ -58,14 +58,17 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
-        var onItemStub: PublishSubject<LoginRecord?>
+        var onItemStub = PublishSubject<LoginRecord?>()
+        var lockedStub = ReplaySubject<Bool>.create(bufferSize: 1)
         var loginIDArg: String?
 
         init() {
-            self.onItemStub = PublishSubject<LoginRecord?>()
             super.init()
-
             self.disposeBag = DisposeBag()
+        }
+
+        override var locked: Observable<Bool> {
+            return lockedStub.asObservable()
         }
 
         override func get(_ id: String) -> Observable<LoginRecord?> {
@@ -340,6 +343,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                     self.itemDetailStore.itemDetailIdStub.onNext("1234")
                     self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
+                    self.dataStore.lockedStub.onNext(false)
                     self.subject.onViewReady()
                 }
 

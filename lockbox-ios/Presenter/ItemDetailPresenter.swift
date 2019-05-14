@@ -88,8 +88,11 @@ class ItemDetailPresenter {
     }
 
     func onViewReady() {
-        let itemObservable = self.itemDetailStore.itemDetailId
-            .flatMap { self.dataStore.get($0) }
+        let itemObservable = self.dataStore.locked
+                .filter { !$0 }
+                .take(1)
+                .flatMap { _ in self.itemDetailStore.itemDetailId }
+                .flatMap { self.dataStore.get($0) }
 
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
         let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
