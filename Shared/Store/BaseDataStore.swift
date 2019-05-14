@@ -278,11 +278,8 @@ extension BaseDataStore {
                 .disposed(by: disposeBag)
 
         self.lifecycleStore.lifecycleEvents
-                .debug()
                 .filter { $0 == .foreground }
-                .debug()
                 .flatMap { _ in self.storageState.take(1) }
-                .debug()
                 .subscribe(onNext: { [weak self] state in
                     guard state != .Unprepared else { return }
 
