@@ -10,15 +10,15 @@ Firefox Lockwise for iOS makes extensive use of RxSwift, an implementation of th
 
 In short, Flux architecture design maintains a unidirectional data flow, in which a global Dispatcher receives Actions & dispatches them to appropriate Stores. The Stores, in turn, process data & provide the source of truth for the Views. As users interact with the Views, any updates are made via a dispatched Action and the cycle begins again. See this [flux architecture](https://facebook.github.io/flux/docs/overview.html) writeup for more details on the original Flux architecture scheme.
 
-Lockbox implements a modified version of the described architecture (LockFlux), keeping in mind that the original implementation ignores asynchronous work. The key difference is in the implementation of an `ActionHandler` class. The `ActionHandler`s in some cases are a simple pass-through class for the dispatcher, but in others do some background work before dispatching the `Action`.
+Lockbox implements a modified version of the described architecture (LockFlux), keeping in mind that the original implementation ignores asynchronous work.
 
 ### Memory Management
 
-The six major components of this architecture (`View`, `Presenter`, `Store`, `Dispatcher`, `ActionHandler`, and `Action`) have distinct lifecycle management based on their functions.
+The five major components of this architecture (`View`, `Presenter`, `Store`, `Dispatcher`, and `Action`) have distinct lifecycle management based on their functions.
 
 `View`/`Presenter` pairs are allocated and de-allocated as views get displayed or hidden in turn.
 
-`Store`s, `ActionHandler`s, and the `Dispatcher` are global singleton objects, meaning that they get lazy-loaded by the application as their shared members get accessed by the `Presenter`s for view configuration or dispatching.
+`Store`s and the `Dispatcher` are global singleton objects, meaning that they get lazy-loaded by the application as their shared members get accessed by the `Presenter`s for view configuration or dispatching.
 
 `Action`s get deallocated as soon as they reach the end observer for their intended function.
 
@@ -28,7 +28,7 @@ All views are bound to a presenter[[1](#note-1)]. In this separation, the presen
 
 ### Action
 
-Actions are tiny `struct`s or `enum`s that contain declarative language about either the triggering user action or the update request for a given `Store`.
+Actions are tiny `struct`s or `enum`s that contain declarative language about either the triggering user action or the update request for a given `Store`. They can also pass along small pieces of data in the form of Swift's associated values or the `struct` properties.
 
 ### Dispatcher
 
@@ -49,9 +49,11 @@ class Dispatcher {
 }
 ```
 
+Despite its simplicity, the `Dispatcher` is a core piece of the LockFlux architecture. Having all user actions pass through the central dispatch allows for easy debugging and telemetry, and enforces agnosticism towards storage on the part of the `Presenter`, whose only responsibility should be translating application state into view state and communicating user actions.
+
 ### Store
 
-Stores provide an opaque wrapper around system storage or simple `Replay- /Publish- Subject`s for the purposes of data access and view configuration.
+Stores provide an opaque wrapper around system storage, `Replay- /Publish- Subject`s, or `Relay`s for the purposes of data access and view configuration.
 
 ### View Routing
 
@@ -63,15 +65,11 @@ To fully understand the concept, it's useful to trace one user action through it
 
 1. When a user enters text into the search field, the textfield binding[[2](#note-2)] on the `ItemListView` emits an event to an observer on the `ItemListPresenter`.
 2. The `ItemListPresenter` dispatches a `ItemListFilterAction`, which is a simple struct with one property - `filteringText: String`.
-3. The struct does a round trip through the `ItemListDisplayActionHandler`, `Dispatcher`, and `ItemListDisplayStore` before getting combined with the most recent list of items back in the `ItemListPresenter`.
+3. The struct does a round trip through the `Dispatcher` and `ItemListDisplayStore` before getting combined with the most recent list of items back in the `ItemListPresenter`.
 4. This combined `Observable` stream with both the text and the items filters the list of items and maps the filtered list into individual cell configurations.
 5. The view, on receiving the updated / filtered list, re-renders the list of items to only show the ones that the user is searching for.
 
-There are a few other listeners for `ItemListFilterAction`s; for example, the `Observable` bound to the `isHidden` property of the Cancel button in the search bar maps the `ItemListFilterAction` with a simple `!isEmpty` check -- if the `ItemListFilterAction.filteringText` is empty, the cancel button is hidden, and if not, it's displayed. While it may seem like a lot of work to make the roundtrip with the `Dispatcher`,
-
-### Current `ActionHandler` technical debt / area for improvement
-
-In the current LockFlux implementation, there is a discrepancy in the ways that asynchronous work is done. In some cases, async work is done behind the scenes at the `Store` level, and in others, as part of the pass-through setup between `ActionHandler`s and the `Dispatcher`. Ideally, we would get rid of the `ActionHandler` concept altogether, and `Presenter`s would construct and dispatch `Action`s directly to the `Dispatcher`. This will simplify tests and the architecture quite a bit.
+There are a few other listeners for `ItemListFilterAction`s; for example, the `Observable` bound to the `isHidden` property of the Cancel button in the search bar maps the `ItemListFilterAction` with a simple `!isEmpty` check -- if the `ItemListFilterAction.filteringText` is empty, the cancel button is hidden, and if not, it's displayed. While it may seem like a lot of work to make the roundtrip with the `Dispatcher`, this allows for a number of side benefits. First, it allows any
 
 ---
 
