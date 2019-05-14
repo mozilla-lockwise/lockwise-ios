@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xki-Si-B7m">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Xki-Si-B7m">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,19 +17,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" image="nessie" translatesAutoresizingMaskIntoConstraints="NO" id="YNk-Or-B8W">
-                                <rect key="frame" x="-59" y="0.0" width="476" height="194"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-glyph" translatesAutoresizingMaskIntoConstraints="NO" id="caX-HO-cIQ">
+                                <rect key="frame" x="143.5" y="249.5" width="88" height="88"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="bA8-o8-CxF" userLabel="Lockbox">
-                                <rect key="frame" x="72.5" y="302" width="230" height="40"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lockbox-title" translatesAutoresizingMaskIntoConstraints="NO" id="bA8-o8-CxF" userLabel="Lockbox">
+                                <rect key="frame" x="72.5" y="349.5" width="230" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="230" id="1Xn-9B-SWn"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="bA8-o8-CxF" firstAttribute="top" secondItem="YNk-Or-B8W" secondAttribute="bottom" constant="73" id="s4R-JZ-zx4"/>
+                            <constraint firstItem="caX-HO-cIQ" firstAttribute="centerY" secondItem="Ky8-vK-JVj" secondAttribute="centerY" constant="-50" id="6Zr-gz-wB6"/>
+                            <constraint firstItem="bA8-o8-CxF" firstAttribute="top" secondItem="caX-HO-cIQ" secondAttribute="bottom" constant="12" id="DVF-3V-nIg"/>
+                            <constraint firstItem="caX-HO-cIQ" firstAttribute="centerX" secondItem="Ky8-vK-JVj" secondAttribute="centerX" id="em3-ua-QLg"/>
                             <constraint firstItem="bA8-o8-CxF" firstAttribute="centerX" secondItem="Ky8-vK-JVj" secondAttribute="centerX" id="wd8-bB-Ebd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ky8-vK-JVj"/>
@@ -40,7 +42,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="lockbox-title" width="224" height="28"/>
-        <image name="nessie" width="476" height="194"/>
+        <image name="lockbox-title" width="133" height="54"/>
+        <image name="logo-glyph" width="88" height="88"/>
     </resources>
+    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
