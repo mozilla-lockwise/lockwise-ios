@@ -51,3 +51,5 @@ extension ItemDetailCellConfiguration: Equatable {
         return lhs.value == rhs.value
     }
 }
+
+typealias ItemDetailSectionModelObserver = ((Observable<[ItemDetailSectionModel]>) -> Disposable)

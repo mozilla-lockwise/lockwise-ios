@@ -4,9 +4,19 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 class ItemEditorCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var field: UITextField!
     @IBOutlet weak var revealButton: UIButton!
+
+    var disposeBag = DisposeBag()
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.disposeBag = DisposeBag()
+    }
+
 }

@@ -44,8 +44,8 @@ extension ItemEditorView: ItemEditorViewProtocol {
         return self.navigationItem.leftBarButtonItem!.rx.tap.asObservable()
     }
 
-    func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
-
+    var itemDetailObserver: ItemDetailSectionModelObserver {
+        return self.tableView.rx.items(dataSource: self.dataSource!)
     }
 }
 
@@ -70,27 +70,22 @@ extension ItemEditorView: UIGestureRecognizerDelegate {
     fileprivate func setupDataSource() {
         self.dataSource = RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>(
                 configureCell: { _, tableView, _, cellConfiguration in
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemdetailcell") as? ItemDetailCell else {
+                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemeditorcell") as? ItemEditorCell else {
                         fatalError("couldn't find the right cell!")
                     }
 
                     cell.titleLabel.text = cellConfiguration.title
-                    cell.valueLabel.text = cellConfiguration.value
+                    cell.field.text = cellConfiguration.value
 
-                    cell.valueLabel.textColor = cellConfiguration.valueFontColor
+                    cell.field.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
                     cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
                     cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
-                    cell.openButton.isHidden = !cellConfiguration.showOpenButton
-                    cell.copyButton.isHidden = !cellConfiguration.showCopyButton
-
-                    cell.dragValue = cellConfiguration.dragValue
 
                     if let revealObserver = cellConfiguration.revealPasswordObserver {
-                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
-                        cell.valueLabel.preferredMaxLayoutWidth = 250
+                        cell.field.font = UIFont(name: "Menlo-Regular", size: 16)
 
                         cell.revealButton.rx.tap
                                 .map { _ -> Bool in

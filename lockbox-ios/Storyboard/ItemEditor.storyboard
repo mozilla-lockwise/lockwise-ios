@@ -43,7 +43,7 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="itemeditorcell" rowHeight="62" id="jCg-4k-GGT" customClass="ItemEditorCell" customModule="Lockbox" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="itemeditorcell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="itemeditorcell" rowHeight="62" id="jCg-4k-GGT" customClass="ItemEditorCell" customModule="Lockbox" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="414" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jCg-4k-GGT" id="1AS-gy-uyE">
