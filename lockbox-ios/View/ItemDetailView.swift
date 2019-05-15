@@ -10,50 +10,6 @@ import CoreServices
 
 typealias ItemDetailSectionModel = AnimatableSectionModel<Int, ItemDetailCellConfiguration>
 
-struct ItemDetailCellConfiguration {
-    let title: String
-    let value: String
-    let accessibilityLabel: String
-    let password: Bool
-    let valueFontColor: UIColor
-    let accessibilityId: String
-    let showCopyButton: Bool
-    let showOpenButton: Bool
-    let dragValue: String?
-
-    init(title: String,
-         value: String,
-         accessibilityLabel: String,
-         password: Bool,
-         valueFontColor: UIColor = UIColor.black,
-         accessibilityId: String,
-         showCopyButton: Bool = false,
-         showOpenButton: Bool = false,
-         dragValue: String? = nil) {
-        self.title = title
-        self.value = value
-        self.accessibilityLabel = accessibilityLabel
-        self.password = password
-        self.valueFontColor = valueFontColor
-        self.accessibilityId = accessibilityId
-        self.showCopyButton = showCopyButton
-        self.showOpenButton = showOpenButton
-        self.dragValue = dragValue
-    }
-}
-
-extension ItemDetailCellConfiguration: IdentifiableType {
-    var identity: String {
-        return self.title
-    }
-}
-
-extension ItemDetailCellConfiguration: Equatable {
-    static func ==(lhs: ItemDetailCellConfiguration, rhs: ItemDetailCellConfiguration) -> Bool {
-        return lhs.value == rhs.value
-    }
-}
-
 class ItemDetailView: UIViewController {
     internal var presenter: ItemDetailPresenter?
     private var disposeBag = DisposeBag()
@@ -86,6 +42,10 @@ class ItemDetailView: UIViewController {
 extension ItemDetailView: ItemDetailViewProtocol {
     var learnHowToEditTapped: Observable<Void> {
         return self.learnHowToEditButton.rx.tap.asObservable()
+    }
+
+    var editTapped: Observable<Void> {
+        return (self.navigationItem.rightBarButtonItem!.customView as? UIButton)!.rx.tap.asObservable()
     }
 
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
@@ -135,6 +95,10 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
+
+        let rightButton = UIButton(title: Constant.string.edit, imageName: nil)
+        rightButton.titleLabel?.font = .navigationButtonFont
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
     }
 
     fileprivate func setupDataSource() {
@@ -152,26 +116,24 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
                     cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
-                    cell.revealButton.isHidden = !cellConfiguration.password
+                    cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
                     cell.openButton.isHidden = !cellConfiguration.showOpenButton
                     cell.copyButton.isHidden = !cellConfiguration.showCopyButton
 
                     cell.dragValue = cellConfiguration.dragValue
 
-                    if cellConfiguration.password {
+                    if let revealObserver = cellConfiguration.revealPasswordObserver {
                         cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
                         cell.valueLabel.preferredMaxLayoutWidth = 250
 
-                        if let presenter = self.presenter {
-                            cell.revealButton.rx.tap
-                                    .map { _ -> Bool in
-                                        cell.revealButton.isSelected = !cell.revealButton.isSelected
+                        cell.revealButton.rx.tap
+                                .map { _ -> Bool in
+                                    cell.revealButton.isSelected = !cell.revealButton.isSelected
 
-                                        return cell.revealButton.isSelected
-                                    }
-                                    .bind(to: presenter.onPasswordToggle)
-                                    .disposed(by: cell.disposeBag)
-                        }
+                                    return cell.revealButton.isSelected
+                                }
+                                .bind(to: revealObserver)
+                                .disposed(by: cell.disposeBag)
                     }
 
                     return cell

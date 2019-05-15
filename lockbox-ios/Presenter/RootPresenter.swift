@@ -254,6 +254,21 @@ class RootPresenter {
                         })
                         .disposed(by: self.disposeBag)
                 }
+            case .edit(let id):
+                if !view.topViewIs(ItemEditorView.self) {
+                    let editorView: ItemEditorView = self.viewFactory.make(storyboardName: "ItemEditor", identifier: "itemeditor")
+
+                    self.sizeClassStore.shouldDisplaySidebar
+                        .take(1)
+                        .subscribe(onNext: { enableSidebar in
+                            if enableSidebar {
+                                view.pushDetail(view: editorView)
+                            } else {
+                                view.push(view: editorView)
+                            }
+                        })
+                        .disposed(by: self.disposeBag)
+                }
             }
         }.asObserver()
     }()

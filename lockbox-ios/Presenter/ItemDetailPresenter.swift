@@ -10,6 +10,7 @@ import MozillaAppServices
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
     var learnHowToEditTapped: Observable<Void> { get }
+    var editTapped: Observable<Void> { get }
     func enableBackButton(enabled: Bool)
     func bind(titleText: Driver<String>)
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
@@ -26,7 +27,7 @@ class ItemDetailPresenter {
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
 
-    lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
+    lazy private var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()
@@ -137,6 +138,15 @@ class ItemDetailPresenter {
             })
             .disposed(by: self.disposeBag)
 
+        self.view?.editTapped
+            .flatMap { _ in self.itemDetailStore.itemDetailId }
+            .take(1)
+            .map { (itemId) -> Action in
+                return MainRouteAction.edit(itemId: itemId)
+            }
+            .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
+            .disposed(by: self.disposeBag)
+
         self.sizeClassStore.shouldDisplaySidebar
             .subscribe(onNext: { (enableSidebar) in
                 self.view?.enableBackButton(enabled: !enableSidebar)
@@ -184,7 +194,6 @@ extension ItemDetailPresenter {
                         title: Constant.string.webAddress,
                         value: hostname,
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
-                        password: false,
                         valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
                         showOpenButton: true,
@@ -195,7 +204,6 @@ extension ItemDetailPresenter {
                         title: Constant.string.username,
                         value: username,
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
-                        password: false,
                         accessibilityId: "userNameItemDetail",
                         showCopyButton: true,
                         dragValue: username),
@@ -205,9 +213,9 @@ extension ItemDetailPresenter {
                         accessibilityLabel: String(
                             format: Constant.string.passwordCellAccessibilityLabel,
                             passwordText),
-                        password: true,
                         accessibilityId: "passwordItemDetail",
                         showCopyButton: true,
+                        revealPasswordObserver: self.onPasswordToggle,
                         dragValue: login?.password)
             ])
         ]
