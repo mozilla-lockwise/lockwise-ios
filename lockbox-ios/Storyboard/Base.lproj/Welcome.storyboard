@@ -235,7 +235,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="6" height="10"/>
+        <image name="arrow-right" width="8" height="10"/>
         <image name="lock" width="44" height="51"/>
         <image name="lockbox-title" width="133" height="54"/>
         <image name="logo-glyph" width="88" height="88"/>

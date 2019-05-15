@@ -109,7 +109,7 @@ class LockboxXCUITests: BaseTestCase {
     }
 
     func testEntriesSortAndSearch() {
-        let firstEntryRecentOrder = "arncyvuzox.co.uk"
+        let firstEntryRecentOrder = "bmo.com"
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
 
@@ -147,7 +147,7 @@ class LockboxXCUITests: BaseTestCase {
         if  iPad() {
             XCTAssertEqual(aMatches, 110)
         } else {
-            XCTAssertEqual(aMatches, 107)
+            XCTAssertEqual(aMatches, 108)
         }
         // There should be less number of matches
         searchTextField.typeText("cc")
