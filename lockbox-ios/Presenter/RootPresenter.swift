@@ -240,7 +240,9 @@ class RootPresenter {
                     view.popToRoot()
                 }
             case .detail(let id):
-                if !view.topViewIs(ItemDetailView.self) {
+                if view.topViewIs(ItemEditorView.self) {
+                    view.popView()
+                } else if !view.topViewIs(ItemDetailView.self) {
                     let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
 
                     self.sizeClassStore.shouldDisplaySidebar

@@ -77,7 +77,7 @@ class RootView: UIViewController, RootViewProtocol {
     }
 
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
-        if let navController = self.currentViewController as? UINavigationController {
+        if let navController = self.currentNavigationController {
             return navController.topViewController is T
         }
 

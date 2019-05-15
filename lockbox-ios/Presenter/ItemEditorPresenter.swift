@@ -60,6 +60,12 @@ class ItemEditorPresenter {
                 }
                 .drive(self.view!.itemDetailObserver)
                 .disposed(by: self.disposeBag)
+
+        self.view?.cancelTapped
+                .flatMap { _ in self.itemDetailStore.itemDetailId.take(1) }
+                .map { itemId -> Action in MainRouteAction.detail(itemId: itemId) }
+                .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
+                .disposed(by: self.disposeBag)
     }
 }
 

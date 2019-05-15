@@ -58,13 +58,8 @@ extension ItemEditorView: UIGestureRecognizerDelegate {
         ]
         self.navigationItem.largeTitleDisplayMode = .never
 
-        let leftButton = UIButton(title: Constant.string.cancel, imageName: nil)
-        leftButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-
-        let rightButton = UIButton(title: Constant.string.save, imageName: nil)
-        rightButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: Constant.string.cancel, style: .plain, target: nil, action: nil)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.save, style: .plain, target: nil, action: nil)
     }
 
     fileprivate func setupDataSource() {
