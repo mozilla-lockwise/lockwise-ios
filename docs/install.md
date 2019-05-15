@@ -1,4 +1,4 @@
-1. Install Xcode version 10.2
+1. Install Xcode version 10.2.1. You need this exact version, other versions of xcode won't work.
 
 2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
 

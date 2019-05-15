@@ -110,6 +110,7 @@ class RootPresenter {
                 .disposed(by: self.disposeBag)
 
         self.dataStore.storageState
+            .distinctUntilChanged()
             .map({ (storageState) -> [Action] in
                 switch storageState {
                 case .Unprepared, .Locked:
