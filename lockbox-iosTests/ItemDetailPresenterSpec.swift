@@ -160,7 +160,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                     let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
 
                     cancelObservable
-                            .bind(to: self.subject.onCancel)
+                            .bind(to: self.subject.onRightSwipe)
                             .disposed(by: self.disposeBag)
 
                     self.scheduler.start()

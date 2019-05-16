@@ -13,8 +13,10 @@ typealias ItemDetailSectionModel = AnimatableSectionModel<Int, ItemDetailCellCon
 class ItemDetailView: UIViewController {
     internal var presenter: ItemDetailPresenter?
     private var disposeBag = DisposeBag()
+    private var swipeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var deleteButton: UIButton!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -29,53 +31,76 @@ class ItemDetailView: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
         self.tableView.dragDelegate = self
+        self.navigationItem.largeTitleDisplayMode = .always
         self.setupNavigation()
         self.setupDataSource()
-        self.setupDelegate()
         self.presenter?.onViewReady()
     }
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
-    var editTapped: Observable<Void> {
-        return (self.navigationItem.rightBarButtonItem!.customView as? UIButton)!.rx.tap.asObservable()
+    var cellTapped: Observable<String?> {
+        return self.tableView.rx.itemSelected
+                .map { path -> String? in
+                    guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
+                        return nil
+                    }
+
+                    return selectedCell.title.text
+                }
     }
 
-    func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
-        if let dataSource = self.dataSource {
-            itemDetail
-                    .drive(self.tableView.rx.items(dataSource: dataSource))
-                    .disposed(by: self.disposeBag)
-        }
+    var deleteTapped: Observable<Void> {
+        return self.deleteButton.rx.tap.asObservable()
     }
 
-    func bind(titleText: Driver<String>) {
-        titleText
-                .drive(self.navigationItem.rx.title)
-                .disposed(by: self.disposeBag)
+    var leftBarButtonTapped: Observable<Void> {
+        // swiftlint:disable:next force_cast
+        return (self.navigationItem.leftBarButtonItem?.customView as! UIButton).rx.tap.asObservable()
     }
 
-    func enableBackButton(enabled: Bool) {
+    var rightBarButtonTapped: Observable<Void> {
+        // swiftlint:disable:next force_cast
+        return (self.navigationItem.rightBarButtonItem?.customView as! UIButton).rx.tap.asObservable()
+    }
+
+    var itemDetailObserver: ItemDetailSectionModelObserver {
+        return self.tableView.rx.items(dataSource: self.dataSource!)
+    }
+
+    var titleText: Binder<String?> {
+        return self.navigationItem.rx.title
+    }
+
+    var rightButtonText: Binder<String?> {
+        // swiftlint:disable:next force_cast
+        return (self.navigationItem.rightBarButtonItem!.customView as! UIButton).rx.title()
+    }
+
+    var leftButtonText: Binder<String?> {
+        // swiftlint:disable:next force_cast
+        return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.title()
+    }
+
+    var deleteHidden: Binder<Bool> {
+        return self.deleteButton.rx.isHidden
+    }
+
+    func enableLargeTitle(enabled: Bool) {
+        self.navigationItem.largeTitleDisplayMode = enabled ? .always : .never
+    }
+
+    func enableSwipeNavigation(enabled: Bool) {
         if enabled {
-            let leftButton = UIButton(title: Constant.string.back, imageName: "back")
-            leftButton.titleLabel?.font = .navigationButtonFont
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
-
-            if let presenter = self.presenter {
-                leftButton.rx.tap
-                    .bind(to: presenter.onCancel)
-                    .disposed(by: self.disposeBag)
-
-                self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-                self.navigationController?.interactivePopGestureRecognizer?.rx.event
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+            self.navigationController?.interactivePopGestureRecognizer?.rx.event
                     .map { _ -> Void in
                         return ()
                     }
-                    .bind(to: presenter.onCancel)
-                    .disposed(by: self.disposeBag)
-            }
+                    .bind(to: self.presenter!.onRightSwipe)
+                    .disposed(by: self.swipeBag)
         } else {
-            self.navigationItem.leftBarButtonItem = nil
+            self.swipeBag = DisposeBag()
         }
     }
 }
@@ -89,6 +114,10 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .font: UIFont.navigationTitleFont
         ]
 
+        let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+        leftButton.titleLabel?.font = .navigationButtonFont
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
+
         let rightButton = UIButton(title: Constant.string.edit, imageName: nil)
         rightButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
@@ -101,23 +130,32 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                         fatalError("couldn't find the right cell!")
                     }
 
-                    cell.titleLabel.text = cellConfiguration.title
-                    cell.valueLabel.text = cellConfiguration.value
+                    cell.title.text = cellConfiguration.title
+                    cell.value.text = cellConfiguration.value
 
-                    cell.valueLabel.textColor = cellConfiguration.valueFontColor
+                    cell.value.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
                     cell.accessibilityIdentifier = cellConfiguration.accessibilityId
 
                     cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
-                    cell.openButton.isHidden = !cellConfiguration.showOpenButton
-                    cell.copyButton.isHidden = !cellConfiguration.showCopyButton
+
+                    cellConfiguration.textFieldEnabled
+                            .drive(cell.value.rx.isUserInteractionEnabled)
+                            .disposed(by: cell.disposeBag)
+
+                    cellConfiguration.copyButtonHidden
+                            .drive(cell.copyButton.rx.isHidden)
+                            .disposed(by: cell.disposeBag)
+
+                    cellConfiguration.openButtonHidden
+                            .drive(cell.openButton.rx.isHidden)
+                            .disposed(by: cell.disposeBag)
 
                     cell.dragValue = cellConfiguration.dragValue
 
                     if let revealObserver = cellConfiguration.revealPasswordObserver {
-                        cell.valueLabel.font = UIFont(name: "Menlo-Regular", size: 16)
-                        cell.valueLabel.preferredMaxLayoutWidth = 250
+                        cell.value.font = UIFont(name: "Menlo-Regular", size: 16)
 
                         cell.revealButton.rx.tap
                                 .map { _ -> Bool in
@@ -132,29 +170,16 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     return cell
                 })
     }
-
-    fileprivate func setupDelegate() {
-        if let presenter = self.presenter {
-            self.tableView.rx.itemSelected
-                    .map { path -> String? in
-                        guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
-                            return nil
-                        }
-
-                        return selectedCell.titleLabel.text
-                    }
-                    .bind(to: presenter.onCellTapped)
-                    .disposed(by: self.disposeBag)
-        }
-    }
 }
 
 extension ItemDetailView: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let cell = tableView.cellForRow(at: indexPath) as? ItemDetailCell
-        guard let data = cell?.dragValue as NSString? else { return [] }
+        guard let data = cell?.dragValue as NSString? else {
+            return []
+        }
 
-        self.presenter?.dndStarted(value: cell?.titleLabel.text)
+        self.presenter?.dndStarted(value: cell?.title.text)
 
         let itemProvider = NSItemProvider(object: data as NSString)
         return [

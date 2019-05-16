@@ -240,9 +240,7 @@ class RootPresenter {
                     view.popToRoot()
                 }
             case .detail(let id):
-                if view.topViewIs(ItemEditorView.self) {
-                    view.popView()
-                } else if !view.topViewIs(ItemDetailView.self) {
+                if !view.topViewIs(ItemDetailView.self) {
                     let detailView: ItemDetailView = self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview")
 
                     self.sizeClassStore.shouldDisplaySidebar
@@ -252,21 +250,6 @@ class RootPresenter {
                                 view.pushDetail(view: detailView)
                             } else {
                                 view.push(view: detailView)
-                            }
-                        })
-                        .disposed(by: self.disposeBag)
-                }
-            case .edit(let id):
-                if !view.topViewIs(ItemEditorView.self) {
-                    let editorView: ItemEditorView = self.viewFactory.make(storyboardName: "ItemEditor", identifier: "itemeditor")
-
-                    self.sizeClassStore.shouldDisplaySidebar
-                        .take(1)
-                        .subscribe(onNext: { enableSidebar in
-                            if enableSidebar {
-                                view.pushDetail(view: editorView)
-                            } else {
-                                view.push(view: editorView)
                             }
                         })
                         .disposed(by: self.disposeBag)

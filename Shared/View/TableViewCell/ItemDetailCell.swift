@@ -6,8 +6,8 @@ import UIKit
 import RxSwift
 
 class ItemDetailCell: UITableViewCell {
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var valueLabel: UILabel!
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var value: UITextField!
     @IBOutlet weak var revealButton: UIButton!
     @IBOutlet weak var copyButton: UIButton!
     @IBOutlet weak var openButton: UIButton!

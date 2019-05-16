@@ -30,7 +30,7 @@ class ItemDetailViewSpec: QuickSpec {
             }.asObserver()
         }
 
-        override var onCancel: AnyObserver<Void> {
+        override var onRightSwipe: AnyObserver<Void> {
             return Binder(self) { target, _ in
                 target.onCancelActionDispatched = true
             }.asObserver()

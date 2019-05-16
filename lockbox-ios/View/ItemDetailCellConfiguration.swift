@@ -7,6 +7,7 @@ import UIKit
 import UIKit
 import RxDataSources
 import RxSwift
+import RxCocoa
 
 struct ItemDetailCellConfiguration {
     let title: String
@@ -14,8 +15,10 @@ struct ItemDetailCellConfiguration {
     let accessibilityLabel: String
     let valueFontColor: UIColor
     let accessibilityId: String
-    let showCopyButton: Bool
-    let showOpenButton: Bool
+    let textFieldEnabled: Driver<Bool>
+    let copyButtonHidden: Driver<Bool>
+    let openButtonHidden: Driver<Bool>
+    let textObserver: AnyObserver<String>?
     let revealPasswordObserver: AnyObserver<Bool>?
     let dragValue: String?
 
@@ -24,8 +27,10 @@ struct ItemDetailCellConfiguration {
          accessibilityLabel: String,
          valueFontColor: UIColor = UIColor.black,
          accessibilityId: String,
-         showCopyButton: Bool = false,
-         showOpenButton: Bool = false,
+         textFieldEnabled: Driver<Bool>,
+         copyButtonHidden: Driver<Bool> = Driver.just(true),
+         openButtonHidden: Driver<Bool> = Driver.just(true),
+         textObserver: AnyObserver<String>? = nil,
          revealPasswordObserver: AnyObserver<Bool>? = nil,
          dragValue: String? = nil) {
         self.title = title
@@ -33,8 +38,10 @@ struct ItemDetailCellConfiguration {
         self.accessibilityLabel = accessibilityLabel
         self.valueFontColor = valueFontColor
         self.accessibilityId = accessibilityId
-        self.showCopyButton = showCopyButton
-        self.showOpenButton = showOpenButton
+        self.textFieldEnabled = textFieldEnabled
+        self.copyButtonHidden = copyButtonHidden
+        self.openButtonHidden = openButtonHidden
+        self.textObserver = textObserver
         self.revealPasswordObserver = revealPasswordObserver
         self.dragValue = dragValue
     }

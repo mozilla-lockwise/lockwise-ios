@@ -6,6 +6,8 @@ import Foundation
 
 enum ItemDetailDisplayAction: Action {
     case togglePassword(displayed: Bool)
+    case editMode
+    case viewMode
 }
 
 extension ItemDetailDisplayAction: TelemetryAction {
@@ -14,7 +16,14 @@ extension ItemDetailDisplayAction: TelemetryAction {
     }
 
     var eventObject: TelemetryEventObject {
-        return .revealPassword
+        switch self {
+        case .togglePassword:
+            return .revealPassword
+        case .viewMode:
+            return .entryDetail
+        case .editMode:
+            return .entryEditor
+        }
     }
 
     var value: String? {
@@ -22,6 +31,8 @@ extension ItemDetailDisplayAction: TelemetryAction {
         case .togglePassword(let displayed):
             let displayedString = String(displayed)
             return displayedString
+        default:
+            return nil
         }
     }
 
@@ -35,6 +46,12 @@ extension ItemDetailDisplayAction: Equatable {
         switch (lhs, rhs) {
         case (.togglePassword(let lhDisplay), .togglePassword(let rhDisplay)):
             return lhDisplay == rhDisplay
+        case (.editMode, .editMode):
+            return true
+        case (.viewMode, .viewMode):
+            return true
+        default:
+            return false
         }
     }
 }

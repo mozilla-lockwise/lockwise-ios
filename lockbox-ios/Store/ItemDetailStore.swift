@@ -6,6 +6,7 @@ import Foundation
 import RxSwift
 import RxCocoa
 import MozillaAppServices
+import RxOptional
 
 class ItemDetailStore: BaseItemDetailStore {
     public static let shared = ItemDetailStore()
@@ -17,9 +18,14 @@ class ItemDetailStore: BaseItemDetailStore {
     private var routeStore: RouteStore
 
     private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
+    private var _isEditing = BehaviorRelay<Bool>(value: false)
 
     lazy private(set) var passwordRevealed: Driver<Bool> = {
         return self._passwordRevealed.asDriver(onErrorJustReturn: false)
+    }()
+
+    lazy private(set) var isEditing: Observable<Bool> = {
+        return self._isEditing.asObservable()
     }()
 
     // RootPresenter needs a synchronous way to find out if the detail screen has a login or not
@@ -54,6 +60,22 @@ class ItemDetailStore: BaseItemDetailStore {
                 }
                 .filterNil()
                 .bind(to: self._passwordRevealed)
+                .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+                .filterByType(class: ItemDetailDisplayAction.self)
+                .map { action -> Bool? in
+                    switch action {
+                    case .editMode:
+                        return true
+                    case .viewMode:
+                        return false
+                    default:
+                        return nil
+                    }
+                }
+                .filterNil()
+                .bind(to: self._isEditing)
                 .disposed(by: self.disposeBag)
 
         self.lifecycleStore.lifecycleEvents
