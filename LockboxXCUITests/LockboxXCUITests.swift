@@ -145,7 +145,7 @@ class LockboxXCUITests: BaseTestCase {
         // There should be the correct number of matches
         let aMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(aMatches, 110)
+            XCTAssertEqual(aMatches, 111)
         } else {
             XCTAssertEqual(aMatches, 108)
         }
@@ -210,7 +210,7 @@ class LockboxXCUITests: BaseTestCase {
     func testSetAutofill() {
         if #available(iOS 12.0, *) {
             let testingURL = "accounts.google.com"
-            let safariButtons1 = "firefoxlockbox@gmail.com, for this website — Lockbox"
+            let safariButtons1 = "firefoxlockbox@gmail.com, for this website — Lockwise"
             let safariButtons2 = "Use “firefoxlockbox@example.com”"
             loginFxAccount()
             waitforExistence(app.buttons["setupAutofill.button"])
