@@ -1,6 +1,10 @@
-# Sharing Code between Lockwise + CredentialProvider
+## Building new Views
 
-### Overview
+<img style="float: left;" src="storyboard_l10n.png" width="200">
+
+Many of the layouts in Lockwise are constructed using `Storyboard`s. In order to support localizing these storyboard files, make sure that the actual `xml` for the layout lives in the `Base.lproj` directory, and language-based directories such as `en.lproj` contain only `.strings` files. This can be confirmed in Interface Builder by looking at the `Identity` tab in the right toolbar, and confirming that the Localization section specifies `Localizable Strings` for each language as shown in the image.
+
+## Shared Business Logic between Lockwise + CredentialProvider
 
 There are many `View`s, `Presenter`s, and `Store`s with code useful in both the Lockwise application and the CredentialProvider app extension. In service to iOS' restriction that apps and their extension run in separate processes ([extension documentation here](https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionOverview.html)), the following code sharing strategy minimizes the amount of code required in each to keep binary sizes small and performance snappy.
 
