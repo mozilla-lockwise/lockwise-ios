@@ -84,7 +84,7 @@ class BaseItemListView: UIViewController {
 
         self.navigationItem.title = Constant.string.productName
         self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockbox.navigationBar"
+        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
