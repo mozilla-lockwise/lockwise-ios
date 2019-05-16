@@ -18,5 +18,4 @@ class ItemEditorCell: UITableViewCell {
 
         self.disposeBag = DisposeBag()
     }
-
 }

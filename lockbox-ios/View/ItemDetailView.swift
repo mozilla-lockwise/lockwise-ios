@@ -15,8 +15,6 @@ class ItemDetailView: UIViewController {
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var learnHowToEditButton: UIButton!
-    @IBOutlet private weak var learnHowToEditArrow: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -31,7 +29,6 @@ class ItemDetailView: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
         self.tableView.dragDelegate = self
-        self.learnHowToEditArrow.tintColor = Constant.color.lockBoxViolet
         self.setupNavigation()
         self.setupDataSource()
         self.setupDelegate()
@@ -40,10 +37,6 @@ class ItemDetailView: UIViewController {
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
-    var learnHowToEditTapped: Observable<Void> {
-        return self.learnHowToEditButton.rx.tap.asObservable()
-    }
-
     var editTapped: Observable<Void> {
         return (self.navigationItem.rightBarButtonItem!.customView as? UIButton)!.rx.tap.asObservable()
     }

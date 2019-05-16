@@ -9,7 +9,6 @@ import RxDataSources
 import MozillaAppServices
 
 protocol ItemDetailViewProtocol: class, StatusAlertView {
-    var learnHowToEditTapped: Observable<Void> { get }
     var editTapped: Observable<Void> { get }
     func enableBackButton(enabled: Bool)
     func bind(titleText: Driver<String>)
@@ -121,22 +120,6 @@ class ItemDetailPresenter {
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
                 })
         .disposed(by: self.disposeBag)
-
-        self.view?.learnHowToEditTapped
-            .flatMap({ _ -> Observable<String> in
-                return self.itemDetailStore.itemDetailId
-            })
-            .take(1)
-            .map({ (itemId) -> Action in
-                return ExternalWebsiteRouteAction(
-                    urlString: Constant.app.editExistingEntriesFAQ,
-                    title: Constant.string.faq,
-                    returnRoute: MainRouteAction.detail(itemId: itemId))
-            })
-            .subscribe(onNext: { (action) in
-                self.dispatcher.dispatch(action: action)
-            })
-            .disposed(by: self.disposeBag)
 
         self.view?.editTapped
             .flatMap { _ in self.itemDetailStore.itemDetailId }

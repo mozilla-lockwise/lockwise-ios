@@ -16,15 +16,15 @@ class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
-        let learnHowToEditStub = PublishSubject<Void>()
+        let editStub = PublishSubject<Void>()
         var tempAlertMessage: String?
         var tempAlertTimeout: TimeInterval?
         var enableBackButtonValue: Bool?
 
         private let disposeBag = DisposeBag()
 
-        var learnHowToEditTapped: Observable<Void> {
-            return self.learnHowToEditStub.asObservable()
+        var editTapped: Observable<Void> {
+            return self.editStub.asObservable()
         }
 
         func bind(titleText: Driver<String>) {
@@ -367,19 +367,19 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
                         expect(webAddressSection.value).to(equal(item.hostname))
                         expect(webAddressSection.accessibilityLabel).to(equal(String(format: Constant.string.websiteCellAccessibilityLabel, item.hostname)))
-                        expect(webAddressSection.password).to(beFalse())
+                        expect(webAddressSection.revealPasswordObserver).to(beNil())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
                         expect(usernameSection.value).to(equal(item.username))
                         expect(usernameSection.accessibilityLabel).to(equal(String(format: Constant.string.usernameCellAccessibilityLabel, item.username!)))
-                        expect(usernameSection.password).to(beFalse())
+                        expect(usernameSection.revealPasswordObserver).to(beNil())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
                         expect(passwordSection.value).to(equal(item.password))
                         expect(passwordSection.accessibilityLabel).to(equal(String(format: Constant.string.passwordCellAccessibilityLabel, item.password)))
-                        expect(passwordSection.password).to(beTrue())
+                        expect(passwordSection.revealPasswordObserver).notTo(beNil())
                     }
                 }
 
@@ -400,17 +400,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
                         expect(webAddressSection.value).to(equal(item.hostname))
-                        expect(webAddressSection.password).to(beFalse())
+                        expect(webAddressSection.revealPasswordObserver).to(beNil())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
                         expect(usernameSection.value).to(equal(item.username!))
-                        expect(usernameSection.password).to(beFalse())
+                        expect(usernameSection.revealPasswordObserver).to(beNil())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
                         expect(passwordSection.value).to(equal("•••••••••"))
-                        expect(passwordSection.password).to(beTrue())
+                        expect(passwordSection.revealPasswordObserver).notTo(beNil())
                     }
 
                     it("open button is displayed for web address") {
@@ -459,17 +459,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
                         expect(webAddressSection.value).to(equal(""))
-                        expect(webAddressSection.password).to(beFalse())
+                        expect(webAddressSection.revealPasswordObserver).to(beNil())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
                         expect(usernameSection.value).to(equal(""))
-                        expect(usernameSection.password).to(beFalse())
+                        expect(usernameSection.revealPasswordObserver).to(beNil())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
                         expect(passwordSection.value).to(equal(""))
-                        expect(passwordSection.password).to(beTrue())
+                        expect(passwordSection.revealPasswordObserver).notTo(beNil())
                     }
                 }
 
@@ -487,22 +487,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("onLearnHowToEditTapped") {
+                describe("editTapped") {
                     beforeEach {
-                        self.view.learnHowToEditStub.onNext(())
+                        self.view.editStub.onNext(())
 
                         self.itemDetailStore.itemDetailIdStub.onNext("1234")
                     }
 
-                    it("dispatches the faq link action") {
+                    it("dispatches the edit route action") {
                         expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                        let argument = self.dispatcher.dispatchActionArgument.last as! ExternalWebsiteRouteAction
-                        expect(argument).to(equal(
-                                        ExternalWebsiteRouteAction(
-                                                urlString: Constant.app.editExistingEntriesFAQ,
-                                                title: Constant.string.faq,
-                                                returnRoute: MainRouteAction.detail(itemId: "1234"))
-                                ))
+                        let argument = self.dispatcher.dispatchActionArgument.last as! MainRouteAction
+                        expect(argument).to(equal(MainRouteAction.edit(itemId: "1234")))
                     }
                 }
             }

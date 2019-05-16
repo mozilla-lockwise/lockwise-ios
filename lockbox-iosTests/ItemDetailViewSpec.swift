@@ -24,7 +24,7 @@ class ItemDetailViewSpec: QuickSpec {
             self.onViewReadyCalled = true
         }
 
-        override var onPasswordToggle: AnyObserver<Bool> {
+        var passwordToggle: AnyObserver<Bool> {
             return Binder(self) { target, argument in
                 target.onPasswordToggleActionDispatched = argument
             }.asObserver()
@@ -66,48 +66,49 @@ class ItemDetailViewSpec: QuickSpec {
 
             describe("tableview datasource configuration") {
                 let configDriver = PublishSubject<[ItemDetailSectionModel]>()
-                let sectionModels = [
-                    ItemDetailSectionModel(model: 0, items: [
-                        ItemDetailCellConfiguration(
+
+                beforeEach {
+                    let sectionModels = [
+                        ItemDetailSectionModel(model: 0, items: [
+                            ItemDetailCellConfiguration(
                                 title: Constant.string.webAddress,
                                 value: "www.meow.com",
                                 accessibilityLabel: "something accessible",
-                                password: false,
                                 valueFontColor: Constant.color.lockBoxViolet,
                                 accessibilityId: "")
-                    ]),
-                    ItemDetailSectionModel(model: 1, items: [
-                        ItemDetailCellConfiguration(
+                            ]),
+                        ItemDetailSectionModel(model: 1, items: [
+                            ItemDetailCellConfiguration(
                                 title: Constant.string.username,
                                 value: "tanya",
                                 accessibilityLabel: "something else accessible",
-                                password: false,
                                 accessibilityId: ""),
-                        ItemDetailCellConfiguration(
+                            ItemDetailCellConfiguration(
                                 title: Constant.string.password,
-                                value: "••••••••••",
-                                accessibilityLabel: "something else accessible",
-                                password: true,
-                                accessibilityId: "")
-                    ]),
-                    ItemDetailSectionModel(model: 2, items: [
-                        ItemDetailCellConfiguration(
+                                value: "iluvdawgz",
+                                accessibilityLabel: "more accessible here",
+                                valueFontColor: .black,
+                                accessibilityId: "",
+                                showCopyButton: true,
+                                showOpenButton: false,
+                                revealPasswordObserver: self.presenter.passwordToggle)
+                            ]),
+                        ItemDetailSectionModel(model: 2, items: [
+                            ItemDetailCellConfiguration(
                                 title: Constant.string.notes,
                                 value: "some long note about whatever thing yeahh",
                                 accessibilityLabel: "something else accessible",
-                                password: false,
                                 accessibilityId: "")
-                    ])
-                ]
+                            ])
+                    ]
 
-                beforeEach {
                     self.subject.bind(itemDetail: configDriver.asDriver(onErrorJustReturn: []))
 
                     configDriver.onNext(sectionModels)
                 }
 
                 it("configures the tableview based on the models provided") {
-                    expect(self.subject.tableView.numberOfSections).to(equal(sectionModels.count))
+                    expect(self.subject.tableView.numberOfSections).to(equal(3))
                 }
 
                 it("binds password reveal tap actions to the appropriate presenter listener") {
@@ -161,14 +162,15 @@ class ItemDetailViewSpec: QuickSpec {
                 }
             }
 
-            describe("tapping learnHowToEdit button") {
+            describe("tapping edit button") {
                 var voidObserver = self.scheduler.createObserver(Void.self)
 
                 beforeEach {
                     voidObserver = self.scheduler.createObserver(Void.self)
 
-                    self.subject.learnHowToEditTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
-                    self.subject.learnHowToEditButton.sendActions(for: .touchUpInside)
+                    self.subject.editTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
+                    let editButton = self.subject.navigationItem.rightBarButtonItem!.customView as! UIButton
+                    editButton.sendActions(for: .touchUpInside)
                 }
 
                 it("informs any observers") {
@@ -177,18 +179,18 @@ class ItemDetailViewSpec: QuickSpec {
             }
 
             describe("tapping a password reveal button") {
-                let sectionModelWithJustPassword = [
-                    ItemDetailSectionModel(model: 1, items: [
-                        ItemDetailCellConfiguration(
+                beforeEach {
+                    let sectionModelWithJustPassword = [
+                        ItemDetailSectionModel(model: 1, items: [
+                            ItemDetailCellConfiguration(
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
-                                password: true,
-                                accessibilityId: "")
-                    ])
-                ]
+                                accessibilityId: "",
+                                revealPasswordObserver: self.presenter.passwordToggle)
+                            ])
+                    ]
 
-                beforeEach {
                     self.subject.bind(itemDetail: Driver.just(sectionModelWithJustPassword))
                 }
 
@@ -208,7 +210,6 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
-                                password: true,
                                 accessibilityId: "")
                     ])
                 ]
@@ -235,7 +236,6 @@ class ItemDetailViewSpec: QuickSpec {
                                 title: Constant.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
-                                password: true,
                                 accessibilityId: "")
                     ])
                 ]
@@ -259,7 +259,7 @@ class ItemDetailViewSpec: QuickSpec {
         describe("ItemDetailViewCellConfiguration") {
             describe("IdentifiableType") {
                 let title = "meow"
-                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", accessibilityLabel: "something accessible", password: false, accessibilityId: "")
+                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", accessibilityLabel: "something accessible", accessibilityId: "")
 
                 it("uses the title as the identity string") {
                     expect(cellConfig.identity).to(equal(title))
@@ -272,13 +272,11 @@ class ItemDetailViewSpec: QuickSpec {
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
                             accessibilityId: "")
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
                             accessibilityId: "")
                     ))
 
@@ -286,13 +284,11 @@ class ItemDetailViewSpec: QuickSpec {
                             title: "woof",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
                             accessibilityId: "")
                     ).to(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
                             accessibilityId: "")
                     ))
 
@@ -300,13 +296,11 @@ class ItemDetailViewSpec: QuickSpec {
                             title: "meow",
                             value: "dogs",
                             accessibilityLabel: "something accessible",
-                            password: false,
                             accessibilityId: "")
                     ).notTo(equal(ItemDetailCellConfiguration(
                             title: "meow",
                             value: "cats",
                             accessibilityLabel: "something accessible",
-                            password: false,
                             accessibilityId: "")
                     ))
                 }
