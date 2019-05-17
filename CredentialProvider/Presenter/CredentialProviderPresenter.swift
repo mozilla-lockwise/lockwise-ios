@@ -23,7 +23,7 @@ class CredentialProviderPresenter {
     private let accountStore: AccountStore
     private let telemetryStore: TelemetryStore
     private let userDefaultStore: UserDefaultStore
-    private let dataStore: DataStore
+    fileprivate let dataStore: DataStore
     private let telemetryActionHandler: TelemetryActionHandler
     private let credentialProviderStore: CredentialProviderStore
     private let autoLockSupport: AutoLockSupport
@@ -68,21 +68,16 @@ class CredentialProviderPresenter {
                 switch action {
                 case .extensionConfigured:
                     self?.view?.extensionContext.completeExtensionConfigurationRequest()
-                case .loginSelected(let login, let relock):
+                case .loginSelected(let login):
                     self?.view?.extensionContext.completeRequest(withSelectedCredential: login.passwordCredential) { _ in
                         self?.dispatcher.dispatch(action: DataStoreAction.touch(id: login.id))
-
-                        if relock {
-                            self?.dispatcher.dispatch(action: DataStoreAction.lock)
-                        }
                     }
-                case .userCanceled:
-                    self?.cancelWith(.userCanceled)
+                case .cancelled(let error):
+                    self?.cancelWith(error)
                 }
             })
             .disposed(by: self.disposeBag)
 
-        self.dispatcher.dispatch(action: DataStoreAction.unlock)
         self.startTelemetry()
     }
 
@@ -105,10 +100,23 @@ class CredentialProviderPresenter {
                 .take(1)
                 .bind { [weak self] locked in
                     if locked {
-                        self?.dispatcher.dispatch(action: DataStoreAction.unlock)
+                        self?.dispatcher.dispatch(action: CredentialProviderAction.authenticationRequested)
+                        self?.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .userInteractionRequired))
+                    } else {
+                        self?.provideCredential(for: credentialIdentity)
                     }
+                }
+                .disposed(by: self.disposeBag)
+    }
 
-                    self?.provideCredential(for: credentialIdentity, relock: locked)
+    func interfaceToAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) {
+        self.dataStore.locked
+                .bind { [weak self] locked in
+                    if locked {
+                        self?.view?.displayWelcome()
+                    } else {
+                        self?.provideCredential(for: credentialIdentity)
+                    }
                 }
                 .disposed(by: self.disposeBag)
     }
@@ -126,13 +134,6 @@ class CredentialProviderPresenter {
                         self?.view?.displayWelcome()
                     } else {
                         self?.view?.displayItemList()
-//                        guard let dismissObserver = self?.dismissObserver else { return }
-//                        self?.view?.displayAlertController(buttons: [
-//                                AlertActionButtonConfiguration(title: "OK", tapObserver: dismissObserver, style: .default)
-//                            ],
-//                                                          title: "Credential list not available yet",
-//                                                          message: "Please check back later",
-//                                                          style: .alert)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -141,7 +142,7 @@ class CredentialProviderPresenter {
 
 @available(iOS 12, *)
 extension CredentialProviderPresenter {
-    private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity, relock: Bool) {
+    private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
         guard let id = credentialIdentity.recordIdentifier else {
             self.cancelWith(.credentialIdentityNotFound)
             return
@@ -157,7 +158,7 @@ extension CredentialProviderPresenter {
                         return
                     }
 
-                    self?.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login, relock: relock))
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login))
                 }
                 .disposed(by: self.disposeBag)
     }
