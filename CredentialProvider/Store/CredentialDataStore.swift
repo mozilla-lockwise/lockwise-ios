@@ -18,7 +18,12 @@ class DataStore: BaseDataStore {
     override func initialized() {
         self.dispatcher.register
                 .filterByType(class: CredentialStatusAction.self)
-                // when we get credential status actions, check the locked status
+                /* when we get credential status actions & are unlocked, store the next lock time
+                *
+                * why this works: credential status actions are sent at the conclusion of a user's interaction with the
+                * credential provider, and thus mirror the more generic "background" as relied on in the app lifecycle.
+                * from a user perception (and therefore functionality) standpoint, this begins the timer to the next
+                * lock time. */
                 .withLatestFrom(self.locked, resultSelector: { (_, locked) -> Void? in
                     // if we are already locked, do not store the next lock time
                     return locked ? nil : ()
