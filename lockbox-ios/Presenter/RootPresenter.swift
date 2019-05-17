@@ -53,7 +53,7 @@ class RootPresenter {
     fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
-    fileprivate let sentryManager: Sentry
+    fileprivate let sentryManager: SentryStore
     fileprivate let adjustManager: AdjustManager
     fileprivate let viewFactory: ViewFactory
     fileprivate let sizeClassStore: SizeClassStore
@@ -73,7 +73,7 @@ class RootPresenter {
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
-         sentryManager: Sentry = Sentry.shared,
+         sentryManager: SentryStore = SentryStore.shared,
          adjustManager: AdjustManager = AdjustManager.shared,
          viewFactory: ViewFactory = ViewFactory.shared,
          sizeClassStore: SizeClassStore = SizeClassStore.shared,

@@ -4,13 +4,29 @@
 
 import Foundation
 import Sentry
+import RxSwift
 
-class Sentry {
+class SentryStore {
     private let SentryDSNKey = "SentryDSN"
+    private var disposeBag = DisposeBag()
 
-    public static let shared = Sentry()
+    public static let shared = SentryStore()
 
-    init() {
+    init(dispatcher: Dispatcher = .shared) {
+        dispatcher.register
+                .filterByType(class: SentryAction.self)
+                .subscribe(onNext: { (action) in
+                    Client.shared?.reportUserException(
+                        action.title,
+                        reason: action.error.localizedDescription,
+                        language: NSLocale.preferredLanguages.first ?? "",
+                        lineOfCode: action.line,
+                        stackTrace: Thread.callStackSymbols,
+                        logAllThreads: false,
+                        terminateProgram: false)
+                })
+                .disposed(by: self.disposeBag)
+        
     }
 
     func setup(sendUsageData: Bool) {
