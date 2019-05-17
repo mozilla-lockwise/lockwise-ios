@@ -26,14 +26,8 @@ class CredentialProviderPresenter {
     fileprivate let dataStore: DataStore
     private let telemetryActionHandler: TelemetryActionHandler
     private let credentialProviderStore: CredentialProviderStore
-    private let autoLockSupport: AutoLockSupport
+    private var credentialProvisionBag = DisposeBag()
     private let disposeBag = DisposeBag()
-
-    private var dismissObserver: AnyObserver<Void> {
-        return Binder(self) { target, _ in
-            target.cancelWith(.userCanceled)
-        }.asObserver()
-    }
 
     init(view: CredentialProviderViewProtocol,
          dispatcher: Dispatcher = .shared,
@@ -43,7 +37,6 @@ class CredentialProviderPresenter {
          dataStore: DataStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          credentialProviderStore: CredentialProviderStore = .shared,
-         autoLockSupport: AutoLockSupport = .shared,
          sizeClassStore: SizeClassStore = .shared) { // SizeClassStore needs to be initialized
         self.view = view
         self.dispatcher = dispatcher
@@ -53,7 +46,6 @@ class CredentialProviderPresenter {
         self.dataStore = dataStore
         self.telemetryActionHandler = telemetryActionHandler
         self.credentialProviderStore = credentialProviderStore
-        self.autoLockSupport = autoLockSupport
 
         self.accountStore.syncCredentials
             .filterNil()
@@ -106,19 +98,20 @@ class CredentialProviderPresenter {
                         self?.provideCredential(for: credentialIdentity)
                     }
                 }
-                .disposed(by: self.disposeBag)
+                .disposed(by: self.credentialProvisionBag)
     }
 
     func interfaceToAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) {
         self.dataStore.locked
-                .bind { [weak self] locked in
+                .asDriver(onErrorJustReturn: true)
+                .drive(onNext: { [weak self] locked in
                     if locked {
                         self?.view?.displayWelcome()
                     } else {
                         self?.provideCredential(for: credentialIdentity)
                     }
-                }
-                .disposed(by: self.disposeBag)
+                })
+                .disposed(by: self.credentialProvisionBag)
     }
 
     func changeDisplay(traitCollection: UITraitCollection) {
@@ -136,15 +129,17 @@ class CredentialProviderPresenter {
                         self?.view?.displayItemList()
                     }
                 })
-                .disposed(by: self.disposeBag)
+                .disposed(by: self.credentialProvisionBag)
     }
 }
 
 @available(iOS 12, *)
 extension CredentialProviderPresenter {
     private func provideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
+        self.credentialProvisionBag = DisposeBag()
+
         guard let id = credentialIdentity.recordIdentifier else {
-            self.cancelWith(.credentialIdentityNotFound)
+            self.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .credentialIdentityNotFound))
             return
         }
 
@@ -152,14 +147,14 @@ extension CredentialProviderPresenter {
                 .filter { !$0 }
                 .take(1)
                 .flatMap { _ in self.dataStore.get(id) }
-                .bind { [weak self] login in
+                .map { login -> Action in
                     guard let login = login else {
-                        self?.cancelWith(.credentialIdentityNotFound)
-                        return
+                        return CredentialStatusAction.cancelled(error: .credentialIdentityNotFound)
                     }
 
-                    self?.dispatcher.dispatch(action: CredentialStatusAction.loginSelected(login: login))
+                    return CredentialStatusAction.loginSelected(login: login)
                 }
+                .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: self.disposeBag)
     }
 

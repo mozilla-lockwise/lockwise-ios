@@ -24,9 +24,7 @@ class ItemListPresenter: BaseItemListPresenter {
                 return
             }
 
-            if let view = target.view {
-                view.dismissKeyboard()
-            }
+            target.view?.dismissKeyboard()
 
             target.dataStore.get(id)
                 .map { login -> CredentialStatusAction in

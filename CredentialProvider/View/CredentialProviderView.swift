@@ -26,7 +26,7 @@ class CredentialProviderView: ASCredentialProviderViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return self.currentViewController?.preferredStatusBarStyle ?? .default
+        return self.currentViewController?.preferredStatusBarStyle ?? .lightContent
     }
 
     required init?(coder aDecoder: NSCoder) {
