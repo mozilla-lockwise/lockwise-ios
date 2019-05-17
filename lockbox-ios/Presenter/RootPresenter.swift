@@ -126,13 +126,6 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        self.dataStore.storageState
-            .filter { $0 == LoginStoreState.Unprepared }
-            .subscribe(onNext: { _ in
-                self.dispatcher.dispatch(action: LoginRouteAction.welcome)
-            })
-            .disposed(by: self.disposeBag)
-
         self.lifecycleStore.lifecycleEvents
             .subscribe(onNext: { lifecycleAction in
                 switch lifecycleAction {
@@ -146,7 +139,6 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
         self.startAdjust()
         self.startSentry()

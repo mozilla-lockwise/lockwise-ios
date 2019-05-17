@@ -11,7 +11,7 @@ class RouteStore {
 
     fileprivate let disposeBag = DisposeBag()
     fileprivate var routeState = ReplaySubject<RouteAction>.create(bufferSize: 1)
-    fileprivate var onboardingState = ReplaySubject<Bool>.create(bufferSize: 1)
+    fileprivate var onboardingState = BehaviorRelay<Bool>(value: false)
 
     public var onRoute: Observable<RouteAction> {
         return self.routeState.asObservable()
