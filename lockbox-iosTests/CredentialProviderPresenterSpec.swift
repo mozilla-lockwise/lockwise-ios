@@ -15,7 +15,7 @@ import MozillaAppServices
 class CredentialProviderPresenterSpec: QuickSpec {
     class FakeExtensionContext: ASCredentialProviderExtensionContext {
         var extensionConfigurationCompleted = false
-        var error: Error?
+        var errorCode: ASExtensionError.Code?
 
         var selectedCredential: ASPasswordCredential?
         var completeRequestCompletion: ((Bool) -> Void)?
@@ -25,7 +25,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
         }
 
         override func cancelRequest(withError error: Error) {
-            self.error = error
+            self.errorCode = ASExtensionError.Code(rawValue: (error as NSError).code)
         }
 
         override func completeRequest(withSelectedCredential credential: ASPasswordCredential, completionHandler: ((Bool) -> Void)? = nil) {
@@ -123,53 +123,41 @@ class CredentialProviderPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("loginSelected:relock:") {
+                describe("loginSelected") {
                     let guid = "afsdfdasfdsasf"
                     let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
 
-                    describe("relock = true") {
-                        beforeEach {
-                            self.dispatcher.registerSubject.onNext(CredentialStatusAction.loginSelected(login: login, relock: true))
-                        }
-
-                        it("selects the credential") {
-                            expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
-                            expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
-                            expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
-                        }
-
-                        describe("on completion") {
-                            beforeEach {
-                                self.view.fakeExtensionContext.completeRequestCompletion!(true)
-                            }
-
-                            it("touches the login and relocks the datastore") {
-                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.lock))
-                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
-                            }
-                        }
+                    beforeEach {
+                        self.dispatcher.registerSubject.onNext(CredentialStatusAction.loginSelected(login: login))
+                        self.dataStore.lockedStub.onNext(false)
                     }
 
-                    describe("relock = false") {
+                    it("selects the credential") {
+                        expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
+                        expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
+                        expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
+                    }
+
+                    describe("on completion") {
                         beforeEach {
-                            self.dispatcher.registerSubject.onNext(CredentialStatusAction.loginSelected(login: login, relock: false))
+                            self.view.fakeExtensionContext.completeRequestCompletion!(true)
                         }
 
-                        it("selects the credential") {
-                            expect(self.view.fakeExtensionContext.selectedCredential!.password).to(equal(login.passwordCredential.password))
-                            expect(self.view.fakeExtensionContext.selectedCredential!.user).to(equal(login.passwordCredential.user))
-                            expect(self.view.fakeExtensionContext.completeRequestCompletion).notTo(beNil())
+                        it("touches the login") {
+                            expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
                         }
+                    }
+                }
 
-                        describe("on completion") {
-                            beforeEach {
-                                self.view.fakeExtensionContext.completeRequestCompletion!(true)
-                            }
+                describe("cancelling") {
+                    let code = ASExtensionError.Code.failed
 
-                            it("touches the login") {
-                                expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.touch(id: guid)))
-                            }
-                        }
+                    beforeEach {
+                        self.dispatcher.registerSubject.onNext(CredentialStatusAction.cancelled(error: code))
+                    }
+
+                    it("cancels the extension context") {
+                        expect(self.view.fakeExtensionContext.errorCode).to(equal(code))
                     }
                 }
             }
@@ -182,92 +170,64 @@ class CredentialProviderPresenterSpec: QuickSpec {
                 it("tells the view to display the welcome screen") {
                     expect(self.view.displayWelcomeCalled).to(beTrue())
                 }
-            }
 
-            describe("credentialProvisionRequested") {
-                describe("when the credentialIdentity does not have a record identifier") {
-                    let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: nil)
+                describe("when the datastore is locked") {
                     beforeEach {
-                        self.subject.credentialProvisionRequested(for: passwordIdentity)
+                        self.dataStore.lockedStub.onNext(true)
                     }
 
-                    describe("locked datastore") {
-                        beforeEach {
-                            self.dataStore.lockedStub.onNext(true)
-                        }
-
-                        it("cancels the request with notFound") {
-                            expect(self.view.fakeExtensionContext.error).notTo(beNil())
-                            expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
-                        }
-                    }
-
-                    describe("unlocked datastore") {
-                        beforeEach {
-                            self.dataStore.lockedStub.onNext(false)
-                        }
-
-                        it("cancels the request with notFound") {
-                            expect(self.view.fakeExtensionContext.error).notTo(beNil())
-                            expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
-                        }
+                    it("requests authentication") {
+                        expect(self.dispatcher.actionArguments.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticationRequested))
                     }
                 }
 
-                describe("when the credentialIdentity has a record identifier") {
-                    let guid = "afsdfdasfdsasf"
-                    let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: guid)
+                describe("when the datstore is unlocked") {
+                    beforeEach {
+                        self.dataStore.lockedStub.onNext(false)
+                    }
 
+                    it("refreshes") {
+                        expect(self.dispatcher.actionArguments.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.refresh))
+                    }
+                }
+            }
+
+            describe("credentialProvisionRequested") {
+                describe("when the datastore is locked") {
+                    let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: nil)
                     beforeEach {
                         self.subject.credentialProvisionRequested(for: passwordIdentity)
+                        self.dataStore.lockedStub.onNext(true)
                     }
 
-                    describe("when the datastore is locked") {
+                    it("dispatches the cancellation and requests authentication") {
+                        expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.cancelled(error: .userInteractionRequired)))
+                        expect(self.dispatcher.actionArguments.popLast()! as? CredentialProviderAction).to(equal(CredentialProviderAction.authenticationRequested))
+                    }
+                }
+
+                describe("when the datstore is unlocked") {
+                    beforeEach {
+                        self.dataStore.lockedStub.onNext(false)
+                    }
+
+                    describe("when the credentialIdentity does not have a record identifier") {
+                        let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: nil)
                         beforeEach {
-                            self.dataStore.lockedStub.onNext(true)
+                            self.subject.credentialProvisionRequested(for: passwordIdentity)
                         }
 
-                        it("unlocks the datastore") {
-                            expect(self.dispatcher.actionArguments.popLast()! as? DataStoreAction).to(equal(DataStoreAction.unlock))
-                        }
-                        describe("after unlocking") {
-                            beforeEach {
-                                self.dataStore.lockedStub.onNext(false)
-                            }
-
-                            it("requests the login from the datastore") {
-                                expect(self.dataStore.getGuid).to(equal(passwordIdentity.recordIdentifier))
-                            }
-
-                            describe("when the login is nil") {
-                                beforeEach {
-                                    self.dataStore.getStub.onNext(nil)
-                                }
-
-                                it("cancels the request with notFound") {
-                                    expect(self.view.fakeExtensionContext.error).notTo(beNil())
-                                    expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
-                                }
-                            }
-
-                            describe("when the login is not nil and the password fill completes") {
-                                let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
-
-                                beforeEach {
-                                    self.dataStore.getStub.onNext(login)
-                                }
-
-                                it("dispatches the selected credential action") {
-                                    expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login, relock: true)))
-                                }
-                            }
-
+                        it("cancels the request with notFound") {
+                            expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.cancelled(error: .credentialIdentityNotFound)))
                         }
                     }
 
-                    describe("when the datastore is unlocked") {
+                    describe("when the credentialIdentity has a record identifier") {
+                        let guid = "afsdfdasfdsasf"
+                        let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: guid)
+
                         beforeEach {
-                            self.dataStore.lockedStub.onNext(false)
+                            self.subject.credentialProvisionRequested(for: passwordIdentity)
                         }
 
                         it("requests the login from the datastore") {
@@ -280,8 +240,7 @@ class CredentialProviderPresenterSpec: QuickSpec {
                             }
 
                             it("cancels the request with notFound") {
-                                expect(self.view.fakeExtensionContext.error).notTo(beNil())
-                                expect((self.view.fakeExtensionContext.error! as NSError).code).to(equal(ASExtensionError.credentialIdentityNotFound.rawValue))
+                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.cancelled(error: .credentialIdentityNotFound)))
                             }
                         }
 
@@ -293,15 +252,118 @@ class CredentialProviderPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches the credentialstatusaction") {
-                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login, relock: false)))
+                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login)))
                             }
                         }
                     }
                 }
             }
 
+            describe("prepareAuthentication") {
+                describe("when the datastore is locked") {
+                    let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: nil)
+                    beforeEach {
+                        self.subject.prepareAuthentication(for: passwordIdentity)
+                        self.dataStore.lockedStub.onNext(true)
+                    }
+
+                    it("displays the welcome view") {
+                        expect(self.view.displayWelcomeCalled).to(beTrue())
+                    }
+
+                    describe("subsequent pushes when unlocked") {
+
+                        beforeEach {
+                            self.dataStore.lockedStub.onNext(false)
+                        }
+
+                        describe("when the credentialIdentity does not have a record identifier") {
+                            let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: nil)
+                            beforeEach {
+                                self.subject.prepareAuthentication(for: passwordIdentity)
+                            }
+
+                            it("cancels the request with notFound") {
+                                expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.cancelled(error: .credentialIdentityNotFound)))
+                            }
+                        }
+
+                        describe("when the credentialIdentity has a record identifier") {
+                            let guid = "afsdfdasfdsasf"
+                            let passwordIdentity = ASPasswordCredentialIdentity(serviceIdentifier: ASCredentialServiceIdentifier(identifier: "http://www.mozilla.com", type: .URL), user: "dogs@dogs.com", recordIdentifier: guid)
+
+                            beforeEach {
+                                self.subject.credentialProvisionRequested(for: passwordIdentity)
+                            }
+
+                            it("requests the login from the datastore") {
+                                expect(self.dataStore.getGuid).to(equal(passwordIdentity.recordIdentifier))
+                            }
+
+                            describe("when the login is nil") {
+                                beforeEach {
+                                    self.dataStore.getStub.onNext(nil)
+                                }
+
+                                it("cancels the request with notFound") {
+                                    expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.cancelled(error: .credentialIdentityNotFound)))
+                                }
+                            }
+
+                            describe("when the login is not nil and the password fill completes") {
+                                let login = LoginRecord(fromJSONDict: ["id": guid, "hostname": "http://www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
+
+                                beforeEach {
+                                    self.dataStore.getStub.onNext(login)
+                                }
+
+                                it("dispatches the credentialstatusaction") {
+                                    expect(self.dispatcher.actionArguments.popLast()! as? CredentialStatusAction).to(equal(CredentialStatusAction.loginSelected(login: login)))
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            describe("credentialList for identifiers") {
+                beforeEach {
+                    self.subject.credentialList(for: [] as! [ASCredentialServiceIdentifier])
+                }
+
+                describe("when the datastore is locked") {
+                    beforeEach {
+                        self.dataStore.lockedStub.onNext(true)
+                    }
+
+                    it("displays the welcomeview") {
+                        expect(self.view.displayWelcomeCalled).to(beTrue())
+                    }
+
+                    describe("subsequent unlocking") {
+                        beforeEach {
+                            self.dataStore.lockedStub.onNext(false)
+                        }
+
+                        it("displays the itemlist") {
+                            expect(self.view.displayItemListCalled).to(beTrue())
+                        }
+                    }
+                }
+
+                describe("when the datastore is unlocked") {
+                    beforeEach {
+                        self.dataStore.lockedStub.onNext(false)
+                    }
+
+                    it("displays the itemlist") {
+                        expect(self.view.displayItemListCalled).to(beTrue())
+                    }
+                }
+            }
+
             describe("change display") {
-                var traits = UITraitCollection()
+                let traits = UITraitCollection()
                 beforeEach {
                     self.subject.changeDisplay(traitCollection: traits)
                 }

@@ -101,7 +101,7 @@ class CredentialProviderPresenter {
                 .disposed(by: self.credentialProvisionBag)
     }
 
-    func interfaceToAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) {
+    func prepareAuthentication(for credentialIdentity: ASPasswordCredentialIdentity) {
         self.dataStore.locked
                 .asDriver(onErrorJustReturn: true)
                 .drive(onNext: { [weak self] locked in

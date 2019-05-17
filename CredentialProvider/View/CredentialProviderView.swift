@@ -49,7 +49,7 @@ class CredentialProviderView: ASCredentialProviderViewController {
     }
 
     override func prepareInterfaceToProvideCredential(for credentialIdentity: ASPasswordCredentialIdentity) {
-        self.presenter?.interfaceToAuthentication(for: credentialIdentity)
+        self.presenter?.prepareAuthentication(for: credentialIdentity)
     }
 
     override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
