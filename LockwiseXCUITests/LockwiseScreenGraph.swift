@@ -6,7 +6,7 @@ import Foundation
 import MappaMundi
 import XCTest
 
-let appName = "Lockbox"
+let appName = "Lockwise"
 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
 let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
 let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
@@ -23,7 +23,7 @@ class Screen {
     static let OnboardingWelcomeScreen = "OnboardingWelcomeScreen"
     static let AutofillOnboardingWhenLogingIn = "AutofillOnboardingWhenLogingIn"
     static let AutofillSetUpInstructionsWhenLogingIn = "AutofillSetUpInstructionsWhenLogingIn"
-    static let LockboxMainPage = "LockboxMainPage"
+    static let LockwiseMainPage = "LockwiseMainPage"
     static let SettingsMenu = "SettingsMenu"
 
     static let FxASigninScreenEmail = "FxASigninScreenEmail"
@@ -55,8 +55,8 @@ class Action {
     static let SendUsageData = "SendUsageData"
     static let OpenDeviceSettings = "OpenDeviceSettings"
 
-    static let DisconnectFirefoxLockbox = "DisconnectFirefoxLockbox"
-    static let DisconnectFirefoxLockboxCancel = "DisconnectFirefoxLockboxCancel"
+    static let DisconnectFirefoxLockwise = "DisconnectFirefoxLockwise"
+    static let DisconnectFirefoxLockwiseCancel = "DisconnectFirefoxLockwiseCancel"
 
     static let ChangeEntriesOrder = "ChangeEntriesOrder"
     static let SelectAlphabeticalOrder = "SelectAlphabeticalOrder"
@@ -67,7 +67,7 @@ class Action {
 }
 
 @objcMembers
-class LockboxUserState: MMUserState {
+class LockwiseUserState: MMUserState {
     required init() {
         super.init()
         initialScreenState = Screen.WelcomeScreen
@@ -77,8 +77,8 @@ class LockboxUserState: MMUserState {
     var fxaPassword: String? = nil
 }
 
-func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<LockboxUserState> {
-    let map = MMScreenGraph(for: test, with: LockboxUserState.self)
+func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<LockwiseUserState> {
+    let map = MMScreenGraph(for: test, with: LockwiseUserState.self)
 
     let navigationControllerBackAction = {
         app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
@@ -88,13 +88,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         app.buttons["Done"].tap()
     }
 
-    let fxaViewCancelButton = {
-        app.navigationBars["Lockbox.FxAView"].buttons["Cancel"].tap()
-    }
-
     map.addScreenState(Screen.WelcomeScreen) { screenState in
             screenState.tap(app.buttons["getStarted.button"], to: Screen.FxASigninScreenEmail)
-            screenState.noop(to: Screen.LockboxMainPage)
+            screenState.noop(to: Screen.LockwiseMainPage)
     }
 
     map.addScreenState(Screen.FxASigninScreenEmail) { screenState in
@@ -114,7 +110,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.OnboardingWelcomeScreen) { screenState in
-        screenState.gesture(forAction: Action.TapOnFinish, transitionTo: Screen.LockboxMainPage) { userState in
+        screenState.gesture(forAction: Action.TapOnFinish, transitionTo: Screen.LockwiseMainPage) { userState in
             app.buttons["finish.button"].tap()
         }
     }
@@ -136,7 +132,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(Screen.LockboxMainPage) { screenState in
+    map.addScreenState(Screen.LockwiseMainPage) { screenState in
         screenState.tap(app.buttons["settings.button"], to: Screen.SettingsMenu)
         screenState.tap(app.buttons["sorting.button"], to: Screen.SortEntriesMenu)
         screenState.tap(app.tables.cells.staticTexts.firstMatch, to: Screen.EntryDetails)
@@ -154,10 +150,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Screen.SortEntriesMenu) { screenState in
-        screenState.gesture(forAction: Action.SelectAlphabeticalOrder, transitionTo: Screen.LockboxMainPage) { userState in
+        screenState.gesture(forAction: Action.SelectAlphabeticalOrder, transitionTo: Screen.LockwiseMainPage) { userState in
             app.buttons["Alphabetically"].tap()
         }
-        screenState.gesture(forAction: Action.SelectRecentOrder, transitionTo: Screen.LockboxMainPage) { userState in
+        screenState.gesture(forAction: Action.SelectRecentOrder, transitionTo: Screen.LockwiseMainPage) { userState in
             app.buttons["Recently Used"].tap()
         }
 
@@ -190,12 +186,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(Screen.AccountSettingsMenu) { screenState in
         screenState.backAction = navigationControllerBackAction
 
-        screenState.gesture(forAction: Action.DisconnectFirefoxLockbox, transitionTo: Screen.WelcomeScreen) { userState in
-            app.buttons["disconnectFirefoxLockbox.button"].tap()
+        screenState.gesture(forAction: Action.DisconnectFirefoxLockwise, transitionTo: Screen.WelcomeScreen) { userState in
+            app.buttons["disconnectFirefoxLockwise.button"].tap()
             app.buttons["Disconnect"].tap()
         }
-        screenState.gesture(forAction: Action.DisconnectFirefoxLockboxCancel, transitionTo: Screen.AccountSettingsMenu) { userState in
-            app.buttons["disconnectFirefoxLockbox.button"].tap()
+        screenState.gesture(forAction: Action.DisconnectFirefoxLockwiseCancel, transitionTo: Screen.AccountSettingsMenu) { userState in
+            app.buttons["disconnectFirefoxLockwise.button"].tap()
             app.buttons["Cancel"].tap()
         }
     }
@@ -217,7 +213,7 @@ extension BaseTestCase {
         loginFxAccount()
         skipAutofillConfiguration()
         tapOnFinishButton()
-        waitForLockboxEntriesListView()
+        waitForLockwiseEntriesListView()
     }
 
     func loginFxAccount() {
@@ -246,14 +242,14 @@ extension BaseTestCase {
         app.buttons["finish.button"].tap()
     }
 
-    func waitForLockboxEntriesListView() {
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+    func waitForLockwiseEntriesListView() {
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
-        navigator.nowAt(Screen.LockboxMainPage)
+        navigator.nowAt(Screen.LockwiseMainPage)
     }
 
     func disconnectAndConnectAccount() {
-        navigator.performAction(Action.DisconnectFirefoxLockbox)
+        navigator.performAction(Action.DisconnectFirefoxLockwise)
         // And, connect it again
         waitforExistence(app.buttons["getStarted.button"])
         app.buttons["getStarted.button"].tap()
