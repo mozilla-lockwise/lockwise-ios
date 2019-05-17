@@ -54,6 +54,11 @@ class BaseAccountStore {
         }
 
         fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
+            if let error = err {
+                NSLog("Unexpected error getting access token: \(error.localizedDescription)")
+                self?._syncCredentials.onNext(nil)
+            }
+
             guard let key = accessToken?.key,
                 let token = accessToken?.token
                 else { return }
