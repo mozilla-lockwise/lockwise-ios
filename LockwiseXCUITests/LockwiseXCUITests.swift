@@ -4,13 +4,14 @@
 
 import XCTest
 
-class LockboxXCUITests: BaseTestCase {
+class LockwiseXCUITests: BaseTestCase {
 
     override func tearDown() {
         navigator.goto(Screen.AccountSettingsMenu)
-        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"], timeout: 3)
+        print(app.debugDescription)
+        waitforExistence(app.buttons["disconnectFirefoxLockwise.button"], timeout: 3)
         // Using taps directly because the action is intermittently failing on BB
-        app.buttons["disconnectFirefoxLockbox.button"].tap()
+        app.buttons["disconnectFirefoxLockwise.button"].tap()
         waitforExistence(app.buttons["Disconnect"], timeout: 3)
         app.buttons["Disconnect"].tap()
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
@@ -67,7 +68,7 @@ class LockboxXCUITests: BaseTestCase {
 
         app.launch()
         waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 5)
-        navigator.nowAt(Screen.LockboxMainPage)
+        navigator.nowAt(Screen.LockwiseMainPage)
         navigator.goto(Screen.SettingsMenu)
     }
 
@@ -78,11 +79,11 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
         XCTAssertEqual(app.staticTexts["username.Label"].label, userNameAccountSetting)
-        XCTAssertTrue(app.buttons["disconnectFirefoxLockbox.button"].exists, "The option to disconnect does not appear")
+        XCTAssertTrue(app.buttons["disconnectFirefoxLockwise.button"].exists, "The option to disconnect does not appear")
 
         // Try Cancel disconnecting the account
-        navigator.performAction(Action.DisconnectFirefoxLockboxCancel)
-        waitforExistence(app.buttons["disconnectFirefoxLockbox.button"])
+        navigator.performAction(Action.DisconnectFirefoxLockwiseCancel)
+        waitforExistence(app.buttons["disconnectFirefoxLockwise.button"])
     }
 
     func testSettings() {
@@ -118,7 +119,7 @@ class LockboxXCUITests: BaseTestCase {
         app.buttons["sorting.button"].tap()
         waitforExistence(app.buttons["Recently Used"])
         app.buttons["Recently Used"].tap()
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
 
@@ -130,7 +131,7 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.buttons["Alphabetically"])
         app.buttons["Alphabetically"].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of logins (currently A-Z)")
 
         // Check that the order has changed again to its initial state
@@ -178,7 +179,7 @@ class LockboxXCUITests: BaseTestCase {
         let searchFieldValueAfterXButton = searchTextField.value as! String
         XCTAssertEqual(searchFieldValueAfterXButton, "Search logins")
         app.buttons["Cancel"].tap()
-        navigator.nowAt(Screen.LockboxMainPage)
+        navigator.nowAt(Screen.LockwiseMainPage)
     }
 
     func testCheckAutolock() {
@@ -188,12 +189,12 @@ class LockboxXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["settings.navigationBar"])
         navigator.goto(Screen.AutolockSettingsMenu)
         app.cells.staticTexts["Never"].tap()
-        navigator.goto(Screen.LockboxMainPage)
+        navigator.goto(Screen.LockwiseMainPage)
         // Send app to background and launch it
         XCUIDevice.shared.press(.home)
         app.activate()
         waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
-        navigator.goto(Screen.LockboxMainPage)
+        navigator.goto(Screen.LockwiseMainPage)
         navigator.performAction(Action.LockNow)
         waitforExistence(app.buttons["unlock.button"])
         app.buttons["unlock.button"].tap()
@@ -202,8 +203,8 @@ class LockboxXCUITests: BaseTestCase {
         let passcodeInput = springboard.secureTextFields["Passcode field"]
         passcodeInput.tap()
         passcodeInput.typeText("0000\r")
-        waitforExistence(app.navigationBars["firefoxLockbox.navigationBar"])
-        navigator.nowAt(Screen.LockboxMainPage)
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
+        navigator.nowAt(Screen.LockwiseMainPage)
     }
 
     // Verify SetAutofillNow
@@ -215,8 +216,8 @@ class LockboxXCUITests: BaseTestCase {
             loginFxAccount()
             waitforExistence(app.buttons["setupAutofill.button"])
             navigator.goto(Screen.AutofillSetUpInstructionsWhenLogingIn)
-            navigator.goto(Screen.LockboxMainPage)
-            waitForLockboxEntriesListView()
+            navigator.goto(Screen.LockwiseMainPage)
+            waitForLockwiseEntriesListView()
 
             // Open Settings app
             settings.launch()
@@ -250,7 +251,7 @@ class LockboxXCUITests: BaseTestCase {
             safari.terminate()
             app.launch()
             waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 10)
-            navigator.nowAt(Screen.LockboxMainPage)
+            navigator.nowAt(Screen.LockwiseMainPage)
         }
     }
 }

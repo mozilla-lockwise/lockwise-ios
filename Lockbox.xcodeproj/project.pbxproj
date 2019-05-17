@@ -12,9 +12,9 @@
 		22336C7221111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */; };
 		224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224A6C7C212C8C2B008C7A3F /* UIFont+.swift */; };
 		226E3FF02127759C00185D11 /* ExternalLinkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */; };
-		2C2EC55520ADA85A00AF8C44 /* LockboxXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */; };
+		2C2EC55520ADA85A00AF8C44 /* LockwiseXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC55420ADA85A00AF8C44 /* LockwiseXCUITests.swift */; };
 		2C2EC56020ADAA8100AF8C44 /* MappaMundi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */; };
-		2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */; };
+		2C2EC56220ADAB1D00AF8C44 /* LockwiseScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56120ADAB1D00AF8C44 /* LockwiseScreenGraph.swift */; };
 		2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */; };
 		391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */; };
 		3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3931871D214C12C5003C9E4A /* AppearanceHelper.swift */; };
@@ -364,11 +364,11 @@
 		22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenterSpec.swift; sourceTree = "<group>"; };
 		224A6C7C212C8C2B008C7A3F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStore.swift; sourceTree = "<group>"; };
-		2C2EC55220ADA85A00AF8C44 /* LockboxXCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockboxXCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockboxXCUITests.swift; sourceTree = "<group>"; };
+		2C2EC55220ADA85A00AF8C44 /* LockwiseXCUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LockwiseXCUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C2EC55420ADA85A00AF8C44 /* LockwiseXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockwiseXCUITests.swift; sourceTree = "<group>"; };
 		2C2EC55620ADA85A00AF8C44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MappaMundi.framework; path = Carthage/Build/iOS/MappaMundi.framework; sourceTree = "<group>"; };
-		2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockBoxScreenGraph.swift; sourceTree = "<group>"; };
+		2C2EC56120ADAB1D00AF8C44 /* LockwiseScreenGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockwiseScreenGraph.swift; sourceTree = "<group>"; };
 		2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTestCase.swift; sourceTree = "<group>"; };
 		391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		3931871D214C12C5003C9E4A /* AppearanceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceHelper.swift; sourceTree = "<group>"; };
@@ -675,16 +675,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2C2EC55320ADA85A00AF8C44 /* LockboxXCUITests */ = {
+		2C2EC55320ADA85A00AF8C44 /* LockwiseXCUITests */ = {
 			isa = PBXGroup;
 			children = (
-				2C2EC55420ADA85A00AF8C44 /* LockboxXCUITests.swift */,
+				2C2EC55420ADA85A00AF8C44 /* LockwiseXCUITests.swift */,
 				2C2EC55620ADA85A00AF8C44 /* Info.plist */,
-				2C2EC56120ADAB1D00AF8C44 /* LockBoxScreenGraph.swift */,
+				2C2EC56120ADAB1D00AF8C44 /* LockwiseScreenGraph.swift */,
 				2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */,
 				7AA54CF29E6B76D6894A841E /* SnapshotHelper.swift */,
 			);
-			path = LockboxXCUITests;
+			path = LockwiseXCUITests;
 			sourceTree = "<group>";
 		};
 		391233672090E4FB00CB0233 /* Recovered References */ = {
@@ -1108,7 +1108,7 @@
 				7D078EE12124DC0A00D10D1B /* Shared */,
 				7D5DF8751F87F2600039B23E /* lockbox-ios */,
 				7D1B1AC51F99028D00C1F5FF /* lockbox-iosTests */,
-				2C2EC55320ADA85A00AF8C44 /* LockboxXCUITests */,
+				2C2EC55320ADA85A00AF8C44 /* LockwiseXCUITests */,
 				7D80F3092118DCC700DA191B /* CredentialProvider */,
 				7D5DF8741F87F2600039B23E /* Products */,
 				7D1B1A8A1F98F86400C1F5FF /* Frameworks */,
@@ -1126,7 +1126,7 @@
 			children = (
 				7D5DF8731F87F2600039B23E /* Firefox Lockbox.app */,
 				7D1B1AC41F99028D00C1F5FF /* LockboxTests.xctest */,
-				2C2EC55220ADA85A00AF8C44 /* LockboxXCUITests.xctest */,
+				2C2EC55220ADA85A00AF8C44 /* LockwiseXCUITests.xctest */,
 				7D80F3062118DCC700DA191B /* CredentialProvider.appex */,
 			);
 			name = Products;
@@ -1230,9 +1230,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2C2EC55120ADA85A00AF8C44 /* LockboxXCUITests */ = {
+		2C2EC55120ADA85A00AF8C44 /* LockwiseXCUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C2EC55C20ADA85A00AF8C44 /* Build configuration list for PBXNativeTarget "LockboxXCUITests" */;
+			buildConfigurationList = 2C2EC55C20ADA85A00AF8C44 /* Build configuration list for PBXNativeTarget "LockwiseXCUITests" */;
 			buildPhases = (
 				2C2EC55E20ADA92400AF8C44 /* Copy Carthage frameworks */,
 				2C2EC54E20ADA85A00AF8C44 /* Sources */,
@@ -1244,9 +1244,9 @@
 			dependencies = (
 				2C2EC55820ADA85A00AF8C44 /* PBXTargetDependency */,
 			);
-			name = LockboxXCUITests;
+			name = LockwiseXCUITests;
 			productName = LockboxXCUITests;
-			productReference = 2C2EC55220ADA85A00AF8C44 /* LockboxXCUITests.xctest */;
+			productReference = 2C2EC55220ADA85A00AF8C44 /* LockwiseXCUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		7D1B1AC31F99028D00C1F5FF /* LockboxTests */ = {
@@ -1367,7 +1367,7 @@
 			targets = (
 				7D5DF8721F87F2600039B23E /* Firefox Lockbox */,
 				7D1B1AC31F99028D00C1F5FF /* LockboxTests */,
-				2C2EC55120ADA85A00AF8C44 /* LockboxXCUITests */,
+				2C2EC55120ADA85A00AF8C44 /* LockwiseXCUITests */,
 				7D80F3052118DCC700DA191B /* CredentialProvider */,
 			);
 		};
@@ -1499,9 +1499,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C2EC55520ADA85A00AF8C44 /* LockboxXCUITests.swift in Sources */,
+				2C2EC55520ADA85A00AF8C44 /* LockwiseXCUITests.swift in Sources */,
 				2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */,
-				2C2EC56220ADAB1D00AF8C44 /* LockBoxScreenGraph.swift in Sources */,
+				2C2EC56220ADAB1D00AF8C44 /* LockwiseScreenGraph.swift in Sources */,
 				7AA54A18A8CB61CD8D086821 /* SnapshotHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1911,10 +1911,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
+				INFOPLIST_FILE = LockwiseXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockwiseXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -1933,10 +1933,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
+				INFOPLIST_FILE = LockwiseXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockwiseXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -1955,10 +1955,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = LockboxXCUITests/Info.plist;
+				INFOPLIST_FILE = LockwiseXCUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockboxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockwiseXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
@@ -2432,7 +2432,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C2EC55C20ADA85A00AF8C44 /* Build configuration list for PBXNativeTarget "LockboxXCUITests" */ = {
+		2C2EC55C20ADA85A00AF8C44 /* Build configuration list for PBXNativeTarget "LockwiseXCUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C2EC55920ADA85A00AF8C44 /* Debug */,

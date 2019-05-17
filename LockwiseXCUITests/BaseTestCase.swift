@@ -8,9 +8,9 @@ import XCTest
 let CONTENT_SIZE = "UICTContentSizeCategoryL"
 
 class BaseTestCase: XCTestCase {
-    var navigator: MMNavigator<LockboxUserState>!
+    var navigator: MMNavigator<LockwiseUserState>!
     let app =  XCUIApplication()
-    var userState: LockboxUserState!
+    var userState: LockwiseUserState!
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()

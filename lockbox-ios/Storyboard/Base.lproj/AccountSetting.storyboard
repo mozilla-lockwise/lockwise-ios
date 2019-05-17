@@ -35,7 +35,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="htf-cl-VXU">
                                         <rect key="frame" x="0.0" y="582" width="414" height="44"/>
                                         <color key="backgroundColor" red="1" green="0.99997591972351074" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="disconnectFirefoxLockbox.button"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="disconnectFirefoxLockwise.button"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="mIY-nI-JMy"/>
                                         </constraints>
@@ -44,7 +44,7 @@
                                             <color key="titleColor" red="0.99718213081359863" green="0.2334609180688858" blue="0.1882847398519516" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="disconnectFirefoxLockbox.button"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="disconnectFirefoxLockwise.button"/>
                                         </userDefinedRuntimeAttributes>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dKb-ji-8VE">
