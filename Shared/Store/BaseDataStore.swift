@@ -76,7 +76,7 @@ class BaseDataStore {
 
     private let dispatcher: Dispatcher
     private let keychainWrapper: KeychainWrapper
-    private let autoLockSupport: AutoLockSupport
+    internal let autoLockSupport: AutoLockSupport
     private let dataStoreSupport: DataStoreSupport
     private let networkStore: NetworkStore
     private let lifecycleStore: LifecycleStore
