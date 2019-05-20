@@ -53,7 +53,7 @@ class RootPresenter {
     fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let biometryManager: BiometryManager
-    fileprivate let sentryManager: Sentry
+    fileprivate let sentryManager: SentryStore
     fileprivate let adjustManager: AdjustManager
     fileprivate let viewFactory: ViewFactory
     fileprivate let sizeClassStore: SizeClassStore
@@ -73,7 +73,7 @@ class RootPresenter {
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          biometryManager: BiometryManager = BiometryManager(),
-         sentryManager: Sentry = Sentry.shared,
+         sentryManager: SentryStore = SentryStore.shared,
          adjustManager: AdjustManager = AdjustManager.shared,
          viewFactory: ViewFactory = ViewFactory.shared,
          sizeClassStore: SizeClassStore = SizeClassStore.shared,
@@ -126,13 +126,6 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        self.dataStore.storageState
-            .filter { $0 == LoginStoreState.Unprepared }
-            .subscribe(onNext: { _ in
-                self.dispatcher.dispatch(action: LoginRouteAction.welcome)
-            })
-            .disposed(by: self.disposeBag)
-
         self.lifecycleStore.lifecycleEvents
             .subscribe(onNext: { lifecycleAction in
                 switch lifecycleAction {
@@ -146,7 +139,6 @@ class RootPresenter {
             })
             .disposed(by: self.disposeBag)
 
-        self.dispatcher.dispatch(action: OnboardingStatusAction(onboardingInProgress: false))
         self.startTelemetry()
         self.startAdjust()
         self.startSentry()
