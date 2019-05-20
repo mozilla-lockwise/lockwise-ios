@@ -161,7 +161,7 @@
 		7D4396542135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4396522135B0C200B96FA9 /* CredentialProviderAction.swift */; };
 		7D4396552135C2FF00B96FA9 /* SpinnerAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */; };
 		7D4396572135D79800B96FA9 /* Sentry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D4396562135D79700B96FA9 /* Sentry.framework */; };
-		7D4396612135D8BD00B96FA9 /* SentryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4396602135D8BC00B96FA9 /* SentryManager.swift */; };
+		7D4396612135D8BD00B96FA9 /* SentryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4396602135D8BC00B96FA9 /* SentryStore.swift */; };
 		7D440889201786E4001873F6 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D440888201786E4001873F6 /* WelcomeView.swift */; };
 		7D44088B201786F1001873F6 /* WelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D44088A201786F1001873F6 /* WelcomePresenter.swift */; };
 		7D44088E20178713001873F6 /* WelcomePresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D44088C20178713001873F6 /* WelcomePresenterSpec.swift */; };
@@ -229,6 +229,8 @@
 		7DBDBBC922726E1E00A4EF14 /* DataStoreSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DBDBBC722726E1E00A4EF14 /* DataStoreSupport.swift */; };
 		7DC3899C20B600820057929D /* ItemDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC3899E20B600820057929D /* ItemDetail.storyboard */; };
 		7DC75D79206AD01C007CDDBB /* AccountSetting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DC75D7B206AD01C007CDDBB /* AccountSetting.storyboard */; };
+		7DD2BED2228F120600E283B9 /* SentryAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD2BED1228F120600E283B9 /* SentryAction.swift */; };
+		7DD2BED3228F148700E283B9 /* SentryAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD2BED1228F120600E283B9 /* SentryAction.swift */; };
 		7DDEAA622124B24E00A7D521 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA54CDEA56C47263160AD0E /* Dispatcher.swift */; };
 		7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D9D64921F9F8EE300279C39 /* RxCocoa.framework */; };
 		7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D320B3420360F9000891F73 /* RxDataSources.framework */; };
@@ -503,7 +505,7 @@
 		7D43964F2135AFBD00B96FA9 /* CredentialProviderStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderStore.swift; sourceTree = "<group>"; };
 		7D4396522135B0C200B96FA9 /* CredentialProviderAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderAction.swift; sourceTree = "<group>"; };
 		7D4396562135D79700B96FA9 /* Sentry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sentry.framework; path = Carthage/Build/iOS/Sentry.framework; sourceTree = "<group>"; };
-		7D4396602135D8BC00B96FA9 /* SentryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SentryManager.swift; path = "lockbox-ios/Common/Helpers/SentryManager.swift"; sourceTree = SOURCE_ROOT; };
+		7D4396602135D8BC00B96FA9 /* SentryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SentryStore.swift; path = "lockbox-ios/Store/SentryStore.swift"; sourceTree = SOURCE_ROOT; };
 		7D440888201786E4001873F6 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WelcomeView.swift; path = "lockbox-ios/View/WelcomeView.swift"; sourceTree = SOURCE_ROOT; };
 		7D44088A201786F1001873F6 /* WelcomePresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WelcomePresenter.swift; path = "lockbox-ios/Presenter/WelcomePresenter.swift"; sourceTree = SOURCE_ROOT; };
 		7D44088C20178713001873F6 /* WelcomePresenterSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomePresenterSpec.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 		7DC389A020B600830057929D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemDetail.strings; sourceTree = "<group>"; };
 		7DC75D7A206AD01C007CDDBB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AccountSetting.storyboard; sourceTree = "<group>"; };
 		7DC75D7D206AD01E007CDDBB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AccountSetting.strings; sourceTree = "<group>"; };
+		7DD2BED1228F120600E283B9 /* SentryAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentryAction.swift; sourceTree = "<group>"; };
 		7DDEAA702124CEB100A7D521 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAccountStore.swift; sourceTree = "<group>"; };
 		7DEA1C4120362E09008AD7C4 /* Differentiator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differentiator.framework; path = Carthage/Build/iOS/Differentiator.framework; sourceTree = "<group>"; };
@@ -730,7 +733,6 @@
 		7AA54273E00B828CAEA30FA9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7D43965F2135D8B000B96FA9 /* Helpers */,
 				7AA549BD9AE6A6DD82FDA434 /* AppDelegate.swift */,
 				7AA54C03E372B15AC9309717 /* Extensions */,
 				7AA547FECD9BACFBEE60F8B8 /* Resources */,
@@ -741,6 +743,7 @@
 		7AA5453C4865C63179179FE2 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				7D4396602135D8BC00B96FA9 /* SentryStore.swift */,
 				7AA544CADF713D6B1E330659 /* UserDefaultStore.swift */,
 				7AA54C369D0BF64704C8D5FB /* RouteStore.swift */,
 				7AA54146E0C9269A0CE8D53A /* AccountStore.swift */,
@@ -791,6 +794,7 @@
 				7AA54B41C60F04FA585E5B8F /* ItemDetailAction.swift */,
 				7AA54E38ACC2FDBBF700D5E1 /* RouteAction.swift */,
 				7D078EEA2124DCE100D10D1B /* SettingAction.swift */,
+				7DD2BED1228F120600E283B9 /* SentryAction.swift */,
 			);
 			path = Action;
 			sourceTree = "<group>";
@@ -1087,14 +1091,6 @@
 				7D2712B8224D70E900E6C4CA /* SyncCredential.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		7D43965F2135D8B000B96FA9 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				7D4396602135D8BC00B96FA9 /* SentryManager.swift */,
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		7D522E952033473F00295FF8 /* Strings */ = {
@@ -1657,7 +1653,7 @@
 				7AA547EF949CA76FC018402A /* ItemListCell.swift in Sources */,
 				7AA54A743320656025DC5B3E /* ItemDetailCell.swift in Sources */,
 				7DB9DEA12140CC0300239D31 /* ItemListView.swift in Sources */,
-				7D4396612135D8BD00B96FA9 /* SentryManager.swift in Sources */,
+				7D4396612135D8BD00B96FA9 /* SentryStore.swift in Sources */,
 				D878360F207ABDF100C19BC7 /* StaticURLWebView.swift in Sources */,
 				D819A4BC21BAFA6F004EE6F3 /* File.swift in Sources */,
 				08454B9A21486BCF00328040 /* TelemetryStore.swift in Sources */,
@@ -1674,6 +1670,7 @@
 				D819A4B921BAF988004EE6F3 /* LoginRecord+.swift in Sources */,
 				D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */,
 				3931871E214C12C5003C9E4A /* AppearanceHelper.swift in Sources */,
+				7DD2BED2228F120600E283B9 /* SentryAction.swift in Sources */,
 				7D1D2F0420AA394A0011BFC8 /* SpinnerAlert.swift in Sources */,
 				7AA54E0EAF2761904796DB90 /* ItemListDisplayStore.swift in Sources */,
 				7AA548100774B367341D450F /* ItemListDisplayAction.swift in Sources */,
@@ -1717,6 +1714,7 @@
 				08454B9B21486BCF00328040 /* TelemetryStore.swift in Sources */,
 				7D9722DB21348C2F0071D82B /* CredentialWelcomePresenter.swift in Sources */,
 				D8C20D6C22013A0D001B4A27 /* SizeClassStore.swift in Sources */,
+				7DD2BED3228F148700E283B9 /* SentryAction.swift in Sources */,
 				7D9722C8213464020071D82B /* UIViewController+.swift in Sources */,
 				7D9722E021349B9F0071D82B /* CredentialStatusAction.swift in Sources */,
 				7D078EF42124E24100D10D1B /* BaseConstants.swift in Sources */,
