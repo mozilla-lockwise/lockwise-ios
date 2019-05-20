@@ -83,8 +83,6 @@ class ItemDetailPresenter {
         self.itemDetailStore = itemDetailStore
         self.copyDisplayStore = copyDisplayStore
         self.sizeClassStore = sizeClassStore
-
-        self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
 
     func onViewReady() {
@@ -95,13 +93,9 @@ class ItemDetailPresenter {
                 .flatMap { self.dataStore.get($0) }
 
         let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.itemDetailDisplay)
+        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.passwordRevealed)
                 .map { e -> [ItemDetailSectionModel] in
-                    if case let .togglePassword(passwordDisplayed) = e.1 {
-                        return self.configurationForLogin(e.0, passwordDisplayed: passwordDisplayed)
-                    }
-
-                    return self.configurationForLogin(e.0, passwordDisplayed: false)
+                    return self.configurationForLogin(e.0, passwordDisplayed: e.1)
                 }
 
         let titleDriver = itemObservable

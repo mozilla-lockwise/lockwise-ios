@@ -86,11 +86,11 @@ class ItemDetailPresenterSpec: QuickSpec {
     }
 
     class FakeItemDetailStore: ItemDetailStore {
-        var itemDetailDisplayStub = PublishSubject<ItemDetailDisplayAction>()
+        var passwordRevealedStub = PublishSubject<Bool>()
         var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
 
-        override var itemDetailDisplay: Driver<ItemDetailDisplayAction> {
-            return itemDetailDisplayStub.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
+        override var passwordRevealed: Driver<Bool> {
+            return passwordRevealedStub.asDriver(onErrorJustReturn: false)
         }
 
         override var itemDetailId: Observable<String> {
@@ -134,12 +134,6 @@ class ItemDetailPresenterSpec: QuickSpec {
                         copyDisplayStore: self.copyDisplayStore,
                         sizeClassStore: self.sizeClassStore
                 )
-            }
-
-            it("starts the password display as hidden") {
-                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                let action = self.dispatcher.dispatchActionArgument.first as! ItemDetailDisplayAction
-                expect(action).to(equal(.togglePassword(displayed: false)))
             }
 
             describe("onPasswordToggle") {
@@ -310,7 +304,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                             }
 
                             it("dispatches nothing new") {
-                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(3))
+                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(2))
                             }
                         }
                     }
@@ -358,8 +352,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("getting an item with the password displayed") {
                     beforeEach {
                         self.dataStore.onItemStub.onNext(item)
-                        self.itemDetailStore.itemDetailDisplayStub
-                                .onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
+                        self.itemDetailStore.passwordRevealedStub
+                                .onNext(true)
                     }
 
                     it("displays the title") {
@@ -392,8 +386,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("getting an item without the password displayed") {
                     beforeEach {
                         self.dataStore.onItemStub.onNext(item)
-                        self.itemDetailStore.itemDetailDisplayStub
-                                .onNext(ItemDetailDisplayAction.togglePassword(displayed: false))
+                        self.itemDetailStore.passwordRevealedStub
+                                .onNext(false)
                     }
 
                     it("displays the title") {
@@ -448,8 +442,8 @@ class ItemDetailPresenterSpec: QuickSpec {
                     beforeEach {
                         let emptyItem = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
                         self.dataStore.onItemStub.onNext(emptyItem)
-                        self.itemDetailStore.itemDetailDisplayStub
-                                .onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
+                        self.itemDetailStore.passwordRevealedStub
+                                .onNext(true)
                     }
 
                     it("displays the unnamed entry placeholder text") {
