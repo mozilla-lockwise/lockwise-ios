@@ -103,11 +103,7 @@ extension WelcomePresenter {
             AlertActionButtonConfiguration(
                     title: Constant.string.skip,
                     tapObserver: self.skipButtonObserver,
-                    style: .cancel),
-            AlertActionButtonConfiguration(
-                    title: Constant.string.setPasscode,
-                    tapObserver: self.setPasscodeButtonObserver,
-                    style: .default)
+                    style: .cancel)
         ]
     }
 
