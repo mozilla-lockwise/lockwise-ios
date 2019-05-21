@@ -1,6 +1,6 @@
 # External Dependencies
 
-With the addition of the Credential Provider API in iOS 12, you will need to use **Xcode 10.2.1** and **Swift 4.2.1** (`swiftlang-1000.0.36 clang-1000.10.44`) to work on Lockbox.
+You will need to use **Xcode 10.2.1** and **Swift 4.2.1** (`swiftlang-1000.0.36 clang-1000.10.44`) to work on Lockwise.
 
 ## Swift frameworks
 
@@ -24,4 +24,7 @@ Ask in the #application-services channel on Slack or IRC if you need support for
 
 ### Setting up Rust with iOS
 
-If you would like to compile Carthage using `--no-use-binaries`, you need to add iOS targets to your local installation You can do this
+If you would like to compile Carthage using `--no-use-binaries`, you need to add iOS targets to your local Rust environment. You can do this by running:
+```
+rustup target add aarch64-apple-ios armv7-apple-ios armv7s-apple-ios x86_64-apple-ios i386-apple-ios
+```

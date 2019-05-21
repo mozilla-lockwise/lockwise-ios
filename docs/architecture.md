@@ -10,7 +10,7 @@ Firefox Lockwise for iOS makes extensive use of RxSwift, an implementation of th
 
 In short, Flux architecture design maintains a unidirectional data flow, in which a global Dispatcher receives Actions & dispatches them to appropriate Stores. The Stores, in turn, process data & provide the source of truth for the Views. As users interact with the Views, any updates are made via a dispatched Action and the cycle begins again. See this [flux architecture](https://facebook.github.io/flux/docs/overview.html) writeup for more details on the original Flux architecture scheme.
 
-Lockbox implements a modified version of the described architecture (LockFlux), keeping in mind that the original implementation ignores asynchronous work.
+Lockwise implements a modified version of the described architecture (LockFlux), keeping in mind that the original implementation ignores asynchronous work.
 
 ### Memory Management
 
@@ -69,7 +69,7 @@ To fully understand the concept, it's useful to trace one user action through it
 4. This combined `Observable` stream with both the text and the items filters the list of items and maps the filtered list into individual cell configurations.
 5. The view, on receiving the updated / filtered list, re-renders the list of items to only show the ones that the user is searching for.
 
-There are a few other listeners for `ItemListFilterAction`s; for example, the `Observable` bound to the `isHidden` property of the Cancel button in the search bar maps the `ItemListFilterAction` with a simple `!isEmpty` check -- if the `ItemListFilterAction.filteringText` is empty, the cancel button is hidden, and if not, it's displayed. While it may seem like a lot of work to make the roundtrip with the `Dispatcher`, this allows for a number of side benefits. First, it allows any
+There are a few other listeners for `ItemListFilterAction`s; for example, the `Observable` bound to the `isHidden` property of the Cancel button in the search bar maps the `ItemListFilterAction` with a simple `!isEmpty` check -- if the `ItemListFilterAction.filteringText` is empty, the cancel button is hidden, and if not, it's displayed. While it may seem like a lot of work to make the roundtrip with the `Dispatcher`, this allows for a number of side benefits. First, it allows for easy manipulation of the text and the displayed items from multiple sources (tapping the clear button as well as editing the text field, for example), and second, routing all user interactions through the `Dispatcher` allows for low overhead data collection; it's as simple as attaching a listener to the `Dispatcher`.
 
 ---
 
