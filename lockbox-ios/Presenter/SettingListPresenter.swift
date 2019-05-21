@@ -177,7 +177,7 @@ extension SettingListPresenter {
                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         subtitle.append(NSAttributedString(
                 string: Constant.string.learnMore,
-                attributes: [NSAttributedString.Key.foregroundColor: Constant.color.lockBoxBlue]))
+                attributes: [NSAttributedString.Key.foregroundColor: Constant.color.lockBoxViolet]))
         usageDataSetting.subtitle = subtitle
         usageDataSetting.accessibilityActions = [
             UIAccessibilityCustomAction(

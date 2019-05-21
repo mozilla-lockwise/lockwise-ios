@@ -6,3 +6,5 @@ xcuserdata
 lockbox-ios/binaries/
 site/
 fastlane/screenshots/
+export-locales-env
+lockwiseios-l10n

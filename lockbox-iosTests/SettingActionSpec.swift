@@ -67,22 +67,22 @@ class SettingActionSpec: QuickSpec {
             describe("PreferredBrowser") {
                 describe("getPreferredBrowserDeeplink") {
 
-                    let testUrl = "https://github.com/mozilla-lockbox/lockbox-ios"
+                    let testUrl = "https://github.com/mozilla-lockwise/lockwise-ios"
 
                     it("creates safari deeplinks") {
                         expect(Setting.PreferredBrowser.Safari.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal(testUrl))
                     }
 
                     it("creates firefox deeplinks") {
-                        expect(Setting.PreferredBrowser.Firefox.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                        expect(Setting.PreferredBrowser.Firefox.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockwise%2Flockwise-ios"))
                     }
 
                     it("creates focus deeplinks") {
-                        expect(Setting.PreferredBrowser.Focus.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockbox%2Flockbox-ios"))
+                        expect(Setting.PreferredBrowser.Focus.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("firefox-focus://open-url?url=https%3A%2F%2Fgithub.com%2Fmozilla-lockwise%2Flockwise-ios"))
                     }
 
                     it("creates chrome https deeplinks") {
-                        expect(Setting.PreferredBrowser.Chrome.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("googlechromes://github.com/mozilla-lockbox/lockbox-ios"))
+                        expect(Setting.PreferredBrowser.Chrome.getPreferredBrowserDeeplink(url: testUrl)?.absoluteString).to(equal("googlechromes://github.com/mozilla-lockwise/lockwise-ios"))
                     }
 
                     it("creates chrome http deeplinks") {

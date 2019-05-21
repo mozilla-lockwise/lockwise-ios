@@ -61,7 +61,6 @@ class ItemDetailView: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var learnHowToEditButton: UIButton!
     @IBOutlet private weak var learnHowToEditArrow: UIImageView!
-    let longPress = UILongPressGestureRecognizer()
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -76,7 +75,7 @@ class ItemDetailView: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
         self.tableView.dragDelegate = self
-        self.learnHowToEditArrow.tintColor = Constant.color.lockBoxBlue
+        self.learnHowToEditArrow.tintColor = Constant.color.lockBoxViolet
         self.setupNavigation()
         self.setupDataSource()
         self.setupDelegate()
@@ -181,8 +180,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
     fileprivate func setupDelegate() {
         if let presenter = self.presenter {
-            self.tableView.addGestureRecognizer(self.longPress)
-
             self.tableView.rx.itemSelected
                     .map { path -> String? in
                         guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
@@ -193,18 +190,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     }
                     .bind(to: presenter.onCellTapped)
                     .disposed(by: self.disposeBag)
-
-            longPress.rx.event.map({ gesture -> String? in
-                let loc = gesture.location(in: self.tableView)
-                if let path = self.tableView.indexPathForRow(at: loc) {
-                    if let cell = self.tableView.cellForRow(at: path) as? ItemDetailCell {
-                        return cell.titleLabel?.text
-                    }
-                }
-                return nil
-            })
-            .bind(to: presenter.onCellTapped)
-            .disposed(by: self.disposeBag)
         }
     }
 }

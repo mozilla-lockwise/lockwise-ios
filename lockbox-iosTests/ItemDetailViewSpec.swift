@@ -73,7 +73,7 @@ class ItemDetailViewSpec: QuickSpec {
                                 value: "www.meow.com",
                                 accessibilityLabel: "something accessible",
                                 password: false,
-                                valueFontColor: Constant.color.lockBoxBlue,
+                                valueFontColor: Constant.color.lockBoxViolet,
                                 accessibilityId: "")
                     ]),
                     ItemDetailSectionModel(model: 1, items: [
@@ -128,7 +128,7 @@ class ItemDetailViewSpec: QuickSpec {
                 }
 
                 it("sets the font color for web address") {
-                    expect((self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell).valueLabel.textColor).to(equal(Constant.color.lockBoxBlue))
+                    expect((self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell).valueLabel.textColor).to(equal(Constant.color.lockBoxViolet))
                 }
 
                 it("sets the passed accessibility label for every cell") {

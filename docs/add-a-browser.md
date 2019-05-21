@@ -1,9 +1,9 @@
-# Add a browser setting to Firefox Lockbox
+# Add a browser setting to Firefox Lockwise
 
 _These instructions are for developers wanting to add another browser setting so when users tap to open an entry's URL it will be sent to the web browser of their choice._
 
 
-1. Find and add the query scheme the new browser has registered to `LSApplicationQueriesSchemes` in `Common/Resources/Info.plist`. For example we'll use [DuckDuckGo](https://github.com/mozilla-lockbox/lockbox-ios/compare/master...joeyg:duckduckgo?expand=1):
+1. Find and add the query scheme the new browser has registered to `LSApplicationQueriesSchemes` in `Common/Resources/Info.plist`. For example we'll use [DuckDuckGo](https://github.com/mozilla-lockwise/lockwise-ios/compare/master...joeyg:duckduckgo?expand=1):
 
   ```
   <string>ddgQuickLink</string>

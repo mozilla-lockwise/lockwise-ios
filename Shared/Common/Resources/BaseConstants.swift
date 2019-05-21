@@ -30,18 +30,19 @@ class Constant {
         static let cellBorderGrey = UIColor(hex: 0xC8C7CC)
         static let viewBackground = UIColor(hex: 0xEDEDF0)
         static let lightGrey = UIColor(hex: 0xEFEFEF)
-        static let lockBoxBlue = UIColor(hex: 0x0060DF)
+        static let lockBoxViolet = UIColor(red: 89, green: 42, blue: 203)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
         static let settingsHeader = UIColor(hex: 0x737373)
-        static let tableViewCellHighlighted = UIColor(hex: 0xE5EFF9)
+        static let tableViewCellHighlighted = UIColor(red: 231, green: 223, blue: 255)
         static let buttonTitleColorNormalState = UIColor.white
         static let buttonTitleColorOtherState = UIColor(white: 1.0, alpha: 0.6)
         static let shadowColor = UIColor(red: 12, green: 12, blue: 13)
         static let videoBorderColor = UIColor(hex: 0xD7D7DB)
         static let helpTextBorderColor = UIColor(hex: 0xD8D7DE)
-        static let navBackgroundColor = UIColor(red: 19, green: 125, blue: 181)
+        static let navBackgroundColor = UIColor(red: 57, green: 52, blue: 115)
         static let navTextColor = UIColor(red: 237, green: 237, blue: 240)
-        static let navSearchBackgroundColor = UIColor(red: 11, green: 96, blue: 138)
+        static let inactiveNavSearchBackgroundColor = UIColor(red: 43, green: 33, blue: 86)
+        static let activeNavSearchBackgroundColor = UIColor(red: 39, green: 25, blue: 72)
         static let navSerachTextColor = UIColor.white
         static let navSearchPlaceholderTextColor = UIColor(white: 1.0, alpha: 0.8)
     }
@@ -59,17 +60,18 @@ class Constant {
 
     class string {
         static let enablingAutofill = NSLocalizedString("autofill.enabling", value: "Updating AutoFill…", comment: "Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature")
-        static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating AutoFill", comment: "Accesibility notification when AutoFill is done being enabled")
+        static let completedEnablingAutofill = NSLocalizedString("autofill.finished_enabling", value: "Finished updating AutoFill", comment: "Accessibility notification when AutoFill is done being enabled")
         static let unlockPlaceholder = NSLocalizedString("unlock_placeholder", value: "This will unlock the app.", comment: "Placeholder text when the user’s email is unavailable while unlocking Lockbox, shown in Touch ID and passcode prompts")
         static let signInRequired = NSLocalizedString("autofill.signInRequired", value: "Sign in Required", comment: "Title for alert dialog explaining that a user must be signed in to use AutoFill.")
-        static let signInRequiredBody = NSLocalizedString("autofill.signInRequiredBody", value: "You must be signed in to %@ before AutoFill will allow you to add passwords from %@. Once you have signed in, your entries will start appearing in AutoFill.", comment: "Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name")
+        static let signInRequiredBody = NSLocalizedString("autofill.signInRequiredBody", value: "You must be signed in to %@ before AutoFill will allow access to passwords within it.", comment: "Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name")
         static let ok = NSLocalizedString("ok", value: "OK", comment: "Ok button title")
-        static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockbox", comment: "Product Name")
+        static let productName = NSLocalizedString("firefoxLockbox", value: "Firefox Lockwise", comment: "Product Name")
+        static let productLabel = NSLocalizedString("lockwise", value: "Lockwise", comment: "This is the name displayed instead of Firefox Lockwise in some places")
         static let signIn = NSLocalizedString("signIn", value: "Sign In", comment: "Sign in button text")
         static let cancel = NSLocalizedString("cancel", value: "Cancel", comment: "Cancel button title")
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username.")
-        static let searchYourEntries = NSLocalizedString("search.placeholder", value: "Search your entries", comment: "Placeholder text for search field")
-        static let emptyListPlaceholder = NSLocalizedString("list.empty", value: "%@ lets you access passwords you’ve already saved to Firefox. To view your entries here, you’ll need to sign in and sync with Firefox for desktop.", comment: "Label shown when there are no logins to list. %@ will be replaced with the application name")
+        static let searchYourEntries = NSLocalizedString("search.placeholder", value: "Search logins", comment: "Placeholder text for search field")
+        static let emptyListPlaceholder = NSLocalizedString("list.empty", value: "%@ lets you access passwords you’ve already saved to Firefox. To view your logins here, you’ll need to sign in and sync with Firefox.", comment: "Label shown when there are no logins to list. %@ will be replaced with the application name")
     }
 }
 

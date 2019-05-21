@@ -1,12 +1,12 @@
 # Test Plan
 
-_Test plan for [Firefox Lockbox for iOS][1]_
+_Test plan for [Firefox Lockwise for iOS][1]_
 
 See also: [https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan](https://wiki.mozilla.org/QA/Mobile/LockboxiOSTestPlan)
 
 ## Overview
 
-Firefox Lockbox for iOS is a new mobile iOS app developed with a pre-defined set of P1 "must have" requirements and a target release at the end of June in the Apple App Store and in Test Pilot.
+Firefox Lockwise for iOS is a new mobile iOS app developed with a pre-defined set of P1 "must have" requirements and a target release at the end of June in the Apple App Store and in Test Pilot.
 
 Mozilla Product Integrity provides embedded QA to work with the team throughout the weekly sprints allowing for ongoing testing and feedback, issue triage, and continuous test plan development and end-to-end regression testing in order to accommodate a quick release schedule and submission to the App Store by end of May.
 
@@ -81,7 +81,7 @@ The interface is legible and tappable by designing and testing for:
 - text sizes follow system adjustment (i.e. respect "Larger Text" setting)
 
 **MVP Testing and Results documented at:**  
-https://github.com/mozilla-lockbox/lockbox-ios/issues/441
+https://github.com/mozilla-lockwise/lockwise-ios/issues/441
   
 ### Out of Scope
 
@@ -90,9 +90,9 @@ https://github.com/mozilla-lockbox/lockbox-ios/issues/441
 
 ---
 
-[1]: https://github.com/mozilla-lockbox/lockbox-ios
+[1]: https://github.com/mozilla-lockwise/lockwise-ios
 [2]: https://testrail.stage.mozaws.net/index.php?/projects/overview/52
 [3]: https://docs.google.com/document/d/1q2xYGsoB0ylfir-Bkg8BwP4Aj1H6OjjJHW2FmX-JexU/edit#
-[4]: https://github.com/mozilla-lockbox/lockbox-ios/issues/202
+[4]: https://github.com/mozilla-lockwise/lockwise-ios/issues/202
 [5]: /metrics.md 
-[6]: https://github.com/mozilla-lockbox/lockbox-ios/issues/51
+[6]: https://github.com/mozilla-lockwise/lockwise-ios/issues/51

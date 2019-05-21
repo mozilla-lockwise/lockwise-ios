@@ -39,8 +39,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
-               BuildableName = "LockboxXCUITests.xctest"
-               BlueprintName = "LockboxXCUITests"
+               BuildableName = "LockwiseXCUITests.xctest"
+               BlueprintName = "LockwiseXCUITests"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -67,8 +67,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
-               BuildableName = "LockboxXCUITests.xctest"
-               BlueprintName = "LockboxXCUITests"
+               BuildableName = "LockwiseXCUITests.xctest"
+               BlueprintName = "LockwiseXCUITests"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -77,8 +77,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
-            BuildableName = "LockboxXCUITests.xctest"
-            BlueprintName = "LockboxXCUITests"
+            BuildableName = "LockwiseXCUITests.xctest"
+            BlueprintName = "LockwiseXCUITests"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -99,8 +99,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
-            BuildableName = "LockboxXCUITests.xctest"
-            BlueprintName = "LockboxXCUITests"
+            BuildableName = "LockwiseXCUITests.xctest"
+            BlueprintName = "LockwiseXCUITests"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -117,8 +117,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
-            BuildableName = "LockboxXCUITests.xctest"
-            BlueprintName = "LockboxXCUITests"
+            BuildableName = "LockwiseXCUITests.xctest"
+            BlueprintName = "LockwiseXCUITests"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

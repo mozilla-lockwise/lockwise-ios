@@ -8,10 +8,9 @@ import RxCocoa
 
 class CredentialWelcomeView: UIViewController {
     internal var presenter: CredentialWelcomePresenter?
-    @IBOutlet private weak var oceanView: UIImageView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .default
+        return .lightContent
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -31,11 +30,6 @@ class CredentialWelcomeView: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.oceanView.image = UIImage.createGradientImage(
-            frame: self.oceanView.frame,
-            colors: [Constant.color.lockBoxTeal, Constant.color.lockBoxBlue],
-            locations: [0, 0.85]
-        )
     }
 }
 

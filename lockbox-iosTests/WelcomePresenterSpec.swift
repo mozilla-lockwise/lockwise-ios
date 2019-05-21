@@ -25,6 +25,7 @@ class WelcomePresenterSpec: QuickSpec {
         var firstTimeLearnMoreHiddenStub: TestableObserver<Bool>!
         var firstTimeLearnMoreArrowHiddenStub: TestableObserver<Bool>!
         var loginButtonHiddenStub: TestableObserver<Bool>!
+        var lockwiseGlyphHiddenStub: TestableObserver<Bool>!
         var unlockButtonHiddenStub: TestableObserver<Bool>!
         var lockImageHiddenStub: TestableObserver<Bool>!
         var alertControllerButtons: [AlertActionButtonConfiguration]?
@@ -58,6 +59,10 @@ class WelcomePresenterSpec: QuickSpec {
 
         var loginButtonHidden: AnyObserver<Bool> {
             return self.loginButtonHiddenStub.asObserver()
+        }
+
+        var lockwiseGlyphHidden: AnyObserver<Bool> {
+            return self.lockwiseGlyphHiddenStub.asObserver()
         }
 
         var unlockButtonHidden: AnyObserver<Bool> {
@@ -167,6 +172,7 @@ class WelcomePresenterSpec: QuickSpec {
                 self.view.firstTimeLearnMoreHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.firstTimeLearnMoreArrowHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.loginButtonHiddenStub = self.scheduler.createObserver(Bool.self)
+                self.view.lockwiseGlyphHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.unlockButtonHiddenStub = self.scheduler.createObserver(Bool.self)
                 self.view.lockImageHiddenStub = self.scheduler.createObserver(Bool.self)
 

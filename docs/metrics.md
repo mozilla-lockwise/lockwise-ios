@@ -1,4 +1,4 @@
-# Firefox Lockbox for iOS Metrics Plan
+# Firefox Lockwise for iOS Metrics Plan
 
 _Last Updated: May 1, 2018_
 

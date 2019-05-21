@@ -92,6 +92,7 @@ extension AutoLockSettingView {
             let cell = SettingCell()
             cell.textLabel?.text = cellConfiguration.text
             cell.selectionStyle = UITableViewCell.SelectionStyle.none
+            cell.tintColor = Constant.color.lockBoxViolet
 
             cell.accessoryType = cellConfiguration.isChecked ?
                 UITableViewCell.AccessoryType.checkmark : UITableViewCell.AccessoryType.none

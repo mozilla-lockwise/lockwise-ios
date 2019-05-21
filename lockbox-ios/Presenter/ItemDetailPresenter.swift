@@ -191,7 +191,7 @@ extension ItemDetailPresenter {
                         value: hostname,
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
                         password: false,
-                        valueFontColor: Constant.color.lockBoxBlue,
+                        valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
                         showOpenButton: true,
                         dragValue: hostname)

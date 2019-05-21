@@ -1,6 +1,47 @@
 # Release Notes
 
+## 1.5.0 (Build 3240)
+
+_Date: 2019-05-10_
+
+This is a major update because we changed how sign in and sync works behind the scenes. You shouldn't notice it but it was a big deal.
+
+We also fixed a few little bugs along the way.
+
+**Fourth TestFlight build**
+
+New since the last build:
+
+- remove gray bar at bottom of tall screens (#948)
+- improved UI transitions (#951) 
+- improved strings for localizing (#952)
+- improved syncstate (#956)
+- autofill fixes (#961)
+
+All other changes since the previous release:
+
+- fix backgrounding / foregrounding problems with lock (#936)
+- make updates for product name use in strings and starting to prep for localization
+- fix autofill to work with new logins library (#928)
+- only autolock in the background (#916)
+- fix recurring web address (#932)
+- integrate a-s logins (#891)
+- use mozillaappservices.framework (#911)
+- update RxSwift and MappaMundi dependencies (#912)
+- fix app start up when there's no network (#905)
+
+## 1.5.0 (Build 3135)
+
+_Date: 2019-05-01_
+
+Third TestFlight build testing the new logins library from application-services.
+
+- fix backgrounding / foregrounding problems with lock (#936)
+- make updates for product name use in strings and starting to prep for localization
+
 ## 1.5.0 (Build 3088)
+
+_Date: 2019-04-26_
 
 Second TestFlight build testing the new logins library from application-services.
 
@@ -10,6 +51,8 @@ Second TestFlight build testing the new logins library from application-services
 
 ## 1.5.0 (Build 2999)
 
+_Date: 2019-04-19_
+
 First TestFlight build testing the new logins library from application-services. Known issue: autofill doesn't work.
 
 - integrate a-s logins (#891)
@@ -18,6 +61,8 @@ First TestFlight build testing the new logins library from application-services.
 - fix app start up when there's no network (#905)
 
 ## 1.4.1 (Build 2943)
+
+_Date: 2019-04-03_
 
 We made minor fixes to visual inconsistencies between the iPhone and iPad.
 
@@ -362,7 +407,7 @@ This build DOES NOT include:
 - the remaining links to final FAQ content and instructions (#172)
 - creating, updating or deleting entries (that's intentional)
 
-Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+Join us at [https://github.com/mozilla-lockwise/lockwise-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1280)
 
@@ -388,7 +433,7 @@ This build DOES NOT include:
 - a few more links to real FAQ content and instructions (#172)
 - creating, updating or deleting entries (that's intentional)
 
-Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+Join us at [https://github.com/mozilla-lockwise/lockwise-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1189)
 
@@ -418,7 +463,7 @@ Some KNOWN ISSUES include:
 - if you delete the app and re-install it, your app may crash once (#374)
 - the autolocking timer was working inconsistently and may not have automatically locked the app, please keep testing this!
 
-Join us at [https://github.com/mozilla-lockbox/lockbox-ios/issues][1] to find any of the above items or report new issues you encounter.
+Join us at [https://github.com/mozilla-lockwise/lockwise-ios/issues][1] to find any of the above items or report new issues you encounter.
 
 ## 1.0 (Build 1128)
 
@@ -442,4 +487,4 @@ This build does NOT include: actual Sync data (test data only), Face ID nor Touc
 
 Please note: the only data loaded into the app is hard-coded test data (not real Sync data)
 
-[1]: https://github.com/mozilla-lockbox/lockbox-ios/issues
+[1]: https://github.com/mozilla-lockwise/lockwise-ios/issues

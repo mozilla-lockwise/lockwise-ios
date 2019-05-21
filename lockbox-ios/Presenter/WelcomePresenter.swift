@@ -14,6 +14,7 @@ protocol WelcomeViewProtocol: BaseWelcomeViewProtocol {
     var firstTimeLoginMessageHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreHidden: AnyObserver<Bool> { get }
     var firstTimeLearnMoreArrowHidden: AnyObserver<Bool> { get }
+    var lockwiseGlyphHidden: AnyObserver<Bool> { get }
     var lockImageHidden: AnyObserver<Bool> { get }
     var unlockButtonHidden: AnyObserver<Bool> { get }
     var loginButtonPressed: ControlEvent<Void> { get }
@@ -183,7 +184,8 @@ extension WelcomePresenter {
             view.firstTimeLoginMessageHidden,
             view.firstTimeLearnMoreHidden,
             view.firstTimeLearnMoreArrowHidden,
-            view.loginButtonHidden
+            view.loginButtonHidden,
+            view.lockwiseGlyphHidden
         ]
 
         let lockScreenHiddenObservers = [

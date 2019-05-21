@@ -112,7 +112,7 @@ class AccountSettingPresenterSpec: QuickSpec {
                 }
                 it("displays the alert controller") {
                     expect(self.view.displayAlertActionButtons).notTo(beNil())
-                    expect(self.view.displayAlertControllerTitle).to(equal(String(format: Constant.string.confirmDialogTitle, Constant.string.productName)))
+                    expect(self.view.displayAlertControllerTitle).to(equal(String(format: Constant.string.confirmDialogTitle, Constant.string.productLabel)))
                     expect(self.view.displayAlertControllerMessage).to(equal(String(format: Constant.string.confirmDialogMessage, Constant.string.productName)))
                 }
 
