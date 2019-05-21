@@ -6,9 +6,11 @@ import Foundation
 import Quick
 import Nimble
 import MozillaAppServices
+import AuthenticationServices
 
 @testable import Lockbox
 
+@available(iOS 12.0, *)
 class CredentialStatusActionSpec: QuickSpec {
     override func spec() {
         describe("CredentialStatusAction") {
@@ -18,21 +20,19 @@ class CredentialStatusActionSpec: QuickSpec {
                 }
 
                 it("userCancelled is always equal") {
-                    expect(CredentialStatusAction.userCanceled).to(equal(CredentialStatusAction.userCanceled))
+                    expect(CredentialStatusAction.cancelled(error: .failed)).to(equal(CredentialStatusAction.cancelled(error: .failed)))
                 }
 
                 it("loginSelected is equalbased on login and relock values") {
                     let login1 = LoginRecord(fromJSONDict: ["id": "fasasdf", "hostname": "www.mozilla.com", "username": "dogs@dogs.com", "password": "meow"])
                     let login2 = LoginRecord(fromJSONDict: ["id": ";l;iiojlkljk", "hostname": "www.neopets.com", "username": "cats@cats.com", "password": "woof"])
 
-                    expect(CredentialStatusAction.loginSelected(login: login1, relock: true)).to(equal(CredentialStatusAction.loginSelected(login: login1, relock: true)))
-                    expect(CredentialStatusAction.loginSelected(login: login2, relock: true)).notTo(equal(CredentialStatusAction.loginSelected(login: login1, relock: true)))
-                    expect(CredentialStatusAction.loginSelected(login: login1, relock: true)).notTo(equal(CredentialStatusAction.loginSelected(login: login1, relock: false)))
-                    expect(CredentialStatusAction.loginSelected(login: login1, relock: true)).notTo(equal(CredentialStatusAction.loginSelected(login: login2, relock: false)))
+                    expect(CredentialStatusAction.loginSelected(login: login1)).to(equal(CredentialStatusAction.loginSelected(login: login1)))
+                    expect(CredentialStatusAction.loginSelected(login: login2)).notTo(equal(CredentialStatusAction.loginSelected(login: login1)))
                 }
 
                 it("different enum values are not equal") {
-                    expect(CredentialStatusAction.userCanceled).notTo(equal(CredentialStatusAction.extensionConfigured))
+                    expect(CredentialStatusAction.cancelled(error: .userCanceled)).notTo(equal(CredentialStatusAction.extensionConfigured))
                 }
             }
 

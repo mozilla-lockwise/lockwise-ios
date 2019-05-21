@@ -202,7 +202,7 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeSentryManager: Lockbox.Sentry {
+    class FakeSentryManager: Lockbox.SentryStore {
         var setupCalled: Bool = false
 
         override func setup(sendUsageData: Bool) {

@@ -35,7 +35,6 @@ enum LocalUserDefaultKey: String {
 class AccountStore: BaseAccountStore {
     static let shared = AccountStore()
 
-    private let dispatcher: Dispatcher
     private let urlCache: URLCache
     private let webData: WKWebsiteDataStore
     private let disposeBag = DisposeBag()
@@ -57,11 +56,10 @@ class AccountStore: BaseAccountStore {
          urlCache: URLCache = URLCache.shared,
          webData: WKWebsiteDataStore = WKWebsiteDataStore.default()
         ) {
-        self.dispatcher = dispatcher
         self.urlCache = urlCache
         self.webData = webData
 
-        super.init(keychainWrapper: keychainWrapper, networkStore: networkStore)
+        super.init(dispatcher: dispatcher, keychainWrapper: keychainWrapper, networkStore: networkStore)
     }
 
     override func initialized() {

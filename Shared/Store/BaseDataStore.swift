@@ -76,7 +76,7 @@ class BaseDataStore {
 
     private let dispatcher: Dispatcher
     private let keychainWrapper: KeychainWrapper
-    private let autoLockSupport: AutoLockSupport
+    internal let autoLockSupport: AutoLockSupport
     private let dataStoreSupport: DataStoreSupport
     private let networkStore: NetworkStore
     private let lifecycleStore: LifecycleStore
@@ -238,8 +238,10 @@ extension BaseDataStore {
         queue.async {
             do {
                 try self.loginsStorage?.sync(unlockInfo: syncInfo)
+            } catch let error as LoginStoreError {
+                self.storageStateSubject.onNext(.Errored(cause: error))
             } catch let error {
-                print("Sync15 Sync Error: \(error)")
+                NSLog("Unknown error syncing: \(error)")
             }
             self.syncSubject.onNext(SyncState.Synced)
         }
@@ -252,8 +254,10 @@ extension BaseDataStore {
             do {
                 let loginRecords = try loginsStorage.list()
                 self.listSubject.accept(loginRecords)
+            } catch let error as LoginStoreError {
+                self.storageStateSubject.onNext(.Errored(cause: error))
             } catch let error {
-                print("Sync15 list update error: \(error)")
+                NSLog("Unknown error updating list: \(error)")
             }
         }
     }
@@ -302,8 +306,8 @@ extension BaseDataStore {
         guard let loginsStorage = self.loginsStorage else { return }
 
         queue.async {
-            loginsStorage.ensureLocked()
             self.storageStateSubject.onNext(.Locked)
+            loginsStorage.ensureLocked()
         }
     }
 
@@ -314,8 +318,10 @@ extension BaseDataStore {
         do {
             try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
             self.storageStateSubject.onNext(.Unlocked)
+        } catch let error as LoginStoreError {
+            self.storageStateSubject.onNext(.Errored(cause: error))
         } catch let error {
-            print("LoginsError: \(error)")
+            NSLog("Unknown error unlocking: \(error)")
         }
     }
 
@@ -355,8 +361,10 @@ extension BaseDataStore {
                 self.storageStateSubject.onNext(.Unprepared)
                 try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
                 try loginsStorage.wipeLocal()
+            } catch let error as LoginStoreError {
+                self.storageStateSubject.onNext(.Errored(cause: error))
             } catch let error {
-                print("Sync15 wipe error: \(error.localizedDescription)")
+                NSLog("Unknown error wiping database: \(error.localizedDescription)")
             }
         }
     }
