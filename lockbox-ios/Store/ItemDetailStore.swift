@@ -14,6 +14,7 @@ class ItemDetailStore: BaseItemDetailStore {
     private var sizeClassStore: SizeClassStore
     private var lifecycleStore: LifecycleStore
     private var userDefaultStore: UserDefaultStore
+    private var routeStore: RouteStore
 
     private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
 
@@ -22,32 +23,36 @@ class ItemDetailStore: BaseItemDetailStore {
     }()
 
     // RootPresenter needs a synchronous way to find out if the detail screen has a login or not
-    lazy private(set) var itemDetailHasId: Bool = {
+    var itemDetailHasId: Bool {
         return self._itemDetailId.value != ""
-    }()
+    }
 
     init(
             dispatcher: Dispatcher = .shared,
             dataStore: DataStore = .shared,
             sizeClassStore: SizeClassStore = .shared,
             lifecycleStore: LifecycleStore = .shared,
-            userDefaultStore: UserDefaultStore = .shared
+            userDefaultStore: UserDefaultStore = .shared,
+            routeStore: RouteStore = .shared
     ) {
         self.dataStore = dataStore
         self.sizeClassStore = sizeClassStore
         self.lifecycleStore = lifecycleStore
         self.userDefaultStore = userDefaultStore
+        self.routeStore = routeStore
 
         super.init(dispatcher: dispatcher)
 
         self.dispatcher.register
                 .filterByType(class: ItemDetailDisplayAction.self)
-                .map { action -> Bool in
-                    switch action {
-                    case .togglePassword(let displayed):
+                .map { action -> Bool? in
+                    if case let .togglePassword(displayed) = action {
                         return displayed
+                    } else {
+                        return nil
                     }
                 }
+                .filterNil()
                 .bind(to: self._passwordRevealed)
                 .disposed(by: self.disposeBag)
 
@@ -57,7 +62,7 @@ class ItemDetailStore: BaseItemDetailStore {
                 .bind(to: self._passwordRevealed)
                 .disposed(by: self.disposeBag)
 
-        self.dispatcher.register
+        self.routeStore.onRoute
                 .filterByType(class: MainRouteAction.self)
                 .map { route -> String? in
                     switch route {

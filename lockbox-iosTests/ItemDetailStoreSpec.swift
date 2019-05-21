@@ -37,6 +37,14 @@ class ItemDetailStoreSpec: QuickSpec {
         }
     }
 
+    class FakeRouteStore: RouteStore {
+        let routeEventsStub = PublishSubject<RouteAction>()
+
+        override var onRoute: Observable<RouteAction> {
+            return self.routeEventsStub.asObservable()
+        }
+    }
+
     class FakeDataStore: DataStore {
         let syncStateStub = ReplaySubject<SyncState>.create(bufferSize: 1)
 
@@ -60,6 +68,7 @@ class ItemDetailStoreSpec: QuickSpec {
     private var sizeClassStore: FakeSizeClassStore!
     private var lifecycleStore: FakeLifecycleStore!
     private var dataStore: FakeDataStore!
+    private var routeStore: FakeRouteStore!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailStore!
@@ -70,12 +79,14 @@ class ItemDetailStoreSpec: QuickSpec {
                 self.dispatcher = FakeDispatcher()
                 self.lifecycleStore = FakeLifecycleStore()
                 self.sizeClassStore = FakeSizeClassStore()
+                self.routeStore = FakeRouteStore()
                 self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
                 self.subject = ItemDetailStore(
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         sizeClassStore: self.sizeClassStore,
-                        lifecycleStore: self.lifecycleStore
+                        lifecycleStore: self.lifecycleStore,
+                        routeStore: self.routeStore
                 )
             }
 
@@ -102,7 +113,7 @@ class ItemDetailStoreSpec: QuickSpec {
                 describe("MainRouteAction") {
                     describe(".list") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.list)
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.list)
                         }
 
                         it("does nothing") {
@@ -116,7 +127,7 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     describe(".detail") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "asdf"))
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "asdf"))
                         }
 
                         it("sets detailId") {
@@ -150,7 +161,7 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     describe("when there is a detailId set") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "1234"))
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "1234"))
                             expect(detailIdObserver.events.count).to(equal(2))
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                         }
@@ -162,7 +173,7 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     describe("when there is not a detailId set") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: ""))
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: ""))
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                         }
 
@@ -186,7 +197,7 @@ class ItemDetailStoreSpec: QuickSpec {
                                 .subscribe(detailIdObserver)
                                 .disposed(by: self.disposeBag)
 
-                        self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "1234"))
+                        self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "1234"))
                         expect(detailIdObserver.events.count).to(equal(2))
                         self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                     }
