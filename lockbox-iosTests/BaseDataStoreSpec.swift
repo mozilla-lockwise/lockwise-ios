@@ -291,6 +291,12 @@ class BaseDataStoreSpec: QuickSpec {
                     it("stores the next autolock time") {
                         expect(self.autoLockSupport.storeNextTimeCalled).to(beTrue())
                     }
+
+                    it("respects all future backgrounding actions") {
+                        self.autoLockSupport.clearInvocations()
+                        self.lifecycleStore.fakeCycle.onNext(.background)
+                        expect(self.autoLockSupport.storeNextTimeCalled).to(beTrue())
+                    }
                 }
 
                 describe("foregrounding actions") {

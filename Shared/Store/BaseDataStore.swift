@@ -271,22 +271,25 @@ extension BaseDataStore {
 extension BaseDataStore {
     private func setupAutolock() {
         self.lifecycleStore.lifecycleEvents
-                .filter { $0 == .background }
-                .flatMap { _ in self.storageState }
-                .take(1)
-                .subscribe(onNext: { [weak self] state in
-                    guard state == .Unlocked else { return }
-
-                    self?.autoLockSupport.storeNextAutolockTime()
-                })
-                .disposed(by: disposeBag)
+            .filter { $0 == .background }
+            .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void in
+                if state == .Unlocked {
+                    return ()
+                }
+            })
+            .subscribe(onNext: { [weak self] _ in
+                self?.autoLockSupport.storeNextAutolockTime()
+            })
+            .disposed(by: disposeBag)
 
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
-                .flatMap { _ in self.storageState.take(1) }
-                .subscribe(onNext: { [weak self] state in
-                    guard state != .Unprepared else { return }
-
+                .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void in
+                    if state != .Unprepared {
+                        return ()
+                    }
+                })
+                .subscribe(onNext: { [weak self] _ in
                     self?.handleLock()
                 })
                 .disposed(by: self.disposeBag)
