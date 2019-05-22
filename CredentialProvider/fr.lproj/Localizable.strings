@@ -1,0 +1,39 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Mise à jour du remplissage automatique…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Mise à jour du remplissage automatique terminée";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Connexion nécessaire";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Vous devez être connecté(e) à %@ pour que le remplissage automatique autorise l’accès aux mots de passe qu’il contient.";
+
+/* Cancel button title */
+"cancel" = "Annuler";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ vous permet d’accéder aux mots de passe que vous avez déjà enregistrés dans Firefox. Pour afficher vos identifiants ici, vous devez vous connecter et activer la synchronisation dans Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Rechercher des identifiants";
+
+/* Sign in button text */
+"signIn" = "Connexion";
+
+/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Ceci va déverrouiller l’application.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(aucun nom d’utilisateur)";
+

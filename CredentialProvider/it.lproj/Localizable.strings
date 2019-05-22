@@ -1,0 +1,39 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Aggiornamento riempimento automatico in corso…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Aggiornamento riempimento automatico completato";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Autenticazione richiesta";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Per utilizzare le password salvate nella funzione di riempimento automatico è necessario accedere a %@";
+
+/* Cancel button title */
+"cancel" = "Annulla";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ permette di accedere alle password salvate in Firefox. Per visualizzare le credenziali in questa sezione, effettua l’accesso in Firefox e completa la sincronizzazione.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Cerca nelle credenziali";
+
+/* Sign in button text */
+"signIn" = "Accedi";
+
+/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Questa operazione sbloccherà l’app.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "[nessun nome utente]";
+
