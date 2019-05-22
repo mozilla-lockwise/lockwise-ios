@@ -12,48 +12,69 @@ class ItemDetailStore: BaseItemDetailStore {
 
     private var dataStore: DataStore
     private var sizeClassStore: SizeClassStore
+    private var lifecycleStore: LifecycleStore
     private var userDefaultStore: UserDefaultStore
+    private var routeStore: RouteStore
 
-    private var _itemDetailDisplay = ReplaySubject<ItemDetailDisplayAction>.create(bufferSize: 1)
+    private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
 
-    lazy private(set) var itemDetailDisplay: Driver<ItemDetailDisplayAction> = {
-        return self._itemDetailDisplay.asDriver(onErrorJustReturn: .togglePassword(displayed: false))
+    lazy private(set) var passwordRevealed: Driver<Bool> = {
+        return self._passwordRevealed.asDriver(onErrorJustReturn: false)
     }()
 
     // RootPresenter needs a synchronous way to find out if the detail screen has a login or not
-    private(set) var itemDetailHasId = false
+    var itemDetailHasId: Bool {
+        return self._itemDetailId.value != ""
+    }
 
-    init(dispatcher: Dispatcher = Dispatcher.shared,
-         dataStore: DataStore = DataStore.shared,
-         sizeClassStore: SizeClassStore = SizeClassStore.shared,
-         userDefaultStore: UserDefaultStore = UserDefaultStore.shared) {
+    init(
+            dispatcher: Dispatcher = .shared,
+            dataStore: DataStore = .shared,
+            sizeClassStore: SizeClassStore = .shared,
+            lifecycleStore: LifecycleStore = .shared,
+            userDefaultStore: UserDefaultStore = .shared,
+            routeStore: RouteStore = .shared
+    ) {
         self.dataStore = dataStore
         self.sizeClassStore = sizeClassStore
+        self.lifecycleStore = lifecycleStore
         self.userDefaultStore = userDefaultStore
+        self.routeStore = routeStore
 
         super.init(dispatcher: dispatcher)
 
         self.dispatcher.register
-            .filterByType(class: ItemDetailDisplayAction.self)
-            .bind(to: self._itemDetailDisplay)
-            .disposed(by: self.disposeBag)
-
-        self.dispatcher.register
-            .filterByType(class: MainRouteAction.self)
-            .subscribe(onNext: { (route) in
-                switch route {
-                case .detail(let itemId):
-                    self._itemDetailId.accept(itemId)
-                case .list:
-                    break
+                .filterByType(class: ItemDetailDisplayAction.self)
+                .map { action -> Bool? in
+                    if case let .togglePassword(displayed) = action {
+                        return displayed
+                    } else {
+                        return nil
+                    }
                 }
-            }).disposed(by: self.disposeBag)
+                .filterNil()
+                .bind(to: self._passwordRevealed)
+                .disposed(by: self.disposeBag)
 
-        self.itemDetailId
-            .subscribe(onNext: { itemId in
-                self.itemDetailHasId = itemId != ""
-            })
-            .disposed(by: self.disposeBag)
+        self.lifecycleStore.lifecycleEvents
+                .filter { $0 == .background }
+                .map { _ in false }
+                .bind(to: self._passwordRevealed)
+                .disposed(by: self.disposeBag)
+
+        self.routeStore.onRoute
+                .filterByType(class: MainRouteAction.self)
+                .map { route -> String? in
+                    switch route {
+                    case .detail(let itemId):
+                        return itemId
+                    case .list:
+                        return nil
+                    }
+                }
+                .filterNil()
+                .bind(to: self._itemDetailId)
+                .disposed(by: self.disposeBag)
 
         // If the splitview is being show
         // then after sync, select one item from the datastore to show

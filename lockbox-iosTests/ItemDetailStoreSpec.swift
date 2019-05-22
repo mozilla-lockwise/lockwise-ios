@@ -29,6 +29,22 @@ class ItemDetailStoreSpec: QuickSpec {
         }
     }
 
+    class FakeLifecycleStore: LifecycleStore {
+        let lifecycleEventsStub = PublishSubject<LifecycleAction>()
+
+        override var lifecycleEvents: Observable<LifecycleAction> {
+            return self.lifecycleEventsStub.asObservable()
+        }
+    }
+
+    class FakeRouteStore: RouteStore {
+        let routeEventsStub = PublishSubject<RouteAction>()
+
+        override var onRoute: Observable<RouteAction> {
+            return self.routeEventsStub.asObservable()
+        }
+    }
+
     class FakeDataStore: DataStore {
         let syncStateStub = ReplaySubject<SyncState>.create(bufferSize: 1)
 
@@ -50,7 +66,9 @@ class ItemDetailStoreSpec: QuickSpec {
 
     private var dispatcher: FakeDispatcher!
     private var sizeClassStore: FakeSizeClassStore!
+    private var lifecycleStore: FakeLifecycleStore!
     private var dataStore: FakeDataStore!
+    private var routeStore: FakeRouteStore!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailStore!
@@ -59,11 +77,17 @@ class ItemDetailStoreSpec: QuickSpec {
         describe("ItemDetailStore") {
             beforeEach {
                 self.dispatcher = FakeDispatcher()
+                self.lifecycleStore = FakeLifecycleStore()
                 self.sizeClassStore = FakeSizeClassStore()
+                self.routeStore = FakeRouteStore()
                 self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
-                self.subject = ItemDetailStore(dispatcher: self.dispatcher,
-                                               dataStore: self.dataStore,
-                                               sizeClassStore: self.sizeClassStore)
+                self.subject = ItemDetailStore(
+                        dispatcher: self.dispatcher,
+                        dataStore: self.dataStore,
+                        sizeClassStore: self.sizeClassStore,
+                        lifecycleStore: self.lifecycleStore,
+                        routeStore: self.routeStore
+                )
             }
 
             describe("itemDetailId") {
@@ -73,8 +97,8 @@ class ItemDetailStoreSpec: QuickSpec {
                     detailIdObserver = self.scheduler.createObserver(String.self)
 
                     self.subject.itemDetailId
-                        .subscribe(detailIdObserver)
-                        .disposed(by: self.disposeBag)
+                            .subscribe(detailIdObserver)
+                            .disposed(by: self.disposeBag)
                 }
 
                 it("initalizes to empty string") {
@@ -89,7 +113,7 @@ class ItemDetailStoreSpec: QuickSpec {
                 describe("MainRouteAction") {
                     describe(".list") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.list)
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.list)
                         }
 
                         it("does nothing") {
@@ -103,7 +127,7 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     describe(".detail") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "asdf"))
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "asdf"))
                         }
 
                         it("sets detailId") {
@@ -126,18 +150,18 @@ class ItemDetailStoreSpec: QuickSpec {
                         self.dataStore.syncStateStub.onNext(SyncState.Synced)
                         self.dataStore.listStub.onNext([
                             LoginRecord(fromJSONDict: ["id": "5678", "hostname": "asdf", "username": "asdf", "password": "asdf"])
-                            ])
+                        ])
 
                         detailIdObserver = self.scheduler.createObserver(String.self)
 
                         self.subject.itemDetailId
-                            .subscribe(detailIdObserver)
-                            .disposed(by: self.disposeBag)
+                                .subscribe(detailIdObserver)
+                                .disposed(by: self.disposeBag)
                     }
 
                     describe("when there is a detailId set") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "1234"))
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "1234"))
                             expect(detailIdObserver.events.count).to(equal(2))
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                         }
@@ -149,7 +173,7 @@ class ItemDetailStoreSpec: QuickSpec {
 
                     describe("when there is not a detailId set") {
                         beforeEach {
-                            self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: ""))
+                            self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: ""))
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                         }
 
@@ -170,10 +194,10 @@ class ItemDetailStoreSpec: QuickSpec {
                         detailIdObserver = self.scheduler.createObserver(String.self)
 
                         self.subject.itemDetailId
-                            .subscribe(detailIdObserver)
-                            .disposed(by: self.disposeBag)
+                                .subscribe(detailIdObserver)
+                                .disposed(by: self.disposeBag)
 
-                        self.dispatcher.fakeRegistration.onNext(MainRouteAction.detail(itemId: "1234"))
+                        self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "1234"))
                         expect(detailIdObserver.events.count).to(equal(2))
                         self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                     }
@@ -185,27 +209,34 @@ class ItemDetailStoreSpec: QuickSpec {
             }
 
             describe("itemDetailDisplay") {
-                var displayObserver = self.scheduler.createObserver(ItemDetailDisplayAction.self)
+                var passwordRevealedObserver = self.scheduler.createObserver(Bool.self)
 
                 beforeEach {
-                    displayObserver = self.scheduler.createObserver(ItemDetailDisplayAction.self)
+                    passwordRevealedObserver = self.scheduler.createObserver(Bool.self)
 
-                    self.subject.itemDetailDisplay
-                            .drive(displayObserver)
+                    self.subject.passwordRevealed
+                            .drive(passwordRevealedObserver)
                             .disposed(by: self.disposeBag)
                 }
 
                 it("passes through ItemDetailDisplayActions from the dispatcher") {
                     self.dispatcher.fakeRegistration.onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
 
-                    expect(displayObserver.events.count).to(equal(1))
-                    expect(displayObserver.events.first!.value.element!).to(equal(.togglePassword(displayed: true)))
+                    expect(passwordRevealedObserver.events.count).to(equal(2))
+                    expect(passwordRevealedObserver.events.last!.value.element!).to(equal(true))
                 }
 
                 it("does not pass through non-ItemDetailDisplayActions") {
                     self.dispatcher.fakeRegistration.onNext(LoginRouteAction.welcome)
 
-                    expect(displayObserver.events.count).to(equal(0))
+                    expect(passwordRevealedObserver.events.count).to(equal(1))
+                }
+
+                it("backgrounding actions toggle password revealed status") {
+                    self.lifecycleStore.lifecycleEventsStub.onNext(.background)
+
+                    expect(passwordRevealedObserver.events.count).to(equal(2))
+                    expect(passwordRevealedObserver.events.last!.value.element!).to(equal(false))
                 }
             }
 
