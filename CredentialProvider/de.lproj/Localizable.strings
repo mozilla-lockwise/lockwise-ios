@@ -1,0 +1,39 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "„Automatisch ausfüllen“ wird aktualisiert…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "„Automatisch ausfüllen“ wurde aktualisiert";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Anmeldung erforderlich";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Sie müssen bei %@ angemeldet sein, bevor „Automatisch ausfüllen“ den Zugriff auf die darin enthaltenen Passwörter ermöglicht.";
+
+/* Cancel button title */
+"cancel" = "Abbrechen";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "Mit %@ können Sie auf Passwörter zugreifen, die Sie bereits in Firefox gespeichert haben. Um Ihre Zugangsdaten hier anzuzeigen, müssen Sie sich anmelden und mit Firefox synchronisieren.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Zugangsdaten durchsuchen";
+
+/* Sign in button text */
+"signIn" = "Anmelden";
+
+/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Dies entsperrt die App.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(Kein Benutzername)";
+
