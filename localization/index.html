@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Build and Install - Firefox Lockwise for iOS</title>
+  <title>Localization for Lockwise iOS - Firefox Lockwise for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Build and Install";
-    var mkdocs_page_input_path = "install.md";
+    var mkdocs_page_name = "Localization for Lockwise iOS";
+    var mkdocs_page_input_path = "localization.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -78,12 +78,9 @@
 		
     <span class="caption-text">Developer Guides</span>
     <ul class="subnav">
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Build and Install</a>
-    <ul class="subnav">
-            
-    </ul>
+    <a class="" href="../install/">Build and Install</a>
                 </li>
                 <li class="">
                     
@@ -133,15 +130,11 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Developer Guides &raquo;</li>
-        
-      
     
-    <li>Build and Install</li>
+    <li>Localization for Lockwise iOS</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockwise/lockwise-ios/edit/master/docs/install.md"
+        <a href="https://github.com/mozilla-lockwise/lockwise-ios/edit/master/docs/localization.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -151,47 +144,45 @@
           <div role="main">
             <div class="section">
               
-                <ol>
-<li>
-<p>Install Xcode version 10.2.1. You need this exact version, other versions of xcode won't work.</p>
-</li>
-<li>
-<p>Install the latest <a href="https://developer.apple.com/xcode/downloads/">Xcode developer tools</a> from Apple</p>
-</li>
-<li>
-<p>Install Carthage</p>
-<p><code>brew update
-brew install carthage</code></p>
-</li>
-<li>
-<p>Clone the repository</p>
-<p><code>git clone https://github.com/mozilla-lockwise/lockwise-ios</code></p>
-</li>
-<li>
-<p>Pull in the project dependencies:</p>
-<p><code>cd lockbox-ios
-sh ./bootstrap.sh</code></p>
-</li>
-<li>
-<p>Open <code>Lockbox.xcodeproj</code> in Xcode</p>
-</li>
-<li>
-<p>Build/Run the <code>lockbox</code> scheme in Xcode</p>
-</li>
+                <h1 id="localization-for-lockwise-ios">Localization for Lockwise iOS</h1>
+<p>The localization process for iOS is a bit of a trip:</p>
+<ol>
+<li>Create and update a l10n repository that will collect all the strings for all the locales</li>
+<li>Export strings from the app repository into that l10n repository</li>
+<li>Expose the strings from the l10n repository to the Pontoon tool for translation</li>
+<li>Import the string changes from the l10n repository back into the app repository</li>
+</ol>
+<h2 id="1-bootstrap-locales">(1) Bootstrap locales</h2>
+<ol>
+<li>From the <a href="http://github.com/mozilla-l10n/lockwiseios-l10n">lockwiseios-l10n</a> repository</li>
+<li>Copy the templates folder to the locale(s) to add or "bootstrap" (ex: <code>cp -R templates en-US</code>)</li>
+<li>Run <code>update-xliff.py</code> to fix the target language in the file(s)</li>
+<li>Create a PR to merge to the <code>master</code> branch, this will make it available for translating</li>
+</ol>
+<h2 id="2-exporting-strings">(2) Exporting Strings</h2>
+<ol>
+<li>Fork of <a href="http://github.com/mozilla-l10n/lockwiseios-l10n">lockwiseios-l10n</a> to make PRs from</li>
+<li>Clone the <a href="https://github.com/mozilla-mobile/ios-l10n-scripts">ios-l10n-scripts</a> repo so it is a sibling of <a href="https://github.com/mozilla-lockwise/lockwise-ios">lockwise-ios</a>.</li>
+<li><code>cd lockwise-ios</code></li>
+<li><code>../ios-l10n-scripts/export-locales-lockwise.sh</code></li>
+<li><code>git remote add &lt;your username&gt; git@github.com:&lt;your username&gt;/lockwiseios-l10n.git</code></li>
+<li><code>git push &lt;your username&gt; &lt;branch name&gt;</code> The script automatically creates the branch for you. You just need to grab its name to push in this step.</li>
+<li>Create a PR of your l10n changes and submit it</li>
+</ol>
+<h2 id="3-pontoon">(3) Pontoon</h2>
+<p>Magic happens in Step 3. Learn more here:<br />
+<a href="https://mozilla-l10n.github.io/documentation/tools/pontoon/">https://mozilla-l10n.github.io/documentation/tools/pontoon/</a></p>
+<h2 id="4-importing-strings">(4) Importing Strings</h2>
+<p><em>This assumes you have set up the lockwiseios-l10n repo as a sibling of lockwise-ios, see export above</em></p>
+<ol>
+<li><code>cd lockwise-ios</code></li>
+<li><code>../ios-l10n-scripts/import-locales-lockwise.sh</code></li>
+<li>Verify that new language files are created for the main app, credential provider extension, storyboards, and xibs. Note that if only there is no translation a new file won't be created.</li>
 </ol>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../metrics/" class="btn btn-neutral" title="Telemetry and Metrics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -217,10 +208,6 @@ sh ./bootstrap.sh</code></p>
           <a href="https://github.com/mozilla-lockwise/lockwise-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../metrics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

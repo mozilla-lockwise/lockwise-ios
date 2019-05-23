@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Architecture - Firefox Lockbox for iOS</title>
+  <title>Architecture - Firefox Lockwise for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -36,7 +36,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> Firefox Lockbox for iOS</a>
+        <a href=".." class="icon icon-home"> Firefox Lockwise for iOS</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -87,7 +87,7 @@
     <a class="current" href="./">Architecture</a>
     <ul class="subnav">
             
-    <li class="toctree-l3"><a href="#firefox-lockbox-for-ios-architecture">Firefox Lockbox for iOS Architecture</a></li>
+    <li class="toctree-l3"><a href="#firefox-lockwise-for-ios-architecture">Firefox Lockwise for iOS Architecture</a></li>
     
         <ul>
         
@@ -133,7 +133,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">Firefox Lockbox for iOS</a>
+        <a href="..">Firefox Lockwise for iOS</a>
       </nav>
 
       
@@ -152,7 +152,7 @@
     <li>Architecture</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/architecture.md"
+        <a href="https://github.com/mozilla-lockwise/lockwise-ios/edit/master/docs/architecture.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -162,9 +162,9 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="firefox-lockbox-for-ios-architecture">Firefox Lockbox for iOS Architecture</h1>
+                <h1 id="firefox-lockwise-for-ios-architecture">Firefox Lockwise for iOS Architecture</h1>
 <h2 id="rxswift">RxSwift</h2>
-<p>Firefox Lockbox for iOS makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the <a href="http://reactivex.io/">ReactiveX documentation</a>. The rest of this document relies on a basic understanding of the reader of the ReactiveX-style Observer implementation. Their intro document is a <a href="http://reactivex.io/intro.html">good starting point</a>.</p>
+<p>Firefox Lockwise for iOS makes extensive use of RxSwift, an implementation of the Observable pattern from ReactiveX. More information and many marble diagrams can be found in the <a href="http://reactivex.io/">ReactiveX documentation</a>. The rest of this document relies on a basic understanding of the reader of the ReactiveX-style Observer implementation. Their intro document is a <a href="http://reactivex.io/intro.html">good starting point</a>.</p>
 <h2 id="flux">Flux</h2>
 <h3 id="architecture-pattern">Architecture Pattern</h3>
 <p>In short, Flux architecture design maintains a unidirectional data flow, in which a global Dispatcher receives Actions &amp; dispatches them to appropriate Stores. The Stores, in turn, process data &amp; provide the source of truth for the Views. As users interact with the Views, any updates are made via a dispatched Action and the cycle begins again. See this <a href="https://facebook.github.io/flux/docs/overview.html">flux architecture</a> writeup for more details on the original Flux architecture scheme.</p>
@@ -248,7 +248,7 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/mozilla-lockwise/lockwise-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../install/" style="color: #fcfcfc;">&laquo; Previous</a></span>

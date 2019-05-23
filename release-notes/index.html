@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Release Notes - Firefox Lockbox for iOS</title>
+  <title>Release Notes - Firefox Lockwise for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -36,7 +36,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> Firefox Lockbox for iOS</a>
+        <a href=".." class="icon icon-home"> Firefox Lockwise for iOS</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -61,6 +61,20 @@
     <li class="toctree-l2"><a href="#release-notes">Release Notes</a></li>
     
         <ul>
+        
+            <li><a class="toctree-l3" href="#160-build-3352">1.6.0 (Build 3352)</a></li>
+        
+            <li><a class="toctree-l3" href="#160-build-3339">1.6.0 (Build 3339)</a></li>
+        
+            <li><a class="toctree-l3" href="#152-build-3338">1.5.2 (Build 3338)</a></li>
+        
+            <li><a class="toctree-l3" href="#151-build-3310">1.5.1 (Build 3310)</a></li>
+        
+            <li><a class="toctree-l3" href="#150-build-3240">1.5.0 (Build 3240)</a></li>
+        
+            <li><a class="toctree-l3" href="#150-build-3135">1.5.0 (Build 3135)</a></li>
+        
+            <li><a class="toctree-l3" href="#150-build-3088">1.5.0 (Build 3088)</a></li>
         
             <li><a class="toctree-l3" href="#150-build-2999">1.5.0 (Build 2999)</a></li>
         
@@ -191,7 +205,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">Firefox Lockbox for iOS</a>
+        <a href="..">Firefox Lockwise for iOS</a>
       </nav>
 
       
@@ -206,7 +220,7 @@
     <li>Release Notes</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockbox/lockbox-ios/edit/master/docs/release-notes.md"
+        <a href="https://github.com/mozilla-lockwise/lockwise-ios/edit/master/docs/release-notes.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -217,7 +231,88 @@
             <div class="section">
               
                 <h1 id="release-notes">Release Notes</h1>
+<h2 id="160-build-3352">1.6.0 (Build 3352)</h2>
+<p><em>Date: 2019-05-22</em></p>
+<p>Firefox Lockbox is now Firefox Lockwise! With the new name also comes a new look!</p>
+<p>Changes since last the last build for version 1.6.0:</p>
+<ul>
+<li>toggle password to hidden on backgrounding (#995) </li>
+<li>fix issue where locking only happens once per app lifecycle (#1003) </li>
+</ul>
+<p>All changes for version 1.6.0:</p>
+<ul>
+<li>re-brand to Lockwise (#958 and #979)</li>
+<li>change to app-services dependency (#974)</li>
+<li>fix for datastore (#970)</li>
+<li>remove button to direct to settings when logging in (#996) </li>
+<li>toggle password to hidden on backgrounding (#995) </li>
+<li>fix issue where locking only happens once per app lifecycle (#1003) </li>
+</ul>
+<h2 id="160-build-3339">1.6.0 (Build 3339)</h2>
+<p><em>Date: 2019-05-21</em></p>
+<p>Firefox Lockbox is now Firefox Lockwise! With the new name also comes a new look!</p>
+<p>Changes in this version:</p>
+<ul>
+<li>re-brand to Lockwise (#958 and #979)</li>
+<li>change to app-services dependency (#974)</li>
+<li>fix for datastore (#970)</li>
+<li>remove button to direct to settings when logging in (#996) </li>
+</ul>
+<h2 id="152-build-3338">1.5.2 (Build 3338)</h2>
+<p><em>Date: 2019-05-21</em></p>
+<p>A bug fix around unlocking during AutoFill.</p>
+<ul>
+<li>autolock respected and reset properly in autofill contexts (#993)</li>
+<li>remove button to direct to settings when logging in (#996)</li>
+</ul>
+<h2 id="151-build-3310">1.5.1 (Build 3310)</h2>
+<p><em>Date: 2019-05-17</em></p>
+<p>Attempts to fix a bug with signing in and syncing logins. Some users may be required to sign in again. Apologies for the inconvenience.</p>
+<ul>
+<li>log errors outside of debug, push errored state, handle fxa errors (#990)</li>
+</ul>
+<h2 id="150-build-3240">1.5.0 (Build 3240)</h2>
+<p><em>Date: 2019-05-10</em></p>
+<p>This is a major update because we changed how sign in and sync works behind the scenes. You shouldn't notice it but it was a big deal.</p>
+<p>We also fixed a few little bugs along the way.</p>
+<p><strong>Fourth TestFlight build</strong></p>
+<p>New since the last build:</p>
+<ul>
+<li>remove gray bar at bottom of tall screens (#948)</li>
+<li>improved UI transitions (#951) </li>
+<li>improved strings for localizing (#952)</li>
+<li>improved syncstate (#956)</li>
+<li>autofill fixes (#961)</li>
+</ul>
+<p>All other changes since the previous release:</p>
+<ul>
+<li>fix backgrounding / foregrounding problems with lock (#936)</li>
+<li>make updates for product name use in strings and starting to prep for localization</li>
+<li>fix autofill to work with new logins library (#928)</li>
+<li>only autolock in the background (#916)</li>
+<li>fix recurring web address (#932)</li>
+<li>integrate a-s logins (#891)</li>
+<li>use mozillaappservices.framework (#911)</li>
+<li>update RxSwift and MappaMundi dependencies (#912)</li>
+<li>fix app start up when there's no network (#905)</li>
+</ul>
+<h2 id="150-build-3135">1.5.0 (Build 3135)</h2>
+<p><em>Date: 2019-05-01</em></p>
+<p>Third TestFlight build testing the new logins library from application-services.</p>
+<ul>
+<li>fix backgrounding / foregrounding problems with lock (#936)</li>
+<li>make updates for product name use in strings and starting to prep for localization</li>
+</ul>
+<h2 id="150-build-3088">1.5.0 (Build 3088)</h2>
+<p><em>Date: 2019-04-26</em></p>
+<p>Second TestFlight build testing the new logins library from application-services.</p>
+<ul>
+<li>fix autofill to work with new logins library (#928)</li>
+<li>only autolock in the background (#916)</li>
+<li>fix recurring web address (#932)</li>
+</ul>
 <h2 id="150-build-2999">1.5.0 (Build 2999)</h2>
+<p><em>Date: 2019-04-19</em></p>
 <p>First TestFlight build testing the new logins library from application-services. Known issue: autofill doesn't work.</p>
 <ul>
 <li>integrate a-s logins (#891)</li>
@@ -226,6 +321,7 @@
 <li>fix app start up when there's no network (#905)</li>
 </ul>
 <h2 id="141-build-2943">1.4.1 (Build 2943)</h2>
+<p><em>Date: 2019-04-03</em></p>
 <p>We made minor fixes to visual inconsistencies between the iPhone and iPad.</p>
 <p>"Thanks" as always to the contributors who have helped along the way!</p>
 <h2 id="140-build-2908">1.4.0 (Build 2908)</h2>
@@ -479,7 +575,7 @@
 <li>the remaining links to final FAQ content and instructions (#172)</li>
 <li>creating, updating or deleting entries (that's intentional)</li>
 </ul>
-<p>Join us at <a href="https://github.com/mozilla-lockbox/lockbox-ios/issues">https://github.com/mozilla-lockbox/lockbox-ios/issues</a> to find any of the above items or report new issues you encounter.</p>
+<p>Join us at <a href="https://github.com/mozilla-lockwise/lockwise-ios/issues">https://github.com/mozilla-lockwise/lockwise-ios/issues</a> to find any of the above items or report new issues you encounter.</p>
 <h2 id="10-build-1280">1.0 (Build 1280)</h2>
 <p><em>Date: 2018-05-23</em></p>
 <p>What's NEW? We polished the interface (colors!), squashed some bugs (lock timer!), and improved the experience for those users (unsafely!) using a device without a passcode. If your app appears empty, there is one good reason and we're working on it but check your email for a confirmation link.</p>
@@ -501,7 +597,7 @@
 <li>a few more links to real FAQ content and instructions (#172)</li>
 <li>creating, updating or deleting entries (that's intentional)</li>
 </ul>
-<p>Join us at <a href="https://github.com/mozilla-lockbox/lockbox-ios/issues">https://github.com/mozilla-lockbox/lockbox-ios/issues</a> to find any of the above items or report new issues you encounter.</p>
+<p>Join us at <a href="https://github.com/mozilla-lockwise/lockwise-ios/issues">https://github.com/mozilla-lockwise/lockwise-ios/issues</a> to find any of the above items or report new issues you encounter.</p>
 <h2 id="10-build-1189">1.0 (Build 1189)</h2>
 <p><em>Date: 2018-05-18</em></p>
 <p>What's NEW? We squashed a bunch of bugs (timed locking works much better now) and added a few improvements (user-friendly titles and a sync indicator that doesn't interrupt you). To recap...</p>
@@ -527,7 +623,7 @@
 <li>if you delete the app and re-install it, your app may crash once (#374)</li>
 <li>the autolocking timer was working inconsistently and may not have automatically locked the app, please keep testing this!</li>
 </ul>
-<p>Join us at <a href="https://github.com/mozilla-lockbox/lockbox-ios/issues">https://github.com/mozilla-lockbox/lockbox-ios/issues</a> to find any of the above items or report new issues you encounter.</p>
+<p>Join us at <a href="https://github.com/mozilla-lockwise/lockwise-ios/issues">https://github.com/mozilla-lockwise/lockwise-ios/issues</a> to find any of the above items or report new issues you encounter.</p>
 <h2 id="10-build-1128">1.0 (Build 1128)</h2>
 <p><em>Date: 2018-05-14</em></p>
 <p>This build DOES include: signing in with Firefox Accounts to see your real "Saved Logins" data from Firefox; automatic locking with biometrics (Touch ID / Face ID) to prevent access to your data; searching and sorting items; showing/hiding passwords; copying usernames and passwords to the pasteboard (which expire after 60 seconds); opening web addresses in your preferred web browser; Telemetry for event tracking (no personally-identifiable information is collected).</p>
@@ -574,7 +670,7 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/mozilla-lockbox/lockbox-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/mozilla-lockwise/lockwise-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
