@@ -1,4 +1,3 @@
-
 /* Class = "UIButton"; normalTitle = "Not Now"; ObjectID = "GdN-75-tz4"; Note = "This is the text on the button to allow the user to bypass the onboarding instructions on how to enable AutoFill"; */
 "GdN-75-tz4.normalTitle" = "Not Now";
 
@@ -10,3 +9,4 @@
 
 /* Class = "UIButton"; normalTitle = "Set Up AutoFill"; ObjectID = "yEI-pU-vMZ"; Note = "This is the text on the button to instruct the user how to enable AutoFill in iOS. AutoFill should be localized to match the proper name for Apple’s system feature"; */
 "yEI-pU-vMZ.normalTitle" = "Set Up AutoFill";
+

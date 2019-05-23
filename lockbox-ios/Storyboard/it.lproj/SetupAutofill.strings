@@ -1,0 +1,24 @@
+/* Class = "UIButton"; normalTitle = "Got it"; ObjectID = "KnK-nY-NyH"; Note = "The message on a confirmation button that the user understands or followed the instructions and will close out of these instructions"; */
+"KnK-nY-NyH.normalTitle" = "Ho capito";
+
+/* Class = "UILabel"; text = "Tap into AutoFill Passwords"; ObjectID = "YaL-kM-bTV"; Note = "The instruction to open the system setting. AutoFill Passwords should match the system setting menu name"; */
+"YaL-kM-bTV.text" = "Tocca riempimento automatico password";
+
+/* Class = "UILabel"; text = "Complete the following steps in order to use Lockwise as an AutoFill provider."; ObjectID = "Ycw-sN-cFL"; Note = "The description that appears indicating there are instructions to be followed to enable the AutoFill feature. AutoFill should be localized to match the proper name for Apple’s system feature"; */
+"Ycw-sN-cFL.text" = "Completa i seguenti passaggi per utilizzare Lockwise come sorgente per il riempimento automatico.";
+
+/* Class = "UILabel"; text = "Turn on AutoFill Passwords"; ObjectID = "Ys5-RP-RQg"; Note = "The instruction to enable the setting. AutoFill Passwords should match the system setting item"; */
+"Ys5-RP-RQg.text" = "Attiva riempimento automatico password";
+
+/* Class = "UILabel"; text = "Tap into Passwords & Accounts"; ObjectID = "daO-QU-3p5"; Note = "The instruction to open the system settings. Passwords & Accounts should match the system setting menu name"; */
+"daO-QU-3p5.text" = "Tocca Password e account";
+
+/* Class = "UILabel"; text = "How to Set up AutoFill"; ObjectID = "dbo-05-zWe"; Note = "The heading for instructions on how to enable the AutoFill feature in iOS. AutoFill should be localized to match the proper name for Apple’s system feature "; */
+"dbo-05-zWe.text" = "Come configurare il riempimento automatico";
+
+/* Class = "UILabel"; text = "Select Lockwise"; ObjectID = "r0I-o4-2Ym"; Note = "The instruction to tap the name of this application. Lockwise should not be translated"; */
+"r0I-o4-2Ym.text" = "Seleziona Lockwise";
+
+/* Class = "UILabel"; text = "Open the Settings app"; ObjectID = "xig-s8-dim"; Note = "The instruction to open the system Settings app"; */
+"xig-s8-dim.text" = "Apri impostazioni di sistema";
+
