@@ -101,6 +101,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
                     .bind(to: self.presenter!.onRightSwipe)
                     .disposed(by: self.swipeBag)
         } else {
+            self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
             self.swipeBag = DisposeBag()
         }
     }
