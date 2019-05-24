@@ -78,18 +78,18 @@ class AccountSettingPresenter {
             self?.view?.displayAlertController(
                 buttons: [
                     AlertActionButtonConfiguration(
-                        title: Constant.string.cancel,
+                        title: Localized.string.cancel,
                         tapObserver: nil,
                         style: .cancel
                     ),
                     AlertActionButtonConfiguration(
-                        title: Constant.string.unlink,
+                        title: Localized.string.unlink,
                         tapObserver: self?.unlinkAccountObserver,
                         style: .destructive)
                 ],
-                title: String(format: Constant.string.confirmDialogTitle, Constant.string.productLabel),
-                message: String(format: Constant.string.confirmDialogMessage,
-                    Constant.string.productName),
+                title: String(format: Localized.string.confirmDialogTitle, Localized.string.productLabel),
+                message: String(format: Localized.string.confirmDialogMessage,
+                    Localized.string.productName),
                 style: .alert,
                 barButtonItem: nil)
         }

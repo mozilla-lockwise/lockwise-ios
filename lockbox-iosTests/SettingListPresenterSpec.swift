@@ -133,7 +133,7 @@ class SettingListPresenterSpec: QuickSpec {
 
                         it("sets detail value for autolock") {
                             let autoLockCellConfig = self.view.itemsObserver.events.last!.value.element![1].items[1]
-                            expect(autoLockCellConfig.detailText).to(equal(Constant.string.autoLockOneHour))
+                            expect(autoLockCellConfig.detailText).to(equal(Localized.string.autoLockOneHour))
                         }
 
                         it("sets detail value for preferred browser") {

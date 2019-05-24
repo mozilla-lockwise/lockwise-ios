@@ -56,7 +56,7 @@ class StaticURLWebView: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .never
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-                title: Constant.string.close,
+                title: Localized.string.close,
                 style: .plain,
                 target: nil,
                 action: nil)

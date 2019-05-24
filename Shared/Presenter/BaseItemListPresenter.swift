@@ -203,7 +203,7 @@ extension BaseItemListPresenter {
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname.titleFromHostname()
             let usernameEmpty = login.username == "" || login.username == nil
-            let usernameText = usernameEmpty ? Constant.string.usernamePlaceholder : login.username!
+            let usernameText = usernameEmpty ? Localized.string.usernamePlaceholder : login.username!
 
             return LoginListCellConfiguration.Item(
                 title: titleText,

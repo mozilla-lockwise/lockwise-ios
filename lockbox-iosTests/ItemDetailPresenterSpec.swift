@@ -177,7 +177,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("when the title of the tapped cell is the username constant") {
                     beforeEach {
                         self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.username)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Localized.string.username)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)
@@ -224,7 +224,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("when the title of the tapped cell is the password constant") {
                     beforeEach {
                         self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.password)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Localized.string.password)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)
@@ -271,7 +271,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("when the title of the tapped cell is the web address constant") {
                     beforeEach {
                         self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Localized.string.webAddress)])
 
                         cellTappedObservable
                             .bind(to: self.subject.onCellTapped)
@@ -312,7 +312,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("all other cells") {
                     beforeEach {
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.notes)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Localized.string.notes)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)
@@ -364,21 +364,21 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
-                        expect(webAddressSection.title).to(equal(Constant.string.webAddress))
+                        expect(webAddressSection.title).to(equal(Localized.string.webAddress))
                         expect(webAddressSection.value).to(equal(item.hostname))
-                        expect(webAddressSection.accessibilityLabel).to(equal(String(format: Constant.string.websiteCellAccessibilityLabel, item.hostname)))
+                        expect(webAddressSection.accessibilityLabel).to(equal(String(format: Localized.string.websiteCellAccessibilityLabel, item.hostname)))
                         expect(webAddressSection.password).to(beFalse())
 
                         let usernameSection = viewConfig[1].items[0]
-                        expect(usernameSection.title).to(equal(Constant.string.username))
+                        expect(usernameSection.title).to(equal(Localized.string.username))
                         expect(usernameSection.value).to(equal(item.username))
-                        expect(usernameSection.accessibilityLabel).to(equal(String(format: Constant.string.usernameCellAccessibilityLabel, item.username!)))
+                        expect(usernameSection.accessibilityLabel).to(equal(String(format: Localized.string.usernameCellAccessibilityLabel, item.username!)))
                         expect(usernameSection.password).to(beFalse())
 
                         let passwordSection = viewConfig[1].items[1]
-                        expect(passwordSection.title).to(equal(Constant.string.password))
+                        expect(passwordSection.title).to(equal(Localized.string.password))
                         expect(passwordSection.value).to(equal(item.password))
-                        expect(passwordSection.accessibilityLabel).to(equal(String(format: Constant.string.passwordCellAccessibilityLabel, item.password)))
+                        expect(passwordSection.accessibilityLabel).to(equal(String(format: Localized.string.passwordCellAccessibilityLabel, item.password)))
                         expect(passwordSection.password).to(beTrue())
                     }
                 }
@@ -398,17 +398,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                         let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
-                        expect(webAddressSection.title).to(equal(Constant.string.webAddress))
+                        expect(webAddressSection.title).to(equal(Localized.string.webAddress))
                         expect(webAddressSection.value).to(equal(item.hostname))
                         expect(webAddressSection.password).to(beFalse())
 
                         let usernameSection = viewConfig[1].items[0]
-                        expect(usernameSection.title).to(equal(Constant.string.username))
+                        expect(usernameSection.title).to(equal(Localized.string.username))
                         expect(usernameSection.value).to(equal(item.username!))
                         expect(usernameSection.password).to(beFalse())
 
                         let passwordSection = viewConfig[1].items[1]
-                        expect(passwordSection.title).to(equal(Constant.string.password))
+                        expect(passwordSection.title).to(equal(Localized.string.password))
                         expect(passwordSection.value).to(equal("•••••••••"))
                         expect(passwordSection.password).to(beTrue())
                     }
@@ -448,7 +448,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                     it("displays the unnamed entry placeholder text") {
                         expect(self.view.titleTextObserver.events.last!.value.element)
-                                .to(equal(Constant.string.unnamedEntry))
+                                .to(equal(Localized.string.unnamedEntry))
                     }
 
                     it("passes the configuration with an empty string for the appropriate values") {
@@ -457,17 +457,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(viewConfig.count).to(equal(2))
 
                         let webAddressSection = viewConfig[0].items[0]
-                        expect(webAddressSection.title).to(equal(Constant.string.webAddress))
+                        expect(webAddressSection.title).to(equal(Localized.string.webAddress))
                         expect(webAddressSection.value).to(equal(""))
                         expect(webAddressSection.password).to(beFalse())
 
                         let usernameSection = viewConfig[1].items[0]
-                        expect(usernameSection.title).to(equal(Constant.string.username))
+                        expect(usernameSection.title).to(equal(Localized.string.username))
                         expect(usernameSection.value).to(equal(""))
                         expect(usernameSection.password).to(beFalse())
 
                         let passwordSection = viewConfig[1].items[1]
-                        expect(passwordSection.title).to(equal(Constant.string.password))
+                        expect(passwordSection.title).to(equal(Localized.string.password))
                         expect(passwordSection.value).to(equal(""))
                         expect(passwordSection.password).to(beTrue())
                     }
@@ -476,13 +476,13 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("getting a copy display action") {
                     it("tells the view to display a password temporary alert") {
                         self.copyDisplayStore.copyDisplayStub.onNext(CopyField.password)
-                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.password)))
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Localized.string.fieldNameCopied, Localized.string.password)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
 
                     it("tells the view to display a username temporary alert") {
                         self.copyDisplayStore.copyDisplayStub.onNext(CopyField.username)
-                        expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
+                        expect(self.view.tempAlertMessage).to(equal(String(format: Localized.string.fieldNameCopied, Localized.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
                     }
                 }
@@ -500,7 +500,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(argument).to(equal(
                                         ExternalWebsiteRouteAction(
                                                 urlString: Constant.app.editExistingEntriesFAQ,
-                                                title: Constant.string.faq,
+                                                title: Localized.string.faq,
                                                 returnRoute: MainRouteAction.detail(itemId: "1234"))
                                 ))
                     }

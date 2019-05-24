@@ -82,7 +82,7 @@ class BaseItemListView: UIViewController {
     internal func styleNavigationBar() {
         self.navigationController?.navigationBar.tintColor = UIColor.white
 
-        self.navigationItem.title = Constant.string.productName
+        self.navigationItem.title = Localized.string.productName
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
         self.navigationController?.navigationBar.titleTextAttributes = [
@@ -134,7 +134,7 @@ class BaseItemListView: UIViewController {
         }
 
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = UIColor.white // Set cursor color
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Constant.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: Localized.string.searchYourEntries, attributes: [NSAttributedString.Key.foregroundColor: Constant.color.navSearchPlaceholderTextColor]) // Set the placeholder text and color
 
         return searchController
     }
@@ -214,7 +214,7 @@ extension BaseItemListView {
                             fatalError("couldn't find the right cell!")
                         }
 
-                        cell.titleLabel.text = String(format: Constant.string.emptyListPlaceholder, Constant.string.productName)
+                        cell.titleLabel.text = String(format: Localized.string.emptyListPlaceholder, Localized.string.productName)
 
                         if let observer = learnMoreObserver {
                             cell.learnMoreButton.rx.tap

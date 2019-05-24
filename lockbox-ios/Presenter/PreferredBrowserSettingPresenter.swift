@@ -18,11 +18,11 @@ class PreferredBrowserSettingPresenter {
     private let disposeBag = DisposeBag()
 
     lazy var initialSettings = [
-        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox,
+        CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserFirefox,
                                           valueWhenChecked: Setting.PreferredBrowser.Firefox),
-        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserChrome,
+        CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserChrome,
                                           valueWhenChecked: Setting.PreferredBrowser.Chrome),
-        CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari,
+        CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserSafari,
                                           valueWhenChecked: Setting.PreferredBrowser.Safari)
     ]
 
@@ -75,10 +75,10 @@ class PreferredBrowserSettingPresenter {
 
     private func getInstalledFocusBrowser() -> CheckmarkSettingCellConfiguration? {
         if Setting.PreferredBrowser.Focus.canOpenBrowser() {
-            return CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus,
+            return CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserFocus,
                                                      valueWhenChecked: Setting.PreferredBrowser.Focus)
         } else if Setting.PreferredBrowser.Klar.canOpenBrowser() {
-            return CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserKlar,
+            return CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserKlar,
                                                      valueWhenChecked: Setting.PreferredBrowser.Klar)
         }
 

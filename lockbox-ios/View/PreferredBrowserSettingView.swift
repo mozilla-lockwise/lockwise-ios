@@ -58,7 +58,7 @@ class PreferredBrowserSettingView: UIViewController, UITableViewDelegate {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
         cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        cell.textLabel?.text = Constant.string.browserHeader
+        cell.textLabel?.text = Localized.string.browserHeader
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.textLabel?.numberOfLines = 0
         return cell
@@ -103,7 +103,7 @@ extension PreferredBrowserSettingView {
                     cell.isUserInteractionEnabled = false
                     cell.textLabel?.isEnabled = false
                     cell.accessibilityLabel = String(
-                            format: Constant.string.installBrowserAccessibilityLabel,
+                            format: Localized.string.installBrowserAccessibilityLabel,
                             cellConfiguration.text
                     )
                 }
@@ -136,13 +136,13 @@ extension PreferredBrowserSettingView: PreferredBrowserSettingViewProtocol {
 
 extension PreferredBrowserSettingView: UIGestureRecognizerDelegate {
     private func setupNavbar() {
-        self.navigationItem.title = Constant.string.settingsBrowser
+        self.navigationItem.title = Localized.string.settingsBrowser
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
         self.navigationController?.navigationBar.accessibilityIdentifier = "openWebSitesIn.navigationBar"
-        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
+        let leftButton = UIButton(title: Localized.string.settingsTitle, imageName: "back")
         leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 

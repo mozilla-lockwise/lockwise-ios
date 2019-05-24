@@ -87,21 +87,21 @@ extension Setting.AutoLock {
     func toString() -> String {
         switch self {
         case .OneMinute:
-            return Constant.string.autoLockOneMinute
+            return Localized.string.autoLockOneMinute
         case .FiveMinutes:
-            return Constant.string.autoLockFiveMinutes
+            return Localized.string.autoLockFiveMinutes
         case .FifteenMinutes:
-            return Constant.string.autoLockFifteenMinutes
+            return Localized.string.autoLockFifteenMinutes
         case .ThirtyMinutes:
-            return Constant.string.autoLockThirtyMinutes
+            return Localized.string.autoLockThirtyMinutes
         case .OneHour:
-            return Constant.string.autoLockOneHour
+            return Localized.string.autoLockOneHour
         case .TwelveHours:
-            return Constant.string.autoLockTwelveHours
+            return Localized.string.autoLockTwelveHours
         case .TwentyFourHours:
-            return Constant.string.autoLockTwentyFourHours
+            return Localized.string.autoLockTwentyFourHours
         case .Never:
-            return Constant.string.autoLockNever
+            return Localized.string.autoLockNever
         }
     }
 }
@@ -153,15 +153,15 @@ extension Setting {
         func toString() -> String {
             switch self {
             case .Safari:
-                return Constant.string.settingsBrowserSafari
+                return Localized.string.settingsBrowserSafari
             case .Chrome:
-                return Constant.string.settingsBrowserChrome
+                return Localized.string.settingsBrowserChrome
             case .Firefox:
-                return Constant.string.settingsBrowserFirefox
+                return Localized.string.settingsBrowserFirefox
             case .Focus:
-                return Constant.string.settingsBrowserFocus
+                return Localized.string.settingsBrowserFocus
             case .Klar:
-                return Constant.string.settingsBrowserKlar
+                return Localized.string.settingsBrowserKlar
             }
         }
     }

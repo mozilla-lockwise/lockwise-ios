@@ -33,7 +33,7 @@ class OnboardingConfirmationPresenter {
         self.dispatcher.dispatch(action:
                 ExternalWebsiteRouteAction(
                         urlString: Constant.app.securityFAQ,
-                        title: Constant.string.faq,
+                        title: Localized.string.faq,
                         returnRoute: LoginRouteAction.onboardingConfirmation)
         )
     }

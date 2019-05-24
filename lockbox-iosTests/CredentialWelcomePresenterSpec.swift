@@ -154,7 +154,7 @@ class CredentialWelcomePresenterSpec: QuickSpec {
                             }
 
                             it("requests authentication") {
-                                expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                                expect(self.biometryManager.authMessage).to(equal(Localized.string.unlockPlaceholder))
                             }
 
                             it("dispatches the unlock and authenticated actions when auth succeeds") {

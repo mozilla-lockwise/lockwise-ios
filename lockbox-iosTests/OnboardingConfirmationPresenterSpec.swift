@@ -72,7 +72,7 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                     expect(action).to(equal(
                             ExternalWebsiteRouteAction(
                                     urlString: Constant.app.securityFAQ,
-                                    title: Constant.string.faq,
+                                    title: Localized.string.faq,
                                     returnRoute: LoginRouteAction.onboardingConfirmation)))
                 }
             }

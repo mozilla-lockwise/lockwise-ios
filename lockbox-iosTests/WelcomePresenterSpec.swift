@@ -219,8 +219,8 @@ class WelcomePresenterSpec: QuickSpec {
                     }
 
                     it("launches an alert") {
-                        expect(self.view.alertControllerTitle).to(equal(Constant.string.reauthenticationRequired))
-                        expect(self.view.alertControllerMessage).to(equal(Constant.string.appUpdateDisclaimer))
+                        expect(self.view.alertControllerTitle).to(equal(Localized.string.reauthenticationRequired))
+                        expect(self.view.alertControllerMessage).to(equal(Localized.string.appUpdateDisclaimer))
                         expect(self.view.alertControllerStyle).to(equal(UIAlertController.Style.alert))
                     }
 
@@ -260,8 +260,8 @@ class WelcomePresenterSpec: QuickSpec {
                         }
 
                         it("displays a directional / informative alert") {
-                            expect(self.view.alertControllerTitle).to(equal(Constant.string.notUsingPasscode))
-                            expect(self.view.alertControllerMessage).to(equal(Constant.string.passcodeInformation))
+                            expect(self.view.alertControllerTitle).to(equal(Localized.string.notUsingPasscode))
+                            expect(self.view.alertControllerMessage).to(equal(Localized.string.passcodeInformation))
                             expect(self.view.alertControllerStyle).to(equal(UIAlertController.Style.alert))
                         }
 
@@ -289,7 +289,7 @@ class WelcomePresenterSpec: QuickSpec {
                         let argument = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                         expect(argument).to(equal(ExternalWebsiteRouteAction(
                                 urlString: Constant.app.useLockboxFAQ,
-                                title: Constant.string.learnMore,
+                                title: Localized.string.learnMore,
                                 returnRoute: LoginRouteAction.welcome)))
                     }
                 }
@@ -448,7 +448,7 @@ class WelcomePresenterSpec: QuickSpec {
                                 }
 
                                 it("starts authentication") {
-                                    expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                                    expect(self.biometryManager.authMessage).to(equal(Localized.string.unlockPlaceholder))
                                 }
 
                                 describe("successful authentication") {
@@ -479,7 +479,7 @@ class WelcomePresenterSpec: QuickSpec {
                                 }
 
                                 it("starts authentication") {
-                                    expect(self.biometryManager.authMessage).to(equal(Constant.string.unlockPlaceholder))
+                                    expect(self.biometryManager.authMessage).to(equal(Localized.string.unlockPlaceholder))
                                 }
 
                                 describe("successful authentication") {

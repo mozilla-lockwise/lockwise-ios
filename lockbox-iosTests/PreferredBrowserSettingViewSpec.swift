@@ -44,16 +44,16 @@ class PreferredBrowserSettingViewSpec: QuickSpec {
         }
 
         it("sets the title") {
-            expect(self.subject.navigationItem.title).to(equal(Constant.string.settingsBrowser ))
+            expect(self.subject.navigationItem.title).to(equal(Localized.string.settingsBrowser ))
         }
 
         describe("tableview datasource configuration") {
             let configDriver = PublishSubject<[PreferredBrowserSettingSectionModel]>()
 
             let sectionModels = [PreferredBrowserSettingSectionModel(model: 0, items: [
-                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFirefox, isChecked: false, valueWhenChecked: Setting.PreferredBrowser.Firefox),
-                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserSafari, isChecked: true, valueWhenChecked: Setting.PreferredBrowser.Safari),
-                CheckmarkSettingCellConfiguration(text: Constant.string.settingsBrowserFocus, isChecked: false, valueWhenChecked: Setting.PreferredBrowser.Focus)
+                CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserFirefox, isChecked: false, valueWhenChecked: Setting.PreferredBrowser.Firefox),
+                CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserSafari, isChecked: true, valueWhenChecked: Setting.PreferredBrowser.Safari),
+                CheckmarkSettingCellConfiguration(text: Localized.string.settingsBrowserFocus, isChecked: false, valueWhenChecked: Setting.PreferredBrowser.Focus)
                 ])]
 
             sectionModels[0].items[2].enabled = false

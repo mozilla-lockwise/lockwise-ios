@@ -74,12 +74,12 @@ extension FxAView: WKNavigationDelegate {
 
 extension FxAView: UIGestureRecognizerDelegate {
     fileprivate func setupNavBar() {
-        let leftButton = UIButton(title: Constant.string.close, imageName: nil)
+        let leftButton = UIButton(title: Localized.string.close, imageName: nil)
         leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        self.navigationItem.title = Constant.string.getStarted
+        self.navigationItem.title = Localized.string.getStarted
         self.navigationItem.largeTitleDisplayMode = .never
 
         if let presenter = self.presenter {

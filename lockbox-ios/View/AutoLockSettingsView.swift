@@ -58,7 +58,7 @@ class AutoLockSettingView: UIViewController, UITableViewDelegate {
         let cell = UITableViewCell()
         cell.textLabel?.textColor = Constant.color.settingsHeader
         cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
-        cell.textLabel?.text = String(format: Constant.string.autoLockHeader, Constant.string.productName)
+        cell.textLabel?.text = String(format: Localized.string.autoLockHeader, Localized.string.productName)
         cell.textLabel?.textAlignment = NSTextAlignment.center
         cell.textLabel?.numberOfLines = 0
         return cell
@@ -125,13 +125,13 @@ extension AutoLockSettingView: AutoLockSettingViewProtocol {
 
 extension AutoLockSettingView: UIGestureRecognizerDelegate {
     private func setupNavbar() {
-        self.navigationItem.title = Constant.string.settingsAutoLock
+        self.navigationItem.title = Localized.string.settingsAutoLock
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
 
-        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
+        let leftButton = UIButton(title: Localized.string.settingsTitle, imageName: "back")
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         if let presenter = self.presenter {

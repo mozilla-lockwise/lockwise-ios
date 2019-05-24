@@ -15,7 +15,7 @@ protocol ItemDetailViewProtocol: class, StatusAlertView {
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
 }
 
-let copyableFields = [Constant.string.username, Constant.string.password]
+let copyableFields = [Localized.string.username, Localized.string.password]
 
 class ItemDetailPresenter {
     weak var view: ItemDetailViewProtocol?
@@ -54,7 +54,7 @@ class ItemDetailPresenter {
                             actions.append(DataStoreAction.touch(id: item.id))
                             actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap))
                         }
-                    } else if value == Constant.string.webAddress {
+                    } else if value == Localized.string.webAddress {
                         if let origin = item?.hostname {
                             actions.append(ExternalLinkAction(baseURLString: origin))
                         }
@@ -102,8 +102,8 @@ class ItemDetailPresenter {
                 .filterNil()
                 .map { item -> String in
                     let title = item.hostname.titleFromHostname()
-                    return title.isEmpty ? Constant.string.unnamedEntry : title
-                }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
+                    return title.isEmpty ? Localized.string.unnamedEntry : title
+                }.asDriver(onErrorJustReturn: Localized.string.unnamedEntry)
 
         self.view?.bind(itemDetail: viewConfigDriver)
         self.view?.bind(titleText: titleDriver)
@@ -112,11 +112,11 @@ class ItemDetailPresenter {
                 .drive(onNext: { field in
                     let fieldName: String
                     switch field {
-                    case .password: fieldName = Constant.string.password
-                    case .username: fieldName = Constant.string.username
+                    case .password: fieldName = Localized.string.password
+                    case .username: fieldName = Localized.string.username
                     }
 
-                    let message = String(format: Constant.string.fieldNameCopied, fieldName)
+                    let message = String(format: Localized.string.fieldNameCopied, fieldName)
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
                 })
         .disposed(by: self.disposeBag)
@@ -129,7 +129,7 @@ class ItemDetailPresenter {
             .map({ (itemId) -> Action in
                 return ExternalWebsiteRouteAction(
                     urlString: Constant.app.editExistingEntriesFAQ,
-                    title: Constant.string.faq,
+                    title: Localized.string.faq,
                     returnRoute: MainRouteAction.detail(itemId: itemId))
             })
             .subscribe(onNext: { (action) in
@@ -181,9 +181,9 @@ extension ItemDetailPresenter {
         let sectionModels = [
             ItemDetailSectionModel(model: 0, items: [
                 ItemDetailCellConfiguration(
-                        title: Constant.string.webAddress,
+                        title: Localized.string.webAddress,
                         value: hostname,
-                        accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
+                        accessibilityLabel: String(format: Localized.string.websiteCellAccessibilityLabel, hostname),
                         password: false,
                         valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
@@ -192,18 +192,18 @@ extension ItemDetailPresenter {
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
-                        title: Constant.string.username,
+                        title: Localized.string.username,
                         value: username,
-                        accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
+                        accessibilityLabel: String(format: Localized.string.usernameCellAccessibilityLabel, username),
                         password: false,
                         accessibilityId: "userNameItemDetail",
                         showCopyButton: true,
                         dragValue: username),
                 ItemDetailCellConfiguration(
-                        title: Constant.string.password,
+                        title: Localized.string.password,
                         value: passwordText,
                         accessibilityLabel: String(
-                            format: Constant.string.passwordCellAccessibilityLabel,
+                            format: Localized.string.passwordCellAccessibilityLabel,
                             passwordText),
                         password: true,
                         accessibilityId: "passwordItemDetail",
@@ -218,10 +218,10 @@ extension ItemDetailPresenter {
     private static func getCopyActionFor(_ item: LoginRecord?, value: String?, actionType: CopyActionType) -> CopyAction {
         var field = CopyField.username
         var text = ""
-        if value == Constant.string.username {
+        if value == Localized.string.username {
             text = item?.username ?? ""
             field = CopyField.username
-        } else if value == Constant.string.password {
+        } else if value == Localized.string.password {
             text = item?.password ?? ""
             field = CopyField.password
         }

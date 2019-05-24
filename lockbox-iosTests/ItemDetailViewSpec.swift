@@ -69,7 +69,7 @@ class ItemDetailViewSpec: QuickSpec {
                 let sectionModels = [
                     ItemDetailSectionModel(model: 0, items: [
                         ItemDetailCellConfiguration(
-                                title: Constant.string.webAddress,
+                                title: Localized.string.webAddress,
                                 value: "www.meow.com",
                                 accessibilityLabel: "something accessible",
                                 password: false,
@@ -78,13 +78,13 @@ class ItemDetailViewSpec: QuickSpec {
                     ]),
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
-                                title: Constant.string.username,
+                                title: Localized.string.username,
                                 value: "tanya",
                                 accessibilityLabel: "something else accessible",
                                 password: false,
                                 accessibilityId: ""),
                         ItemDetailCellConfiguration(
-                                title: Constant.string.password,
+                                title: Localized.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something else accessible",
                                 password: true,
@@ -92,7 +92,7 @@ class ItemDetailViewSpec: QuickSpec {
                     ]),
                     ItemDetailSectionModel(model: 2, items: [
                         ItemDetailCellConfiguration(
-                                title: Constant.string.notes,
+                                title: Localized.string.notes,
                                 value: "some long note about whatever thing yeahh",
                                 accessibilityLabel: "something else accessible",
                                 password: false,
@@ -123,7 +123,7 @@ class ItemDetailViewSpec: QuickSpec {
                     }
 
                     it("extracts the titlelabel text and tells the presenter") {
-                        expect(self.presenter.onCellTappedValue).to(equal(Constant.string.username))
+                        expect(self.presenter.onCellTappedValue).to(equal(Localized.string.username))
                     }
                 }
 
@@ -180,7 +180,7 @@ class ItemDetailViewSpec: QuickSpec {
                 let sectionModelWithJustPassword = [
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
-                                title: Constant.string.password,
+                                title: Localized.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
                                 password: true,
@@ -205,7 +205,7 @@ class ItemDetailViewSpec: QuickSpec {
                 let sectionModelWithJustPassword = [
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
-                                title: Constant.string.password,
+                                title: Localized.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
                                 password: true,
@@ -232,7 +232,7 @@ class ItemDetailViewSpec: QuickSpec {
                 let sectionModel = [
                     ItemDetailSectionModel(model: 1, items: [
                         ItemDetailCellConfiguration(
-                                title: Constant.string.password,
+                                title: Localized.string.password,
                                 value: "••••••••••",
                                 accessibilityLabel: "something accessible",
                                 password: true,

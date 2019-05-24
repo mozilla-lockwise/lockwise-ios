@@ -138,6 +138,11 @@
 		7D09B24F2125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2502125E27E00794CA2 /* BaseUserDefaultStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */; };
 		7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
+		7D0DF45E2298218F00C85B56 /* BaseStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0DF45D2298218F00C85B56 /* BaseStrings.swift */; };
+		7D0DF460229821D700C85B56 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0DF45F229821D700C85B56 /* Strings.swift */; };
+		7D0DF461229821D700C85B56 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0DF45F229821D700C85B56 /* Strings.swift */; };
+		7D0DF4632298229400C85B56 /* BaseStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0DF45D2298218F00C85B56 /* BaseStrings.swift */; };
+		7D0DF4642298229500C85B56 /* BaseStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0DF45D2298218F00C85B56 /* BaseStrings.swift */; };
 		7D11623A225FAF11009097C7 /* AutoLockSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D116239225FAF11009097C7 /* AutoLockSupport.swift */; };
 		7D11623B225FAF11009097C7 /* AutoLockSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D116239225FAF11009097C7 /* AutoLockSupport.swift */; };
 		7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */; };
@@ -523,6 +528,8 @@
 		7D09B2472125DD4800794CA2 /* CredentialDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialDataStore.swift; sourceTree = "<group>"; };
 		7D09B24E2125E27E00794CA2 /* BaseUserDefaultStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseUserDefaultStore.swift; sourceTree = "<group>"; };
 		7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
+		7D0DF45D2298218F00C85B56 /* BaseStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStrings.swift; sourceTree = "<group>"; };
+		7D0DF45F229821D700C85B56 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		7D116239225FAF11009097C7 /* AutoLockSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoLockSupport.swift; sourceTree = "<group>"; };
 		7D11623E225FDD27009097C7 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7D1B1A8B1F98F86400C1F5FF /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
@@ -889,6 +896,7 @@
 				7AA5406822AB67B669BAF89B /* Info.plist */,
 				7AA54F13767439D644B91C5E /* lockbox-ios-Bridging-Header.h */,
 				7AA547418F6E716AEEE385F6 /* Constants.swift */,
+				7D0DF45F229821D700C85B56 /* Strings.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1037,6 +1045,7 @@
 			children = (
 				7D078EF22124E24100D10D1B /* BaseConstants.swift */,
 				7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */,
+				7D0DF45D2298218F00C85B56 /* BaseStrings.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1588,7 +1597,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C2EC55520ADA85A00AF8C44 /* LockwiseXCUITests.swift in Sources */,
+				7D0DF4642298229500C85B56 /* BaseStrings.swift in Sources */,
 				2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */,
+				7D0DF461229821D700C85B56 /* Strings.swift in Sources */,
 				2C2EC56220ADAB1D00AF8C44 /* LockwiseScreenGraph.swift in Sources */,
 				7AA54A18A8CB61CD8D086821 /* SnapshotHelper.swift in Sources */,
 			);
@@ -1694,6 +1705,7 @@
 				7D4396502135AFBD00B96FA9 /* CredentialProviderStore.swift in Sources */,
 				7D44088B201786F1001873F6 /* WelcomePresenter.swift in Sources */,
 				7AA54CB0835678A0038E5424 /* RouteAction.swift in Sources */,
+				7D0DF460229821D700C85B56 /* Strings.swift in Sources */,
 				7D07A31C21385C6F00772283 /* CredentialStatusAction.swift in Sources */,
 				7D078EEF2124DF6500D10D1B /* BaseAccountStore.swift in Sources */,
 				7AA548263012DE1D03950DE0 /* RouteStore.swift in Sources */,
@@ -1727,6 +1739,7 @@
 				7D440889201786E4001873F6 /* WelcomeView.swift in Sources */,
 				7AA543A00DEEDF6947B578EC /* AccountStore.swift in Sources */,
 				7AA543D5D705C1B0B7B78CBD /* AccountAction.swift in Sources */,
+				7D0DF45E2298218F00C85B56 /* BaseStrings.swift in Sources */,
 				7AA54BF8B62177DC348BFDA6 /* UIImage+.swift in Sources */,
 				7DA4C6932028FB0900B61DD8 /* UIColor+.swift in Sources */,
 				226E3FF02127759C00185D11 /* ExternalLinkStore.swift in Sources */,
@@ -1793,6 +1806,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DBDBBC922726E1E00A4EF14 /* DataStoreSupport.swift in Sources */,
+				7D0DF4632298229400C85B56 /* BaseStrings.swift in Sources */,
 				D819A4BD21BAFA6F004EE6F3 /* File.swift in Sources */,
 				7D09B2522125F9DB00794CA2 /* CredentialProviderPresenter.swift in Sources */,
 				7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */,

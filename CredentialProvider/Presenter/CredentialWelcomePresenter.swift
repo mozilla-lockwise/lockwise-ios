@@ -82,7 +82,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                     return Observable.never().asSingle()
                 }
 
-                let message = profile?.email ?? Constant.string.unlockPlaceholder
+                let message = profile?.email ?? Localized.string.unlockPlaceholder
 
                 return target.launchBiometrics(message: message)
             }
@@ -108,11 +108,11 @@ extension CredentialWelcomePresenter {
     private func displayNotLoggedInMessage() {
         view?.displayAlertController(
                 buttons: [AlertActionButtonConfiguration(
-                        title: Constant.string.ok,
+                        title: Localized.string.ok,
                         tapObserver: self.okButtonObserver,
                         style: UIAlertAction.Style.default)],
-                title: Constant.string.signInRequired,
-                message: String(format: Constant.string.signInRequiredBody, Constant.string.productName, Constant.string.productName),
+                title: Localized.string.signInRequired,
+                message: String(format: Localized.string.signInRequiredBody, Localized.string.productName, Localized.string.productName),
                 style: .alert,
                 barButtonItem: nil)
     }
@@ -130,8 +130,8 @@ extension CredentialWelcomePresenter {
 
                     self?.view?.displaySpinner(populated.asDriver(onErrorJustReturn: ()),
                                                bag: disposeBag,
-                                               message: Constant.string.enablingAutofill,
-                                               completionMessage: Constant.string.completedEnablingAutofill)
+                                               message: Localized.string.enablingAutofill,
+                                               completionMessage: Localized.string.completedEnablingAutofill)
                 })
                 .disposed(by: self.disposeBag)
 

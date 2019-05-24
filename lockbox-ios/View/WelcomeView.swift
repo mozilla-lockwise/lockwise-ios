@@ -44,8 +44,8 @@ class WelcomeView: UIViewController {
     }
 
     private func setupStrings() {
-        self.accessLockboxMessage.text = String(format: Constant.string.accessProduct, Constant.string.productName)
-        self.unlockButton.setTitle(String(format: Constant.string.unlockAppButton, Constant.string.productName), for: .normal)
+        self.accessLockboxMessage.text = String(format: Localized.string.accessProduct, Localized.string.productName)
+        self.unlockButton.setTitle(String(format: Localized.string.unlockAppButton, Localized.string.productName), for: .normal)
     }
 }
 

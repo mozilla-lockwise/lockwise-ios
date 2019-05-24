@@ -12,8 +12,8 @@ class LockwiseXCUITests: BaseTestCase {
         waitforExistence(app.buttons["disconnectFirefoxLockwise.button"], timeout: 3)
         // Using taps directly because the action is intermittently failing on BB
         app.buttons["disconnectFirefoxLockwise.button"].tap()
-        waitforExistence(app.buttons["Disconnect"], timeout: 3)
-        app.buttons["Disconnect"].tap()
+        waitforExistence(app.buttons[Localized.string.unlink], timeout: 3)
+        app.buttons[Localized.string.unlink].tap()
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
         navigator.nowAt(Screen.WelcomeScreen)
     }
@@ -118,7 +118,7 @@ class LockwiseXCUITests: BaseTestCase {
         waitforExistence(app.buttons["sorting.button"], timeout: 3)
         app.buttons["sorting.button"].tap()
         waitforExistence(app.buttons["Recently Used"])
-        app.buttons["Recently Used"].tap()
+        app.buttons[Localized.string.recentlyUsed].tap()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
@@ -128,8 +128,8 @@ class LockwiseXCUITests: BaseTestCase {
         XCTAssertEqual(firstCellRecent, firstEntryRecentOrder )
 
         app.buttons["sorting.button"].tap()
-        waitforExistence(app.buttons["Alphabetically"])
-        app.buttons["Alphabetically"].tap()
+        waitforExistence(app.buttons[Localized.string.alphabetically])
+        app.buttons[Localized.string.alphabetically].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of logins (currently A-Z)")
@@ -178,7 +178,7 @@ class LockwiseXCUITests: BaseTestCase {
         app.buttons["Clear text"].tap()
         let searchFieldValueAfterXButton = searchTextField.value as! String
         XCTAssertEqual(searchFieldValueAfterXButton, "Search logins")
-        app.buttons["Cancel"].tap()
+        app.buttons[Localized.string.cancel].tap()
         navigator.nowAt(Screen.LockwiseMainPage)
     }
 
@@ -188,7 +188,7 @@ class LockwiseXCUITests: BaseTestCase {
         navigator.goto(Screen.SettingsMenu)
         waitforExistence(app.navigationBars["settings.navigationBar"])
         navigator.goto(Screen.AutolockSettingsMenu)
-        app.cells.staticTexts["Never"].tap()
+        app.cells.staticTexts[Localized.string.autoLockNever].tap()
         navigator.goto(Screen.LockwiseMainPage)
         // Send app to background and launch it
         XCUIDevice.shared.press(.home)

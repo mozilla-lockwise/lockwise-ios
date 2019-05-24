@@ -46,11 +46,11 @@ class SettingListPresenter {
     private var passcodeButtonsConfiguration: [AlertActionButtonConfiguration] {
         return [
             AlertActionButtonConfiguration(
-                title: Constant.string.cancel,
+                title: Localized.string.cancel,
                 tapObserver: nil,
                 style: .cancel),
             AlertActionButtonConfiguration(
-                title: Constant.string.setPasscode,
+                title: Localized.string.setPasscode,
                 tapObserver: self.setPasscodeButtonObserver,
                 style: .default)
         ]
@@ -59,24 +59,24 @@ class SettingListPresenter {
     private var staticSupportSettingSection: SettingSectionModel {
         return SettingSectionModel(model: 0, items: [
             SettingCellConfiguration(
-                    text: Constant.string.settingsProvideFeedback,
+                    text: Localized.string.settingsProvideFeedback,
                     routeAction: ExternalWebsiteRouteAction(
                             urlString: Constant.app.provideFeedbackURL,
-                            title: Constant.string.settingsProvideFeedback,
+                            title: Localized.string.settingsProvideFeedback,
                             returnRoute: SettingRouteAction.list),
                             accessibilityId: "sendFeedbackSettingOption"),
             SettingCellConfiguration(
-                text: Constant.string.settingsGetSupport,
+                text: Localized.string.settingsGetSupport,
                 routeAction: ExternalWebsiteRouteAction(
                     urlString: Constant.app.getSupportURL,
-                    title: Constant.string.settingsGetSupport,
+                    title: Localized.string.settingsGetSupport,
                     returnRoute: SettingRouteAction.list),
                 accessibilityId: "getSupportSettingOption"),
             SettingCellConfiguration(
-                    text: Constant.string.faq,
+                    text: Localized.string.faq,
                     routeAction: ExternalWebsiteRouteAction(
                             urlString: Constant.app.faqURLtop,
-                            title: Constant.string.faq,
+                            title: Localized.string.faq,
                             returnRoute: SettingRouteAction.list),
                             accessibilityId: "faqSettingOption")
         ])
@@ -117,8 +117,8 @@ class SettingListPresenter {
                     } else {
                         self.view?.displayAlertController(
                             buttons: self.passcodeButtonsConfiguration,
-                            title: Constant.string.notUsingPasscode,
-                            message: String(format: Constant.string.passcodeDetailInformation, Constant.string.productName),
+                            title: Localized.string.notUsingPasscode,
+                            message: String(format: Localized.string.passcodeDetailInformation, Localized.string.productName),
                             style: .alert,
                             barButtonItem: nil)
                     }
@@ -142,14 +142,14 @@ extension SettingListPresenter {
 
         var applicationConfigurationSection = SettingSectionModel(model: 1, items: [
             SettingCellConfiguration(
-                    text: Constant.string.settingsAccount,
+                    text: Localized.string.settingsAccount,
                     routeAction: SettingRouteAction.account,
                     accessibilityId: "accountSettingOption")
         ])
 
         if self.biometryManager.deviceAuthenticationAvailable {
             let autoLockSetting = SettingCellConfiguration(
-                    text: Constant.string.settingsAutoLock,
+                    text: Localized.string.settingsAutoLock,
                     routeAction: SettingRouteAction.autoLock,
                     accessibilityId: "autoLockSettingOption")
             autoLockSetting.detailText = autoLock?.toString()
@@ -157,31 +157,31 @@ extension SettingListPresenter {
         }
 
         let preferredBrowserSetting = SettingCellConfiguration(
-                text: Constant.string.settingsBrowser,
+                text: Localized.string.settingsBrowser,
                 routeAction: SettingRouteAction.preferredBrowser,
                 accessibilityId: "openWebSitesInSettingOption")
         preferredBrowserSetting.detailText = preferredBrowser.toString()
         applicationConfigurationSection.items.append(preferredBrowserSetting)
 
         let usageDataSetting = SwitchSettingCellConfiguration(
-                text: Constant.string.settingsUsageData,
+                text: Localized.string.settingsUsageData,
                 routeAction: ExternalWebsiteRouteAction(
                         urlString: Constant.app.privacyURL,
-                        title: Constant.string.learnMore,
+                        title: Localized.string.learnMore,
                         returnRoute: SettingRouteAction.list),
                 accessibilityId: "usageDataSettingOption",
                 isOn: usageDataEnabled,
                 onChanged: self.onUsageDataSettingChanged)
         let subtitle = NSMutableAttributedString(
-            string: String(format: Constant.string.settingsUsageDataSubtitle, Constant.string.productName),
+            string: String(format: Localized.string.settingsUsageDataSubtitle, Localized.string.productName),
                 attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray])
         subtitle.append(NSAttributedString(
-                string: Constant.string.learnMore,
+                string: Localized.string.learnMore,
                 attributes: [NSAttributedString.Key.foregroundColor: Constant.color.lockBoxViolet]))
         usageDataSetting.subtitle = subtitle
         usageDataSetting.accessibilityActions = [
             UIAccessibilityCustomAction(
-                    name: Constant.string.learnMore,
+                    name: Localized.string.learnMore,
                     target: self,
                     selector: #selector(self.learnMoreTapped))]
 
@@ -189,14 +189,14 @@ extension SettingListPresenter {
         supportSettingSection.items.append(usageDataSetting)
 
         if let appVersion = Constant.app.appVersion {
-            let appVersionSetting = SettingCellConfiguration(text: Constant.string.settingsAppVersion, routeAction: nil,
+            let appVersionSetting = SettingCellConfiguration(text: Localized.string.settingsAppVersion, routeAction: nil,
                 accessibilityId: "appVersionSettingOption")
             appVersionSetting.detailText = appVersion
             supportSettingSection.items.append(appVersionSetting)
         }
 
         if #available(iOS 12.0, *) {
-            let autoFillSetting = SettingCellConfiguration(text: Constant.string.settingsAutoFillSettings,
+            let autoFillSetting = SettingCellConfiguration(text: Localized.string.settingsAutoFillSettings,
                                                            routeAction: SettingRouteAction.autofillInstructions,
                                                            accessibilityId: "autoFillSettingsOption")
             applicationConfigurationSection.items.append(autoFillSetting)
@@ -209,7 +209,7 @@ extension SettingListPresenter {
         self.onSettingCellTapped.onNext(
                 ExternalWebsiteRouteAction(
                         urlString: Constant.app.faqURLtop,
-                        title: Constant.string.faq,
+                        title: Localized.string.faq,
                         returnRoute: SettingRouteAction.list
                 ))
     }

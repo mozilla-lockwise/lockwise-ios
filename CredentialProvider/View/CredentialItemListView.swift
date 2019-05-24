@@ -51,7 +51,7 @@ class ItemListView: BaseItemListView, ItemListViewProtocol {
 
 extension ItemListView {
     private var cancelButton: UIButton {
-        let button = UIButton(title: Constant.string.cancel, imageName: nil)
+        let button = UIButton(title: Localized.string.cancel, imageName: nil)
         button.titleLabel?.font = .navigationButtonFont
         button.accessibilityIdentifier = "cancel.button"
         button.translatesAutoresizingMaskIntoConstraints = false

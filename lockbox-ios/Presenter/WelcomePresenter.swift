@@ -65,7 +65,7 @@ class WelcomePresenter: BaseWelcomePresenter {
             .subscribe(onNext: { _ in
                 self.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                         urlString: Constant.app.useLockboxFAQ,
-                        title: Constant.string.learnMore,
+                        title: Localized.string.learnMore,
                         returnRoute: LoginRouteAction.welcome))
             })
             .disposed(by: self.disposeBag)
@@ -102,7 +102,7 @@ extension WelcomePresenter {
     private var passcodeButtonsConfiguration: [AlertActionButtonConfiguration] {
         return [
             AlertActionButtonConfiguration(
-                    title: Constant.string.skip,
+                    title: Localized.string.skip,
                     tapObserver: self.skipButtonObserver,
                     style: .cancel)
         ]
@@ -148,8 +148,8 @@ extension WelcomePresenter {
     private func launchPasscodePrompt() {
         self.view?.displayAlertController(
                 buttons: self.passcodeButtonsConfiguration,
-                title: Constant.string.notUsingPasscode,
-                message: Constant.string.passcodeInformation,
+                title: Localized.string.notUsingPasscode,
+                message: Localized.string.passcodeInformation,
                 style: .alert,
                 barButtonItem:  nil)
     }
@@ -163,7 +163,7 @@ extension WelcomePresenter {
                         return Observable.never().asSingle()
                     }
 
-                    return target.launchBiometrics(message: latest?.email ?? Constant.string.unlockPlaceholder)
+                    return target.launchBiometrics(message: latest?.email ?? Localized.string.unlockPlaceholder)
                         .catchError { _ in
                             // ignore errors from local authentication
                             return Observable.never().asSingle()
@@ -211,12 +211,12 @@ extension WelcomePresenter {
         self.view?.displayAlertController(
             buttons: [
                 AlertActionButtonConfiguration(
-                    title: Constant.string.continueText,
+                    title: Localized.string.continueText,
                     tapObserver: self.oauthLoginConfirmationObserver,
                     style: .default)
             ],
-            title: Constant.string.reauthenticationRequired,
-            message: Constant.string.appUpdateDisclaimer,
+            title: Localized.string.reauthenticationRequired,
+            message: Localized.string.appUpdateDisclaimer,
             style: .alert,
             barButtonItem: nil)
     }

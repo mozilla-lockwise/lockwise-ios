@@ -279,7 +279,7 @@ class ItemListPresenterSpec: QuickSpec {
                                     let argument = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
                                     expect(argument).to(equal(ExternalWebsiteRouteAction(
                                             urlString: Constant.app.enableSyncFAQ,
-                                            title: Constant.string.faq,
+                                            title: Localized.string.faq,
                                             returnRoute: MainRouteAction.list)))
                                 }
                             }
@@ -347,8 +347,8 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("highlights the selected item") {
                             let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
-                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: "ff", highlight: true),
+                                LoginListCellConfiguration.Item(title: "", username: Localized.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Localized.string.usernamePlaceholder, guid: "ff", highlight: true),
                                 LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1, highlight: false)
                             ]
                             expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
@@ -371,8 +371,8 @@ class ItemListPresenterSpec: QuickSpec {
 
                         it("tells the view to display the items in alphabetic order by title") {
                             let expectedItemConfigurations = [
-                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
-                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: "ff", highlight: false),
+                                LoginListCellConfiguration.Item(title: "", username: Localized.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Localized.string.usernamePlaceholder, guid: "ff", highlight: false),
                                 LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1, highlight: false)
                             ]
                             expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
@@ -441,8 +441,8 @@ class ItemListPresenterSpec: QuickSpec {
                         it("pushes the new configuration with the items") {
                             let expectedItemConfigurations = [
                                 LoginListCellConfiguration.Item(title: webAddress1, username: username, guid: id1, highlight: false),
-                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
-                                LoginListCellConfiguration.Item(title: webAddress2, username: Constant.string.usernamePlaceholder, guid: "fdssdf", highlight: false)
+                                LoginListCellConfiguration.Item(title: "", username: Localized.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: webAddress2, username: Localized.string.usernamePlaceholder, guid: "fdssdf", highlight: false)
                             ]
                             expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
                             let configuration = self.view.itemsObserver.events.last!.value.element!
@@ -550,7 +550,7 @@ class ItemListPresenterSpec: QuickSpec {
                     expect(self.view.displayOptionSheetButtons?.first?.checked).to(beTrue())
                     expect(self.view.displayOptionSheetButtons?[1].checked).to(beFalse())
 
-                    expect(self.view.displayOptionSheetTitle).to(equal(Constant.string.sortEntries))
+                    expect(self.view.displayOptionSheetTitle).to(equal(Localized.string.sortEntries))
                 }
 
                 describe("tapping alphabetically") {

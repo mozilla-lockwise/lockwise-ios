@@ -18,21 +18,21 @@ class AutoLockSettingPresenter {
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOneMinute, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockOneMinute, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.OneMinute),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockFiveMinutes, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockFiveMinutes, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.FiveMinutes),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockFifteenMinutes, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockFifteenMinutes, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.FifteenMinutes),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockThirtyMinutes, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockThirtyMinutes, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.ThirtyMinutes),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockOneHour, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockOneHour, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.OneHour),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockTwelveHours, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockTwelveHours, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.TwelveHours),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockTwentyFourHours, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockTwentyFourHours, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.TwentyFourHours),
-        CheckmarkSettingCellConfiguration(text: Constant.string.autoLockNever, isChecked: false,
+        CheckmarkSettingCellConfiguration(text: Localized.string.autoLockNever, isChecked: false,
                                           valueWhenChecked: Setting.AutoLock.Never)
     ]
 

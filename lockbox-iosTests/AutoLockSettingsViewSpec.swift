@@ -45,7 +45,7 @@ class AutoLockSettingsViewSpec: QuickSpec {
         }
 
         it("labels the header") {
-            expect((self.subject.tableView(self.subject.tableView, viewForHeaderInSection: 0) as? UITableViewCell)?.textLabel?.text).to(equal(String(format: Constant.string.autoLockHeader, Constant.string.productName)))
+            expect((self.subject.tableView(self.subject.tableView, viewForHeaderInSection: 0) as? UITableViewCell)?.textLabel?.text).to(equal(String(format: Localized.string.autoLockHeader, Localized.string.productName)))
         }
 
         describe("tableview datasource configuration") {

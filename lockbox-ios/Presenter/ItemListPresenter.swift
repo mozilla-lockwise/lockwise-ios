@@ -71,7 +71,7 @@ class ItemListPresenter: BaseItemListPresenter {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                     urlString: Constant.app.enableSyncFAQ,
-                    title: Constant.string.faq,
+                    title: Localized.string.faq,
                     returnRoute: MainRouteAction.list))
         }.asObserver()
     }
@@ -80,7 +80,7 @@ class ItemListPresenter: BaseItemListPresenter {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
                 urlString: Constant.app.createNewEntriesFAQ,
-                title: Constant.string.faq,
+                title: Localized.string.faq,
                 returnRoute: MainRouteAction.list))
         }.asObserver()
     }
@@ -143,21 +143,21 @@ class ItemListPresenter: BaseItemListPresenter {
                         view.displayAlertController(
                             buttons: [
                                 AlertActionButtonConfiguration(
-                                    title: Constant.string.alphabetically,
+                                    title: Localized.string.alphabetically,
                                     tapObserver: strongSelf.alphabeticSortObserver,
                                     style: .default,
                                     checked: latest == Setting.ItemListSort.alphabetically),
                                 AlertActionButtonConfiguration(
-                                    title: Constant.string.recentlyUsed,
+                                    title: Localized.string.recentlyUsed,
                                     tapObserver: strongSelf.recentlyUsedSortObserver,
                                     style: .default,
                                     checked: latest == Setting.ItemListSort.recentlyUsed),
                                 AlertActionButtonConfiguration(
-                                    title: Constant.string.cancel,
+                                    title: Localized.string.cancel,
                                     tapObserver: nil,
                                     style: .cancel)
                             ],
-                            title: Constant.string.sortEntries,
+                            title: Localized.string.sortEntries,
                             message: nil,
                             style: .actionSheet,
                             barButtonItem: self?.view?.sortButton)
@@ -189,8 +189,8 @@ extension ItemListPresenter {
                     if latest.syncState == .Syncing && !latest.manualSync {
                         self.view?.displaySpinner(hideSpinnerObservable,
                                                   bag: self.disposeBag,
-                                                  message: Constant.string.syncingYourEntries,
-                                                  completionMessage: Constant.string.doneSyncingYourEntries)
+                                                  message: Localized.string.syncingYourEntries,
+                                                  completionMessage: Localized.string.doneSyncingYourEntries)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -227,9 +227,9 @@ extension ItemListPresenter {
                 .map { itemSortAction -> String in
                     switch itemSortAction {
                     case .alphabetically:
-                        return Constant.string.aToZ
+                        return Localized.string.aToZ
                     case .recentlyUsed:
-                        return Constant.string.recent
+                        return Localized.string.recent
                     }
                 }
 

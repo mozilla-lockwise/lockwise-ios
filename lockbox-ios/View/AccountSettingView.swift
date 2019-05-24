@@ -35,10 +35,10 @@ class AccountSettingView: UIViewController {
 
     private func setupStrings() {
         self.unlinkAccountButton.setTitle(
-            String(format: Constant.string.unlinkAccountButton, Constant.string.productLabel),
+            String(format: Localized.string.unlinkAccountButton, Localized.string.productLabel),
             for: .normal
         )
-        self.disclaimerLabel.text = String(format: Constant.string.disclaimerLabel, Constant.string.productLabel)
+        self.disclaimerLabel.text = String(format: Localized.string.disclaimerLabel, Localized.string.productLabel)
     }
 }
 
@@ -79,13 +79,13 @@ extension AccountSettingView: UIGestureRecognizerDelegate {
     }
 
     fileprivate func setupNavBar() {
-        self.navigationItem.title = Constant.string.account
+        self.navigationItem.title = Localized.string.account
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
         self.navigationController?.navigationBar.accessibilityIdentifier = "accountSetting.navigationBar"
-        let leftButton = UIButton(title: Constant.string.settingsTitle, imageName: "back")
+        let leftButton = UIButton(title: Localized.string.settingsTitle, imageName: "back")
         leftButton.titleLabel?.font = .navigationButtonFont
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 

@@ -104,7 +104,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
 
     func enableBackButton(enabled: Bool) {
         if enabled {
-            let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+            let leftButton = UIButton(title: Localized.string.back, imageName: "back")
             leftButton.titleLabel?.font = .navigationButtonFont
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 

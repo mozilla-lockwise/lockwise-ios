@@ -110,8 +110,8 @@ extension SettingListView {
 
                 return cell
         }, titleForHeaderInSection: { _, section in
-            return section == 0 ? Constant.string.settingsSupportSectionHeader :
-                    Constant.string.settingsConfigurationSectionHeader
+            return section == 0 ? Localized.string.settingsSupportSectionHeader :
+                    Localized.string.settingsConfigurationSectionHeader
          })
     }
 
@@ -127,7 +127,7 @@ extension SettingListView {
     }
 
     private func setupNavbar() {
-        self.navigationItem.title = Constant.string.settingsTitle
+        self.navigationItem.title = Localized.string.settingsTitle
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
@@ -137,7 +137,7 @@ extension SettingListView {
 
         self.navigationItem.largeTitleDisplayMode = .never
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Constant.string.done,
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: Localized.string.done,
                 style: .plain,
                 target: nil,
                 action: nil)

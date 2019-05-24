@@ -60,7 +60,7 @@ extension OnboardingConfirmationView {
         if let encryptionText = self.encryptionTextView.text {
             self.encryptionTextView.delegate = self
             let text = NSMutableAttributedString(string: encryptionText)
-            let range = text.mutableString.range(of: Constant.string.onboardingSecurityPostfix)
+            let range = text.mutableString.range(of: Localized.string.onboardingSecurityPostfix)
             text.addAttributes([
                 NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0)
             ], range: NSMakeRange(0, text.length)) // swiftlint:disable:this legacy_constructor
@@ -78,6 +78,6 @@ extension OnboardingConfirmationView {
     }
 
     private func setupStrings() {
-        self.headerLabel.text = String(format: Constant.string.onboardingTitle, Constant.string.productName)
+        self.headerLabel.text = String(format: Localized.string.onboardingTitle, Localized.string.productName)
     }
 }
