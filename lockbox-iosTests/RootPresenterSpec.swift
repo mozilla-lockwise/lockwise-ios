@@ -863,11 +863,6 @@ class RootPresenterSpec: QuickSpec {
                                     expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument).to(beNil())
                                 }
-
-                                it("checks for the DetailView & nothing happens") {
-                                    expect(self.view.topViewIsArgument === ItemEditorView.self).to(beTrue())
-                                    expect(self.view.pushArgument).to(beNil())
-                                }
                             }
                         }
                     }
@@ -959,11 +954,6 @@ class RootPresenterSpec: QuickSpec {
                                 it("starts the main stack") {
                                     expect(self.view.mainStackIsArgument === SplitView.self).to(beTrue())
                                     expect(self.view.startMainStackArgument is SplitView).to(beTrue())
-                                }
-
-                                it("checks for the EditorView & nothing happens") {
-                                    expect(self.view.topViewIsArgument === ItemEditorView.self).to(beTrue())
-                                    expect(self.view.pushArgument).to(beNil())
                                 }
                             }
                         }

@@ -11,7 +11,7 @@ import RxCocoa
 
 struct ItemDetailCellConfiguration {
     let title: String
-    let value: String
+    let value: Driver<String>
     let accessibilityLabel: String
     let valueFontColor: UIColor
     let accessibilityId: String
@@ -23,7 +23,7 @@ struct ItemDetailCellConfiguration {
     let dragValue: String?
 
     init(title: String,
-         value: String,
+         value: Driver<String>,
          accessibilityLabel: String,
          valueFontColor: UIColor = UIColor.black,
          accessibilityId: String,
@@ -55,7 +55,7 @@ extension ItemDetailCellConfiguration: IdentifiableType {
 
 extension ItemDetailCellConfiguration: Equatable {
     static func ==(lhs: ItemDetailCellConfiguration, rhs: ItemDetailCellConfiguration) -> Bool {
-        return lhs.value == rhs.value
+        return lhs.title == rhs.title
     }
 }
 

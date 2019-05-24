@@ -16,10 +16,10 @@ protocol ItemDetailViewProtocol: class, StatusAlertView {
     var rightBarButtonTapped: Observable<Void> { get }
     var leftBarButtonTapped: Observable<Void> { get }
     var itemDetailObserver: ItemDetailSectionModelObserver { get }
-    var titleText: Binder<String?> { get }
-    var rightButtonText: Binder<String?> { get }
-    var leftButtonText: Binder<String?> { get }
-    var deleteHidden: Binder<Bool> { get }
+    var titleText: AnyObserver<String?> { get }
+    var rightButtonText: AnyObserver<String?> { get }
+    var leftButtonText: AnyObserver<String?> { get }
+    var deleteHidden: AnyObserver<Bool> { get }
 }
 
 let copyableFields = [Constant.string.username, Constant.string.password]
@@ -66,12 +66,9 @@ class ItemDetailPresenter {
                 .flatMap { _ in self.itemDetailStore.itemDetailId }
                 .flatMap { self.dataStore.get($0) }
 
-        let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-
-        Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.passwordRevealed)
-                .map { e -> [ItemDetailSectionModel] in
-                    return self.configurationForLogin(e.0, passwordDisplayed: e.1)
-                }
+        itemObservable.asDriver(onErrorJustReturn: nil)
+                .filterNil()
+                .map { self.configurationForLogin($0) }
                 .drive(self.view!.itemDetailObserver)
                 .disposed(by: self.disposeBag)
 
@@ -102,9 +99,20 @@ class ItemDetailPresenter {
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
+        // use the behaviorrelay to cache the most recent version of the LoginRecord
+        let itemDetailRelay = BehaviorRelay<LoginRecord?>(value: nil)
+
+        itemObservable
+                .asDriver(onErrorJustReturn: nil)
+                .drive(itemDetailRelay)
+                .disposed(by: self.disposeBag)
+
         self.view?.cellTapped
+                .withLatestFrom(self.itemDetailStore.isEditing) { cellTitle, isEditing -> String? in
+                    return !isEditing ? cellTitle : nil
+                }
                 .filterNil()
-                .withLatestFrom(itemObservable) { (cellTitle: String, item: LoginRecord?) -> [Action] in
+                .withLatestFrom(itemDetailRelay) { (cellTitle: String, item: LoginRecord?) -> [Action] in
                     var actions: [Action] = []
                     if copyableFields.contains(cellTitle) {
                         if let item = item {
@@ -143,19 +151,24 @@ class ItemDetailPresenter {
 
     private func setupNavigation() {
         self.view?.leftBarButtonTapped
-                .flatMap { _ in self.itemDetailStore.isEditing.take(1) }
-                .map { editing -> Action in
+                .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action in
                     return editing ? ItemDetailDisplayAction.viewMode : MainRouteAction.list
                 }
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: self.disposeBag)
 
         self.view?.rightBarButtonTapped
-                .flatMap { _ in self.itemDetailStore.isEditing.take(1) }
-                .map { editing -> Action in
+                .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action in
                     return editing ? ItemDetailDisplayAction.viewMode : ItemDetailDisplayAction.editMode
                 }
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
+                .disposed(by: self.disposeBag)
+
+        self.itemDetailStore.isEditing
+                .map { editing in
+                    return editing ? Constant.string.save : Constant.string.edit
+                }
+                .subscribe(self.view!.rightButtonText)
                 .disposed(by: self.disposeBag)
 
         self.itemDetailStore.isEditing
@@ -164,9 +177,8 @@ class ItemDetailPresenter {
                         return Constant.string.cancel
                     } else if !sidebar {
                         return Constant.string.back
-                    } else {
-                        return nil
                     }
+                    return nil
                 }
                 .subscribe(self.view!.leftButtonText)
                 .disposed(by: self.disposeBag)
@@ -180,35 +192,36 @@ class ItemDetailPresenter {
 
     func dndStarted(value: String?) {
         self.itemDetailStore.itemDetailId
-            .take(1)
-            .flatMap { self.dataStore.get($0) }
-            .flatMap { item -> Observable<[Action]> in
-                var actions: [Action] = []
-                if let item = item {
-                    actions.append(DataStoreAction.touch(id: item.id))
-                    actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
-                }
+                .take(1)
+                .flatMap { self.dataStore.get($0) }
+                .flatMap { item -> Observable<[Action]> in
+                    var actions: [Action] = []
+                    if let item = item {
+                        actions.append(DataStoreAction.touch(id: item.id))
+                        actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
+                    }
 
-                return Observable.just(actions)
-            }.subscribe(onNext: { actions in
-                for action in actions {
-                    self.dispatcher.dispatch(action: action)
+                    return Observable.just(actions)
                 }
-            }).disposed(by: self.disposeBag)
+                .subscribe(onNext: { actions in
+                    for action in actions {
+                        self.dispatcher.dispatch(action: action)
+                    }
+                })
+                .disposed(by: self.disposeBag)
     }
 }
 
 // helpers
 extension ItemDetailPresenter {
-    private func configurationForLogin(_ login: LoginRecord?, passwordDisplayed: Bool) -> [ItemDetailSectionModel] {
-        var passwordText: String
+    private func configurationForLogin(_ login: LoginRecord?) -> [ItemDetailSectionModel] {
         let itemPassword: String = login?.password ?? ""
 
-        if passwordDisplayed {
-            passwordText = itemPassword
-        } else {
-            passwordText = String(repeating: "•", count: itemPassword.count)
-        }
+        let passwordTextDriver = self.itemDetailStore.passwordRevealed
+                .map { revealed -> String in
+                    return revealed ? itemPassword : String(repeating: "•", count: itemPassword.count)
+                }
+                .asDriver(onErrorJustReturn: "")
 
         let editing = self.itemDetailStore.isEditing
                 .asDriver(onErrorJustReturn: true)
@@ -219,7 +232,7 @@ extension ItemDetailPresenter {
             ItemDetailSectionModel(model: 0, items: [
                 ItemDetailCellConfiguration(
                         title: Constant.string.webAddress,
-                        value: hostname,
+                        value: Driver.just(hostname),
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
                         valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
@@ -230,7 +243,7 @@ extension ItemDetailPresenter {
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
                         title: Constant.string.username,
-                        value: username,
+                        value: Driver.just(username),
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
                         accessibilityId: "userNameItemDetail",
                         textFieldEnabled: editing,
@@ -238,10 +251,8 @@ extension ItemDetailPresenter {
                         dragValue: username),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
-                        value: passwordText,
-                        accessibilityLabel: String(
-                            format: Constant.string.passwordCellAccessibilityLabel,
-                            passwordText),
+                        value: passwordTextDriver,
+                        accessibilityLabel: Constant.string.passwordCellAccessibilityLabel,
                         accessibilityId: "passwordItemDetail",
                         textFieldEnabled: editing,
                         copyButtonHidden: editing,

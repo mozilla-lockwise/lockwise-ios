@@ -14,38 +14,70 @@ import MozillaAppServices
 
 class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
-        var titleTextObserver: TestableObserver<String>!
-        var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
+        var itemDetailObserverStub: TestableObserver<[ItemDetailSectionModel]>!
+        var titleTextObserverStub: TestableObserver<String?>!
+        var rightButtonTextObserverStub: TestableObserver<String?>!
+        var leftButtonTextObserverStub: TestableObserver<String?>!
+        var deleteHiddenObserverStub: TestableObserver<Bool>!
         let editStub = PublishSubject<Void>()
+        let cellTappedStub = PublishSubject<String?>()
+        let deleteTappedStub = PublishSubject<Void>()
+        let rightButtonTappedStub = PublishSubject<Void>()
+        let leftButtonTappedStub = PublishSubject<Void>()
         var tempAlertMessage: String?
         var tempAlertTimeout: TimeInterval?
-        var enableBackButtonValue: Bool?
+        var enableLargeTitleValue: Bool?
+        var enableSwipeValue: Bool?
 
-        private let disposeBag = DisposeBag()
-
-        var editTapped: Observable<Void> {
-            return self.editStub.asObservable()
+        var itemDetailObserver: ItemDetailSectionModelObserver {
+            return { observable -> Disposable in
+                observable.subscribe(self.itemDetailObserverStub)
+            }
         }
 
-        func bind(titleText: Driver<String>) {
-            titleText
-                    .drive(self.titleTextObserver)
-                    .disposed(by: self.disposeBag)
+        func enableSwipeNavigation(enabled: Bool) {
+            self.enableSwipeValue = enabled
         }
 
-        func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
-            itemDetail
-                    .drive(self.itemDetailObserver)
-                    .disposed(by: self.disposeBag)
+        func enableLargeTitle(enabled: Bool) {
+            self.enableLargeTitleValue = enabled
+        }
+
+        var cellTapped: Observable<String?> {
+            return self.cellTappedStub.asObservable()
+        }
+
+        var deleteTapped: Observable<Void> {
+            return self.deleteTappedStub.asObservable()
+        }
+
+        var rightBarButtonTapped: Observable<Void> {
+            return self.rightButtonTappedStub.asObservable()
+        }
+
+        var leftBarButtonTapped: Observable<Void> {
+            return self.leftButtonTappedStub.asObservable()
+        }
+
+        var titleText: AnyObserver<String?> {
+            return self.titleTextObserverStub.asObserver()
+        }
+
+        var rightButtonText: AnyObserver<String?> {
+            return self.rightButtonTextObserverStub.asObserver()
+        }
+
+        var leftButtonText: AnyObserver<String?> {
+            return self.leftButtonTextObserverStub.asObserver()
+        }
+
+        var deleteHidden: AnyObserver<Bool> {
+            return self.deleteHiddenObserverStub.asObserver()
         }
 
         func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
             self.tempAlertMessage = message
             self.tempAlertTimeout = timeout
-        }
-
-        func enableBackButton(enabled: Bool) {
-            self.enableBackButtonValue = enabled
         }
     }
 
@@ -88,9 +120,14 @@ class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailStore: ItemDetailStore {
         var passwordRevealedStub = PublishSubject<Bool>()
         var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
+        var isEditingStub = ReplaySubject<Bool>.create(bufferSize: 1)
 
-        override var passwordRevealed: Driver<Bool> {
-            return passwordRevealedStub.asDriver(onErrorJustReturn: false)
+        override var passwordRevealed: Observable<Bool> {
+            return passwordRevealedStub.asObservable()
+        }
+
+        override var isEditing: Observable<Bool> {
+            return self.isEditingStub.asObservable()
         }
 
         override var itemDetailId: Observable<String> {
@@ -120,6 +157,12 @@ class ItemDetailPresenterSpec: QuickSpec {
         describe("ItemDetailPresenter") {
             beforeEach {
                 self.view = FakeItemDetailView()
+                self.view.itemDetailObserverStub = self.scheduler.createObserver([ItemDetailSectionModel].self)
+                self.view.titleTextObserverStub = self.scheduler.createObserver(String?.self)
+                self.view.rightButtonTextObserverStub = self.scheduler.createObserver(String?.self)
+                self.view.leftButtonTextObserverStub = self.scheduler.createObserver(String?.self)
+                self.view.deleteHiddenObserverStub = self.scheduler.createObserver(Bool.self)
+
                 self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
                 self.copyDisplayStore = FakeCopyDisplayStore()
@@ -136,26 +179,24 @@ class ItemDetailPresenterSpec: QuickSpec {
                 )
             }
 
-            describe("onPasswordToggle") {
-                let passwordRevealSelected = true
-                beforeEach {
-                    let tapObservable = self.scheduler.createColdObservable([next(50, passwordRevealSelected)])
+//            describe("onPasswordToggle") {
+//                let passwordRevealSelected = true
+//                beforeEach {
+//                    self.subject.onViewReady()
+//                    self.dataStore.lockedStub.onNext(false)
+//                    let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": username, "password": "meow"])
+//                    self.dataStore.onItemStub.onNext(item)
+//                    self.view.itemDetailObserverStub.events.first!.value.element!.first!.revealPasswordObserver.onNext(passwordRevealSelected)
+//                }
+//
+//                it("dispatches the password action with the value") {
+//                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+//                    let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
+//                    expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
+//                }
+//            }
 
-                    tapObservable
-                            .bind(to: self.subject.onPasswordToggle)
-                            .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
-                }
-
-                it("dispatches the password action with the value") {
-                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                    let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
-                    expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
-                }
-            }
-
-            describe("onCancel") {
+            describe("when swiping right") {
                 beforeEach {
                     let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
 
@@ -173,169 +214,12 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
             }
 
-            describe("onCellTapped") {
-                describe("when the title of the tapped cell is the username constant") {
-                    beforeEach {
-                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.username)])
-
-                        cellTappedObservable
-                                .bind(to: self.subject.onCellTapped)
-                                .disposed(by: self.disposeBag)
-
-                        self.scheduler.start()
-                    }
-
-                    it("requests the current item from the datastore") {
-                        expect(self.dataStore.loginIDArg).notTo(beNil())
-                    }
-
-                    describe("getting the item") {
-                        describe("when the item has a username") {
-                            let username = "some username"
-
-                            beforeEach {
-                                let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": username, "password": "meow"])
-                                self.dataStore.onItemStub.onNext(item)
-                            }
-
-                            it("dispatches the copy action") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
-                                expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "", actionType: .tap)))
-                            }
-                        }
-
-                        describe("when the item does not have a username") {
-                            beforeEach {
-                                let item = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
-                                self.dataStore.onItemStub.onNext(item)
-                            }
-
-                            it("dispatches the copy action with no text") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "", actionType: .tap)))
-                            }
-                        }
-                    }
-                }
-
-                describe("when the title of the tapped cell is the password constant") {
-                    beforeEach {
-                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.password)])
-
-                        cellTappedObservable
-                                .bind(to: self.subject.onCellTapped)
-                                .disposed(by: self.disposeBag)
-
-                        self.scheduler.start()
-                    }
-
-                    it("requests the current item from the datastore") {
-                        expect(self.dataStore.loginIDArg).notTo(beNil())
-                    }
-
-                    describe("getting the item") {
-                        describe("when the item has a password") {
-                            let password = "some password"
-
-                            beforeEach {
-                                let item = LoginRecord(fromJSONDict: ["id": "sdfdsf", "hostname": "www.example.com", "username": "", "password": password])
-                                self.dataStore.onItemStub.onNext(item)
-                            }
-
-                            it("dispatches the copy action") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
-                                expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "", actionType: .tap)))
-                            }
-                        }
-
-                        describe("when the item does not have a password") {
-                            beforeEach {
-                                let item = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
-                                self.dataStore.onItemStub.onNext(item)
-                            }
-
-                            it("dispatches the copy action with no text") {
-                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                                let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
-                                expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "", actionType: .tap)))
-                            }
-                        }
-                    }
-                }
-
-                describe("when the title of the tapped cell is the web address constant") {
-                    beforeEach {
-                        self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
-
-                        cellTappedObservable
-                            .bind(to: self.subject.onCellTapped)
-                            .disposed(by: self.disposeBag)
-
-                        self.scheduler.start()
-                    }
-
-                    it("requests the current item from the datastore") {
-                        expect(self.dataStore.loginIDArg).notTo(beNil())
-                    }
-
-                    describe("getting the item") {
-                        let webAddress = "https://www.mozilla.org"
-                        let item = LoginRecord(fromJSONDict: ["id": "sdfdfsfd", "hostname": webAddress, "username": "ffs", "password": "ilikecatz"])
-
-                        beforeEach {
-                            self.dataStore.onItemStub.onNext(item)
-                        }
-
-                        it("dispatches the externalLink action") {
-                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            let action = self.dispatcher.dispatchActionArgument.last as! ExternalLinkAction
-                            expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
-                        }
-
-                        describe("subsequent pushes of the same item") {
-                            beforeEach {
-                                self.dataStore.onItemStub.onNext(item)
-                            }
-
-                            it("dispatches nothing new") {
-                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(2))
-                            }
-                        }
-                    }
-                }
-
-                describe("all other cells") {
-                    beforeEach {
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.notes)])
-
-                        cellTappedObservable
-                                .bind(to: self.subject.onCellTapped)
-                                .disposed(by: self.disposeBag)
-
-                        self.scheduler.start()
-                    }
-
-                    it("does nothing") {
-                        expect(self.dataStore.loginIDArg).to(beNil())
-                        expect(self.dispatcher.dispatchActionArgument).notTo(beAnInstanceOf(CopyAction.self))
-                    }
-                }
-            }
-
             describe(".onViewReady") {
                 let item = LoginRecord(fromJSONDict: ["id": "sdfsdfdfs", "hostname": "www.cats.com", "username": "meow", "password": "iluv kats"])
 
                 beforeEach {
-                    self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
-                    self.view.titleTextObserver = self.scheduler.createObserver(String.self)
-
                     self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                    self.itemDetailStore.isEditingStub.onNext(false)
                     self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                     self.dataStore.lockedStub.onNext(false)
                     self.subject.onViewReady()
@@ -345,8 +229,158 @@ class ItemDetailPresenterSpec: QuickSpec {
                     expect(self.dataStore.loginIDArg).to(equal("1234"))
                 }
 
-                it("enables back button") {
-                    expect(self.view.enableBackButtonValue).to(beTrue())
+                describe("copy behavior") {
+                    describe("when editing") {
+                        beforeEach {
+                            let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": "dawgzone", "password": "meow"])
+                            self.dataStore.onItemStub.onNext(item)
+                            self.itemDetailStore.isEditingStub.onNext(true)
+                        }
+
+                        it("username does nothing") {
+                            self.view.cellTappedStub.onNext(Constant.string.username)
+                            expect(self.dispatcher.dispatchActionArgument).to(beEmpty())
+                        }
+
+                        it("password does nothing") {
+                            self.view.cellTappedStub.onNext(Constant.string.password)
+                            expect(self.dispatcher.dispatchActionArgument).to(beEmpty())
+                        }
+
+                        it("webAddress does nothing") {
+                            self.view.cellTappedStub.onNext(Constant.string.webAddress)
+                            expect(self.dispatcher.dispatchActionArgument).to(beEmpty())
+                        }
+                    }
+
+                    describe("when the title of the tapped cell is the username constant") {
+                        describe("getting the item") {
+                            describe("when the item has a username") {
+                                let username = "some username"
+
+                                beforeEach {
+                                    let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": username, "password": "meow"])
+                                    self.dataStore.onItemStub.onNext(item)
+                                    self.view.cellTappedStub.onNext(Constant.string.username)
+                                }
+
+                                it("requests the current item from the datastore") {
+                                    expect(self.dataStore.loginIDArg).notTo(beNil())
+                                }
+
+                                it("dispatches the copy action") {
+                                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                    let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
+                                    expect(action).to(equal(CopyAction(text: username, field: .username, itemID: "", actionType: .tap)))
+                                }
+                            }
+
+                            describe("when the item does not have a username") {
+                                beforeEach {
+                                    let item = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
+                                    self.dataStore.onItemStub.onNext(item)
+                                    self.view.cellTappedStub.onNext(Constant.string.username)
+                                }
+
+                                it("requests the current item from the datastore") {
+                                    expect(self.dataStore.loginIDArg).notTo(beNil())
+                                }
+
+                                it("dispatches the copy action with no text") {
+                                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                    let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
+                                    expect(action).to(equal(CopyAction(text: "", field: .username, itemID: "", actionType: .tap)))
+                                }
+                            }
+                        }
+                    }
+
+                    describe("when the title of the tapped cell is the password constant") {
+                        describe("getting the item") {
+                            describe("when the item has a password") {
+                                let password = "some password"
+
+                                beforeEach {
+                                    let item = LoginRecord(fromJSONDict: ["id": "sdfdsf", "hostname": "www.example.com", "username": "", "password": password])
+                                    self.dataStore.onItemStub.onNext(item)
+                                    self.view.cellTappedStub.onNext(Constant.string.password)
+                                }
+
+                                it("requests the current item from the datastore") {
+                                    expect(self.dataStore.loginIDArg).notTo(beNil())
+                                }
+
+                                it("dispatches the copy action") {
+                                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                    let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
+                                    expect(action).to(equal(CopyAction(text: password, field: .password, itemID: "", actionType: .tap)))
+                                }
+                            }
+
+                            describe("when the item does not have a password") {
+                                beforeEach {
+                                    let item = LoginRecord(fromJSONDict: ["id": "", "hostname": "", "username": "", "password": ""])
+                                    self.dataStore.onItemStub.onNext(item)
+                                    self.view.cellTappedStub.onNext(Constant.string.password)
+                                }
+
+                                it("requests the current item from the datastore") {
+                                    expect(self.dataStore.loginIDArg).notTo(beNil())
+                                }
+
+                                it("dispatches the copy action with no text") {
+                                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                    let action = self.dispatcher.dispatchActionArgument.last as! CopyAction
+                                    expect(action).to(equal(CopyAction(text: "", field: .password, itemID: "", actionType: .tap)))
+                                }
+                            }
+                        }
+                    }
+
+                    describe("when the title of the tapped cell is the web address constant") {
+                        describe("getting the item") {
+                            let webAddress = "https://www.mozilla.org"
+                            let item = LoginRecord(fromJSONDict: ["id": "sdfdfsfd", "hostname": webAddress, "username": "ffs", "password": "ilikecatz"])
+
+                            beforeEach {
+                                self.dataStore.onItemStub.onNext(item)
+                                self.view.cellTappedStub.onNext(Constant.string.webAddress)
+                            }
+
+                            it("requests the current item from the datastore") {
+                                expect(self.dataStore.loginIDArg).notTo(beNil())
+                            }
+
+                            it("dispatches the externalLink action") {
+                                expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                                let action = self.dispatcher.dispatchActionArgument.last as! ExternalLinkAction
+                                expect(action).to(equal(ExternalLinkAction(baseURLString: webAddress)))
+                            }
+
+                            describe("subsequent pushes of the same item") {
+                                beforeEach {
+                                    self.dataStore.onItemStub.onNext(item)
+                                }
+
+                                it("dispatches nothing new") {
+                                    expect(self.dispatcher.dispatchActionArgument.count).to(equal(1))
+                                }
+                            }
+                        }
+                    }
+
+                    describe("all other cells") {
+                        let item = LoginRecord(fromJSONDict: ["id": "sdfdfsfd", "hostname": "www.mozilla.org", "username": "ffs", "password": "ilikecatz"])
+
+                        beforeEach {
+                            self.dataStore.onItemStub.onNext(item)
+                            self.view.cellTappedStub.onNext(Constant.string.notes)
+                        }
+
+                        it("does nothing") {
+                            expect(self.dispatcher.dispatchActionArgument).to(beEmpty())
+                        }
+                    }
                 }
 
                 describe("getting an item with the password displayed") {
@@ -357,27 +391,27 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the title") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal("cats.com"))
+                        expect(self.view.titleTextObserverStub.events.last!.value.element).to(equal("cats.com"))
                     }
 
                     it("passes the configuration with a shown password for the item") {
-                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-                        expect(webAddressSection.value).to(equal(item.hostname))
+//                        expect(webAddressSection.value).to(equal(item.hostname))
                         expect(webAddressSection.accessibilityLabel).to(equal(String(format: Constant.string.websiteCellAccessibilityLabel, item.hostname)))
                         expect(webAddressSection.revealPasswordObserver).to(beNil())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
-                        expect(usernameSection.value).to(equal(item.username))
+//                        expect(usernameSection.value).to(equal(item.username))
                         expect(usernameSection.accessibilityLabel).to(equal(String(format: Constant.string.usernameCellAccessibilityLabel, item.username!)))
                         expect(usernameSection.revealPasswordObserver).to(beNil())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
-                        expect(passwordSection.value).to(equal(item.password))
+//                        expect(passwordSection.value).to(equal(item.password))
                         expect(passwordSection.accessibilityLabel).to(equal(String(format: Constant.string.passwordCellAccessibilityLabel, item.password)))
                         expect(passwordSection.revealPasswordObserver).notTo(beNil())
                     }
@@ -391,50 +425,58 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the title") {
-                        expect(self.view.titleTextObserver.events.last!.value.element).to(equal("cats.com"))
+                        expect(self.view.titleTextObserverStub.events.last!.value.element).to(equal("cats.com"))
                     }
 
                     it("passes the configuration with an obscured password for the item") {
-                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-                        expect(webAddressSection.value).to(equal(item.hostname))
+//                        expect(webAddressSection.value).to(equal(item.hostname))
                         expect(webAddressSection.revealPasswordObserver).to(beNil())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
-                        expect(usernameSection.value).to(equal(item.username!))
+//                        expect(usernameSection.value).to(equal(item.username!))
                         expect(usernameSection.revealPasswordObserver).to(beNil())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
-                        expect(passwordSection.value).to(equal("•••••••••"))
+//                        expect(passwordSection.value).to(equal("•••••••••"))
                         expect(passwordSection.revealPasswordObserver).notTo(beNil())
                     }
 
                     it("open button is displayed for web address") {
-                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
                         let usernameSection = viewConfig[1].items[0]
                         let passwordSection = viewConfig[1].items[1]
 
-                        expect(webAddressSection.showOpenButton).to(beTrue())
-                        expect(usernameSection.showOpenButton).to(beFalse())
-                        expect(passwordSection.showOpenButton).to(beFalse())
+//                        expect(webAddressSection.showOpenButton).to(beTrue())
+//                        expect(usernameSection.showOpenButton).to(beFalse())
+//                        expect(passwordSection.showOpenButton).to(beFalse())
                     }
 
                     it("copy button is displayed for username and password") {
-                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
                         let usernameSection = viewConfig[1].items[0]
                         let passwordSection = viewConfig[1].items[1]
 
-                        expect(webAddressSection.showCopyButton).to(beFalse())
-                        expect(usernameSection.showCopyButton).to(beTrue())
-                        expect(passwordSection.showCopyButton).to(beTrue())
+//                        expect(webAddressSection.showCopyButton).to(beFalse())
+//                        expect(usernameSection.showCopyButton).to(beTrue())
+//                        expect(passwordSection.showCopyButton).to(beTrue())
+                    }
+
+                    describe("") {
+
+                    }
+
+                    describe("") {
+
                     }
                 }
 
@@ -447,28 +489,28 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
 
                     it("displays the unnamed entry placeholder text") {
-                        expect(self.view.titleTextObserver.events.last!.value.element)
+                        expect(self.view.titleTextObserverStub.events.last!.value.element)
                                 .to(equal(Constant.string.unnamedEntry))
                     }
 
                     it("passes the configuration with an empty string for the appropriate values") {
-                        let viewConfig = self.view.itemDetailObserver.events.last!.value.element!
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
                         expect(viewConfig.count).to(equal(2))
 
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-                        expect(webAddressSection.value).to(equal(""))
+//                        expect(webAddressSection.value).to(equal(""))
                         expect(webAddressSection.revealPasswordObserver).to(beNil())
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
-                        expect(usernameSection.value).to(equal(""))
+//                        expect(usernameSection.value).to(equal(""))
                         expect(usernameSection.revealPasswordObserver).to(beNil())
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
-                        expect(passwordSection.value).to(equal(""))
+//                        expect(passwordSection.value).to(equal(""))
                         expect(passwordSection.revealPasswordObserver).notTo(beNil())
                     }
                 }
@@ -487,33 +529,162 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("editTapped") {
-                    beforeEach {
-                        self.view.editStub.onNext(())
+                describe("leftButtonTapped") {
+                    describe("when editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(true)
+                            self.view.leftButtonTappedStub.onNext(())
+                        }
 
-                        self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                        it("dispatches the view mode action") {
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                                    .to(equal(ItemDetailDisplayAction.viewMode))
+                        }
                     }
 
-                    it("dispatches the edit route action") {
-                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                        let argument = self.dispatcher.dispatchActionArgument.last as! MainRouteAction
-                        expect(argument).to(equal(MainRouteAction.edit(itemId: "1234")))
+                    describe("when not editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(false)
+                            self.view.leftButtonTappedStub.onNext(())
+                        }
+
+                        it("dispatches the edit mode action") {
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction)
+                                    .to(equal(MainRouteAction.list))
+                        }
                     }
                 }
-            }
 
-            describe(".onViewReady for view with sidebar") {
-                beforeEach {
-                    self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
-                    self.view.titleTextObserver = self.scheduler.createObserver(String.self)
+                describe("rightButtonTapped") {
+                    describe("when editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(true)
+                            self.view.rightButtonTappedStub.onNext(())
+                        }
 
-                    self.itemDetailStore.itemDetailIdStub.onNext("1234")
-                    self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
-                    self.subject.onViewReady()
+                        it("dispatches the view mode action") {
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                                    .to(equal(ItemDetailDisplayAction.viewMode))
+                        }
+                    }
+
+                    describe("when not editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(false)
+                            self.view.rightButtonTappedStub.onNext(())
+                        }
+
+                        it("dispatches the edit mode action") {
+                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                                    .to(equal(ItemDetailDisplayAction.editMode))
+                        }
+                    }
                 }
 
-                it("does not show back button") {
-                    expect(self.view.enableBackButtonValue).to(beFalse())
+                describe("left button title") {
+                    describe("when the sidebar is displayed") {
+                        beforeEach {
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                        }
+
+                        describe("when editing") {
+                            beforeEach {
+                                self.itemDetailStore.isEditingStub.onNext(true)
+                            }
+
+                            it("pushes cancel") {
+                                expect(self.view.leftButtonTextObserverStub.events.last?.value.element).to(equal(Constant.string.cancel))
+                            }
+                        }
+
+                        describe("when not editing") {
+                            beforeEach {
+                                self.itemDetailStore.isEditingStub.onNext(false)
+                            }
+
+                            it("pushes nil") {
+                                expect(self.view.leftButtonTextObserverStub.events.last!.value.element!).to(beNil())
+                            }
+                        }
+                    }
+
+                    describe("when the sidebar is not displayed") {
+                        beforeEach {
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
+                        }
+
+                        describe("when editing") {
+                            beforeEach {
+                                self.itemDetailStore.isEditingStub.onNext(true)
+                            }
+
+                            it("pushes cancel") {
+                                expect(self.view.leftButtonTextObserverStub.events.last!.value.element).to(equal(Constant.string.cancel))
+                            }
+                        }
+
+                        describe("when not editing") {
+                            beforeEach {
+                                self.itemDetailStore.isEditingStub.onNext(false)
+                            }
+
+                            it("pushes back") {
+                                expect(self.view.leftButtonTextObserverStub.events.last!.value.element).to(equal(Constant.string.back))
+                            }
+                        }
+                    }
+                }
+
+                describe("other editing side effects") {
+                    describe("when editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(true)
+                        }
+
+                        it("changes the title size, the delete status, and the right button title") {
+                            expect(self.view.enableLargeTitleValue).to(beFalse())
+                            expect(self.view.deleteHiddenObserverStub.events.last?.value.element).to(equal(false))
+                            expect(self.view.rightButtonTextObserverStub.events.last?.value.element).to(equal(Constant.string.save))
+                        }
+                    }
+
+                    describe("when not editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(false)
+                        }
+
+                        it("changes the title size, the delete status, and the right button title") {
+                            expect(self.view.enableLargeTitleValue).to(beTrue())
+                            expect(self.view.deleteHiddenObserverStub.events.last?.value.element).to(equal(true))
+                            expect(self.view.rightButtonTextObserverStub.events.last?.value.element).to(equal(Constant.string.edit))
+                        }
+                    }
+                }
+
+                describe("sizeClass") {
+                    describe("when displaying sidebar") {
+                        beforeEach {
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                        }
+                        
+                        it("enables swipe navigation") {
+                            expect(self.view.enableSwipeValue).to(beFalse())
+                        }
+                    }
+                    
+                    describe("when not displaying sidebar") {
+                        beforeEach {
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
+                        }
+
+                        it("disables swipe navigation") {
+                            expect(self.view.enableSwipeValue).to(beTrue())
+                        }
+                    }
                 }
             }
 

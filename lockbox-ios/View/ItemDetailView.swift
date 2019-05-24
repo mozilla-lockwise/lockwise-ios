@@ -32,6 +32,7 @@ class ItemDetailView: UIViewController {
         self.view.backgroundColor = Constant.color.viewBackground
         self.tableView.dragDelegate = self
         self.navigationItem.largeTitleDisplayMode = .always
+        self.setupDeleteButton()
         self.setupNavigation()
         self.setupDataSource()
         self.presenter?.onViewReady()
@@ -68,22 +69,22 @@ extension ItemDetailView: ItemDetailViewProtocol {
         return self.tableView.rx.items(dataSource: self.dataSource!)
     }
 
-    var titleText: Binder<String?> {
-        return self.navigationItem.rx.title
+    var titleText: AnyObserver<String?> {
+        return self.navigationItem.rx.title.asObserver()
     }
 
-    var rightButtonText: Binder<String?> {
+    var rightButtonText: AnyObserver<String?> {
         // swiftlint:disable:next force_cast
-        return (self.navigationItem.rightBarButtonItem!.customView as! UIButton).rx.title()
+        return (self.navigationItem.rightBarButtonItem!.customView as! UIButton).rx.title().asObserver()
     }
 
-    var leftButtonText: Binder<String?> {
+    var leftButtonText: AnyObserver<String?> {
         // swiftlint:disable:next force_cast
-        return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.title()
+        return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.title().asObserver()
     }
 
-    var deleteHidden: Binder<Bool> {
-        return self.deleteButton.rx.isHidden
+    var deleteHidden: AnyObserver<Bool> {
+        return self.deleteButton.rx.isHidden.asObserver()
     }
 
     func enableLargeTitle(enabled: Bool) {
@@ -107,6 +108,13 @@ extension ItemDetailView: ItemDetailViewProtocol {
 
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
+    fileprivate func setupDeleteButton() {
+        self.deleteButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        self.deleteButton.titleLabel?.textAlignment = .center
+        self.deleteButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        self.deleteButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
+    }
+
     fileprivate func setupNavigation() {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
@@ -131,9 +139,12 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     }
 
                     cell.title.text = cellConfiguration.title
-                    cell.value.text = cellConfiguration.value
 
-                    cell.value.textColor = cellConfiguration.valueFontColor
+                    cellConfiguration.value
+                            .drive(cell.textValue.rx.text)
+                            .disposed(by: cell.disposeBag)
+
+                    cell.textValue.textColor = cellConfiguration.valueFontColor
 
                     cell.accessibilityLabel = cellConfiguration.accessibilityLabel
                     cell.accessibilityIdentifier = cellConfiguration.accessibilityId
@@ -141,7 +152,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
 
                     cellConfiguration.textFieldEnabled
-                            .drive(cell.value.rx.isUserInteractionEnabled)
+                            .drive(cell.textValue.rx.isUserInteractionEnabled)
                             .disposed(by: cell.disposeBag)
 
                     cellConfiguration.copyButtonHidden
@@ -155,7 +166,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     cell.dragValue = cellConfiguration.dragValue
 
                     if let revealObserver = cellConfiguration.revealPasswordObserver {
-                        cell.value.font = UIFont(name: "Menlo-Regular", size: 16)
+                        cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
 
                         cell.revealButton.rx.tap
                                 .map { _ -> Bool in

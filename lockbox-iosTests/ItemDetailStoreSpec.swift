@@ -215,7 +215,7 @@ class ItemDetailStoreSpec: QuickSpec {
                     passwordRevealedObserver = self.scheduler.createObserver(Bool.self)
 
                     self.subject.passwordRevealed
-                            .drive(passwordRevealedObserver)
+                            .subscribe(passwordRevealedObserver)
                             .disposed(by: self.disposeBag)
                 }
 

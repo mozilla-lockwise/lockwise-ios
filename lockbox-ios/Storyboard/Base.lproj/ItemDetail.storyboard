@@ -131,7 +131,7 @@
                                             <outlet property="openButton" destination="Tbk-ki-qGK" id="SAe-N5-GUR"/>
                                             <outlet property="revealButton" destination="Mhp-Pp-rfw" id="9gv-8e-xXc"/>
                                             <outlet property="title" destination="t0H-71-xTp" id="OlC-Hz-PBf"/>
-                                            <outlet property="value" destination="av2-cE-3aJ" id="a5G-v5-4tQ"/>
+                                            <outlet property="textValue" destination="av2-cE-3aJ" id="a5G-v5-4tQ"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

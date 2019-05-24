@@ -20,8 +20,8 @@ class ItemDetailStore: BaseItemDetailStore {
     private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
     private var _isEditing = BehaviorRelay<Bool>(value: false)
 
-    lazy private(set) var passwordRevealed: Driver<Bool> = {
-        return self._passwordRevealed.asDriver(onErrorJustReturn: false)
+    lazy private(set) var passwordRevealed: Observable<Bool> = {
+        return self._passwordRevealed.asObservable()
     }()
 
     lazy private(set) var isEditing: Observable<Bool> = {
