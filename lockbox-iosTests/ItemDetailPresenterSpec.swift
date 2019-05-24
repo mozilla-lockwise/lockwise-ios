@@ -179,23 +179,6 @@ class ItemDetailPresenterSpec: QuickSpec {
                 )
             }
 
-//            describe("onPasswordToggle") {
-//                let passwordRevealSelected = true
-//                beforeEach {
-//                    self.subject.onViewReady()
-//                    self.dataStore.lockedStub.onNext(false)
-//                    let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": username, "password": "meow"])
-//                    self.dataStore.onItemStub.onNext(item)
-//                    self.view.itemDetailObserverStub.events.first!.value.element!.first!.revealPasswordObserver.onNext(passwordRevealSelected)
-//                }
-//
-//                it("dispatches the password action with the value") {
-//                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-//                    let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
-//                    expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
-//                }
-//            }
-
             describe("when swiping right") {
                 beforeEach {
                     let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
@@ -215,7 +198,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             }
 
             describe(".onViewReady") {
-                let item = LoginRecord(fromJSONDict: ["id": "sdfsdfdfs", "hostname": "www.cats.com", "username": "meow", "password": "iluv kats"])
+                let item = LoginRecord(fromJSONDict: ["id": "sdfsdfdfs", "hostname": "https://www.cats.com", "username": "meow", "password": "iluv kats"])
 
                 beforeEach {
                     self.itemDetailStore.itemDetailIdStub.onNext("1234")
@@ -232,7 +215,6 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("copy behavior") {
                     describe("when editing") {
                         beforeEach {
-                            let item = LoginRecord(fromJSONDict: ["id": "fsdfds", "hostname": "www.example.com", "username": "dawgzone", "password": "meow"])
                             self.dataStore.onItemStub.onNext(item)
                             self.itemDetailStore.isEditingStub.onNext(true)
                         }
@@ -383,100 +365,183 @@ class ItemDetailPresenterSpec: QuickSpec {
                     }
                 }
 
-                describe("getting an item with the password displayed") {
+                describe("getting an item") {
+                    var webAddressTestObserver = self.scheduler.createObserver(String.self)
+                    var usernameTestObserver = self.scheduler.createObserver(String?.self)
+                    var passwordTestObserver = self.scheduler.createObserver(String.self)
+
                     beforeEach {
+                        webAddressTestObserver = self.scheduler.createObserver(String.self)
+                        usernameTestObserver = self.scheduler.createObserver(String?.self)
+                        passwordTestObserver = self.scheduler.createObserver(String.self)
                         self.dataStore.onItemStub.onNext(item)
-                        self.itemDetailStore.passwordRevealedStub
-                                .onNext(true)
                     }
 
                     it("displays the title") {
                         expect(self.view.titleTextObserverStub.events.last!.value.element).to(equal("cats.com"))
                     }
 
-                    it("passes the configuration with a shown password for the item") {
+                    it("passes the configuration for the item") {
                         let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
                         let webAddressSection = viewConfig[0].items[0]
                         expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-//                        expect(webAddressSection.value).to(equal(item.hostname))
-                        expect(webAddressSection.accessibilityLabel).to(equal(String(format: Constant.string.websiteCellAccessibilityLabel, item.hostname)))
                         expect(webAddressSection.revealPasswordObserver).to(beNil())
+                        webAddressSection.value.drive(webAddressTestObserver).disposed(by: self.disposeBag)
+                        expect(webAddressTestObserver.events.first?.value.element).to(equal(item.hostname))
 
                         let usernameSection = viewConfig[1].items[0]
                         expect(usernameSection.title).to(equal(Constant.string.username))
-//                        expect(usernameSection.value).to(equal(item.username))
-                        expect(usernameSection.accessibilityLabel).to(equal(String(format: Constant.string.usernameCellAccessibilityLabel, item.username!)))
                         expect(usernameSection.revealPasswordObserver).to(beNil())
+                        usernameSection.value.drive(usernameTestObserver).disposed(by: self.disposeBag)
+                        expect(usernameTestObserver.events.first?.value.element).to(equal(item.username))
 
                         let passwordSection = viewConfig[1].items[1]
                         expect(passwordSection.title).to(equal(Constant.string.password))
-//                        expect(passwordSection.value).to(equal(item.password))
-                        expect(passwordSection.accessibilityLabel).to(equal(String(format: Constant.string.passwordCellAccessibilityLabel, item.password)))
                         expect(passwordSection.revealPasswordObserver).notTo(beNil())
-                    }
-                }
-
-                describe("getting an item without the password displayed") {
-                    beforeEach {
-                        self.dataStore.onItemStub.onNext(item)
+                        passwordSection.value.drive(passwordTestObserver).disposed(by: self.disposeBag)
                         self.itemDetailStore.passwordRevealedStub
                                 .onNext(false)
+                        expect(passwordTestObserver.events.first?.value.element).to(equal("•••••••••"))
                     }
 
-                    it("displays the title") {
-                        expect(self.view.titleTextObserverStub.events.last!.value.element).to(equal("cats.com"))
-                    }
-
-                    it("passes the configuration with an obscured password for the item") {
+                    it("displays the password when the itemdetailstore changes") {
                         let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
-
-                        let webAddressSection = viewConfig[0].items[0]
-                        expect(webAddressSection.title).to(equal(Constant.string.webAddress))
-//                        expect(webAddressSection.value).to(equal(item.hostname))
-                        expect(webAddressSection.revealPasswordObserver).to(beNil())
-
-                        let usernameSection = viewConfig[1].items[0]
-                        expect(usernameSection.title).to(equal(Constant.string.username))
-//                        expect(usernameSection.value).to(equal(item.username!))
-                        expect(usernameSection.revealPasswordObserver).to(beNil())
-
                         let passwordSection = viewConfig[1].items[1]
-                        expect(passwordSection.title).to(equal(Constant.string.password))
-//                        expect(passwordSection.value).to(equal("•••••••••"))
-                        expect(passwordSection.revealPasswordObserver).notTo(beNil())
+                        passwordSection.value.drive(passwordTestObserver).disposed(by: self.disposeBag)
+
+                        self.itemDetailStore.passwordRevealedStub.onNext(true)
+                        expect(passwordTestObserver.events.last?.value.element).to(equal(item.password))
                     }
 
-                    it("open button is displayed for web address") {
+                    it("dispatches the reveal password action on password eye taps") {
                         let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
-
-                        let webAddressSection = viewConfig[0].items[0]
-                        let usernameSection = viewConfig[1].items[0]
                         let passwordSection = viewConfig[1].items[1]
+                        passwordSection.revealPasswordObserver!.onNext(true)
 
-//                        expect(webAddressSection.showOpenButton).to(beTrue())
-//                        expect(usernameSection.showOpenButton).to(beFalse())
-//                        expect(passwordSection.showOpenButton).to(beFalse())
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
+                        expect(action).to(equal(.togglePassword(displayed: true)))
                     }
 
-                    it("copy button is displayed for username and password") {
-                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                    describe("when editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(true)
+                        }
 
-                        let webAddressSection = viewConfig[0].items[0]
-                        let usernameSection = viewConfig[1].items[0]
-                        let passwordSection = viewConfig[1].items[1]
+                        it("open button is not displayed for web address or any other cell") {
+                            let webAddressObserver = self.scheduler.createObserver(Bool.self)
+                            let usernameObserver = self.scheduler.createObserver(Bool.self)
+                            let passwordObserver = self.scheduler.createObserver(Bool.self)
+                            let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
-//                        expect(webAddressSection.showCopyButton).to(beFalse())
-//                        expect(usernameSection.showCopyButton).to(beTrue())
-//                        expect(passwordSection.showCopyButton).to(beTrue())
+                            let webAddressSection = viewConfig[0].items[0]
+                            let usernameSection = viewConfig[1].items[0]
+                            let passwordSection = viewConfig[1].items[1]
+
+                            webAddressSection.openButtonHidden.drive(webAddressObserver).disposed(by: self.disposeBag)
+                            expect(webAddressObserver.events.first?.value.element).to(beTrue())
+                            usernameSection.openButtonHidden.drive(usernameObserver).disposed(by: self.disposeBag)
+                            expect(usernameObserver.events.first?.value.element).to(beTrue())
+                            passwordSection.openButtonHidden.drive(passwordObserver).disposed(by: self.disposeBag)
+                            expect(passwordObserver.events.first?.value.element).to(beTrue())
+                        }
+
+                        it("copy button is not displayed for webaddress, username and password") {
+                            let webAddressObserver = self.scheduler.createObserver(Bool.self)
+                            let usernameObserver = self.scheduler.createObserver(Bool.self)
+                            let passwordObserver = self.scheduler.createObserver(Bool.self)
+                            let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+
+                            let webAddressSection = viewConfig[0].items[0]
+                            let usernameSection = viewConfig[1].items[0]
+                            let passwordSection = viewConfig[1].items[1]
+
+                            webAddressSection.copyButtonHidden.drive(webAddressObserver).disposed(by: self.disposeBag)
+                            expect(webAddressObserver.events.first?.value.element).to(beTrue())
+                            usernameSection.copyButtonHidden.drive(usernameObserver).disposed(by: self.disposeBag)
+                            expect(usernameObserver.events.first?.value.element).to(beTrue())
+                            passwordSection.copyButtonHidden.drive(passwordObserver).disposed(by: self.disposeBag)
+                            expect(passwordObserver.events.first?.value.element).to(beTrue())
+                        }
+
+                        it("enforces editability of all fields") {
+                            let webAddressObserver = self.scheduler.createObserver(Bool.self)
+                            let usernameObserver = self.scheduler.createObserver(Bool.self)
+                            let passwordObserver = self.scheduler.createObserver(Bool.self)
+                            let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+
+                            let webAddressSection = viewConfig[0].items[0]
+                            let usernameSection = viewConfig[1].items[0]
+                            let passwordSection = viewConfig[1].items[1]
+
+                            webAddressSection.textFieldEnabled.drive(webAddressObserver).disposed(by: self.disposeBag)
+                            expect(webAddressObserver.events.first?.value.element).to(beTrue())
+                            usernameSection.textFieldEnabled.drive(usernameObserver).disposed(by: self.disposeBag)
+                            expect(usernameObserver.events.first?.value.element).to(beTrue())
+                            passwordSection.textFieldEnabled.drive(passwordObserver).disposed(by: self.disposeBag)
+                            expect(passwordObserver.events.first?.value.element).to(beTrue())
+                        }
                     }
 
-                    describe("") {
+                    describe("when not editing") {
+                        beforeEach {
+                            self.itemDetailStore.isEditingStub.onNext(false)
+                        }
 
-                    }
+                        it("open button is displayed for web address and no other cell") {
+                            let webAddressObserver = self.scheduler.createObserver(Bool.self)
+                            let usernameObserver = self.scheduler.createObserver(Bool.self)
+                            let passwordObserver = self.scheduler.createObserver(Bool.self)
+                            let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
 
-                    describe("") {
+                            let webAddressSection = viewConfig[0].items[0]
+                            let usernameSection = viewConfig[1].items[0]
+                            let passwordSection = viewConfig[1].items[1]
 
+                            webAddressSection.openButtonHidden.drive(webAddressObserver).disposed(by: self.disposeBag)
+                            expect(webAddressObserver.events.first?.value.element).to(beFalse())
+                            usernameSection.openButtonHidden.drive(usernameObserver).disposed(by: self.disposeBag)
+                            expect(usernameObserver.events.first?.value.element).to(beTrue())
+                            passwordSection.openButtonHidden.drive(passwordObserver).disposed(by: self.disposeBag)
+                            expect(passwordObserver.events.first?.value.element).to(beTrue())
+                        }
+
+                        it("copy button is displayed for username and password only") {
+                            let webAddressObserver = self.scheduler.createObserver(Bool.self)
+                            let usernameObserver = self.scheduler.createObserver(Bool.self)
+                            let passwordObserver = self.scheduler.createObserver(Bool.self)
+                            let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+
+                            let webAddressSection = viewConfig[0].items[0]
+                            let usernameSection = viewConfig[1].items[0]
+                            let passwordSection = viewConfig[1].items[1]
+
+                            webAddressSection.copyButtonHidden.drive(webAddressObserver).disposed(by: self.disposeBag)
+                            expect(webAddressObserver.events.first?.value.element).to(beTrue())
+                            usernameSection.copyButtonHidden.drive(usernameObserver).disposed(by: self.disposeBag)
+                            expect(usernameObserver.events.first?.value.element).to(beFalse())
+                            passwordSection.copyButtonHidden.drive(passwordObserver).disposed(by: self.disposeBag)
+                            expect(passwordObserver.events.first?.value.element).to(beFalse())
+                        }
+
+                        it("enforces editability of all fields") {
+                            let webAddressObserver = self.scheduler.createObserver(Bool.self)
+                            let usernameObserver = self.scheduler.createObserver(Bool.self)
+                            let passwordObserver = self.scheduler.createObserver(Bool.self)
+                            let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+
+                            let webAddressSection = viewConfig[0].items[0]
+                            let usernameSection = viewConfig[1].items[0]
+                            let passwordSection = viewConfig[1].items[1]
+
+                            webAddressSection.textFieldEnabled.drive(webAddressObserver).disposed(by: self.disposeBag)
+                            expect(webAddressObserver.events.first?.value.element).to(beFalse())
+                            usernameSection.textFieldEnabled.drive(usernameObserver).disposed(by: self.disposeBag)
+                            expect(usernameObserver.events.first?.value.element).to(beFalse())
+                            passwordSection.textFieldEnabled.drive(passwordObserver).disposed(by: self.disposeBag)
+                            expect(passwordObserver.events.first?.value.element).to(beFalse())
+                        }
                     }
                 }
 
