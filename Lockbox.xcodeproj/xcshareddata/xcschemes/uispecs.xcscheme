@@ -71,6 +71,17 @@
                BlueprintName = "LockwiseXCUITests"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "LockwiseXCUITests">
+               </Test>
+               <Test
+                  Identifier = "SnapshotsXCUITests/testEntriesSortAndSearchSnapshots()">
+               </Test>
+               <Test
+                  Identifier = "SnapshotsXCUITests/testSettingsSnapshots()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
       <MacroExpansion>

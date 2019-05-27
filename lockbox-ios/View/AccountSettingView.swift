@@ -39,6 +39,7 @@ class AccountSettingView: UIViewController {
             for: .normal
         )
         self.disclaimerLabel.text = String(format: Constant.string.disclaimerLabel, Constant.string.productLabel)
+        //self.unlinkAccountButton.accessibilityIdentifier = "disconnectConfirm"
     }
 }
 
