@@ -603,8 +603,8 @@
 		D59BC99A2296EA96009BA380 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
 		D59BC99B2296EA98009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
 		D59BC99D2296EA9A009BA380 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SpinnerAlert.strings; sourceTree = "<group>"; };
-		D59BC99E2296EAD0009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "lockbox-ios/Common/Resources/de.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
-		D59BC99F2296EADF009BA380 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = "lockbox-ios/Common/Resources/es.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
+		D59BC99E2296EAD0009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = "lockbox-ios/Common/Resources/Strings/de.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
+		D59BC99F2296EADF009BA380 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = "lockbox-ios/Common/Resources/Strings/es.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
 		D59BC9A02296EAF4009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D59BC9A12296EAFC009BA380 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -612,9 +612,9 @@
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
 		D5EFD9A72294631E0070E7CB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D5EFD9A8229463270070E7CB /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D5EFD9AA229463360070E7CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "lockbox-ios/Common/Resources/en.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
-		D5EFD9AC229463420070E7CB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "lockbox-ios/Common/Resources/fr.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
-		D5EFD9AD2294634D0070E7CB /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "lockbox-ios/Common/Resources/it.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
+		D5EFD9AA229463360070E7CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "lockbox-ios/Common/Resources/Strings/en.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
+		D5EFD9AC229463420070E7CB /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = "lockbox-ios/Common/Resources/Strings/fr.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
+		D5EFD9AD2294634D0070E7CB /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = "lockbox-ios/Common/Resources/Strings/it.lproj/InfoPlist.strings"; sourceTree = SOURCE_ROOT; };
 		D80D41B721F65E91008A7B11 /* SizeClassStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStore.swift; sourceTree = "<group>"; };
 		D80D41B921F677A5008A7B11 /* SizeClassAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassAction.swift; sourceTree = "<group>"; };
 		D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeClassStoreSpec.swift; sourceTree = "<group>"; };
