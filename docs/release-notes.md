@@ -1,5 +1,56 @@
 # Release Notes
 
+## 1.6.0 (Build 3352)
+
+_Date: 2019-05-22_
+
+Firefox Lockbox is now Firefox Lockwise! With the new name also comes a new look!
+
+Changes since last the last build for version 1.6.0:
+
+- toggle password to hidden on backgrounding (#995) 
+- fix issue where locking only happens once per app lifecycle (#1003) 
+
+All changes for version 1.6.0:
+
+- re-brand to Lockwise (#958 and #979)
+- change to app-services dependency (#974)
+- fix for datastore (#970)
+- remove button to direct to settings when logging in (#996) 
+- toggle password to hidden on backgrounding (#995) 
+- fix issue where locking only happens once per app lifecycle (#1003) 
+
+## 1.6.0 (Build 3339)
+
+_Date: 2019-05-21_
+
+Firefox Lockbox is now Firefox Lockwise! With the new name also comes a new look!
+
+Changes in this version:
+
+- re-brand to Lockwise (#958 and #979)
+- change to app-services dependency (#974)
+- fix for datastore (#970)
+- remove button to direct to settings when logging in (#996) 
+
+## 1.5.2 (Build 3338)
+
+_Date: 2019-05-21_
+
+A bug fix around unlocking during AutoFill.
+
+- autolock respected and reset properly in autofill contexts (#993)
+- remove button to direct to settings when logging in (#996)
+
+## 1.5.1 (Build 3310)
+
+_Date: 2019-05-17_
+
+Attempts to fix a bug with signing in and syncing logins. Some users may be required to sign in again. Apologies for the inconvenience.
+
+- log errors outside of debug, push errored state, handle fxa errors (#990)
+
+
 ## 1.5.0 (Build 3240)
 
 _Date: 2019-05-10_
