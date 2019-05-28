@@ -6,8 +6,8 @@ devices([
 ])
 
 languages([
-  "de-DE"
+  "de-DE", "es-ES", "it-IT", "en-US", "fr-FR"
 ])
 
 # The name of the scheme which contains the UI Tests
-scheme "uispecs"
+scheme "L10nSnapshotsTests"

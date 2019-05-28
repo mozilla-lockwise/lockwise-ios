@@ -22,19 +22,16 @@ class LockwiseXCUITests: BaseTestCase {
     }
 
     func testCheckEntryDetailsView() {
-        snapshot("01Welcome" + CONTENT_SIZE)
         loginToEntryListView()
         
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
-        snapshot("02EntryList" + CONTENT_SIZE)
         navigator.goto(Screen.EntryDetails)
         
         // The fields appear
         XCTAssertTrue(app.cells["userNameItemDetail"].exists)
         XCTAssertTrue(app.cells["passwordItemDetail"].exists)
         XCTAssertTrue(app.cells["webAddressItemDetail"].exists)
-        snapshot("03EntryDetail" + CONTENT_SIZE)
         // The value in each field is correct
         let userNameValue = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(userNameValue, firstEntryEmail)
