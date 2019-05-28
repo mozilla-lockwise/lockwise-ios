@@ -58,7 +58,7 @@ class AccountStoreSpec: QuickSpec {
         var connection: Reachability.Connection {
             return .none
         }
-        
+
         var whenReachable: Reachability.NetworkReachable?
         var whenUnreachable: Reachability.NetworkUnreachable?
         func startNotifier() {
