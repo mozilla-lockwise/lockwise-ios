@@ -26,7 +26,7 @@ class SentryStore {
                         terminateProgram: false)
                 })
                 .disposed(by: self.disposeBag)
-        
+
     }
 
     func setup(sendUsageData: Bool) {
