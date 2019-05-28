@@ -245,7 +245,6 @@
 		7DFF2EED21384E6D00F001ED /* CredentialProviderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D09B2512125F9DB00794CA2 /* CredentialProviderPresenter.swift */; };
 		7DFF2EF2213854BA00F001ED /* LoginRecord+Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF1213854BA00F001ED /* LoginRecord+Spec.swift */; };
 		7DFF2EF4213857E100F001ED /* CredentialProviderPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */; };
-		D59BC9902296EA5A009BA380 /* ItemList.strings in Resources */ = {isa = PBXBuildFile; fileRef = D59BC98E2296EA5A009BA380 /* ItemList.strings */; };
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
 		D5E2930A207D59050039A0AC /* FiraSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */; };
 		D5E2930B207D59050039A0AC /* FiraSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */; };
@@ -594,7 +593,6 @@
 		D50921062284A60B00AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
 		D509210A2284A69D00AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/AccountSetting.strings; sourceTree = "<group>"; };
 		D509210C2284A77700AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/OnboardingConfirmation.strings; sourceTree = "<group>"; };
-		D59BC98F2296EA5A009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D59BC9922296EA6B009BA380 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D59BC9942296EA70009BA380 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D59BC9962296EA75009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ItemList.strings; sourceTree = "<group>"; };
@@ -1234,7 +1232,6 @@
 			children = (
 				D8B5D8FA229746780049E03C /* StatusAlert.xib */,
 				7D5889FA205706AA0087DF89 /* ItemList.storyboard */,
-				D59BC98E2296EA5A009BA380 /* ItemList.strings */,
 				7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */,
 			);
 			path = Storyboard;
@@ -1471,7 +1468,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D59BC9902296EA5A009BA380 /* ItemList.strings in Resources */,
 				7D80F30E2118DCC700DA191B /* MainInterface.storyboard in Resources */,
 				7D9722E52134A6770071D82B /* CredentialWelcome.storyboard in Resources */,
 				7DFF2EEC21382DCB00F001ED /* SharedAssets.xcassets in Resources */,
@@ -1959,14 +1955,6 @@
 				F89944D1BA73C4E3BE17F680 /* es */,
 			);
 			name = AccountSetting.storyboard;
-			sourceTree = "<group>";
-		};
-		D59BC98E2296EA5A009BA380 /* ItemList.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D59BC98F2296EA5A009BA380 /* de */,
-			);
-			name = ItemList.strings;
 			sourceTree = "<group>";
 		};
 		D5EFD9A9229463360070E7CB /* InfoPlist.strings */ = {
