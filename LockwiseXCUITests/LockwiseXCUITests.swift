@@ -11,23 +11,20 @@ class LockwiseXCUITests: BaseTestCase {
         waitforExistence(app.buttons["disconnectFirefoxLockwise.button"], timeout: 3)
         // Using taps directly because the action is intermittently failing on BB
         app.buttons["disconnectFirefoxLockwise.button"].tap()
-        //waitforExistence(app.buttons["Disconnect"], timeout: 3)
-        //app.buttons["Disconnect"].tap()
-        // This is the confirm Disconnect account
-        snapshot("14ConfirmDisconnect" + CONTENT_SIZE)
-        waitforExistence(app.buttons.element(boundBy: 3), timeout: 3)
-        app.buttons.element(boundBy: 3).tap()
+        waitforExistence(app.buttons["Disconnect"], timeout: 3)
+        app.buttons["Disconnect"].tap()
+
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
         navigator.nowAt(Screen.WelcomeScreen)
     }
 
     func testCheckEntryDetailsView() {
         loginToEntryListView()
-        
+
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
         navigator.goto(Screen.EntryDetails)
-        
+
         // The fields appear
         XCTAssertTrue(app.cells["userNameItemDetail"].exists)
         XCTAssertTrue(app.cells["passwordItemDetail"].exists)
@@ -48,7 +45,7 @@ class LockwiseXCUITests: BaseTestCase {
         // Check the copy functionality with user name
         let userNameField = app.cells["userNameItemDetail"]
         userNameField.press(forDuration: 1)
-        snapshot("04CopyBanner" + CONTENT_SIZE)
+
         // Now check the clipboard
         if let userNameString = UIPasteboard.general.string {
             let value = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
@@ -75,15 +72,14 @@ class LockwiseXCUITests: BaseTestCase {
     func testSettingsAccountUI() {
         loginToEntryListView()
         navigator.goto(Screen.AccountSettingsMenu)
-        snapshot("05AccountUI" + CONTENT_SIZE)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
         XCTAssertEqual(app.staticTexts["username.Label"].label, userNameAccountSetting)
         XCTAssertTrue(app.buttons["disconnectFirefoxLockwise.button"].exists, "The option to disconnect does not appear")
 
         // Try Cancel disconnecting the account
-//        navigator.performAction(Action.DisconnectFirefoxLockwiseCancel)
-//        waitforExistence(app.buttons["disconnectFirefoxLockwise.button"])
+        navigator.performAction(Action.DisconnectFirefoxLockwiseCancel)
+        waitforExistence(app.buttons["disconnectFirefoxLockwise.button"])
     }
 
     func testSettings() {
@@ -95,14 +91,12 @@ class LockwiseXCUITests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts["Firefox"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Google Chrome"].exists)
         XCTAssertTrue(app.tables.cells.staticTexts["Safari"].exists)
-        snapshot("05OpenSitesMenu" + CONTENT_SIZE)
 
         // Check App Version not empty
         navigator.goto(Screen.SettingsMenu)
         // The app version option exists and it is not empty
         XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
         XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
-        snapshot("06SettingsMenu" + CONTENT_SIZE)
         
         // Check configure Autofill from settings
         if #available(iOS 12.0, *) {
@@ -119,26 +113,24 @@ class LockwiseXCUITests: BaseTestCase {
         // Checking if doing the steps directly works on bb
         waitforExistence(app.buttons["sorting.button"], timeout: 5)
         app.buttons["sorting.button"].tap()
-        snapshot("07SortingMenu" + CONTENT_SIZE)
-        //waitforExistence(app.buttons["Recently Used"])
-        //app.buttons["Recently Used"].tap()
+
+        waitforExistence(app.buttons["Recently Used"])
+        app.buttons["Recently Used"].tap()
         app.sheets.buttons.element(boundBy: 1).tap()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-//        let buttonLabelChanged = app.buttons["sorting.button"].label
-//        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
-        snapshot("08ListSortByRecent" + CONTENT_SIZE)
+        let buttonLabelChanged = app.buttons["sorting.button"].label
+        XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
+
         // Check that the order has changed
         let firstCellRecent = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellRecent, firstEntryRecentOrder )
 
         app.buttons["sorting.button"].tap()
-//        waitforExistence(app.buttons["Alphabetically"])
-//        app.buttons["Alphabetically"].tap()
-        waitforExistence(app.sheets.buttons.element(boundBy: 1))
-        app.sheets.buttons.element(boundBy: 0).tap()
+        waitforExistence(app.buttons["Alphabetically"])
+        app.buttons["Alphabetically"].tap()
         let buttonLabelInitally = app.buttons["sorting.button"].label
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-//        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of logins (currently A-Z)")
+        XCTAssertEqual(buttonLabelInitally, "Select options for sorting your list of logins (currently A-Z)")
 
         // Check that the order has changed again to its initial state
         let firstCellAlphabetically = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
@@ -148,7 +140,6 @@ class LockwiseXCUITests: BaseTestCase {
         let searchTextField = app.searchFields.firstMatch
         waitforExistence(searchTextField, timeout: 3)
         searchTextField.tap()
-        snapshot("09SearchOptions" + CONTENT_SIZE)
         searchTextField.typeText("a")
         // There should be the correct number of matches
         let aMatches = app.tables.cells.count
@@ -168,8 +159,6 @@ class LockwiseXCUITests: BaseTestCase {
         // There should not be any matches
         searchTextField.typeText("x")
         waitforExistence(app.cells.staticTexts["noMatchingEntries.label"])
-        print(app.debugDescription)
-        snapshot("10SearchNoMatches" + CONTENT_SIZE)
         let noMatches = app.tables.cells.count
         if  iPad() {
             // There are not matches but the number of rows shown, more on iPad
@@ -178,19 +167,16 @@ class LockwiseXCUITests: BaseTestCase {
             XCTAssertEqual(noMatches, 1)
         }
         // Tap on cacel
-        //app.buttons["Cancel"].tap()
-        app.buttons.element(boundBy: 4).tap()
+        app.buttons["Cancel"].tap()
         let searchFieldValueAfterCancel = searchTextField.placeholderValue
-//        XCTAssertEqual(searchFieldValueAfterCancel, "Search logins")
+        XCTAssertEqual(searchFieldValueAfterCancel, "Search logins")
         // Tap on 'x'
         searchTextField.tap()
         searchTextField.typeText("a")
-        //app.buttons["Clear text"].tap()
-        //app.buttons.element(boundBy: 3).tap()
-//        let searchFieldValueAfterXButton = searchTextField.value as! String
-//        XCTAssertEqual(searchFieldValueAfterXButton, "Search logins")
-//        app.buttons["Cancel"].tap()
-        app.buttons.element(boundBy: 4).tap()
+        app.buttons["Clear text"].tap()
+        let searchFieldValueAfterXButton = searchTextField.value as! String
+        XCTAssertEqual(searchFieldValueAfterXButton, "Search logins")
+        app.buttons["Cancel"].tap()
         navigator.nowAt(Screen.LockwiseMainPage)
     }
 
@@ -201,23 +187,23 @@ class LockwiseXCUITests: BaseTestCase {
         waitforExistence(app.navigationBars["settings.navigationBar"])
         navigator.goto(Screen.AutolockSettingsMenu)
         snapshot("11AutolockSettingsMenu" + CONTENT_SIZE)
-        //app.cells.staticTexts["Never"].tap()
+        app.cells.staticTexts["Never"].tap()
         navigator.goto(Screen.SettingsMenu)
-//        // Send app to background and launch it
-//        XCUIDevice.shared.press(.home)
-//        app.activate()
-//        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
-//        navigator.goto(Screen.LockwiseMainPage)
-//        navigator.performAction(Action.LockNow)
-//        waitforExistence(app.buttons["unlock.button"])
-//        app.buttons["unlock.button"].tap()
-//        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-//        waitforExistence(springboard.secureTextFields["Passcode field"])
-//        let passcodeInput = springboard.secureTextFields["Passcode field"]
-//        passcodeInput.tap()
-//        passcodeInput.typeText("0000\r")
-//        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-//        navigator.nowAt(Screen.LockwiseMainPage)
+        // Send app to background and launch it
+        XCUIDevice.shared.press(.home)
+        app.activate()
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        navigator.goto(Screen.LockwiseMainPage)
+        navigator.performAction(Action.LockNow)
+        waitforExistence(app.buttons["unlock.button"])
+        app.buttons["unlock.button"].tap()
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitforExistence(springboard.secureTextFields["Passcode field"])
+        let passcodeInput = springboard.secureTextFields["Passcode field"]
+        passcodeInput.tap()
+        passcodeInput.typeText("0000\r")
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
+        navigator.nowAt(Screen.LockwiseMainPage)
     }
 
     // Verify SetAutofillNow
