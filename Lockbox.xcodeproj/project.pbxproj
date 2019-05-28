@@ -572,7 +572,6 @@
 		7DFF2EF1213854BA00F001ED /* LoginRecord+Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LoginRecord+Spec.swift"; sourceTree = "<group>"; };
 		7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenterSpec.swift; sourceTree = "<group>"; };
 		7E074AECBDE3E53FE8E256D7 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7FAA4C7D98709807CCE06A22 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		80C24E078F9DA15264F2FA6F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		9E0D4268AAFE27A5E01718A6 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B0E84623AB91A6A141DD8403 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -631,6 +630,7 @@
 		D5BCA687229D9E1300CF980C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
 		D5BCA688229D9E1400CF980C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
 		D5BCA689229D9E1500CF980C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
+		D5BCA68A229D9F6800CF980C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D5E29308207D59030039A0AC /* FiraSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Bold.ttf"; sourceTree = "<group>"; };
 		D5E29309207D59040039A0AC /* FiraSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FiraSans-Italic.ttf"; sourceTree = "<group>"; };
@@ -1880,11 +1880,11 @@
 		135D40AD8E5C6CC264F33683 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7FAA4C7D98709807CCE06A22 /* de */,
 				72E546AA9EE05EE1E371EFD2 /* en */,
 				B0E84623AB91A6A141DD8403 /* es */,
 				511148969B436281C48E9813 /* it */,
 				B3554B229BDD46895D14A661 /* fr */,
+				D5BCA68A229D9F6800CF980C /* de */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
