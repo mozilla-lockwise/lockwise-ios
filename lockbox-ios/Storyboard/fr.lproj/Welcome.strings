@@ -11,5 +11,5 @@
 "hwO-wS-oS4.text" = "Emportez vos mots de passe partout";
 
 /* Class = "UILabel"; text = "To use Firefox Lockwise, you’ll need a Firefox Account with saved logins."; ObjectID = "xyY-bk-Xw8"; Note = "These are instructions that to use the application, a Firefox Account is need. Firefox Account and Lockwise should be consistently translated to match the product names"; */
-"xyY-bk-Xw8.text" = "Pour utiliser Firefox Lockwise, vous aurez besoin d’un compte Firefox avec des noms d’utilisateur enregistrés.";
+"xyY-bk-Xw8.text" = "Pour utiliser Firefox Lockwise, vous aurez besoin d’un compte Firefox avec des identifiants enregistrés.";
 

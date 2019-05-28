@@ -254,7 +254,7 @@
 "website_accessibility_instructions" = "Adresse web : appuyez deux fois pour ouvrir dans le navigateur %@";
 
 /* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
-"welcome.accessProduct" = "Pour utiliser %@, vous aurez besoin d’un compte Firefox avec des noms d’utilisateur enregistrés.";
+"welcome.accessProduct" = "Pour utiliser %@, vous aurez besoin d’un compte Firefox avec des identifiants enregistrés.";
 
 /* Text on button to unlock app */
 "welcome.unlockButton" = "Déverrouiller";
