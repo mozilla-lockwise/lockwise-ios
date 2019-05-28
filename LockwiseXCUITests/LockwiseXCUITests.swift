@@ -116,7 +116,6 @@ class LockwiseXCUITests: BaseTestCase {
 
         waitforExistence(app.buttons["Recently Used"])
         app.buttons["Recently Used"].tap()
-        app.sheets.buttons.element(boundBy: 1).tap()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
