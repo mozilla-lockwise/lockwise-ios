@@ -32,7 +32,7 @@
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Firefox Lockbox will use Face ID to sign you in to the app.</string>
+	<string>Firefox Lockwise will use Face ID to sign you in to the app.</string>
 	<key>SentryDSN</key>
 	<string>$(SENTRY_DSN)</string>
 	<key>UIAppFonts</key>
