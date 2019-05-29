@@ -18,11 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="755" text="How to Set up AutoFill" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbo-05-zWe">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="755" text="How to Set up AutoFill" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="dbo-05-zWe">
                                 <rect key="frame" x="0.0" y="90" width="375" height="26.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="26.5" id="eJV-rw-EgP"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -32,11 +29,8 @@
                                     </fragment>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" text="Complete the following steps in order to use Lockwise as an AutoFill provider." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ycw-sN-cFL">
-                                <rect key="frame" x="52.5" y="132.5" width="270" height="36"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="270" id="CO1-xV-3OH"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" layoutMarginsFollowReadableWidth="YES" text="Complete the following steps in order to use Lockwise as an AutoFill provider." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ycw-sN-cFL">
+                                <rect key="frame" x="50" y="132.5" width="275" height="36"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -46,7 +40,7 @@
                                     </fragment>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Open the Settings app" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xig-s8-dim">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Open the Settings app" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="xig-s8-dim">
                                 <rect key="frame" x="100.5" y="211.5" width="154" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
@@ -55,16 +49,16 @@
                                     <fragment content="The instruction to open the system Settings app"/>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Deselect iCloud Keychain" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcZ-pI-Mgz">
-                                <rect key="frame" x="100.5" y="434.5" width="172" height="18"/>
-                                <fontDescription key="fontDescription" name=".SFNSText" family=".SF NS Text" pointSize="15"/>
-                                <color key="textColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="757" text="Deselect iCloud Keychain" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="vcZ-pI-Mgz">
+                                <rect key="frame" x="100.5" y="434.5" width="174" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                                 <attributedString key="userComments">
                                     <fragment content="The instruction to unselect a default setting. iCloud Keychain should match the system setting item name"/>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Select Lockwise" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0I-o4-2Ym">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="756" text="Select Lockwise" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="r0I-o4-2Ym">
                                 <rect key="frame" x="100.5" y="391.5" width="110.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
@@ -73,8 +67,8 @@
                                     <fragment content="The instruction to tap the name of this application. Lockwise should not be translated"/>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Turn on AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ys5-RP-RQg">
-                                <rect key="frame" x="100.5" y="348.5" width="185" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Turn on AutoFill Passwords" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="Ys5-RP-RQg">
+                                <rect key="frame" x="100.5" y="348.5" width="184.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -82,7 +76,7 @@
                                     <fragment content="The instruction to enable the setting. AutoFill Passwords should match the system setting item"/>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" text="Tap into AutoFill Passwords" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaL-kM-bTV">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="753" text="Tap into AutoFill Passwords" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="YaL-kM-bTV">
                                 <rect key="frame" x="100.5" y="303.5" width="187" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
@@ -91,8 +85,8 @@
                                     <fragment content="The instruction to open the system setting. AutoFill Passwords should match the system setting menu name"/>
                                 </attributedString>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="Tap into Passwords &amp; Accounts" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daO-QU-3p5">
-                                <rect key="frame" x="100.5" y="257.5" width="215" height="18"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="754" text="Tap into Passwords &amp; Accounts" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="daO-QU-3p5">
+                                <rect key="frame" x="100.5" y="257.5" width="214.5" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -150,15 +144,18 @@
                             <constraint firstItem="xig-s8-dim" firstAttribute="leading" secondItem="UTf-nA-sa6" secondAttribute="trailing" constant="14" id="9q1-Qq-dlc"/>
                             <constraint firstItem="KnK-nY-NyH" firstAttribute="centerX" secondItem="wli-NL-jKr" secondAttribute="centerX" id="BTa-2k-vkc"/>
                             <constraint firstItem="Ys5-RP-RQg" firstAttribute="leading" secondItem="YaL-kM-bTV" secondAttribute="leading" id="BuP-F6-I0W"/>
+                            <constraint firstItem="Ycw-sN-cFL" firstAttribute="width" relation="lessThanOrEqual" secondItem="jQO-vK-4qk" secondAttribute="width" constant="-100" id="C4P-Cp-nar"/>
                             <constraint firstItem="xig-s8-dim" firstAttribute="centerX" secondItem="jQO-vK-4qk" secondAttribute="centerX" constant="-10" id="CVI-B5-Nzw"/>
                             <constraint firstItem="otg-Pn-9qu" firstAttribute="centerY" secondItem="YaL-kM-bTV" secondAttribute="centerY" id="Dg3-dz-SFR"/>
                             <constraint firstItem="dbo-05-zWe" firstAttribute="top" secondItem="jQO-vK-4qk" secondAttribute="top" priority="750" constant="70" id="FLm-5X-gKW"/>
                             <constraint firstItem="YaL-kM-bTV" firstAttribute="top" secondItem="daO-QU-3p5" secondAttribute="bottom" constant="28" id="GnQ-lr-rgX"/>
+                            <constraint firstItem="dbo-05-zWe" firstAttribute="width" relation="lessThanOrEqual" secondItem="jQO-vK-4qk" secondAttribute="width" id="H09-rl-7Lf"/>
                             <constraint firstItem="vcZ-pI-Mgz" firstAttribute="leading" secondItem="sH0-d8-GTZ" secondAttribute="trailing" constant="14" id="J9M-68-myg"/>
                             <constraint firstItem="5iN-kU-ZKf" firstAttribute="centerY" secondItem="daO-QU-3p5" secondAttribute="centerY" id="Jiv-4l-lEH"/>
                             <constraint firstItem="vcZ-pI-Mgz" firstAttribute="leading" secondItem="r0I-o4-2Ym" secondAttribute="leading" id="KAb-ch-8Ty"/>
                             <constraint firstItem="dbo-05-zWe" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jQO-vK-4qk" secondAttribute="top" id="LNF-Xn-syc"/>
                             <constraint firstItem="Ys5-RP-RQg" firstAttribute="leading" secondItem="cqp-p8-7f0" secondAttribute="trailing" constant="12" id="M8t-nv-V4m"/>
+                            <constraint firstItem="UTf-nA-sa6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jQO-vK-4qk" secondAttribute="leading" id="PTx-FA-mIY"/>
                             <constraint firstItem="YaL-kM-bTV" firstAttribute="leading" secondItem="daO-QU-3p5" secondAttribute="leading" id="UWS-Sh-xZm"/>
                             <constraint firstItem="YaL-kM-bTV" firstAttribute="leading" secondItem="otg-Pn-9qu" secondAttribute="trailing" constant="14" id="UbD-kh-1fs"/>
                             <constraint firstItem="daO-QU-3p5" firstAttribute="leading" secondItem="xig-s8-dim" secondAttribute="leading" id="XMa-8j-Rn3"/>

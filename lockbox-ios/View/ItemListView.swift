@@ -147,7 +147,7 @@ extension ItemListView {
         button.addConstraint(NSLayoutConstraint(
             item: button,
             attribute: .width,
-            relatedBy: .equal,
+            relatedBy: .greaterThanOrEqual,
             toItem: nil,
             attribute: .notAnAttribute,
             multiplier: 1.0,

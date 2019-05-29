@@ -120,16 +120,12 @@
                                                     <color key="textColor" red="0.45098039215686275" green="0.45098039215686275" blue="0.45098039215686275" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQB-Vr-ObR">
-                                                    <rect key="frame" x="452" y="249" width="120" height="16"/>
+                                                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQB-Vr-ObR">
+                                                    <rect key="frame" x="473.5" y="249" width="77" height="16"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="gx1-Wz-pTz"/>
-                                                    </constraints>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                    <inset key="imageEdgeInsets" minX="90" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="2" maxX="-2" maxY="0.0"/>
                                                     <state key="normal" title="Learn more" image="arrow-right">
                                                         <color key="titleColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -189,16 +185,12 @@
                                                         </fragment>
                                                     </attributedString>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
-                                                    <rect key="frame" x="452" y="102.5" width="120" height="162.5"/>
+                                                <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
+                                                    <rect key="frame" x="473.5" y="102.5" width="77" height="162.5"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XXw-4F-3gz"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <inset key="titleEdgeInsets" minX="-15" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                    <inset key="imageEdgeInsets" minX="90" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="2" maxX="-2" maxY="0.0"/>
                                                     <state key="normal" title="Learn more" image="arrow-right">
                                                         <color key="titleColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
@@ -279,7 +271,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="6" height="10"/>
+        <image name="arrow-right" width="8" height="10"/>
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
     </resources>
