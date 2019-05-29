@@ -48,13 +48,14 @@ class CredentialProviderPresenter {
         self.credentialProviderStore = credentialProviderStore
 
         self.accountStore.syncCredentials
-            .bind { [weak self] (syncInfo) in
+            .map { syncInfo -> Action in
                 if let credentials = syncInfo {
-                    self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: credentials))
+                    return DataStoreAction.updateCredentials(syncInfo: credentials)
                 } else {
-                    self?.dispatcher.dispatch(action: DataStoreAction.reset)
+                    return DataStoreAction.reset
                 }
             }
+            .bind { self.dispatcher.dispatch(action: $0) }
             .disposed(by: self.disposeBag)
 
         self.dispatcher.register
