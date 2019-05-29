@@ -4,32 +4,38 @@
 
 import Foundation
 import MozillaAppServices
+import AuthenticationServices
 
+@available(iOS 12, *)
 enum CredentialStatusAction: Action {
-    case extensionConfigured, userCanceled, loginSelected(login: LoginRecord, relock: Bool)
+    case extensionConfigured,
+         cancelled(error: ASExtensionError.Code),
+         loginSelected(login: LoginRecord)
 }
 
+@available(iOS 12, *)
 extension CredentialStatusAction: Equatable {
     static func ==(lhs: CredentialStatusAction, rhs: CredentialStatusAction) -> Bool {
         switch (lhs, rhs) {
         case (.extensionConfigured, .extensionConfigured):
             return true
-        case (.userCanceled, .userCanceled):
-            return true
-        case (.loginSelected(let lhLogin, let lhRelock), .loginSelected(let rhLogin, let rhRelock)):
-            return lhLogin == rhLogin && lhRelock == rhRelock
+        case (.cancelled(let lhError), .cancelled(let rhError)):
+            return lhError == rhError
+        case (.loginSelected(let lhLogin), .loginSelected(let rhLogin)):
+            return lhLogin == rhLogin
         default:
             return false
         }
     }
 }
 
+@available(iOS 12, *)
 extension CredentialStatusAction: TelemetryAction {
     var eventMethod: TelemetryEventMethod {
         switch self {
         case .extensionConfigured:
             return .settingChanged
-        case .userCanceled:
+        case .cancelled:
             return .canceled
         case .loginSelected:
             return .login_selected

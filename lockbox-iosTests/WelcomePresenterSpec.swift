@@ -275,17 +275,6 @@ class WelcomePresenterSpec: QuickSpec {
                                 expect(argument).to(equal(.fxa))
                             }
                         }
-
-                        describe("tapping the set passcode button") {
-                            beforeEach {
-                                self.view.alertControllerButtons![1].tapObserver!.onNext(())
-                            }
-
-                            it("routes to the touchid / passcode settings page") {
-                                let action = self.dispatcher.dispatchedActions.popLast() as! SettingLinkAction
-                                expect(action).to(equal(.touchIDPasscode))
-                            }
-                        }
                     }
                 }
 

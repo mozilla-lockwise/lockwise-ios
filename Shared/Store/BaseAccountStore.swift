@@ -10,6 +10,7 @@ import SwiftKeychainWrapper
 import WebKit
 
 class BaseAccountStore {
+    internal let dispatcher: Dispatcher
     internal var keychainWrapper: KeychainWrapper
     internal let networkStore: NetworkStore
 
@@ -31,8 +32,10 @@ class BaseAccountStore {
         return self.keychainWrapper.string(forKey: key)
     }
 
-    init(keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
+    init(dispatcher: Dispatcher = .shared,
+         keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
          networkStore: NetworkStore = NetworkStore.shared) {
+        self.dispatcher = dispatcher
         self.keychainWrapper = keychainWrapper
         self.networkStore = networkStore
 
@@ -54,6 +57,29 @@ class BaseAccountStore {
         }
 
         fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
+            if let error = err as? FirefoxAccountError {
+                var errMessage = ""
+                switch error {
+                case .Network(let message):
+                    errMessage = "Network error: " + message
+                case .Unspecified(let message):
+                    errMessage = "Unspecified error: " + message
+                case .Unauthorized(let message):
+                    errMessage = "Unauthorized error: " + message
+                case .Panic(let message):
+                    errMessage = "Panic error: " + message
+                }
+                let sentryAction = SentryAction(
+                    title: "FxAException: " + errMessage,
+                    error: error,
+                    function: "\(#function)",
+                    line: "\(#line)"
+                )
+                self?.dispatcher.dispatch(action: sentryAction)
+                NSLog("Unexpected error getting access token: \(error.localizedDescription)")
+                self?._syncCredentials.onNext(nil)
+            }
+
             guard let key = accessToken?.key,
                 let token = accessToken?.token
                 else { return }

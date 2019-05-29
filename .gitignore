@@ -7,4 +7,5 @@ lockbox-ios/binaries/
 site/
 fastlane/screenshots/
 export-locales-env
+import-locales-env
 lockwiseios-l10n

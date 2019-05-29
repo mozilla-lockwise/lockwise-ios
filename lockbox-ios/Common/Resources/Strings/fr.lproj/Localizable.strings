@@ -1,0 +1,261 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A à Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Compte";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Alphabétiquement";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "En raison d’une mise à jour récente de l’application, nous devons vous demander de vous reconnecter. Nous sommes désolés pour ce désagrément.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Mise à jour du remplissage automatique…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Mise à jour du remplissage automatique terminée";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Connexion nécessaire";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Vous devez être connecté(e) à %@ pour que le remplissage automatique autorise l’accès aux mots de passe qu’il contient.";
+
+/* Back button title */
+"back" = "Retour";
+
+/* Cancel button title */
+"cancel" = "Annuler";
+
+/* Close button title */
+"close" = "Fermer";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Cette action supprimera de %@ les informations de votre compte Firefox et tous les identifiants enregistrés.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Déconnecter %@ ?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Continuer";
+
+/* Text on button to close settings */
+"done" = "Terminé";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Synchronisation de vos identifiants terminée";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ copié";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Pour commencer";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ est désactivé, installez ce navigateur pour le rendre disponible";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ vous permet d’accéder aux mots de passe que vous avez déjà enregistrés dans Firefox. Pour afficher vos identifiants ici, vous devez vous connecter et activer la synchronisation dans Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(aucun nom d’utilisateur)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Vous n’utilisez pas de code d’accès.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Notes";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "Chiffrement 256 bits";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Bienvenue dans %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Pour verrouiller %@, un code d’accès doit être configuré sur votre appareil. Sinon, toute personne disposant de votre téléphone peut accéder aux informations qui y sont enregistrées.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Vous devriez utiliser un code d’accès pour verrouiller votre appareil. Sinon, toute personne disposant de votre téléphone peut accéder aux informations qui y sont enregistrées.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Mot de passe";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Mot de passe : appuyez deux fois pour copier %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Nouvelle authentification nécessaire";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Récents";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Récemment utilisés";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Rechercher des identifiants";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Définir un code d’accès";
+
+/* Account option in settings */
+"settings.account" = "Compte";
+
+/* App Version setting label */
+"settings.appVersion" = "Version de l’application";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Instructions pour le remplissage automatique";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Verrouillage automatique";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 minutes";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 minutes";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Sélectionnez quand verrouiller après une période d’inactivité";
+
+/* Never */
+"settings.autoLock.never" = "Jamais";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 heure";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 minute";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 minutes";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 heures";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 heures";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Navigateur préféré";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Sélectionnez le navigateur à utiliser avec Lockwise";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "CONFIGURATION";
+
+/* FAQ option in settings */
+"settings.faq" = "FAQ";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Poser une question";
+
+/* Label for link to learn more */
+"settings.learnMore" = "En savoir plus";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Donner mon avis";
+
+/* Support section label in settings */
+"settings.support.header" = "ASSISTANCE";
+
+/* Title on settings screen */
+"settings.title" = "Paramètres";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Déconnecter %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Cette action supprimera les identifiants synchronisés de %@, mais ne supprimera pas vos identifiants de Firefox.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Envoyer des données d’utilisation";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer %@ pour tout le monde.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Paramètres";
+
+/* Sign in button text */
+"signIn" = "Connexion";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Ignorer";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Trier les identifiants";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Sélectionnez des options pour trier votre liste d’identifiants (actuellement %@)";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Synchronisation de vos identifiants";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Se déconnecter";
+
+/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Ceci va déverrouiller l’application.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Déverrouiller avec Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Déverrouiller avec le code d’accès";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Déverrouiller avec Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "entrée sans nom";
+
+/* Section title text for username on the item detail screen */
+"username" = "Nom d’utilisateur";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Nom d’utilisateur : appuyez deux fois pour copier %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(aucun nom d’utilisateur)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Adresse web";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Adresse web : appuyez deux fois pour ouvrir dans le navigateur %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Pour utiliser %@, vous aurez besoin d’un compte Firefox avec des identifiants enregistrés.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Déverrouiller";
+

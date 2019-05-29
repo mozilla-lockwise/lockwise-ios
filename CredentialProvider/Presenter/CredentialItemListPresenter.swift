@@ -24,16 +24,14 @@ class ItemListPresenter: BaseItemListPresenter {
                 return
             }
 
-            if let view = target.view {
-                view.dismissKeyboard()
-            }
+            target.view?.dismissKeyboard()
 
             target.dataStore.get(id)
                 .map { login -> CredentialStatusAction in
                     if let login = login {
-                        return CredentialStatusAction.loginSelected(login: login, relock: false)
+                        return CredentialStatusAction.loginSelected(login: login)
                     } else {
-                        return CredentialStatusAction.userCanceled
+                        return CredentialStatusAction.cancelled(error: .userCanceled)
                     }
                 }
                 .subscribe(onNext: { target.dispatcher.dispatch(action: $0) })
@@ -45,7 +43,7 @@ class ItemListPresenter: BaseItemListPresenter {
 
     lazy var cancelButtonObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            target.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+            target.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .userCanceled))
         }.asObserver()
     }()
 }

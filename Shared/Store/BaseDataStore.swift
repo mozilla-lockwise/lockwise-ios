@@ -76,7 +76,7 @@ class BaseDataStore {
 
     private let dispatcher: Dispatcher
     private let keychainWrapper: KeychainWrapper
-    private let autoLockSupport: AutoLockSupport
+    internal let autoLockSupport: AutoLockSupport
     private let dataStoreSupport: DataStoreSupport
     private let networkStore: NetworkStore
     private let lifecycleStore: LifecycleStore
@@ -238,8 +238,10 @@ extension BaseDataStore {
         queue.async {
             do {
                 try self.loginsStorage?.sync(unlockInfo: syncInfo)
+            } catch let error as LoginStoreError {
+                self.storageStateSubject.onNext(.Errored(cause: error))
             } catch let error {
-                print("Sync15 Sync Error: \(error)")
+                NSLog("Unknown error syncing: \(error)")
             }
             self.syncSubject.onNext(SyncState.Synced)
         }
@@ -252,8 +254,10 @@ extension BaseDataStore {
             do {
                 let loginRecords = try loginsStorage.list()
                 self.listSubject.accept(loginRecords)
+            } catch let error as LoginStoreError {
+                self.storageStateSubject.onNext(.Errored(cause: error))
             } catch let error {
-                print("Sync15 list update error: \(error)")
+                NSLog("Unknown error updating list: \(error)")
             }
         }
     }
@@ -267,22 +271,23 @@ extension BaseDataStore {
 extension BaseDataStore {
     private func setupAutolock() {
         self.lifecycleStore.lifecycleEvents
-                .filter { $0 == .background }
-                .flatMap { _ in self.storageState }
-                .take(1)
-                .subscribe(onNext: { [weak self] state in
-                    guard state == .Unlocked else { return }
-
-                    self?.autoLockSupport.storeNextAutolockTime()
-                })
-                .disposed(by: disposeBag)
+            .filter { $0 == .background }
+            .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void? in
+                return state == .Unlocked ? () : nil
+            })
+            .filterNil()
+            .subscribe(onNext: { [weak self] _ in
+                self?.autoLockSupport.storeNextAutolockTime()
+            })
+            .disposed(by: disposeBag)
 
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
-                .flatMap { _ in self.storageState.take(1) }
-                .subscribe(onNext: { [weak self] state in
-                    guard state != .Unprepared else { return }
-
+                .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void? in
+                    return state != .Unprepared ? () : nil
+                })
+                .filterNil()
+                .subscribe(onNext: { [weak self] _ in
                     self?.handleLock()
                 })
                 .disposed(by: self.disposeBag)
@@ -302,8 +307,8 @@ extension BaseDataStore {
         guard let loginsStorage = self.loginsStorage else { return }
 
         queue.async {
-            loginsStorage.ensureLocked()
             self.storageStateSubject.onNext(.Locked)
+            loginsStorage.ensureLocked()
         }
     }
 
@@ -314,8 +319,10 @@ extension BaseDataStore {
         do {
             try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
             self.storageStateSubject.onNext(.Unlocked)
+        } catch let error as LoginStoreError {
+            self.storageStateSubject.onNext(.Errored(cause: error))
         } catch let error {
-            print("LoginsError: \(error)")
+            NSLog("Unknown error unlocking: \(error)")
         }
     }
 
@@ -355,8 +362,10 @@ extension BaseDataStore {
                 self.storageStateSubject.onNext(.Unprepared)
                 try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
                 try loginsStorage.wipeLocal()
+            } catch let error as LoginStoreError {
+                self.storageStateSubject.onNext(.Errored(cause: error))
             } catch let error {
-                print("Sync15 wipe error: \(error.localizedDescription)")
+                NSLog("Unknown error wiping database: \(error.localizedDescription)")
             }
         }
     }

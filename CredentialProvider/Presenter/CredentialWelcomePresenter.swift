@@ -96,7 +96,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
                         return
                     }
 
-                    self?.dispatcher.dispatch(action: CredentialStatusAction.userCanceled)
+                    self?.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .userCanceled))
                 }
             )
             .disposed(by: self.authenticationBag)

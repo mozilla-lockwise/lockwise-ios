@@ -104,11 +104,7 @@ extension WelcomePresenter {
             AlertActionButtonConfiguration(
                     title: Constant.string.skip,
                     tapObserver: self.skipButtonObserver,
-                    style: .cancel),
-            AlertActionButtonConfiguration(
-                    title: Constant.string.setPasscode,
-                    tapObserver: self.setPasscodeButtonObserver,
-                    style: .default)
+                    style: .cancel)
         ]
     }
 
@@ -155,7 +151,7 @@ extension WelcomePresenter {
                 title: Constant.string.notUsingPasscode,
                 message: Constant.string.passcodeInformation,
                 style: .alert,
-                barButtonItem:  nil)
+                barButtonItem: nil)
     }
 
     private func handleBiometrics(_ infoLockedObservable: Observable<(Profile?, Bool)>) {
