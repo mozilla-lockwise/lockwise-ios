@@ -19,6 +19,9 @@
 /* Class = "UILabel"; text = "Select Lockwise"; ObjectID = "r0I-o4-2Ym"; Note = "The instruction to tap the name of this application. Lockwise should not be translated"; */
 "r0I-o4-2Ym.text" = "Select Lockwise";
 
+/* Class = "UILabel"; text = "Deselect iCloud Keychain"; ObjectID = "vcZ-pI-Mgz"; Note = "The instruction to unselect a default setting. iCloud Keychain should match the system setting item name"; */
+"vcZ-pI-Mgz.text" = "Deselect iCloud Keychain";
+
 /* Class = "UILabel"; text = "Open the Settings app"; ObjectID = "xig-s8-dim"; Note = "The instruction to open the system Settings app"; */
 "xig-s8-dim.text" = "Open the Settings app";
 
