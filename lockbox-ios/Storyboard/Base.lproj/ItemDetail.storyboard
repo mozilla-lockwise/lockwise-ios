@@ -123,7 +123,7 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YaD-WB-pbb">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="YaD-WB-pbb">
                                 <rect key="frame" x="104.5" y="619" width="166" height="28"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <state key="normal" title="Learn how to edit this entry">
@@ -136,7 +136,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="learnEditEntry.button"/>
                                 </userDefinedRuntimeAttributes>
                             </button>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" translatesAutoresizingMaskIntoConstraints="NO" id="FgQ-ab-RJt">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" image="arrow-right" translatesAutoresizingMaskIntoConstraints="NO" id="FgQ-ab-RJt">
                                 <rect key="frame" x="272.5" y="628" width="7" height="10"/>
                                 <color key="tintColor" red="0.0" green="0.37647058823529411" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -151,10 +151,11 @@
                             </imageView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="YaD-WB-pbb" firstAttribute="bottom" secondItem="4I2-rO-7Qh" secondAttribute="bottom" constant="-20" id="2ZU-bL-E9J"/>
+                            <constraint firstItem="YaD-WB-pbb" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="4I2-rO-7Qh" secondAttribute="bottom" constant="-20" id="2ZU-bL-E9J"/>
                             <constraint firstItem="YaD-WB-pbb" firstAttribute="centerX" secondItem="4I2-rO-7Qh" secondAttribute="centerX" id="7wI-eF-AR9"/>
                             <constraint firstItem="FgQ-ab-RJt" firstAttribute="centerY" secondItem="YaD-WB-pbb" secondAttribute="centerY" id="9vk-AX-izw"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="leading" secondItem="KzI-mp-fPN" secondAttribute="leading" id="JZg-bg-E7B"/>
+                            <constraint firstItem="YaD-WB-pbb" firstAttribute="width" relation="lessThanOrEqual" secondItem="3Hr-tN-JYo" secondAttribute="width" id="PAs-Ln-X7h"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="height" secondItem="KzI-mp-fPN" secondAttribute="height" id="Qr0-wP-XZD"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="width" secondItem="KzI-mp-fPN" secondAttribute="width" id="U4U-2H-wOZ"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="top" secondItem="KzI-mp-fPN" secondAttribute="top" id="qDT-gp-FgI"/>
