@@ -101,7 +101,7 @@
 "recent" = "Reciente";
 
 /* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
-"recently_used" = "Usado cecientemente";
+"recently_used" = "Usado recientemente";
 
 /* Placeholder text for search field */
 "search.placeholder" = "Buscar usuarios";
