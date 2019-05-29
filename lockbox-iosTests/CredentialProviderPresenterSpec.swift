@@ -71,10 +71,15 @@ class CredentialProviderPresenterSpec: QuickSpec {
     }
 
     class FakeDataStore: DataStore {
+        let stateStub = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
         let lockedStub = ReplaySubject<Bool>.create(bufferSize: 1)
         let getStub = PublishSubject<LoginRecord?>()
 
         var getGuid: String?
+
+        override var storageState: Observable<LoginStoreState> {
+            return self.stateStub.asObservable()
+        }
 
         override var locked: Observable<Bool> {
             return self.lockedStub.asObservable()
@@ -110,6 +115,30 @@ class CredentialProviderPresenterSpec: QuickSpec {
                     dispatcher: self.dispatcher,
                     accountStore: self.accountStore,
                     dataStore: self.dataStore)
+            }
+
+            describe("passing along sync credentials") {
+                describe("nil credentials") {
+                    beforeEach {
+                        self.accountStore._syncCredentials.onNext(nil)
+                    }
+
+                    it("resets the datastore") {
+                        let action = self.dispatcher.actionArguments.popLast() as! DataStoreAction
+                        expect(action).to(equal(DataStoreAction.reset))
+                    }
+                }
+
+                describe("populated credentials") {
+                    beforeEach {
+                        self.accountStore._syncCredentials.onNext(OfflineSyncCredential)
+                    }
+
+                    it("passes them along to the datastore") {
+                        let action = self.dispatcher.actionArguments.popLast() as! DataStoreAction
+                        expect(action).to(equal(DataStoreAction.updateCredentials(syncInfo: OfflineSyncCredential)))
+                    }
+                }
             }
 
             describe("CredentialStatusAction") {
@@ -329,6 +358,16 @@ class CredentialProviderPresenterSpec: QuickSpec {
             describe("credentialList for identifiers") {
                 beforeEach {
                     self.subject.credentialList(for: [] as! [ASCredentialServiceIdentifier])
+                }
+
+                describe("when the datastore is unprepared") {
+                    beforeEach {
+                        self.dataStore.stateStub.onNext(.Unprepared)
+                    }
+
+                    it("routes to the welcome view") {
+                        expect(self.view.displayWelcomeCalled).to(beTrue())
+                    }
                 }
 
                 describe("when the datastore is locked") {
