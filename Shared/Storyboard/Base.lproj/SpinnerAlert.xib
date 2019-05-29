@@ -11,7 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view autoresizesSubviews="NO" contentMode="scaleToFill" id="iN0-l3-epB" customClass="SpinnerAlert" customModule="CredentialProvider" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="178" height="103"/>
+            <rect key="frame" x="0.0" y="0.0" width="178" height="111"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
             <subviews>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="mO2-mg-hqg">
@@ -30,9 +30,9 @@
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="1Mj-QY-mDP" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2DQ-hn-m9y"/>
-                <constraint firstItem="1Mj-QY-mDP" firstAttribute="top" secondItem="mO2-mg-hqg" secondAttribute="bottom" constant="10" id="IHO-QR-1Rv"/>
-                <constraint firstAttribute="bottom" secondItem="1Mj-QY-mDP" secondAttribute="bottom" constant="20" id="KXN-re-ANZ"/>
                 <constraint firstItem="mO2-mg-hqg" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" constant="20" id="L9a-gx-P6H"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="1Mj-QY-mDP" secondAttribute="bottom" constant="5" id="Prm-eD-e8X"/>
+                <constraint firstItem="1Mj-QY-mDP" firstAttribute="top" secondItem="mO2-mg-hqg" secondAttribute="bottom" constant="10" id="QWQ-ba-nsm"/>
                 <constraint firstItem="mO2-mg-hqg" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="T6z-6q-Gk5"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1Mj-QY-mDP" secondAttribute="trailing" id="mPd-69-me3"/>
                 <constraint firstItem="1Mj-QY-mDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="leading" id="q47-qo-1lN"/>
@@ -44,7 +44,7 @@
                 <outlet property="activityIndicatorView" destination="mO2-mg-hqg" id="gY0-8k-Sj3"/>
                 <outlet property="text" destination="1Mj-QY-mDP" id="7b9-UB-BRv"/>
             </connections>
-            <point key="canvasLocation" x="33.600000000000001" y="52.623688155922046"/>
+            <point key="canvasLocation" x="33.600000000000001" y="56.221889055472268"/>
         </view>
     </objects>
 </document>
