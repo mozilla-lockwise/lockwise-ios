@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-               BuildableName = "Firefox Lockbox.app"
+               BuildableName = "Firefox Lockwise.app"
                BlueprintName = "Firefox Lockbox"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "Firefox Lockbox.app"
+            BuildableName = "Firefox Lockwise.app"
             BlueprintName = "Firefox Lockbox"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
@@ -56,7 +56,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "Firefox Lockbox.app"
+            BuildableName = "Firefox Lockwise.app"
             BlueprintName = "Firefox Lockbox"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
@@ -75,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7D5DF8721F87F2600039B23E"
-            BuildableName = "Firefox Lockbox.app"
+            BuildableName = "Firefox Lockwise.app"
             BlueprintName = "Firefox Lockbox"
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
