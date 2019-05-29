@@ -75,7 +75,6 @@ class ItemDetailView: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = Constant.color.viewBackground
         self.tableView.dragDelegate = self
-        self.learnHowToEditArrow.tintColor = Constant.color.lockBoxViolet
         self.setupNavigation()
         self.setupDataSource()
         self.setupDelegate()
