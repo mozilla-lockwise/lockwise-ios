@@ -48,10 +48,14 @@ class CredentialProviderPresenter {
         self.credentialProviderStore = credentialProviderStore
 
         self.accountStore.syncCredentials
-            .filterNil()
-            .bind { [weak self] (syncInfo) in
-                self?.dispatcher.dispatch(action: DataStoreAction.updateCredentials(syncInfo: syncInfo))
+            .map { syncInfo -> Action in
+                if let credentials = syncInfo {
+                    return DataStoreAction.updateCredentials(syncInfo: credentials)
+                } else {
+                    return DataStoreAction.reset
+                }
             }
+            .bind { self.dispatcher.dispatch(action: $0) }
             .disposed(by: self.disposeBag)
 
         self.dispatcher.register
@@ -128,6 +132,14 @@ class CredentialProviderPresenter {
                     } else {
                         self?.view?.displayItemList()
                     }
+                })
+                .disposed(by: self.credentialProvisionBag)
+
+        self.dataStore.storageState
+                .filter { $0 == .Unprepared }
+                .asDriver(onErrorJustReturn: .Unprepared)
+                .drive(onNext: { [weak self] _ in
+                    self?.view?.displayWelcome()
                 })
                 .disposed(by: self.credentialProvisionBag)
     }

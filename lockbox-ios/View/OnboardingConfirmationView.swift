@@ -11,7 +11,7 @@ class OnboardingConfirmationView: UIViewController {
     @IBOutlet weak var finishButton: UIButton!
     @IBOutlet weak var encryptionTextView: UITextView!
     @IBOutlet weak var headerLabel: UILabel!
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }

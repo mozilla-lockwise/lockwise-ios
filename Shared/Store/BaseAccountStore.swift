@@ -57,9 +57,20 @@ class BaseAccountStore {
         }
 
         fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
-            if let error = err {
+            if let error = err as? FirefoxAccountError {
+                var errMessage = ""
+                switch error {
+                case .Network(let message):
+                    errMessage = "Network error: " + message
+                case .Unspecified(let message):
+                    errMessage = "Unspecified error: " + message
+                case .Unauthorized(let message):
+                    errMessage = "Unauthorized error: " + message
+                case .Panic(let message):
+                    errMessage = "Panic error: " + message
+                }
                 let sentryAction = SentryAction(
-                    title: "FxAException",
+                    title: "FxAException: " + errMessage,
                     error: error,
                     function: "\(#function)",
                     line: "\(#line)"
