@@ -185,7 +185,6 @@ class LockwiseXCUITests: BaseTestCase {
         navigator.goto(Screen.SettingsMenu)
         waitforExistence(app.navigationBars["settings.navigationBar"])
         navigator.goto(Screen.AutolockSettingsMenu)
-        snapshot("11AutolockSettingsMenu" + CONTENT_SIZE)
         app.cells.staticTexts["Never"].tap()
         navigator.goto(Screen.LockwiseMainPage)
         // Send app to background and launch it
