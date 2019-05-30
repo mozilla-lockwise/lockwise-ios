@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Build and Install - Firefox Lockwise for iOS</title>
+  <title>Shared code - Firefox Lockwise for iOS</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Build and Install";
-    var mkdocs_page_input_path = "install.md";
+    var mkdocs_page_name = "Shared code";
+    var mkdocs_page_input_path = "shared_code.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -78,12 +78,9 @@
 		
     <span class="caption-text">Developer Guides</span>
     <ul class="subnav">
-                <li class=" current">
+                <li class="">
                     
-    <a class="current" href="./">Build and Install</a>
-    <ul class="subnav">
-            
-    </ul>
+    <a class="" href="../install/">Build and Install</a>
                 </li>
                 <li class="">
                     
@@ -133,15 +130,11 @@
     <li><a href="..">Docs</a> &raquo;</li>
     
       
-        
-          <li>Developer Guides &raquo;</li>
-        
-      
     
-    <li>Build and Install</li>
+    <li>Shared code</li>
     <li class="wy-breadcrumbs-aside">
       
-        <a href="https://github.com/mozilla-lockwise/lockwise-ios/edit/master/docs/install.md"
+        <a href="https://github.com/mozilla-lockwise/lockwise-ios/edit/master/docs/shared_code.md"
           class="icon icon-github"> Edit on GitHub</a>
       
     </li>
@@ -151,47 +144,21 @@
           <div role="main">
             <div class="section">
               
-                <ol>
-<li>
-<p>Install Xcode version 10.2.1</p>
-</li>
-<li>
-<p>Install the latest <a href="https://developer.apple.com/xcode/downloads/">Xcode developer tools</a> from Apple</p>
-</li>
-<li>
-<p>Install Carthage</p>
-<p><code>brew update
-brew install carthage</code></p>
-</li>
-<li>
-<p>Clone the repository</p>
-<p><code>git clone https://github.com/mozilla-lockwise/lockwise-ios</code></p>
-</li>
-<li>
-<p>Pull in the project dependencies:</p>
-<p><code>cd lockbox-ios
-sh ./bootstrap.sh</code></p>
-</li>
-<li>
-<p>Open <code>Lockbox.xcodeproj</code> in Xcode</p>
-</li>
-<li>
-<p>Build/Run the <code>lockbox</code> scheme in Xcode</p>
-</li>
-</ol>
+                <h2 id="building-new-views">Building new Views</h2>
+<p><img style="float: left;" src="storyboard_l10n.png" width="200"></p>
+<p>Many of the layouts in Lockwise are constructed using <code>Storyboard</code>s. In order to support localizing these storyboard files, make sure that the actual <code>xml</code> for the layout lives in the <code>Base.lproj</code> directory, and language-based directories such as <code>en.lproj</code> contain only <code>.strings</code> files. This can be confirmed in Interface Builder by looking at the <code>Identity</code> tab in the right toolbar, and confirming that the Localization section specifies <code>Localizable Strings</code> for each language as shown in the image.</p>
+<h2 id="shared-business-logic-between-lockwise-credentialprovider">Shared Business Logic between Lockwise + CredentialProvider</h2>
+<p>There are many <code>View</code>s, <code>Presenter</code>s, and <code>Store</code>s with code useful in both the Lockwise application and the CredentialProvider app extension. In service to iOS' restriction that apps and their extension run in separate processes (<a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionOverview.html">extension documentation here</a>), the following code sharing strategy minimizes the amount of code required in each to keep binary sizes small and performance snappy.</p>
+<h3 id="strategy">Strategy</h3>
+<p>We have three directories at the top level of the project -- <code>lockbox-ios</code>, <code>CredentialProvider</code>, and <code>Shared</code>. Each of those directories is broken down into the same set of folders. All classes in the <code>Shared</code> directory are included in both the <code>Lockwise</code> and <code>CredentialProvider</code> targets; the other directories' code is included only in their respective targets.</p>
+<h3 id="inheritance">Inheritance</h3>
+<p>For classes that are used in both the <code>CredentialProvider</code> and <code>Lockwise</code>, the shared code lives in a <code>Base</code> implementation for the class (e.g. <code>BaseDataStore</code>, <code>BaseAccountStore</code>). Each target then implements its own version of the <code>Base</code> class, with <code>Lockwise.app</code> filenames simply removing the <code>Base</code> (e.g. <code>DataStore</code>, <code>AccountStore</code>) and <code>CredentialProvider.appextension</code> filenames prepending <code>Credential</code> (e.g. <code>CredentialDataStore</code>, <code>CredentialAccountStore</code>).</p>
+<h3 id="technical-debt">Technical debt</h3>
+<p>The <code>Base</code> sharing strategy is clunky and can be confusing when interacting with code that spans a <code>Base-</code> class and its target-specific implementation. Future work might see this strategy move to the <a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionScenarios.html#//apple_ref/doc/uid/TP40014214-CH21-SW1">recommended <code>.framework</code></a> method for code sharing.</p>
               
             </div>
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture">Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../metrics/" class="btn btn-neutral" title="Telemetry and Metrics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>
@@ -217,10 +184,6 @@ sh ./bootstrap.sh</code></p>
           <a href="https://github.com/mozilla-lockwise/lockwise-ios/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../metrics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      
-      
-        <span style="margin-left: 15px"><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
