@@ -23,4 +23,4 @@ While the process is added to the CI, screenshots can be generated locally. The 
 If screenshots are not saved, it may be necessary to create that folder locally.
 
 Current locales are defined in `fastlane/Snapfile` as well as the scheme to test. This file can be modified to add/remove locales while generating the screenshots.
-Once screenshots for each locale are generated, they are stored in [`drive`](https://drive.google.com/drive/folders/1dghwymAw5a8TbhhHZvA0Ag4qbgxJ1fDM?usp=sharing). This may change in the future but for now, they live there.
+Once screenshots for each locale are generated, they are stored in drive. This may change in the future but for now, they live there.

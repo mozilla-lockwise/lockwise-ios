@@ -97,7 +97,7 @@ class LockwiseXCUITests: BaseTestCase {
         // The app version option exists and it is not empty
         XCTAssertTrue(app.cells["appVersionSettingOption"].exists)
         XCTAssertNotEqual(app.cells.staticTexts.element(boundBy: 2).label, "")
-        
+
         // Check configure Autofill from settings
         if #available(iOS 12.0, *) {
             navigator.goto(Screen.AutoFillSetUpInstructionsSettings)
