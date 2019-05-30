@@ -20,7 +20,7 @@ class SentryStore {
                         action.title,
                         reason: action.error?.localizedDescription ?? "",
                         language: NSLocale.preferredLanguages.first ?? "",
-                        lineOfCode: action.line,
+                        lineOfCode: action.line ?? "",
                         stackTrace: Thread.callStackSymbols,
                         logAllThreads: false,
                         terminateProgram: false)
@@ -31,10 +31,12 @@ class SentryStore {
 
     func setup(sendUsageData: Bool) {
         if isSimulator() || !sendUsageData {
+            NSLog("SENTRY:: Disable Sentry data collection per user preference or running on the simulator")
             return
         }
 
         guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+            NSLog("SENTRY:: Couldn't start service")
             return
         }
 
@@ -44,8 +46,11 @@ class SentryStore {
 
             // https://docs.sentry.io/clients/cocoa/advanced/#breadcrumbs
             Client.shared?.enableAutomaticBreadcrumbTracking()
+        } catch let error as NSError {
+            NSLog("SENTRY:: Sentry error -- \(error.localizedDescription)")
         } catch let error {
-            print("\(error)")
+            // this seems like a weird way to throw the error when we get an unexpected one
+            assert(true, error.localizedDescription)
         }
     }
 

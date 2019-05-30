@@ -72,11 +72,19 @@ class BaseAccountStore {
                 let sentryAction = SentryAction(
                     title: "FxAException: " + errMessage,
                     error: error,
-                    function: "\(#function)",
                     line: "\(#line)"
                 )
                 self?.dispatcher.dispatch(action: sentryAction)
                 NSLog("Unexpected error getting access token: \(error.localizedDescription)")
+                self?._syncCredentials.onNext(nil)
+            } else if let error = err as? Error {
+                let sentryAction = SentryAction(
+                        title: "Unexpected exception: ",
+                        error: error,
+                        line: "\(#line)"
+                )
+                self?.dispatcher.dispatch(action: sentryAction)
+                throw error
                 self?._syncCredentials.onNext(nil)
             }
 
