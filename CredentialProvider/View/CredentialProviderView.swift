@@ -24,7 +24,7 @@ class CredentialProviderView: ASCredentialProviderViewController {
             oldViewController.removeFromParent()
         }
     }
-    
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return self.currentViewController?.preferredStatusBarStyle ?? .lightContent
     }
