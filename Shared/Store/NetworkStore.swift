@@ -39,7 +39,7 @@ open class NetworkStore {
         }
  
         if !isRunningTest {
-            try? self.reachability?.startNotifier()
+            ((try? self.reachability?.startNotifier()) as ()??)
         }
     }
 }

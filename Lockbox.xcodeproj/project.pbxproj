@@ -1385,13 +1385,13 @@
 					};
 					7D1B1AC31F99028D00C1F5FF = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 7D5DF8721F87F2600039B23E;
 					};
 					7D5DF8721F87F2600039B23E = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -1404,6 +1404,7 @@
 					};
 					7D80F3052118DCC700DA191B = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -2138,7 +2139,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Lockbox.app/Firefox Lockbox";
 			};
@@ -2163,7 +2164,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Lockbox.app/Firefox Lockbox";
 			};
@@ -2324,7 +2325,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2362,7 +2363,7 @@
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2389,7 +2390,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2415,7 +2416,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.adhoc.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Branch;
@@ -2441,7 +2442,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2544,7 +2545,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Branch;
@@ -2573,7 +2574,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lockbox-Branch.app/Lockbox-Branch";
 			};

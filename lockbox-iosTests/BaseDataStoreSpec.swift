@@ -341,7 +341,7 @@ class BaseDataStoreSpec: QuickSpec {
                     it("backdates the next lock time and locks the db") {
                         expect(self.autoLockSupport.backdateCalled).to(beTrue())
                         _ = try! self.subject.storageState.toBlocking().first()
-                        let state = try! self.subject.storageState.toBlocking().first()
+                        _ = try! self.subject.storageState.toBlocking().first()
                         expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
                     }
                 }
