@@ -148,19 +148,21 @@ class ItemDetailPresenter {
         self.itemDetailStore.itemDetailId
             .take(1)
             .flatMap { self.dataStore.get($0) }
-            .flatMap { item -> Observable<[Action]> in
+            .map { item -> [Action] in
                 var actions: [Action] = []
                 if let item = item {
                     actions.append(DataStoreAction.touch(id: item.id))
                     actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
                 }
 
-                return Observable.just(actions)
-            }.subscribe(onNext: { actions in
+                return actions
+            }
+            .subscribe(onNext: { actions in
                 for action in actions {
                     self.dispatcher.dispatch(action: action)
                 }
-            }).disposed(by: self.disposeBag)
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 
