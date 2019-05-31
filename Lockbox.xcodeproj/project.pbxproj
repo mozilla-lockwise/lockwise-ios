@@ -237,6 +237,8 @@
 		7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D80F3072118DCC700DA191B /* AuthenticationServices.framework */; };
 		7DDEAA712124CEB100A7D521 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDEAA702124CEB100A7D521 /* DataStore.swift */; };
 		7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */; };
+		7DF455DC22A1D3D200207285 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF455DB22A1D3D200207285 /* RxRelay.framework */; };
+		7DF455DD22A1D3F700207285 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF455DB22A1D3D200207285 /* RxRelay.framework */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
@@ -556,6 +558,7 @@
 		7DDEAA702124CEB100A7D521 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAccountStore.swift; sourceTree = "<group>"; };
 		7DEA1C4120362E09008AD7C4 /* Differentiator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differentiator.framework; path = Carthage/Build/iOS/Differentiator.framework; sourceTree = "<group>"; };
+		7DF455DB22A1D3D200207285 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
@@ -716,6 +719,7 @@
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
 				7D5F1D7B20866A9400688DEA /* RxDataSources.framework in Frameworks */,
 				7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */,
+				7DF455DC22A1D3D200207285 /* RxRelay.framework in Frameworks */,
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
 				7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */,
@@ -731,6 +735,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */,
+				7DF455DD22A1D3F700207285 /* RxRelay.framework in Frameworks */,
 				7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */,
 				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
 				7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */,
@@ -1042,6 +1047,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DF455DB22A1D3D200207285 /* RxRelay.framework */,
 				7D897EAC2260FFA800257946 /* Reachability.framework */,
 				7D11623E225FDD27009097C7 /* SystemConfiguration.framework */,
 				7D07FE91225E2DB60000B030 /* Network.framework */,
@@ -1529,6 +1535,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
 			);
 			name = "Run Script";
 			outputPaths = (
@@ -1543,6 +1550,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AdjustSdk.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sentry.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Reachability.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRelay.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

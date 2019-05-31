@@ -4,7 +4,7 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
+import RxRelay
 import MozillaAppServices
 import SwiftKeychainWrapper
 import WebKit
