@@ -18,7 +18,7 @@ open class Bytes {
             if (SecRandomCopyBytes(kSecRandomDefault, len, p) != errSecSuccess) {
                 fatalError("Random byte generation failed.")
             }
-        }   
+        }
         return data
     }
 
