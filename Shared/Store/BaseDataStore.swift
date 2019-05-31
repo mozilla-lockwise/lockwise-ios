@@ -367,7 +367,7 @@ extension BaseDataStore {
 
     private func pushError(_ error: LoginStoreError) {
         self.storageStateSubject.onNext(.Errored(cause: error))
-        self.dispatcher.dispatch(action: SentryAction.init(title: "Datastore Error", error: error))
+        self.dispatcher.dispatch(action: SentryAction(title: "Datastore Error", error: error, line: nil))
     }
 
     private func reset() {
