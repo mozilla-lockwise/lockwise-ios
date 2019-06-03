@@ -115,12 +115,15 @@ class LockwiseXCUITests: BaseTestCase {
         // Copy its username and open the website
         let userName = app.cells["userNameItemDetail"]
         userName.press(forDuration: 1)
+
+        sleep(1)
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
         safari.terminate()
-
         app.launch()
-
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"], timeout: 5)
+        sleep(3)
+        navigator.nowAt(Screen.LockwiseMainPage)
         // Checking if doing the steps directly works on bb
         waitforExistence(app.buttons["sorting.button"], timeout: 15)
         app.buttons["sorting.button"].tap()
