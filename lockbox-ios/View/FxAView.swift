@@ -76,6 +76,7 @@ extension FxAView: UIGestureRecognizerDelegate {
     fileprivate func setupNavBar() {
         let leftButton = UIButton(title: Constant.string.close, imageName: nil)
         leftButton.titleLabel?.font = .navigationButtonFont
+        leftButton.accessibilityIdentifier = "closeButtonGetStartedNavBar"
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]

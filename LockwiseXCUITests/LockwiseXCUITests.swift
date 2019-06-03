@@ -8,30 +8,27 @@ class LockwiseXCUITests: BaseTestCase {
 
     override func tearDown() {
         navigator.goto(Screen.AccountSettingsMenu)
-        print(app.debugDescription)
         waitforExistence(app.buttons["disconnectFirefoxLockwise.button"], timeout: 3)
         // Using taps directly because the action is intermittently failing on BB
         app.buttons["disconnectFirefoxLockwise.button"].tap()
         waitforExistence(app.buttons["Disconnect"], timeout: 3)
         app.buttons["Disconnect"].tap()
+
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
         navigator.nowAt(Screen.WelcomeScreen)
     }
 
     func testCheckEntryDetailsView() {
-        snapshot("01Welcome" + CONTENT_SIZE)
         loginToEntryListView()
 
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
-        snapshot("02EntryList" + CONTENT_SIZE)
         navigator.goto(Screen.EntryDetails)
 
         // The fields appear
         XCTAssertTrue(app.cells["userNameItemDetail"].exists)
         XCTAssertTrue(app.cells["passwordItemDetail"].exists)
         XCTAssertTrue(app.cells["webAddressItemDetail"].exists)
-
         // The value in each field is correct
         let userNameValue = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(userNameValue, firstEntryEmail)
@@ -74,7 +71,6 @@ class LockwiseXCUITests: BaseTestCase {
 
     func testSettingsAccountUI() {
         loginToEntryListView()
-        snapshot("03Settings" + CONTENT_SIZE)
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
@@ -115,8 +111,9 @@ class LockwiseXCUITests: BaseTestCase {
         loginToEntryListView()
 
         // Checking if doing the steps directly works on bb
-        waitforExistence(app.buttons["sorting.button"], timeout: 3)
+        waitforExistence(app.buttons["sorting.button"], timeout: 5)
         app.buttons["sorting.button"].tap()
+
         waitforExistence(app.buttons["Recently Used"])
         app.buttons["Recently Used"].tap()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
