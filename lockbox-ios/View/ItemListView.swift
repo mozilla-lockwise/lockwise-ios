@@ -63,7 +63,7 @@ extension ItemListView: ItemListViewProtocol {
     }
 
     func bind(scrollAction: Driver<ScrollAction>) {
-        scrollAction.delay(RxTimeInterval(0.1))
+        scrollAction.delay(.milliseconds(100))
                     .drive(onNext: { action in
                         guard self.tableView.dataSource?.tableView(self.tableView, numberOfRowsInSection: 0) ?? 0 > 0 else { return }
                         switch action {
