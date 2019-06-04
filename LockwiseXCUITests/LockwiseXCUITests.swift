@@ -119,6 +119,7 @@ class LockwiseXCUITests: BaseTestCase {
         sleep(1)
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
+        waitforExistence(safari.buttons["URL"], timeout: 10)
         safari.terminate()
         app.launch()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"], timeout: 5)
