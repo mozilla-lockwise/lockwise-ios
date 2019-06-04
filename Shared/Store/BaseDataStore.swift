@@ -71,7 +71,7 @@ class BaseDataStore {
 
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
-    private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
+    private var syncSubject = BehaviorRelay<SyncState>(value: .Synced)
     private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
     private let dispatcher: Dispatcher
@@ -229,16 +229,19 @@ extension BaseDataStore {
             else { return }
 
         if (networkStore.isConnectedToNetwork) {
-            self.syncSubject.onNext(SyncState.Syncing)
+            self.syncSubject.accept(SyncState.Syncing)
         } else {
-            self.syncSubject.onNext(SyncState.Synced)
+            self.syncSubject.accept(SyncState.Synced)
             return
         }
 
         queue.async {
             self.queue.asyncAfter(deadline: .now() + 20, execute: {
                 // this block serves to "cancel" the sync if the operation is running slowly
-                self.syncSubject.onNext(.Synced)
+                if (self.syncSubject.value != .Synced) {
+                    self.syncSubject.accept(.Synced)
+                    self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, function: "", line: ""))
+                }
             })
 
             do {
@@ -248,7 +251,7 @@ extension BaseDataStore {
             } catch let error {
                 NSLog("Unknown error syncing: \(error)")
             }
-            self.syncSubject.onNext(SyncState.Synced)
+            self.syncSubject.accept(SyncState.Synced)
         }
     }
 

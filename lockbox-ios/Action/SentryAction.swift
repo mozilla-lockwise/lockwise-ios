@@ -6,7 +6,7 @@ import Foundation
 
 struct SentryAction: Action {
     let title: String
-    let error: Error
+    let error: Error?
     let function: String
     let line: String
 }
