@@ -117,6 +117,7 @@ class LockwiseXCUITests: BaseTestCase {
         userName.press(forDuration: 1)
 
         sleep(1)
+        waitforExistence(app.buttons["open.button"])
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
         waitforExistence(safari.buttons["URL"], timeout: 10)
