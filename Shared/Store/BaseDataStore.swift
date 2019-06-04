@@ -9,20 +9,6 @@ import RxRelay
 import RxOptional
 import SwiftKeychainWrapper
 
-enum SyncError: Error {
-    case CryptoInvalidKey
-    case CryptoMissingKey
-    case Crypto
-    case Locked
-    case Offline
-    case Network
-    case NeedAuth
-    case Conflict
-    case AccountDeleted
-    case AccountReset
-    case DeviceRevoked
-}
-
 enum SyncState: Equatable {
     case Syncing, Synced, TimedOut
 
@@ -41,7 +27,7 @@ enum SyncState: Equatable {
 }
 
 enum LoginStoreState: Equatable {
-    case Unprepared, Locked, Unlocked, Errored(cause: LoginStoreError)
+    case Unprepared, Locked, Unlocked, Errored(cause: LoginsStoreError)
 
     public static func ==(lhs: LoginStoreState, rhs: LoginStoreState) -> Bool {
         switch (lhs, rhs) {
@@ -53,19 +39,6 @@ enum LoginStoreState: Equatable {
             return false
         }
     }
-}
-
-public enum LoginStoreError: Error {
-    // applies to just about every function call
-    case Unknown(cause: Error?)
-    case NotInitialized
-    case AlreadyInitialized
-    case VersionMismatch
-    case CryptoInvalidKey
-    case CryptoMissingKey
-    case Crypto
-    case InvalidItem
-    case Locked
 }
 
 class BaseDataStore {
@@ -216,7 +189,7 @@ extension BaseDataStore {
     private func touch(id: String) {
         do {
             try self.loginsStorage?.touch(id: id)
-        } catch let error as LoginStoreError {
+        } catch let error as LoginsStoreError {
             self.pushError(error)
         } catch let error {
             NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
@@ -250,7 +223,7 @@ extension BaseDataStore {
 
             do {
                 try self.loginsStorage?.sync(unlockInfo: syncInfo)
-            } catch let error as LoginStoreError {
+            } catch let error as LoginsStoreError {
                 self.pushError(error)
             } catch let error {
                 NSLog("DATASTORE:: Unknown error syncing: \(error)")
@@ -266,7 +239,7 @@ extension BaseDataStore {
             do {
                 let loginRecords = try loginsStorage.list()
                 self.listSubject.accept(loginRecords)
-            } catch let error as LoginStoreError {
+            } catch let error as LoginsStoreError {
                 self.pushError(error)
             } catch let error {
                 NSLog("DATASTORE:: Unknown error updating list: \(error)")
@@ -331,7 +304,7 @@ extension BaseDataStore {
         do {
             try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
             self.storageStateSubject.onNext(.Unlocked)
-        } catch let error as LoginStoreError {
+        } catch let error as LoginsStoreError {
             pushError(error)
         } catch let error {
             NSLog("Unknown error unlocking: \(error)")
@@ -365,9 +338,17 @@ extension BaseDataStore {
         }
     }
 
-    private func pushError(_ error: LoginStoreError) {
+    private func pushError(_ error: LoginsStoreError) {
         self.storageStateSubject.onNext(.Errored(cause: error))
         self.dispatcher.dispatch(action: SentryAction(title: "Datastore Error", error: error, line: nil))
+
+        switch error {
+        case .AuthInvalid, .InvalidKey:
+            self.dispatcher.dispatch(action: DataStoreAction.reset)
+            self.dispatcher.dispatch(action: AccountAction.clear)
+        default:
+            return
+        }
     }
 
     private func reset() {
@@ -379,7 +360,7 @@ extension BaseDataStore {
                 self.storageStateSubject.onNext(.Unprepared)
                 try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
                 try loginsStorage.wipeLocal()
-            } catch let error as LoginStoreError {
+            } catch let error as LoginsStoreError {
                 self.pushError(error)
             } catch let error {
                 NSLog("Unknown error wiping database: \(error.localizedDescription)")
