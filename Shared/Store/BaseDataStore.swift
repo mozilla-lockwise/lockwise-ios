@@ -236,6 +236,11 @@ extension BaseDataStore {
         }
 
         queue.async {
+            self.queue.asyncAfter(deadline: .now() + 20, execute: {
+                // this block serves to "cancel" the sync if the operation is running slowly
+                self.syncSubject.onNext(.Synced)
+            })
+
             do {
                 try self.loginsStorage?.sync(unlockInfo: syncInfo)
             } catch let error as LoginStoreError {
