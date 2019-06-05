@@ -72,6 +72,7 @@ class Constant {
         static let usernamePlaceholder = NSLocalizedString("username_placeholder", value: "(no username)", comment: "Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username.")
         static let searchYourEntries = NSLocalizedString("search.placeholder", value: "Search logins", comment: "Placeholder text for search field")
         static let emptyListPlaceholder = NSLocalizedString("list.empty", value: "%@ lets you access passwords you’ve already saved to Firefox. To view your logins here, you’ll need to sign in and sync with Firefox.", comment: "Label shown when there are no logins to list. %@ will be replaced with the application name")
+        static let syncTimedOut = NSLocalizedString("sync.timeout", value: "Sync timed out", comment: "This is the message displayed when syncing entries from the server times out")
     }
 }
 

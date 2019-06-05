@@ -24,13 +24,15 @@ enum SyncError: Error {
 }
 
 enum SyncState: Equatable {
-    case Syncing, Synced
+    case Syncing, Synced, TimedOut
 
     public static func ==(lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
         case (Syncing, Syncing):
             return true
         case (Synced, Synced):
+            return true
+        case (TimedOut, TimedOut):
             return true
         default:
             return false
@@ -239,7 +241,7 @@ extension BaseDataStore {
             self.queue.asyncAfter(deadline: .now() + 20, execute: {
                 // this block serves to "cancel" the sync if the operation is running slowly
                 if (self.syncSubject.value != .Synced) {
-                    self.syncSubject.accept(.Synced)
+                    self.syncSubject.accept(.TimedOut)
                     self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, function: "", line: ""))
                 }
             })

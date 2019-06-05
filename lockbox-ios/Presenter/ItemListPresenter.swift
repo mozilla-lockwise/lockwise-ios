@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 
-protocol ItemListViewProtocol: AlertControllerView, SpinnerAlertView, BaseItemListViewProtocol {
+protocol ItemListViewProtocol: AlertControllerView, StatusAlertView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)
     func bind(scrollAction: Driver<ScrollAction>)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
@@ -174,7 +174,7 @@ extension ItemListPresenter {
     fileprivate func setupSpinnerDisplay() {
         // when this observable emits an event, the spinner gets dismissed
         let hideSpinnerObservable = self.dataStore.syncState
-                .filter { $0 == SyncState.Synced }
+                .filter { $0 == SyncState.Synced || $0 == SyncState.TimedOut }
                 .map { _ in return () }
                 .asDriver(onErrorJustReturn: ())
 
@@ -192,6 +192,15 @@ extension ItemListPresenter {
                                                   message: Constant.string.syncingYourEntries,
                                                   completionMessage: Constant.string.doneSyncingYourEntries)
                     }
+                })
+                .disposed(by: self.disposeBag)
+
+        self.dataStore.syncState
+                .filter { $0 == SyncState.TimedOut }
+                .map { _ in () }
+                .asDriver(onErrorJustReturn: () )
+                .drive(onNext: { _ in
+                    self.view?.displayTemporaryAlert(Constant.string.syncTimedOut, timeout: 5)
                 })
                 .disposed(by: self.disposeBag)
     }
