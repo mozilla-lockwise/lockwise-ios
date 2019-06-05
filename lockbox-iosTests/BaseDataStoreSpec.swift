@@ -383,6 +383,7 @@ class BaseDataStoreSpec: QuickSpec {
 
                     it("syncs + pushes syncing followed by synced") {
                         _ = try! self.subject.syncState.toBlocking().first()
+                        _ = try! self.subject.syncState.toBlocking().first()
                         expect(self.loginsStorage.syncArgument).notTo(beNil())
                         let syncStates: [SyncState] = self.syncObserver.events.map {
                             $0.value.element!
