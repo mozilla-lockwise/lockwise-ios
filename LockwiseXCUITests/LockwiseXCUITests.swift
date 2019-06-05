@@ -110,12 +110,27 @@ class LockwiseXCUITests: BaseTestCase {
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
 
-        // Checking if doing the steps directly works on bb
-        waitforExistence(app.buttons["sorting.button"], timeout: 5)
-        app.buttons["sorting.button"].tap()
+        // Use one entry
+        app.tables.cells.staticTexts["testtesttesttest"].tap()
+        // Copy its username and open the website
+        let userName = app.cells["userNameItemDetail"]
+        userName.press(forDuration: 1)
 
-        waitforExistence(app.buttons["Recently Used"])
+        waitforExistence(app.buttons["open.button"], timeout: 3)
+        app.buttons["open.button"].tap()
+        // Safari is open
+        waitforExistence(safari.buttons["URL"], timeout: 10)
+        safari.terminate()
+        // Close Safari and re-open the app
+        app.launch()
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 20)
+
+        // Checking if doing the steps directly works on bb
+        waitforExistence(app.buttons["sorting.button"], timeout: 15)
+        app.buttons["sorting.button"].tap()
+        waitforExistence(app.buttons["Recently Used"], timeout: 5)
         app.buttons["Recently Used"].tap()
+
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
