@@ -24,13 +24,15 @@ enum SyncError: Error {
 }
 
 enum SyncState: Equatable {
-    case Syncing, Synced
+    case Syncing, Synced, TimedOut
 
     public static func ==(lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
         case (Syncing, Syncing):
             return true
         case (Synced, Synced):
+            return true
+        case (TimedOut, TimedOut):
             return true
         default:
             return false
@@ -71,7 +73,7 @@ class BaseDataStore {
 
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
-    private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
+    private var syncSubject = BehaviorRelay<SyncState>(value: .Synced)
     private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
     private let dispatcher: Dispatcher
@@ -229,13 +231,21 @@ extension BaseDataStore {
             else { return }
 
         if (networkStore.isConnectedToNetwork) {
-            self.syncSubject.onNext(SyncState.Syncing)
+            self.syncSubject.accept(SyncState.Syncing)
         } else {
-            self.syncSubject.onNext(SyncState.Synced)
+            self.syncSubject.accept(SyncState.Synced)
             return
         }
-
+        
         queue.async {
+            self.queue.asyncAfter(deadline: .now() + Constant.app.syncTimeout, execute: {
+                // this block serves to "cancel" the sync if the operation is running slowly
+                if (self.syncSubject.value != .Synced) {
+                    self.syncSubject.accept(.TimedOut)
+                    self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, function: "", line: ""))
+                }
+            })
+
             do {
                 try self.loginsStorage?.sync(unlockInfo: syncInfo)
             } catch let error as LoginStoreError {
@@ -243,7 +253,7 @@ extension BaseDataStore {
             } catch let error {
                 NSLog("Unknown error syncing: \(error)")
             }
-            self.syncSubject.onNext(SyncState.Synced)
+            self.syncSubject.accept(SyncState.Synced)
         }
     }
 

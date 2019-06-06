@@ -388,7 +388,7 @@ class BaseDataStoreSpec: QuickSpec {
                         let syncStates: [SyncState] = self.syncObserver.events.map {
                             $0.value.element!
                         }
-                        expect(syncStates).to(equal([SyncState.Synced, SyncState.Syncing, SyncState.Synced]))
+                        expect(syncStates).to(equal([SyncState.Synced, SyncState.Synced, SyncState.Syncing, SyncState.Synced]))
                     }
                 }
 

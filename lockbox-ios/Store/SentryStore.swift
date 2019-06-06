@@ -18,7 +18,7 @@ class SentryStore {
                 .subscribe(onNext: { (action) in
                     Client.shared?.reportUserException(
                         action.title,
-                        reason: action.error.localizedDescription,
+                        reason: action.error?.localizedDescription ?? "",
                         language: NSLocale.preferredLanguages.first ?? "",
                         lineOfCode: action.line,
                         stackTrace: Thread.callStackSymbols,
