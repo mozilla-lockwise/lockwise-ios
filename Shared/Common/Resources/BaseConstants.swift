@@ -10,6 +10,7 @@ public let isRunningTest = NSClassFromString("XCTestCase") != nil
 class Constant {
     class app {
         static let group = "group.org.mozilla.ios.Lockbox"
+        static let syncTimeout: Double = 20
     }
 
     struct fxa {

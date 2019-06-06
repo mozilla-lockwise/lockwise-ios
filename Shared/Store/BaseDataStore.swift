@@ -236,9 +236,9 @@ extension BaseDataStore {
             self.syncSubject.accept(SyncState.Synced)
             return
         }
-
+        
         queue.async {
-            self.queue.asyncAfter(deadline: .now() + 20, execute: {
+            self.queue.asyncAfter(deadline: .now() + Constant.app.syncTimeout, execute: {
                 // this block serves to "cancel" the sync if the operation is running slowly
                 if (self.syncSubject.value != .Synced) {
                     self.syncSubject.accept(.TimedOut)
