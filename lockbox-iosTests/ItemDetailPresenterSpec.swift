@@ -507,6 +507,17 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
             }
 
+            describe(".onViewDisappear") {
+                beforeEach {
+                    self.subject.onViewDisappear()
+                }
+
+                it("toggles the password to hidden") {
+                    let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
+                    expect(action).to(equal(.togglePassword(displayed: false)))
+                }
+            }
+
             describe(".onViewReady for view with sidebar") {
                 beforeEach {
                     self.view.itemDetailObserver = self.scheduler.createObserver([ItemDetailSectionModel].self)
