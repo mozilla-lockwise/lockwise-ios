@@ -144,6 +144,10 @@ class ItemDetailPresenter {
             .disposed(by: self.disposeBag)
     }
 
+    func onViewDisappear() {
+        self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
+    }
+
     func dndStarted(value: String?) {
         self.itemDetailStore.itemDetailId
             .take(1)
