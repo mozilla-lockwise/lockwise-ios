@@ -217,7 +217,7 @@ extension BaseDataStore {
                 // this block serves to "cancel" the sync if the operation is running slowly
                 if (self.syncSubject.value != .Synced) {
                     self.syncSubject.accept(.TimedOut)
-                    self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, function: "", line: ""))
+                    self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, line: ""))
                 }
             })
 
