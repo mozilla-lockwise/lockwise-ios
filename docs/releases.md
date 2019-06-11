@@ -114,19 +114,18 @@ Configuration:
 - [devices] Update / add desired device sizes to `fastlane/Snapfile`
 - [text size][5] Update the `CONTENT_SIZE` variable in `LockboxXCUITests/BaseTestCase.swift`
 
-## Updating the version
-
-_Once a version has been merged or released, the major app version should be increased_
-
-- Update the value in `Common/Resources/Info.plist` for the Lockbox app, for example from `1.2` to `1.3`
-- Also update the value in `CredentialProvider/Info.plist` for the extension to _the exact same version_
-
 ## Preparation before and after a release
 
-- After changing the version: TestFlight requires Beta review. Be sure to submit a new build to TestFlight Beta App Review as early as possible so that review doesn't prevent user testing
-- Once development is complete: consider running the string export script to send new and updated strings to Pontoon for localization (see [localization.md](localization.md)) 
-- Before release: consider running the string import script to get the latest from Pontoon (see [localization.md](localization.md)) 
-- After release: consider filing an issue for the next sprint/release to update to the latest dependencies (application-services, for example)
+- **Before testing or distributing a release**: make sure the release number is still what you want and expect it to be, especially if major (versus minor) changes were made. (see below on how to _"change the version"_).
+- **Once development is complete**: consider running the string export script to send new and updated strings to Pontoon for localization (see [localization.md](localization.md)) 
+- **Before public release**: consider running the string import script to get the latest from Pontoon (see [localization.md](localization.md)) 
+- **After public release**: consider filing an issue for the next sprint/release to update to the latest dependencies (application-services, for example)
+- **After public release**: consider running `mkdocs gh-deploy` so the latest `docs` are also published to the GitHub pages website
+- **After public release**: _change the version_ to a major or minor update depending on the future plans.
+  - Update the value in `Common/Resources/Info.plist` for the Lockbox app, for example from `1.2` to `1.3`
+  - Also update the value in `CredentialProvider/Info.plist` for the extension to _the exact same version_
+- **After public release**: make sure the dSYMs were uploaded to Sentry as part of the process earlier, do it now if not so your error reports are legible.
+- **After changing the version**: TestFlight requires manual Beta review before any build is distributed. Be sure to submit a new build to TestFlight Beta App Review as early as possible so that review doesn't prevent user testing.
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
 [2]: https://developer.apple.com/testflight/testers/
