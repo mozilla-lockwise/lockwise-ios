@@ -343,7 +343,7 @@ extension BaseDataStore {
         self.dispatcher.dispatch(action: SentryAction(title: "Datastore Error", error: error, line: nil))
 
         switch error {
-        case .AuthInvalid, .InvalidKey:
+        case .authInvalid, .invalidKey:
             self.dispatcher.dispatch(action: DataStoreAction.reset)
             self.dispatcher.dispatch(action: AccountAction.clear)
         default:
