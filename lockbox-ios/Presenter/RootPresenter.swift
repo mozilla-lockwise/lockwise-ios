@@ -326,19 +326,17 @@ extension RootPresenter {
     }
 
     fileprivate func startAdjust() {
-        self.userDefaultStore.recordUsageData
-                .subscribe(onNext: { enabled in
-                    self.adjustManager.setEnabled(enabled)
-                })
-                .disposed(by: self.disposeBag)
+        self.userDefaultStore.recordUsageData.subscribe(onNext: { enabled in
+            self.adjustManager.setEnabled(enabled)
+        }).disposed(by: self.disposeBag)
     }
 
     fileprivate func startSentry() {
         self.userDefaultStore.recordUsageData
-                .subscribe(onNext: { enabled in
-                    self.sentryManager.setup(sendUsageData: enabled)
-                })
-                .disposed(by: self.disposeBag)
+            .take(1)
+            .subscribe(onNext: { enabled in
+                self.sentryManager.setup(sendUsageData: enabled)
+        }).disposed(by: self.disposeBag)
     }
 
     private func hidePrivacyView() {
