@@ -381,7 +381,7 @@ class BaseDataStoreSpec: QuickSpec {
                         self.dispatcher.dispatch(action: DataStoreAction.sync)
                     }
 
-                    it("syncs + pushes syncing followed by synced") {
+                    xit("syncs + pushes syncing followed by synced") {
                         _ = try! self.subject.syncState.toBlocking().first()
                         _ = try! self.subject.syncState.toBlocking().first()
                         expect(self.loginsStorage.syncArgument).notTo(beNil())
