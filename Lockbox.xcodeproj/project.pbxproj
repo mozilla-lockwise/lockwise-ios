@@ -177,7 +177,6 @@
 		7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DEA1C4120362E09008AD7C4 /* Differentiator.framework */; };
 		7D6FB87B204F00E2005E23AA /* StatusAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6FB87A204F00E2005E23AA /* StatusAlert.swift */; };
 		7D788F0520AA3B5D00976D79 /* SpinnerAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D1D2F0720AA39700011BFC8 /* SpinnerAlert.xib */; };
-		7D79A5CD22A6FE130094D189 /* AccountAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5492DA3988625D1DAB5BD /* AccountAction.swift */; };
 		7D8057EC2135E51300D41BDD /* CredentialProviderStoreSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057EB2135E51300D41BDD /* CredentialProviderStoreSpec.swift */; };
 		7D8057EE2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */; };
 		7D8057EF2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8057ED2135ED8F00D41BDD /* ASCredentialIdentityStore+.swift */; };
@@ -189,6 +188,7 @@
 		7D897EAF2261074700257946 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D897EAE2261074700257946 /* NetworkProtocols.swift */; };
 		7D897EB02261074700257946 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D897EAE2261074700257946 /* NetworkProtocols.swift */; };
 		7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */; };
+		7D96A73322B020AD00E8FA5C /* AccountAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5492DA3988625D1DAB5BD /* AccountAction.swift */; };
 		7D9722C3213461510071D82B /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542A3362BE85B313A88B8 /* UIImage+.swift */; };
 		7D9722C4213461510071D82B /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6902028FB0900B61DD8 /* UIColor+.swift */; };
 		7D9722C62134622F0071D82B /* BaseWelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722C52134622F0071D82B /* BaseWelcomePresenter.swift */; };
@@ -1837,7 +1837,7 @@
 				7DB9DEA32140D04700239D31 /* ItemListDisplayAction.swift in Sources */,
 				7DB9DEA42140D41E00239D31 /* UIFont+.swift in Sources */,
 				7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */,
-				7D79A5CD22A6FE130094D189 /* AccountAction.swift in Sources */,
+				7D96A73322B020AD00E8FA5C /* AccountAction.swift in Sources */,
 				D80D41C321FD6D48008A7B11 /* CredentialItemDetailStore.swift in Sources */,
 				7D09B2492125DD6100794CA2 /* BaseDataStore.swift in Sources */,
 				7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */,
