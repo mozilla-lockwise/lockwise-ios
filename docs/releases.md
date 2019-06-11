@@ -41,6 +41,7 @@ _all commits on all branches and pull requests are automatically built_
 6. Browse to App Store Connect and continue the "Distributing..." instructions
 7. Download and unzip dSYM build artifact from buddybuild
 8. Upload dSYM files to Sentry using `sentry-cli` using [sentry instructions](https://docs.sentry.io/clients/cocoa/dsym/#manually-with-sentry-cli)
+  - HINT: if you get a 411 "content-length" error, you may need to add the `--no-reprocessing` flag due to a bug with GCP and the `sentry-cli`
 
 ### In Case of Emergency (Release)
 
@@ -60,6 +61,8 @@ _similar to above, but requires explicit cherry-pick commits on `production` bra
   - download the `.ipa` from buddybuild and attach it to the Release on GitHub
 9. From the buddybuild's build "Deploy" tab, select the "Upload to App Store Connect" link
 10. Browse to App Store Connect to find the build and continue the "Distributing..." instructions
+
+_While most reviews are performed and completed within 24 hours, to request an expedited review request you can [submit a request directly to Apple](https://developer.apple.com/contact/app-store/?topic=expedite)._
 
 ## Distributing Builds through TestFlight (release)
 
@@ -88,6 +91,8 @@ NOTE: if for some reason buddybuild does not deploy a build to App Store Connect
 
 ## Distributing through the App Store (release)
 
+_Currently all the mobile engineering managers and release management team members (see private #release-coordination channel in Mozilla Slack) both have access to distribute production releases through the App Store._
+
 1. Browse to the [App Store][4] section in App Store Connect
 2. Confirm the "App Information" details are accurate and complete
 3. Confirm the "Pricing and Availability" details are accurate and complete
@@ -95,8 +100,8 @@ NOTE: if for some reason buddybuild does not deploy a build to App Store Connect
   - provide the version information (keywords, URLs, promotional screenshots)
   - select the corresponding build number for the App Store release
   - set the release instructions (manually, immediately, on a date)
+  - NOTE: the best practice is to opt for the "Phased" release which starts at 1% per day, then 2% up to 100% after 7 days. This way you can "Pause" the release if early use results in new findings or big issues. The app will still be available to users who manually access the App Store "Update" section, though.
 5. Save and "Submit for Review"
-6. Wait for notification the app is ready for release and then release it (manually, on schedule and/or phased)
 
 NOTE: _brand new_ apps may take up to 2 or more hours to appear throughout the App Store whereas existing app (updates) can appear within an hour. Schedule accordingly!
 
@@ -115,7 +120,13 @@ _Once a version has been merged or released, the major app version should be inc
 
 - Update the value in `Common/Resources/Info.plist` for the Lockbox app, for example from `1.2` to `1.3`
 - Also update the value in `CredentialProvider/Info.plist` for the extension to _the exact same version_
-- Be sure to submit the new build to TestFlight Beta App Review ASAP so that review doesn't prevent external user testing
+
+## Preparation before and after a release
+
+- After changing the version: TestFlight requires Beta review. Be sure to submit a new build to TestFlight Beta App Review as early as possible so that review doesn't prevent user testing
+- Once development is complete: consider running the string export script to send new and updated strings to Pontoon for localization (see [localization.md](localization.md)) 
+- Before release: consider running the string import script to get the latest from Pontoon (see [localization.md](localization.md)) 
+- After release: consider filing an issue for the next sprint/release to update to the latest dependencies (application-services, for example)
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
 [2]: https://developer.apple.com/testflight/testers/
