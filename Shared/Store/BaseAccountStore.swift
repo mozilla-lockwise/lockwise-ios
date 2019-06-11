@@ -72,25 +72,38 @@ class BaseAccountStore {
                 let sentryAction = SentryAction(
                     title: "FxAException: " + errMessage,
                     error: error,
-                    function: "\(#function)",
                     line: "\(#line)"
                 )
                 self?.dispatcher.dispatch(action: sentryAction)
                 NSLog("Unexpected error getting access token: \(error.localizedDescription)")
                 self?._syncCredentials.onNext(nil)
+            } else if let error = err {
+                let sentryAction = SentryAction(
+                        title: "Unexpected exception: ",
+                        error: error,
+                        line: "\(#line)"
+                )
+                self?.dispatcher.dispatch(action: sentryAction)
+                self?._syncCredentials.onNext(nil)
             }
 
             guard let key = accessToken?.key,
                 let token = accessToken?.token
-                else { return }
+                else {
+                    self?._syncCredentials.onNext(nil)
+                    return
+            }
 
-            guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else { return }
+            guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else {
+                self?._syncCredentials.onNext(nil)
+                return
+            }
 
             let syncInfo = SyncUnlockInfo(
                 kid: key.kid,
                 fxaAccessToken: token,
                 syncKey: key.k,
-                tokenserverURL: tokenURL!.absoluteString
+                tokenserverURL: tokenURL.absoluteString
             )
 
             self?._syncCredentials.onNext(

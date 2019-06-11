@@ -146,7 +146,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.OpenWebsite) { userState in
             app.buttons["open.button"].tap()
         }
-
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(Screen.SortEntriesMenu) { screenState in
@@ -220,10 +220,11 @@ extension BaseTestCase {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = emailTestAccountLogins
         navigator.goto(Screen.FxASigninScreenEmail)
-        waitforExistence(app.navigationBars["Get Started"])
-        waitforExistence(app.webViews.textFields["Email"], timeout: 10)
+        waitforExistence(app.buttons["closeButtonGetStartedNavBar"], timeout: 5)
+        snapshot("15LoginScreen" + CONTENT_SIZE)
         navigator.performAction(Action.FxATypeEmail)
         waitforExistence(app.webViews.secureTextFields["Password"])
+        snapshot("16PasswordScreen" + CONTENT_SIZE)
         navigator.performAction(Action.FxATypePassword)
     }
 
@@ -232,6 +233,7 @@ extension BaseTestCase {
             //If autofill is set this option will not appear
             sleep(5)
             if (app.buttons["setupAutofill.button"].exists) {
+                snapshot("13SkipAutofill" + CONTENT_SIZE)
                 app.buttons["notNow.button"].tap()
             }
         }
@@ -239,6 +241,7 @@ extension BaseTestCase {
 
     func tapOnFinishButton() {
         waitforExistence(app.buttons["finish.button"])
+        snapshot("12FinishButton" + CONTENT_SIZE)
         app.buttons["finish.button"].tap()
     }
 

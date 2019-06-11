@@ -62,7 +62,7 @@ extension ItemListView {
             toItem: nil,
             attribute: .notAnAttribute,
             multiplier: 1.0,
-            constant: 60)
+            constant: 90)
         )
         return button
     }

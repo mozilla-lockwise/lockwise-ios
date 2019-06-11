@@ -4,7 +4,7 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
+import RxRelay
 import Reachability
 
 open class NetworkStore {
@@ -39,7 +39,7 @@ open class NetworkStore {
         }
  
         if !isRunningTest {
-            try? self.reachability?.startNotifier()
+            ((try? self.reachability?.startNotifier()) as ()??)
         }
     }
 }

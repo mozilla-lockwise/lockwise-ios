@@ -8,30 +8,27 @@ class LockwiseXCUITests: BaseTestCase {
 
     override func tearDown() {
         navigator.goto(Screen.AccountSettingsMenu)
-        print(app.debugDescription)
         waitforExistence(app.buttons["disconnectFirefoxLockwise.button"], timeout: 3)
         // Using taps directly because the action is intermittently failing on BB
         app.buttons["disconnectFirefoxLockwise.button"].tap()
         waitforExistence(app.buttons["Disconnect"], timeout: 3)
         app.buttons["Disconnect"].tap()
+
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
         navigator.nowAt(Screen.WelcomeScreen)
     }
 
     func testCheckEntryDetailsView() {
-        snapshot("01Welcome" + CONTENT_SIZE)
         loginToEntryListView()
 
         XCTAssertNotEqual(app.tables.cells.count, 1)
         XCTAssertTrue(app.tables.cells.staticTexts[firstEntryEmail].exists)
-        snapshot("02EntryList" + CONTENT_SIZE)
         navigator.goto(Screen.EntryDetails)
 
         // The fields appear
         XCTAssertTrue(app.cells["userNameItemDetail"].exists)
         XCTAssertTrue(app.cells["passwordItemDetail"].exists)
         XCTAssertTrue(app.cells["webAddressItemDetail"].exists)
-
         // The value in each field is correct
         let userNameValue = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
         XCTAssertEqual(userNameValue, firstEntryEmail)
@@ -74,7 +71,6 @@ class LockwiseXCUITests: BaseTestCase {
 
     func testSettingsAccountUI() {
         loginToEntryListView()
-        snapshot("03Settings" + CONTENT_SIZE)
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
@@ -114,11 +110,27 @@ class LockwiseXCUITests: BaseTestCase {
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
 
+        // Use one entry
+        app.tables.cells.staticTexts["testtesttesttest"].tap()
+        // Copy its username and open the website
+        let userName = app.cells["userNameItemDetail"]
+        userName.press(forDuration: 1)
+
+        waitforExistence(app.buttons["open.button"], timeout: 3)
+        app.buttons["open.button"].tap()
+        // Safari is open
+        waitforExistence(safari.buttons["URL"], timeout: 10)
+        safari.terminate()
+        // Close Safari and re-open the app
+        app.launch()
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 20)
+
         // Checking if doing the steps directly works on bb
-        waitforExistence(app.buttons["sorting.button"], timeout: 3)
+        waitforExistence(app.buttons["sorting.button"], timeout: 15)
         app.buttons["sorting.button"].tap()
-        waitforExistence(app.buttons["Recently Used"])
+        waitforExistence(app.buttons["Recently Used"], timeout: 5)
         app.buttons["Recently Used"].tap()
+
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
         let buttonLabelChanged = app.buttons["sorting.button"].label
         XCTAssertEqual(buttonLabelChanged, "Select options for sorting your list of logins (currently Recent)")
