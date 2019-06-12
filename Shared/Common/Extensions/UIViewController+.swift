@@ -7,7 +7,7 @@ import RxSwift
 import RxCocoa
 
 protocol StatusAlertView {
-    func displayTemporaryAlert(_ message: String, timeout: TimeInterval)
+    func displayTemporaryAlert(_ message: String, timeout: TimeInterval, icon: UIImage?)
 }
 
 struct AlertActionButtonConfiguration {
@@ -41,13 +41,17 @@ protocol SpinnerAlertView {
 }
 
 extension UIViewController: StatusAlertView {
-    func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+    func displayTemporaryAlert(_ message: String, timeout: TimeInterval, icon: UIImage? = nil) {
         if let temporaryAlertView = Bundle.main.loadNibNamed("StatusAlert", owner: self)?.first as? StatusAlert {
             
             for view in self.view.subviews {
                 if view is StatusAlert {
                     self.animateAlertOut(view, delay: timeout)
                 }
+            }
+
+            if let icon = icon {
+                temporaryAlertView.icon.image = icon
             }
             
             temporaryAlertView.messageLabel.text = message

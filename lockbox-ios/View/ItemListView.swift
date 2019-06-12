@@ -73,6 +73,11 @@ extension ItemListView: ItemListViewProtocol {
                     .disposed(by: self.disposeBag)
     }
 
+    func showDeletedStatusAlert(message: String) {
+        let icon = UIImage(named: "delete")
+        self.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: icon)
+    }
+
     var tableViewScrollEnabled: AnyObserver<Bool> {
         return self.tableView.rx.isScrollEnabled.asObserver()
     }

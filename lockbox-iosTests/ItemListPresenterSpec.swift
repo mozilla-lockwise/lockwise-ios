@@ -33,6 +33,7 @@ class ItemListPresenterSpec: QuickSpec {
         var setFilterEnabledValue: Bool?
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var temporaryAlertArgument: String?
+        var deletedMessage: String?
 
         var displayOptionSheetTitle: String?
         func bind(items: Driver<[ItemSectionModel]>) {
@@ -53,7 +54,7 @@ class ItemListPresenterSpec: QuickSpec {
             self.displayOptionSheetTitle = title
         }
 
-        func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+        func displayTemporaryAlert(_ message: String, timeout: TimeInterval, icon: UIImage?) {
             self.temporaryAlertArgument = message
         }
 
@@ -88,6 +89,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         func setFilterEnabled(enabled: Bool) {
             self.setFilterEnabledValue = enabled
+        }
+
+        func showDeletedStatusAlert(message: String) {
+            self.deletedMessage = message
         }
     }
 

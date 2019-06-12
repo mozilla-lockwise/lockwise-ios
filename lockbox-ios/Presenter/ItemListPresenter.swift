@@ -6,10 +6,12 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
+import MozillaAppServices
 
 protocol ItemListViewProtocol: AlertControllerView, StatusAlertView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)
     func bind(scrollAction: Driver<ScrollAction>)
+    func showDeletedStatusAlert(message: String)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
@@ -48,7 +50,7 @@ class ItemListPresenter: BaseItemListPresenter {
         }.asObserver()
     }
 
-    private var deletedItem: String?
+    private var deletedItem: LoginRecord?
 
     var itemDeletedObserver: AnyObserver<String?> {
         return Binder(self) { target, itemId in
@@ -56,25 +58,30 @@ class ItemListPresenter: BaseItemListPresenter {
                 return
             }
 
-            self.deletedItem = id
+            target.dataStore.get(id)
+                .take(1)
+                .subscribe(onNext: { (loginRecord) in
+                    target.deletedItem = loginRecord
 
-            target.view?.displayAlertController(
-                buttons: [
-                    AlertActionButtonConfiguration(
-                        title: Constant.string.cancel,
-                        tapObserver: target.deleteCancelObserver,
-                        style: .cancel
-                    ),
-                    AlertActionButtonConfiguration(
-                        title: Constant.string.delete,
-                        tapObserver: target.deleteItemObserver,
-                        style: .destructive)
-                ],
-                title: Constant.string.confirmDeleteLoginDialogTitle,
-                message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
-                                Constant.string.productName),
-                style: .alert,
-                barButtonItem: nil)
+                    target.view?.displayAlertController(
+                        buttons: [
+                            AlertActionButtonConfiguration(
+                                title: Constant.string.cancel,
+                                tapObserver: target.deleteCancelObserver,
+                                style: .cancel
+                            ),
+                            AlertActionButtonConfiguration(
+                                title: Constant.string.delete,
+                                tapObserver: target.deleteItemObserver,
+                                style: .destructive)
+                        ],
+                        title: Constant.string.confirmDeleteLoginDialogTitle,
+                        message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                        Constant.string.productName),
+                        style: .alert,
+                        barButtonItem: nil)
+                })
+                .disposed(by: self.disposeBag)
         }.asObserver()
     }
 
@@ -87,7 +94,8 @@ class ItemListPresenter: BaseItemListPresenter {
     lazy private var deleteItemObserver: AnyObserver<Void> = {
         return Binder(self) { target, id in
             if let deletedItem = target.deletedItem {
-                target.dispatcher.dispatch(action: DataStoreAction.delete(id: deletedItem))
+                target.dispatcher.dispatch(action: DataStoreAction.delete(id: deletedItem.id))
+                target.view?.showDeletedStatusAlert(message: String(format: Constant.string.deletedStatusAlert, deletedItem.hostname.titleFromHostname()))
             }
         }.asObserver()
     }()
@@ -244,7 +252,7 @@ extension ItemListPresenter {
                 .map { _ in () }
                 .asDriver(onErrorJustReturn: () )
                 .drive(onNext: { _ in
-                    self.view?.displayTemporaryAlert(Constant.string.syncTimedOut, timeout: 5)
+                    self.view?.displayTemporaryAlert(Constant.string.syncTimedOut, timeout: 5, icon: nil)
                 })
                 .disposed(by: self.disposeBag)
     }
