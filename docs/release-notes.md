@@ -1,5 +1,18 @@
 # Release Notes
 
+## 1.6.2 (Build 3548)
+
+We fixed bugs related to: signing in, syncing, and translations.
+
+Changes since version 1.6.1:
+
+- migrate to Swift 5 (#1037)
+- update application-services to 0.31.2 (#1050)
+- implement a sync timeout (#1045)
+- hide password after navigating away (#1049)
+- increase cancel button width in AutoFill list view (#1048)
+- improve error handling and reporting for better troubleshooting (#1038)
+
 ## 1.6.1 (Build 3457)
 
 _Date: 2019-05-30_
