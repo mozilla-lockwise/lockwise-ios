@@ -15,6 +15,7 @@ enum LoginListCellConfiguration {
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>?)
     case NoResults(learnMoreObserver: AnyObserver<Void>?)
     case SelectAPasswordHelpText
+    case NoNetwork(retryObserver: AnyObserver<Void>)
 }
 
 extension LoginListCellConfiguration: IdentifiableType {
@@ -30,6 +31,8 @@ extension LoginListCellConfiguration: IdentifiableType {
             return "noresultsplaceholder"
         case .SelectAPasswordHelpText:
             return "selectapasswordhelptext"
+        case .NoNetwork:
+            return "nonetwork"
         }
     }
 }
@@ -42,6 +45,7 @@ extension LoginListCellConfiguration: Equatable {
         case (.SyncListPlaceholder, .SyncListPlaceholder): return true
         case (.EmptyListPlaceholder, .EmptyListPlaceholder): return true
         case (.NoResults, .NoResults): return true
+        case (.NoNetwork, .NoNetwork): return true
         default:
             return false
         }
@@ -247,6 +251,16 @@ extension BaseItemListView {
                         borderView.backgroundColor = Constant.color.helpTextBorderColor
                         cell.addSubview(borderView)
 
+                        retCell = cell
+                    case .NoNetwork(let retryObserver):
+                        guard let cell = tableView.dequeueReusableCell(withIdentifier: "nonetwork") as? NoNetworkCell else {
+                            fatalError("couldn't find the nonetwork cell")
+                        }
+
+                        cell.retryButton.rx.tap
+                            .bind(to: retryObserver)
+                            .disposed(by: cell.disposeBag)
+                        
                         retCell = cell
                     }
 

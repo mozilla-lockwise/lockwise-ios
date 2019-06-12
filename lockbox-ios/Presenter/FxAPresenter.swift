@@ -9,6 +9,8 @@ import RxCocoa
 
 protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
+    var retryButtonTaps: Observable<Void> { get }
+    var networkDisclaimerHidden: AnyObserver<Bool> { get }
 }
 
 struct LockedSyncState {
@@ -20,6 +22,7 @@ class FxAPresenter {
     private weak var view: FxAViewProtocol?
     fileprivate let dispatcher: Dispatcher
     fileprivate let accountStore: AccountStore
+    fileprivate let networkStore: NetworkStore
     private let adjustManager: AdjustManager
 
     fileprivate var _credentialProviderStore: Any?
@@ -49,12 +52,14 @@ class FxAPresenter {
 
     init(view: FxAViewProtocol,
          dispatcher: Dispatcher = .shared,
-         accountStore: AccountStore = AccountStore.shared,
-         adjustManager: AdjustManager = AdjustManager.shared
+         accountStore: AccountStore = .shared,
+         networkStore: NetworkStore = .shared,
+         adjustManager: AdjustManager = .shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
+        self.networkStore = networkStore
         self.adjustManager = adjustManager
     }
 
@@ -62,12 +67,14 @@ class FxAPresenter {
     init(view: FxAViewProtocol,
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = AccountStore.shared,
+         networkStore: NetworkStore = .shared,
          credentialProviderStore: CredentialProviderStore = CredentialProviderStore.shared,
          adjustManager: AdjustManager = AdjustManager.shared
         ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
+        self.networkStore = networkStore
         self._credentialProviderStore = credentialProviderStore
         self.adjustManager = adjustManager
     }
@@ -89,6 +96,15 @@ class FxAPresenter {
         } else {
             _nextRouteSubject.onNext(.onboardingConfirmation)
         }
+
+        self.networkStore.connectedToNetwork
+                .bind(to: view!.networkDisclaimerHidden)
+                .disposed(by: self.disposeBag)
+
+        self.view?.retryButtonTaps
+                .map { _ in NetworkAction.retry }
+                .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
+                .disposed(by: self.disposeBag)
     }
 }
 

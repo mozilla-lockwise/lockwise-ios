@@ -11,6 +11,7 @@ import MozillaAppServices
 class FxAView: UIViewController {
     internal var presenter: FxAPresenter?
     private var webView: WKWebView
+    private var networkView: NoNetworkView
     private var disposeBag = DisposeBag()
     private var url: URL?
 
@@ -20,6 +21,7 @@ class FxAView: UIViewController {
 
     init(webView: WKWebView = WKWebView()) {
         self.webView = webView
+        self.networkView = NoNetworkView.instanceFromNib()
         super.init(nibName: nil, bundle: nil)
         self.presenter = FxAPresenter(view: self, adjustManager: AdjustManager.shared)
     }
@@ -32,6 +34,7 @@ class FxAView: UIViewController {
         super.viewDidLoad()
         self.webView.navigationDelegate = self
         self.view = self.webView
+        self.setupNetworkMessage()
         self.setupNavBar()
 
         self.presenter?.onViewReady()
@@ -50,6 +53,14 @@ class FxAView: UIViewController {
 extension FxAView: FxAViewProtocol {
     func loadRequest(_ urlRequest: URLRequest) {
         self.webView.load(urlRequest)
+    }
+
+    var retryButtonTaps: Observable<Void> {
+        return self.networkView.retryButton.rx.tap.asObservable()
+    }
+
+    var networkDisclaimerHidden: AnyObserver<Bool> {
+        return self.networkView.rx.isHidden.asObserver()
     }
 }
 
@@ -96,5 +107,47 @@ extension FxAView: UIGestureRecognizerDelegate {
                 .bind(to: presenter.onClose)
                 .disposed(by: self.disposeBag)
         }
+    }
+
+    fileprivate func setupNetworkMessage() {
+        self.networkView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.networkView)
+        self.networkView.addConstraint(NSLayoutConstraint(
+            item: self.networkView,
+            attribute: .height,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .height,
+            multiplier: 1,
+            constant: 38)
+        )
+
+        self.view.addConstraints([
+            NSLayoutConstraint(
+                item: self.networkView,
+                attribute: .leading,
+                relatedBy: .equal,
+                toItem: self.view.safeAreaLayoutGuide,
+                attribute: .leading,
+                multiplier: 1,
+                constant: 0),
+            NSLayoutConstraint(
+                item: self.networkView,
+                attribute: .trailing,
+                relatedBy: .equal,
+                toItem: self.view.safeAreaLayoutGuide,
+                attribute: .trailing,
+                multiplier: 1,
+                constant: 0),
+            NSLayoutConstraint(
+                item: self.networkView,
+                attribute: .top,
+                relatedBy: .equal,
+                toItem: self.view.safeAreaLayoutGuide,
+                attribute: .top,
+                multiplier: 1,
+                constant: 0)
+            ]
+        )
     }
 }

@@ -51,6 +51,10 @@ class BaseAccountStore {
             return
         }
 
+        fxa.getProfile { (profile: Profile?, _) in
+            self._profile.onNext(profile)
+        }
+
         if !networkStore.isConnectedToNetwork {
             self._syncCredentials.onNext(OfflineSyncCredential)
             return
@@ -113,10 +117,6 @@ class BaseAccountStore {
             if let accountJSON = try? fxa.toJSON() {
                 self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             }
-        }
-
-        fxa.getProfile { (profile: Profile?, _) in
-            self._profile.onNext(profile)
         }
     }
 }
