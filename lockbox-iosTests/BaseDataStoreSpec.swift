@@ -25,6 +25,7 @@ class BaseDataStoreSpec: QuickSpec {
         var getStub: LoginRecord?
         var touchIdArgument: String?
         var listStub: [LoginRecord] = []
+        var deleteIdArgument: String?
 
         func close() {
             closeCalled = true
@@ -61,6 +62,11 @@ class BaseDataStoreSpec: QuickSpec {
 
         func list() throws -> [LoginRecord] {
             return listStub
+        }
+
+        func delete(id: String) throws -> Bool {
+            self.deleteIdArgument = id
+            return true
         }
 
         func clearInvocations() {
