@@ -21,7 +21,7 @@ class FxAPresenterSpec: QuickSpec {
             self.loadRequestArgument = urlRequest
         }
 
-        var retryButtonTaps: Observable<Void> {
+        var retryButtonTapped: Observable<Void> {
             return self.retryButtonStub
         }
 
@@ -57,6 +57,14 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeNetworkStore: NetworkStore {
+        let connectedToNetworkStub = PublishSubject<Bool>()
+
+        override var connectedToNetwork: Observable<Bool> {
+            return self.connectedToNetworkStub.asObservable()
+        }
+    }
+
     class FakeAdjustManager: AdjustManager {
         var eventSent: AdjustManager.AdjustEvent?
 
@@ -68,6 +76,7 @@ class FxAPresenterSpec: QuickSpec {
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
+    private var networkStore: FakeNetworkStore!
     private var credentialProviderStore: Any!
     private var adjustManager: FakeAdjustManager!
     var subject: FxAPresenter!
@@ -82,6 +91,7 @@ class FxAPresenterSpec: QuickSpec {
 
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
+                self.networkStore = FakeNetworkStore()
                 self.adjustManager = FakeAdjustManager()
 
                 if #available(iOS 12.0, *) {
@@ -90,6 +100,7 @@ class FxAPresenterSpec: QuickSpec {
                         view: self.view,
                         dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
+                        networkStore: self.networkStore,
                         credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore,
                         adjustManager: self.adjustManager
                     )
@@ -99,6 +110,7 @@ class FxAPresenterSpec: QuickSpec {
                             view: self.view,
                             dispatcher: self.dispatcher,
                             accountStore: self.accountStore,
+                            networkStore: self.networkStore,
                             adjustManager: self.adjustManager
                     )
                 }
@@ -114,6 +126,28 @@ class FxAPresenterSpec: QuickSpec {
                     self.accountStore.loginURLStub.onNext(url)
 
                     expect(self.view.loadRequestArgument).to(equal(URLRequest(url: url)))
+                }
+
+                describe("when the retry button is tapped") {
+                    beforeEach {
+                        self.view.retryButtonStub.onNext(())
+                    }
+
+                    it("dispatches the retry action") {
+                        expect(self.dispatcher.dispatchedActions.last as? NetworkAction).to(equal(NetworkAction.retry))
+                    }
+                }
+
+                describe("network connectivity") {
+                    it("being connected hides the network disclaimer") {
+                        self.networkStore.connectedToNetworkStub.onNext(true)
+                        expect(self.view.networkDisclaimerHiddenObserver.events.last?.value.element).to(beTrue())
+                    }
+
+                    it("being disconnected shows the network disclaimer") {
+                        self.networkStore.connectedToNetworkStub.onNext(false)
+                        expect(self.view.networkDisclaimerHiddenObserver.events.last?.value.element).to(beFalse())
+                    }
                 }
             }
 

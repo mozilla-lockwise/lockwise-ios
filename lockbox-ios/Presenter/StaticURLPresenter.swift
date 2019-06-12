@@ -9,7 +9,7 @@ import RxSwift
 protocol StaticURLViewProtocol: class {
     var returnRoute: RouteAction { get }
     var closeTapped: Observable<Void>? { get }
-    var retryButtonTaps: Observable<Void> { get }
+    var retryButtonTapped: Observable<Void> { get }
     var networkDisclaimerHidden: AnyObserver<Bool> { get }
     func reload()
 }
@@ -42,7 +42,7 @@ class StaticURLPresenter {
                 .bind(to: view!.networkDisclaimerHidden)
                 .disposed(by: self.disposeBag)
 
-        self.view?.retryButtonTaps
+        self.view?.retryButtonTapped
                 .map { _ in NetworkAction.retry }
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: self.disposeBag)

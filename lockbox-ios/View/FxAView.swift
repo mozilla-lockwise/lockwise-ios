@@ -55,7 +55,7 @@ extension FxAView: FxAViewProtocol {
         self.webView.load(urlRequest)
     }
 
-    var retryButtonTaps: Observable<Void> {
+    var retryButtonTapped: Observable<Void> {
         return self.networkView.retryButton.rx.tap.asObservable()
     }
 

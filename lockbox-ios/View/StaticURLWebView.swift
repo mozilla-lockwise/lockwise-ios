@@ -10,7 +10,7 @@ import RxSwift
 class StaticURLWebView: UIViewController {
     private var urlString: String
     private var navTitle: String
-    private var presenter: StaticURLPresenter?
+    internal var presenter: StaticURLPresenter?
 
     var returnRoute: RouteAction
     private var webView = WKWebView()
@@ -113,7 +113,7 @@ extension StaticURLWebView: StaticURLViewProtocol {
         }
     }
 
-    var retryButtonTaps: Observable<Void> {
+    var retryButtonTapped: Observable<Void> {
         return self.networkView.retryButton.rx.tap.asObservable()
     }
 

@@ -150,11 +150,7 @@ class BaseItemListView: UIViewController {
 
 extension BaseItemListView: BaseItemListViewProtocol {
     var sortingButtonHidden: AnyObserver<Bool>? {
-        if let button = self.navigationItem.leftBarButtonItem?.customView as? UIButton {
-            return button.rx.isHidden.asObserver()
-        } else {
-            return nil
-        }
+        return (self.navigationItem.leftBarButtonItem?.customView as? UIButton)?.rx.isHidden.asObserver()
     }
 
     func bind(items: Driver<[ItemSectionModel]>) {

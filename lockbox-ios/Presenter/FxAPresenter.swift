@@ -9,7 +9,7 @@ import RxCocoa
 
 protocol FxAViewProtocol: class {
     func loadRequest(_ urlRequest: URLRequest)
-    var retryButtonTaps: Observable<Void> { get }
+    var retryButtonTapped: Observable<Void> { get }
     var networkDisclaimerHidden: AnyObserver<Bool> { get }
 }
 
@@ -101,7 +101,7 @@ class FxAPresenter {
                 .bind(to: view!.networkDisclaimerHidden)
                 .disposed(by: self.disposeBag)
 
-        self.view?.retryButtonTaps
+        self.view?.retryButtonTapped
                 .map { _ in NetworkAction.retry }
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: self.disposeBag)
