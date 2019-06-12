@@ -12,8 +12,6 @@ class ItemListView: BaseItemListView {
         return self.basePresenter as? ItemListPresenter
     }
 
-    private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
@@ -26,6 +24,7 @@ class ItemListView: BaseItemListView {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupRefresh()
+        self.setupSwipeDelete()
         self.presenter?.onViewReady()
     }
 
@@ -116,6 +115,38 @@ extension ItemListView {
             refreshControl.rx.controlEvent(.valueChanged)
                 .bind(to: presenter.refreshObserver)
                 .disposed(by: self.disposeBag)
+        }
+    }
+
+    fileprivate func setupSwipeDelete() {
+        if let presenter = self.presenter {
+            self.tableView.rx.itemDeleted
+                .map { (path: IndexPath) -> String? in
+                    self.tableView.deselectRow(at: path, animated: false)
+                    guard let config = self.dataSource?[path] else {
+                        return nil
+                    }
+
+                    switch config {
+                    case .Item(_, _, let id, _):
+                        return id
+                    default:
+                        return nil
+                    }
+                }
+                .bind(to: presenter.itemDeletedObserver)
+                .disposed(by: self.disposeBag)
+        }
+
+        self.dataSource?.canEditRowAtIndexPath = { dataSource, indexPath in
+            let config = dataSource[indexPath]
+
+            switch config {
+            case .Item:
+                return true
+            default:
+                return false
+            }
         }
     }
 }

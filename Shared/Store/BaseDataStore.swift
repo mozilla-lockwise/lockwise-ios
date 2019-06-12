@@ -122,6 +122,8 @@ class BaseDataStore {
                         self.lock()
                     case .unlock:
                         self.unlock()
+                    case .delete(let id):
+                        self.delete(id: id)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -194,6 +196,20 @@ extension BaseDataStore {
         } catch let error {
             NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
         }
+    }
+}
+
+extension BaseDataStore {
+    private func delete(id: String) {
+        do {
+            try self.loginsStorage?.delete(id: id)
+        } catch let error as LoginsStoreError {
+            self.pushError(error)
+        } catch let error {
+            NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
+        }
+
+        self.updateList()
     }
 }
 

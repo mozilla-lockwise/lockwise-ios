@@ -48,6 +48,50 @@ class ItemListPresenter: BaseItemListPresenter {
         }.asObserver()
     }
 
+    private var deletedItem: String?
+
+    var itemDeletedObserver: AnyObserver<String?> {
+        return Binder(self) { target, itemId in
+            guard let id = itemId else {
+                return
+            }
+
+            self.deletedItem = id
+
+            target.view?.displayAlertController(
+                buttons: [
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.cancel,
+                        tapObserver: target.deleteCancelObserver,
+                        style: .cancel
+                    ),
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.delete,
+                        tapObserver: target.deleteItemObserver,
+                        style: .destructive)
+                ],
+                title: Constant.string.confirmDeleteLoginDialogTitle,
+                message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                Constant.string.productName),
+                style: .alert,
+                barButtonItem: nil)
+        }.asObserver()
+    }
+
+    lazy private var deleteCancelObserver: AnyObserver<Void> = {
+        return Binder(self) { target, id in
+            target.deletedItem = nil
+        }.asObserver()
+    }()
+
+    lazy private var deleteItemObserver: AnyObserver<Void> = {
+        return Binder(self) { target, id in
+            if let deletedItem = target.deletedItem {
+                target.dispatcher.dispatch(action: DataStoreAction.delete(id: deletedItem))
+            }
+        }.asObserver()
+    }()
+
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: PullToRefreshAction(refreshing: true))
