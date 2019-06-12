@@ -7,3 +7,11 @@ import Foundation
 enum NetworkAction: Action {
     case retry
 }
+
+extension NetworkAction: Equatable {
+    static func ==(lhs: NetworkAction, rhs: NetworkAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.retry, .retry): return true
+        }
+    }
+}

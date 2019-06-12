@@ -14,9 +14,19 @@ import RxTest
 class FxAPresenterSpec: QuickSpec {
     class FakeFxAView: FxAViewProtocol {
         var loadRequestArgument: URLRequest?
+        var retryButtonStub = PublishSubject<Void>()
+        var networkDisclaimerHiddenObserver: TestableObserver<Bool>!
 
         func loadRequest(_ urlRequest: URLRequest) {
             self.loadRequestArgument = urlRequest
+        }
+
+        var retryButtonTaps: Observable<Void> {
+            return self.retryButtonStub
+        }
+
+        var networkDisclaimerHidden: AnyObserver<Bool> {
+            return self.networkDisclaimerHiddenObserver.asObserver()
         }
     }
 
@@ -61,12 +71,15 @@ class FxAPresenterSpec: QuickSpec {
     private var credentialProviderStore: Any!
     private var adjustManager: FakeAdjustManager!
     var subject: FxAPresenter!
+    private var scheduler = TestScheduler(initialClock: 0)
 
     override func spec() {
 
         describe("FxAPresenter") {
             beforeEach {
                 self.view = FakeFxAView()
+                self.view.networkDisclaimerHiddenObserver = self.scheduler.createObserver(Bool.self)
+
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
                 self.adjustManager = FakeAdjustManager()
