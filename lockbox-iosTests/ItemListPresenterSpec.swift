@@ -113,11 +113,13 @@ class ItemListPresenterSpec: QuickSpec {
         var itemListStub: PublishSubject<[LoginRecord]>
         var syncStateStub: PublishSubject<SyncState>
         var storageStateStub: PublishSubject<LoginStoreState>
+        var getStub: ReplaySubject<LoginRecord?>
 
         init(dispatcher: Dispatcher) {
             self.itemListStub = PublishSubject<[LoginRecord]>()
             self.syncStateStub = PublishSubject<SyncState>()
             self.storageStateStub = PublishSubject<LoginStoreState>()
+            self.getStub = ReplaySubject<LoginRecord?>.create(bufferSize: 1)
             super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard)
 
             self.disposeBag = DisposeBag()
@@ -133,6 +135,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         override var storageState: Observable<LoginStoreState> {
             return self.storageStateStub.asObservable()
+        }
+
+        override func get(_ id: String) -> Observable<LoginRecord?> {
+            return self.getStub.asObservable()
         }
     }
 
@@ -502,6 +508,27 @@ class ItemListPresenterSpec: QuickSpec {
 
                     let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
                     expect(filterAction.filteringText).to(equal(""))
+                }
+            }
+
+            describe("itemDeleted") {
+                let loginRecord = LoginRecord(fromJSONDict: ["id": "asdf", "hostname": "mozilla.com", "username": "asdf", "password": "fdsa"])
+                beforeEach {
+
+                    self.dataStore.getStub.onNext(loginRecord)
+                    let itemObservable = self.scheduler.createColdObservable([
+                        next(50, loginRecord.id)
+                        ])
+
+                    itemObservable
+                        .bind(to: self.subject.itemDeletedObserver)
+                        .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
+                }
+
+                it("tells the view to display the confirmation dialog") {
+                    expect(self.view.displayOptionSheetTitle).to(equal(Constant.string.confirmDeleteLoginDialogTitle))
                 }
             }
 
