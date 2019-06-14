@@ -124,7 +124,7 @@ Configuration:
 - **After public release**: _change the version_ to a major or minor update depending on the future plans.
   - Update the value in `Common/Resources/Info.plist` for the Lockbox app, for example from `1.2` to `1.3`
   - Also update the value in `CredentialProvider/Info.plist` for the extension to _the exact same version_
-- **After public release**: make sure the dSYMs were uploaded to Sentry as part of the process earlier, do it now if not so your error reports are legible.
+- **After public release**: make sure the dSYMs were uploaded to Sentry as part of the process earlier, do it now if not so your error reports are symbolicated.
 - **After changing the version**: TestFlight requires manual Beta review before any build is distributed. Be sure to submit a new build to TestFlight Beta App Review as early as possible so that review doesn't prevent user testing.
 
 [1]: https://dashboard.buddybuild.com/apps/5a0ddb736e19370001034f85
