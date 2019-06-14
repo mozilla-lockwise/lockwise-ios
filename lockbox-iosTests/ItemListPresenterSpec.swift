@@ -163,6 +163,14 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
+    class FakeNetworkStore: NetworkStore {
+        var networkAvailableStub = ReplaySubject<Bool>.create(bufferSize: 1)
+
+        override var connectedToNetwork: Observable<Bool> {
+            return self.networkAvailableStub.asObservable()
+        }
+    }
+
     private var view: FakeItemListView!
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
@@ -170,6 +178,7 @@ class ItemListPresenterSpec: QuickSpec {
     private var userDefaultStore: FakeUserDefaultStore!
     private var itemDetailStore: FakeItemDetailStore!
     private var sizeClassStore: FakeSizeClassStore!
+    private var networkStore: FakeNetworkStore!
     private let scheduler = TestScheduler(initialClock: 0)
     private let disposeBag = DisposeBag()
     var subject: ItemListPresenter!
@@ -184,6 +193,7 @@ class ItemListPresenterSpec: QuickSpec {
                 self.userDefaultStore = FakeUserDefaultStore()
                 self.itemDetailStore = FakeItemDetailStore()
                 self.sizeClassStore = FakeSizeClassStore()
+                self.networkStore = FakeNetworkStore()
                 self.view.itemsObserver = self.scheduler.createObserver([ItemSectionModel].self)
                 self.view.sortingButtonTitleObserver = self.scheduler.createObserver(String.self)
                 self.view.scrollActionObserver = self.scheduler.createObserver(ScrollAction.self)
@@ -199,6 +209,7 @@ class ItemListPresenterSpec: QuickSpec {
                         itemListDisplayStore: self.itemListDisplayStore,
                         userDefaultStore: self.userDefaultStore,
                         itemDetailStore: self.itemDetailStore,
+                        networkStore: self.networkStore,
                         sizeClassStore: self.sizeClassStore
                 )
             }
@@ -208,6 +219,7 @@ class ItemListPresenterSpec: QuickSpec {
                     beforeEach {
                         self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                         self.itemDetailStore.itemDetailIdStub.onNext("1234")
+                        self.networkStore.networkAvailableStub.onNext(true)
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
@@ -350,6 +362,7 @@ class ItemListPresenterSpec: QuickSpec {
                     describe("when in wide view with sidebar") {
                         beforeEach {
                             self.itemDetailStore.itemDetailIdStub.onNext("ff")
+                            self.networkStore.networkAvailableStub.onNext(true)
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                             self.subject.onViewReady()
                             self.dataStore.itemListStub.onNext(items)
@@ -374,6 +387,7 @@ class ItemListPresenterSpec: QuickSpec {
                     describe("when in narrow view") {
                         beforeEach {
                             self.itemDetailStore.itemDetailIdStub.onNext("ff")
+                            self.networkStore.networkAvailableStub.onNext(true)
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)
                             self.subject.onViewReady()
                             self.dataStore.itemListStub.onNext(items)
@@ -446,6 +460,48 @@ class ItemListPresenterSpec: QuickSpec {
                         }
                     }
 
+                    describe("no network") {
+                        beforeEach {
+                            self.itemDetailStore.itemDetailIdStub.onNext("ff")
+                            self.networkStore.networkAvailableStub.onNext(false)
+                            self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
+                            self.subject.onViewReady()
+                            self.dataStore.itemListStub.onNext(items)
+                            self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
+                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                            self.dataStore.syncStateStub.onNext(SyncState.Synced)
+                            self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
+                        }
+
+                        it("pushes the no network cell along with the others") {
+                            let expectedItemConfigurations = [
+                                LoginListCellConfiguration.Item(title: "", username: Constant.string.usernamePlaceholder, guid: id2, highlight: false),
+                                LoginListCellConfiguration.Item(title: "aaaaaa", username: Constant.string.usernamePlaceholder, guid: "ff", highlight: true),
+                                LoginListCellConfiguration.Item(title: "meow", username: username, guid: id1, highlight: false)
+                            ]
+                            expect(self.view.itemsObserver.events.first!.value.element).notTo(beNil())
+                            let configuration = self.view.itemsObserver.events.first!.value.element!
+                            expect(configuration.first!.items.first).to(equal(LoginListCellConfiguration.NoNetwork(retryObserver: self.scheduler.createObserver(Void.self).asObserver())))
+                            expect(configuration.first!.items).to(contain(expectedItemConfigurations))
+                        }
+
+                        describe("tapping the retry button") {
+                            beforeEach {
+                                let configuration = self.view.itemsObserver.events.first!.value.element!
+                                guard case let .NoNetwork(retryObserver) = configuration.first!.items.first! else {
+                                    fail("wrong configuration!")
+                                    return
+                                }
+
+                                retryObserver.onNext(())
+                            }
+
+                            it("dispatches the refresh action") {
+                                expect(self.dispatcher.dispatchedActions.popLast() as? NetworkAction).to(equal(NetworkAction.retry))
+                            }
+                        }
+                    }
+
                     xdescribe("when sorting method switches to recently used") {
                         // pended until it's possible to construct Logins with recently_used dates
                         beforeEach {
@@ -470,7 +526,7 @@ class ItemListPresenterSpec: QuickSpec {
                 let text = "entered text"
 
                 beforeEach {
-                    let textObservable = self.scheduler.createColdObservable([next(40, text)])
+                    let textObservable = self.scheduler.createColdObservable([Recorded.next(40, text)])
                     textObservable.bind(to: self.subject.filterTextObserver).disposed(by: self.disposeBag)
                     self.scheduler.start()
                 }
@@ -486,7 +542,7 @@ class ItemListPresenterSpec: QuickSpec {
 
             describe("cancelClicked") {
                 beforeEach {
-                    let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
+                    let cancelObservable = self.scheduler.createColdObservable([Recorded.next(50, ())])
                     cancelObservable.bind(to: self.subject.cancelObserver).disposed(by: self.disposeBag)
                     self.scheduler.start()
                 }
@@ -506,7 +562,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                     beforeEach {
                         let itemObservable = self.scheduler.createColdObservable([
-                            next(50, id)
+                            Recorded.next(50, id)
                         ])
 
                         itemObservable
@@ -528,7 +584,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                 describe("when the item does not have an id") {
                     beforeEach {
-                        let itemObservable: TestableObservable<String?> = self.scheduler.createColdObservable([next(50, nil)])
+                        let itemObservable: TestableObservable<String?> = self.scheduler.createColdObservable([Recorded.next(50, nil)])
 
                         itemObservable
                                 .bind(to: self.subject.itemSelectedObserver)
@@ -547,7 +603,7 @@ class ItemListPresenterSpec: QuickSpec {
                 beforeEach {
                     self.subject.onViewReady()
 
-                    let itemSettingObservable: TestableObservable<ScrollAction> = self.scheduler.createColdObservable([next(50, ScrollAction.toTop)])
+                    let itemSettingObservable: TestableObservable<ScrollAction> = self.scheduler.createColdObservable([Recorded.next(50, ScrollAction.toTop)])
                     itemSettingObservable
                         .bind(to: self.view.scrollActionObserver)
                         .disposed(by: self.disposeBag)

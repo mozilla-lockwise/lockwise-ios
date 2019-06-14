@@ -11,6 +11,8 @@ open class NetworkStore {
     static let shared = NetworkStore()
 
     private var reachability: ReachabilityProtocol?
+    private let dispatcher: Dispatcher
+    private let disposeBag = DisposeBag()
 
     private let _connectedToNetwork = BehaviorRelay<Bool>(value: false)
 
@@ -24,8 +26,12 @@ open class NetworkStore {
         return _connectedToNetwork.value
     }
 
-    init(reachability: ReachabilityProtocol? = Reachability()) {
+    init(
+        reachability: ReachabilityProtocol? = Reachability(),
+        dispatcher: Dispatcher = .shared
+        ) {
         self.reachability = reachability
+        self.dispatcher = dispatcher
         let currentlyReachable = (reachability?.connection ?? Reachability.Connection.none) != .none
 
         self._connectedToNetwork.accept(currentlyReachable)
@@ -41,5 +47,12 @@ open class NetworkStore {
         if !isRunningTest {
             ((try? self.reachability?.startNotifier()) as ()??)
         }
+
+        dispatcher.register
+                .filterByType(class: NetworkAction.self)
+                .filter { $0 == NetworkAction.retry }
+                .map { _ in (self.reachability?.connection ?? Reachability.Connection.none) != .none }
+                .bind(to: self._connectedToNetwork)
+                .disposed(by: self.disposeBag)
     }
 }
