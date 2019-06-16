@@ -108,4 +108,7 @@ extension Constant.string {
     static let save = NSLocalizedString("save", value: "Save", comment: "This is the button title for the entry editor view")
     static let edit = NSLocalizedString("edit", value: "Edit", comment: "The button title allowing a user to access the item editor from the entry details view")
     static let name = NSLocalizedString("name", value: "Name", comment: "Row title for the `name` row of the item editor, describing what name is used when displaying the entry")
+    static let discardChangesTitle = NSLocalizedString("edit.discardChangesDialog.title", value: "Discard Changes?", comment: "Title of dialog shown when cancel is tapped on the edit screen")
+    static let discardChangesMessage = NSLocalizedString("edit.discardChangesDialog.message", value: "Your edits will not be saved.", comment: "Message in dialog shown when cancel is tapped on the edit screen")
+    static let discard = NSLocalizedString("edit.discardChangesDialog.discard", value: "Discard", comment: "Button to remove changes in the dialog shown when cancel is tapped on the edit screen")
 }

@@ -28,6 +28,9 @@ class ItemDetailPresenterSpec: QuickSpec {
         var tempAlertTimeout: TimeInterval?
         var enableLargeTitleValue: Bool?
         var enableSwipeValue: Bool?
+        var alertControllerTitle: String?
+        var alertControllerMessage: String?
+        var alertControllerButtons: [AlertActionButtonConfiguration]?
 
         var itemDetailObserver: ItemDetailSectionModelObserver {
             return { observable -> Disposable in
@@ -78,6 +81,16 @@ class ItemDetailPresenterSpec: QuickSpec {
         func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
             self.tempAlertMessage = message
             self.tempAlertTimeout = timeout
+        }
+
+        func displayAlertController(buttons: [AlertActionButtonConfiguration],
+                                    title: String?,
+                                    message: String?,
+                                    style: UIAlertController.Style,
+                                    barButtonItem: UIBarButtonItem?) {
+            self.alertControllerButtons = buttons
+            self.alertControllerTitle = title
+            self.alertControllerMessage = message
         }
     }
 
@@ -601,10 +614,21 @@ class ItemDetailPresenterSpec: QuickSpec {
                             self.view.leftButtonTappedStub.onNext(())
                         }
 
-                        it("dispatches the view mode action") {
-                            expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
-                                    .to(equal(ItemDetailDisplayAction.viewMode))
+                        it("displays the alert controller") {
+                            expect(self.view.alertControllerButtons).notTo(beNil())
+                            expect(self.view.alertControllerTitle).to(equal(Constant.string.discardChangesTitle))
+                            expect(self.view.alertControllerMessage).to(equal(Constant.string.discardChangesMessage))
+                        }
+
+                        describe("discardChangesObserver") {
+                            beforeEach {
+                                self.view.alertControllerButtons![1].tapObserver?.onNext(())
+                            }
+
+                            it("sends the viewMode action") {
+                                let displayAction = self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction
+                                expect(displayAction).to(equal(.viewMode))
+                            }
                         }
                     }
 
