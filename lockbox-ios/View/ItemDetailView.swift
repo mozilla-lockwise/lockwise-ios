@@ -37,6 +37,11 @@ class ItemDetailView: UIViewController {
         self.setupDataSource()
         self.presenter?.onViewReady()
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.presenter?.onViewDisappear()
+    }
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {

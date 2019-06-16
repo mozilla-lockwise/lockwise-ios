@@ -190,6 +190,7 @@
 		7D897EAF2261074700257946 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D897EAE2261074700257946 /* NetworkProtocols.swift */; };
 		7D897EB02261074700257946 /* NetworkProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D897EAE2261074700257946 /* NetworkProtocols.swift */; };
 		7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */; };
+		7D96A73322B020AD00E8FA5C /* AccountAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA5492DA3988625D1DAB5BD /* AccountAction.swift */; };
 		7D9722C3213461510071D82B /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA542A3362BE85B313A88B8 /* UIImage+.swift */; };
 		7D9722C4213461510071D82B /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA4C6902028FB0900B61DD8 /* UIColor+.swift */; };
 		7D9722C62134622F0071D82B /* BaseWelcomePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9722C52134622F0071D82B /* BaseWelcomePresenter.swift */; };
@@ -238,6 +239,8 @@
 		7DDEAA6C2124B7A700A7D521 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D80F3072118DCC700DA191B /* AuthenticationServices.framework */; };
 		7DDEAA712124CEB100A7D521 /* DataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDEAA702124CEB100A7D521 /* DataStore.swift */; };
 		7DE5896E2125D20C005CFF47 /* CredentialAccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */; };
+		7DF455DC22A1D3D200207285 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF455DB22A1D3D200207285 /* RxRelay.framework */; };
+		7DF455DD22A1D3F700207285 /* RxRelay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF455DB22A1D3D200207285 /* RxRelay.framework */; };
 		7DF469CA1F9F8FDA00375C74 /* RxTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; };
 		7DF469CB1F9F8FE400375C74 /* RxTest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7DF469C91F9F8FDA00375C74 /* RxTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7DFF2EEB21382D5C00F001ED /* SharedAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DFF2EEA21382D5C00F001ED /* SharedAssets.xcassets */; };
@@ -247,6 +250,7 @@
 		7DFF2EF4213857E100F001ED /* CredentialProviderPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */; };
 		9BFB48C59623367F328FE265 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BCAF40329CC78C0CBF5E632C /* Localizable.strings */; };
 		A1B04DCCB276B7FD665F1C96 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 135D40AD8E5C6CC264F33683 /* InfoPlist.strings */; };
+		D4AC7F5522980EEC00F75ACF /* SnapshotsXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */; };
 		D5BCA68D229DA4A800CF980C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BCA68B229DA4A800CF980C /* InfoPlist.strings */; };
 		D5BCA694229DA4E000CF980C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BCA692229DA4E000CF980C /* Localizable.strings */; };
 		D5CC9BB8207D13660013CDEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5CC9BB7207D13660013CDEC /* LaunchScreen.storyboard */; };
@@ -559,6 +563,7 @@
 		7DDEAA702124CEB100A7D521 /* DataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStore.swift; sourceTree = "<group>"; };
 		7DE5896D2125D20C005CFF47 /* CredentialAccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialAccountStore.swift; sourceTree = "<group>"; };
 		7DEA1C4120362E09008AD7C4 /* Differentiator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differentiator.framework; path = Carthage/Build/iOS/Differentiator.framework; sourceTree = "<group>"; };
+		7DF455DB22A1D3D200207285 /* RxRelay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxRelay.framework; path = Carthage/Build/iOS/RxRelay.framework; sourceTree = "<group>"; };
 		7DF469C31F9F8F8000375C74 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		7DF469C71F9F8FD500375C74 /* RxBlocking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxBlocking.framework; path = Carthage/Build/iOS/RxBlocking.framework; sourceTree = "<group>"; };
 		7DF469C91F9F8FDA00375C74 /* RxTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxTest.framework; path = Carthage/Build/iOS/RxTest.framework; sourceTree = "<group>"; };
@@ -568,7 +573,13 @@
 		80C24E078F9DA15264F2FA6F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0E84623AB91A6A141DD8403 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B3554B229BDD46895D14A661 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotsXCUITests.swift; sourceTree = "<group>"; };
 		D50920F62284A18100AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
+		D578C36E229F099D00E08CFF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
+		D578C370229F09B600E08CFF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
+		D578C372229F0A5500E08CFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
+		D578C374229F0A8C00E08CFF /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
+		D578C376229F0AC400E08CFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
 		D59BC9922296EA6B009BA380 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D59BC9942296EA70009BA380 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D59BC9962296EA75009BA380 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ItemList.strings; sourceTree = "<group>"; };
@@ -612,11 +623,6 @@
 		D5BCA682229D9D9600CF980C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
 		D5BCA683229D9D9B00CF980C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
 		D5BCA684229D9D9D00CF980C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
-		D5BCA685229D9E1100CF980C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
-		D5BCA686229D9E1200CF980C /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
-		D5BCA687229D9E1300CF980C /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
-		D5BCA688229D9E1400CF980C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
-		D5BCA689229D9E1500CF980C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
 		D5BCA68A229D9F6800CF980C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D5BCA68C229DA4A800CF980C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D5BCA68E229DA4AF00CF980C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -719,6 +725,7 @@
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
 				7D5F1D7B20866A9400688DEA /* RxDataSources.framework in Frameworks */,
 				7D5F1D7E20866A9400688DEA /* Telemetry.framework in Frameworks */,
+				7DF455DC22A1D3D200207285 /* RxRelay.framework in Frameworks */,
 				7D5F1D7C20866A9400688DEA /* RxOptional.framework in Frameworks */,
 				7D5F1D7D20866A9400688DEA /* RxSwift.framework in Frameworks */,
 				7D1E758D224A7B3F00C06B4C /* SwiftProtobuf.framework in Frameworks */,
@@ -734,6 +741,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DDEAA652124B27600A7D521 /* RxCocoa.framework in Frameworks */,
+				7DF455DD22A1D3F700207285 /* RxRelay.framework in Frameworks */,
 				7D11623D225FB839009097C7 /* MozillaAppServices.framework in Frameworks */,
 				7DDEAA662124B27900A7D521 /* RxDataSources.framework in Frameworks */,
 				7DDEAA672124B27F00A7D521 /* RxSwift.framework in Frameworks */,
@@ -751,6 +759,7 @@
 				2C2EC56120ADAB1D00AF8C44 /* LockwiseScreenGraph.swift */,
 				2C2EC56320ADAB5400AF8C44 /* BaseTestCase.swift */,
 				7AA54CF29E6B76D6894A841E /* SnapshotHelper.swift */,
+				D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */,
 			);
 			path = LockwiseXCUITests;
 			sourceTree = "<group>";
@@ -1046,6 +1055,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7DF455DB22A1D3D200207285 /* RxRelay.framework */,
 				7D897EAC2260FFA800257946 /* Reachability.framework */,
 				7D11623E225FDD27009097C7 /* SystemConfiguration.framework */,
 				7D07FE91225E2DB60000B030 /* Network.framework */,
@@ -1390,13 +1400,13 @@
 					};
 					7D1B1AC31F99028D00C1F5FF = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 7D5DF8721F87F2600039B23E;
 					};
 					7D5DF8721F87F2600039B23E = {
 						CreatedOnToolsVersion = 9.0;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -1409,6 +1419,7 @@
 					};
 					7D80F3052118DCC700DA191B = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -1534,6 +1545,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
 			);
 			name = "Run Script";
 			outputPaths = (
@@ -1548,6 +1560,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AdjustSdk.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sentry.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Reachability.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRelay.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1573,6 +1586,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4AC7F5522980EEC00F75ACF /* SnapshotsXCUITests.swift in Sources */,
 				2C2EC55520ADA85A00AF8C44 /* LockwiseXCUITests.swift in Sources */,
 				2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift in Sources */,
 				2C2EC56220ADAB1D00AF8C44 /* LockwiseScreenGraph.swift in Sources */,
@@ -1830,6 +1844,7 @@
 				7DB9DEA32140D04700239D31 /* ItemListDisplayAction.swift in Sources */,
 				7DB9DEA42140D41E00239D31 /* UIFont+.swift in Sources */,
 				7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */,
+				7D96A73322B020AD00E8FA5C /* AccountAction.swift in Sources */,
 				D80D41C321FD6D48008A7B11 /* CredentialItemDetailStore.swift in Sources */,
 				7D09B2492125DD6100794CA2 /* BaseDataStore.swift in Sources */,
 				7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */,
@@ -2046,11 +2061,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				D8256F84227510C400FA96ED /* Base */,
-				D5BCA685229D9E1100CF980C /* en */,
-				D5BCA686229D9E1200CF980C /* it */,
-				D5BCA687229D9E1300CF980C /* fr */,
-				D5BCA688229D9E1400CF980C /* de */,
-				D5BCA689229D9E1500CF980C /* es */,
+				D578C36E229F099D00E08CFF /* en */,
+				D578C370229F09B600E08CFF /* it */,
+				D578C372229F0A5500E08CFF /* fr */,
+				D578C374229F0A8C00E08CFF /* de */,
+				D578C376229F0AC400E08CFF /* es */,
 			);
 			name = SetupAutofill.storyboard;
 			sourceTree = "<group>";
@@ -2145,7 +2160,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Lockbox.app/Firefox Lockbox";
 			};
@@ -2170,7 +2185,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Firefox Lockbox.app/Firefox Lockbox";
 			};
@@ -2331,7 +2346,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2369,7 +2384,7 @@
 				SWIFT_INCLUDE_PATHS = "${PROJECT_DIR}/lockbox-ios/CommonCrypto/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2396,7 +2411,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -2422,7 +2437,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.adhoc.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Branch;
@@ -2448,7 +2463,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2551,7 +2566,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Branch;
@@ -2580,7 +2595,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "lockbox-ios/Common/Resources/lockbox-ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lockbox-Branch.app/Lockbox-Branch";
 			};

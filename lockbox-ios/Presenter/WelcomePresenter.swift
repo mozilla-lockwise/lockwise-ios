@@ -151,7 +151,7 @@ extension WelcomePresenter {
                 title: Constant.string.notUsingPasscode,
                 message: Constant.string.passcodeInformation,
                 style: .alert,
-                barButtonItem:  nil)
+                barButtonItem: nil)
     }
 
     private func handleBiometrics(_ infoLockedObservable: Observable<(Profile?, Bool)>) {

@@ -4,6 +4,7 @@
 
 import Foundation
 import RxSwift
+import RxRelay
 import RxCocoa
 import MozillaAppServices
 import RxOptional

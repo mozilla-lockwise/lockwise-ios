@@ -22,7 +22,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
 
     private var okButtonObserver: AnyObserver<Void> {
         return Binder(self) { target, _ in
-            self.dispatcher.dispatch(action: CredentialStatusAction.extensionConfigured)
+            self.dispatcher.dispatch(action: CredentialStatusAction.cancelled(error: .userCanceled))
         }.asObserver()
     }
 

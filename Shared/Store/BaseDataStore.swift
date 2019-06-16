@@ -5,32 +5,20 @@
 import Foundation
 import MozillaAppServices
 import RxSwift
-import RxCocoa
+import RxRelay
 import RxOptional
 import SwiftKeychainWrapper
 
-enum SyncError: Error {
-    case CryptoInvalidKey
-    case CryptoMissingKey
-    case Crypto
-    case Locked
-    case Offline
-    case Network
-    case NeedAuth
-    case Conflict
-    case AccountDeleted
-    case AccountReset
-    case DeviceRevoked
-}
-
 enum SyncState: Equatable {
-    case Syncing, Synced
+    case Syncing, Synced, TimedOut
 
     public static func ==(lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
         case (Syncing, Syncing):
             return true
         case (Synced, Synced):
+            return true
+        case (TimedOut, TimedOut):
             return true
         default:
             return false
@@ -39,7 +27,7 @@ enum SyncState: Equatable {
 }
 
 enum LoginStoreState: Equatable {
-    case Unprepared, Locked, Unlocked, Errored(cause: LoginStoreError)
+    case Unprepared, Locked, Unlocked, Errored(cause: LoginsStoreError)
 
     public static func ==(lhs: LoginStoreState, rhs: LoginStoreState) -> Bool {
         switch (lhs, rhs) {
@@ -53,25 +41,12 @@ enum LoginStoreState: Equatable {
     }
 }
 
-public enum LoginStoreError: Error {
-    // applies to just about every function call
-    case Unknown(cause: Error?)
-    case NotInitialized
-    case AlreadyInitialized
-    case VersionMismatch
-    case CryptoInvalidKey
-    case CryptoMissingKey
-    case Crypto
-    case InvalidItem
-    case Locked
-}
-
 class BaseDataStore {
     private let queue = DispatchQueue(label: "Logins queue", attributes: [])
 
     internal var disposeBag = DisposeBag()
     private var listSubject = BehaviorRelay<[LoginRecord]>(value: [])
-    private var syncSubject = ReplaySubject<SyncState>.create(bufferSize: 1)
+    private var syncSubject = BehaviorRelay<SyncState>(value: .Synced)
     private var storageStateSubject = ReplaySubject<LoginStoreState>.create(bufferSize: 1)
 
     private let dispatcher: Dispatcher
@@ -214,8 +189,10 @@ extension BaseDataStore {
     private func touch(id: String) {
         do {
             try self.loginsStorage?.touch(id: id)
+        } catch let error as LoginsStoreError {
+            self.pushError(error)
         } catch let error {
-            print("Sync15: \(error)")
+            NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
         }
     }
 }
@@ -229,21 +206,29 @@ extension BaseDataStore {
             else { return }
 
         if (networkStore.isConnectedToNetwork) {
-            self.syncSubject.onNext(SyncState.Syncing)
+            self.syncSubject.accept(SyncState.Syncing)
         } else {
-            self.syncSubject.onNext(SyncState.Synced)
+            self.syncSubject.accept(SyncState.Synced)
             return
         }
 
         queue.async {
+            self.queue.asyncAfter(deadline: .now() + Constant.app.syncTimeout, execute: {
+                // this block serves to "cancel" the sync if the operation is running slowly
+                if (self.syncSubject.value != .Synced) {
+                    self.syncSubject.accept(.TimedOut)
+                    self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, line: ""))
+                }
+            })
+
             do {
                 try self.loginsStorage?.sync(unlockInfo: syncInfo)
-            } catch let error as LoginStoreError {
-                self.storageStateSubject.onNext(.Errored(cause: error))
+            } catch let error as LoginsStoreError {
+                self.pushError(error)
             } catch let error {
-                NSLog("Unknown error syncing: \(error)")
+                NSLog("DATASTORE:: Unknown error syncing: \(error)")
             }
-            self.syncSubject.onNext(SyncState.Synced)
+            self.syncSubject.accept(SyncState.Synced)
         }
     }
 
@@ -254,10 +239,10 @@ extension BaseDataStore {
             do {
                 let loginRecords = try loginsStorage.list()
                 self.listSubject.accept(loginRecords)
-            } catch let error as LoginStoreError {
-                self.storageStateSubject.onNext(.Errored(cause: error))
+            } catch let error as LoginsStoreError {
+                self.pushError(error)
             } catch let error {
-                NSLog("Unknown error updating list: \(error)")
+                NSLog("DATASTORE:: Unknown error updating list: \(error)")
             }
         }
     }
@@ -272,11 +257,10 @@ extension BaseDataStore {
     private func setupAutolock() {
         self.lifecycleStore.lifecycleEvents
             .filter { $0 == .background }
-            .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void in
-                if state == .Unlocked {
-                    return ()
-                }
+            .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void? in
+                return state == .Unlocked ? () : nil
             })
+            .filterNil()
             .subscribe(onNext: { [weak self] _ in
                 self?.autoLockSupport.storeNextAutolockTime()
             })
@@ -284,11 +268,10 @@ extension BaseDataStore {
 
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .foreground }
-                .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void in
-                    if state != .Unprepared {
-                        return ()
-                    }
+                .withLatestFrom(self.storageState, resultSelector: { (_, state) -> Void? in
+                    return state != .Unprepared ? () : nil
                 })
+                .filterNil()
                 .subscribe(onNext: { [weak self] _ in
                     self?.handleLock()
                 })
@@ -321,8 +304,8 @@ extension BaseDataStore {
         do {
             try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
             self.storageStateSubject.onNext(.Unlocked)
-        } catch let error as LoginStoreError {
-            self.storageStateSubject.onNext(.Errored(cause: error))
+        } catch let error as LoginsStoreError {
+            pushError(error)
         } catch let error {
             NSLog("Unknown error unlocking: \(error)")
         }
@@ -355,6 +338,19 @@ extension BaseDataStore {
         }
     }
 
+    private func pushError(_ error: LoginsStoreError) {
+        self.storageStateSubject.onNext(.Errored(cause: error))
+        self.dispatcher.dispatch(action: SentryAction(title: "Datastore Error", error: error, line: nil))
+
+        switch error {
+        case .authInvalid, .invalidKey:
+            self.dispatcher.dispatch(action: DataStoreAction.reset)
+            self.dispatcher.dispatch(action: AccountAction.clear)
+        default:
+            return
+        }
+    }
+
     private func reset() {
         guard let loginsStorage = self.loginsStorage,
             let loginsKey = self.loginsKey else { return }
@@ -364,8 +360,8 @@ extension BaseDataStore {
                 self.storageStateSubject.onNext(.Unprepared)
                 try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
                 try loginsStorage.wipeLocal()
-            } catch let error as LoginStoreError {
-                self.storageStateSubject.onNext(.Errored(cause: error))
+            } catch let error as LoginsStoreError {
+                self.pushError(error)
             } catch let error {
                 NSLog("Unknown error wiping database: \(error.localizedDescription)")
             }

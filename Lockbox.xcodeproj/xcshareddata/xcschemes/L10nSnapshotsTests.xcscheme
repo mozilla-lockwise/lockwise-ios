@@ -73,13 +73,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "SnapshotsXCUITests">
-               </Test>
-               <Test
-                  Identifier = "SnapshotsXCUITests/testEntriesSortAndSearchSnapshots()">
-               </Test>
-               <Test
-                  Identifier = "SnapshotsXCUITests/testSettingsSnapshots()">
+                  Identifier = "LockwiseXCUITests">
                </Test>
             </SkippedTests>
          </TestableReference>

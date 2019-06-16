@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,8 +15,11 @@
             <rect key="frame" x="0.0" y="0.0" width="145" height="114"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Password copied" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="145" translatesAutoresizingMaskIntoConstraints="NO" id="6dX-h5-s50">
-                    <rect key="frame" x="24.5" y="71.5" width="96" height="14.5"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="749" insetsLayoutMarginsFromSafeArea="NO" text="Nombre de usuario copiado" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="145" translatesAutoresizingMaskIntoConstraints="NO" id="6dX-h5-s50">
+                    <rect key="frame" x="27.5" y="71.5" width="90.5" height="30.5"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14.5" id="SGH-1k-c9s"/>
+                    </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                     <color key="textColor" red="0.91092252731323242" green="0.91161435842514038" blue="0.9110296368598938" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -33,14 +36,13 @@
                 <constraint firstItem="hbg-mx-lXA" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="jDw-px-It3"/>
                 <constraint firstItem="6dX-h5-s50" firstAttribute="top" secondItem="hbg-mx-lXA" secondAttribute="bottom" constant="9.5" id="lLX-Gi-gas"/>
                 <constraint firstItem="hbg-mx-lXA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="30" id="nLs-fZ-jnl"/>
-                <constraint firstAttribute="bottom" secondItem="6dX-h5-s50" secondAttribute="bottom" constant="28" id="vgh-3g-qoo"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6dX-h5-s50" secondAttribute="trailing" id="yN3-8M-9z0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="messageLabel" destination="6dX-h5-s50" id="nWU-kS-zc7"/>
             </connections>
-            <point key="canvasLocation" x="-22.5" y="-185"/>
+            <point key="canvasLocation" x="-23.199999999999999" y="-185.30734632683661"/>
         </view>
     </objects>
     <resources>

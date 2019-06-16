@@ -1,6 +1,6 @@
 # External Dependencies
 
-You will need to use **Xcode 10.2.1** and **Swift 4.2.1** (`swiftlang-1000.0.36 clang-1000.10.44`) to work on Lockwise.
+You will need to use **Xcode 10.2.1** and **Swift 5.0.1** (`swiftlang-1001.0.82.4 clang-1001.0.46.5`) to work on Lockwise.
 
 ## Swift frameworks
 

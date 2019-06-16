@@ -190,25 +190,29 @@ class ItemDetailPresenter {
                 .disposed(by: self.disposeBag)
     }
 
+    func onViewDisappear() {
+        self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
+    }
+
     func dndStarted(value: String?) {
         self.itemDetailStore.itemDetailId
-                .take(1)
-                .flatMap { self.dataStore.get($0) }
-                .flatMap { item -> Observable<[Action]> in
-                    var actions: [Action] = []
-                    if let item = item {
-                        actions.append(DataStoreAction.touch(id: item.id))
-                        actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
-                    }
-
-                    return Observable.just(actions)
+            .take(1)
+            .flatMap { self.dataStore.get($0) }
+            .map { item -> [Action] in
+                var actions: [Action] = []
+                if let item = item {
+                    actions.append(DataStoreAction.touch(id: item.id))
+                    actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .dnd))
                 }
-                .subscribe(onNext: { actions in
-                    for action in actions {
-                        self.dispatcher.dispatch(action: action)
-                    }
-                })
-                .disposed(by: self.disposeBag)
+
+                return actions
+            }
+            .subscribe(onNext: { actions in
+                for action in actions {
+                    self.dispatcher.dispatch(action: action)
+                }
+            })
+            .disposed(by: self.disposeBag)
     }
 }
 

@@ -31,10 +31,10 @@ class ItemListPresenterSpec: QuickSpec {
         var fakeOnSettingsPressed = PublishSubject<Void>()
         var fakeOnSortingButtonPressed = PublishSubject<Void>()
         var setFilterEnabledValue: Bool?
-
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
-        var displayOptionSheetTitle: String?
+        var temporaryAlertArgument: String?
 
+        var displayOptionSheetTitle: String?
         func bind(items: Driver<[ItemSectionModel]>) {
             items.drive(itemsObserver).disposed(by: self.disposeBag)
         }
@@ -51,6 +51,10 @@ class ItemListPresenterSpec: QuickSpec {
         func displayAlertController(buttons: [AlertActionButtonConfiguration], title: String?, message: String?, style: UIAlertController.Style, barButtonItem: UIBarButtonItem?) {
             self.displayOptionSheetButtons = buttons
             self.displayOptionSheetTitle = title
+        }
+
+        func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+            self.temporaryAlertArgument = message
         }
 
         func dismissKeyboard() {
@@ -282,6 +286,16 @@ class ItemListPresenterSpec: QuickSpec {
                                             title: Constant.string.faq,
                                             returnRoute: MainRouteAction.list)))
                                 }
+                            }
+                        }
+
+                        describe("if the sync times out") {
+                            beforeEach {
+                                self.dataStore.syncStateStub.onNext(SyncState.TimedOut)
+                            }
+
+                            it("displays a temporary alert for the user") {
+                                expect(self.view.temporaryAlertArgument).to(equal(Constant.string.syncTimedOut))
                             }
                         }
                     }

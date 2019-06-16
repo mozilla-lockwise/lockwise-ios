@@ -632,7 +632,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         it("dispatches the view mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
                             expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
-                                    .to(equal(ItemDetailDisplayAction.viewMode))
+                                .to(equal(ItemDetailDisplayAction.viewMode))
                         }
                     }
 
@@ -645,7 +645,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                         it("dispatches the edit mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
                             expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
-                                    .to(equal(ItemDetailDisplayAction.editMode))
+                                .to(equal(ItemDetailDisplayAction.editMode))
                         }
                     }
                 }
