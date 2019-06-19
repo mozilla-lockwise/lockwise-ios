@@ -10,15 +10,17 @@ import RxSwift
 class StaticURLWebView: UIViewController {
     private var urlString: String
     private var navTitle: String
-    private var presenter: StaticURLPresenter?
+    internal var presenter: StaticURLPresenter?
 
     var returnRoute: RouteAction
     private var webView = WKWebView()
+    private var networkView: NoNetworkView
 
     init(urlString: String, title: String, returnRoute: RouteAction) {
         self.urlString = urlString
         self.navTitle = title
         self.returnRoute = returnRoute
+        self.networkView = NoNetworkView.instanceFromNib()
 
         super.init(nibName: nil, bundle: nil)
         self.presenter = StaticURLPresenter(view: self)
@@ -35,12 +37,8 @@ class StaticURLWebView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.styleNavigationBar()
-
         self.view = webView
-
-        if let url = URL(string: self.urlString) {
-            webView.load(URLRequest(url: url))
-        }
+        self.setupNetworkMessage()
 
         self.presenter?.onViewReady()
     }
@@ -64,9 +62,65 @@ class StaticURLWebView: UIViewController {
             .font: UIFont.navigationButtonFont
         ], for: .normal)
     }
+
+    fileprivate func setupNetworkMessage() {
+        self.networkView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.networkView)
+        self.networkView.addConstraint(NSLayoutConstraint(
+            item: self.networkView,
+            attribute: .height,
+            relatedBy: .equal,
+            toItem: nil,
+            attribute: .height,
+            multiplier: 1,
+            constant: 38)
+        )
+
+        self.view.addConstraints([
+            NSLayoutConstraint(
+                item: self.networkView,
+                attribute: .leading,
+                relatedBy: .equal,
+                toItem: self.view.safeAreaLayoutGuide,
+                attribute: .leading,
+                multiplier: 1,
+                constant: 0),
+            NSLayoutConstraint(
+                item: self.networkView,
+                attribute: .trailing,
+                relatedBy: .equal,
+                toItem: self.view.safeAreaLayoutGuide,
+                attribute: .trailing,
+                multiplier: 1,
+                constant: 0),
+            NSLayoutConstraint(
+                item: self.networkView,
+                attribute: .top,
+                relatedBy: .equal,
+                toItem: self.view.safeAreaLayoutGuide,
+                attribute: .top,
+                multiplier: 1,
+                constant: 0)
+            ]
+        )
+    }
 }
 
 extension StaticURLWebView: StaticURLViewProtocol {
+    func reload() {
+        if let url = URL(string: self.urlString) {
+            webView.load(URLRequest(url: url))
+        }
+    }
+
+    var retryButtonTapped: Observable<Void> {
+        return self.networkView.retryButton.rx.tap.asObservable()
+    }
+
+    var networkDisclaimerHidden: AnyObserver<Bool> {
+        return self.networkView.rx.isHidden.asObserver()
+    }
+
     var closeTapped: Observable<Void>? {
         return self.navigationItem.leftBarButtonItem?.rx.tap.asObservable()
     }

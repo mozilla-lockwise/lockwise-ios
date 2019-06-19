@@ -143,6 +143,7 @@ class ItemListPresenter: BaseItemListPresenter {
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
          userDefaultStore: UserDefaultStore = .shared,
          itemDetailStore: ItemDetailStore = .shared,
+         networkStore: NetworkStore = .shared,
          sizeClassStore: SizeClassStore = .shared) {
 
         super.init(view: view,
@@ -151,6 +152,7 @@ class ItemListPresenter: BaseItemListPresenter {
                    itemListDisplayStore: itemListDisplayStore,
                    userDefaultStore: userDefaultStore,
                    itemDetailStore: itemDetailStore,
+                   networkStore: networkStore,
                    sizeClassStore: sizeClassStore)
     }
 

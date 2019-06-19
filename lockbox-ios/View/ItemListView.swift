@@ -13,7 +13,7 @@ class ItemListView: BaseItemListView {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        return super.preferredStatusBarStyle
     }
 
     required init?(coder aDecoder: NSCoder) {
