@@ -109,6 +109,23 @@ extension ItemListView: ItemListViewProtocol {
 
         return nil
     }
+
+    var itemDeleted: Observable<String> {
+        return self.tableView.rx.itemDeleted
+            .map { (path: IndexPath) -> String? in
+                self.tableView.deselectRow(at: path, animated: false)
+                guard let config = self.dataSource?[path] else {
+                    return nil
+                }
+
+                switch config {
+                case .Item(_, _, let id, _):
+                    return id
+                default:
+                    return nil
+                }
+        }.filterNil()
+    }
 }
 
 extension ItemListView {
@@ -124,25 +141,6 @@ extension ItemListView {
     }
 
     fileprivate func setupSwipeDelete() {
-        if let presenter = self.presenter {
-            self.tableView.rx.itemDeleted
-                .map { (path: IndexPath) -> String? in
-                    self.tableView.deselectRow(at: path, animated: false)
-                    guard let config = self.dataSource?[path] else {
-                        return nil
-                    }
-
-                    switch config {
-                    case .Item(_, _, let id, _):
-                        return id
-                    default:
-                        return nil
-                    }
-                }
-                .bind(to: presenter.itemDeletedObserver)
-                .disposed(by: self.disposeBag)
-        }
-
         self.dataSource?.canEditRowAtIndexPath = { dataSource, indexPath in
             let config = dataSource[indexPath]
 

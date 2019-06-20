@@ -30,6 +30,7 @@ class ItemListPresenterSpec: QuickSpec {
         var pullToRefreshObserver: TestableObserver<Bool>!
         var fakeOnSettingsPressed = PublishSubject<Void>()
         var fakeOnSortingButtonPressed = PublishSubject<Void>()
+        var fakeItemDeleted = PublishSubject<String>()
         var setFilterEnabledValue: Bool?
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var temporaryAlertArgument: String?
@@ -85,6 +86,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         var onSortingButtonPressed: ControlEvent<Void>? {
             return ControlEvent<Void>(events: fakeOnSortingButtonPressed.asObservable())
+        }
+
+        var itemDeleted: Observable<String> {
+            return self.fakeItemDeleted.asObservable()
         }
 
         func setFilterEnabled(enabled: Bool) {
@@ -568,19 +573,9 @@ class ItemListPresenterSpec: QuickSpec {
             }
 
             describe("itemDeleted") {
-                let loginRecord = LoginRecord(fromJSONDict: ["id": "asdf", "hostname": "mozilla.com", "username": "asdf", "password": "fdsa"])
                 beforeEach {
-
-                    self.dataStore.getStub.onNext(loginRecord)
-                    let itemObservable = self.scheduler.createColdObservable([
-                        next(50, loginRecord.id)
-                        ])
-
-                    itemObservable
-                        .bind(to: self.subject.itemDeletedObserver)
-                        .disposed(by: self.disposeBag)
-
-                    self.scheduler.start()
+                    self.subject.onViewReady()
+                    self.view.fakeItemDeleted.onNext("asdf")
                 }
 
                 it("tells the view to display the confirmation dialog") {

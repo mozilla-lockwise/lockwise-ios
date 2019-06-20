@@ -17,6 +17,7 @@ protocol ItemListViewProtocol: AlertControllerView, StatusAlertView, SpinnerAler
     var pullToRefreshActive: AnyObserver<Bool>? { get }
     var onSettingsButtonPressed: ControlEvent<Void>? { get }
     var onSortingButtonPressed: ControlEvent<Void>? { get }
+    var itemDeleted: Observable<String> { get }
     var sortButton: UIBarButtonItem? { get }
 }
 
@@ -49,56 +50,6 @@ class ItemListPresenter: BaseItemListPresenter {
             target.dispatcher.dispatch(action: MainRouteAction.detail(itemId: id))
         }.asObserver()
     }
-
-    private var deletedItem: LoginRecord?
-
-    var itemDeletedObserver: AnyObserver<String?> {
-        return Binder(self) { target, itemId in
-            guard let id = itemId else {
-                return
-            }
-
-            target.dataStore.get(id)
-                .take(1)
-                .subscribe(onNext: { (loginRecord) in
-                    target.deletedItem = loginRecord
-
-                    target.view?.displayAlertController(
-                        buttons: [
-                            AlertActionButtonConfiguration(
-                                title: Constant.string.cancel,
-                                tapObserver: target.deleteCancelObserver,
-                                style: .cancel
-                            ),
-                            AlertActionButtonConfiguration(
-                                title: Constant.string.delete,
-                                tapObserver: target.deleteItemObserver,
-                                style: .destructive)
-                        ],
-                        title: Constant.string.confirmDeleteLoginDialogTitle,
-                        message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
-                                        Constant.string.productName),
-                        style: .alert,
-                        barButtonItem: nil)
-                })
-                .disposed(by: self.disposeBag)
-        }.asObserver()
-    }
-
-    lazy private var deleteCancelObserver: AnyObserver<Void> = {
-        return Binder(self) { target, id in
-            target.deletedItem = nil
-        }.asObserver()
-    }()
-
-    lazy private var deleteItemObserver: AnyObserver<Void> = {
-        return Binder(self) { target, id in
-            if let deletedItem = target.deletedItem {
-                target.dispatcher.dispatch(action: DataStoreAction.delete(id: deletedItem.id))
-                target.view?.showDeletedStatusAlert(message: String(format: Constant.string.deletedStatusAlert, deletedItem.hostname.titleFromHostname()))
-            }
-        }.asObserver()
-    }()
 
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
@@ -221,6 +172,36 @@ class ItemListPresenter: BaseItemListPresenter {
             .disposed(by: self.disposeBag)
 
         }
+
+        if let itemDeleted = self.view?.itemDeleted {
+            itemDeleted.subscribe(onNext: { (id) in
+                self.view?.displayAlertController(
+                    buttons: [
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.cancel,
+                            tapObserver: nil,
+                            style: .cancel
+                        ),
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.delete,
+                            tapObserver: self.getDeletedItemObserver(id: id),
+                            style: .destructive)
+                    ],
+                    title: Constant.string.confirmDeleteLoginDialogTitle,
+                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                    Constant.string.productNameShort),
+                    style: .alert,
+                    barButtonItem: nil)
+            })
+            .disposed(by: self.disposeBag)
+        }
+    }
+
+    private func getDeletedItemObserver(id: String) -> AnyObserver<Void> {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: DataStoreAction.delete(id: id))
+//            target.view?.showDeletedStatusAlert(message: String(format: Constant.string.deletedStatusAlert, itemToDelete.hostname.titleFromHostname()))
+        }.asObserver()
     }
 }
 
