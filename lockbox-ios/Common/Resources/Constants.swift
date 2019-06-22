@@ -105,4 +105,5 @@ extension Constant.string {
     static let disclaimerLabel = NSLocalizedString("settings.unlinkDisclaimer", value: "This removes synced logins from %@, but will not delete your logins from Firefox.", comment: "Label on account setting explaining unlink. %@ will be replaced with the application name")
     static let onboardingTitle = NSLocalizedString("onboarding.title", value: "Welcome to %@", comment: "Title on onboarding screen. %@ will be replaced with the application name")
     static let getStarted = NSLocalizedString("get.started", value: "Get Started", comment: "Title for the FxA login screen.")
+    static let syncBetweenDevicesEncryption = NSLocalizedString("securityTheather.syncBetweenDevices", value: "Sync between devices with secure 256-bit encryption", comment: "Text shown on security screen during onboarding.")
 }
