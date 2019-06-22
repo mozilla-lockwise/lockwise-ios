@@ -435,6 +435,7 @@ class BaseDataStoreSpec: QuickSpec {
 
                 it("deletes the item in the datastore") {
                     _ = try! self.subject.syncState.toBlocking().first()
+                    _ = try! self.subject.storageState.toBlocking().first()
                     expect(self.loginsStorage.deleteIdArgument).to(equal(id))
                 }
             }
