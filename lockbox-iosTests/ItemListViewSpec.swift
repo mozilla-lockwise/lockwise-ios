@@ -152,64 +152,206 @@ class ItemListViewSpec: QuickSpec {
                 }
 
                 describe("empty list placeholder") {
-                    var learnMoreObserver = self.scheduler.createObserver(Void.self)
+                    describe("non-null observer") {
+                        var learnMoreObserver = self.scheduler.createObserver(Void.self)
 
-                    beforeEach {
-                        learnMoreObserver = self.scheduler.createObserver(Void.self)
+                        beforeEach {
+                            learnMoreObserver = self.scheduler.createObserver(Void.self)
 
-                        self.subject.bind(items: Driver.just(
-                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: learnMoreObserver.asObserver())])]
-                        ))
+                            self.subject.bind(items: Driver.just(
+                                    [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: learnMoreObserver.asObserver())])]
+                            ))
+                        }
+
+                        it("configures the empty list placeholder") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                    self.subject.tableView,
+                                    cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as? EmptyPlaceholderCell
+
+                            expect(cell).notTo(beNil())
+                        }
+
+                        it("configures the learn more button") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                    self.subject.tableView,
+                                    cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as! EmptyPlaceholderCell
+
+                            cell.learnMoreButton.sendActions(for: .touchUpInside)
+
+                            expect(learnMoreObserver.events.count).to(equal(1))
+                        }
+
+                        it("prepare for reuse clears the subscription") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                    self.subject.tableView,
+                                    cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as! EmptyPlaceholderCell
+
+                            let originalDisposeBag = cell.disposeBag
+
+                            cell.prepareForReuse()
+
+                            expect(originalDisposeBag === cell.disposeBag).to(beFalse())
+                        }
                     }
 
-                    it("configures the empty list placeholder") {
-                        let cell = self.subject.tableView.dataSource!.tableView(
-                                self.subject.tableView,
-                                cellForRowAt: IndexPath(row: 0, section: 0)
-                        ) as? EmptyPlaceholderCell
+                    describe("null observer") {
+                        beforeEach {
+                            self.subject.bind(items: Driver.just(
+                                    [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: nil)])]
+                            ))
+                        }
 
-                        expect(cell).notTo(beNil())
-                    }
+                        it("configures the empty list placeholder") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                    self.subject.tableView,
+                                    cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as? EmptyPlaceholderCell
 
-                    it("configures the learn more button") {
-                        let cell = self.subject.tableView.dataSource!.tableView(
-                                self.subject.tableView,
-                                cellForRowAt: IndexPath(row: 0, section: 0)
-                        ) as! EmptyPlaceholderCell
+                            expect(cell).notTo(beNil())
+                        }
 
-                        cell.learnMoreButton.sendActions(for: .touchUpInside)
+                        it("hides the learn more button") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                    self.subject.tableView,
+                                    cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as! EmptyPlaceholderCell
 
-                        expect(learnMoreObserver.events.count).to(equal(1))
+                            expect(cell.learnMoreButton.isHidden).to(beTrue())
+
+                        }
                     }
                 }
 
                 describe("no results placeholder") {
-                    var learnMoreObserver = self.scheduler.createObserver(Void.self)
+                    describe("non-null observer") {
+                        var learnMoreObserver = self.scheduler.createObserver(Void.self)
+
+                        beforeEach {
+                            learnMoreObserver = self.scheduler.createObserver(Void.self)
+                            self.subject.bind(items: Driver.just(
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: learnMoreObserver.asObserver())])]))
+                        }
+
+                        it("configures the no results placeholder") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as? NoResultsCell
+
+                            expect(cell).notTo(beNil())
+                        }
+
+                        it("configures the learn more button") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                                ) as! NoResultsCell
+
+                            cell.learnMoreButton.sendActions(for: .touchUpInside)
+
+                            expect(learnMoreObserver.events.count).to(equal(1))
+                        }
+
+                        it("disposes the subscription on reuse") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                    self.subject.tableView,
+                                    cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as! NoResultsCell
+
+                            let originalDisposeBag = cell.disposeBag
+
+                            cell.prepareForReuse()
+
+                            expect(originalDisposeBag === cell.disposeBag).to(beFalse())
+                        }
+                    }
+
+                    describe("null observer") {
+                        beforeEach {
+                            self.subject.bind(items: Driver.just(
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: nil)])]))
+                        }
+
+                        it("configures the no results placeholder") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                            ) as? NoResultsCell
+
+                            expect(cell).notTo(beNil())
+                        }
+
+                        it("hides the learn more button") {
+                            let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                                ) as! NoResultsCell
+
+                            expect(cell.learnMoreButton.isHidden).to(beTrue())
+                        }
+                    }
+                }
+
+                describe("select a password help text") {
+                    beforeEach {
+                        self.subject.bind(items: Driver.just(
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.SelectAPasswordHelpText])]
+                        ))
+                    }
+
+                    it("configures the select password cell") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        )
+
+                        expect(cell).notTo(beNil())
+                    }
+                }
+
+                describe("no network disclaimer") {
+                    var retryObserver = self.scheduler.createObserver(Void.self)
 
                     beforeEach {
-                        learnMoreObserver = self.scheduler.createObserver(Void.self)
+                        retryObserver = self.scheduler.createObserver(Void.self)
                         self.subject.bind(items: Driver.just(
-                            [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: learnMoreObserver.asObserver())])]))
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoNetwork(retryObserver: retryObserver.asObserver())])]))
                     }
 
                     it("configures the no results placeholder") {
                         let cell = self.subject.tableView.dataSource!.tableView(
-                            self.subject.tableView,
-                            cellForRowAt: IndexPath(row: 0, section: 0)
-                        )
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as? NoNetworkCell
 
                         expect(cell).notTo(beNil())
                     }
 
                     it("configures the learn more button") {
                         let cell = self.subject.tableView.dataSource!.tableView(
-                            self.subject.tableView,
-                            cellForRowAt: IndexPath(row: 0, section: 0)
-                            ) as! NoResultsCell
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as! NoNetworkCell
 
-                        cell.learnMoreButton.sendActions(for: .touchUpInside)
+                        cell.retryButton.sendActions(for: .touchUpInside)
 
-                        expect(learnMoreObserver.events.count).to(equal(1))
+                        expect(retryObserver.events.count).to(equal(1))
+                    }
+
+                    it("disposes the subscription on reuse") {
+                        let cell = self.subject.tableView.dataSource!.tableView(
+                                self.subject.tableView,
+                                cellForRowAt: IndexPath(row: 0, section: 0)
+                        ) as! NoNetworkCell
+
+                        let originalDisposeBag = cell.disposeBag
+
+                        cell.prepareForReuse()
+
+                        expect(originalDisposeBag === cell.disposeBag).to(beFalse())
                     }
                 }
             }
@@ -225,6 +367,18 @@ class ItemListViewSpec: QuickSpec {
                     let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
 
                     expect(button.currentTitle).to(equal(newTitle))
+                }
+            }
+
+            describe("sortingButtonHidden") {
+                beforeEach {
+                    self.subject.sortingButtonHidden?.onNext(true)
+                }
+
+                it("configures the sorting button hidden status") {
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+
+                    expect(button.isHidden).to(beTrue())
                 }
             }
 
@@ -333,7 +487,14 @@ class ItemListViewSpec: QuickSpec {
                     expect(LoginListCellConfiguration.SyncListPlaceholder.identity).to(equal("syncplaceholder"))
                     let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
                     expect(LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver).identity).to(equal("emptyplaceholder"))
+                    expect(LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver).identity).to(equal("noresultsplaceholder")) 
+                    expect(LoginListCellConfiguration.SelectAPasswordHelpText.identity).to(equal("selectapasswordhelptext")) 
+                    expect(LoginListCellConfiguration.NoNetwork(retryObserver: fakeObserver).identity).to(equal("nonetwork")) 
                 }
+            }
+
+            describe("equality") {
+
             }
         }
 
