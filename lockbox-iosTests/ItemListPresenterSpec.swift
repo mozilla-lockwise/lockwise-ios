@@ -583,6 +583,17 @@ class ItemListPresenterSpec: QuickSpec {
                 }
             }
 
+            describe("item deleted from store") {
+                beforeEach {
+                    self.subject.onViewReady()
+                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemDeletedAction(name: "mozilla.org"))
+                }
+
+                it("tells the view to display the toast") {
+                    expect(self.view.deletedMessage).to(contain("mozilla.org"))
+                }
+            }
+
             describe("itemSelected") {
                 describe("when the item has an id") {
                     let id = "fsjksdfjklsdfjlkdsf"

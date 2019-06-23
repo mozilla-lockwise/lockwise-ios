@@ -202,15 +202,26 @@ extension BaseDataStore {
 extension BaseDataStore {
     private func delete(id: String) {
         queue.async {
-            do {
-                try self.loginsStorage?.delete(id: id)
-            } catch let error as LoginsStoreError {
-                self.pushError(error)
-            } catch let error {
-                NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
-            }
+            self.get(id)
+                .take(1)
+                .subscribe(onNext: { (record) in
+                    if let record = record {
+                        let title = record.hostname.titleFromHostname()
+                        self.dispatcher.dispatch(action: ItemDeletedAction(name: title))
 
-            self.updateList()
+                        do {
+                            try self.loginsStorage?.delete(id: id)
+                        } catch let error as LoginsStoreError {
+                            self.pushError(error)
+                        } catch let error {
+                            NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
+                        }
+
+                        self.updateList()
+                    }
+
+                })
+                .disposed(by: self.disposeBag)
         }
     }
 }

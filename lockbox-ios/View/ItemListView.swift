@@ -74,8 +74,10 @@ extension ItemListView: ItemListViewProtocol {
     }
 
     func showDeletedStatusAlert(message: String) {
-        let icon = UIImage(named: "delete")
-        self.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: icon)
+        DispatchQueue.main.async {
+            let icon = UIImage(named: "delete")
+            self.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: icon)
+        }
     }
 
     var tableViewScrollEnabled: AnyObserver<Bool> {

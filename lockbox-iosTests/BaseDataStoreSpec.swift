@@ -426,20 +426,6 @@ class BaseDataStoreSpec: QuickSpec {
                 }
             }
 
-            describe("delete") {
-                let id = "lieksmxhwmldkdmsldlf"
-
-                beforeEach {
-                    self.dispatcher.dispatch(action: DataStoreAction.delete(id: id))
-                }
-
-                it("deletes the item in the datastore") {
-                    _ = try! self.subject.syncState.toBlocking().first()
-                    _ = try! self.subject.storageState.toBlocking().first()
-                    expect(self.loginsStorage.deleteIdArgument).to(equal(id))
-                }
-            }
-
             describe("lifecycle interactions") {
                 describe("background events") {
                     beforeEach {

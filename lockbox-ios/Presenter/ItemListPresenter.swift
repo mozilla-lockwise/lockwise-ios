@@ -195,12 +195,19 @@ class ItemListPresenter: BaseItemListPresenter {
             })
             .disposed(by: self.disposeBag)
         }
+
+        self.itemListDisplayStore.listDisplay
+            .filterByType(class: ItemDeletedAction.self)
+            .subscribe(onNext: { (action) in
+                self.view?.showDeletedStatusAlert(message:
+                    String(format: Constant.string.deletedStatusAlert, action.name))
+            })
+            .disposed(by: self.disposeBag)
     }
 
     private func getDeletedItemObserver(id: String) -> AnyObserver<Void> {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: DataStoreAction.delete(id: id))
-//            target.view?.showDeletedStatusAlert(message: String(format: Constant.string.deletedStatusAlert, itemToDelete.hostname.titleFromHostname()))
         }.asObserver()
     }
 }
