@@ -8,6 +8,7 @@ import UIKit
 import WebKit
 import RxSwift
 import AdjustSdk
+import RxTest
 
 @testable import Lockbox
 
@@ -37,6 +38,8 @@ class FxAViewSpec: QuickSpec {
     var webView: FakeWebView!
     var presenter: FakeFxAPresenter!
     var subject: FxAView!
+    var scheduler = TestScheduler(initialClock: 0)
+    var disposeBag = DisposeBag()
 
     override func spec() {
         beforeEach {
@@ -63,6 +66,25 @@ class FxAViewSpec: QuickSpec {
                 expect(self.webView.loadCalled).to(beTrue())
                 expect(self.webView.loadArgument).to(equal(request))
             }
+        }
+
+        it("binds the retry button to the retrytapped observable") {
+            let voidObserver = self.scheduler.createObserver(Void.self)
+
+            self.subject.retryButtonTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
+
+            let noNetworkView = self.subject.view!.subviews.last as! NoNetworkView
+            noNetworkView.retryButton.sendActions(for: .touchUpInside)
+
+            expect(voidObserver.events.count).to(equal(1))
+        }
+
+        it("binds the hidden observer to the no network disclaimer") {
+            let noNetworkView = self.subject.view!.subviews.last as! NoNetworkView
+
+            self.subject.networkDisclaimerHidden.onNext(true)
+
+            expect(noNetworkView.isHidden).to(beTrue())
         }
     }
 }

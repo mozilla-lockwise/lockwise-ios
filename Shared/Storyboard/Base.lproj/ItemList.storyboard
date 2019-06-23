@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2mk-ib-5TB">
-    <device id="ipad12_9rounded" orientation="portrait">
+    <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -14,24 +14,24 @@
             <objects>
                 <viewController storyboardIdentifier="itemlist" useStoryboardIdentifierAsRestorationIdentifier="YES" id="2mk-ib-5TB" customClass="ItemListView" customModule="CredentialProvider" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EWp-zW-Z4E">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6QD-kO-MbW">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" white="0.66042751736111116" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="EJh-kX-2nu">
-                                    <rect key="frame" x="0.0" y="993" width="1024" height="0.29999999999999999"/>
+                                    <rect key="frame" x="0.0" y="1029" width="414" height="0.29999999999999999"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="0.66042751736111116" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="itemlistcell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="itemlistcell" rowHeight="60" id="js3-IG-n21" customClass="ItemListCell" customModule="CredentialProvider" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="1024" height="60"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="js3-IG-n21" id="R1R-SD-Nxb">
-                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="60"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3A5-nI-aV6">
@@ -53,7 +53,7 @@
                                                     </attributedString>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HqN-xH-UTt">
-                                                    <rect key="frame" x="15" y="59" width="1009" height="1"/>
+                                                    <rect key="frame" x="15" y="59" width="399" height="1"/>
                                                     <color key="backgroundColor" red="0.84313725490196079" green="0.84313725490196079" blue="0.85882352941176465" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="qD6-Z6-y50"/>
@@ -82,14 +82,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="itemlistplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="itemlistplaceholder" rowHeight="253" id="HQ6-Kl-lQz">
-                                        <rect key="frame" x="0.0" y="88" width="1024" height="253"/>
+                                        <rect key="frame" x="0.0" y="88" width="414" height="253"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HQ6-Kl-lQz" id="DT8-fp-7Ef">
-                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="253"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="253"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" image="item-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="hbE-L4-UGB">
-                                                    <rect key="frame" x="0.0" y="0.0" width="1024" height="253"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="253"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -102,17 +102,17 @@
                                         <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="emptylistplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="emptylistplaceholder" rowHeight="300" id="Zwa-yR-CR7" customClass="EmptyPlaceholderCell" customModule="CredentialProvider" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="341" width="1024" height="300"/>
+                                        <rect key="frame" x="0.0" y="341" width="414" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zwa-yR-CR7" id="6wL-a0-kfc">
-                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="300"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" verticalCompressionResistancePriority="751" insetsLayoutMarginsFromSafeArea="NO" image="empty-list-placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="VhK-mU-PRG">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Smh-ku-Ub5">
-                                                    <rect key="frame" x="372" y="182" width="280" height="63"/>
+                                                    <rect key="frame" x="67" y="182" width="280" height="63"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="WcY-qh-pBg"/>
                                                     </constraints>
@@ -121,7 +121,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQB-Vr-ObR">
-                                                    <rect key="frame" x="473.5" y="249" width="77" height="16"/>
+                                                    <rect key="frame" x="168.5" y="249" width="77" height="16"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -134,7 +134,7 @@
                                                     </attributedString>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No logins found." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gQr-4J-xpv">
-                                                    <rect key="frame" x="456" y="156" width="112" height="18"/>
+                                                    <rect key="frame" x="151" y="156" width="112" height="18"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" red="0.047058823529411764" green="0.047058823529411764" blue="0.050980392156862744" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -165,14 +165,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="noresultsplaceholder" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="noresultsplaceholder" rowHeight="300" id="k0g-dg-N0G" customClass="NoResultsCell" customModule="CredentialProvider" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="641" width="1024" height="300"/>
+                                        <rect key="frame" x="0.0" y="641" width="414" height="300"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="k0g-dg-N0G" id="CRM-Km-Zcb">
-                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="300"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To see more logins here, you’ll need to save them to Firefox." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JpV-eG-grp">
-                                                    <rect key="frame" x="372" y="56" width="280" height="31.5"/>
+                                                    <rect key="frame" x="67" y="56" width="280" height="31.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="280" id="gFp-Ms-L2p"/>
                                                     </constraints>
@@ -186,7 +186,7 @@
                                                     </attributedString>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5gN-a0-N6V">
-                                                    <rect key="frame" x="473.5" y="102.5" width="77" height="162.5"/>
+                                                    <rect key="frame" x="168.5" y="102.5" width="77" height="162.5"/>
                                                     <accessibility key="accessibilityConfiguration" identifier="learnMore.button"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="tintColor" red="0.34901960780000002" green="0.1647058824" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -199,7 +199,7 @@
                                                     </attributedString>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No matching logins." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qZc-w1-SRT">
-                                                    <rect key="frame" x="444" y="30" width="136.5" height="18"/>
+                                                    <rect key="frame" x="139" y="30" width="136.5" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.047058823530000002" green="0.047058823530000002" blue="0.050980392159999999" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -223,18 +223,18 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.94117647059999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
-                                            <outlet property="learnMoreButton" destination="5gN-a0-N6V" id="WTm-PM-Xqd"/>
+                                            <outlet property="learnMoreButton" destination="5gN-a0-N6V" id="vAd-Rx-2VF"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="selectapasswordhelptext" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="selectapasswordhelptext" id="jdq-PU-RcE" userLabel="selectapasswordhelptext">
-                                        <rect key="frame" x="0.0" y="941" width="1024" height="52"/>
+                                        <rect key="frame" x="0.0" y="941" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jdq-PU-RcE" id="q18-Tm-NMt">
-                                            <rect key="frame" x="0.0" y="0.0" width="1024" height="52"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a password to fill" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RpZ-Z7-u0I">
-                                                    <rect key="frame" x="440" y="18" width="144" height="16"/>
+                                                    <rect key="frame" x="135" y="14" width="144" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -249,6 +249,48 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.11372549019607843" green="0.066666666666666666" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="nonetwork" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="nonetwork" id="i8b-tm-5wi" customClass="NoNetworkCell" customModule="CredentialProvider" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="985" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i8b-tm-5wi" id="Tmx-Gk-Z6B">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="warning" translatesAutoresizingMaskIntoConstraints="NO" id="5Dw-c3-mvi">
+                                                    <rect key="frame" x="16" y="15" width="14" height="14"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Internet Connection" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V5S-CG-n11">
+                                                    <rect key="frame" x="36" y="13" width="160" height="18"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <attributedString key="userComments">
+                                                        <fragment content="This is an instruction for the user to select a login when in AutoFill mode "/>
+                                                    </attributedString>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SWH-yo-sI7">
+                                                    <rect key="frame" x="358" y="5.5" width="41" height="33"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <state key="normal" title="Retry">
+                                                        <color key="titleColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="5Dw-c3-mvi" firstAttribute="leading" secondItem="Tmx-Gk-Z6B" secondAttribute="leading" constant="16" id="6b1-8J-0Ta"/>
+                                                <constraint firstItem="V5S-CG-n11" firstAttribute="leading" secondItem="5Dw-c3-mvi" secondAttribute="trailing" constant="6" id="G36-do-E3v"/>
+                                                <constraint firstItem="SWH-yo-sI7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="V5S-CG-n11" secondAttribute="trailing" constant="8" symbolic="YES" id="Nxh-Gv-A1W"/>
+                                                <constraint firstAttribute="trailing" secondItem="SWH-yo-sI7" secondAttribute="trailing" constant="15" id="YHh-Cc-L1M"/>
+                                                <constraint firstItem="V5S-CG-n11" firstAttribute="centerY" secondItem="Tmx-Gk-Z6B" secondAttribute="centerY" id="hLH-wd-vCu"/>
+                                                <constraint firstItem="5Dw-c3-mvi" firstAttribute="centerY" secondItem="Tmx-Gk-Z6B" secondAttribute="centerY" id="pC0-oT-ap4"/>
+                                                <constraint firstItem="SWH-yo-sI7" firstAttribute="centerY" secondItem="Tmx-Gk-Z6B" secondAttribute="centerY" id="xUu-pv-TvW"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.1137254902" green="0.066666666669999999" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <outlet property="retryButton" destination="SWH-yo-sI7" id="cnd-Ou-9dM"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -274,5 +316,6 @@
         <image name="arrow-right" width="8" height="10"/>
         <image name="empty-list-placeholder" width="414" height="128"/>
         <image name="item-list-placeholder" width="414" height="255"/>
+        <image name="warning" width="14" height="14"/>
     </resources>
 </document>
