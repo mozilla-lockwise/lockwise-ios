@@ -21,6 +21,7 @@ struct LoginListTextSort {
     let sortingOption: Setting.ItemListSort
     let syncState: SyncState
     let storeState: LoginStoreState
+    let networkConnected: Bool
     let detailItemId: String
 }
 
@@ -30,6 +31,7 @@ extension LoginListTextSort: Equatable {
             lhs.text == rhs.text &&
             lhs.sortingOption == rhs.sortingOption &&
             lhs.syncState == rhs.syncState &&
+            lhs.networkConnected == rhs.networkConnected &&
             lhs.detailItemId == rhs.detailItemId
     }
 }
@@ -41,6 +43,7 @@ class BaseItemListPresenter {
     internal let itemListDisplayStore: ItemListDisplayStore
     internal let userDefaultStore: UserDefaultStore
     internal let itemDetailStore: BaseItemDetailStore
+    internal let networkStore: NetworkStore
     internal let sizeClassStore: SizeClassStore
     internal let disposeBag = DisposeBag()
 
@@ -64,25 +67,26 @@ class BaseItemListPresenter {
     }()
 
     lazy private(set) var cancelObserver: AnyObserver<Void> = {
-        return Binder(self) { target, filterText in
+        return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ItemListFilterAction(filteringText: ""))
             target.dispatcher.dispatch(action: ItemListFilterEditAction(editing: false))
         }.asObserver()
     }()
 
-    lazy fileprivate var emptyPlaceholderItems = [
-        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
-        )
-    ]
+    lazy private(set) var retryNetworkObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: NetworkAction.retry)
+            }
+            .asObserver()
+    }()
 
-    lazy fileprivate var noResultsPlaceholderItems = [
-        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
-        )
-    ]
+    lazy fileprivate var emptyPlaceholderItems = [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
 
-    lazy internal var syncPlaceholderItems = [
-        ItemSectionModel(model: 0, items: [LoginListCellConfiguration.SyncListPlaceholder])
-    ]
+    lazy fileprivate var noResultsPlaceholderItems = [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
+
+    lazy internal var syncPlaceholderItems = [LoginListCellConfiguration.SyncListPlaceholder]
+
+    lazy internal var noNetworkItems = [LoginListCellConfiguration.NoNetwork(retryObserver: self.retryNetworkObserver)]
 
     var helpTextItems: [LoginListCellConfiguration] {
         return []
@@ -94,6 +98,7 @@ class BaseItemListPresenter {
          itemListDisplayStore: ItemListDisplayStore = .shared,
          userDefaultStore: UserDefaultStore = .shared,
          itemDetailStore: ItemDetailStore = .shared,
+         networkStore: NetworkStore = .shared,
          sizeClassStore: SizeClassStore = .shared) {
         self.baseView = view
         self.dispatcher = dispatcher
@@ -101,6 +106,7 @@ class BaseItemListPresenter {
         self.itemListDisplayStore = itemListDisplayStore
         self.userDefaultStore = userDefaultStore
         self.itemDetailStore = itemDetailStore
+        self.networkStore = networkStore
         self.sizeClassStore = sizeClassStore
     }
 
@@ -116,6 +122,7 @@ class BaseItemListPresenter {
             itemSortObservable: itemSortObservable,
             syncStateObservable: self.dataStore.syncState,
             storageStateObservable: self.dataStore.storageState,
+            networkConnectivityObservable: self.networkStore.connectedToNetwork,
             itemDetailIdObservable: self.itemDetailStore.itemDetailId,
             sidebarObservable: self.sizeClassStore.shouldDisplaySidebar
         )
@@ -139,6 +146,7 @@ extension BaseItemListPresenter {
                                           itemSortObservable: Observable<Setting.ItemListSort>,
                                           syncStateObservable: Observable<SyncState>,
                                           storageStateObservable: Observable<LoginStoreState>,
+                                          networkConnectivityObservable: Observable<Bool>,
                                           itemDetailIdObservable: Observable<String>,
                                           sidebarObservable: Observable<Bool>) -> Driver<[ItemSectionModel]> {
         // only run on a delay for UI purposes; keep tests from blocking
@@ -157,27 +165,31 @@ extension BaseItemListPresenter {
             itemSortObservable,
             throttledSyncStateObservable,
             throttledStorageStateObservable,
+            networkConnectivityObservable,
             itemDetailIdObservable,
             sidebarObservable
             )
-            .map { (latest: ([LoginRecord], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, String, Bool)) -> LoginListTextSort in
+            .map { (latest: ([LoginRecord], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, Bool, String, Bool)) -> LoginListTextSort in
                 return LoginListTextSort(
                     logins: latest.0,
                     text: latest.1.filteringText,
                     sortingOption: latest.2,
                     syncState: latest.3,
                     storeState: latest.4,
-                    detailItemId: latest.6 ? latest.5 : "" // only pass along the detailItemId if we are showing the sidebar
+                    networkConnected: latest.5,
+                    detailItemId: latest.7 ? latest.6 : "" // only pass along the detailItemId if we are showing the sidebar
                 )
             }
             .distinctUntilChanged()
             .map { (latest: LoginListTextSort) -> [ItemSectionModel] in
+                let networkItems = latest.networkConnected ? [] : self.noNetworkItems
+                
                 if latest.syncState == .Syncing && latest.logins.isEmpty {
-                    return self.syncPlaceholderItems
+                    return [ItemSectionModel(model: 0, items: networkItems + self.syncPlaceholderItems)]
                 }
 
                 if latest.syncState == .Synced && latest.logins.isEmpty {
-                    return self.emptyPlaceholderItems
+                    return [ItemSectionModel(model: 0, items: networkItems + self.emptyPlaceholderItems)]
                 }
 
                 let sortedFilteredItems = self.filterItemsForText(latest.text, items: latest.logins)
@@ -191,10 +203,10 @@ extension BaseItemListPresenter {
                 }
 
                 if sortedFilteredItems.count == 0 {
-                    return self.noResultsPlaceholderItems
+                    return [ItemSectionModel(model: 0, items: networkItems + self.noResultsPlaceholderItems)]
                 }
 
-                return [ItemSectionModel(model: 0, items: self.configurationsFromItems(sortedFilteredItems, detailItemId: latest.detailItemId))]
+                return [ItemSectionModel(model: 0, items: networkItems + self.configurationsFromItems(sortedFilteredItems, detailItemId: latest.detailItemId))]
             }
             .asDriver(onErrorJustReturn: [])
     }
