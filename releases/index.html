@@ -121,7 +121,7 @@
         
             <li><a class="toctree-l4" href="#taking-screenshots-for-new-releases">Taking screenshots for new releases</a></li>
         
-            <li><a class="toctree-l4" href="#updating-the-version">Updating the version</a></li>
+            <li><a class="toctree-l4" href="#preparation-before-and-after-a-release">Preparation before and after a release</a></li>
         
         </ul>
     
@@ -211,6 +211,7 @@
 <li>Browse to App Store Connect and continue the "Distributing..." instructions</li>
 <li>Download and unzip dSYM build artifact from buddybuild</li>
 <li>Upload dSYM files to Sentry using <code>sentry-cli</code> using <a href="https://docs.sentry.io/clients/cocoa/dsym/#manually-with-sentry-cli">sentry instructions</a></li>
+<li>HINT: if you get a 411 "content-length" error, you may need to add the <code>--no-reprocessing</code> flag due to a bug with GCP and the <code>sentry-cli</code></li>
 </ol>
 <h3 id="in-case-of-emergency-release">In Case of Emergency (Release)</h3>
 <p><em>similar to above, but requires explicit cherry-pick commits on <code>production</code> branch when <code>master</code> branch is not in a release-able state</em></p>
@@ -230,6 +231,7 @@
 <li>From the buddybuild's build "Deploy" tab, select the "Upload to App Store Connect" link</li>
 <li>Browse to App Store Connect to find the build and continue the "Distributing..." instructions</li>
 </ol>
+<p><em>While most reviews are performed and completed within 24 hours, to request an expedited review request you can <a href="https://developer.apple.com/contact/app-store/?topic=expedite">submit a request directly to Apple</a>.</em></p>
 <h2 id="distributing-builds-through-testflight-release">Distributing Builds through TestFlight (release)</h2>
 <p><em>all <code>master</code> and <code>production</code> branch builds are automatically uploaded from buddybuild to App Store Connect.</em></p>
 <p>NOTE: if for some reason buddybuild does not deploy a build to App Store Connect, download the full App Store Connect .ipa from buddybuild and use the "Application Loader" app to manually upload it yourself.</p>
@@ -256,6 +258,7 @@
 <li>example: "Cohort A" which includes the first round of volunteers to test</li>
 </ol>
 <h2 id="distributing-through-the-app-store-release">Distributing through the App Store (release)</h2>
+<p><em>Currently all the mobile engineering managers and release management team members (see private #release-coordination channel in Mozilla Slack) both have access to distribute production releases through the App Store.</em></p>
 <ol>
 <li>Browse to the <a href="https://itunesconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/1314000270">App Store</a> section in App Store Connect</li>
 <li>Confirm the "App Information" details are accurate and complete</li>
@@ -264,8 +267,8 @@
 <li>provide the version information (keywords, URLs, promotional screenshots)</li>
 <li>select the corresponding build number for the App Store release</li>
 <li>set the release instructions (manually, immediately, on a date)</li>
+<li>NOTE: the best practice is to opt for the "Phased" release which starts at 1% per day, then 2% up to 100% after 7 days. This way you can "Pause" the release if early use results in new findings or big issues. The app will still be available to users who manually access the App Store "Update" section, though.</li>
 <li>Save and "Submit for Review"</li>
-<li>Wait for notification the app is ready for release and then release it (manually, on schedule and/or phased)</li>
 </ol>
 <p>NOTE: <em>brand new</em> apps may take up to 2 or more hours to appear throughout the App Store whereas existing app (updates) can appear within an hour. Schedule accordingly!</p>
 <h2 id="taking-screenshots-for-new-releases">Taking screenshots for new releases</h2>
@@ -274,12 +277,18 @@
 - [languages] Update / add desired locales to <code>fastlane/Snapfile</code>
 - [devices] Update / add desired device sizes to <code>fastlane/Snapfile</code>
 - <a href="https://stackoverflow.com/questions/38316591/how-to-test-dynamic-type-larger-font-sizes-in-ios-simulator">text size</a> Update the <code>CONTENT_SIZE</code> variable in <code>LockboxXCUITests/BaseTestCase.swift</code></p>
-<h2 id="updating-the-version">Updating the version</h2>
-<p><em>Once a version has been merged or released, the major app version should be increased</em></p>
+<h2 id="preparation-before-and-after-a-release">Preparation before and after a release</h2>
 <ul>
+<li><strong>Before testing or distributing a release</strong>: make sure the release number is still what you want and expect it to be, especially if major (versus minor) changes were made. (see below on how to <em>"change the version"</em>).</li>
+<li><strong>Once development is complete</strong>: consider running the string export script to send new and updated strings to Pontoon for localization (see <a href="../localization/">localization.md</a>) </li>
+<li><strong>Before public release</strong>: consider running the string import script to get the latest from Pontoon (see <a href="../localization/">localization.md</a>) </li>
+<li><strong>After public release</strong>: consider filing an issue for the next sprint/release to update to the latest dependencies (application-services, for example)</li>
+<li><strong>After public release</strong>: consider running <code>mkdocs gh-deploy</code> so the latest <code>docs</code> are also published to the GitHub pages website</li>
+<li><strong>After public release</strong>: <em>change the version</em> to a major or minor update depending on the future plans.</li>
 <li>Update the value in <code>Common/Resources/Info.plist</code> for the Lockbox app, for example from <code>1.2</code> to <code>1.3</code></li>
 <li>Also update the value in <code>CredentialProvider/Info.plist</code> for the extension to <em>the exact same version</em></li>
-<li>Be sure to submit the new build to TestFlight Beta App Review ASAP so that review doesn't prevent external user testing</li>
+<li><strong>After public release</strong>: make sure the dSYMs were uploaded to Sentry as part of the process earlier, do it now if not so your error reports are symbolicated.</li>
+<li><strong>After changing the version</strong>: TestFlight requires manual Beta review before any build is distributed. Be sure to submit a new build to TestFlight Beta App Review as early as possible so that review doesn't prevent user testing.</li>
 </ul>
               
             </div>
