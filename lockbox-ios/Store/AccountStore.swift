@@ -50,6 +50,21 @@ class AccountStore: BaseAccountStore {
         return _oldAccountPresence.asObservable()
     }
 
+    private var generatedLoginURL: Observable<URL> {
+        return Observable.create( { observer -> Disposable in
+            self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, err in
+                if let err = err {
+                    observer.onError(err)
+                }
+                if let url = url {
+                    observer.onNext(url)
+                }
+            }
+
+            return Disposables.create()
+        })
+    }
+
     init(dispatcher: Dispatcher = Dispatcher.shared,
          networkStore: NetworkStore = NetworkStore.shared,
          keychainWrapper: KeychainWrapper = KeychainWrapper.sharedAppContainerKeychain,
@@ -114,11 +129,15 @@ extension AccountStore {
     }
 
     private func generateLoginURL() {
-        self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, _ in
-            if let url = url {
-                self._loginURL.onNext(url)
-            }
-        }
+        self.networkStore.connectedToNetwork
+            .distinctUntilChanged()
+            // don't try to generate the URL unless we're connected to the internet
+            .filter { $0 }
+            // only generate the login URL once per call to this method
+            .take(1)
+            .flatMap { _ in self.generatedLoginURL }
+            .bind(to: self._loginURL)
+            .disposed(by: self.disposeBag)
     }
 
     private func clear() {

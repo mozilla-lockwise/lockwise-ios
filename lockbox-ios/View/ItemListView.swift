@@ -15,7 +15,7 @@ class ItemListView: BaseItemListView {
     private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return UIStatusBarStyle.lightContent
+        return super.preferredStatusBarStyle
     }
 
     required init?(coder aDecoder: NSCoder) {

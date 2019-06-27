@@ -108,4 +108,5 @@ extension Constant.string {
     static let save = NSLocalizedString("save", value: "Save", comment: "This is the button title for the entry editor view")
     static let edit = NSLocalizedString("edit", value: "Edit", comment: "The button title allowing a user to access the item editor from the entry details view")
     static let name = NSLocalizedString("name", value: "Name", comment: "Row title for the `name` row of the item editor, describing what name is used when displaying the entry")
+    static let syncBetweenDevicesEncryption = NSLocalizedString("securityTheather.syncBetweenDevices", value: "Sync between devices with secure 256-bit encryption", comment: "Text shown on security screen during onboarding.")
 }
