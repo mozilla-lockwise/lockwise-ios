@@ -8,7 +8,7 @@
 "alphabetically" = "Alphabetisch";
 
 /* Message in dialog box when users need to reauthenticate explaining application update */
-"app_update_explanation" = "Aufgrund eines kürzlich durchgeführten App-Updates müssen Sie sich erneut anmelden. Bitte entschuldigen Sie die Unannehmlichkeiten.";
+"app_update_explanation" = "Aufgrund eines kürzlich durchgeführten App-Updates musst du dich erneut anmelden. Bitte entschuldige die Unannehmlichkeiten.";
 
 /* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
 "autofill.enabling" = "„Automatisch ausfüllen“ wird aktualisiert…";
@@ -20,7 +20,7 @@
 "autofill.signInRequired" = "Anmeldung erforderlich";
 
 /* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
-"autofill.signInRequiredBody" = "Sie müssen bei %@ angemeldet sein, bevor „Automatisch ausfüllen“ den Zugriff auf die darin enthaltenen Passwörter ermöglicht.";
+"autofill.signInRequiredBody" = "Du musst bei %@ angemeldet sein, bevor „Automatisch ausfüllen“ den Zugriff auf die darin enthaltenen Passwörter ermöglicht.";
 
 /* Back button title */
 "back" = "Zurück";
@@ -32,7 +32,7 @@
 "close" = "Schließen";
 
 /* Confirm dialog message */
-"confirm_dialog_message" = "Dadurch werden Ihre Firefox-Kontodaten und alle gespeicherten Zugangsdaten von %@ gelöscht.";
+"confirm_dialog_message" = "Dadurch werden deine Firefox-Kontodaten und alle gespeicherten Zugangsdaten von %@ gelöscht.";
 
 /* Confirm dialog title. %@ will be replaced with the application name */
 "confirm_dialog_title" = "%@ trennen?";
@@ -56,10 +56,10 @@
 "get.started" = "Erste Schritte";
 
 /* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
-"install_browser_prompt" = "%@ ist deaktiviert, installieren Sie diesen Browser, um es verfügbar zu machen";
+"install_browser_prompt" = "%@ ist deaktiviert, installiere diesen Browser, um es verfügbar zu machen";
 
 /* Label shown when there are no logins to list. %@ will be replaced with the application name */
-"list.empty" = "Mit %@ können Sie auf Passwörter zugreifen, die Sie bereits in Firefox gespeichert haben. Um Ihre Zugangsdaten hier anzuzeigen, müssen Sie sich anmelden und mit Firefox synchronisieren.";
+"list.empty" = "Mit %@ kannst du auf Passwörter zugreifen, die du bereits in Firefox gespeichert hast. Um deine Zugangsdaten hier anzuzeigen, musst du dich anmelden und mit Firefox synchronisieren.";
 
 /* This is the name displayed instead of Firefox Lockwise in some places */
 "lockwise" = "Lockwise";
@@ -68,7 +68,7 @@
 "no_username" = "(Kein Benutzername)";
 
 /* Title for dialog box with passcode setting information */
-"not_using_passcode" = "Sie verwenden keinen Passcode.";
+"not_using_passcode" = "Du verwendest keinen Passcode.";
 
 /* Section title for the notes field on the item detail screen */
 "notes" = "Bemerkungen";
@@ -83,10 +83,10 @@
 "onboarding.title" = "Willkommen bei %@";
 
 /* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
-"passcode_detail_information" = "Um %@ zu sperren, muss auf Ihrem Gerät ein Passcode eingerichtet sein. Ohne Passcode kann jeder, der Zugang zu Ihrem Gerät hat, auf die hier gespeicherten Informationen zugreifen.";
+"passcode_detail_information" = "Um %@ zu sperren, muss auf deinem Gerät ein Passcode eingerichtet sein. Ohne Passcode kann jeder, der Zugang zu deinem Gerät hat, auf die hier gespeicherten Informationen zugreifen.";
 
 /* Informative text about the security need for a passcode */
-"passcode_info" = "Sie sollten einen Passcode anlegen, um Ihr Gerät zu sperren. Ohne Passcode kann jeder, der Zugang zu Ihrem Gerät hat, auf die hier gespeicherten Informationen zugreifen.";
+"passcode_info" = "Du solltest einen Passcode anlegen, um dein Gerät zu sperren. Ohne Passcode kann jeder, der Zugang zu deinem Gerät hat, auf die hier gespeicherten Informationen zugreifen.";
 
 /* Section title text for the password on the item detail screen */
 "password" = "Passwort";
@@ -105,6 +105,9 @@
 
 /* Placeholder text for search field */
 "search.placeholder" = "Zugangsdaten durchsuchen";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Synchronisiere zwischen Geräten mit sicherer 256-Bit-Verschlüsselung";
 
 /* Label for button allowing users to go to passcode settings */
 "set_passcode" = "Passcode festlegen";
@@ -128,7 +131,7 @@
 "settings.autoLock.fiveMinutes" = "5 Minuten";
 
 /* Header displayed above auto lock settings. */
-"settings.autoLock.header" = "Wählen Sie aus, wann die Sperre nach einer bestimmten Zeit der Inaktivität erfolgen soll";
+"settings.autoLock.header" = "Wähle aus, wann die Sperre nach einer bestimmten Zeit der Inaktivität erfolgen soll";
 
 /* Never */
 "settings.autoLock.never" = "Nie";
@@ -161,7 +164,7 @@
 "settings.browser.focus" = "Firefox Focus";
 
 /* Header displayed above browser choice settings. */
-"settings.browser.header" = "Wählen Sie aus, welcher Browser mit Lockwise verwendet werden soll";
+"settings.browser.header" = "Wähle aus, welcher Browser mit Lockwise verwendet werden soll";
 
 /* Klar Browser */
 "settings.browser.klar" = "Firefox Klar";
@@ -176,7 +179,7 @@
 "settings.faq" = "FAQ";
 
 /* Support link to Discourse discussion forum */
-"settings.getSupport" = "Stellen Sie eine Frage";
+"settings.getSupport" = "Stelle eine Frage";
 
 /* Label for link to learn more */
 "settings.learnMore" = "Weitere Informationen";
@@ -194,7 +197,7 @@
 "settings.unlinkAccount" = "%@ trennen";
 
 /* Label on account setting explaining unlink. %@ will be replaced with the application name */
-"settings.unlinkDisclaimer" = "Dadurch werden synchronisierte Zugangsdaten von %@ entfernt. Ihre Zugangsdaten werden jedoch nicht aus Firefox gelöscht.";
+"settings.unlinkDisclaimer" = "Dadurch werden synchronisierte Zugangsdaten von %@ entfernt. Deine Zugangsdaten werden jedoch nicht aus Firefox gelöscht.";
 
 /* Setting to send usage data */
 "settings.usageData" = "Nutzungsdaten senden";
@@ -215,7 +218,10 @@
 "sort_entries" = "Zugangsdaten sortieren";
 
 /* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
-"sorting_options" = "Optionen zum Sortieren der Liste Ihrer Zugangsdaten auswählen (derzeit %@)";
+"sorting_options" = "Optionen zum Sortieren der Liste deiner Zugangsdaten auswählen (derzeit %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Zeitüberschreitung bei Synchronisation";
 
 /* Label and accessibility callout for Syncing your logins spinner and HUD */
 "syncing_entries" = "Zugangsdaten synchronisieren…";
@@ -223,7 +229,7 @@
 /* Unlink aka Disconnect button title */
 "unlink" = "Verbindung trennen";
 
-/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
 "unlock_placeholder" = "Dies entsperrt die App.";
 
 /* Label for the button to unlock the device using Face ID */
@@ -254,7 +260,7 @@
 "website_accessibility_instructions" = "Internetadresse: doppeltippen, um sie im Browser %@ zu öffnen";
 
 /* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
-"welcome.accessProduct" = "Um %@ zu verwenden, benötigst du ein Firefox-Konto mit gespeicherten Zugangsdaten.";
+"welcome.accessProduct" = "Um %@ zu verwenden, benötigen Sie ein Firefox-Konto mit gespeicherten Zugangsdaten.";
 
 /* Text on button to unlock app */
 "welcome.unlockButton" = "Entsperren";

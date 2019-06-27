@@ -1,6 +1,54 @@
 # Release Notes
 
+## 1.6.2 (Build 3616)
+
+_Date: 2019-06-26_
+
+We fixed bugs related to: signing in, syncing, and translations.
+
+Changes since the last build:
+
+- import the latest fr and de translations (#1067)
+- bump application-services to v0.32.1 (#1068)
+
+All changes since version 1.6.1:
+
+- migrate to Swift 5 (#1037)
+- update application-services to 0.31.2 (#1050)
+- implement a sync timeout (#1045)
+- hide password after navigating away (#1049)
+- increase cancel button width in AutoFill list view (#1048)
+- improve error handling and reporting for better troubleshooting (#1038)
+- added minimal support for when no network is available (#1054)
+- display the translated string for text view in onboarding (#1057) 
+- import the latest fr and de translations (#1067)
+- bump application-services to v0.32.1 (#1068)
+
+## 1.6.2 (Build 3598)
+
+_Date: 2019-06-24_
+
+We fixed bugs related to: signing in, syncing, and translations.
+
+Changes since the last build:
+
+- added minimal support for when no network is available (#1054)
+- display the translated string for text view in onboarding (#1057) 
+
+All changes since version 1.6.1:
+
+- migrate to Swift 5 (#1037)
+- update application-services to 0.31.2 (#1050)
+- implement a sync timeout (#1045)
+- hide password after navigating away (#1049)
+- increase cancel button width in AutoFill list view (#1048)
+- improve error handling and reporting for better troubleshooting (#1038)
+- added minimal support for when no network is available (#1054)
+- display the translated string for text view in onboarding (#1057) 
+
 ## 1.6.2 (Build 3548)
+
+_Date: 2019-06-11_
 
 We fixed bugs related to: signing in, syncing, and translations.
 

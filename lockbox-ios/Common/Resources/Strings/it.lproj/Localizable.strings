@@ -223,7 +223,7 @@
 /* Unlink aka Disconnect button title */
 "unlink" = "Disconnetti";
 
-/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
 "unlock_placeholder" = "Questa operazione sbloccherà l’app.";
 
 /* Label for the button to unlock the device using Face ID */
