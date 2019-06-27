@@ -158,7 +158,7 @@ class LockwiseXCUITests: BaseTestCase {
         // There should be the correct number of matches
         let aMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(aMatches, 111)
+            XCTAssertEqual(aMatches, 110)
         } else {
             XCTAssertEqual(aMatches, 107)
         }
