@@ -106,6 +106,9 @@
 /* Placeholder text for search field */
 "search.placeholder" = "Rechercher des identifiants";
 
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Synchronisez vos appareils avec un chiffrement sécurisé à 256 bits";
+
 /* Label for button allowing users to go to passcode settings */
 "set_passcode" = "Définir un code d’accès";
 
@@ -217,13 +220,16 @@
 /* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
 "sorting_options" = "Sélectionnez des options pour trier votre liste d’identifiants (actuellement %@)";
 
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Délai de synchronisation dépassé";
+
 /* Label and accessibility callout for Syncing your logins spinner and HUD */
 "syncing_entries" = "Synchronisation de vos identifiants";
 
 /* Unlink aka Disconnect button title */
 "unlink" = "Se déconnecter";
 
-/* Placeholder text when the user’s email is unavailable while unlocking Lockwise, shown in Touch ID and passcode prompts */
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
 "unlock_placeholder" = "Ceci va déverrouiller l’application.";
 
 /* Label for the button to unlock the device using Face ID */
