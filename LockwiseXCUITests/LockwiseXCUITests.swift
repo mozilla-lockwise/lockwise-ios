@@ -106,12 +106,12 @@ class LockwiseXCUITests: BaseTestCase {
     }
 
     func testEntriesSortAndSearch() {
-        let firstEntryRecentOrder = "bmo.com"
+        let firstEntryRecentOrder = "arncyvuzox.co.uk"
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
 
         // Use one entry
-        app.tables.cells.staticTexts["testtesttesttest"].tap()
+        app.tables.cells.staticTexts["fakeTester33333"].tap()
         // Copy its username and open the website
         let userName = app.cells["userNameItemDetail"]
         userName.press(forDuration: 1)
@@ -160,7 +160,7 @@ class LockwiseXCUITests: BaseTestCase {
         if  iPad() {
             XCTAssertEqual(aMatches, 111)
         } else {
-            XCTAssertEqual(aMatches, 108)
+            XCTAssertEqual(aMatches, 107)
         }
         // There should be less number of matches
         searchTextField.typeText("cc")
