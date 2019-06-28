@@ -765,12 +765,12 @@ class ItemDetailPresenterSpec: QuickSpec {
                         beforeEach {
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                         }
-                        
+
                         it("enables swipe navigation") {
                             expect(self.view.enableSwipeValue).to(beFalse())
                         }
                     }
-                    
+
                     describe("when not displaying sidebar") {
                         beforeEach {
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)

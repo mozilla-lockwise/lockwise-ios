@@ -46,7 +46,6 @@ class ItemDetailPresenter {
         }.asObserver()
     }()
 
-
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
