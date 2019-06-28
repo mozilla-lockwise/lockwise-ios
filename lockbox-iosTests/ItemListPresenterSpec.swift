@@ -30,9 +30,11 @@ class ItemListPresenterSpec: QuickSpec {
         var pullToRefreshObserver: TestableObserver<Bool>!
         var fakeOnSettingsPressed = PublishSubject<Void>()
         var fakeOnSortingButtonPressed = PublishSubject<Void>()
+        var fakeItemDeleted = PublishSubject<String>()
         var setFilterEnabledValue: Bool?
         var displayOptionSheetButtons: [AlertActionButtonConfiguration]?
         var temporaryAlertArgument: String?
+        var deletedMessage: String?
 
         var displayOptionSheetTitle: String?
         func bind(items: Driver<[ItemSectionModel]>) {
@@ -53,7 +55,7 @@ class ItemListPresenterSpec: QuickSpec {
             self.displayOptionSheetTitle = title
         }
 
-        func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+        func displayTemporaryAlert(_ message: String, timeout: TimeInterval, icon: UIImage?) {
             self.temporaryAlertArgument = message
         }
 
@@ -86,8 +88,16 @@ class ItemListPresenterSpec: QuickSpec {
             return ControlEvent<Void>(events: fakeOnSortingButtonPressed.asObservable())
         }
 
+        var itemDeleted: Observable<String> {
+            return self.fakeItemDeleted.asObservable()
+        }
+
         func setFilterEnabled(enabled: Bool) {
             self.setFilterEnabledValue = enabled
+        }
+
+        func showDeletedStatusAlert(message: String) {
+            self.deletedMessage = message
         }
     }
 
@@ -108,11 +118,13 @@ class ItemListPresenterSpec: QuickSpec {
         var itemListStub: PublishSubject<[LoginRecord]>
         var syncStateStub: PublishSubject<SyncState>
         var storageStateStub: PublishSubject<LoginStoreState>
+        var getStub: ReplaySubject<LoginRecord?>
 
         init(dispatcher: Dispatcher) {
             self.itemListStub = PublishSubject<[LoginRecord]>()
             self.syncStateStub = PublishSubject<SyncState>()
             self.storageStateStub = PublishSubject<LoginStoreState>()
+            self.getStub = ReplaySubject<LoginRecord?>.create(bufferSize: 1)
             super.init(dispatcher: dispatcher, keychainWrapper: KeychainWrapper.standard)
 
             self.disposeBag = DisposeBag()
@@ -128,6 +140,10 @@ class ItemListPresenterSpec: QuickSpec {
 
         override var storageState: Observable<LoginStoreState> {
             return self.storageStateStub.asObservable()
+        }
+
+        override func get(_ id: String) -> Observable<LoginRecord?> {
+            return self.getStub.asObservable()
         }
     }
 
@@ -228,7 +244,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                     describe("when the datastore is still syncing & prepared") {
                         beforeEach {
-                            self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                            self.dataStore.syncStateStub.onNext(SyncState.Syncing(supressNotification: false))
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: false))
                             self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
@@ -271,7 +287,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 let expectedItemConfigurations = [
                                     LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                 ]
-                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
+                            expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
                             }
 
                             describe("tapping the learnMore button in the empty list placeholder") {
@@ -316,7 +332,7 @@ class ItemListPresenterSpec: QuickSpec {
                         describe("started") {
                             beforeEach {
                                 self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: true))
-                                self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                                self.dataStore.syncStateStub.onNext(SyncState.Syncing(supressNotification: false))
                             }
 
                             it("tells the view to show pull to refresh") {
@@ -553,6 +569,28 @@ class ItemListPresenterSpec: QuickSpec {
 
                     let filterAction = self.dispatcher.dispatchedActions.popLast() as! ItemListFilterAction
                     expect(filterAction.filteringText).to(equal(""))
+                }
+            }
+
+            describe("itemDeleted") {
+                beforeEach {
+                    self.subject.onViewReady()
+                    self.view.fakeItemDeleted.onNext("asdf")
+                }
+
+                it("tells the view to display the confirmation dialog") {
+                    expect(self.view.displayOptionSheetTitle).to(equal(Constant.string.confirmDeleteLoginDialogTitle))
+                }
+            }
+
+            describe("item deleted from store") {
+                beforeEach {
+                    self.subject.onViewReady()
+                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemDeletedAction(name: "mozilla.org"))
+                }
+
+                it("tells the view to display the toast") {
+                    expect(self.view.deletedMessage).to(contain("mozilla.org"))
                 }
             }
 

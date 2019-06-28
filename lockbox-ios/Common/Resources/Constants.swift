@@ -108,5 +108,9 @@ extension Constant.string {
     static let save = NSLocalizedString("save", value: "Save", comment: "This is the button title for the entry editor view")
     static let edit = NSLocalizedString("edit", value: "Edit", comment: "The button title allowing a user to access the item editor from the entry details view")
     static let name = NSLocalizedString("name", value: "Name", comment: "Row title for the `name` row of the item editor, describing what name is used when displaying the entry")
+    static let confirmDeleteLoginDialogTitle = NSLocalizedString("delete.confirmDialogTitle", value: "Delete this login?", comment: "Title for confirmation dialog when a login is deleted")
+    static let confirmDeleteLoginDialogMessage = NSLocalizedString("delete.confirmDeleteLoginDialogMessage", value: "This will delete the entry from both %@ and Firefox.", comment: "Message in confirmation dialog when a login is deleted")
+    static let deletedStatusAlert = NSLocalizedString("delete.statusAlert", value: "%@ deleted", comment: "Text in the status alert after a login has been deleted. %@ is the hostname of the login")
+    static let productNameShort = "Lockwise"
     static let syncBetweenDevicesEncryption = NSLocalizedString("securityTheather.syncBetweenDevices", value: "Sync between devices with secure 256-bit encryption", comment: "Text shown on security screen during onboarding.")
 }

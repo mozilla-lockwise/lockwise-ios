@@ -15,6 +15,7 @@ public protocol LoginsStorageProtocol {
     func get(id: String) throws -> LoginRecord?
     func touch(id: String) throws
     func list() throws -> [LoginRecord]
+    func delete(id: String) throws -> Bool
 }
 
 // We decorate the LoginsStorage with the LoginsStorageProtocol so that it's easy to mock and inject for unit testing.

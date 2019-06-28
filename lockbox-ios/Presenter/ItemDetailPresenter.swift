@@ -145,7 +145,7 @@ class ItemDetailPresenter {
                     }
 
                     let message = String(format: Constant.string.fieldNameCopied, fieldName)
-                    self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength)
+                    self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: nil)
                 })
         .disposed(by: self.disposeBag)
     }

@@ -15,6 +15,7 @@ enum DataStoreAction: Action {
     case reset
     case sync
     case touch(id: String)
+    case delete(id: String)
 }
 
 extension DataStoreAction: Equatable {
