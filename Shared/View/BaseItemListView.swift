@@ -56,7 +56,7 @@ class BaseItemListView: UIViewController {
     internal var basePresenter: BaseItemListPresenter?
     @IBOutlet weak var tableView: UITableView!
     internal var disposeBag = DisposeBag()
-    private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
+    private(set) var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
 
     var searchController: UISearchController?
 
@@ -261,7 +261,7 @@ extension BaseItemListView {
                     }
 
                     return retCell
-                })
+        })
 
         self.dataSource?.animationConfiguration = AnimationConfiguration(
                 insertAnimation: .fade,

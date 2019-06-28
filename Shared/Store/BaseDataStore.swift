@@ -10,15 +10,24 @@ import RxOptional
 import SwiftKeychainWrapper
 
 enum SyncState: Equatable {
-    case Syncing, Synced, TimedOut
+    case Syncing(supressNotification: Bool), Synced, TimedOut
 
     public static func ==(lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
-        case (Syncing, Syncing):
-            return true
+        case (.Syncing(let lhSupressNotification), .Syncing(let rhSupressNotification)):
+            return lhSupressNotification == rhSupressNotification
         case (Synced, Synced):
             return true
         case (TimedOut, TimedOut):
+            return true
+        default:
+            return false
+        }
+    }
+
+    public func isSyncing() -> Bool {
+        switch self {
+        case .Syncing(_):
             return true
         default:
             return false
@@ -122,6 +131,8 @@ class BaseDataStore {
                         self.lock()
                     case .unlock:
                         self.unlock()
+                    case .delete(let id):
+                        self.delete(id: id)
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -197,16 +208,44 @@ extension BaseDataStore {
     }
 }
 
+extension BaseDataStore {
+    private func delete(id: String) {
+        queue.async {
+            self.get(id)
+                .take(1)
+                .subscribe(onNext: { (record) in
+                    if let record = record {
+                        let title = record.hostname.titleFromHostname()
+                        self.dispatcher.dispatch(action: ItemDeletedAction(name: title))
+
+                        do {
+                            try self.loginsStorage?.delete(id: id)
+                        } catch let error as LoginsStoreError {
+                            self.pushError(error)
+                        } catch let error {
+                            NSLog("DATASTORE:: Unexpected LoginsStorage error -- \(error)")
+                        }
+
+                        self.updateList()
+                        self.sync(supressNotification: true)
+                    }
+
+                })
+                .disposed(by: self.disposeBag)
+        }
+    }
+}
+
 // list operations
 extension BaseDataStore {
-    private func sync() {
+    private func sync(supressNotification: Bool = false) {
         guard let loginsStorage = self.loginsStorage,
             let syncInfo = self.syncUnlockInfo,
             !loginsStorage.isLocked()
             else { return }
 
         if (networkStore.isConnectedToNetwork) {
-            self.syncSubject.accept(SyncState.Syncing)
+            self.syncSubject.accept(SyncState.Syncing(supressNotification: supressNotification))
         } else {
             self.syncSubject.accept(SyncState.Synced)
             return

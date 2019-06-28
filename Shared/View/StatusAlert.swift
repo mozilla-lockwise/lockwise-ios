@@ -6,4 +6,5 @@ import UIKit
 
 class StatusAlert: UIView {
     @IBOutlet weak var messageLabel: UILabel!
+    @IBOutlet weak var icon: UIImageView!
 }

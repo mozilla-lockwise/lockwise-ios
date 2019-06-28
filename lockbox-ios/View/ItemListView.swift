@@ -12,8 +12,6 @@ class ItemListView: BaseItemListView {
         return self.basePresenter as? ItemListPresenter
     }
 
-    private var dataSource: RxTableViewSectionedAnimatedDataSource<ItemSectionModel>?
-
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return super.preferredStatusBarStyle
     }
@@ -26,6 +24,7 @@ class ItemListView: BaseItemListView {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupRefresh()
+        self.setupSwipeDelete()
         self.presenter?.onViewReady()
     }
 
@@ -74,6 +73,13 @@ extension ItemListView: ItemListViewProtocol {
                     .disposed(by: self.disposeBag)
     }
 
+    func showDeletedStatusAlert(message: String) {
+        DispatchQueue.main.async {
+            let icon = UIImage(named: "delete")
+            self.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: icon)
+        }
+    }
+
     var tableViewScrollEnabled: AnyObserver<Bool> {
         return self.tableView.rx.isScrollEnabled.asObserver()
     }
@@ -105,6 +111,23 @@ extension ItemListView: ItemListViewProtocol {
 
         return nil
     }
+
+    var itemDeleted: Observable<String> {
+        return self.tableView.rx.itemDeleted
+            .map { (path: IndexPath) -> String? in
+                self.tableView.deselectRow(at: path, animated: false)
+                guard let config = self.dataSource?[path] else {
+                    return nil
+                }
+
+                switch config {
+                case .Item(_, _, let id, _):
+                    return id
+                default:
+                    return nil
+                }
+        }.filterNil()
+    }
 }
 
 extension ItemListView {
@@ -116,6 +139,19 @@ extension ItemListView {
             refreshControl.rx.controlEvent(.valueChanged)
                 .bind(to: presenter.refreshObserver)
                 .disposed(by: self.disposeBag)
+        }
+    }
+
+    fileprivate func setupSwipeDelete() {
+        self.dataSource?.canEditRowAtIndexPath = { dataSource, indexPath in
+            let config = dataSource[indexPath]
+
+            switch config {
+            case .Item:
+                return true
+            default:
+                return false
+            }
         }
     }
 }
