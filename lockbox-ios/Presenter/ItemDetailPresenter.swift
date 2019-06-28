@@ -8,7 +8,7 @@ import RxCocoa
 import RxDataSources
 import MozillaAppServices
 
-protocol ItemDetailViewProtocol: class, StatusAlertView {
+protocol ItemDetailViewProtocol: class, StatusAlertView, AlertControllerView {
     func enableSwipeNavigation(enabled: Bool)
     func enableLargeTitle(enabled: Bool)
     var cellTapped: Observable<String?> { get }
@@ -43,6 +43,13 @@ class ItemDetailPresenter {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
+    }()
+
+
+    lazy private var discardChangesObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
+            }.asObserver()
     }()
 
     init(view: ItemDetailViewProtocol,
@@ -151,9 +158,30 @@ class ItemDetailPresenter {
 
     private func setupNavigation() {
         self.view?.leftBarButtonTapped
-                .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action in
-                    return editing ? ItemDetailDisplayAction.viewMode : MainRouteAction.list
+                .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action? in
+                    if editing {
+                        self.view?.displayAlertController(
+                            buttons: [
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.cancel,
+                                    tapObserver: nil,
+                                    style: .cancel
+                                ),
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.discard,
+                                    tapObserver: self.discardChangesObserver,
+                                    style: .destructive)
+                            ],
+                            title: Constant.string.discardChangesTitle,
+                            message: Constant.string.discardChangesMessage,
+                            style: .alert,
+                            barButtonItem: nil)
+                    } else {
+                        return MainRouteAction.list
+                    }
+                    return nil
                 }
+                .filterNil()
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: self.disposeBag)
 
