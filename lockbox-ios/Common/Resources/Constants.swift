@@ -111,5 +111,9 @@ extension Constant.string {
     static let discardChangesTitle = NSLocalizedString("edit.discardChangesDialog.title", value: "Discard Changes?", comment: "Title of dialog shown when cancel is tapped on the edit screen")
     static let discardChangesMessage = NSLocalizedString("edit.discardChangesDialog.message", value: "Your edits will not be saved.", comment: "Message in dialog shown when cancel is tapped on the edit screen")
     static let discard = NSLocalizedString("edit.discardChangesDialog.discard", value: "Discard", comment: "Button to remove changes in the dialog shown when cancel is tapped on the edit screen")
+    static let confirmDeleteLoginDialogTitle = NSLocalizedString("delete.confirmDialogTitle", value: "Delete this login?", comment: "Title for confirmation dialog when a login is deleted")
+    static let confirmDeleteLoginDialogMessage = NSLocalizedString("delete.confirmDeleteLoginDialogMessage", value: "This will delete the entry from both %@ and Firefox.", comment: "Message in confirmation dialog when a login is deleted")
+    static let deletedStatusAlert = NSLocalizedString("delete.statusAlert", value: "%@ deleted", comment: "Text in the status alert after a login has been deleted. %@ is the hostname of the login")
+    static let productNameShort = "Lockwise"
     static let syncBetweenDevicesEncryption = NSLocalizedString("securityTheather.syncBetweenDevices", value: "Sync between devices with secure 256-bit encryption", comment: "Text shown on security screen during onboarding.")
 }

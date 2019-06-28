@@ -184,7 +184,7 @@ extension BaseItemListPresenter {
             .map { (latest: LoginListTextSort) -> [ItemSectionModel] in
                 let networkItems = latest.networkConnected ? [] : self.noNetworkItems
                 
-                if latest.syncState == .Syncing && latest.logins.isEmpty {
+                if latest.syncState.isSyncing() && latest.logins.isEmpty {
                     return [ItemSectionModel(model: 0, items: networkItems + self.syncPlaceholderItems)]
                 }
 
