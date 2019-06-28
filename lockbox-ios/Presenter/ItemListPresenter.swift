@@ -228,7 +228,7 @@ extension ItemListPresenter {
                 .asDriver(onErrorJustReturn: SyncStateManual(syncState: .Synced, manualSync: false))
                 .throttle(2.0)
                 .drive(onNext: { latest in
-                    if latest.syncState == .Syncing && !latest.manualSync {
+                    if latest.syncState == .Syncing(supressNotification: false) && !latest.manualSync {
                         self.view?.displaySpinner(hideSpinnerObservable,
                                                   bag: self.disposeBag,
                                                   message: Constant.string.syncingYourEntries,
@@ -251,7 +251,7 @@ extension ItemListPresenter {
 extension ItemListPresenter {
     fileprivate func setupPullToRefresh(_ pullToRefreshActive: AnyObserver<Swift.Bool>) {
         let syncingObserver = self.dataStore.syncState
-                .map { $0 == .Syncing }
+                .map { $0.isSyncing() }
 
         let isManualRefreshObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: PullToRefreshAction.self)
@@ -287,7 +287,7 @@ extension ItemListPresenter {
         view.bind(sortingButtonTitle: itemSortTextDriver)
 
         let loginListEmptyObservable = self.dataStore.list.map { $0.isEmpty }
-        let isSyncingObservable = self.dataStore.syncState.map { $0 == .Syncing }
+        let isSyncingObservable = self.dataStore.syncState.map { $0.isSyncing() }
         let enableObservable = isSyncingObservable.withLatestFrom(loginListEmptyObservable) { (isSyncing, isListEmpty) in
           return !(isSyncing && isListEmpty)
         }

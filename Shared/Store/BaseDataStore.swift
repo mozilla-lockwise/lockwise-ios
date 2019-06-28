@@ -10,15 +10,24 @@ import RxOptional
 import SwiftKeychainWrapper
 
 enum SyncState: Equatable {
-    case Syncing, Synced, TimedOut
+    case Syncing(supressNotification: Bool), Synced, TimedOut
 
     public static func ==(lhs: SyncState, rhs: SyncState) -> Bool {
         switch (lhs, rhs) {
-        case (Syncing, Syncing):
-            return true
+        case (.Syncing(let lhSupressNotification), .Syncing(let rhSupressNotification)):
+            return lhSupressNotification == rhSupressNotification
         case (Synced, Synced):
             return true
         case (TimedOut, TimedOut):
+            return true
+        default:
+            return false
+        }
+    }
+
+    public func isSyncing() -> Bool {
+        switch self {
+        case .Syncing(_):
             return true
         default:
             return false
@@ -218,6 +227,7 @@ extension BaseDataStore {
                         }
 
                         self.updateList()
+                        self.sync(supressNotification: true)
                     }
 
                 })
@@ -228,14 +238,14 @@ extension BaseDataStore {
 
 // list operations
 extension BaseDataStore {
-    private func sync() {
+    private func sync(supressNotification: Bool = false) {
         guard let loginsStorage = self.loginsStorage,
             let syncInfo = self.syncUnlockInfo,
             !loginsStorage.isLocked()
             else { return }
 
         if (networkStore.isConnectedToNetwork) {
-            self.syncSubject.accept(SyncState.Syncing)
+            self.syncSubject.accept(SyncState.Syncing(supressNotification: supressNotification))
         } else {
             self.syncSubject.accept(SyncState.Synced)
             return

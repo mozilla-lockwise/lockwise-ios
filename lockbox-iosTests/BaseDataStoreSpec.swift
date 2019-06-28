@@ -394,7 +394,7 @@ class BaseDataStoreSpec: QuickSpec {
                         let syncStates: [SyncState] = self.syncObserver.events.map {
                             $0.value.element!
                         }
-                        expect(syncStates).to(equal([SyncState.Synced, SyncState.Synced, SyncState.Syncing, SyncState.Synced]))
+                        expect(syncStates).to(equal([SyncState.Synced, SyncState.Synced, SyncState.Syncing(supressNotification: false), SyncState.Synced]))
                     }
                 }
 
@@ -454,9 +454,27 @@ class BaseDataStoreSpec: QuickSpec {
         describe("syncstate") {
             describe("equality") {
                 it("same states are equal") {
-                    expect(SyncState.Syncing).to(equal(SyncState.Syncing))
+                    expect(SyncState.Syncing(supressNotification: false)).to(equal(SyncState.Syncing(supressNotification: false)))
+                    expect(SyncState.Syncing(supressNotification: true)).to(equal(SyncState.Syncing(supressNotification: true)))
+                    expect(SyncState.Syncing(supressNotification: false)).toNot(equal(SyncState.Syncing(supressNotification: true)))
                     expect(SyncState.Synced).to(equal(SyncState.Synced))
-                    expect(SyncState.Synced).notTo(equal(SyncState.Syncing))
+                    expect(SyncState.Synced).notTo(equal(SyncState.Syncing(supressNotification: false)))
+                    expect(SyncState.TimedOut).to(equal(SyncState.TimedOut))
+                }
+            }
+
+            describe("isSyncing") {
+                it("not syncing when synced") {
+                    expect(SyncState.Synced.isSyncing()).to(beFalse())
+                }
+
+                it("not syncing when timed out") {
+                    expect(SyncState.TimedOut.isSyncing()).to(beFalse())
+                }
+
+                it("syncing") {
+                    expect(SyncState.Syncing(supressNotification: true).isSyncing()).to(beTrue())
+                    expect(SyncState.Syncing(supressNotification: false).isSyncing()).to(beTrue())
                 }
             }
         }

@@ -244,7 +244,7 @@ class ItemListPresenterSpec: QuickSpec {
 
                     describe("when the datastore is still syncing & prepared") {
                         beforeEach {
-                            self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                            self.dataStore.syncStateStub.onNext(SyncState.Syncing(supressNotification: false))
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: false))
                             self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
@@ -287,7 +287,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 let expectedItemConfigurations = [
                                     LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver)
                                 ]
-                                expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
+                            expect(self.view.itemsObserver.events.last!.value.element!.first!.items).to(equal(expectedItemConfigurations))
                             }
 
                             describe("tapping the learnMore button in the empty list placeholder") {
@@ -332,7 +332,7 @@ class ItemListPresenterSpec: QuickSpec {
                         describe("started") {
                             beforeEach {
                                 self.itemListDisplayStore.itemListDisplaySubject.onNext(PullToRefreshAction(refreshing: true))
-                                self.dataStore.syncStateStub.onNext(SyncState.Syncing)
+                                self.dataStore.syncStateStub.onNext(SyncState.Syncing(supressNotification: false))
                             }
 
                             it("tells the view to show pull to refresh") {
