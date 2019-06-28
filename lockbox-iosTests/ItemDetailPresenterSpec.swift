@@ -75,7 +75,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             return self.deleteHiddenObserverStub.asObserver()
         }
 
-        func displayTemporaryAlert(_ message: String, timeout: TimeInterval) {
+        func displayTemporaryAlert(_ message: String, timeout: TimeInterval, icon: UIImage?) {
             self.tempAlertMessage = message
             self.tempAlertTimeout = timeout
         }

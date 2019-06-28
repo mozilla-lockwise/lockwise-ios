@@ -6,15 +6,18 @@ import Foundation
 import RxSwift
 import RxCocoa
 import RxDataSources
+import MozillaAppServices
 
 protocol ItemListViewProtocol: AlertControllerView, StatusAlertView, SpinnerAlertView, BaseItemListViewProtocol {
     func bind(sortingButtonTitle: Driver<String>)
     func bind(scrollAction: Driver<ScrollAction>)
+    func showDeletedStatusAlert(message: String)
     var sortingButtonEnabled: AnyObserver<Bool>? { get }
     var tableViewScrollEnabled: AnyObserver<Bool> { get }
     var pullToRefreshActive: AnyObserver<Bool>? { get }
     var onSettingsButtonPressed: ControlEvent<Void>? { get }
     var onSortingButtonPressed: ControlEvent<Void>? { get }
+    var itemDeleted: Observable<String> { get }
     var sortButton: UIBarButtonItem? { get }
 }
 
@@ -169,6 +172,43 @@ class ItemListPresenter: BaseItemListPresenter {
             .disposed(by: self.disposeBag)
 
         }
+
+        if let itemDeleted = self.view?.itemDeleted {
+            itemDeleted.subscribe(onNext: { (id) in
+                self.view?.displayAlertController(
+                    buttons: [
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.cancel,
+                            tapObserver: nil,
+                            style: .cancel
+                        ),
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.delete,
+                            tapObserver: self.getDeletedItemObserver(id: id),
+                            style: .destructive)
+                    ],
+                    title: Constant.string.confirmDeleteLoginDialogTitle,
+                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                    Constant.string.productNameShort),
+                    style: .alert,
+                    barButtonItem: nil)
+            })
+            .disposed(by: self.disposeBag)
+        }
+
+        self.itemListDisplayStore.listDisplay
+            .filterByType(class: ItemDeletedAction.self)
+            .subscribe(onNext: { (action) in
+                self.view?.showDeletedStatusAlert(message:
+                    String(format: Constant.string.deletedStatusAlert, action.name))
+            })
+            .disposed(by: self.disposeBag)
+    }
+
+    private func getDeletedItemObserver(id: String) -> AnyObserver<Void> {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: DataStoreAction.delete(id: id))
+        }.asObserver()
     }
 }
 
@@ -188,7 +228,7 @@ extension ItemListPresenter {
                 .asDriver(onErrorJustReturn: SyncStateManual(syncState: .Synced, manualSync: false))
                 .throttle(2.0)
                 .drive(onNext: { latest in
-                    if latest.syncState == .Syncing && !latest.manualSync {
+                    if latest.syncState == .Syncing(supressNotification: false) && !latest.manualSync {
                         self.view?.displaySpinner(hideSpinnerObservable,
                                                   bag: self.disposeBag,
                                                   message: Constant.string.syncingYourEntries,
@@ -202,7 +242,7 @@ extension ItemListPresenter {
                 .map { _ in () }
                 .asDriver(onErrorJustReturn: () )
                 .drive(onNext: { _ in
-                    self.view?.displayTemporaryAlert(Constant.string.syncTimedOut, timeout: 5)
+                    self.view?.displayTemporaryAlert(Constant.string.syncTimedOut, timeout: 5, icon: nil)
                 })
                 .disposed(by: self.disposeBag)
     }
@@ -211,7 +251,7 @@ extension ItemListPresenter {
 extension ItemListPresenter {
     fileprivate func setupPullToRefresh(_ pullToRefreshActive: AnyObserver<Swift.Bool>) {
         let syncingObserver = self.dataStore.syncState
-                .map { $0 == .Syncing }
+                .map { $0.isSyncing() }
 
         let isManualRefreshObservable = self.itemListDisplayStore.listDisplay
                 .filterByType(class: PullToRefreshAction.self)
@@ -247,7 +287,7 @@ extension ItemListPresenter {
         view.bind(sortingButtonTitle: itemSortTextDriver)
 
         let loginListEmptyObservable = self.dataStore.list.map { $0.isEmpty }
-        let isSyncingObservable = self.dataStore.syncState.map { $0 == .Syncing }
+        let isSyncingObservable = self.dataStore.syncState.map { $0.isSyncing() }
         let enableObservable = isSyncingObservable.withLatestFrom(loginListEmptyObservable) { (isSyncing, isListEmpty) in
           return !(isSyncing && isListEmpty)
         }
