@@ -45,11 +45,28 @@ class ItemDetailPresenter {
         }.asObserver()
     }()
 
-
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
             }.asObserver()
+    }()
+
+    lazy private var deleteObserver: AnyObserver<Void>? = {
+        return Binder(self) { target, _ in
+            target.itemDetailStore.itemDetailId
+                .take(1)
+                .map { id -> [Action] in
+                    return [DataStoreAction.delete(id: id),
+                        MainRouteAction.list,
+                        ItemDetailDisplayAction.viewMode]
+                }
+                .subscribe(onNext: { actions in
+                    for action in actions {
+                        self.dispatcher.dispatch(action: action)
+                    }
+                })
+                .disposed(by: target.disposeBag)
+        }.asObserver()
     }()
 
     init(view: ItemDetailViewProtocol,
@@ -71,6 +88,7 @@ class ItemDetailPresenter {
                 .filter { !$0 }
                 .take(1)
                 .flatMap { _ in self.itemDetailStore.itemDetailId }
+                .take(1)
                 .flatMap { self.dataStore.get($0) }
 
         itemObservable.asDriver(onErrorJustReturn: nil)
@@ -103,6 +121,28 @@ class ItemDetailPresenter {
         self.itemDetailStore.isEditing
                 .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
                 .disposed(by: self.disposeBag)
+
+        self.view?.deleteTapped
+            .subscribe(onNext: { (_) in
+                self.view?.displayAlertController(
+                    buttons: [
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.cancel,
+                            tapObserver: nil,
+                            style: .cancel
+                        ),
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.delete,
+                            tapObserver: self.deleteObserver,
+                            style: .destructive)
+                    ],
+                    title: Constant.string.confirmDeleteLoginDialogTitle,
+                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                    Constant.string.productNameShort),
+                    style: .alert,
+                    barButtonItem: nil)
+            })
+            .disposed(by: self.disposeBag)
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
