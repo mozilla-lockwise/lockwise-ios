@@ -18,6 +18,8 @@ class LockwiseXCUITests: BaseTestCase {
         navigator.nowAt(Screen.WelcomeScreen)
     }
 
+    // To run this test locally, first run python3 upload_fake_passwordsBB.py 1
+    // See more info in docs/AutomatedTests.md
     func testDeleteEntry() {
         loginToEntryListView()
         waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
