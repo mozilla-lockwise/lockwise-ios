@@ -24,7 +24,7 @@ class SnapshotsXCUITests: BaseTestCase {
         waitforExistence(app.buttons["getStarted.button"], timeout: 30)
         navigator.nowAt(Screen.WelcomeScreen)
     }
-    
+
     func testCheckEntryDetailsViewSnapshot() {
         snapshot("01Welcome" + CONTENT_SIZE)
         loginToEntryListView()
@@ -132,5 +132,17 @@ class SnapshotsXCUITests: BaseTestCase {
         // Tap on cacel
         app.buttons.element(boundBy: 4).tap()
         navigator.nowAt(Screen.LockwiseMainPage)
+    }
+
+    func testDeleteEntrySnapshots() {
+        loginToEntryListView()
+        // Show the Delete option
+        app.tables.cells.staticTexts["amazon.com"].swipeLeft()
+        snapshot("DeleteButton" + CONTENT_SIZE)
+        // Tap on Delete button
+        app.tables.buttons.firstMatch.tap()
+        snapshot("DeleteAlertDialog" + CONTENT_SIZE)
+        // Cancel deleting the login
+        app.alerts.buttons.firstMatch.tap()
     }
 }
