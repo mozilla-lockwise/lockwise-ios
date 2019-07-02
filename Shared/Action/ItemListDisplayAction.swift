@@ -20,4 +20,5 @@ struct PullToRefreshAction: ItemListDisplayAction {
 
 struct ItemDeletedAction: ItemListDisplayAction {
     let name: String
+    let id: String
 }

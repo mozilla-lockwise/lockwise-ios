@@ -16,6 +16,7 @@ class ItemDetailStore: BaseItemDetailStore {
     private var lifecycleStore: LifecycleStore
     private var userDefaultStore: UserDefaultStore
     private var routeStore: RouteStore
+    private var itemListDisplayStore: ItemListDisplayStore
 
     private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
 
@@ -34,13 +35,15 @@ class ItemDetailStore: BaseItemDetailStore {
             sizeClassStore: SizeClassStore = .shared,
             lifecycleStore: LifecycleStore = .shared,
             userDefaultStore: UserDefaultStore = .shared,
-            routeStore: RouteStore = .shared
+            routeStore: RouteStore = .shared,
+            itemListDisplayStore: ItemListDisplayStore = .shared
     ) {
         self.dataStore = dataStore
         self.sizeClassStore = sizeClassStore
         self.lifecycleStore = lifecycleStore
         self.userDefaultStore = userDefaultStore
         self.routeStore = routeStore
+        self.itemListDisplayStore = itemListDisplayStore
 
         super.init(dispatcher: dispatcher)
 
@@ -76,6 +79,14 @@ class ItemDetailStore: BaseItemDetailStore {
                 .filterNil()
                 .bind(to: self._itemDetailId)
                 .disposed(by: self.disposeBag)
+
+        self.itemListDisplayStore.listDisplay
+            .filterByType(class: ItemDeletedAction.self)
+            .filter { self._itemDetailId.value == $0.id }
+            .subscribe(onNext: { (action) in
+                self._itemDetailId.accept("")
+            })
+            .disposed(by: self.disposeBag)
 
         // If the splitview is being show
         // then after sync, select one item from the datastore to show
