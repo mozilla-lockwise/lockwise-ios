@@ -35,7 +35,7 @@ CRYPTO_BACKEND = default_backend()
 
 
 EMAIL = "firefoxlockbox@gmail.com"
-PASSWORD = "aabbcc112233!"
+PASSWORD = os.environ['TEST_EMAIL_PASSWORD']
 
 
 # Here you can customize how fake password records are generated.

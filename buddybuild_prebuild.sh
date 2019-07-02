@@ -15,6 +15,8 @@ if [ "$BUDDYBUILD_SCHEME" = "uispecs" ]; then
 python3 --version
 
 cd scripts/
+
+echo "Password: $TEST_EMAIL_PASSWORD"
 # Install cryptography
 pip3 install PyFxA syncclient cryptography
 # Run script to upload new login
