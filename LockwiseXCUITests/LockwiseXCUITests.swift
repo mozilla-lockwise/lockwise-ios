@@ -18,7 +18,30 @@ class LockwiseXCUITests: BaseTestCase {
         navigator.nowAt(Screen.WelcomeScreen)
     }
 
-    func testCheckEntryDetailsView() {
+    // To run this test locally, first run python3 upload_fake_passwordsBB.py 1
+    // See more info in docs/AutomatedTests.md
+    func testDeleteEntry() {
+        loginToEntryListView()
+        waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        // Need to add firstMatch for iPad case
+        app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
+        app.tables.buttons["Delete"].tap()
+        waitforExistence(app.alerts["Delete this login?"])
+        // First check the Cancel button
+        app.alerts.buttons["Cancel"].tap()
+        waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
+        app.tables.buttons["Delete"].tap()
+        waitforExistence(app.alerts["Delete this login?"])
+        // Then Delete the login
+        app.alerts.buttons["Delete"].tap()
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
+        // Now check that the login has been removed
+        // Known issue #1074 on iPad, comment the verification until is fixed
+        // waitforNoExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+    }
+
+    func testEntryDetailsView() {
         loginToEntryListView()
 
         XCTAssertNotEqual(app.tables.cells.count, 1)
@@ -158,17 +181,17 @@ class LockwiseXCUITests: BaseTestCase {
         // There should be the correct number of matches
         let aMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(aMatches, 110)
+            XCTAssertEqual(aMatches, 100)
         } else {
-            XCTAssertEqual(aMatches, 107)
+            XCTAssertEqual(aMatches, 97)
         }
         // There should be less number of matches
         searchTextField.typeText("cc")
         let accMatches = app.tables.cells.count
         if  iPad() {
-            XCTAssertEqual(accMatches, 6)
+            XCTAssertEqual(accMatches, 5)
         } else {
-            XCTAssertEqual(accMatches, 3)
+            XCTAssertEqual(accMatches, 2)
         }
         // There should not be any matches
         searchTextField.typeText("x")

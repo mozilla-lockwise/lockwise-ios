@@ -12,6 +12,22 @@ There are three schemes containing the different test types.
 ## Tests part of the development process
 For new PRs or new commits on master lockbox and uispecs tests are running. XCUITests are running on both iPhone (8) and iPad (Air2) simulator since they test the UI of the app, closer to what a real user would do, and there are differences that need to be checked depending on the device.
 
+### For the Delete feature, before running the test is necessary to add a login via script. These would be the steps needed:
+
+```
+# Check if python is installed
+python3 --version
+
+cd scripts/
+# Install cryptography
+pip3 install PyFxA syncclient cryptography
+# Run script to upload a new login (or more by changing the #)
+python3 upload_fake_passwordsBB.py 1
+```
+
+These steps run as part as the `buddybuild_prebuild.sh`script so that before running the tests in CI the environment is ready and the tests will work as expected.
+
+
 
 ## Tests to generate screenshots
 L10nSnapshots tests will be run in the future as part of the CI but is not defined yet how/how often.
