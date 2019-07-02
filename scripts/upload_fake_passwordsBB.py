@@ -34,7 +34,7 @@ import syncclient.client
 CRYPTO_BACKEND = default_backend()
 
 
-EMAIL = "firefoxlockbox@gmail.com"
+EMAIL = os.environ['TEST_EMAIL_ACCOUNT']
 PASSWORD = os.environ['TEST_EMAIL_PASSWORD']
 
 
