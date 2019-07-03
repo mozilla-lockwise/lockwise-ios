@@ -487,9 +487,9 @@ class ItemListViewSpec: QuickSpec {
                     expect(LoginListCellConfiguration.SyncListPlaceholder.identity).to(equal("syncplaceholder"))
                     let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
                     expect(LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver).identity).to(equal("emptyplaceholder"))
-                    expect(LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver).identity).to(equal("noresultsplaceholder")) 
-                    expect(LoginListCellConfiguration.SelectAPasswordHelpText.identity).to(equal("selectapasswordhelptext")) 
-                    expect(LoginListCellConfiguration.NoNetwork(retryObserver: fakeObserver).identity).to(equal("nonetwork")) 
+                    expect(LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver).identity).to(equal("noresultsplaceholder"))
+                    expect(LoginListCellConfiguration.SelectAPasswordHelpText.identity).to(equal("selectapasswordhelptext"))
+                    expect(LoginListCellConfiguration.NoNetwork(retryObserver: fakeObserver).identity).to(equal("nonetwork"))
                 }
             }
 

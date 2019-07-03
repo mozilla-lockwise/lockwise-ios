@@ -79,13 +79,23 @@ extension ItemDetailView: ItemDetailViewProtocol {
     }
 
     var rightButtonText: AnyObserver<String?> {
-        // swiftlint:disable:next force_cast
-        return (self.navigationItem.rightBarButtonItem!.customView as! UIButton).rx.title().asObserver()
+        return AnyObserver<String?> { evt in
+            // swiftlint:disable:next force_cast
+            let button = (self.navigationItem.rightBarButtonItem!.customView as! UIButton)
+            button.setTitle(evt.element ?? "", for: UIControl.State.normal)
+            button.sizeToFit()
+
+        }
     }
 
     var leftButtonText: AnyObserver<String?> {
         // swiftlint:disable:next force_cast
         return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.title().asObserver()
+    }
+
+    var leftButtonIcon: AnyObserver<UIImage?> {
+        // swiftlint:disable:next force_cast
+        return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.image().asObserver()
     }
 
     var deleteHidden: AnyObserver<Bool> {

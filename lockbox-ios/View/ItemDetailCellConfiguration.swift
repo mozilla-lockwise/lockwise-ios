@@ -4,7 +4,6 @@
 
 import Foundation
 import UIKit
-import UIKit
 import RxDataSources
 import RxSwift
 import RxCocoa
