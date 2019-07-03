@@ -19,6 +19,7 @@ class ItemDetailPresenterSpec: QuickSpec {
         var rightButtonTextObserverStub: TestableObserver<String?>!
         var leftButtonTextObserverStub: TestableObserver<String?>!
         var deleteHiddenObserverStub: TestableObserver<Bool>!
+        var leftButtonIconObserverStub: TestableObserver<UIImage?>!
         let editStub = PublishSubject<Void>()
         let cellTappedStub = PublishSubject<String?>()
         let deleteTappedStub = PublishSubject<Void>()
@@ -76,6 +77,10 @@ class ItemDetailPresenterSpec: QuickSpec {
 
         var deleteHidden: AnyObserver<Bool> {
             return self.deleteHiddenObserverStub.asObserver()
+        }
+
+        var leftButtonIcon: AnyObserver<UIImage?> {
+            return self.leftButtonIconObserverStub.asObserver()
         }
 
         func displayTemporaryAlert(_ message: String, timeout: TimeInterval, icon: UIImage?) {
@@ -175,6 +180,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 self.view.rightButtonTextObserverStub = self.scheduler.createObserver(String?.self)
                 self.view.leftButtonTextObserverStub = self.scheduler.createObserver(String?.self)
                 self.view.deleteHiddenObserverStub = self.scheduler.createObserver(Bool.self)
+                self.view.leftButtonIconObserverStub = self.scheduler.createObserver(UIImage?.self)
 
                 self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore()
@@ -783,12 +789,12 @@ class ItemDetailPresenterSpec: QuickSpec {
                         beforeEach {
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(true)
                         }
-                        
+
                         it("enables swipe navigation") {
                             expect(self.view.enableSwipeValue).to(beFalse())
                         }
                     }
-                    
+
                     describe("when not displaying sidebar") {
                         beforeEach {
                             self.sizeClassStore.shouldDisplaySidebarStub.onNext(false)

@@ -19,6 +19,7 @@ protocol ItemDetailViewProtocol: class, StatusAlertView, AlertControllerView {
     var titleText: AnyObserver<String?> { get }
     var rightButtonText: AnyObserver<String?> { get }
     var leftButtonText: AnyObserver<String?> { get }
+    var leftButtonIcon: AnyObserver<UIImage?> { get }
     var deleteHidden: AnyObserver<Bool> { get }
 }
 
@@ -250,6 +251,16 @@ class ItemDetailPresenter {
                 }
                 .subscribe(self.view!.leftButtonText)
                 .disposed(by: self.disposeBag)
+
+        self.itemDetailStore.isEditing
+            .withLatestFrom(self.sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
+                if !editing && !sidebar {
+                    return UIImage(named: "back")
+                }
+                return nil
+            }
+            .subscribe(self.view!.leftButtonIcon)
+            .disposed(by: self.disposeBag)
 
         self.sizeClassStore.shouldDisplaySidebar
                 .subscribe(onNext: { (enableSidebar) in
