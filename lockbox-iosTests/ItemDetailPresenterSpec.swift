@@ -501,6 +501,30 @@ class ItemDetailPresenterSpec: QuickSpec {
                             passwordSection.textFieldEnabled.drive(passwordObserver).disposed(by: self.disposeBag)
                             expect(passwordObserver.events.first?.value.element).to(beTrue())
                         }
+
+                        describe("when delete is tapped") {
+                            beforeEach {
+                                self.view.deleteTappedStub.onNext(())
+                            }
+
+                            it("shows the dialog") {
+                                expect(self.view.alertControllerTitle).to(equal(Constant.string.confirmDeleteLoginDialogTitle))
+                            }
+                        }
+
+                        describe("when delete dialog confirmed") {
+                            beforeEach {
+                                self.view.deleteTappedStub.onNext(())
+                                self.view.alertControllerButtons?[1].tapObserver?.onNext(())
+                            }
+
+                            it("sends actions") {
+                                expect(self.dispatcher.dispatchActionArgument.count).to(equal(3))
+                                expect(self.dispatcher.dispatchActionArgument[0] as! DataStoreAction == DataStoreAction.delete(id: "1234")).to(beTrue())
+                                expect(self.dispatcher.dispatchActionArgument[1] as! MainRouteAction == MainRouteAction.list).to(beTrue())
+                                expect(self.dispatcher.dispatchActionArgument[2] as! ItemDetailDisplayAction == ItemDetailDisplayAction.viewMode).to(beTrue())
+                            }
+                        }
                     }
 
                     describe("when not editing") {

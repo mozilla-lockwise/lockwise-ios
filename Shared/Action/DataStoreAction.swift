@@ -28,6 +28,8 @@ extension DataStoreAction: Equatable {
         case (.sync, .sync): return true
         case (.touch(let lhID), .touch(let rhID)):
             return lhID == rhID
+        case (.delete(let lhID), .delete(let rhID)):
+            return lhID == rhID
         default: return false
         }
     }
