@@ -139,6 +139,9 @@ class ItemDetailPresenterSpec: QuickSpec {
         var passwordRevealedStub = PublishSubject<Bool>()
         var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
         var isEditingStub = ReplaySubject<Bool>.create(bufferSize: 1)
+        var usernameEditValueStub = ReplaySubject<String>.create(bufferSize: 1)
+        var passwordEditValueStub = ReplaySubject<String>.create(bufferSize: 1)
+        var webAddressEditValueStub = ReplaySubject<String>.create(bufferSize: 1)
 
         override var passwordRevealed: Observable<Bool> {
             return passwordRevealedStub.asObservable()
@@ -150,6 +153,18 @@ class ItemDetailPresenterSpec: QuickSpec {
 
         override var itemDetailId: Observable<String> {
             return itemDetailIdStub.asObservable()
+        }
+
+        override var usernameEditValue: Observable<String> {
+            return usernameEditValueStub.asObservable()
+        }
+
+        override var passwordEditValue: Observable<String> {
+            return passwordEditValueStub.asObservable()
+        }
+
+        override var webAddressEditValue: Observable<String> {
+            return webAddressEditValueStub.asObservable()
         }
     }
 
@@ -677,6 +692,13 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 describe("rightButtonTapped") {
+                    beforeEach {
+                        self.itemDetailStore.usernameEditValueStub.onNext("user")
+                        self.itemDetailStore.passwordEditValueStub.onNext("pass")
+                        self.itemDetailStore.webAddressEditValueStub.onNext("https://www.mozilla.com")
+                        self.dataStore.onItemStub.onNext(item)
+                    }
+
                     describe("when editing") {
                         beforeEach {
                             self.itemDetailStore.isEditingStub.onNext(true)
@@ -685,8 +707,10 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the view mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? ItemDetailDisplayAction)
                                 .to(equal(ItemDetailDisplayAction.viewMode))
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? DataStoreAction)
+                                .to(equal(DataStoreAction.update(login: item)))
                         }
                     }
 
@@ -698,7 +722,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the edit mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? ItemDetailDisplayAction)
                                 .to(equal(ItemDetailDisplayAction.editMode))
                         }
                     }
