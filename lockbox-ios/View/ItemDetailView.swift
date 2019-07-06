@@ -181,6 +181,11 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
                     cell.dragValue = cellConfiguration.dragValue
 
+                    if let textObserver = cellConfiguration.textObserver {
+                        cell.textValue.rx.text.bind(to: textObserver)
+                            .disposed(by: cell.disposeBag)
+                    }
+
                     if let revealObserver = cellConfiguration.revealPasswordObserver {
                         cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
 

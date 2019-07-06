@@ -17,7 +17,7 @@ struct ItemDetailCellConfiguration {
     let textFieldEnabled: Driver<Bool>
     let copyButtonHidden: Driver<Bool>
     let openButtonHidden: Driver<Bool>
-    let textObserver: AnyObserver<String>?
+    let textObserver: AnyObserver<String?>?
     let revealPasswordObserver: AnyObserver<Bool>?
     let dragValue: String?
 
@@ -29,7 +29,7 @@ struct ItemDetailCellConfiguration {
          textFieldEnabled: Driver<Bool>,
          copyButtonHidden: Driver<Bool> = Driver.just(true),
          openButtonHidden: Driver<Bool> = Driver.just(true),
-         textObserver: AnyObserver<String>? = nil,
+         textObserver: AnyObserver<String?>? = nil,
          revealPasswordObserver: AnyObserver<Bool>? = nil,
          dragValue: String? = nil) {
         self.title = title

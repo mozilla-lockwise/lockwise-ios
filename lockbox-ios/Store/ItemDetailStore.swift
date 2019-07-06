@@ -20,6 +20,8 @@ class ItemDetailStore: BaseItemDetailStore {
 
     private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
     private var _isEditing = BehaviorRelay<Bool>(value: false)
+    private var _usernameEditValue = ReplaySubject<String>.create(bufferSize: 1)
+    private var _passwordEditValue = ReplaySubject<String>.create(bufferSize: 1)
 
     lazy private(set) var passwordRevealed: Observable<Bool> = {
         return self._passwordRevealed.asObservable()
@@ -32,6 +34,14 @@ class ItemDetailStore: BaseItemDetailStore {
     // RootPresenter needs a synchronous way to find out if the detail screen has a login or not
     var itemDetailHasId: Bool {
         return self._itemDetailId.value != ""
+    }
+
+    var usernameEditValue: Observable<String> {
+        return self._usernameEditValue.asObservable()
+    }
+
+    var passwordEditValue: Observable<String> {
+        return self._passwordEditValue.asObservable()
     }
 
     init(
@@ -78,6 +88,20 @@ class ItemDetailStore: BaseItemDetailStore {
                 .filterNil()
                 .bind(to: self._isEditing)
                 .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+            .filterByType(class: ItemEditAction.self)
+            .subscribe(onNext: { (action) in
+                switch action {
+                case .editUsername(let newVal):
+                    self._usernameEditValue.onNext(newVal)
+                case .editPassword(let newVal):
+                    self._passwordEditValue.onNext(newVal)
+                default:
+                    break
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .background }
