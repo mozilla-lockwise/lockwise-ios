@@ -59,6 +59,7 @@ extension ItemDetailDisplayAction: Equatable {
 enum ItemEditAction: Action {
     case editUsername(value: String)
     case editPassword(value: String)
+    case editWebAddress(value: String)
 }
 
 extension ItemEditAction: Equatable {
@@ -68,6 +69,8 @@ extension ItemEditAction: Equatable {
             return lhUsername == rhUsername
         case (.editPassword(let lhPassword), .editPassword(let rhPassword)):
             return lhPassword == rhPassword
+        case (.editWebAddress(let lhWebAddress), .editWebAddress(let rhWebAddress)):
+            return lhWebAddress == rhWebAddress
         default:
             return false
         }

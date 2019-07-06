@@ -54,7 +54,6 @@ class ItemDetailPresenter {
 
     lazy private var usernameObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
-            print(val)
             if let val = val {
                 target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
             }
@@ -63,9 +62,16 @@ class ItemDetailPresenter {
 
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
-            print(val)
             if let val = val {
                 target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
+            }
+        }.asObserver()
+    }()
+
+    lazy private var webAddressObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editWebAddress(value: val))
             }
         }.asObserver()
     }()
@@ -246,16 +252,18 @@ class ItemDetailPresenter {
 
         let editingObservable = Observable.combineLatest(self.itemDetailStore.usernameEditValue,
                                                          self.itemDetailStore.passwordEditValue,
+                                                         self.itemDetailStore.webAddressEditValue,
                                                          self.itemDetailStore.isEditing,
                                                          itemObservable)
 
         self.view?.rightBarButtonTapped
                 .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
-                    let (username, password, editing, item) = tuple
+                    let (username, password, webAddress, editing, item) = tuple
                     if editing {
                         if let item = item {
                                 item.username = username
                                 item.password = password
+                                item.hostname = webAddress
                                 return [DataStoreAction.update(login: item),
                                         ItemDetailDisplayAction.viewMode]
                         }
@@ -360,6 +368,7 @@ extension ItemDetailPresenter {
                         accessibilityId: "webAddressItemDetail",
                         textFieldEnabled: editing,
                         openButtonHidden: editing,
+                        textObserver: self.webAddressObserver,
                         dragValue: hostname)
             ]),
             ItemDetailSectionModel(model: 1, items: [

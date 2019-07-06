@@ -22,6 +22,7 @@ class ItemDetailStore: BaseItemDetailStore {
     private var _isEditing = BehaviorRelay<Bool>(value: false)
     private var _usernameEditValue = ReplaySubject<String>.create(bufferSize: 1)
     private var _passwordEditValue = ReplaySubject<String>.create(bufferSize: 1)
+    private var _webAddressEditValue = ReplaySubject<String>.create(bufferSize: 1)
 
     lazy private(set) var passwordRevealed: Observable<Bool> = {
         return self._passwordRevealed.asObservable()
@@ -42,6 +43,10 @@ class ItemDetailStore: BaseItemDetailStore {
 
     var passwordEditValue: Observable<String> {
         return self._passwordEditValue.asObservable()
+    }
+
+    var webAddressEditValue: Observable<String> {
+        return self._webAddressEditValue.asObservable()
     }
 
     init(
@@ -97,8 +102,8 @@ class ItemDetailStore: BaseItemDetailStore {
                     self._usernameEditValue.onNext(newVal)
                 case .editPassword(let newVal):
                     self._passwordEditValue.onNext(newVal)
-                default:
-                    break
+                case .editWebAddress(let newVal):
+                    self._webAddressEditValue.onNext(newVal)
                 }
             })
             .disposed(by: self.disposeBag)
