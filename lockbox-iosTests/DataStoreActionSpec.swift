@@ -51,6 +51,13 @@ class DataStoreActionSpec: QuickSpec {
                 expect(DataStoreAction.sync).notTo(equal(DataStoreAction.reset))
                 expect(DataStoreAction.reset).notTo(equal(DataStoreAction.sync))
             }
+
+            it("update login equal based on logins") {
+                let login1 = LoginRecord(fromJSONDict: ["id": "id1", "hostname": "https://www.mozilla.com", "username": "asdf", "password": ""])
+                let login2 = LoginRecord(fromJSONDict: ["id": "id2", "hostname": "https://www.getfirefox.com", "username": "asdf", "password": ""])
+                expect(DataStoreAction.update(login: login1)).to(equal(DataStoreAction.update(login: login1)))
+                expect(DataStoreAction.update(login: login1)).notTo(equal(DataStoreAction.update(login: login2)))
+            }
         }
     }
 }
