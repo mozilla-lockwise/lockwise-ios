@@ -216,7 +216,7 @@ extension BaseDataStore {
                 .subscribe(onNext: { (record) in
                     if let record = record {
                         let title = record.hostname.titleFromHostname()
-                        self.dispatcher.dispatch(action: ItemDeletedAction(name: title))
+                        self.dispatcher.dispatch(action: ItemDeletedAction(name: title, id: record.id))
 
                         do {
                             try self.loginsStorage?.delete(id: id)
