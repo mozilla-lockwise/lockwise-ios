@@ -458,6 +458,36 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(action).to(equal(.togglePassword(displayed: true)))
                     }
 
+                    it("dispatches the editUsername action on username textObserver") {
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                        let usernameSection = viewConfig[1].items[0]
+                        usernameSection.textObserver?.onNext("asdf")
+
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemEditAction
+                        expect(action).to(equal(.editUsername(value: "asdf")))
+                    }
+
+                    it("dispatches the editWebAddress action on webAddress textObserver") {
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                        let usernameSection = viewConfig[0].items[0]
+                        usernameSection.textObserver?.onNext("https://www.mozilla.org")
+
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemEditAction
+                        expect(action).to(equal(.editWebAddress(value: "https://www.mozilla.org")))
+                    }
+
+                    it("dispatches the editPassword action on password textObserver") {
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                        let usernameSection = viewConfig[1].items[1]
+                        usernameSection.textObserver?.onNext("pass")
+
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemEditAction
+                        expect(action).to(equal(.editPassword(value: "pass")))
+                    }
+
                     describe("when editing") {
                         beforeEach {
                             self.itemDetailStore.isEditingStub.onNext(true)
