@@ -586,7 +586,7 @@ class ItemListPresenterSpec: QuickSpec {
             describe("item deleted from store") {
                 beforeEach {
                     self.subject.onViewReady()
-                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemDeletedAction(name: "mozilla.org"))
+                    self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemDeletedAction(name: "mozilla.org", id: "1234"))
                 }
 
                 it("tells the view to display the toast") {

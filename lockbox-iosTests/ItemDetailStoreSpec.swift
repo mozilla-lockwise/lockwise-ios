@@ -64,11 +64,20 @@ class ItemDetailStoreSpec: QuickSpec {
         }
     }
 
+    class FakeItemListDisplayStore: ItemListDisplayStore {
+        let listDisplayStub = ReplaySubject<ItemListDisplayAction>.create(bufferSize: 1)
+
+        override var listDisplay: Observable<ItemListDisplayAction> {
+            return self.listDisplayStub.asObservable()
+        }
+    }
+
     private var dispatcher: FakeDispatcher!
     private var sizeClassStore: FakeSizeClassStore!
     private var lifecycleStore: FakeLifecycleStore!
     private var dataStore: FakeDataStore!
     private var routeStore: FakeRouteStore!
+    private var itemListDisplayStore: FakeItemListDisplayStore!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
     var subject: ItemDetailStore!
@@ -81,12 +90,14 @@ class ItemDetailStoreSpec: QuickSpec {
                 self.sizeClassStore = FakeSizeClassStore()
                 self.routeStore = FakeRouteStore()
                 self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
+                self.itemListDisplayStore = FakeItemListDisplayStore()
                 self.subject = ItemDetailStore(
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         sizeClassStore: self.sizeClassStore,
                         lifecycleStore: self.lifecycleStore,
-                        routeStore: self.routeStore
+                        routeStore: self.routeStore,
+                        itemListDisplayStore: self.itemListDisplayStore
                 )
             }
 
@@ -138,6 +149,17 @@ class ItemDetailStoreSpec: QuickSpec {
                         it("sets itemDeatilHasId") {
                             expect(self.subject.itemDetailHasId).to(beTrue())
                         }
+                    }
+                }
+
+                describe("ItemDeletedAction") {
+                    beforeEach {
+                        self.routeStore.routeEventsStub.onNext(MainRouteAction.detail(itemId: "1234"))
+                        self.itemListDisplayStore.listDisplayStub.onNext(ItemDeletedAction(name: "Item", id: "1234"))
+                    }
+
+                    it("clears the detailId") {
+                        expect(detailIdObserver.events.last!.value.element!).to(equal(""))
                     }
                 }
             }

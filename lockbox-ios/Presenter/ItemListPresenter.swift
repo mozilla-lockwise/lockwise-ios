@@ -208,6 +208,7 @@ class ItemListPresenter: BaseItemListPresenter {
     private func getDeletedItemObserver(id: String) -> AnyObserver<Void> {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: DataStoreAction.delete(id: id))
+            target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
     }
 }
