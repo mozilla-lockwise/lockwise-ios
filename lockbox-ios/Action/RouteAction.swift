@@ -18,6 +18,37 @@ extension ExternalWebsiteRouteAction: Equatable {
     }
 }
 
+extension ExternalWebsiteRouteAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        return .show
+    }
+
+    var eventObject: TelemetryEventObject {
+        switch self.urlString {
+        case let str where str.contains(Constant.app.provideFeedbackURL):
+            return .settingsProvideFeedback
+        case Constant.app.getSupportURL:
+            return .settingsGetSupport
+        case Constant.app.faqURLtop:
+            return .settingsFaq
+        case Constant.app.privacyURL:
+            return .settingsPrivacy
+        case Constant.app.securityFAQ:
+            return .onboardingConfirmationPrivacy
+        default:
+            return .externalWebsite
+        }
+    }
+
+    var value: String? {
+        return nil
+    }
+
+    var extras: [String: Any?]? {
+        return nil
+    }
+}
+
 enum LoginRouteAction: RouteAction {
     case welcome
     case fxa

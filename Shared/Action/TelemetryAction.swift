@@ -41,6 +41,7 @@ enum TelemetryEventObject: String {
     case settingsFaq = "settings_faq"
     case settingsProvideFeedback = "settings_provide_feedback"
     case settingsGetSupport = "settings_get_support"
+    case settingsPrivacy = "settings_privacy"
     case loginWelcome = "login_welcome"
     case loginFxa = "login_fxa"
     case loginOnboardingConfirmation = "login_onboarding_confirmation"
@@ -51,6 +52,8 @@ enum TelemetryEventObject: String {
     case autofillOnboardingInstructions = "autofill_onboarding_instructions"
     case forceLock = "force_lock"
     case openInBrowser = "open_in_browser"
+    case onboardingConfirmationPrivacy = "onboarding_confirmation_privacy"
+    case externalWebsite = "external_website"
 }
 
 enum ExtraKey: String {

@@ -142,6 +142,21 @@ class RouteActionSpec: QuickSpec {
                             .notTo(equal(ExternalWebsiteRouteAction(urlString: "www.meow.com", title: "blah", returnRoute: SettingRouteAction.list)))
                 }
             }
+
+            describe("telemetry") {
+                it("event method equals show") {
+                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.faqURLtop, title: "FAQ", returnRoute: SettingRouteAction.list).eventMethod).to(equal(TelemetryEventMethod.show))
+                }
+
+                it("event object matches") {
+                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.faqURLtop, title: "FAQ", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsFaq))
+                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.getSupportURL, title: "Support", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsGetSupport))
+                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.provideFeedbackURL, title: "Provide Feedback", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsProvideFeedback))
+                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.privacyURL, title: "Privacy", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsPrivacy))
+                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.securityFAQ, title: "Security", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.onboardingConfirmationPrivacy))
+                    expect(ExternalWebsiteRouteAction(urlString: "http://www.mozilla.com", title: "Mozilla", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.externalWebsite))
+                }
+            }
         }
 
         describe("OnboardingStatusAction") {
