@@ -54,12 +54,12 @@ class DataStoreActionSpec: QuickSpec {
 
             it("syncError are equal based onerror") {
                 expect(DataStoreAction.syncError(error: "asdf")).to(equal(DataStoreAction.syncError(error: "asdf")))
-                expect(DataStoreAction.syncError(error: "asdf")).to(equal(DataStoreAction.syncError(error: "fdsa")))
+                expect(DataStoreAction.syncError(error: "asdf")).notTo(equal(DataStoreAction.syncError(error: "fdsa")))
             }
 
             it("syncTimeout are equal based onerror") {
                 expect(DataStoreAction.syncTimeout(error: "asdf")).to(equal(DataStoreAction.syncTimeout(error: "asdf")))
-                expect(DataStoreAction.syncTimeout(error: "asdf")).to(equal(DataStoreAction.syncTimeout(error: "fdsa")))
+                expect(DataStoreAction.syncTimeout(error: "asdf")).notTo(equal(DataStoreAction.syncTimeout(error: "fdsa")))
             }
         }
     }
