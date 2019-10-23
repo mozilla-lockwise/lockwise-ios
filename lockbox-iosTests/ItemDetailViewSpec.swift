@@ -54,9 +54,11 @@ class ItemDetailViewSpec: QuickSpec {
 
             describe("tableview datasource configuration") {
                 var revealPasswordObserver = self.scheduler.createObserver(Bool.self)
+                var usernameTextObserver = self.scheduler.createObserver(String?.self)
 
                 beforeEach {
                     revealPasswordObserver = self.scheduler.createObserver(Bool.self)
+                    usernameTextObserver = self.scheduler.createObserver(String?.self)
                     let sectionModels = [
                         ItemDetailSectionModel(model: 0, items: [
                             ItemDetailCellConfiguration(
@@ -73,7 +75,8 @@ class ItemDetailViewSpec: QuickSpec {
                                     value: Driver.just("tanya"),
                                     accessibilityLabel: "something else accessible",
                                     accessibilityId: "",
-                                    textFieldEnabled: Driver.just(false)),
+                                    textFieldEnabled: Driver.just(false),
+                                    textObserver: usernameTextObserver.asObserver()),
                             ItemDetailCellConfiguration(
                                     title: Constant.string.password,
                                     value: Driver.just("iluvdawgz"),
@@ -100,6 +103,14 @@ class ItemDetailViewSpec: QuickSpec {
 
                     expect(revealPasswordObserver.events.count).to(equal(1))
                     expect(revealPasswordObserver.events.first?.value.element).to(beTrue())
+                }
+
+                it("binds textObserver text change actions to the observer") {
+                    let cell = self.subject.tableView.cellForRow(at: [1, 0]) as! ItemDetailCell
+                    cell.textValue.sendActions(for: .editingChanged)
+
+                    expect(usernameTextObserver.events.count).to(equal(2))
+                    expect(usernameTextObserver.events.first?.value.element).to(equal("tanya"))
                 }
 
                 describe("tapping cells") {

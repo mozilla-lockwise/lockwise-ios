@@ -282,6 +282,55 @@ class ItemDetailStoreSpec: QuickSpec {
                 }
             }
 
+            describe("edit actions") {
+                let usernameObserver = self.scheduler.createObserver(String.self)
+                let passwordObserver = self.scheduler.createObserver(String.self)
+                let webAddressObserver = self.scheduler.createObserver(String.self)
+
+                beforeEach {
+                    self.subject.usernameEditValue
+                        .subscribe(usernameObserver)
+                        .disposed(by: self.disposeBag)
+
+                    self.subject.passwordEditValue
+                        .subscribe(passwordObserver)
+                        .disposed(by: self.disposeBag)
+
+                    self.subject.webAddressEditValue
+                        .subscribe(webAddressObserver)
+                        .disposed(by: self.disposeBag)
+                }
+
+                describe("editUsername") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(ItemEditAction.editUsername(value: "a"))
+                    }
+
+                    it("fires event") {
+                        expect(usernameObserver.events.last!.value.element!).to(equal("a"))
+                    }
+                }
+
+                describe("editPassword") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(ItemEditAction.editPassword(value: "p"))
+                    }
+
+                    it("fires event") {
+                        expect(passwordObserver.events.last!.value.element!).to(equal("p"))
+                    }
+                }
+
+                describe("editWebAddress") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(ItemEditAction.editWebAddress(value: "h"))
+                    }
+
+                    it("fires event") {
+                        expect(webAddressObserver.events.last!.value.element!).to(equal("h"))
+                    }
+                }
+            }
         }
     }
 }

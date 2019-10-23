@@ -139,6 +139,9 @@ class ItemDetailPresenterSpec: QuickSpec {
         var passwordRevealedStub = PublishSubject<Bool>()
         var itemDetailIdStub = ReplaySubject<String>.create(bufferSize: 1)
         var isEditingStub = ReplaySubject<Bool>.create(bufferSize: 1)
+        var usernameEditValueStub = ReplaySubject<String>.create(bufferSize: 1)
+        var passwordEditValueStub = ReplaySubject<String>.create(bufferSize: 1)
+        var webAddressEditValueStub = ReplaySubject<String>.create(bufferSize: 1)
 
         override var passwordRevealed: Observable<Bool> {
             return passwordRevealedStub.asObservable()
@@ -150,6 +153,18 @@ class ItemDetailPresenterSpec: QuickSpec {
 
         override var itemDetailId: Observable<String> {
             return itemDetailIdStub.asObservable()
+        }
+
+        override var usernameEditValue: Observable<String> {
+            return usernameEditValueStub.asObservable()
+        }
+
+        override var passwordEditValue: Observable<String> {
+            return passwordEditValueStub.asObservable()
+        }
+
+        override var webAddressEditValue: Observable<String> {
+            return webAddressEditValueStub.asObservable()
         }
     }
 
@@ -443,6 +458,36 @@ class ItemDetailPresenterSpec: QuickSpec {
                         expect(action).to(equal(.togglePassword(displayed: true)))
                     }
 
+                    it("dispatches the editUsername action on username textObserver") {
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                        let usernameSection = viewConfig[1].items[0]
+                        usernameSection.textObserver?.onNext("asdf")
+
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemEditAction
+                        expect(action).to(equal(.editUsername(value: "asdf")))
+                    }
+
+                    it("dispatches the editWebAddress action on webAddress textObserver") {
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                        let usernameSection = viewConfig[0].items[0]
+                        usernameSection.textObserver?.onNext("https://www.mozilla.org")
+
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemEditAction
+                        expect(action).to(equal(.editWebAddress(value: "https://www.mozilla.org")))
+                    }
+
+                    it("dispatches the editPassword action on password textObserver") {
+                        let viewConfig = self.view.itemDetailObserverStub.events.last!.value.element!
+                        let usernameSection = viewConfig[1].items[1]
+                        usernameSection.textObserver?.onNext("pass")
+
+                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                        let action = self.dispatcher.dispatchActionArgument.last as! ItemEditAction
+                        expect(action).to(equal(.editPassword(value: "pass")))
+                    }
+
                     describe("when editing") {
                         beforeEach {
                             self.itemDetailStore.isEditingStub.onNext(true)
@@ -677,6 +722,13 @@ class ItemDetailPresenterSpec: QuickSpec {
                 }
 
                 describe("rightButtonTapped") {
+                    beforeEach {
+                        self.itemDetailStore.usernameEditValueStub.onNext("user")
+                        self.itemDetailStore.passwordEditValueStub.onNext("pass")
+                        self.itemDetailStore.webAddressEditValueStub.onNext("https://www.mozilla.com")
+                        self.dataStore.onItemStub.onNext(item)
+                    }
+
                     describe("when editing") {
                         beforeEach {
                             self.itemDetailStore.isEditingStub.onNext(true)
@@ -685,8 +737,10 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the view mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? ItemDetailDisplayAction)
                                 .to(equal(ItemDetailDisplayAction.viewMode))
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? DataStoreAction)
+                                .to(equal(DataStoreAction.update(login: item)))
                         }
                     }
 
@@ -698,7 +752,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the edit mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            expect(self.dispatcher.dispatchActionArgument.popLast() as! ItemDetailDisplayAction)
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? ItemDetailDisplayAction)
                                 .to(equal(ItemDetailDisplayAction.editMode))
                         }
                     }

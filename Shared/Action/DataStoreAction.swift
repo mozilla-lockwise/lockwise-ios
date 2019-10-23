@@ -16,6 +16,7 @@ enum DataStoreAction: Action {
     case sync
     case touch(id: String)
     case delete(id: String)
+    case update(login: LoginRecord)
 }
 
 extension DataStoreAction: Equatable {
@@ -30,6 +31,8 @@ extension DataStoreAction: Equatable {
             return lhID == rhID
         case (.delete(let lhID), .delete(let rhID)):
             return lhID == rhID
+        case (.update(let lhLogin), .update(let rhLogin)):
+            return lhLogin == rhLogin
         default: return false
         }
     }

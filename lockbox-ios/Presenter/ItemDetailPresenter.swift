@@ -52,6 +52,30 @@ class ItemDetailPresenter {
             }.asObserver()
     }()
 
+    lazy private var usernameObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
+            }
+        }.asObserver()
+    }()
+
+    lazy private var passwordObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
+            }
+        }.asObserver()
+    }()
+
+    lazy private var webAddressObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editWebAddress(value: val))
+            }
+        }.asObserver()
+    }()
+
     lazy private var deleteObserver: AnyObserver<Void>? = {
         return Binder(self) { target, _ in
             target.itemDetailStore.itemDetailId
@@ -110,7 +134,7 @@ class ItemDetailPresenter {
 
         self.setupEdit()
         self.setupCopy(itemObservable: itemObservable)
-        self.setupNavigation()
+        self.setupNavigation(itemObservable: itemObservable)
     }
 
     private func setupEdit() {
@@ -197,7 +221,7 @@ class ItemDetailPresenter {
         .disposed(by: self.disposeBag)
     }
 
-    private func setupNavigation() {
+    private func setupNavigation(itemObservable: Observable<LoginRecord?>) {
         self.view?.leftBarButtonTapped
                 .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action? in
                     if editing {
@@ -226,11 +250,34 @@ class ItemDetailPresenter {
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: self.disposeBag)
 
+        let editingObservable = Observable.combineLatest(self.itemDetailStore.usernameEditValue,
+                                                         self.itemDetailStore.passwordEditValue,
+                                                         self.itemDetailStore.webAddressEditValue,
+                                                         self.itemDetailStore.isEditing,
+                                                         itemObservable)
+
         self.view?.rightBarButtonTapped
-                .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action in
-                    return editing ? ItemDetailDisplayAction.viewMode : ItemDetailDisplayAction.editMode
+                .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
+                    let (username, password, webAddress, editing, item) = tuple
+                    if editing {
+                        if let item = item {
+                                item.username = username
+                                item.password = password
+                                item.hostname = webAddress
+                                return [DataStoreAction.update(login: item),
+                                        ItemDetailDisplayAction.viewMode]
+                        }
+                    } else {
+                        return [ItemDetailDisplayAction.editMode]
+                    }
+
+                    return []
                 }
-                .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
+                .subscribe(onNext: { actions in
+                    for action in actions {
+                        self.dispatcher.dispatch(action: action)
+                    }
+                })
                 .disposed(by: self.disposeBag)
 
         self.itemDetailStore.isEditing
@@ -321,6 +368,7 @@ extension ItemDetailPresenter {
                         accessibilityId: "webAddressItemDetail",
                         textFieldEnabled: editing,
                         openButtonHidden: editing,
+                        textObserver: self.webAddressObserver,
                         dragValue: hostname)
             ]),
             ItemDetailSectionModel(model: 1, items: [
@@ -331,6 +379,7 @@ extension ItemDetailPresenter {
                         accessibilityId: "userNameItemDetail",
                         textFieldEnabled: editing,
                         copyButtonHidden: editing,
+                        textObserver: self.usernameObserver,
                         dragValue: username),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
@@ -339,6 +388,7 @@ extension ItemDetailPresenter {
                         accessibilityId: "passwordItemDetail",
                         textFieldEnabled: editing,
                         copyButtonHidden: editing,
+                        textObserver: self.passwordObserver,
                         revealPasswordObserver: self.onPasswordToggle,
                         dragValue: login?.password)
             ])
