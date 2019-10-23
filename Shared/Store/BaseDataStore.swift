@@ -123,7 +123,7 @@ class BaseDataStore {
                         self.updateCredentials(syncCredential)
                     case .reset:
                         self.reset()
-                    case .sync:
+                    case .syncStart:
                         self.sync()
                     case .touch(let id):
                         self.touch(id: id)
@@ -259,7 +259,7 @@ extension BaseDataStore {
                 if (self.syncSubject.value != .Synced) {
                     self.syncSubject.accept(.TimedOut)
                     self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, line: ""))
-                    self.dispatcher.dispatch(action: DataStoreAction.syncTimeout(error: ""))
+                    self.dispatcher.dispatch(action: DataStoreAction.syncTimeout)
                 }
             })
 

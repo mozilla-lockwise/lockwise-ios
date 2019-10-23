@@ -13,11 +13,11 @@ enum DataStoreAction: Action {
     case lock
     case unlock
     case reset
-    case sync
+    case syncStart
     case touch(id: String)
     case delete(id: String)
     case syncEnd
-    case syncTimeout(error: String)
+    case syncTimeout
     case syncError(error: String)
 }
 
@@ -32,7 +32,7 @@ extension DataStoreAction: TelemetryAction {
             return .unlock
         case .reset:
             return .reset
-        case .sync:
+        case .syncStart:
             return .sync
         case .touch:
             return .touch
@@ -59,8 +59,6 @@ extension DataStoreAction: TelemetryAction {
             return "ID: \(id)"
         case .syncError(let error):
             return error
-        case .syncTimeout(let error):
-            return error
         default:
             return nil
         }
@@ -78,12 +76,11 @@ extension DataStoreAction: Equatable {
         case (.lock, .lock): return true
         case (.unlock, .unlock): return true
         case (.reset, .reset): return true
-        case (.sync, .sync): return true
+        case (.syncStart, .syncStart): return true
         case (.touch(let lhID), .touch(let rhID)):
             return lhID == rhID
         case (.syncEnd, .syncEnd): return true
-        case (.syncTimeout(let lhError), .syncTimeout(let rhError)):
-            return lhError == rhError
+        case (.syncTimeout, .syncTimeout): return true
         case (.syncError(let lhError), .syncError(let rhError)):
             return lhError == rhError
         default: return false
