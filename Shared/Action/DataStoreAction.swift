@@ -13,9 +13,60 @@ enum DataStoreAction: Action {
     case lock
     case unlock
     case reset
-    case sync
+    case syncStart
     case touch(id: String)
     case delete(id: String)
+    case syncEnd
+    case syncTimeout
+    case syncError(error: String)
+}
+
+extension DataStoreAction: TelemetryAction {
+    var eventMethod: TelemetryEventMethod {
+        switch(self) {
+        case .updateCredentials:
+            return .update_credentials
+        case .lock:
+            return .lock
+        case .unlock:
+            return .unlock
+        case .reset:
+            return .reset
+        case .syncStart:
+            return .sync
+        case .touch:
+            return .touch
+        case .delete:
+            return .delete
+        case .syncEnd:
+            return .sync_end
+        case .syncTimeout:
+            return .sync_timeout
+        case .syncError:
+            return .sync_error
+        }
+    }
+
+    var eventObject: TelemetryEventObject {
+        return .datastore
+    }
+
+    var value: String? {
+        switch(self) {
+        case .delete(let id):
+            return id
+        case .touch(let id):
+            return "ID: \(id)"
+        case .syncError(let error):
+            return error
+        default:
+            return nil
+        }
+    }
+
+    var extras: [String : Any?]? {
+        return nil
+    }
 }
 
 extension DataStoreAction: Equatable {
@@ -25,9 +76,13 @@ extension DataStoreAction: Equatable {
         case (.lock, .lock): return true
         case (.unlock, .unlock): return true
         case (.reset, .reset): return true
-        case (.sync, .sync): return true
+        case (.syncStart, .syncStart): return true
         case (.touch(let lhID), .touch(let rhID)):
             return lhID == rhID
+        case (.syncEnd, .syncEnd): return true
+        case (.syncTimeout, .syncTimeout): return true
+        case (.syncError(let lhError), .syncError(let rhError)):
+            return lhError == rhError
         default: return false
         }
     }

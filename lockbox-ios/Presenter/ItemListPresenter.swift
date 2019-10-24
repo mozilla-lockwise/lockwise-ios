@@ -54,7 +54,7 @@ class ItemListPresenter: BaseItemListPresenter {
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: PullToRefreshAction(refreshing: true))
-            target.dispatcher.dispatch(action: DataStoreAction.sync)
+            target.dispatcher.dispatch(action: DataStoreAction.syncStart)
         }.asObserver()
     }()
 

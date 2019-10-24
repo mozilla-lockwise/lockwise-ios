@@ -384,7 +384,7 @@ class BaseDataStoreSpec: QuickSpec {
                 describe("when the network is available") {
                     beforeEach {
                         self.networkStore.connectedStub = true
-                        self.dispatcher.dispatch(action: DataStoreAction.sync)
+                        self.dispatcher.dispatch(action: DataStoreAction.syncStart)
                     }
 
                     xit("syncs + pushes syncing followed by synced") {
@@ -401,7 +401,7 @@ class BaseDataStoreSpec: QuickSpec {
                 describe("when the network is not available") {
                     beforeEach {
                         self.networkStore.connectedStub = false
-                        self.dispatcher.dispatch(action: DataStoreAction.sync)
+                        self.dispatcher.dispatch(action: DataStoreAction.syncStart)
                     }
 
                     it("pushes synced and does nothing else") {
