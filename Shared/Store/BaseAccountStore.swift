@@ -64,13 +64,13 @@ class BaseAccountStore {
             if let error = err as? FirefoxAccountError {
                 var errMessage = ""
                 switch error {
-                case .Network(let message):
+                case .network(let message):
                     errMessage = "Network error: " + message
-                case .Unspecified(let message):
+                case .unspecified(let message):
                     errMessage = "Unspecified error: " + message
-                case .Unauthorized(let message):
+                case .unauthorized(let message):
                     errMessage = "Unauthorized error: " + message
-                case .Panic(let message):
+                case .panic(let message):
                     errMessage = "Panic error: " + message
                 }
                 let sentryAction = SentryAction(

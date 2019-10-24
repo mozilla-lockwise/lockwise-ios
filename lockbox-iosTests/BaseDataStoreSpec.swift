@@ -43,8 +43,9 @@ class BaseDataStoreSpec: QuickSpec {
             self.ensureLockedCalled = true
         }
 
-        func sync(unlockInfo: SyncUnlockInfo) throws {
+        func sync(unlockInfo: SyncUnlockInfo) throws -> String {
             self.syncArgument = unlockInfo
+            return ""
         }
 
         func wipeLocal() throws {
