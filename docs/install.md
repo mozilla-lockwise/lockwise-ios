@@ -1,4 +1,4 @@
-1. Install Xcode version 10.2.1 + Swift 5.0.1.
+1. Install Xcode version 11.1 + Swift 5.1.
 
 2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
 
