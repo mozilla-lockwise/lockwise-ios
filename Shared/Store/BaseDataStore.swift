@@ -219,7 +219,7 @@ extension BaseDataStore {
                         self.dispatcher.dispatch(action: ItemDeletedAction(name: title, id: record.id))
 
                         do {
-                            try self.loginsStorage?.delete(id: id)
+                            _ = try self.loginsStorage?.delete(id: id)
                         } catch let error as LoginsStoreError {
                             self.pushError(error)
                         } catch let error {
@@ -261,7 +261,7 @@ extension BaseDataStore {
             })
 
             do {
-                try self.loginsStorage?.sync(unlockInfo: syncInfo)
+                _ = try self.loginsStorage?.sync(unlockInfo: syncInfo)
             } catch let error as LoginsStoreError {
                 self.pushError(error)
             } catch let error {
