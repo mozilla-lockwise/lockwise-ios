@@ -84,27 +84,28 @@ class BaseItemListView: UIViewController {
     }
 
     internal func styleNavigationBar() {
-        self.navigationItem.title = Constant.string.productName
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
-        self.navigationController?.navigationBar.titleTextAttributes = [
+        navigationItem.title = Constant.string.productName
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
+        navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
 
-        self.navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .never
 
-        self.searchController = self.getStyledSearchController()
+        searchController = self.getStyledSearchController()
 
-        self.extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+        extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
 
         if #available(iOS 13.0, *) {
             let navBarAppearance = UINavigationBarAppearance()
             navBarAppearance.configureWithOpaqueBackground()
+            navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
             navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
             navBarAppearance.backgroundColor = Constant.color.navBackgroundColor
-            self.navigationController?.navigationBar.standardAppearance = navBarAppearance
-            self.navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+            navigationController?.navigationBar.standardAppearance = navBarAppearance
+            navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         }
     }
 
