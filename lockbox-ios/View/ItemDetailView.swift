@@ -134,11 +134,12 @@ extension ItemDetailView: ItemDetailViewProtocol {
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupNavigation() {
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
+        navigationItem.largeTitleDisplayMode = .always
     }
 
     fileprivate func setupDataSource() {
