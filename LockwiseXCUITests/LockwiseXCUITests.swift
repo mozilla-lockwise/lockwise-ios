@@ -84,7 +84,7 @@ class LockwiseXCUITests: BaseTestCase {
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
         waitforExistence(safari.buttons["URL"], timeout: 10)
-        waitForValueContains(safari.buttons["URL"], value: "accounts")
+        waitForValueContains(safari.buttons["URL"], value: "accounts.firefox.com")
         safari.terminate()
 
         app.launch()
@@ -143,7 +143,7 @@ class LockwiseXCUITests: BaseTestCase {
         waitforExistence(app.buttons["open.button"], timeout: 3)
         app.buttons["open.button"].tap()
         // Safari is open
-        waitforExistence(safari.textFields["URL"], timeout: 10)
+        waitforExistence(safari.buttons["URL"], timeout: 10)
         safari.terminate()
         // Close Safari and re-open the app
         app.launch()
@@ -247,7 +247,8 @@ class LockwiseXCUITests: BaseTestCase {
     func testSetAutofill() {
         if #available(iOS 12.0, *) {
             let testingURL = "accounts.google.com"
-            let safariButtons1 = "firefoxlockbox@gmail.com, for this website — Lockwise"
+            //Temporarily commenting this out as variable is unused until test code below is fixed
+            //let safariButtons1 = "firefoxlockbox@gmail.com, for this website — Lockwise"
             let safariButtons2 = "Use “firefoxlockbox@example.com”"
             loginFxAccount()
             waitforExistence(app.buttons["setupAutofill.button"])
