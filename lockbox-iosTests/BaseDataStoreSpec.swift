@@ -320,8 +320,8 @@ class BaseDataStoreSpec: QuickSpec {
                         it("locks") {
                             _ = try! self.subject.storageState.toBlocking().first()
                             let state = try! self.subject.storageState.toBlocking().first()
-                            expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
-                            expect(state).to(equal(LoginStoreState.Locked))
+                            expect(self.loginsStorage.ensureLockedCalled).to(beTrue(), description: "ensure lock is called")
+                            expect(state).to(equal(LoginStoreState.Locked), description: "lock expectation failed, state is \(String(describing: state))")
                         }
                     }
 
