@@ -83,8 +83,8 @@ class LockwiseXCUITests: BaseTestCase {
 
         navigator.performAction(Action.OpenWebsite)
         // Safari is open
-        waitforExistence(safari.buttons["URL"], timeout: 10)
-        waitForValueContains(safari.buttons["URL"], value: "accounts.firefox.com")
+        waitforExistence(safari.buttons["URL"], timeout: 20)
+        waitForValueContains(safari.buttons["URL"], value: "‎accounts")
         safari.terminate()
 
         app.launch()
