@@ -220,10 +220,11 @@ extension BaseTestCase {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = emailTestAccountLogins
         navigator.goto(Screen.FxASigninScreenEmail)
-        waitforExistence(app.buttons["closeButtonGetStartedNavBar"], timeout: 5)
+        waitforExistence(app.buttons["closeButtonGetStartedNavBar"], timeout: 10)
+        waitforExistence(app.webViews.textFields["Email"], timeout: 60)
         snapshot("15LoginScreen" + CONTENT_SIZE)
         navigator.performAction(Action.FxATypeEmail)
-        waitforExistence(app.webViews.secureTextFields["Password"])
+        waitforExistence(app.webViews.secureTextFields["Password"], timeout: 60)
         snapshot("16PasswordScreen" + CONTENT_SIZE)
         navigator.performAction(Action.FxATypePassword)
     }
@@ -247,7 +248,7 @@ extension BaseTestCase {
 
     func waitForLockwiseEntriesListView() {
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 60)
         navigator.nowAt(Screen.LockwiseMainPage)
     }
 

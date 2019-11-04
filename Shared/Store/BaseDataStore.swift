@@ -123,7 +123,7 @@ class BaseDataStore {
                         self.updateCredentials(syncCredential)
                     case .reset:
                         self.reset()
-                    case .sync:
+                    case .syncStart:
                         self.sync()
                     case .touch(let id):
                         self.touch(id: id)
@@ -133,6 +133,8 @@ class BaseDataStore {
                         self.unlock()
                     case .delete(let id):
                         self.delete(id: id)
+                    default:
+                        break
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -257,6 +259,7 @@ extension BaseDataStore {
                 if (self.syncSubject.value != .Synced) {
                     self.syncSubject.accept(.TimedOut)
                     self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, line: ""))
+                    self.dispatcher.dispatch(action: DataStoreAction.syncTimeout)
                 }
             })
 
@@ -264,10 +267,12 @@ extension BaseDataStore {
                 _ = try self.loginsStorage?.sync(unlockInfo: syncInfo)
             } catch let error as LoginsStoreError {
                 self.pushError(error)
+                self.dispatcher.dispatch(action: DataStoreAction.syncError(error: error.errorDescription ?? ""))
             } catch let error {
                 NSLog("DATASTORE:: Unknown error syncing: \(error)")
             }
             self.syncSubject.accept(SyncState.Synced)
+            self.dispatcher.dispatch(action: DataStoreAction.syncEnd)
         }
     }
 
