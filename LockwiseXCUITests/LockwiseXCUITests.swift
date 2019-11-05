@@ -142,8 +142,9 @@ class LockwiseXCUITests: BaseTestCase {
 
         waitforExistence(app.buttons["open.button"], timeout: 3)
         app.buttons["open.button"].tap()
+
         // Safari is open
-        waitforExistence(safari.textFields["URL"], timeout: 10)
+        waitforExistence(safari.buttons["URL"], timeout: 30)
         safari.terminate()
         // Close Safari and re-open the app
         app.launch()
@@ -267,7 +268,7 @@ class LockwiseXCUITests: BaseTestCase {
             //Open Safari
             safari.launch()
 
-            waitforExistence(safari.textFields["URL"], timeout: 10)
+            waitforExistence(safari.textFields["URL"], timeout: 20)
             safari.textFields["URL"].tap()
             safari.textFields["URL"].typeText(testingURL)
             safari.textFields["URL"].typeText("\r")
