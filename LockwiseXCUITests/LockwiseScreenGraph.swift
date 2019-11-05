@@ -269,7 +269,8 @@ extension BaseTestCase {
         settings.cells.staticTexts["Passwords & Accounts"].tap()
         settings.cells.staticTexts["AutoFill Passwords"].tap()
         waitforExistence(settings.switches["AutoFill Passwords"], timeout: 3)
-        if let switchValue = settings.switches["AutoFill Passwords"].value as? Bool, switchValue == false {
+        if let switchValue = settings.switches["AutoFill Passwords"].value as? Bool,
+            !switchValue {
             settings.switches["AutoFill Passwords"].tap()
         }
         waitforExistence(settings.cells.staticTexts["Lockwise"])

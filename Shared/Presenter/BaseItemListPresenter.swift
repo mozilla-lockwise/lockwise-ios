@@ -150,8 +150,8 @@ extension BaseItemListPresenter {
                                           itemDetailIdObservable: Observable<String>,
                                           sidebarObservable: Observable<Bool>) -> Driver<[ItemSectionModel]> {
         // only run on a delay for UI purposes; keep tests from blocking
-        let listThrottle = isRunningTest ? DispatchTimeInterval.seconds(0) : DispatchTimeInterval.seconds(1)
-        let stateThrottle = isRunningTest ? DispatchTimeInterval.seconds(0) : DispatchTimeInterval.seconds(2)
+        let listThrottle: DispatchTimeInterval = isRunningTest ? .seconds(0) : .seconds(1)
+        let stateThrottle: DispatchTimeInterval = isRunningTest ? .seconds(0) : .seconds(2)
         let throttledListObservable = loginListObservable
             .throttle(listThrottle, scheduler: ConcurrentMainScheduler.instance)
         let throttledSyncStateObservable = syncStateObservable

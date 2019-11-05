@@ -45,7 +45,7 @@ class BaseDataStoreSpec: QuickSpec {
 
         func sync(unlockInfo: SyncUnlockInfo) throws -> String {
             self.syncArgument = unlockInfo
-            return ""
+            return "fake-unlock-info"
         }
 
         func wipeLocal() throws {
