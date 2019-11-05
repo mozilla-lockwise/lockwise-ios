@@ -88,7 +88,7 @@ class StaticURLPresenterSpec: QuickSpec {
                     }
 
                     it("dispatches the return route action") {
-                        expect(self.dispatcher.dispatchedActions.last as! MainRouteAction).to(equal(MainRouteAction.list))
+                        expect(self.dispatcher.dispatchedActions.last as? MainRouteAction).to(equal(MainRouteAction.list))
                     }
                 }
 

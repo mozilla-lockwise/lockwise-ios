@@ -196,7 +196,7 @@ class SettingListPresenterSpec: QuickSpec {
 
             describe("onUsageDataSettingChanged") {
                 beforeEach {
-                    let voidObservable = self.scheduler.createColdObservable([next(50, false)])
+                    let voidObservable = self.scheduler.createColdObservable([Recorded.next(50, false)])
 
                     voidObservable
                         .bind(to: self.subject.onUsageDataSettingChanged)
@@ -243,7 +243,7 @@ class SettingListPresenterSpec: QuickSpec {
 
                 describe("when the cell did not have a route action") {
                     beforeEach {
-                        let settingRouteObservable: Observable<RouteAction?> = self.scheduler.createColdObservable([next(50, nil)]).asObservable()
+                        let settingRouteObservable: Observable<RouteAction?> = self.scheduler.createColdObservable([Recorded.next(50, nil)]).asObservable()
 
                         settingRouteObservable
                                 .bind(to: self.subject.onSettingCellTapped)
