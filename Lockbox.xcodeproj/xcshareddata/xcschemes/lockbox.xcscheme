@@ -70,6 +70,14 @@
                BlueprintName = "LockboxTests"
                ReferencedContainer = "container:Lockbox.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "RootPresenterSpec">
+               </Test>
+               <Test
+                  Identifier = "RootViewSpec">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

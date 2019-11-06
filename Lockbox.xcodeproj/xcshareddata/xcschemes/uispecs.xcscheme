@@ -82,6 +82,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "LockwiseXCUITests/testSetAutofill()">
+               </Test>
+               <Test
                   Identifier = "SnapshotsXCUITests">
                </Test>
                <Test
