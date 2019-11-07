@@ -96,17 +96,7 @@ class BaseItemListView: UIViewController {
         searchController = self.getStyledSearchController()
 
         extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
-
-        if let navigationBar = navigationController?.navigationBar,
-            #available(iOS 13.0, *) {
-            let navBarAppearance = UINavigationBarAppearance()
-            navBarAppearance.configureWithOpaqueBackground()
-            navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-            navBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-            navBarAppearance.backgroundColor = Constant.color.navBackgroundColor
-            navigationBar.standardAppearance = navBarAppearance
-            navigationBar.scrollEdgeAppearance = navBarAppearance
-        }
+        navigationController?.iosThirteenNavBarAppearance()
     }
 
     func getStyledSearchController() -> UISearchController {
