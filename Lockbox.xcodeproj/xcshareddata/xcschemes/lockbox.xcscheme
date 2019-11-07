@@ -72,6 +72,9 @@
             </BuildableReference>
             <SkippedTests>
                <Test
+                  Identifier = "BaseDataStoreSpec">
+               </Test>
+               <Test
                   Identifier = "RootPresenterSpec">
                </Test>
                <Test
