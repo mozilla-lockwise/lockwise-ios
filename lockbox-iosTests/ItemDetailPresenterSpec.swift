@@ -139,7 +139,7 @@ class ItemDetailPresenterSpec: QuickSpec {
             describe("onPasswordToggle") {
                 let passwordRevealSelected = true
                 beforeEach {
-                    let tapObservable = self.scheduler.createColdObservable([next(50, passwordRevealSelected)])
+                    let tapObservable = self.scheduler.createColdObservable([Recorded.next(50, passwordRevealSelected)])
 
                     tapObservable
                             .bind(to: self.subject.onPasswordToggle)
@@ -157,7 +157,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
             describe("onCancel") {
                 beforeEach {
-                    let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
+                    let cancelObservable = self.scheduler.createColdObservable([Recorded.next(50, ())])
 
                     cancelObservable
                             .bind(to: self.subject.onCancel)
@@ -177,7 +177,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("when the title of the tapped cell is the username constant") {
                     beforeEach {
                         self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.username)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([Recorded.next(50, Constant.string.username)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)
@@ -224,7 +224,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("when the title of the tapped cell is the password constant") {
                     beforeEach {
                         self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.password)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([Recorded.next(50, Constant.string.password)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)
@@ -271,7 +271,7 @@ class ItemDetailPresenterSpec: QuickSpec {
                 describe("when the title of the tapped cell is the web address constant") {
                     beforeEach {
                         self.itemDetailStore.itemDetailIdStub.onNext("fsdfds")
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.webAddress)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([Recorded.next(50, Constant.string.webAddress)])
 
                         cellTappedObservable
                             .bind(to: self.subject.onCellTapped)
@@ -312,7 +312,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                 describe("all other cells") {
                     beforeEach {
-                        let cellTappedObservable = self.scheduler.createColdObservable([next(50, Constant.string.notes)])
+                        let cellTappedObservable = self.scheduler.createColdObservable([Recorded.next(50, Constant.string.notes)])
 
                         cellTappedObservable
                                 .bind(to: self.subject.onCellTapped)

@@ -66,7 +66,7 @@ class CredentialWelcomePresenter: BaseWelcomePresenter {
     func onViewAppeared() {
         self.authenticationBag = DisposeBag()
 
-        let delay = isRunningTest ? 0.0 : 1.0
+        let delay: DispatchTimeInterval = isRunningTest ? .seconds(0) : .seconds(1)
         self.credentialProviderStore.displayAuthentication
             .filter { $0 }
             .delay(delay, scheduler: MainScheduler.instance)

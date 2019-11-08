@@ -84,21 +84,19 @@ class BaseItemListView: UIViewController {
     }
 
     internal func styleNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-
-        self.navigationItem.title = Constant.string.productName
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
-        self.navigationController?.navigationBar.titleTextAttributes = [
+        navigationItem.title = Constant.string.productName
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
+        navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
+        
+        searchController = self.getStyledSearchController()
 
-        self.navigationItem.largeTitleDisplayMode = .always
-
-        self.searchController = self.getStyledSearchController()
-
-        self.extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+        extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+        navigationController?.iosThirteenNavBarAppearance()
     }
 
     func getStyledSearchController() -> UISearchController {

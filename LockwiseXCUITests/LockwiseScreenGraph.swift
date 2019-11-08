@@ -220,10 +220,11 @@ extension BaseTestCase {
         userState.fxaPassword = passwordTestAccountLogins
         userState.fxaUsername = emailTestAccountLogins
         navigator.goto(Screen.FxASigninScreenEmail)
-        waitforExistence(app.buttons["closeButtonGetStartedNavBar"], timeout: 5)
+        waitforExistence(app.buttons["closeButtonGetStartedNavBar"], timeout: 10)
+        waitforExistence(app.webViews.textFields["Email"], timeout: 60)
         snapshot("15LoginScreen" + CONTENT_SIZE)
         navigator.performAction(Action.FxATypeEmail)
-        waitforExistence(app.webViews.secureTextFields["Password"])
+        waitforExistence(app.webViews.secureTextFields["Password"], timeout: 60)
         snapshot("16PasswordScreen" + CONTENT_SIZE)
         navigator.performAction(Action.FxATypePassword)
     }
@@ -247,7 +248,7 @@ extension BaseTestCase {
 
     func waitForLockwiseEntriesListView() {
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail])
+        waitforExistence(app.tables.cells.staticTexts[firstEntryEmail], timeout: 60)
         navigator.nowAt(Screen.LockwiseMainPage)
     }
 
@@ -268,7 +269,10 @@ extension BaseTestCase {
         settings.cells.staticTexts["Passwords & Accounts"].tap()
         settings.cells.staticTexts["AutoFill Passwords"].tap()
         waitforExistence(settings.switches["AutoFill Passwords"], timeout: 3)
-        settings.switches["AutoFill Passwords"].tap()
+        if let switchValue = settings.switches["AutoFill Passwords"].value as? Bool,
+            !switchValue {
+            settings.switches["AutoFill Passwords"].tap()
+        }
         waitforExistence(settings.cells.staticTexts["Lockwise"])
         settings.cells.staticTexts["Lockwise"].tap()
     }
