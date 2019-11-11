@@ -71,12 +71,12 @@ class BaseItemListView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Constant.color.viewBackground
-        self.setNeedsStatusBarAppearanceUpdate()
-        self.styleTableViewBackground()
-        self.styleNavigationBar()
-        self.setupDataSource()
-        self.setupDelegate()
+        view.backgroundColor = Constant.color.viewBackground
+        setNeedsStatusBarAppearanceUpdate()
+        setupTableView()
+        styleNavigationBar()
+        setupDataSource()
+        setupDelegate()
     }
 
     internal func createPresenter() -> BaseItemListPresenter {
@@ -306,10 +306,11 @@ extension BaseItemListView {
 
 // view styling
 extension BaseItemListView {
-    fileprivate func styleTableViewBackground() {
+    fileprivate func setupTableView() {
         let backgroundView = UIView(frame: self.view.bounds)
         backgroundView.backgroundColor = Constant.color.viewBackground
-        self.tableView.backgroundView = backgroundView
+        tableView.backgroundView = backgroundView
+        tableView.keyboardDismissMode = .onDrag
     }
 }
 
