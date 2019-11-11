@@ -68,7 +68,7 @@ class LockwiseXCUITests: BaseTestCase {
 
         // Check the copy functionality with user name
         let userNameField = app.cells["userNameItemDetail"]
-        userNameField.press(forDuration: 1)
+        userNameField.tap()
 
         // Now check the clipboard
         if let userNameString = UIPasteboard.general.string {
