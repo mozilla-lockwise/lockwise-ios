@@ -128,7 +128,6 @@ extension SettingListView {
 
     private func setupNavbar() {
         self.navigationItem.title = Constant.string.settingsTitle
-        self.navigationController?.navigationBar.tintColor = UIColor.white
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont

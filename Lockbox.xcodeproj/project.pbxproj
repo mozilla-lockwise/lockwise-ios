@@ -256,6 +256,8 @@
 		7DFF2EF4213857E100F001ED /* CredentialProviderPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */; };
 		9BFB48C59623367F328FE265 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BCAF40329CC78C0CBF5E632C /* Localizable.strings */; };
 		A1B04DCCB276B7FD665F1C96 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 135D40AD8E5C6CC264F33683 /* InfoPlist.strings */; };
+		CDBBCC032374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */; };
+		CDBBCC042374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */; };
 		D4AC7F5522980EEC00F75ACF /* SnapshotsXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */; };
 		D5BCA68D229DA4A800CF980C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BCA68B229DA4A800CF980C /* InfoPlist.strings */; };
 		D5BCA694229DA4E000CF980C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BCA692229DA4E000CF980C /* Localizable.strings */; };
@@ -587,6 +589,7 @@
 		80C24E078F9DA15264F2FA6F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0E84623AB91A6A141DD8403 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B3554B229BDD46895D14A661 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerExtension.swift; sourceTree = "<group>"; };
 		D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotsXCUITests.swift; sourceTree = "<group>"; };
 		D50920F62284A18100AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
 		D578C36E229F099D00E08CFF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
@@ -972,6 +975,7 @@
 				7D078EE42124DC2900D10D1B /* Common */,
 				7D078EE32124DC1D00D10D1B /* Store */,
 				7D078EE22124DC1800D10D1B /* Action */,
+				CDBBCBFD2374CEC90030BF80 /* Extensions-UI */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1309,6 +1313,14 @@
 				D80D41C221FD6D48008A7B11 /* CredentialItemDetailStore.swift */,
 			);
 			path = Store;
+			sourceTree = "<group>";
+		};
+		CDBBCBFD2374CEC90030BF80 /* Extensions-UI */ = {
+			isa = PBXGroup;
+			children = (
+				CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */,
+			);
+			path = "Extensions-UI";
 			sourceTree = "<group>";
 		};
 		D5E2930C207D591C0039A0AC /* Fonts */ = {
@@ -1769,6 +1781,7 @@
 				7D4396532135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7AA547376945C001B151491A /* ItemDetailAction.swift in Sources */,
 				D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */,
+				CDBBCC032374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */,
 				7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */,
 				7D112D2822B054DE00C6CA29 /* NoNetworkView.swift in Sources */,
 				7AA545D6182E36466BC8256A /* CopyDisplayStore.swift in Sources */,
@@ -1844,6 +1857,7 @@
 				7D09B24A2125DD8C00794CA2 /* DataStoreAction.swift in Sources */,
 				7DDEAA6A2124B60F00A7D521 /* Action.swift in Sources */,
 				3996418421486BE2000A1984 /* String+.swift in Sources */,
+				CDBBCC042374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */,
 				7D09B24B2125DDB600794CA2 /* LifecycleStore.swift in Sources */,
 				7DB9DE9F2140CB0E00239D31 /* NoResultsCell.swift in Sources */,
 				7D4396512135AFBD00B96FA9 /* CredentialProviderStore.swift in Sources */,

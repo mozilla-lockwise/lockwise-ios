@@ -140,6 +140,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .font: UIFont.navigationTitleFont
         ]
         navigationItem.largeTitleDisplayMode = .always
+        navigationController?.iosThirteenNavBarAppearance()
     }
 
     fileprivate func setupDataSource() {

@@ -22,22 +22,24 @@ class LockwiseXCUITests: BaseTestCase {
     // See more info in docs/AutomatedTests.md
     func testDeleteEntry() {
         loginToEntryListView()
-         if !iPad() {
-            waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
-            // Need to add firstMatch for iPad case
-            app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
-            app.tables.buttons["Delete"].tap()
-            waitforExistence(app.alerts["Delete this login?"])
-            // First check the Cancel button
-            app.alerts.buttons["Cancel"].tap()
-            waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
-            app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
-            app.tables.buttons["Delete"].tap()
-            waitforExistence(app.alerts["Delete this login?"])
-            // Then Delete the login
-            app.alerts.buttons["Delete"].tap()
-            waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-            // Now check that the login has been removed
+
+        waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        // Need to add firstMatch for iPad case
+        app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
+        app.tables.buttons["Delete"].tap()
+        waitforExistence(app.alerts["Delete this login?"])
+        // First check the Cancel button
+        app.alerts.buttons["Cancel"].tap()
+        waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
+        app.tables.buttons["Delete"].tap()
+        waitforExistence(app.alerts["Delete this login?"])
+        // Then Delete the login
+        app.alerts.buttons["Delete"].tap()
+        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
+        // Now check that the login has been removed
+        // On iPad, entry is removed but only from the entry list, the entry detail view is still there
+        if !iPad() {
             waitforNoExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
         }
     }
@@ -68,7 +70,7 @@ class LockwiseXCUITests: BaseTestCase {
 
         // Check the copy functionality with user name
         let userNameField = app.cells["userNameItemDetail"]
-        userNameField.press(forDuration: 1)
+        userNameField.tap()
 
         // Now check the clipboard
         if let userNameString = UIPasteboard.general.string {
