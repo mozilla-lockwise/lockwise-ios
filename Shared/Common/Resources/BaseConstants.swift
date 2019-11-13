@@ -31,6 +31,7 @@ class Constant {
         static let cellBorderGrey = UIColor(hex: 0xC8C7CC)
         static let viewBackground = UIColor(hex: 0xEDEDF0)
         static let lightGrey = UIColor(hex: 0xEFEFEF)
+        static let systemLightGray = UIColor.lightGray
         static let lockBoxViolet = UIColor(red: 89, green: 42, blue: 203)
         static let lockBoxTeal = UIColor(hex: 0x00C8D7)
         static let settingsHeader = UIColor(hex: 0x737373)
