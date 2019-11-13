@@ -23,23 +23,27 @@ class LockwiseXCUITests: BaseTestCase {
     func testDeleteEntry() {
         loginToEntryListView()
 
-        waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        if !iPad() {
+            waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        }
+
         // Need to add firstMatch for iPad case
-        app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
+        app.tables.cells.staticTexts.firstMatch.swipeLeft()
         app.tables.buttons["Delete"].tap()
         waitforExistence(app.alerts["Delete this login?"])
         // First check the Cancel button
         app.alerts.buttons["Cancel"].tap()
-        waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
-        app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
-        app.tables.buttons["Delete"].tap()
-        waitforExistence(app.alerts["Delete this login?"])
-        // Then Delete the login
-        app.alerts.buttons["Delete"].tap()
-        waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-        // Now check that the login has been removed
-        // On iPad, entry is removed but only from the entry list, the entry detail view is still there
         if !iPad() {
+            waitforExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
+        }
+        // Deleting login only on iPhone
+        if !iPad() {
+            app.tables.cells.staticTexts["aaafakeTesterDelete"].firstMatch.swipeLeft()
+            app.tables.buttons["Delete"].tap()
+            waitforExistence(app.alerts["Delete this login?"])
+            // Then Delete the login
+            app.alerts.buttons["Delete"].tap()
+            waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
             waitforNoExistence(app.tables.cells.staticTexts["aaafakeTesterDelete"])
         }
     }
@@ -97,6 +101,7 @@ class LockwiseXCUITests: BaseTestCase {
 
     func testSettingsAccountUI() {
         loginToEntryListView()
+
         navigator.goto(Screen.AccountSettingsMenu)
         waitforExistence(app.navigationBars["accountSetting.navigationBar"])
         XCTAssertTrue(app.staticTexts["username.Label"].exists)
