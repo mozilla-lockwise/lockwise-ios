@@ -23,16 +23,16 @@ class ItemListView: BaseItemListView {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupRefresh()
-        self.setupSwipeDelete()
-        self.presenter?.onViewReady()
+        setupRefresh()
+        setupSwipeDelete()
+        presenter?.onViewReady()
     }
 
     override func styleNavigationBar() {
         super.styleNavigationBar()
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
     }
 
     override func createPresenter() -> BaseItemListPresenter {
@@ -42,7 +42,7 @@ class ItemListView: BaseItemListView {
 
 extension ItemListView: ItemListViewProtocol {
     var sortButton: UIBarButtonItem? {
-        return self.navigationItem.leftBarButtonItem
+        return navigationItem.leftBarButtonItem
     }
 
     func bind(sortingButtonTitle: Driver<String>) {
@@ -81,11 +81,11 @@ extension ItemListView: ItemListViewProtocol {
     }
 
     var tableViewScrollEnabled: AnyObserver<Bool> {
-        return self.tableView.rx.isScrollEnabled.asObserver()
+        return tableView.rx.isScrollEnabled.asObserver()
     }
 
     var pullToRefreshActive: AnyObserver<Bool>? {
-        return self.tableView.refreshControl!.rx.isRefreshing.asObserver()
+        return tableView.refreshControl!.rx.isRefreshing.asObserver()
     }
 
     var sortingButtonEnabled: AnyObserver<Bool>? {
@@ -134,8 +134,8 @@ extension ItemListView {
     fileprivate func setupRefresh() {
         if let presenter = self.presenter {
             let refreshControl = UIRefreshControl()
-            refreshControl.tintColor = UIColor.white
-            self.tableView.refreshControl = refreshControl
+            refreshControl.tintColor = Constant.color.systemLightGray
+            tableView.refreshControl = refreshControl
             refreshControl.rx.controlEvent(.valueChanged)
                 .bind(to: presenter.refreshObserver)
                 .disposed(by: self.disposeBag)
