@@ -85,3 +85,9 @@ extension AppDelegate {
         }
     }
 }
+
+extension AppDelegate {
+    func application(_ application: UIApplication, willContinueUserActivityWithType userActivityType: String) -> Bool {
+        return true
+    }
+}
