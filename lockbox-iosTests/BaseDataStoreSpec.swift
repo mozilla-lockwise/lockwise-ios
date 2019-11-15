@@ -43,8 +43,9 @@ class BaseDataStoreSpec: QuickSpec {
             self.ensureLockedCalled = true
         }
 
-        func sync(unlockInfo: SyncUnlockInfo) throws {
+        func sync(unlockInfo: SyncUnlockInfo) throws -> String {
             self.syncArgument = unlockInfo
+            return "fake-unlock-info"
         }
 
         func wipeLocal() throws {
@@ -319,8 +320,8 @@ class BaseDataStoreSpec: QuickSpec {
                         it("locks") {
                             _ = try! self.subject.storageState.toBlocking().first()
                             let state = try! self.subject.storageState.toBlocking().first()
-                            expect(self.loginsStorage.ensureLockedCalled).to(beTrue())
-                            expect(state).to(equal(LoginStoreState.Locked))
+                            expect(self.loginsStorage.ensureLockedCalled).to(beTrue(), description: "ensure lock is called")
+                            expect(state).to(equal(LoginStoreState.Locked), description: "lock expectation failed, state is \(String(describing: state))")
                         }
                     }
 

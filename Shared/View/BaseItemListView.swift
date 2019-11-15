@@ -71,12 +71,12 @@ class BaseItemListView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Constant.color.viewBackground
-        self.setNeedsStatusBarAppearanceUpdate()
-        self.styleTableViewBackground()
-        self.styleNavigationBar()
-        self.setupDataSource()
-        self.setupDelegate()
+        view.backgroundColor = Constant.color.viewBackground
+        setNeedsStatusBarAppearanceUpdate()
+        setupTableView()
+        styleNavigationBar()
+        setupDataSource()
+        setupDelegate()
     }
 
     internal func createPresenter() -> BaseItemListPresenter {
@@ -84,21 +84,19 @@ class BaseItemListView: UIViewController {
     }
 
     internal func styleNavigationBar() {
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-
-        self.navigationItem.title = Constant.string.productName
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
-        self.navigationController?.navigationBar.titleTextAttributes = [
+        navigationItem.title = Constant.string.productName
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.accessibilityIdentifier = "firefoxLockwise.navigationBar"
+        navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
+        
+        searchController = self.getStyledSearchController()
 
-        self.navigationItem.largeTitleDisplayMode = .always
-
-        self.searchController = self.getStyledSearchController()
-
-        self.extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+        extendedLayoutIncludesOpaqueBars = true // Fixes tapping the status bar from showing partial pull-to-refresh
+        navigationController?.iosThirteenNavBarAppearance()
     }
 
     func getStyledSearchController() -> UISearchController {
@@ -308,10 +306,11 @@ extension BaseItemListView {
 
 // view styling
 extension BaseItemListView {
-    fileprivate func styleTableViewBackground() {
+    fileprivate func setupTableView() {
         let backgroundView = UIView(frame: self.view.bounds)
         backgroundView.backgroundColor = Constant.color.viewBackground
-        self.tableView.backgroundView = backgroundView
+        tableView.backgroundView = backgroundView
+        tableView.keyboardDismissMode = .onDrag
     }
 }
 

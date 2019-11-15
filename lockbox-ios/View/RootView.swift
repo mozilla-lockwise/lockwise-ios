@@ -5,6 +5,7 @@
 import UIKit
 
 class RootView: UIViewController, RootViewProtocol {
+    
     func sidebarViewIs<T: UIViewController>(_ type: T.Type) -> Bool {
         if let splitViewController = self.currentViewController as? UISplitViewController {
             if let navController = splitViewController.viewControllers.first as? UINavigationController {
@@ -74,6 +75,7 @@ class RootView: UIViewController, RootViewProtocol {
         super.viewDidLoad()
         self.presenter?.onViewReady()
         self.view.backgroundColor = Constant.color.navBackgroundColor
+        self.presenter?.changeDisplay(traitCollection: traitCollection)
     }
 
     func topViewIs<T: UIViewController>(_ type: T.Type) -> Bool {

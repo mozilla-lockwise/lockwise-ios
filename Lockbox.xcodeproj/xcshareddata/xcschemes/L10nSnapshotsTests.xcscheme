@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0940"
+   LastUpgradeVersion = "1110"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -61,6 +61,15 @@
             </ActionContent>
          </ExecutionAction>
       </PreActions>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
+            BuildableName = "LockwiseXCUITests.xctest"
+            BlueprintName = "LockwiseXCUITests"
+            ReferencedContainer = "container:Lockbox.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -78,17 +87,6 @@
             </SkippedTests>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2C2EC55120ADA85A00AF8C44"
-            BuildableName = "LockwiseXCUITests.xctest"
-            BlueprintName = "LockwiseXCUITests"
-            ReferencedContainer = "container:Lockbox.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -109,8 +107,6 @@
             ReferencedContainer = "container:Lockbox.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

@@ -10,7 +10,7 @@ public protocol LoginsStorageProtocol {
     func isLocked() -> Bool
     func ensureUnlocked(withEncryptionKey key: String) throws
     func ensureLocked()
-    func sync(unlockInfo: SyncUnlockInfo) throws
+    func sync(unlockInfo: MozillaAppServices.SyncUnlockInfo) throws -> String
     func wipeLocal() throws
     func get(id: String) throws -> LoginRecord?
     func touch(id: String) throws
