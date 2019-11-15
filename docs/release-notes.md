@@ -1,6 +1,6 @@
 # Release Notes
 
-## 1.7.0 (Build 3874)
+## 1.7.0 (Build 3871)
 
 _Date: 2019-11-15_
 
