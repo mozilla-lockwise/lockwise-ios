@@ -1,5 +1,19 @@
 # Release Notes
 
+## 1.6.3 (Build 3873)
+
+_Date: 2019-11-15_
+
+We fixed bugs related to: iOS 13 layout and navigation bar issues, keyboard dismissal when viewing login list
+
+All changes since last build and version 1.6.2:
+
+- update codebase for Xcode 11.2.1 and Swift 5.1.2
+- bump application-services to v0.42.3
+- update RxSwift to most recent version built with Swift 5
+- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad
+- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout
+
 ## 1.6.2 (Build 3616)
 
 _Date: 2019-06-26_
