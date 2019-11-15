@@ -1,13 +1,16 @@
 # Release Notes
 
-## 1.6.3 (Build 3873)
+## 1.7.0 (Build 3874)
 
 _Date: 2019-11-15_
 
+New Feature: Swipe to delete a credential on the login list screen
 We fixed bugs related to: iOS 13 layout and navigation bar issues, keyboard dismissal when viewing login list
 
 All changes since last build and version 1.6.2:
 
+- Add swipe to delete functionality on login list screen
+- Add telemetry to opening external websites and add sync telemetry
 - update codebase for Xcode 11.2.1 and Swift 5.1.2
 - bump application-services to v0.42.3
 - update RxSwift to most recent version built with Swift 5
