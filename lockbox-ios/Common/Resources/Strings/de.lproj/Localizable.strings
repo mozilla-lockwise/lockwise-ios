@@ -260,7 +260,7 @@
 "website_accessibility_instructions" = "Internetadresse: doppeltippen, um sie im Browser %@ zu öffnen";
 
 /* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
-"welcome.accessProduct" = "Um %@ zu verwenden, benötigen Sie ein Firefox-Konto mit gespeicherten Zugangsdaten.";
+"welcome.accessProduct" = "Um %@ zu verwenden, benötigst du ein Firefox-Konto mit gespeicherten Zugangsdaten.";
 
 /* Text on button to unlock app */
 "welcome.unlockButton" = "Entsperren";

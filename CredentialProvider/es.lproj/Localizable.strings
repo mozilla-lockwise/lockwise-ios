@@ -31,6 +31,9 @@
 /* Sign in button text */
 "signIn" = "Iniciar sesión";
 
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "La sincronización ha expirado";
+
 /* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
 "unlock_placeholder" = "Se desbloqueará la aplicación.";
 

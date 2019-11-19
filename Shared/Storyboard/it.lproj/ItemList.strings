@@ -14,7 +14,7 @@
 "aQB-Vr-ObR.normalTitle" = "Ulteriori informazioni";
 
 /* Class = "UILabel"; text = "No logins found."; ObjectID = "gQr-4J-xpv"; Note = "This is the message informing the user the account has no logins available"; */
-"gQr-4J-xpv.text" = "Nessuna credenziale trovata.";
+"gQr-4J-xpv.text" = "Credenziali non trovate.";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "n2T-XM-ua9"; Note = "This is a placeholder string for development purposes only"; */
 "n2T-XM-ua9.text" = "Etichetta";
