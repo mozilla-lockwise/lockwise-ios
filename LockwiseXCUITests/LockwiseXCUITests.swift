@@ -142,7 +142,7 @@ class LockwiseXCUITests: BaseTestCase {
         loginToEntryListView()
 
         // Use one entry
-        app.tables.cells.staticTexts["fakeTester33333"].tap()
+        app.tables.cells.staticTexts["fakeTester33331"].tap()
         // Copy its username and open the website
         let userName = app.cells["userNameItemDetail"]
         userName.press(forDuration: 1)
