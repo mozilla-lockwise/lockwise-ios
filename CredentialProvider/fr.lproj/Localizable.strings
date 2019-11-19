@@ -8,7 +8,7 @@
 "autofill.signInRequired" = "Connexion nécessaire";
 
 /* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
-"autofill.signInRequiredBody" = "Vous devez être connecté(e) à %@ pour que le remplissage automatique autorise l’accès aux mots de passe qu’il contient.";
+"autofill.signInRequiredBody" = "Vous devez être connecté·e à %@ pour que le remplissage automatique autorise l’accès aux mots de passe qu’il contient.";
 
 /* Cancel button title */
 "cancel" = "Annuler";
