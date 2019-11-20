@@ -51,8 +51,8 @@ class AccountStore: BaseAccountStore {
     }
 
     private var generatedLoginURL: Observable<URL> {
-        return Observable.create({ observer -> Disposable in
-            self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes, wantsKeys: true) { url, err in
+        return Observable.create( { observer -> Disposable in
+            self.fxa?.beginOAuthFlow(scopes: Constant.fxa.scopes) { url, err in
                 if let err = err {
                     observer.onError(err)
                 }

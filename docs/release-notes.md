@@ -1,5 +1,41 @@
 # Release Notes
 
+## 1.7.0 (Build 3902)
+
+_Date: 2019-11-19_
+
+New Feature: Swipe to delete a credential on the login list screen
+We fixed bugs related to: iOS 13 layout and navigation bar issues, keyboard dismissal when viewing login list
+
+All changes since last build and version 1.6.2:
+
+- Add swipe to delete functionality on login list screen
+- Add telemetry to opening external websites and add sync telemetry
+- update codebase for Xcode 11.2.1 and Swift 5.1.2
+- bump application-services to v0.42.3
+- update RxSwift to most recent version built with Swift 5
+- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad
+- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout
+- import new localization strings from pontoon
+
+
+## 1.7.0 (Build 3871)
+
+_Date: 2019-11-15_
+
+New Feature: Swipe to delete a credential on the login list screen
+We fixed bugs related to: iOS 13 layout and navigation bar issues, keyboard dismissal when viewing login list
+
+All changes since last build and version 1.6.2:
+
+- Add swipe to delete functionality on login list screen
+- Add telemetry to opening external websites and add sync telemetry
+- update codebase for Xcode 11.2.1 and Swift 5.1.2
+- bump application-services to v0.42.3
+- update RxSwift to most recent version built with Swift 5
+- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad
+- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout
+
 ## 1.6.2 (Build 3616)
 
 _Date: 2019-06-26_

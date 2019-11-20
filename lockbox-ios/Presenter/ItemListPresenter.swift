@@ -54,7 +54,7 @@ class ItemListPresenter: BaseItemListPresenter {
     lazy private(set) var refreshObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: PullToRefreshAction(refreshing: true))
-            target.dispatcher.dispatch(action: DataStoreAction.sync)
+            target.dispatcher.dispatch(action: DataStoreAction.syncStart)
         }.asObserver()
     }()
 
@@ -227,7 +227,7 @@ extension ItemListPresenter {
         Observable.combineLatest(self.dataStore.syncState, isManualRefreshObservable)
                 .map { SyncStateManual(syncState: $0.0, manualSync: $0.1.refreshing) }
                 .asDriver(onErrorJustReturn: SyncStateManual(syncState: .Synced, manualSync: false))
-                .throttle(2.0)
+                .throttle(DispatchTimeInterval.seconds(2))
                 .drive(onNext: { latest in
                     if latest.syncState == .Syncing(supressNotification: false) && !latest.manualSync {
                         self.view?.displaySpinner(hideSpinnerObservable,

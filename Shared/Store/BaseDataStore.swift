@@ -123,7 +123,7 @@ class BaseDataStore {
                         self.updateCredentials(syncCredential)
                     case .reset:
                         self.reset()
-                    case .sync:
+                    case .syncStart:
                         self.sync()
                     case .touch(let id):
                         self.touch(id: id)
@@ -135,6 +135,8 @@ class BaseDataStore {
                         self.delete(id: id)
                     case .update(let login):
                         self.update(login)
+                    default:
+                        break
                     }
                 })
                 .disposed(by: self.disposeBag)
@@ -221,7 +223,7 @@ extension BaseDataStore {
                         self.dispatcher.dispatch(action: ItemDeletedAction(name: title, id: record.id))
 
                         do {
-                            try self.loginsStorage?.delete(id: id)
+                            _ = try self.loginsStorage?.delete(id: id)
                         } catch let error as LoginsStoreError {
                             self.pushError(error)
                         } catch let error {
@@ -274,17 +276,20 @@ extension BaseDataStore {
                 if (self.syncSubject.value != .Synced) {
                     self.syncSubject.accept(.TimedOut)
                     self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, line: ""))
+                    self.dispatcher.dispatch(action: DataStoreAction.syncTimeout)
                 }
             })
 
             do {
-                try self.loginsStorage?.sync(unlockInfo: syncInfo)
+                _ = try self.loginsStorage?.sync(unlockInfo: syncInfo)
             } catch let error as LoginsStoreError {
                 self.pushError(error)
+                self.dispatcher.dispatch(action: DataStoreAction.syncError(error: error.errorDescription ?? ""))
             } catch let error {
                 NSLog("DATASTORE:: Unknown error syncing: \(error)")
             }
             self.syncSubject.accept(SyncState.Synced)
+            self.dispatcher.dispatch(action: DataStoreAction.syncEnd)
         }
     }
 

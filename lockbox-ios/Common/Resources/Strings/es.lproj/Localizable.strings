@@ -106,6 +106,9 @@
 /* Placeholder text for search field */
 "search.placeholder" = "Buscar usuarios";
 
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Sincroniza entre dispositivos con un cifrado seguro de 256-bit";
+
 /* Label for button allowing users to go to passcode settings */
 "set_passcode" = "Establecer código de acceso";
 
@@ -216,6 +219,9 @@
 
 /* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
 "sorting_options" = "Selecciona las opciones para ordenar la lista de usuarios (actualmente %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "La sincronización ha expirado";
 
 /* Label and accessibility callout for Syncing your logins spinner and HUD */
 "syncing_entries" = "Sincronizar usuarios";

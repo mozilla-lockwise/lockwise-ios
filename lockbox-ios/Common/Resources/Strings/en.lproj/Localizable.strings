@@ -164,7 +164,7 @@
 "settings.browser.focus" = "Firefox Focus";
 
 /* Header displayed above browser choice settings. */
-"settings.browser.header" = "Select which browser use with Lockwise";
+"settings.browser.header" = "Select which browser to use with Lockwise";
 
 /* Klar Browser */
 "settings.browser.klar" = "Firefox Klar";

@@ -213,9 +213,28 @@ class ItemDetailPresenterSpec: QuickSpec {
                 )
             }
 
+            describe("onPasswordToggle") {
+                let passwordRevealSelected = true
+                beforeEach {
+                    let tapObservable = self.scheduler.createColdObservable([Recorded.next(50, passwordRevealSelected)])
+
+                    tapObservable
+                            .bind(to: self.subject.onPasswordToggle)
+                            .disposed(by: self.disposeBag)
+
+                    self.scheduler.start()
+                }
+
+                it("dispatches the password action with the value") {
+                    expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
+                    let action = self.dispatcher.dispatchActionArgument.last as! ItemDetailDisplayAction
+                    expect(action).to(equal(.togglePassword(displayed: passwordRevealSelected)))
+                }
+            }
+
             describe("when swiping right") {
                 beforeEach {
-                    let cancelObservable = self.scheduler.createColdObservable([next(50, ())])
+                    let cancelObservable = self.scheduler.createColdObservable([Recorded.next(50, ())])
 
                     cancelObservable
                             .bind(to: self.subject.onRightSwipe)

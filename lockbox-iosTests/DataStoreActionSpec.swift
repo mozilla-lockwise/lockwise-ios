@@ -37,7 +37,8 @@ class DataStoreActionSpec: QuickSpec {
                 expect(DataStoreAction.lock).to(equal(DataStoreAction.lock))
                 expect(DataStoreAction.unlock).to(equal(DataStoreAction.unlock))
                 expect(DataStoreAction.reset).to(equal(DataStoreAction.reset))
-                expect(DataStoreAction.sync).to(equal(DataStoreAction.sync))
+                expect(DataStoreAction.syncStart).to(equal(DataStoreAction.syncStart))
+                expect(DataStoreAction.syncTimeout).to(equal(DataStoreAction.syncTimeout))
             }
 
             it("touch is equal based on IDs") {
@@ -48,8 +49,8 @@ class DataStoreActionSpec: QuickSpec {
             it("different enum types are never equal") {
                 expect(DataStoreAction.unlock).notTo(equal(DataStoreAction.lock))
                 expect(DataStoreAction.lock).notTo(equal(DataStoreAction.unlock))
-                expect(DataStoreAction.sync).notTo(equal(DataStoreAction.reset))
-                expect(DataStoreAction.reset).notTo(equal(DataStoreAction.sync))
+                expect(DataStoreAction.syncStart).notTo(equal(DataStoreAction.reset))
+                expect(DataStoreAction.reset).notTo(equal(DataStoreAction.syncStart))
             }
 
             it("update login equal based on logins") {
@@ -58,6 +59,11 @@ class DataStoreActionSpec: QuickSpec {
                 expect(DataStoreAction.update(login: login1)).to(equal(DataStoreAction.update(login: login1)))
                 expect(DataStoreAction.update(login: login1)).notTo(equal(DataStoreAction.update(login: login2)))
             }
+            it("syncError are equal based onerror") {
+                expect(DataStoreAction.syncError(error: "asdf")).to(equal(DataStoreAction.syncError(error: "asdf")))
+                expect(DataStoreAction.syncError(error: "asdf")).notTo(equal(DataStoreAction.syncError(error: "fdsa")))
+            }
+
         }
     }
 }

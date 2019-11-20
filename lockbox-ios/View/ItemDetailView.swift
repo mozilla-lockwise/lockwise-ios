@@ -132,19 +132,21 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
     }
 
     fileprivate func setupNavigation() {
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [
+        navigationController?.navigationBar.tintColor = UIColor.white
+        navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white,
             .font: UIFont.navigationTitleFont
         ]
 
         let leftButton = UIButton(title: Constant.string.back, imageName: "back")
         leftButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         let rightButton = UIButton(title: Constant.string.edit, imageName: nil)
         rightButton.titleLabel?.font = .navigationButtonFont
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.iosThirteenNavBarAppearance()
     }
 
     fileprivate func setupDataSource() {
