@@ -142,7 +142,7 @@ class LockwiseXCUITests: BaseTestCase {
         loginToEntryListView()
 
         // Use one entry
-        app.tables.cells.staticTexts["fakeTester33333"].tap()
+        app.tables.cells.staticTexts["fakeTester33331"].tap()
         // Copy its username and open the website
         let userName = app.cells["userNameItemDetail"]
         userName.press(forDuration: 1)
@@ -151,7 +151,7 @@ class LockwiseXCUITests: BaseTestCase {
         app.buttons["open.button"].tap()
 
         // Safari is open
-        waitforExistence(safari.buttons["URL"], timeout: 30)
+        waitforExistence(safari.webViews["WebView"], timeout: 30)
         safari.terminate()
         // Close Safari and re-open the app
         app.launch()
