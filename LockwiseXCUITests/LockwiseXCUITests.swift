@@ -151,7 +151,7 @@ class LockwiseXCUITests: BaseTestCase {
         app.buttons["open.button"].tap()
 
         // Safari is open
-        waitforExistence(safari.buttons["URL"], timeout: 30)
+        waitforExistence(safari.webViews["WebView"], timeout: 30)
         safari.terminate()
         // Close Safari and re-open the app
         app.launch()
