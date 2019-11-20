@@ -323,6 +323,10 @@
 		D8DD93072140D8D900F8041D /* AutofillOnboardingPresenterSpec.swift */ = {isa = PBXBuildFile; fileRef = D8DD93052140D7CA00F8041D /* AutofillOnboardingPresenterSpec.swift */; };
 		D8DD93092140DB1100F8041D /* AutofillOnboardingViewSpec.swift */ = {isa = PBXBuildFile; fileRef = D8DD93082140DB1100F8041D /* AutofillOnboardingViewSpec.swift */; };
 		D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift */ = {isa = PBXBuildFile; fileRef = D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */; };
+        CD7DFE7C2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
+        CD7DFE7D2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
+        CD7DFE7E2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
+        CD7DFE7F2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -565,6 +569,7 @@
 		80C24E078F9DA15264F2FA6F /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0E84623AB91A6A141DD8403 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B3554B229BDD46895D14A661 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 		CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerExtension.swift; sourceTree = "<group>"; };
 		D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotsXCUITests.swift; sourceTree = "<group>"; };
 		D50920F62284A18100AC9580 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ItemList.strings; sourceTree = "<group>"; };
@@ -944,6 +949,7 @@
 		7D078EE12124DC0A00D10D1B /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				CD7DFE7623762E26004FB690 /* FeatureFlags */,
 				7D2712B7224D70D700E6C4CA /* Model */,
 				7D9722BE21345FE60071D82B /* Storyboard */,
 				7D9722BD21345FD50071D82B /* Presenter */,
@@ -1291,6 +1297,14 @@
 			path = Store;
 			sourceTree = "<group>";
 		};
+		CD7DFE7623762E26004FB690 /* FeatureFlags */ = {
+			isa = PBXGroup;
+			children = (
+				CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */,
+			);
+			path = FeatureFlags;
+			sourceTree = "<group>";
+		};
 		CDBBCBFD2374CEC90030BF80 /* Extensions-UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1596,6 +1610,7 @@
 				2C2EC56420ADAB5400AF8C44 /* BaseTestCase.swift */,
 				2C2EC56220ADAB1D00AF8C44 /* LockwiseScreenGraph.swift */,
 				7AA54A18A8CB61CD8D086821 /* SnapshotHelper.swift */,
+                CD7DFE7E2376322B004FB690 /* FeatureFlags.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1639,6 +1654,7 @@
 				7D897EAB2260F96100257946 /* NetworkStoreSpec.swift */,
 				D8C9C520207DC53B007874E1 /* PreferredBrowserSettingViewSpec.swift */,
 				D8D029262062F46600CC01C6 /* MainNavigationControllerSpec.swift */,
+                CD7DFE7D2376322B004FB690 /* FeatureFlags.swift in Sources */,
 				7AA54896CA92B9048C531179 /* LoginNavigationControllerSpec.swift */,
 				7AA545ADA952B5C4ECF6D313 /* ItemDetailPresenterSpec.swift */,
 				7AA54B381C4053C210A6B8F2 /* ItemDetailViewSpec.swift */,
@@ -1722,6 +1738,7 @@
 				D819A4C221BB2686004EE6F3 /* Bytes.swift */,
 				7AA54E848015F62023D3689C /* DataStoreAction.swift */,
 				7AA540F07AF5551122E0EDB7 /* ErrorAction.swift */,
+                CD7DFE7C2376322B004FB690 /* FeatureFlags.swift in Sources */,
 				D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift */,
 				7D1B22042033C57F0098C3A3 /* ItemDetailView.swift */,
 				D8DA03DA215B34FC00656455 /* AutofillInstructionsPresenter.swift */,
@@ -1872,6 +1889,7 @@
 				3931871F214C12C7003C9E4A /* AppearanceHelper.swift */,
 				7D078EED2124DCF500D10D1B /* TelemetryAction.swift */,
 				7AA548349DDB5D1CF52DD82E /* CredentialWelcomeView.swift */,
+                CD7DFE7F2376322B004FB690 /* FeatureFlags.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1894,6 +1912,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockwiseXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG -DDEBUG";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Firefox Lockbox";
@@ -1916,6 +1935,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockwiseXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG -DDEBUG";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Firefox Lockbox";
@@ -1938,6 +1958,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mozilla.LockwiseXCUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "-DRELEASE";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Firefox Lockbox";
