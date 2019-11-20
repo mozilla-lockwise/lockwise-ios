@@ -70,7 +70,7 @@ extension Constant.string {
     static let autoLockTwentyFourHours = NSLocalizedString("settings.autoLock.twentyFourHour", value: "24 hours", comment: "24 hours auto lock setting")
     static let autoLockNever = NSLocalizedString("settings.autoLock.never", value: "Never", comment: "Never")
     static let autoLockHeader = NSLocalizedString("settings.autoLock.header", value: "Select when to lock after a period of inactivity", comment: "Header displayed above auto lock settings.")
-    static let browserHeader = NSLocalizedString("settings.browser.header", value: "Select which browser use with Lockwise", comment: "Header displayed above browser choice settings.")
+    static let browserHeader = NSLocalizedString("settings.browser.header", value: "Select which browser to use with Lockwise", comment: "Header displayed above browser choice settings.")
     static let settingsBrowserChrome = NSLocalizedString("settings.browser.chrome", value: "Google Chrome", comment: "Chrome Browser")
     static let settingsBrowserFirefox = NSLocalizedString("settings.browser.firefox", value: "Firefox", comment: "Firefox Browser")
     static let settingsBrowserFocus = NSLocalizedString("settings.browser.focus", value: "Firefox Focus", comment: "Focus Browser")
