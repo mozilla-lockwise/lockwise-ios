@@ -93,7 +93,7 @@ class SnapshotsXCUITests: BaseTestCase {
     }
     
     func testEntriesSortAndSearchSnapshots() {
-        let firstEntryRecentOrder = "bmo.com"
+        let firstEntryRecentOrder = "arncyvuzox.co.uk"
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
         
@@ -139,10 +139,8 @@ class SnapshotsXCUITests: BaseTestCase {
         // Show the Delete option
         app.tables.cells.staticTexts["amazon.com"].swipeLeft()
         snapshot("DeleteButton" + CONTENT_SIZE)
-        // Tap on Delete button
-        app.tables.buttons.firstMatch.tap()
+        // Tap on Delete button but do not delete
+        app.tables.buttons["trailing0"].tap()
         snapshot("DeleteAlertDialog" + CONTENT_SIZE)
-        // Cancel deleting the login
-        app.alerts.buttons.firstMatch.tap()
     }
 }
