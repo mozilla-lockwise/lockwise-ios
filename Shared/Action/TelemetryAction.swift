@@ -63,14 +63,13 @@ enum ExtraKey: String {
 }
 
 class GleanActionHandler: ActionHandler {
-    private let glean = Glean.shared
-    
     private var disposeBag = DisposeBag()
     
-    init() {
-        UserDefaultStore.shared.recordUsageData.subscribe(
+    init(glean: Glean = Glean.shared,
+         store: UserDefaultStore = UserDefaultStore.shared) {
+        store.recordUsageData.subscribe(
             onNext: { uploadEnabled in
-                self.glean.setUploadEnabled(uploadEnabled)
+                glean.setUploadEnabled(uploadEnabled)
             },
             onError: nil,
             onCompleted: nil,
