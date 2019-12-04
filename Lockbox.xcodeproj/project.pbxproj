@@ -327,6 +327,7 @@
         CD7DFE7D2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
         CD7DFE7E2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
         CD7DFE7F2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
+		1F33DE14237E32500002BA6B /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F33DE0D237E036B0002BA6B /* Glean.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -359,6 +360,7 @@
 /* Begin PBXFileReference section */
 		08454B9621486AAC00328040 /* CredentialUserDefaultStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialUserDefaultStore.swift; sourceTree = "<group>"; };
 		08454B9921486BCE00328040 /* TelemetryStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TelemetryStore.swift; path = Shared/Store/TelemetryStore.swift; sourceTree = SOURCE_ROOT; };
+		1F33DE0D237E036B0002BA6B /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
 		22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingConfirmationPresenterSpec.swift; sourceTree = "<group>"; };
 		224A6C7C212C8C2B008C7A3F /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		226E3FEF2127759C00185D11 /* ExternalLinkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinkStore.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 				7D4396572135D79800B96FA9 /* Sentry.framework */,
 				7D897EAD2260FFA800257946 /* Reachability.framework */,
 				7D116242225FE11C009097C7 /* MozillaAppServices.framework */,
+				1F33DE14237E32500002BA6B /* Glean.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1058,6 +1061,7 @@
 		7D1B1A8A1F98F86400C1F5FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1F33DE0D237E036B0002BA6B /* Glean.framework */,
 				7DF455DB22A1D3D200207285 /* RxRelay.framework */,
 				7D897EAC2260FFA800257946 /* Reachability.framework */,
 				7D11623E225FDD27009097C7 /* SystemConfiguration.framework */,
@@ -1565,6 +1569,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxRelay.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
 			);
 			name = "Run Script";
 			outputPaths = (
@@ -1580,6 +1585,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sentry.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Reachability.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRelay.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Glean.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

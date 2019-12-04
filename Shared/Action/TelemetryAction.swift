@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Glean
 import Telemetry
 import RxSwift
 import RxCocoa
@@ -59,6 +60,25 @@ enum TelemetryEventObject: String {
 
 enum ExtraKey: String {
     case fxauid, itemid, error
+}
+
+class GleanActionHandler: ActionHandler {
+    private let glean = Glean.shared
+    
+    private var disposeBag = DisposeBag()
+    
+    init() {
+        UserDefaultStore.shared.recordUsageData.subscribe(
+            onNext: { uploadEnabled in
+                self.glean.setUploadEnabled(uploadEnabled)
+            },
+            onError: nil,
+            onCompleted: nil,
+            onDisposed: nil
+        ).disposed(by: self.disposeBag)
+        
+        glean.initialize()
+    }
 }
 
 class TelemetryActionHandler: ActionHandler {

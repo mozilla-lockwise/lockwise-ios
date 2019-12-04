@@ -52,6 +52,7 @@ class RootPresenter {
     fileprivate let userDefaultStore: UserDefaultStore
     fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
+    fileprivate let gleanActionHandler: GleanActionHandler
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: SentryStore
     fileprivate let adjustManager: AdjustManager
@@ -72,6 +73,7 @@ class RootPresenter {
          userDefaultStore: UserDefaultStore = .shared,
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
+         gleanActionHandler: GleanActionHandler = GleanActionHandler(),
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: SentryStore = SentryStore.shared,
          adjustManager: AdjustManager = AdjustManager.shared,
@@ -88,6 +90,7 @@ class RootPresenter {
         self.userDefaultStore = userDefaultStore
         self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
+        self.gleanActionHandler = gleanActionHandler
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
         self.adjustManager = adjustManager
