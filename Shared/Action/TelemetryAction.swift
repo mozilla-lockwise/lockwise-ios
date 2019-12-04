@@ -69,6 +69,10 @@ class GleanActionHandler: ActionHandler {
          store: UserDefaultStore = UserDefaultStore.shared) {
         store.recordUsageData.subscribe(
             onNext: { uploadEnabled in
+                // This is invoked once during the call to subscribe on
+                // the main thread, so it will ensure that the Glean
+                // requirement to call `setUploadEnabled()` before
+                // `initialize()` is called below
                 glean.setUploadEnabled(uploadEnabled)
             },
             onError: nil,
