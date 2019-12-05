@@ -80,6 +80,7 @@ class AccountStore: BaseAccountStore {
     override func initialized() {
         self.dispatcher.register
                 .filterByType(class: AccountAction.self)
+                .observeOn(MainScheduler.instance)
                 .subscribe(onNext: { action in
                     switch action {
                     case .oauthRedirect(let url):
@@ -149,12 +150,12 @@ extension AccountStore {
             self.webData.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records) { }
         }
 
-        self.urlCache.removeAllCachedResponses()
+        urlCache.removeAllCachedResponses()
 
-        self._profile.onNext(nil)
-        self._syncCredentials.onNext(nil)
+        _profile.onNext(nil)
+        _syncCredentials.onNext(nil)
 
-        self.initFxa()
+        initFxa()
     }
 
     private func clearOldKeychainValues() {
