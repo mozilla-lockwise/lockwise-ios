@@ -25,6 +25,7 @@ class CredentialProviderPresenter {
     private let userDefaultStore: UserDefaultStore
     fileprivate let dataStore: DataStore
     private let telemetryActionHandler: TelemetryActionHandler
+    private let gleanActionHandler: GleanActionHandler
     private let credentialProviderStore: CredentialProviderStore
     private var credentialProvisionBag = DisposeBag()
     private let disposeBag = DisposeBag()
@@ -36,6 +37,7 @@ class CredentialProviderPresenter {
          userDefaultStore: UserDefaultStore = .shared,
          dataStore: DataStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
+         gleanActionHandler: GleanActionHandler = GleanActionHandler(),
          credentialProviderStore: CredentialProviderStore = .shared,
          sizeClassStore: SizeClassStore = .shared) { // SizeClassStore needs to be initialized
         self.view = view
@@ -45,6 +47,7 @@ class CredentialProviderPresenter {
         self.userDefaultStore = userDefaultStore
         self.dataStore = dataStore
         self.telemetryActionHandler = telemetryActionHandler
+        self.gleanActionHandler = gleanActionHandler
         self.credentialProviderStore = credentialProviderStore
 
         self.accountStore.syncCredentials

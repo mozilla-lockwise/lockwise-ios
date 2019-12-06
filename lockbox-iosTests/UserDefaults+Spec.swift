@@ -8,6 +8,7 @@ import Nimble
 import RxSwift
 import RxTest
 import RxCocoa
+import Glean
 
 @testable import Lockbox
 
@@ -69,6 +70,18 @@ class UserDefaultSpec: QuickSpec {
             it("pushs new values for the correct setting key") {
                 UserDefaults.standard.set(false, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
                 expect(recordUsageDataSettingObserver.events.last!.value.element).to(beFalse())
+            }
+
+            it("triggers Glean.setUploadEnabled() before Glean.initialize()") {
+                // Set the default value to false since Glean upload enabled flag defaults to true.
+                UserDefaultStore.shared.userDefaults
+                    .set(false, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
+                // Create the ActionHandler which will should call `Glean.shared.setUploadEnabled()`
+                // and `Glean.shared.initialize()`.  Since upload defaults to true in Glean, if this
+                // is false it means that initialize is called after setUploadEnabled has been called
+                // with the value that was just set above.
+                _ = GleanActionHandler()
+                expect(Glean.shared.getUploadEnabled()).to(beFalse())
             }
         }
     }
