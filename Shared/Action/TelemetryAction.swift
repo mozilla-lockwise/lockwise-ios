@@ -67,7 +67,9 @@ class GleanActionHandler: ActionHandler {
     
     init(glean: Glean = Glean.shared,
          store: UserDefaultStore = UserDefaultStore.shared) {
-        store.recordUsageData.subscribe(
+        store.recordUsageData
+            .observeOn(MainScheduler.instance)
+            .subscribe(
             onNext: { uploadEnabled in
                 // This is invoked once during the call to subscribe on
                 // the main thread, so it will ensure that the Glean
