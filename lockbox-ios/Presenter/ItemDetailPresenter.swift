@@ -109,7 +109,7 @@ class ItemDetailPresenter {
     }
 
     func onViewReady() {
-        let itemObservable = self.dataStore.locked
+        let itemObservable = dataStore.locked
                 .filter { !$0 }
                 .take(1)
                 .flatMap { _ in self.itemDetailStore.itemDetailId }
@@ -119,8 +119,8 @@ class ItemDetailPresenter {
         itemObservable.asDriver(onErrorJustReturn: nil)
                 .filterNil()
                 .map { self.configurationForLogin($0) }
-                .drive(self.view!.itemDetailObserver)
-                .disposed(by: self.disposeBag)
+                .drive(view!.itemDetailObserver)
+                .disposed(by: disposeBag)
 
         itemObservable
                 .filterNil()
@@ -129,25 +129,28 @@ class ItemDetailPresenter {
                     return title.isEmpty ? Constant.string.unnamedEntry : title
                 }
                 .asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
-                .drive(self.view!.titleText)
-                .disposed(by: self.disposeBag)
+                .drive(view!.titleText)
+                .disposed(by: disposeBag)
 
-        self.setupEdit()
-        self.setupCopy(itemObservable: itemObservable)
-        self.setupNavigation(itemObservable: itemObservable)
+        // Only allow edit functionality on debug builds
+        if FeatureFlags.crudEdit {
+            setupEdit()
+        }
+        setupCopy(itemObservable: itemObservable)
+        setupNavigation(itemObservable: itemObservable)
     }
 
     private func setupEdit() {
-        self.itemDetailStore.isEditing
+        itemDetailStore.isEditing
                 .map { !$0 }
-                .subscribe(self.view!.deleteHidden)
-                .disposed(by: self.disposeBag)
+                .subscribe(view!.deleteHidden)
+                .disposed(by: disposeBag)
 
-        self.itemDetailStore.isEditing
+        itemDetailStore.isEditing
                 .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
 
-        self.view?.deleteTapped
+        view?.deleteTapped
             .subscribe(onNext: { (_) in
                 self.view?.displayAlertController(
                     buttons: [
@@ -167,7 +170,7 @@ class ItemDetailPresenter {
                     style: .alert,
                     barButtonItem: nil)
             })
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
@@ -177,10 +180,10 @@ class ItemDetailPresenter {
         itemObservable
                 .asDriver(onErrorJustReturn: nil)
                 .drive(itemDetailRelay)
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
 
-        self.view?.cellTapped
-                .withLatestFrom(self.itemDetailStore.isEditing) { cellTitle, isEditing -> String? in
+        view?.cellTapped
+                .withLatestFrom(itemDetailStore.isEditing) { cellTitle, isEditing -> String? in
                     return !isEditing ? cellTitle : nil
                 }
                 .filterNil()
@@ -205,9 +208,9 @@ class ItemDetailPresenter {
                         self.dispatcher.dispatch(action: action)
                     }
                 })
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
 
-        self.copyDisplayStore.copyDisplay
+        copyDisplayStore.copyDisplay
                 .drive(onNext: { field in
                     let fieldName: String
                     switch field {
@@ -218,12 +221,12 @@ class ItemDetailPresenter {
                     let message = String(format: Constant.string.fieldNameCopied, fieldName)
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: nil)
                 })
-        .disposed(by: self.disposeBag)
+        .disposed(by: disposeBag)
     }
 
     private func setupNavigation(itemObservable: Observable<LoginRecord?>) {
-        self.view?.leftBarButtonTapped
-                .withLatestFrom(self.itemDetailStore.isEditing) { _, editing -> Action? in
+        view?.leftBarButtonTapped
+                .withLatestFrom(itemDetailStore.isEditing) { _, editing -> Action? in
                     if editing {
                         self.view?.displayAlertController(
                             buttons: [
@@ -248,72 +251,75 @@ class ItemDetailPresenter {
                 }
                 .filterNil()
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
 
-        let editingObservable = Observable.combineLatest(self.itemDetailStore.usernameEditValue,
-                                                         self.itemDetailStore.passwordEditValue,
-                                                         self.itemDetailStore.webAddressEditValue,
-                                                         self.itemDetailStore.isEditing,
+        let editingObservable = Observable.combineLatest(itemDetailStore.usernameEditValue,
+                                                         itemDetailStore.passwordEditValue,
+                                                         itemDetailStore.webAddressEditValue,
+                                                         itemDetailStore.isEditing,
                                                          itemObservable)
 
-        self.view?.rightBarButtonTapped
+        //Only allow edit functional on debug builds
+        if FeatureFlags.crudEdit {
+            view?.rightBarButtonTapped
                 .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
                     let (username, password, webAddress, editing, item) = tuple
                     if editing {
                         if let item = item {
-                                item.username = username
-                                item.password = password
-                                item.hostname = webAddress
-                                return [DataStoreAction.update(login: item),
-                                        ItemDetailDisplayAction.viewMode]
+                            item.username = username
+                            item.password = password
+                            item.hostname = webAddress
+                            return [DataStoreAction.update(login: item),
+                                    ItemDetailDisplayAction.viewMode]
                         }
                     } else {
                         return [ItemDetailDisplayAction.editMode]
                     }
-
+                    
                     return []
+            }
+            .subscribe(onNext: { actions in
+                for action in actions {
+                    self.dispatcher.dispatch(action: action)
                 }
-                .subscribe(onNext: { actions in
-                    for action in actions {
-                        self.dispatcher.dispatch(action: action)
-                    }
-                })
-                .disposed(by: self.disposeBag)
-
-        self.itemDetailStore.isEditing
+            })
+                .disposed(by: disposeBag)
+            
+            itemDetailStore.isEditing
                 .map { editing in
                     return editing ? Constant.string.save : Constant.string.edit
-                }
-                .subscribe(self.view!.rightButtonText)
-                .disposed(by: self.disposeBag)
-
-        self.itemDetailStore.isEditing
-                .withLatestFrom(self.sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> String? in
+            }
+            .subscribe(view!.rightButtonText)
+            .disposed(by: disposeBag)
+            
+            itemDetailStore.isEditing
+                .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> String? in
                     if editing {
                         return Constant.string.cancel
                     } else if !sidebar {
                         return Constant.string.back
                     }
                     return nil
-                }
-                .subscribe(self.view!.leftButtonText)
-                .disposed(by: self.disposeBag)
-
-        self.itemDetailStore.isEditing
-            .withLatestFrom(self.sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
-                if !editing && !sidebar {
-                    return UIImage(named: "back")
-                }
-                return nil
             }
-            .subscribe(self.view!.leftButtonIcon)
-            .disposed(by: self.disposeBag)
-
-        self.sizeClassStore.shouldDisplaySidebar
+            .subscribe(view!.leftButtonText)
+            .disposed(by: disposeBag)
+            
+            itemDetailStore.isEditing
+                .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
+                    if !editing && !sidebar {
+                        return UIImage(named: "back")
+                    }
+                    return nil
+            }
+            .subscribe(view!.leftButtonIcon)
+            .disposed(by: disposeBag)
+        }
+        
+        sizeClassStore.shouldDisplaySidebar
                 .subscribe(onNext: { (enableSidebar) in
                     self.view?.enableSwipeNavigation(enabled: !enableSidebar)
                 })
-                .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
     }
 
     func onViewDisappear() {
@@ -338,7 +344,7 @@ class ItemDetailPresenter {
                     self.dispatcher.dispatch(action: action)
                 }
             })
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -347,13 +353,13 @@ extension ItemDetailPresenter {
     private func configurationForLogin(_ login: LoginRecord?) -> [ItemDetailSectionModel] {
         let itemPassword: String = login?.password ?? ""
 
-        let passwordTextDriver = self.itemDetailStore.passwordRevealed
+        let passwordTextDriver = itemDetailStore.passwordRevealed
                 .map { revealed -> String in
                     return revealed ? itemPassword : String(repeating: "•", count: itemPassword.count)
                 }
                 .asDriver(onErrorJustReturn: "")
 
-        let editing = self.itemDetailStore.isEditing
+        let editing = itemDetailStore.isEditing
                 .asDriver(onErrorJustReturn: true)
 
         let hostname = login?.hostname ?? ""

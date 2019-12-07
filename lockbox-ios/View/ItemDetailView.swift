@@ -29,53 +29,53 @@ class ItemDetailView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Constant.color.viewBackground
-        self.tableView.dragDelegate = self
-        self.navigationItem.largeTitleDisplayMode = .always
-        self.setupDeleteButton()
-        self.setupNavigation()
-        self.setupDataSource()
-        self.presenter?.onViewReady()
+        view.backgroundColor = Constant.color.viewBackground
+        tableView.dragDelegate = self
+        navigationItem.largeTitleDisplayMode = .always
+        setupDeleteButton()
+        setupNavigation()
+        setupDataSource()
+        presenter?.onViewReady()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.presenter?.onViewDisappear()
+        presenter?.onViewDisappear()
     }
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
     var cellTapped: Observable<String?> {
-        return self.tableView.rx.itemSelected
-                .map { path -> String? in
-                    guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
-                        return nil
-                    }
-
-                    return selectedCell.title.text
+        return tableView.rx.itemSelected
+            .map { path -> String? in
+                guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
+                    return nil
                 }
+                
+                return selectedCell.title.text
+        }
     }
 
     var deleteTapped: Observable<Void> {
-        return self.deleteButton.rx.tap.asObservable()
+        return deleteButton.rx.tap.asObservable()
     }
 
     var leftBarButtonTapped: Observable<Void> {
         // swiftlint:disable:next force_cast
-        return (self.navigationItem.leftBarButtonItem?.customView as! UIButton).rx.tap.asObservable()
+        return (navigationItem.leftBarButtonItem?.customView as! UIButton).rx.tap.asObservable()
     }
 
     var rightBarButtonTapped: Observable<Void> {
         // swiftlint:disable:next force_cast
-        return (self.navigationItem.rightBarButtonItem?.customView as! UIButton).rx.tap.asObservable()
+        return (navigationItem.rightBarButtonItem?.customView as! UIButton).rx.tap.asObservable()
     }
 
     var itemDetailObserver: ItemDetailSectionModelObserver {
-        return self.tableView.rx.items(dataSource: self.dataSource!)
+        return tableView.rx.items(dataSource: self.dataSource!)
     }
 
     var titleText: AnyObserver<String?> {
-        return self.navigationItem.rx.title.asObserver()
+        return navigationItem.rx.title.asObserver()
     }
 
     var rightButtonText: AnyObserver<String?> {
@@ -90,34 +90,34 @@ extension ItemDetailView: ItemDetailViewProtocol {
 
     var leftButtonText: AnyObserver<String?> {
         // swiftlint:disable:next force_cast
-        return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.title().asObserver()
+        return (navigationItem.leftBarButtonItem!.customView as! UIButton).rx.title().asObserver()
     }
 
     var leftButtonIcon: AnyObserver<UIImage?> {
         // swiftlint:disable:next force_cast
-        return (self.navigationItem.leftBarButtonItem!.customView as! UIButton).rx.image().asObserver()
+        return (navigationItem.leftBarButtonItem!.customView as! UIButton).rx.image().asObserver()
     }
 
     var deleteHidden: AnyObserver<Bool> {
-        return self.deleteButton.rx.isHidden.asObserver()
+        return deleteButton.rx.isHidden.asObserver()
     }
 
     func enableLargeTitle(enabled: Bool) {
-        self.navigationItem.largeTitleDisplayMode = enabled ? .always : .never
+        navigationItem.largeTitleDisplayMode = enabled ? .always : .never
     }
 
     func enableSwipeNavigation(enabled: Bool) {
         if enabled {
-            self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-            self.navigationController?.interactivePopGestureRecognizer?.rx.event
+            navigationController?.interactivePopGestureRecognizer?.delegate = self
+            navigationController?.interactivePopGestureRecognizer?.rx.event
                     .map { _ -> Void in
                         return ()
                     }
                     .bind(to: self.presenter!.onRightSwipe)
                     .disposed(by: self.swipeBag)
         } else {
-            self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-            self.swipeBag = DisposeBag()
+            navigationController?.interactivePopGestureRecognizer?.delegate = nil
+            swipeBag = DisposeBag()
         }
     }
 }
@@ -125,10 +125,10 @@ extension ItemDetailView: ItemDetailViewProtocol {
 // view styling
 extension ItemDetailView: UIGestureRecognizerDelegate {
     fileprivate func setupDeleteButton() {
-        self.deleteButton.titleLabel?.adjustsFontForContentSizeCategory = true
-        self.deleteButton.titleLabel?.textAlignment = .center
-        self.deleteButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        self.deleteButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
+        deleteButton.titleLabel?.adjustsFontForContentSizeCategory = true
+        deleteButton.titleLabel?.textAlignment = .center
+        deleteButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        deleteButton.setBorder(color: Constant.color.cellBorderGrey, width: 0.5)
     }
 
     fileprivate func setupNavigation() {
@@ -142,67 +142,70 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         leftButton.titleLabel?.font = .navigationButtonFont
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
-        let rightButton = UIButton(title: Constant.string.edit, imageName: nil)
-        rightButton.titleLabel?.font = .navigationButtonFont
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
+        // Only allow edit functionality on debug builds
+        if FeatureFlags.crudEdit {
+            let rightButton = UIButton(title: Constant.string.edit, imageName: nil)
+            rightButton.titleLabel?.font = .navigationButtonFont
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
+        }
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.iosThirteenNavBarAppearance()
     }
 
     fileprivate func setupDataSource() {
-        self.dataSource = RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>(
-                configureCell: { _, tableView, _, cellConfiguration in
-                    guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemdetailcell") as? ItemDetailCell else {
-                        fatalError("couldn't find the right cell!")
+        dataSource = RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>(
+            configureCell: { _, tableView, _, cellConfiguration in
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemdetailcell") as? ItemDetailCell else {
+                    fatalError("couldn't find the right cell!")
+                }
+                
+                cell.title.text = cellConfiguration.title
+                
+                cellConfiguration.value
+                    .drive(cell.textValue.rx.text)
+                    .disposed(by: cell.disposeBag)
+                
+                cell.textValue.textColor = cellConfiguration.valueFontColor
+                
+                cell.accessibilityLabel = cellConfiguration.accessibilityLabel
+                cell.accessibilityIdentifier = cellConfiguration.accessibilityId
+                
+                cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
+                
+                cellConfiguration.textFieldEnabled
+                    .drive(cell.textValue.rx.isUserInteractionEnabled)
+                    .disposed(by: cell.disposeBag)
+                
+                cellConfiguration.copyButtonHidden
+                    .drive(cell.copyButton.rx.isHidden)
+                    .disposed(by: cell.disposeBag)
+                
+                cellConfiguration.openButtonHidden
+                    .drive(cell.openButton.rx.isHidden)
+                    .disposed(by: cell.disposeBag)
+                
+                cell.dragValue = cellConfiguration.dragValue
+                
+                if let textObserver = cellConfiguration.textObserver {
+                    cell.textValue.rx.text.bind(to: textObserver)
+                        .disposed(by: cell.disposeBag)
+                }
+                
+                if let revealObserver = cellConfiguration.revealPasswordObserver {
+                    cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
+                    
+                    cell.revealButton.rx.tap
+                        .map { _ -> Bool in
+                            cell.revealButton.isSelected = !cell.revealButton.isSelected
+                            
+                            return cell.revealButton.isSelected
                     }
-
-                    cell.title.text = cellConfiguration.title
-
-                    cellConfiguration.value
-                            .drive(cell.textValue.rx.text)
-                            .disposed(by: cell.disposeBag)
-
-                    cell.textValue.textColor = cellConfiguration.valueFontColor
-
-                    cell.accessibilityLabel = cellConfiguration.accessibilityLabel
-                    cell.accessibilityIdentifier = cellConfiguration.accessibilityId
-
-                    cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
-
-                    cellConfiguration.textFieldEnabled
-                            .drive(cell.textValue.rx.isUserInteractionEnabled)
-                            .disposed(by: cell.disposeBag)
-
-                    cellConfiguration.copyButtonHidden
-                            .drive(cell.copyButton.rx.isHidden)
-                            .disposed(by: cell.disposeBag)
-
-                    cellConfiguration.openButtonHidden
-                            .drive(cell.openButton.rx.isHidden)
-                            .disposed(by: cell.disposeBag)
-
-                    cell.dragValue = cellConfiguration.dragValue
-
-                    if let textObserver = cellConfiguration.textObserver {
-                        cell.textValue.rx.text.bind(to: textObserver)
-                            .disposed(by: cell.disposeBag)
-                    }
-
-                    if let revealObserver = cellConfiguration.revealPasswordObserver {
-                        cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
-
-                        cell.revealButton.rx.tap
-                                .map { _ -> Bool in
-                                    cell.revealButton.isSelected = !cell.revealButton.isSelected
-
-                                    return cell.revealButton.isSelected
-                                }
-                                .bind(to: revealObserver)
-                                .disposed(by: cell.disposeBag)
-                    }
-
-                    return cell
-                })
+                    .bind(to: revealObserver)
+                    .disposed(by: cell.disposeBag)
+                }
+                
+                return cell
+        })
     }
 }
 
@@ -213,7 +216,7 @@ extension ItemDetailView: UITableViewDragDelegate {
             return []
         }
 
-        self.presenter?.dndStarted(value: cell?.title.text)
+        presenter?.dndStarted(value: cell?.title.text)
 
         let itemProvider = NSItemProvider(object: data as NSString)
         return [
