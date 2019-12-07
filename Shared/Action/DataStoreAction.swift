@@ -45,6 +45,8 @@ extension DataStoreAction: TelemetryAction {
             return .sync_timeout
         case .syncError:
             return .sync_error
+        case .update:
+            return .edit
         }
     }
 
