@@ -5,8 +5,9 @@ _Last Updated: May 1, 2018_
 <!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [Analysis](#analysis)
-- [Collection](#collection)
+- [Collection](#collection-legacy)
 - [List of Proposed Events](#list-of-proposed-events)
+- [Mozilla Glean SDK](#mozilla-glean-sdk)
 - [References](#references)
 
 <!-- /TOC -->
@@ -52,7 +53,7 @@ In service to validating the above hypothesis, we plan on answering these specif
 
 In addition to answering the above questions that directly concern actions in the app, we will also be analyzing telemetry emitted from the password manager that exists in the the Firefox desktop browser. These analyses will primarily examine whether users of Lockbox start active curation of their credentials in the desktop browser (Lockbox users will not be able to edit credentials directly from the app).
 
-## Collection
+## Collection (legacy)
 
 Data will be collected using this library:
 
@@ -157,9 +158,15 @@ https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/c
 	* `value`: nil
 	* `extras`: nil
 
+## Mozilla Glean SDK
+
+Lockwise for iOS uses the [Glean SDK](https://mozilla.github.io/glean/book/index.html) to collect telemetry. The Glean SDK provides a handful of [pings and metrics out of the box](https://mozilla.github.io/glean/book/user/pings/index.html). The data review for using the Glean SDK is available at [this link](TODO).
+
 ## References
 
-[Library used to collect and send telemetry on iOS](https://github.com/mozilla-mobile/telemetry-ios/)
+[Glean SDK repository, used to collect and send telemetry](https://github.com/mozilla/glean/)
+
+[Legacy library used to collect and send telemetry on iOS](https://github.com/mozilla-mobile/telemetry-ios/)
 
 [Description of the "Core" ping](https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/data/core-ping.html)
 
