@@ -359,7 +359,7 @@ extension ItemDetailPresenter {
                 }
                 .asDriver(onErrorJustReturn: "")
 
-        let editing = itemDetailStore.isEditing
+        let isEditing = itemDetailStore.isEditing
                 .asDriver(onErrorJustReturn: true)
 
         let hostname = login?.hostname ?? ""
@@ -372,9 +372,9 @@ extension ItemDetailPresenter {
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
                         valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
-                        textFieldEnabled: editing,
-                        openButtonHidden: editing,
-                        textObserver: self.webAddressObserver,
+                        textFieldEnabled: isEditing,
+                        openButtonHidden: isEditing,
+                        textObserver: webAddressObserver,
                         dragValue: hostname)
             ]),
             ItemDetailSectionModel(model: 1, items: [
@@ -383,19 +383,19 @@ extension ItemDetailPresenter {
                         value: Driver.just(username),
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
                         accessibilityId: "userNameItemDetail",
-                        textFieldEnabled: editing,
-                        copyButtonHidden: editing,
-                        textObserver: self.usernameObserver,
+                        textFieldEnabled: isEditing,
+                        copyButtonHidden: isEditing,
+                        textObserver: usernameObserver,
                         dragValue: username),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
                         value: passwordTextDriver,
                         accessibilityLabel: Constant.string.passwordCellAccessibilityLabel,
                         accessibilityId: "passwordItemDetail",
-                        textFieldEnabled: editing,
-                        copyButtonHidden: editing,
-                        textObserver: self.passwordObserver,
-                        revealPasswordObserver: self.onPasswordToggle,
+                        textFieldEnabled: isEditing,
+                        copyButtonHidden: isEditing,
+                        textObserver: passwordObserver,
+                        revealPasswordObserver: onPasswordToggle,
                         dragValue: login?.password)
             ])
         ]
