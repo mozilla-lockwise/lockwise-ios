@@ -41,5 +41,43 @@ class ItemDetailActionSpec: QuickSpec {
                 expect(ItemDetailDisplayAction.togglePassword(displayed: true).eventObject).to(equal(TelemetryEventObject.revealPassword))
             }
         }
+
+        describe("ItemEditAction equality") {
+            it("editUsername is equal for same username") {
+                expect(ItemEditAction.editUsername(value: "a")).to(equal(ItemEditAction.editUsername(value: "a")))
+            }
+
+            it("editUsername is not equal for different usernames") {
+                expect(ItemEditAction.editUsername(value: "a")).to(equal(ItemEditAction.editUsername(value: "a")))
+            }
+
+            it("editPassword is equal for same username") {
+                expect(ItemEditAction.editPassword(value: "a")).to(equal(ItemEditAction.editPassword(value: "a")))
+            }
+
+            it("editPassword is not equal for different usernames") {
+                expect(ItemEditAction.editPassword(value: "a")).notTo(equal(ItemEditAction.editPassword(value: "b")))
+            }
+
+            it("editWebAddress is equal for same username") {
+                expect(ItemEditAction.editWebAddress(value: "a")).to(equal(ItemEditAction.editWebAddress(value: "a")))
+            }
+
+            it("editWebAddress is not equal for different usernames") {
+                expect(ItemEditAction.editWebAddress(value: "a")).notTo(equal(ItemEditAction.editWebAddress(value: "b")))
+            }
+
+            it("editUsername does not equal editPassword") {
+                expect(ItemEditAction.editUsername(value: "a")).notTo(equal(ItemEditAction.editPassword(value: "a")))
+            }
+
+            it("editUsername does not equal editWebAddress") {
+                expect(ItemEditAction.editUsername(value: "a")).notTo(equal(ItemEditAction.editWebAddress(value: "a")))
+            }
+
+            it("editPassword does not equal editWebAddress") {
+                expect(ItemEditAction.editPassword(value: "a")).notTo(equal(ItemEditAction.editWebAddress(value: "a")))
+            }
+        }
     }
 }

@@ -232,20 +232,40 @@ class ItemDetailStoreSpec: QuickSpec {
 
             describe("itemDetailDisplay") {
                 var passwordRevealedObserver = self.scheduler.createObserver(Bool.self)
+                var editingObserver = self.scheduler.createObserver(Bool.self)
 
                 beforeEach {
                     passwordRevealedObserver = self.scheduler.createObserver(Bool.self)
+                    editingObserver = self.scheduler.createObserver(Bool.self)
 
                     self.subject.passwordRevealed
-                            .drive(passwordRevealedObserver)
+                            .subscribe(passwordRevealedObserver)
+                            .disposed(by: self.disposeBag)
+
+                    self.subject.isEditing
+                            .subscribe(editingObserver)
                             .disposed(by: self.disposeBag)
                 }
 
-                it("passes through ItemDetailDisplayActions from the dispatcher") {
+                it("maps password reveal actions from the dispatcher") {
                     self.dispatcher.fakeRegistration.onNext(ItemDetailDisplayAction.togglePassword(displayed: true))
 
                     expect(passwordRevealedObserver.events.count).to(equal(2))
                     expect(passwordRevealedObserver.events.last!.value.element!).to(equal(true))
+                }
+
+                it("toggles based on edit mode") {
+                    self.dispatcher.fakeRegistration.onNext(ItemDetailDisplayAction.editMode)
+
+                    expect(editingObserver.events.count).to(equal(2))
+                    expect(editingObserver.events.last!.value.element!).to(equal(true))
+                }
+
+                it("toggles based on view mode") {
+                    self.dispatcher.fakeRegistration.onNext(ItemDetailDisplayAction.viewMode)
+
+                    expect(editingObserver.events.count).to(equal(2))
+                    expect(editingObserver.events.last!.value.element!).to(equal(false))
                 }
 
                 it("does not pass through non-ItemDetailDisplayActions") {
@@ -262,6 +282,55 @@ class ItemDetailStoreSpec: QuickSpec {
                 }
             }
 
+            describe("edit actions") {
+                let usernameObserver = self.scheduler.createObserver(String.self)
+                let passwordObserver = self.scheduler.createObserver(String.self)
+                let webAddressObserver = self.scheduler.createObserver(String.self)
+
+                beforeEach {
+                    self.subject.usernameEditValue
+                        .subscribe(usernameObserver)
+                        .disposed(by: self.disposeBag)
+
+                    self.subject.passwordEditValue
+                        .subscribe(passwordObserver)
+                        .disposed(by: self.disposeBag)
+
+                    self.subject.webAddressEditValue
+                        .subscribe(webAddressObserver)
+                        .disposed(by: self.disposeBag)
+                }
+
+                describe("editUsername") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(ItemEditAction.editUsername(value: "a"))
+                    }
+
+                    it("fires event") {
+                        expect(usernameObserver.events.last!.value.element!).to(equal("a"))
+                    }
+                }
+
+                describe("editPassword") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(ItemEditAction.editPassword(value: "p"))
+                    }
+
+                    it("fires event") {
+                        expect(passwordObserver.events.last!.value.element!).to(equal("p"))
+                    }
+                }
+
+                describe("editWebAddress") {
+                    beforeEach {
+                        self.dispatcher.fakeRegistration.onNext(ItemEditAction.editWebAddress(value: "h"))
+                    }
+
+                    it("fires event") {
+                        expect(webAddressObserver.events.last!.value.element!).to(equal("h"))
+                    }
+                }
+            }
         }
     }
 }

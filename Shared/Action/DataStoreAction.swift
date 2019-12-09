@@ -16,6 +16,7 @@ enum DataStoreAction: Action {
     case syncStart
     case touch(id: String)
     case delete(id: String)
+    case update(login: LoginRecord)
     case syncEnd
     case syncTimeout
     case syncError(error: String)
@@ -44,6 +45,8 @@ extension DataStoreAction: TelemetryAction {
             return .sync_timeout
         case .syncError:
             return .sync_error
+        case .update:
+            return .edit
         }
     }
 
@@ -79,6 +82,10 @@ extension DataStoreAction: Equatable {
         case (.syncStart, .syncStart): return true
         case (.touch(let lhID), .touch(let rhID)):
             return lhID == rhID
+        case (.delete(let lhID), .delete(let rhID)):
+            return lhID == rhID
+        case (.update(let lhLogin), .update(let rhLogin)):
+            return lhLogin == rhLogin
         case (.syncEnd, .syncEnd): return true
         case (.syncTimeout, .syncTimeout): return true
         case (.syncError(let lhError), .syncError(let rhError)):

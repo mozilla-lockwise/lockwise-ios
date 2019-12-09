@@ -7,6 +7,7 @@ import RxSwift
 import RxRelay
 import RxCocoa
 import MozillaAppServices
+import RxOptional
 
 class ItemDetailStore: BaseItemDetailStore {
     public static let shared = ItemDetailStore()
@@ -19,14 +20,34 @@ class ItemDetailStore: BaseItemDetailStore {
     private var itemListDisplayStore: ItemListDisplayStore
 
     private var _passwordRevealed = BehaviorRelay<Bool>(value: false)
+    private var _isEditing = BehaviorRelay<Bool>(value: false)
+    private var _usernameEditValue = ReplaySubject<String>.create(bufferSize: 1)
+    private var _passwordEditValue = ReplaySubject<String>.create(bufferSize: 1)
+    private var _webAddressEditValue = ReplaySubject<String>.create(bufferSize: 1)
 
-    lazy private(set) var passwordRevealed: Driver<Bool> = {
-        return self._passwordRevealed.asDriver(onErrorJustReturn: false)
+    lazy private(set) var passwordRevealed: Observable<Bool> = {
+        return self._passwordRevealed.asObservable()
+    }()
+
+    lazy private(set) var isEditing: Observable<Bool> = {
+        return self._isEditing.asObservable()
     }()
 
     // RootPresenter needs a synchronous way to find out if the detail screen has a login or not
     var itemDetailHasId: Bool {
         return self._itemDetailId.value != ""
+    }
+
+    var usernameEditValue: Observable<String> {
+        return self._usernameEditValue.asObservable()
+    }
+
+    var passwordEditValue: Observable<String> {
+        return self._passwordEditValue.asObservable()
+    }
+
+    var webAddressEditValue: Observable<String> {
+        return self._webAddressEditValue.asObservable()
     }
 
     init(
@@ -59,6 +80,36 @@ class ItemDetailStore: BaseItemDetailStore {
                 .filterNil()
                 .bind(to: self._passwordRevealed)
                 .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+                .filterByType(class: ItemDetailDisplayAction.self)
+                .map { action -> Bool? in
+                    switch action {
+                    case .editMode:
+                        return true
+                    case .viewMode:
+                        return false
+                    default:
+                        return nil
+                    }
+                }
+                .filterNil()
+                .bind(to: self._isEditing)
+                .disposed(by: self.disposeBag)
+
+        self.dispatcher.register
+            .filterByType(class: ItemEditAction.self)
+            .subscribe(onNext: { (action) in
+                switch action {
+                case .editUsername(let newVal):
+                    self._usernameEditValue.onNext(newVal)
+                case .editPassword(let newVal):
+                    self._passwordEditValue.onNext(newVal)
+                case .editWebAddress(let newVal):
+                    self._webAddressEditValue.onNext(newVal)
+                }
+            })
+            .disposed(by: self.disposeBag)
 
         self.lifecycleStore.lifecycleEvents
                 .filter { $0 == .background }

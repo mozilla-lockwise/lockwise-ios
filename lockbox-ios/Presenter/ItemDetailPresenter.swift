@@ -8,11 +8,19 @@ import RxCocoa
 import RxDataSources
 import MozillaAppServices
 
-protocol ItemDetailViewProtocol: class, StatusAlertView {
-    var learnHowToEditTapped: Observable<Void> { get }
-    func enableBackButton(enabled: Bool)
-    func bind(titleText: Driver<String>)
-    func bind(itemDetail: Driver<[ItemDetailSectionModel]>)
+protocol ItemDetailViewProtocol: class, StatusAlertView, AlertControllerView {
+    func enableSwipeNavigation(enabled: Bool)
+    func enableLargeTitle(enabled: Bool)
+    var cellTapped: Observable<String?> { get }
+    var deleteTapped: Observable<Void> { get }
+    var rightBarButtonTapped: Observable<Void> { get }
+    var leftBarButtonTapped: Observable<Void> { get }
+    var itemDetailObserver: ItemDetailSectionModelObserver { get }
+    var titleText: AnyObserver<String?> { get }
+    var rightButtonText: AnyObserver<String?> { get }
+    var leftButtonText: AnyObserver<String?> { get }
+    var leftButtonIcon: AnyObserver<UIImage?> { get }
+    var deleteHidden: AnyObserver<Bool> { get }
 }
 
 let copyableFields = [Constant.string.username, Constant.string.password]
@@ -26,45 +34,60 @@ class ItemDetailPresenter {
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
 
-    lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
+    lazy private var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()
     }()
 
-    lazy private(set) var onCancel: AnyObserver<Void> = {
+    lazy private(set) var onRightSwipe: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
     }()
 
-    lazy private(set) var onCellTapped: AnyObserver<String?> = {
-        return Binder(self) { target, value in
-            guard let value = value else {
-                return
-            }
+    lazy private var discardChangesObserver: AnyObserver<Void> = {
+        return Binder(self) { target, _ in
+            target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
+            }.asObserver()
+    }()
 
+    lazy private var usernameObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
+            }
+        }.asObserver()
+    }()
+
+    lazy private var passwordObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
+            }
+        }.asObserver()
+    }()
+
+    lazy private var webAddressObserver: AnyObserver<String?> = {
+        return Binder(self) { target, val in
+            if let val = val {
+                target.dispatcher.dispatch(action: ItemEditAction.editWebAddress(value: val))
+            }
+        }.asObserver()
+    }()
+
+    lazy private var deleteObserver: AnyObserver<Void>? = {
+        return Binder(self) { target, _ in
             target.itemDetailStore.itemDetailId
                 .take(1)
-                .flatMap { target.dataStore.get($0) }
-                .map { item -> [Action] in
-                    var actions: [Action] = []
-                    if copyableFields.contains(value) {
-                        if let item = item {
-                            actions.append(DataStoreAction.touch(id: item.id))
-                            actions.append(ItemDetailPresenter.getCopyActionFor(item, value: value, actionType: .tap))
-                        }
-                    } else if value == Constant.string.webAddress {
-                        if let origin = item?.hostname {
-                            actions.append(ExternalLinkAction(baseURLString: origin))
-                        }
-                    }
-                    return actions
+                .map { id -> [Action] in
+                    return [DataStoreAction.delete(id: id),
+                        MainRouteAction.list,
+                        ItemDetailDisplayAction.viewMode]
                 }
-                .observeOn(MainScheduler.instance)
                 .subscribe(onNext: { actions in
                     for action in actions {
-                        target.dispatcher.dispatch(action: action)
+                        self.dispatcher.dispatch(action: action)
                     }
                 })
                 .disposed(by: target.disposeBag)
@@ -86,29 +109,108 @@ class ItemDetailPresenter {
     }
 
     func onViewReady() {
-        let itemObservable = self.dataStore.locked
+        let itemObservable = dataStore.locked
                 .filter { !$0 }
                 .take(1)
                 .flatMap { _ in self.itemDetailStore.itemDetailId }
+                .take(1)
                 .flatMap { self.dataStore.get($0) }
 
-        let itemDriver = itemObservable.asDriver(onErrorJustReturn: nil)
-        let viewConfigDriver = Driver.combineLatest(itemDriver.filterNil(), self.itemDetailStore.passwordRevealed)
-                .map { e -> [ItemDetailSectionModel] in
-                    return self.configurationForLogin(e.0, passwordDisplayed: e.1)
-                }
+        itemObservable.asDriver(onErrorJustReturn: nil)
+                .filterNil()
+                .map { self.configurationForLogin($0) }
+                .drive(view!.itemDetailObserver)
+                .disposed(by: disposeBag)
 
-        let titleDriver = itemObservable
+        itemObservable
                 .filterNil()
                 .map { item -> String in
                     let title = item.hostname.titleFromHostname()
                     return title.isEmpty ? Constant.string.unnamedEntry : title
-                }.asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
+                }
+                .asDriver(onErrorJustReturn: Constant.string.unnamedEntry)
+                .drive(view!.titleText)
+                .disposed(by: disposeBag)
 
-        self.view?.bind(itemDetail: viewConfigDriver)
-        self.view?.bind(titleText: titleDriver)
+        // Only allow edit functionality on debug builds
+        if FeatureFlags.crudEdit {
+            setupEdit()
+        }
+        setupCopy(itemObservable: itemObservable)
+        setupNavigation(itemObservable: itemObservable)
+    }
 
-        self.copyDisplayStore.copyDisplay
+    private func setupEdit() {
+        itemDetailStore.isEditing
+                .map { !$0 }
+                .subscribe(view!.deleteHidden)
+                .disposed(by: disposeBag)
+
+        itemDetailStore.isEditing
+                .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
+                .disposed(by: disposeBag)
+
+        view?.deleteTapped
+            .subscribe(onNext: { (_) in
+                self.view?.displayAlertController(
+                    buttons: [
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.cancel,
+                            tapObserver: nil,
+                            style: .cancel
+                        ),
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.delete,
+                            tapObserver: self.deleteObserver,
+                            style: .destructive)
+                    ],
+                    title: Constant.string.confirmDeleteLoginDialogTitle,
+                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                    Constant.string.productNameShort),
+                    style: .alert,
+                    barButtonItem: nil)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func setupCopy(itemObservable: Observable<LoginRecord?>) {
+        // use the behaviorrelay to cache the most recent version of the LoginRecord
+        let itemDetailRelay = BehaviorRelay<LoginRecord?>(value: nil)
+
+        itemObservable
+                .asDriver(onErrorJustReturn: nil)
+                .drive(itemDetailRelay)
+                .disposed(by: disposeBag)
+
+        view?.cellTapped
+                .withLatestFrom(itemDetailStore.isEditing) { cellTitle, isEditing -> String? in
+                    return !isEditing ? cellTitle : nil
+                }
+                .filterNil()
+                .withLatestFrom(itemDetailRelay) { (cellTitle: String, item: LoginRecord?) -> [Action] in
+                    var actions: [Action] = []
+                    if copyableFields.contains(cellTitle) {
+                        if let item = item {
+                            actions.append(DataStoreAction.touch(id: item.id))
+                            actions.append(ItemDetailPresenter.getCopyActionFor(item, value: cellTitle, actionType: .tap))
+                        }
+                    } else if cellTitle == Constant.string.webAddress {
+                        if let origin = item?.hostname {
+                            actions.append(ExternalLinkAction(baseURLString: origin))
+                        }
+                    }
+                    return actions
+
+                }
+                .observeOn(MainScheduler.instance)
+                .subscribe(onNext: { actions in
+                    for action in actions {
+                        self.dispatcher.dispatch(action: action)
+                    }
+                })
+                .disposed(by: disposeBag)
+
+        copyDisplayStore.copyDisplay
                 .drive(onNext: { field in
                     let fieldName: String
                     switch field {
@@ -119,29 +221,105 @@ class ItemDetailPresenter {
                     let message = String(format: Constant.string.fieldNameCopied, fieldName)
                     self.view?.displayTemporaryAlert(message, timeout: Constant.number.displayStatusAlertLength, icon: nil)
                 })
-        .disposed(by: self.disposeBag)
+        .disposed(by: disposeBag)
+    }
 
-        self.view?.learnHowToEditTapped
-            .flatMap({ _ -> Observable<String> in
-                return self.itemDetailStore.itemDetailId
-            })
-            .take(1)
-            .map({ (itemId) -> Action in
-                return ExternalWebsiteRouteAction(
-                    urlString: Constant.app.editExistingEntriesFAQ,
-                    title: Constant.string.faq,
-                    returnRoute: MainRouteAction.detail(itemId: itemId))
-            })
-            .subscribe(onNext: { (action) in
-                self.dispatcher.dispatch(action: action)
-            })
-            .disposed(by: self.disposeBag)
+    private func setupNavigation(itemObservable: Observable<LoginRecord?>) {
+        view?.leftBarButtonTapped
+                .withLatestFrom(itemDetailStore.isEditing) { _, editing -> Action? in
+                    if editing {
+                        self.view?.displayAlertController(
+                            buttons: [
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.cancel,
+                                    tapObserver: nil,
+                                    style: .cancel
+                                ),
+                                AlertActionButtonConfiguration(
+                                    title: Constant.string.discard,
+                                    tapObserver: self.discardChangesObserver,
+                                    style: .destructive)
+                            ],
+                            title: Constant.string.discardChangesTitle,
+                            message: Constant.string.discardChangesMessage,
+                            style: .alert,
+                            barButtonItem: nil)
+                    } else {
+                        return MainRouteAction.list
+                    }
+                    return nil
+                }
+                .filterNil()
+                .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
+                .disposed(by: disposeBag)
 
-        self.sizeClassStore.shouldDisplaySidebar
-            .subscribe(onNext: { (enableSidebar) in
-                self.view?.enableBackButton(enabled: !enableSidebar)
+        let editingObservable = Observable.combineLatest(itemDetailStore.usernameEditValue,
+                                                         itemDetailStore.passwordEditValue,
+                                                         itemDetailStore.webAddressEditValue,
+                                                         itemDetailStore.isEditing,
+                                                         itemObservable)
+
+        //Only allow edit functional on debug builds
+        if FeatureFlags.crudEdit {
+            view?.rightBarButtonTapped
+                .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
+                    let (username, password, webAddress, editing, item) = tuple
+                    if editing {
+                        if let item = item {
+                            item.username = username
+                            item.password = password
+                            item.hostname = webAddress
+                            return [DataStoreAction.update(login: item),
+                                    ItemDetailDisplayAction.viewMode]
+                        }
+                    } else {
+                        return [ItemDetailDisplayAction.editMode]
+                    }
+                    
+                    return []
+            }
+            .subscribe(onNext: { actions in
+                for action in actions {
+                    self.dispatcher.dispatch(action: action)
+                }
             })
-            .disposed(by: self.disposeBag)
+                .disposed(by: disposeBag)
+            
+            itemDetailStore.isEditing
+                .map { editing in
+                    return editing ? Constant.string.save : Constant.string.edit
+            }
+            .subscribe(view!.rightButtonText)
+            .disposed(by: disposeBag)
+            
+            itemDetailStore.isEditing
+                .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> String? in
+                    if editing {
+                        return Constant.string.cancel
+                    } else if !sidebar {
+                        return Constant.string.back
+                    }
+                    return nil
+            }
+            .subscribe(view!.leftButtonText)
+            .disposed(by: disposeBag)
+            
+            itemDetailStore.isEditing
+                .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
+                    if !editing && !sidebar {
+                        return UIImage(named: "back")
+                    }
+                    return nil
+            }
+            .subscribe(view!.leftButtonIcon)
+            .disposed(by: disposeBag)
+        }
+        
+        sizeClassStore.shouldDisplaySidebar
+                .subscribe(onNext: { (enableSidebar) in
+                    self.view?.enableSwipeNavigation(enabled: !enableSidebar)
+                })
+                .disposed(by: disposeBag)
     }
 
     func onViewDisappear() {
@@ -166,21 +344,23 @@ class ItemDetailPresenter {
                     self.dispatcher.dispatch(action: action)
                 }
             })
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
     }
 }
 
 // helpers
 extension ItemDetailPresenter {
-    private func configurationForLogin(_ login: LoginRecord?, passwordDisplayed: Bool) -> [ItemDetailSectionModel] {
-        var passwordText: String
+    private func configurationForLogin(_ login: LoginRecord?) -> [ItemDetailSectionModel] {
         let itemPassword: String = login?.password ?? ""
 
-        if passwordDisplayed {
-            passwordText = itemPassword
-        } else {
-            passwordText = String(repeating: "•", count: itemPassword.count)
-        }
+        let passwordTextDriver = itemDetailStore.passwordRevealed
+                .map { revealed -> String in
+                    return revealed ? itemPassword : String(repeating: "•", count: itemPassword.count)
+                }
+                .asDriver(onErrorJustReturn: "")
+
+        let isEditing = itemDetailStore.isEditing
+                .asDriver(onErrorJustReturn: true)
 
         let hostname = login?.hostname ?? ""
         let username = login?.username ?? ""
@@ -188,32 +368,34 @@ extension ItemDetailPresenter {
             ItemDetailSectionModel(model: 0, items: [
                 ItemDetailCellConfiguration(
                         title: Constant.string.webAddress,
-                        value: hostname,
+                        value: Driver.just(hostname),
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
-                        password: false,
                         valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
-                        showOpenButton: true,
+                        textFieldEnabled: isEditing,
+                        openButtonHidden: isEditing,
+                        textObserver: webAddressObserver,
                         dragValue: hostname)
             ]),
             ItemDetailSectionModel(model: 1, items: [
                 ItemDetailCellConfiguration(
                         title: Constant.string.username,
-                        value: username,
+                        value: Driver.just(username),
                         accessibilityLabel: String(format: Constant.string.usernameCellAccessibilityLabel, username),
-                        password: false,
                         accessibilityId: "userNameItemDetail",
-                        showCopyButton: true,
+                        textFieldEnabled: isEditing,
+                        copyButtonHidden: isEditing,
+                        textObserver: usernameObserver,
                         dragValue: username),
                 ItemDetailCellConfiguration(
                         title: Constant.string.password,
-                        value: passwordText,
-                        accessibilityLabel: String(
-                            format: Constant.string.passwordCellAccessibilityLabel,
-                            passwordText),
-                        password: true,
+                        value: passwordTextDriver,
+                        accessibilityLabel: Constant.string.passwordCellAccessibilityLabel,
                         accessibilityId: "passwordItemDetail",
-                        showCopyButton: true,
+                        textFieldEnabled: isEditing,
+                        copyButtonHidden: isEditing,
+                        textObserver: passwordObserver,
+                        revealPasswordObserver: onPasswordToggle,
                         dragValue: login?.password)
             ])
         ]

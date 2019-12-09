@@ -24,21 +24,9 @@ class ItemDetailViewSpec: QuickSpec {
             self.onViewReadyCalled = true
         }
 
-        override var onPasswordToggle: AnyObserver<Bool> {
-            return Binder(self) { target, argument in
-                target.onPasswordToggleActionDispatched = argument
-            }.asObserver()
-        }
-
-        override var onCancel: AnyObserver<Void> {
+        override var onRightSwipe: AnyObserver<Void> {
             return Binder(self) { target, _ in
                 target.onCancelActionDispatched = true
-            }.asObserver()
-        }
-
-        override var onCellTapped: AnyObserver<String?> {
-            return Binder(self) { target, value in
-                target.onCellTappedValue = value
             }.asObserver()
         }
     }
@@ -65,70 +53,86 @@ class ItemDetailViewSpec: QuickSpec {
             }
 
             describe("tableview datasource configuration") {
-                let configDriver = PublishSubject<[ItemDetailSectionModel]>()
-                let sectionModels = [
-                    ItemDetailSectionModel(model: 0, items: [
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.webAddress,
-                                value: "www.meow.com",
-                                accessibilityLabel: "something accessible",
-                                password: false,
-                                valueFontColor: Constant.color.lockBoxViolet,
-                                accessibilityId: "")
-                    ]),
-                    ItemDetailSectionModel(model: 1, items: [
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.username,
-                                value: "tanya",
-                                accessibilityLabel: "something else accessible",
-                                password: false,
-                                accessibilityId: ""),
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.password,
-                                value: "••••••••••",
-                                accessibilityLabel: "something else accessible",
-                                password: true,
-                                accessibilityId: "")
-                    ]),
-                    ItemDetailSectionModel(model: 2, items: [
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.notes,
-                                value: "some long note about whatever thing yeahh",
-                                accessibilityLabel: "something else accessible",
-                                password: false,
-                                accessibilityId: "")
-                    ])
-                ]
+                var revealPasswordObserver = self.scheduler.createObserver(Bool.self)
+                var usernameTextObserver = self.scheduler.createObserver(String?.self)
 
                 beforeEach {
-                    self.subject.bind(itemDetail: configDriver.asDriver(onErrorJustReturn: []))
+                    revealPasswordObserver = self.scheduler.createObserver(Bool.self)
+                    usernameTextObserver = self.scheduler.createObserver(String?.self)
+                    let sectionModels = [
+                        ItemDetailSectionModel(model: 0, items: [
+                            ItemDetailCellConfiguration(
+                                    title: Constant.string.webAddress,
+                                    value: Driver.just("www.meow.com"),
+                                    accessibilityLabel: "something accessible",
+                                    valueFontColor: Constant.color.lockBoxViolet,
+                                    accessibilityId: "",
+                                    textFieldEnabled: Driver.just(false))
+                        ]),
+                        ItemDetailSectionModel(model: 1, items: [
+                            ItemDetailCellConfiguration(
+                                    title: Constant.string.username,
+                                    value: Driver.just("tanya"),
+                                    accessibilityLabel: "something else accessible",
+                                    accessibilityId: "",
+                                    textFieldEnabled: Driver.just(false),
+                                    textObserver: usernameTextObserver.asObserver()),
+                            ItemDetailCellConfiguration(
+                                    title: Constant.string.password,
+                                    value: Driver.just("iluvdawgz"),
+                                    accessibilityLabel: "more accessible here",
+                                    valueFontColor: .black,
+                                    accessibilityId: "",
+                                    textFieldEnabled: Driver.just(false),
+                                    revealPasswordObserver: revealPasswordObserver.asObserver())
+                        ])
+                    ]
 
-                    configDriver.onNext(sectionModels)
+                    Driver.just(sectionModels)
+                            .drive(self.subject!.itemDetailObserver)
+                            .disposed(by: self.disposeBag)
                 }
 
                 it("configures the tableview based on the models provided") {
-                    expect(self.subject.tableView.numberOfSections).to(equal(sectionModels.count))
+                    expect(self.subject.tableView.numberOfSections).to(equal(2))
                 }
 
-                it("binds password reveal tap actions to the appropriate presenter listener") {
+                it("binds password reveal tap actions to the observer") {
                     let cell = self.subject.tableView.cellForRow(at: [1, 1]) as! ItemDetailCell
                     cell.revealButton.sendActions(for: .touchUpInside)
 
-                    expect(self.presenter.onPasswordToggleActionDispatched).to(beTrue())
+                    expect(revealPasswordObserver.events.count).to(equal(1))
+                    expect(revealPasswordObserver.events.first?.value.element).to(beTrue())
+                }
+
+                it("binds textObserver text change actions to the observer") {
+                    let cell = self.subject.tableView.cellForRow(at: [1, 0]) as! ItemDetailCell
+                    cell.textValue.sendActions(for: .editingChanged)
+
+                    expect(usernameTextObserver.events.count).to(equal(2))
+                    expect(usernameTextObserver.events.first?.value.element).to(equal("tanya"))
                 }
 
                 describe("tapping cells") {
+                    var cellTapObserver = self.scheduler.createObserver(String?.self)
+
                     beforeEach {
+                        cellTapObserver = self.scheduler.createObserver(String?.self)
+                        self.subject.cellTapped
+                                .subscribe(cellTapObserver)
+                                .disposed(by: self.disposeBag)
+
                         self.subject.tableView.delegate!.tableView!(self.subject.tableView, didSelectRowAt: [1, 0])
                     }
 
                     it("extracts the titlelabel text and tells the presenter") {
-                        expect(self.presenter.onCellTappedValue).to(equal(Constant.string.username))
+                        expect(cellTapObserver.events.count).to(equal(1))
+                        expect(cellTapObserver.events.first!.value.element).to(equal(Constant.string.username))
                     }
                 }
 
                 it("sets the font color for web address") {
-                    expect((self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell).valueLabel.textColor).to(equal(Constant.color.lockBoxViolet))
+                    expect((self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell).textValue.textColor).to(equal(Constant.color.lockBoxViolet))
                 }
 
                 it("sets the passed accessibility label for every cell") {
@@ -137,38 +141,54 @@ class ItemDetailViewSpec: QuickSpec {
             }
 
             describe("title text") {
-                let textDriver = PublishSubject<String>()
+                let title = "new title"
+
                 beforeEach {
-                    self.subject.bind(titleText: textDriver.asDriver(onErrorJustReturn: ""))
+                    Observable.just(title)
+                            .subscribe(self.subject.titleText)
+                            .disposed(by: self.disposeBag)
                 }
 
                 it("updates the navigation title with new values") {
-                    let title = "new title"
-                    textDriver.onNext(title)
                     expect(self.subject.navigationItem.title).to(equal(title))
                 }
             }
 
-            describe("tapping cancel button") {
-                beforeEach {
-                    self.subject.enableBackButton(enabled: true)
-                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
-                    _ = button.sendActions(for: .touchUpInside)
-                }
-
-                it("informs the presenter") {
-                    expect(self.presenter.onCancelActionDispatched).to(beTrue())
-                }
-            }
-
-            describe("tapping learnHowToEdit button") {
+            describe("tapping left button with text set") {
                 var voidObserver = self.scheduler.createObserver(Void.self)
 
                 beforeEach {
                     voidObserver = self.scheduler.createObserver(Void.self)
 
-                    self.subject.learnHowToEditTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
-                    self.subject.learnHowToEditButton.sendActions(for: .touchUpInside)
+                    self.subject.leftButtonText.onNext("Cancel")
+
+                    self.subject.leftBarButtonTapped
+                            .bind(to: voidObserver)
+                            .disposed(by: self.disposeBag)
+
+                    let button = self.subject.navigationItem.leftBarButtonItem!.customView as! UIButton
+                    _ = button.sendActions(for: .touchUpInside)
+                }
+
+                it("informs the observer") {
+                    expect(voidObserver.events.count).to(equal(1))
+                }
+            }
+
+            describe("tapping right button with text set") {
+                var voidObserver = self.scheduler.createObserver(Void.self)
+
+                beforeEach {
+                    voidObserver = self.scheduler.createObserver(Void.self)
+
+                    self.subject.rightButtonText.onNext("Edit")
+
+                    self.subject.rightBarButtonTapped
+                            .bind(to: voidObserver)
+                            .disposed(by: self.disposeBag)
+
+                    let editButton = self.subject.navigationItem.rightBarButtonItem!.customView as! UIButton
+                    editButton.sendActions(for: .touchUpInside)
                 }
 
                 it("informs any observers") {
@@ -176,45 +196,108 @@ class ItemDetailViewSpec: QuickSpec {
                 }
             }
 
-            describe("tapping a password reveal button") {
-                let sectionModelWithJustPassword = [
-                    ItemDetailSectionModel(model: 1, items: [
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.password,
-                                value: "••••••••••",
-                                accessibilityLabel: "something accessible",
-                                password: true,
-                                accessibilityId: "")
-                    ])
-                ]
+            describe("delete button when visible") {
+                var voidObserver = self.scheduler.createObserver(Void.self)
 
                 beforeEach {
-                    self.subject.bind(itemDetail: Driver.just(sectionModelWithJustPassword))
+                    voidObserver = self.scheduler.createObserver(Void.self)
+                    self.subject.deleteTapped
+                            .subscribe(voidObserver)
+                            .disposed(by: self.disposeBag)
+
+                    self.subject.deleteHidden.onNext(false)
+
+                    self.subject.deleteButton.sendActions(for: .touchUpInside)
                 }
 
-                it("returns the selected state of the password reveal button") {
-                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
-                    cell.revealButton.sendActions(for: .touchUpInside)
+                it("informs any observers") {
+                    expect(voidObserver.events.count).to(equal(1))
+                }
+            }
 
-                    expect(self.presenter.onPasswordToggleActionDispatched).notTo(beNil())
-                    expect(self.presenter.onPasswordToggleActionDispatched).to(equal(cell.revealButton.isSelected))
+            describe("enableLargeTitle") {
+                it("enabled sets large title display mode") {
+                    self.subject.enableLargeTitle(enabled: true)
+                    expect(self.subject.navigationItem.largeTitleDisplayMode).to(equal(.always))
+                }
+
+                it("disabled sets never for large title display mode") {
+                    self.subject.enableLargeTitle(enabled: false)
+                    expect(self.subject.navigationItem.largeTitleDisplayMode).to(equal(.never))
                 }
             }
 
             describe("ItemDetailCell") {
-                let sectionModelWithJustPassword = [
-                    ItemDetailSectionModel(model: 1, items: [
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.password,
-                                value: "••••••••••",
-                                accessibilityLabel: "something accessible",
-                                password: true,
-                                accessibilityId: "")
-                    ])
-                ]
+                let valueStub = PublishSubject<String>()
+                let textFieldEnabledStub = PublishSubject<Bool>()
+                let copyButtonHiddenStub = PublishSubject<Bool>()
+                let openButtonHiddenStub = PublishSubject<Bool>()
 
                 beforeEach {
-                    self.subject.bind(itemDetail: Driver.just(sectionModelWithJustPassword))
+                    let sectionModelWithJustOneItem = [
+                        ItemDetailSectionModel(model: 1, items: [
+                            ItemDetailCellConfiguration(
+                                    title: Constant.string.password,
+                                    value: valueStub.asDriver(onErrorJustReturn: ""),
+                                    accessibilityLabel: "something accessible",
+                                    accessibilityId: "",
+                                    textFieldEnabled: textFieldEnabledStub.asDriver(onErrorJustReturn: false),
+                                    copyButtonHidden: copyButtonHiddenStub.asDriver(onErrorJustReturn: false),
+                                    openButtonHidden: openButtonHiddenStub.asDriver(onErrorJustReturn: false))
+                        ])
+                    ]
+
+                    Driver.just(sectionModelWithJustOneItem)
+                            .drive(self.subject!.itemDetailObserver)
+                            .disposed(by: self.disposeBag)
+                }
+
+                it("binds the value") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+                    let val1 = "meow"
+                    let val2 = "woof"
+
+                    valueStub.onNext(val1)
+                    expect(cell.textValue.text).to(equal(val1))
+
+                    valueStub.onNext(val2)
+                    expect(cell.textValue.text).to(equal(val2))
+                }
+
+                it("binds the textfield enabled status") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+                    let val1 = true
+                    let val2 = false
+
+                    textFieldEnabledStub.onNext(val1)
+                    expect(cell.textValue.isUserInteractionEnabled).to(equal(val1))
+
+                    textFieldEnabledStub.onNext(val2)
+                    expect(cell.textValue.isUserInteractionEnabled).to(equal(val2))
+                }
+
+                it("binds the copy button hidden status") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+                    let val1 = true
+                    let val2 = false
+
+                    copyButtonHiddenStub.onNext(val1)
+                    expect(cell.copyButton.isHidden).to(equal(val1))
+
+                    copyButtonHiddenStub.onNext(val2)
+                    expect(cell.copyButton.isHidden).to(equal(val2))
+                }
+
+                it("binds the open button hidden status") {
+                    let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
+                    let val1 = true
+                    let val2 = false
+
+                    openButtonHiddenStub.onNext(val1)
+                    expect(cell.openButton.isHidden).to(equal(val1))
+
+                    openButtonHiddenStub.onNext(val2)
+                    expect(cell.openButton.isHidden).to(equal(val2))
                 }
 
                 it("prepareForReuse disposes the cell's dispose bag") {
@@ -226,23 +309,6 @@ class ItemDetailViewSpec: QuickSpec {
 
                     expect(cell.disposeBag === disposeBag).notTo(beTrue())
                 }
-            }
-
-            describe("ItemDetailCell") {
-                let sectionModel = [
-                    ItemDetailSectionModel(model: 1, items: [
-                        ItemDetailCellConfiguration(
-                                title: Constant.string.password,
-                                value: "••••••••••",
-                                accessibilityLabel: "something accessible",
-                                password: true,
-                                accessibilityId: "")
-                    ])
-                ]
-
-                beforeEach {
-                    self.subject.bind(itemDetail: Driver.just(sectionModel))
-                }
 
                 it("highlighting the cell changes the background color") {
                     let cell = self.subject.tableView.cellForRow(at: [0, 0]) as! ItemDetailCell
@@ -252,63 +318,6 @@ class ItemDetailViewSpec: QuickSpec {
 
                     cell.setHighlighted(false, animated: false)
                     expect(cell.backgroundColor).to(equal(UIColor.white))
-                }
-            }
-        }
-
-        describe("ItemDetailViewCellConfiguration") {
-            describe("IdentifiableType") {
-                let title = "meow"
-                let cellConfig = ItemDetailCellConfiguration(title: title, value: "cats", accessibilityLabel: "something accessible", password: false, accessibilityId: "")
-
-                it("uses the title as the identity string") {
-                    expect(cellConfig.identity).to(equal(title))
-                }
-            }
-
-            describe("equality") {
-                it("uses the value to determine equality") {
-                    expect(ItemDetailCellConfiguration(
-                            title: "meow",
-                            value: "cats",
-                            accessibilityLabel: "something accessible",
-                            password: false,
-                            accessibilityId: "")
-                    ).to(equal(ItemDetailCellConfiguration(
-                            title: "meow",
-                            value: "cats",
-                            accessibilityLabel: "something accessible",
-                            password: false,
-                            accessibilityId: "")
-                    ))
-
-                    expect(ItemDetailCellConfiguration(
-                            title: "woof",
-                            value: "cats",
-                            accessibilityLabel: "something accessible",
-                            password: false,
-                            accessibilityId: "")
-                    ).to(equal(ItemDetailCellConfiguration(
-                            title: "meow",
-                            value: "cats",
-                            accessibilityLabel: "something accessible",
-                            password: false,
-                            accessibilityId: "")
-                    ))
-
-                    expect(ItemDetailCellConfiguration(
-                            title: "meow",
-                            value: "dogs",
-                            accessibilityLabel: "something accessible",
-                            password: false,
-                            accessibilityId: "")
-                    ).notTo(equal(ItemDetailCellConfiguration(
-                            title: "meow",
-                            value: "cats",
-                            accessibilityLabel: "something accessible",
-                            password: false,
-                            accessibilityId: "")
-                    ))
                 }
             }
         }

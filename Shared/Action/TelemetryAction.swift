@@ -20,13 +20,14 @@ enum TelemetryEventCategory: String {
 }
 
 enum TelemetryEventMethod: String {
-case tap, startup, foreground, background, settingChanged, show, canceled, login_selected, autofill_locked, autofill_unlocked, refresh, autofill_clear, shutdown, dnd, update_credentials, lock, unlock, reset, sync, touch, delete, sync_end, sync_timeout, sync_error
+case tap, startup, foreground, background, settingChanged, show, canceled, login_selected, autofill_locked, autofill_unlocked, refresh, autofill_clear, shutdown, dnd, update_credentials, lock, unlock, reset, sync, touch, delete, sync_end, sync_timeout, sync_error, edit
 }
 
 enum TelemetryEventObject: String {
     case app = "app"
     case entryList = "entry_list"
     case entryDetail = "entry_detail"
+    case entryEditor = "entry_editor"
     case learnMore = "learn_more"
     case revealPassword = "reveal_password"
     case entryCopyUsernameButton = "entry_copy_username_button"
@@ -56,6 +57,7 @@ enum TelemetryEventObject: String {
     case datastore = "datastore"
     case onboardingConfirmationPrivacy = "onboarding_confirmation_privacy"
     case externalWebsite = "external_website"
+    case edit = "edit_item"
 }
 
 enum ExtraKey: String {

@@ -60,16 +60,16 @@ class LockwiseXCUITests: BaseTestCase {
         XCTAssertTrue(app.cells["passwordItemDetail"].exists)
         XCTAssertTrue(app.cells["webAddressItemDetail"].exists)
         // The value in each field is correct
-        let userNameValue = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
+        let userNameValue = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value as! String
         XCTAssertEqual(userNameValue, firstEntryEmail)
 
-        let passwordValue = app.cells["passwordItemDetail"].staticTexts.element(boundBy: 1).label
+        let passwordValue = app.cells["passwordItemDetail"].textFields.element(boundBy: 0).value as! String
         XCTAssertEqual(passwordValue, "•••••••••••••")
 
         // Check the reveal Button
         navigator.performAction(Action.RevealPassword)
 
-        let passwordValueReveal = app.cells["passwordItemDetail"].staticTexts.element(boundBy: 1).label
+        let passwordValueReveal = app.cells["passwordItemDetail"].textFields.element(boundBy: 0).value as! String
         XCTAssertEqual(passwordValueReveal, passwordTestAccountLogins)
 
         // Check the copy functionality with user name
@@ -78,13 +78,13 @@ class LockwiseXCUITests: BaseTestCase {
 
         // Now check the clipboard
         if let userNameString = UIPasteboard.general.string {
-            let value = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
+            let value = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value as! String
             XCTAssertNotNil(value)
             XCTAssertEqual(userNameString, value, "Url matches with the UIPasteboard")
         }
 
         // Open website Web Address
-        let webAddressValue = app.cells["webAddressItemDetail"].staticTexts.element(boundBy: 1).label
+        let webAddressValue = app.cells["webAddressItemDetail"].textFields.element(boundBy: 0).value as! String
         XCTAssertEqual(webAddressValue, websiteDetailView)
 
         navigator.performAction(Action.OpenWebsite)
