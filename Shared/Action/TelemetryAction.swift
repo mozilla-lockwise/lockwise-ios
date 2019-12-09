@@ -57,7 +57,7 @@ enum TelemetryEventObject: String {
     case datastore = "datastore"
     case onboardingConfirmationPrivacy = "onboarding_confirmation_privacy"
     case externalWebsite = "external_website"
-    case edit = "edit_entry_detail"
+    case edit = "edit_item"
 }
 
 enum ExtraKey: String {
