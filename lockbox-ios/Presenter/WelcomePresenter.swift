@@ -64,7 +64,7 @@ class WelcomePresenter: BaseWelcomePresenter {
         self.view?.learnMorePressed
             .subscribe(onNext: { _ in
                 self.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
-                        urlString: Constant.app.useLockboxFAQ,
+                        urlString: Constant.app.faqURLtop,
                         title: Constant.string.learnMore,
                         returnRoute: LoginRouteAction.welcome))
             })

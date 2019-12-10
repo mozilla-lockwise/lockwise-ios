@@ -6,7 +6,6 @@ import UIKit
 import RxSwift
 
 class NoResultsCell: UITableViewCell {
-    @IBOutlet weak var learnMoreButton: UIButton!
     var disposeBag = DisposeBag()
 
     override func prepareForReuse() {

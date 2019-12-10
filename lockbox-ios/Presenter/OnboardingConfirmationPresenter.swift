@@ -29,12 +29,4 @@ class OnboardingConfirmationPresenter {
                 .disposed(by: self.disposeBag)
     }
 
-    func onEncryptionLinkTapped() {
-        self.dispatcher.dispatch(action:
-                ExternalWebsiteRouteAction(
-                        urlString: Constant.app.securityFAQ,
-                        title: Constant.string.faq,
-                        returnRoute: LoginRouteAction.onboardingConfirmation)
-        )
-    }
 }

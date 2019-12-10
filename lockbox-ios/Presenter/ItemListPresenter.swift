@@ -79,15 +79,6 @@ class ItemListPresenter: BaseItemListPresenter {
         }.asObserver()
     }
 
-    override var learnMoreNewEntriesObserver: AnyObserver<Void>? {
-        return Binder(self) { target, _ in
-            target.dispatcher.dispatch(action: ExternalWebsiteRouteAction(
-                urlString: Constant.app.createNewEntriesFAQ,
-                title: Constant.string.faq,
-                returnRoute: MainRouteAction.list))
-        }.asObserver()
-    }
-
     init(view: ItemListViewProtocol,
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
