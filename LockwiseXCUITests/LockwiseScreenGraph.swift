@@ -97,6 +97,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.FxATypeEmail, transitionTo: Screen.FxASigninScreenPassword) { userState in
             app.webViews.textFields["Email"].tap()
             app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                app.webViews.textFields["Email"].tap()
+            }
             app.webViews.buttons["Continue"].tap()
         }
     }
