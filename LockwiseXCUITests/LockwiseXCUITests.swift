@@ -189,7 +189,11 @@ class LockwiseXCUITests: BaseTestCase {
         searchTextField.typeText("a")
         // There should be the correct number of matches
         let aMatches = app.tables.cells.count
-        XCTAssertEqual(aMatches, 97)
+        if  iPad() {
+            XCTAssertEqual(aMatches, 100 )
+        } else {
+            XCTAssertEqual(aMatches, 97)
+        }
         // There should be less number of matches
         searchTextField.typeText("cc")
         let accMatches = app.tables.cells.count
