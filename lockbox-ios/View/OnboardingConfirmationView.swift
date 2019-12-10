@@ -47,23 +47,10 @@ extension OnboardingConfirmationView: OnboardingConfirmationViewProtocol {
 
 extension OnboardingConfirmationView {
     private func styleButtonsAndText() {
-        self.finishButton.layer.cornerRadius = 5
-        self.finishButton.clipsToBounds = true
-
-        let text = NSMutableAttributedString(string: Constant.string.syncBetweenDevicesEncryption)
-        let range = text.mutableString.range(of: Constant.string.onboardingSecurityPostfix)
-        text.addAttributes([
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0)
-        ], range: NSMakeRange(0, text.length)) // swiftlint:disable:this legacy_constructor
-
-        text.addAttributes(
-                [
-                    NSAttributedString.Key.foregroundColor: Constant.color.lockBoxViolet
-                ],
-                range: range
-        )
-
-        self.encryptionTextView.attributedText = text
+        finishButton.layer.cornerRadius = 5
+        finishButton.clipsToBounds = true
+        encryptionTextView.font = UIFont.systemFont(ofSize: 15.0)
+        encryptionTextView.text = Constant.string.syncBetweenDevicesEncryption
     }
 
     private func setupStrings() {
