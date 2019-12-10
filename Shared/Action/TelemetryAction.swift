@@ -126,14 +126,12 @@ class TelemetryActionHandler: ActionHandler {
 
     lazy var telemetryActionListener: AnyObserver<TelemetryAction> = {
         return Binder(self) { target, action in
-            let extras = self.addUidTo(extras: action.extras)
-
             target.telemetry.recordEvent(
                     category: TelemetryEventCategory.action.rawValue,
                     method: action.eventMethod.rawValue,
                     object: action.eventObject.rawValue,
                     value: action.value,
-                    extras: extras
+                    extras: nil
             )
         }.asObserver()
     }()
