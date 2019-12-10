@@ -465,7 +465,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 it("updates the view with the appropriate items") {
                                     let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
                                     let expectedItemConfigurations = [
-                                        LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver)
+                                        LoginListCellConfiguration.NoResults
                                     ]
 
                                     expect(self.view.itemsObserver.events.last!.value.element).notTo(beNil())
