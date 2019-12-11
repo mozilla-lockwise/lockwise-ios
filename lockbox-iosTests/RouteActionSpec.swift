@@ -153,7 +153,6 @@ class RouteActionSpec: QuickSpec {
                     expect(ExternalWebsiteRouteAction(urlString: Constant.app.getSupportURL, title: "Support", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsGetSupport))
                     expect(ExternalWebsiteRouteAction(urlString: Constant.app.provideFeedbackURL, title: "Provide Feedback", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsProvideFeedback))
                     expect(ExternalWebsiteRouteAction(urlString: Constant.app.privacyURL, title: "Privacy", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.settingsPrivacy))
-                    expect(ExternalWebsiteRouteAction(urlString: Constant.app.securityFAQ, title: "Security", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.onboardingConfirmationPrivacy))
                     expect(ExternalWebsiteRouteAction(urlString: "http://www.mozilla.com", title: "Mozilla", returnRoute: SettingRouteAction.list).eventObject).to(equal(TelemetryEventObject.externalWebsite))
                 }
             }

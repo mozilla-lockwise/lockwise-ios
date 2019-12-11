@@ -33,8 +33,6 @@ extension ExternalWebsiteRouteAction: TelemetryAction {
             return .settingsFaq
         case Constant.app.privacyURL:
             return .settingsPrivacy
-        case Constant.app.securityFAQ:
-            return .onboardingConfirmationPrivacy
         default:
             return .externalWebsite
         }

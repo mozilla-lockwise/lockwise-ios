@@ -34,7 +34,7 @@ class ItemDetailPresenter {
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
 
-    lazy private var onPasswordToggle: AnyObserver<Bool> = {
+    lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()

@@ -227,12 +227,10 @@ class ItemListViewSpec: QuickSpec {
 
                 describe("no results placeholder") {
                     describe("non-null observer") {
-                        var learnMoreObserver = self.scheduler.createObserver(Void.self)
 
                         beforeEach {
-                            learnMoreObserver = self.scheduler.createObserver(Void.self)
                             self.subject.bind(items: Driver.just(
-                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: learnMoreObserver.asObserver())])]))
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults])]))
                         }
 
                         it("configures the no results placeholder") {
@@ -242,17 +240,6 @@ class ItemListViewSpec: QuickSpec {
                             ) as? NoResultsCell
 
                             expect(cell).notTo(beNil())
-                        }
-
-                        it("configures the learn more button") {
-                            let cell = self.subject.tableView.dataSource!.tableView(
-                                self.subject.tableView,
-                                cellForRowAt: IndexPath(row: 0, section: 0)
-                                ) as! NoResultsCell
-
-                            cell.learnMoreButton.sendActions(for: .touchUpInside)
-
-                            expect(learnMoreObserver.events.count).to(equal(1))
                         }
 
                         it("disposes the subscription on reuse") {
@@ -272,7 +259,7 @@ class ItemListViewSpec: QuickSpec {
                     describe("null observer") {
                         beforeEach {
                             self.subject.bind(items: Driver.just(
-                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults(learnMoreObserver: nil)])]))
+                                [ItemSectionModel(model: 0, items: [LoginListCellConfiguration.NoResults])]))
                         }
 
                         it("configures the no results placeholder") {
@@ -282,15 +269,6 @@ class ItemListViewSpec: QuickSpec {
                             ) as? NoResultsCell
 
                             expect(cell).notTo(beNil())
-                        }
-
-                        it("hides the learn more button") {
-                            let cell = self.subject.tableView.dataSource!.tableView(
-                                self.subject.tableView,
-                                cellForRowAt: IndexPath(row: 0, section: 0)
-                                ) as! NoResultsCell
-
-                            expect(cell.learnMoreButton.isHidden).to(beTrue())
                         }
                     }
                 }
@@ -487,7 +465,7 @@ class ItemListViewSpec: QuickSpec {
                     expect(LoginListCellConfiguration.SyncListPlaceholder.identity).to(equal("syncplaceholder"))
                     let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
                     expect(LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: fakeObserver).identity).to(equal("emptyplaceholder"))
-                    expect(LoginListCellConfiguration.NoResults(learnMoreObserver: fakeObserver).identity).to(equal("noresultsplaceholder"))
+                    expect(LoginListCellConfiguration.NoResults.identity).to(equal("noresultsplaceholder"))
                     expect(LoginListCellConfiguration.SelectAPasswordHelpText.identity).to(equal("selectapasswordhelptext"))
                     expect(LoginListCellConfiguration.NoNetwork(retryObserver: fakeObserver).identity).to(equal("nonetwork"))
                 }
