@@ -125,14 +125,12 @@ class TelemetryActionHandler: ActionHandler {
 
     lazy var telemetryActionListener: AnyObserver<TelemetryAction> = {
         return Binder(self) { target, action in
-            let extras = self.addUidTo(extras: action.extras)
-
             target.telemetry.recordEvent(
                     category: TelemetryEventCategory.action.rawValue,
                     method: action.eventMethod.rawValue,
                     object: action.eventObject.rawValue,
                     value: action.value,
-                    extras: extras
+                    extras: action.extras
             )
         }.asObserver()
     }()
@@ -164,17 +162,4 @@ extension TelemetryActionHandler {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
 
-    private func addUidTo(extras: [String: Any?]?) -> [String: Any?]? {
-        if let uid = self.profileUid {
-            if let extras = extras {
-                return extras.merging([ExtraKey.fxauid.rawValue: uid]) { (_, new) -> Any? in
-                    return new
-                }
-            } else {
-                return [ExtraKey.fxauid.rawValue: uid]
-            }
-        }
-
-        return extras
-    }
 }
