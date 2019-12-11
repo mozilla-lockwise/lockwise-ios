@@ -29,6 +29,13 @@ class ItemDetailViewSpec: QuickSpec {
                 target.onCancelActionDispatched = true
             }.asObserver()
         }
+        
+        override var onPasswordToggle: AnyObserver<Bool> {
+            return Binder(self) { target, revealed in
+                target.onPasswordToggleActionDispatched = true
+            }.asObserver()
+        }
+
     }
 
     private var presenter: FakeItemDetailPresenter!

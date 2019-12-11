@@ -82,7 +82,7 @@ class BaseItemListPresenter {
 
     lazy fileprivate var emptyPlaceholderItems = [LoginListCellConfiguration.EmptyListPlaceholder(learnMoreObserver: self.learnMoreObserver)]
 
-    lazy fileprivate var noResultsPlaceholderItems = [LoginListCellConfiguration.NoResults(learnMoreObserver: self.learnMoreNewEntriesObserver)]
+    lazy fileprivate var noResultsPlaceholderItems = [LoginListCellConfiguration.NoResults]
 
     lazy internal var syncPlaceholderItems = [LoginListCellConfiguration.SyncListPlaceholder]
 

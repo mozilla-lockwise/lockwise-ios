@@ -14,15 +14,11 @@ import RxTest
 class OnboardingConfirmationViewSpec: QuickSpec {
     class FakeOnboardingConfPresenter: OnboardingConfirmationPresenter {
         var onViewReadyCalled = false
-        var onEncryptionLinkCalled = false
 
         override func onViewReady() {
             self.onViewReadyCalled = true
         }
 
-        override func onEncryptionLinkTapped() {
-            self.onEncryptionLinkCalled = true
-        }
     }
 
     private var presenter: FakeOnboardingConfPresenter!
@@ -62,18 +58,6 @@ class OnboardingConfirmationViewSpec: QuickSpec {
                 }
             }
 
-            describe("textViewURL") {
-                beforeEach {
-                    _ = self.subject.textView(
-                            self.subject.encryptionTextView,
-                            shouldInteractWith: URL(string: Constant.app.securityFAQ)!,
-                            in: NSMakeRange(33, 18)) // swiftlint:disable:this legacy_constructor
-                }
-
-                it("tells the presenter") {
-                    expect(self.presenter.onEncryptionLinkCalled).to(beTrue())
-                }
-            }
         }
     }
 }

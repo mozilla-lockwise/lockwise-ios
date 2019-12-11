@@ -61,21 +61,6 @@ class OnboardingConfirmationPresenterSpec: QuickSpec {
                     }
                 }
             }
-
-            describe("onEncryptionLink") {
-                beforeEach {
-                    self.subject.onEncryptionLinkTapped()
-                }
-
-                it("routes to the external webview") {
-                    let action = self.dispatcher.dispatchedActions.popLast() as! ExternalWebsiteRouteAction
-                    expect(action).to(equal(
-                            ExternalWebsiteRouteAction(
-                                    urlString: Constant.app.securityFAQ,
-                                    title: Constant.string.faq,
-                                    returnRoute: LoginRouteAction.onboardingConfirmation)))
-                }
-            }
         }
     }
 }

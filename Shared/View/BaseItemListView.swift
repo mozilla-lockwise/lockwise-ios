@@ -13,7 +13,7 @@ enum LoginListCellConfiguration {
     case Item(title: String, username: String, guid: String, highlight: Bool)
     case SyncListPlaceholder
     case EmptyListPlaceholder(learnMoreObserver: AnyObserver<Void>?)
-    case NoResults(learnMoreObserver: AnyObserver<Void>?)
+    case NoResults
     case SelectAPasswordHelpText
     case NoNetwork(retryObserver: AnyObserver<Void>)
 }
@@ -222,18 +222,11 @@ extension BaseItemListView {
                             cell.learnMoreButton.isHidden = true
                         }
                         retCell = cell
-                    case .NoResults(let learnMoreObserver):
+                    case .NoResults:
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "noresultsplaceholder") as? NoResultsCell else {
                             fatalError("couldn't find the no results cell")
                         }
 
-                        if let observer = learnMoreObserver {
-                            cell.learnMoreButton.rx.tap
-                                .bind(to: observer)
-                                .disposed(by: cell.disposeBag)
-                        } else {
-                            cell.learnMoreButton.isHidden = true
-                        }
                         retCell = cell
                     case .SelectAPasswordHelpText:
                         guard let cell = tableView.dequeueReusableCell(withIdentifier: "selectapasswordhelptext") else {
