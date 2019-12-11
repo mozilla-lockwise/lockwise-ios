@@ -1600,6 +1600,19 @@
 				fr,
 				de,
 				es,
+				co,
+				sk,
+				nl,
+				zh-TW,
+				sq,
+				en-CA,
+				uk,
+				sv,
+				cs,
+				hu,
+				ia,
+				ru,
+				cy,
 			);
 			mainGroup = 7D5DF86A1F87F2600039B23E /*  */;
 			productRefGroup = 7D5DF8741F87F2600039B23E /* Products */;
