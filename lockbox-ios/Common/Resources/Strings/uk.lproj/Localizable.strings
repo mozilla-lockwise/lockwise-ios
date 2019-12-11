@@ -1,0 +1,267 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "А-Я";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Обліковий запис";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "За абеткою";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "У зв'язку з нещодавнім оновленням додатка, вам необхідно увійти знову. Вибачте за незручності.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Оновлення автозаповнення…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Оновлення автозаповнення завершено";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Необхідно увійти";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Ви повинні увійти до %@, перш ніж автозаповнення дозволить отримати доступ до паролів.";
+
+/* Back button title */
+"back" = "Назад";
+
+/* Cancel button title */
+"cancel" = "Скасувати";
+
+/* Close button title */
+"close" = "Закрити";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Це видалить інформацію про ваш обліковий запис Firefox і всі збережені паролі з %@.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Від'єднати %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Продовжити";
+
+/* Text on button to close settings */
+"done" = "Готово";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Синхронізацію паролів завершено";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ скопійовано";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Розпочнімо";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ вимкнено. Встановіть цей браузер, щоб зробити його доступним";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ дозволяє отримати доступ до паролів, які ви вже зберегли у Firefox. Щоб переглянути тут свої паролі, вам необхідно буде увійти та синхронізуватися з Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(без імені користувача)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Ви не використовуєте код допуску.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Примітки";
+
+/* Ok button title */
+"ok" = "Гаразд";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256-бітове шифрування";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Вітаємо в %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Щоб заблокувати %@, на вашому пристрої повинен бути налаштований код допуску. Без цього будь-хто може отримати доступ до збереженої тут інформації.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Вам слід використовувати код допуску для блокування пристрою. Без цього будь-хто може отримати доступ до збереженої тут інформації.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Пароль";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Пароль: подвійний дотик для копії %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Необхідна повторна автентифікація";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Недавні";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Недавно використані";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Шукати паролі";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Синхронізуйте між пристроями із захищеним 256-бітним шифруванням";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Встановити код допуску";
+
+/* Account option in settings */
+"settings.account" = "Обліковий запис";
+
+/* App Version setting label */
+"settings.appVersion" = "Версія додатка";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Інструкції з автозаповнення";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Автоблокування";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 хвилин";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 хвилин";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Оберіть час блокування при бездіяльності";
+
+/* Never */
+"settings.autoLock.never" = "Ніколи";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 година";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 хвилина";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 хвилин";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 годин";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 години";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Бажаний браузер";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Оберіть, який браузер використовувати з Lockwise";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "КОНФІГУРАЦІЯ";
+
+/* FAQ option in settings */
+"settings.faq" = "ЧаП";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Запитати";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Докладніше";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Надіслати відгук";
+
+/* Support section label in settings */
+"settings.support.header" = "ПІДТРИМКА";
+
+/* Title on settings screen */
+"settings.title" = "Параметри";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Від'єднати %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Це вилучає синхронізовані паролі з %@, але не видалить їх з Firefox.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Надсилати дані про використання";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla намагається збирати лише дані, що необхідні для роботи і вдосконалення %@.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Параметри";
+
+/* Sign in button text */
+"signIn" = "Увійти";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Пропустити";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Сортувати записи";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Оберіть варіанти сортування списку записів (використовується %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Час синхронізації минув";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Ваші паролі синхронізуються";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Від'єднатися";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Це розблокує додаток.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Розблокувати з Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Розблокувати з кодом допуску";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Розблокувати з Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "запис без назви";
+
+/* Section title text for username on the item detail screen */
+"username" = "Ім’я користувача";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Ім’я користувача: подвійний дотик для копії %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(немає імені користувача)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Веб-адреса";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Веб-адреса: подвійний дотик для відкриття в браузері %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Щоб використовувати %@, вам необхідний обліковий запис Firefox зі збереженими паролями.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Розблокувати";
+

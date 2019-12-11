@@ -1,0 +1,42 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Automatikus kitöltés frissítése…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Az automatikus kitöltése frissítése kész";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Bejelentkezés szükséges";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Be kell jelentkeznie a %@ba, mielőtt az automatikus kitöltés engedélyezné a hozzáférést a benne lévő jelszavakhoz.";
+
+/* Cancel button title */
+"cancel" = "Mégse";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "A %@ lehetővé teszi a Firefoxba már elmentett jelszavak elérését. Hogy megtekinthesse a bejelentkezéseit itt, be kell jelentkeznie, és szinkronizálnia kell a Firefoxszal.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Bejelentkezések keresése";
+
+/* Sign in button text */
+"signIn" = "Bejelentkezés";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "A szinkronizáláskor időtúllépés történt";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Ez feloldja az alkalmazást.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(nincs felhasználónév)";
+

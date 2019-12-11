@@ -1,0 +1,267 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A–Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Fiók";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Betűrendben";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Az alkalmazás közelmúltbeli frissítése miatt újra be kell jelentkeznie. Elnézést a kellemetlenségért.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Automatikus kitöltés frissítése…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Az automatikus kitöltése frissítése kész";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Bejelentkezés szükséges";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Be kell jelentkeznie a %@ba, mielőtt az automatikus kitöltés engedélyezné a hozzáférést a benne lévő jelszavakhoz.";
+
+/* Back button title */
+"back" = "Vissza";
+
+/* Cancel button title */
+"cancel" = "Mégse";
+
+/* Close button title */
+"close" = "Bezárás";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Ezzel törli a Firefox-fiók adatait és az összes elmentett bejelentkezést a %@ból.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "%@ leválasztása?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Folytatás";
+
+/* Text on button to close settings */
+"done" = "Kész";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "A bejelentkezések szinkronizálása kész";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ másolva";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Kezdő lépések";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ letiltva, telepítse ezt a böngészőt, hogy elérhetővé tegye";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "A %@ lehetővé teszi a Firefoxba már elmentett jelszavak elérését. Hogy megtekinthesse a bejelentkezéseit itt, be kell jelentkeznie, és szinkronizálnia kell a Firefoxszal.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(nincs felhasználónév)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Nem használ jelkódot.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Megjegyzés";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256 bites titkosítás";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Üdvözli a %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "A %@ zárolásához be kell állítania egy jelkódot az eszközén. Jelkód nélkül bárki, aki hozzáfér az eszközhöz, elérheti az itt mentett információkat.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Állítson be egy jelkódot az eszköze zárolásához. Jelkód nélkül bárki, aki hozzáfér az eszközhöz, elérheti az itt mentett információkat.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Jelszó";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Jelszó: dupla koppintás a(z) %@ másolásához";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Újrahitelesítés szükséges";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Legutóbbi";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Nemrég használt";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Bejelentkezések keresése";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Szinkronizálás az eszközök között biztonságos 256 bites titkosítással";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Jelkód beállítása";
+
+/* Account option in settings */
+"settings.account" = "Fiók";
+
+/* App Version setting label */
+"settings.appVersion" = "Alkalmazásverzió";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Automatikus kitöltési utasítások";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Automatikus zárolás";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 perc";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 perc";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Adja meg, hogy mennyi tétlenség után zárolja";
+
+/* Never */
+"settings.autoLock.never" = "Soha";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 óra";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 perc";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 perc";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 óra";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 óra";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Előnyben részesített böngésző";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Válassza ki, melyik böngészőt használja a Lockwise-zal";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "BEÁLLÍTÁSOK";
+
+/* FAQ option in settings */
+"settings.faq" = "GYIK";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Kérdezzen";
+
+/* Label for link to learn more */
+"settings.learnMore" = "További tudnivalók";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Visszajelzés küldése";
+
+/* Support section label in settings */
+"settings.support.header" = "TÁMOGATÁS";
+
+/* Title on settings screen */
+"settings.title" = "Beállítások";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "A %@ leválasztása";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Ez eltávolítja a szinkronizált bejelentkezéseket a %@ból, de nem törli a bejelentkezéseket a Firefoxból.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Használati adatok elküldése";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "A Mozilla arra törekszik, hogy csak azt gyűjtse, ami a %@ fejlesztéséhez és támogatásához szükséges.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Beállítások";
+
+/* Sign in button text */
+"signIn" = "Bejelentkezés";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Kihagyás";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Bejelentkezések rendezése";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Válassza ki a bejelentkezési lista rendezési lehetőségeit (jelenleg: %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "A szinkronizáláskor időtúllépés történt";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Bejelentkezések szinkronizálása";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Kapcsolat bontása";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Ez feloldja az alkalmazást.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Feloldás Face ID-val";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Feloldás jelkóddal";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Feloldás Touch ID-val";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "névtelen bejegyzés";
+
+/* Section title text for username on the item detail screen */
+"username" = "Felhasználónév";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Felhasználónév: dupla koppintás a(z) %@ másolásához";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(nincs felhasználónév)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Webcím";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Webcím: dupla koppintás a(z) %@ böngészőben megnyitáshoz";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "A %@ használatához egy Firefox-fiókra lesz szüksége, mentett bejelentkezésekkel.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Feloldás";
+

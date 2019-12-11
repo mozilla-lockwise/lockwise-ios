@@ -1,0 +1,279 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Account";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Alfabetisch";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Vanwege een recente update van de app, moeten we u opnieuw aanmelden. Excuses voor het ongemak.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Automatisch invullen wordt bijgewerkt…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Het bijwerken van Automatisch invullen is voltooid";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Aanmelden vereist";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "U moet bij %@ zijn aangemeld voordat Automatisch invullen toegang geeft tot de wachtwoorden daarin.";
+
+/* Back button title */
+"back" = "Terug";
+
+/* Cancel button title */
+"cancel" = "Annuleren";
+
+/* Close button title */
+"close" = "Sluiten";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Hiermee worden uw Firefox-accountgegevens en alle opgeslagen aanmeldgegevens van %@ verwijderd.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Verbinding met %@ verbreken?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Doorgaan";
+
+/* Delete button title */
+"delete" = "Verwijderen";
+
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "Hiermee wordt de vermelding uit zowel %@ als Firefox verwijderd.";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Deze aanmeldgegevens verwijderen?";
+
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "%@ verwijderd";
+
+/* Text on button to close settings */
+"done" = "Gereed";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "De synchronisatie van uw aanmeldgegevens is voltooid";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ gekopieerd";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Aan de slag";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ is uitgeschakeld, installeer deze browser om het beschikbaar te maken";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ geeft u toegang tot wachtwoorden die u al in Firefox hebt opgeslagen. Om uw aanmeldgegevens hier te bekijken, moet u zich aanmelden en synchroniseren met Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(geen gebruikersnaam)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "U gebruikt geen toegangscode.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Opmerkingen";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256-bits codering";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Welkom bij %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Om %@ te vergrendelen, moet een toegangscode op uw apparaat zijn ingesteld. Zonder een toegangscode heeft iedereen die uw apparaat heeft, toegang tot de hierop opgeslagen informatie.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "U zou een toegangscode moeten gebruiken om uw apparaat te vergrendelen. Zonder een toegangscode heeft iedereen die uw apparaat heeft, toegang tot de hier opgeslagen informatie.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Wachtwoord";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Wachtwoord: dubbeltik om %@ te kopiëren";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Opnieuw aanmelden vereist";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Recent";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Onlangs gebruikt";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Aanmeldingen zoeken";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Synchroniseer tussen apparaten met een veilige 256-bits versleuteling";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Toegangscode instellen";
+
+/* Account option in settings */
+"settings.account" = "Account";
+
+/* App Version setting label */
+"settings.appVersion" = "App-versie";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Instructies voor automatisch invullen";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Automatische vergrendeling";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 minuten";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 minuten";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Kies wanneer u, na een periode van inactiviteit, wilt vergrendelen";
+
+/* Never */
+"settings.autoLock.never" = "Nooit";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 uur";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 minuut";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 minuten";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 uur";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 uur";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Voorkeursbrowser";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Selecteer welke browser Lockwise gebruikt";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "CONFIGURATIE";
+
+/* FAQ option in settings */
+"settings.faq" = "FAQ";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Een vraag stellen";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Meer info";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Feedback verzenden";
+
+/* Support section label in settings */
+"settings.support.header" = "ONDERSTEUNING";
+
+/* Title on settings screen */
+"settings.title" = "Instellingen";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Verbinding met %@ verbreken";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Hiermee worden gesynchroniseerde aanmeldingen uit %@ verwijderd, maar worden uw aanmeldingen niet uit Firefox verwijderd.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Gebruiksgegevens verzenden";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla streeft ernaar alleen te verzamelen wat nodig is om %@ voor iedereen aan te bieden en te verbeteren. ";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Instellingen";
+
+/* Sign in button text */
+"signIn" = "Aanmelden";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Overslaan";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Aanmeldingen sorteren";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Selecteer opties voor het sorteren van uw lijst met aanmeldingen (momenteel %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Time-out tijdens synchronisatie";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Synchronisatie aanmeldgegevens";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Verbreken";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Hiermee wordt de app ontgrendeld.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Ontgrendel met Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Ontgrendel met toegangscode";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Ontgrendel met Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "niet benoemde invoer";
+
+/* Section title text for username on the item detail screen */
+"username" = "Gebruikersnaam";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Gebruikersnaam: dubbeltik om %@ te kopiëren";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(geen gebruikersnaam)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Internetadres";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Internetadres: dubbeltik om te openen in browser %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Als u %@ wilt gebruiken, hebt u een Firefox-account met opgeslagen aanmeldingen nodig.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Ontgrendelen";
+

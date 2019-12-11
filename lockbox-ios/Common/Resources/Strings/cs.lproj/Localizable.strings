@@ -1,0 +1,156 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Účet";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Abecedně";
+
+/* Back button title */
+"back" = "Zpět";
+
+/* Cancel button title */
+"cancel" = "Zrušit";
+
+/* Close button title */
+"close" = "Zavřít";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Pokračovat";
+
+/* Text on button to close settings */
+"done" = "Hotovo";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(žádné uživatelské jméno)";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Poznámky";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Vítá vás %@";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Heslo";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Nedávné";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Naposledy použité";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Hledat přihlašovací údaje";
+
+/* Account option in settings */
+"settings.account" = "Účet";
+
+/* App Version setting label */
+"settings.appVersion" = "Verze aplikace";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Automatický zámek";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 minut";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 minut";
+
+/* Never */
+"settings.autoLock.never" = "Nikdy";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 hodina";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 minuta";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 minut";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 hodin";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 hodin";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* FAQ option in settings */
+"settings.faq" = "Časté otázky";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Položit otázku";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Zjistit více";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Odeslat zpětnou vazbu";
+
+/* Support section label in settings */
+"settings.support.header" = "PODPORA";
+
+/* Title on settings screen */
+"settings.title" = "Nastavení";
+
+/* Setting to send usage data */
+"settings.usageData" = "Odesílat údaje o používání";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla sbírá jenom ty informace, které potřebuje pro další vylepšování aplikace %@.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Nastavení";
+
+/* Sign in button text */
+"signIn" = "Přihlásit se";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Přeskočit";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Řazení přihlašovacích údajů";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Odpojit";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Toto vám odemkne aplikaci.";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "nepojmenovaný záznam";
+
+/* Section title text for username on the item detail screen */
+"username" = "Uživatelské jméno";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(žádné uživatelské jméno)";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Odemknout";
+
