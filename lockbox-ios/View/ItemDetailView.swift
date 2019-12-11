@@ -59,8 +59,6 @@ class ItemDetailView: UIViewController {
     private var disposeBag = DisposeBag()
     private var dataSource: RxTableViewSectionedReloadDataSource<ItemDetailSectionModel>?
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var learnHowToEditButton: UIButton!
-    @IBOutlet private weak var learnHowToEditArrow: UIImageView!
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -88,9 +86,6 @@ class ItemDetailView: UIViewController {
 }
 
 extension ItemDetailView: ItemDetailViewProtocol {
-    var learnHowToEditTapped: Observable<Void> {
-        return self.learnHowToEditButton.rx.tap.asObservable()
-    }
 
     func bind(itemDetail: Driver<[ItemDetailSectionModel]>) {
         if let dataSource = self.dataSource {

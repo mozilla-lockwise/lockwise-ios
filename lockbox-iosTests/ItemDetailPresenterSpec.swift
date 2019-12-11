@@ -16,16 +16,11 @@ class ItemDetailPresenterSpec: QuickSpec {
     class FakeItemDetailView: ItemDetailViewProtocol {
         var titleTextObserver: TestableObserver<String>!
         var itemDetailObserver: TestableObserver<[ItemDetailSectionModel]>!
-        let learnHowToEditStub = PublishSubject<Void>()
         var tempAlertMessage: String?
         var tempAlertTimeout: TimeInterval?
         var enableBackButtonValue: Bool?
 
         private let disposeBag = DisposeBag()
-
-        var learnHowToEditTapped: Observable<Void> {
-            return self.learnHowToEditStub.asObservable()
-        }
 
         func bind(titleText: Driver<String>) {
             titleText
@@ -484,25 +479,6 @@ class ItemDetailPresenterSpec: QuickSpec {
                         self.copyDisplayStore.copyDisplayStub.onNext(CopyField.username)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
                         expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
-                    }
-                }
-
-                describe("onLearnHowToEditTapped") {
-                    beforeEach {
-                        self.view.learnHowToEditStub.onNext(())
-
-                        self.itemDetailStore.itemDetailIdStub.onNext("1234")
-                    }
-
-                    it("dispatches the faq link action") {
-                        expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                        let argument = self.dispatcher.dispatchActionArgument.last as! ExternalWebsiteRouteAction
-                        expect(argument).to(equal(
-                                        ExternalWebsiteRouteAction(
-                                                urlString: Constant.app.editExistingEntriesFAQ,
-                                                title: Constant.string.faq,
-                                                returnRoute: MainRouteAction.detail(itemId: "1234"))
-                                ))
                     }
                 }
             }

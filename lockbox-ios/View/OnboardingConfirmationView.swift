@@ -45,34 +45,12 @@ extension OnboardingConfirmationView: OnboardingConfirmationViewProtocol {
     }
 }
 
-extension OnboardingConfirmationView: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        self.presenter?.onEncryptionLinkTapped()
-        return false
-    }
-}
-
 extension OnboardingConfirmationView {
     private func styleButtonsAndText() {
-        self.finishButton.layer.cornerRadius = 5
-        self.finishButton.clipsToBounds = true
-
-        self.encryptionTextView.delegate = self
-        let text = NSMutableAttributedString(string: Constant.string.syncBetweenDevicesEncryption)
-        let range = text.mutableString.range(of: Constant.string.onboardingSecurityPostfix)
-        text.addAttributes([
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0)
-        ], range: NSMakeRange(0, text.length)) // swiftlint:disable:this legacy_constructor
-
-        text.addAttributes(
-                [
-                    NSAttributedString.Key.link: NSString(string: Constant.app.securityFAQ),
-                    NSAttributedString.Key.foregroundColor: Constant.color.lockBoxViolet
-                ],
-                range: range
-        )
-
-        self.encryptionTextView.attributedText = text
+        finishButton.layer.cornerRadius = 5
+        finishButton.clipsToBounds = true
+        encryptionTextView.font = UIFont.systemFont(ofSize: 15.0)
+        encryptionTextView.text = Constant.string.syncBetweenDevicesEncryption
     }
 
     private func setupStrings() {

@@ -53,7 +53,6 @@ enum TelemetryEventObject: String {
     case forceLock = "force_lock"
     case openInBrowser = "open_in_browser"
     case datastore = "datastore"
-    case onboardingConfirmationPrivacy = "onboarding_confirmation_privacy"
     case externalWebsite = "external_website"
 }
 

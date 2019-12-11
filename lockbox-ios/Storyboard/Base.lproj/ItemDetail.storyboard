@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,19 +20,19 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="osx-2O-xPR">
-                                    <rect key="frame" x="0.0" y="119.5" width="375" height="0.0"/>
+                                    <rect key="frame" x="0.0" y="113.5" width="375" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="itemdetailcell" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="itemdetailcell" id="93Q-p9-9a2" customClass="ItemDetailCell" customModule="Lockbox" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="55.5" width="375" height="58"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="93Q-p9-9a2" id="H0O-36-Vfq">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="58"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t0H-71-xTp">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t0H-71-xTp">
                                                     <rect key="frame" x="15" y="12" width="33" height="2"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                                     <color key="textColor" red="0.45106157660484314" green="0.45104357600212097" blue="0.45105573534965515" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -43,7 +41,7 @@
                                                         <fragment content="This is a placeholder string for development purposes only"/>
                                                     </attributedString>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuK-Xc-guT">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tuK-Xc-guT">
                                                     <rect key="frame" x="15" y="14" width="42" height="20.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="erG-yn-Bu2"/>
@@ -56,7 +54,7 @@
                                                     </attributedString>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhp-Pp-rfw">
-                                                    <rect key="frame" x="282" y="-4.5" width="43" height="52.5"/>
+                                                    <rect key="frame" x="282" y="3" width="43" height="52"/>
                                                     <accessibility key="accessibilityConfiguration" label="Reveal password in plaintext"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="reveal-eye"/>
@@ -70,7 +68,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tbk-ki-qGK" userLabel="Open Button">
-                                                    <rect key="frame" x="327" y="-4.5" width="43" height="52.5"/>
+                                                    <rect key="frame" x="327" y="3" width="43" height="52"/>
                                                     <accessibility key="accessibilityConfiguration" label="Open this web address in browser"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="open"/>
@@ -84,7 +82,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </button>
                                                 <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HfY-Wo-gMH" userLabel="Copy Button">
-                                                    <rect key="frame" x="327" y="-4.5" width="43" height="52.5"/>
+                                                    <rect key="frame" x="327" y="3" width="43" height="52"/>
                                                     <accessibility key="accessibilityConfiguration" label="Copy value"/>
                                                     <inset key="contentEdgeInsets" minX="10" minY="15" maxX="15" maxY="15"/>
                                                     <state key="normal" image="copy"/>
@@ -123,26 +121,9 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="YaD-WB-pbb">
-                                <rect key="frame" x="100.5" y="622" width="174" height="22"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="2" maxX="-2" maxY="0.0"/>
-                                <state key="normal" title="Learn how to edit this entry" image="arrow-right">
-                                    <color key="titleColor" red="0.34901960784313724" green="0.16470588235294117" blue="0.79607843137254897" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <attributedString key="userComments">
-                                    <fragment content="This is the text on a link to open an informational page on how to edit this entry outside of the application"/>
-                                </attributedString>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="learnEditEntry.button"/>
-                                </userDefinedRuntimeAttributes>
-                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="YaD-WB-pbb" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="4I2-rO-7Qh" secondAttribute="bottom" constant="-20" id="2ZU-bL-E9J"/>
-                            <constraint firstItem="YaD-WB-pbb" firstAttribute="centerX" secondItem="4I2-rO-7Qh" secondAttribute="centerX" id="7wI-eF-AR9"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="leading" secondItem="KzI-mp-fPN" secondAttribute="leading" id="JZg-bg-E7B"/>
-                            <constraint firstItem="YaD-WB-pbb" firstAttribute="width" relation="lessThanOrEqual" secondItem="3Hr-tN-JYo" secondAttribute="width" id="PAs-Ln-X7h"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="height" secondItem="KzI-mp-fPN" secondAttribute="height" id="Qr0-wP-XZD"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="width" secondItem="KzI-mp-fPN" secondAttribute="width" id="U4U-2H-wOZ"/>
                             <constraint firstItem="4I2-rO-7Qh" firstAttribute="top" secondItem="KzI-mp-fPN" secondAttribute="top" id="qDT-gp-FgI"/>
@@ -150,7 +131,6 @@
                         <viewLayoutGuide key="safeArea" id="3Hr-tN-JYo"/>
                     </view>
                     <connections>
-                        <outlet property="learnHowToEditButton" destination="YaD-WB-pbb" id="Q4A-iK-H3O"/>
                         <outlet property="tableView" destination="4I2-rO-7Qh" id="ymG-U6-G22"/>
                     </connections>
                 </viewController>
@@ -160,7 +140,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow-right" width="8" height="10"/>
         <image name="copy" width="18" height="18"/>
         <image name="hide-eye" width="18" height="18"/>
         <image name="open" width="18" height="18"/>

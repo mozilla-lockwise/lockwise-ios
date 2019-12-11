@@ -41,6 +41,7 @@ class ItemDetailViewSpec: QuickSpec {
                 target.onCellTappedValue = value
             }.asObserver()
         }
+
     }
 
     private var presenter: FakeItemDetailPresenter!
@@ -158,21 +159,6 @@ class ItemDetailViewSpec: QuickSpec {
 
                 it("informs the presenter") {
                     expect(self.presenter.onCancelActionDispatched).to(beTrue())
-                }
-            }
-
-            describe("tapping learnHowToEdit button") {
-                var voidObserver = self.scheduler.createObserver(Void.self)
-
-                beforeEach {
-                    voidObserver = self.scheduler.createObserver(Void.self)
-
-                    self.subject.learnHowToEditTapped.bind(to: voidObserver).disposed(by: self.disposeBag)
-                    self.subject.learnHowToEditButton.sendActions(for: .touchUpInside)
-                }
-
-                it("informs any observers") {
-                    expect(voidObserver.events.count).to(equal(1))
                 }
             }
 
