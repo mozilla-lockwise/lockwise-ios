@@ -1,5 +1,22 @@
 # Release Notes
 
+## 1.7.1 (Build 3997)
+
+_Date: 2019-12-12_
+
+Additions: Updates to FAQ links, Feature Flags for new feature development
+We fixed bugs related to: launch crashes, data in telemetry events, test fixes
+
+All changes since version 1.7.1:
+
+- Update FAQ links (#1093)
+- Launch crash due to expired auth token (#1147)
+- Telemetry event data (#1158)
+- Bad phrasing in preferred browser setting screen (#1101)
+- Add Feature Flags (#1095)
+- Compilation error for XCUITests due to incorrect compilation flag (#1143)
+- New FxA page causing tests to fail (#1153)
+
 ## 1.7.0 (Build 3902)
 
 _Date: 2019-11-19_
@@ -9,15 +26,16 @@ We fixed bugs related to: iOS 13 layout and navigation bar issues, keyboard dism
 
 All changes since last build and version 1.6.2:
 
-- Add swipe to delete functionality on login list screen
-- Add telemetry to opening external websites and add sync telemetry
-- update codebase for Xcode 11.2.1 and Swift 5.1.2
-- bump application-services to v0.42.3
-- update RxSwift to most recent version built with Swift 5
-- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad
-- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout
-- import new localization strings from pontoon
-
+- Add universal links (#1100)
+- Add swipe to delete functionality on login list screen (#938)
+- Add telemetry to opening external websites and add sync telemetry (#1087) (#1090)
+- update codebase for Xcode 11.2.1 and Swift 5.1.2 (#1099)
+- bump application-services to v0.42.3 (#1099)
+- update RxSwift to most recent version built with Swift 5 (#1099)
+- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad (#1097)
+- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout (#1106)
+- keyboard dismissal bug when viewing login list (#1123)
+- import new localization strings from pontoon (#1140)
 
 ## 1.7.0 (Build 3871)
 
@@ -28,13 +46,15 @@ We fixed bugs related to: iOS 13 layout and navigation bar issues, keyboard dism
 
 All changes since last build and version 1.6.2:
 
-- Add swipe to delete functionality on login list screen
-- Add telemetry to opening external websites and add sync telemetry
-- update codebase for Xcode 11.2.1 and Swift 5.1.2
-- bump application-services to v0.42.3
-- update RxSwift to most recent version built with Swift 5
-- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad
-- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout
+- Add universal links (#1100)
+- Add swipe to delete functionality on login list screen (#938)
+- Add telemetry to opening external websites and add sync telemetry (#1087) (#1090)
+- update codebase for Xcode 11.2.1 and Swift 5.1.2 (#1099)
+- bump application-services to v0.42.3 (#1099)
+- update RxSwift to most recent version built with Swift 5 (#1099)
+- fix navigation bar color and size issues caused by changes in iOS 13 on both iPhone and iPad (#1097)
+- fix issue where logins do not appear on first launch due to iOS 13 change where traitCollectionDidChange is no longer called on initial view layout (#1106)
+- keyboard dismissal bug when viewing login list (#1123)
 
 ## 1.6.2 (Build 3616)
 
