@@ -308,4 +308,41 @@ class LockwiseXCUITests: BaseTestCase {
             navigator.nowAt(Screen.LockwiseMainPage)
         }
     }
+
+    func testEditEntry() {
+        loginToEntryListView()
+
+        // Tap on Username69
+        app.tables.cells.element(boundBy: 4).tap()
+
+        // Edit the entry adding 1
+        app.buttons["Edit"].tap()
+        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).tap()
+        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).typeText("1")
+
+        // Discard changes
+        app.buttons["Cancel"].tap()
+        app.alerts.scrollViews.buttons["Discard"].tap()
+        // Go back to Edit detail
+        // Check that username has not changed
+        // Disabled due to issue 1172
+        // let userNameValueDiscard = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value
+        // XCTAssertEqual(userNameValueDiscard as! String, "fakeTester69")
+
+        // Tap again on Edit
+        app.buttons["Edit"].tap()
+        // Tap on Cancel without doing changes
+        app.buttons["Cancel"].tap()
+        app.alerts.scrollViews.buttons["Cancel"].tap()
+
+        // Undo the changes by removing the char
+        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).tap()
+        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).typeText("\u{0008}")
+        app.buttons["Save"].tap()
+
+        // Check that entry has not changed
+        let userNameValue = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value
+        XCTAssertEqual(userNameValue as! String, "fakeTester69")
+        app.buttons["Back"].tap()
+    }
 }
