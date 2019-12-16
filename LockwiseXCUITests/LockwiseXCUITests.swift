@@ -312,37 +312,47 @@ class LockwiseXCUITests: BaseTestCase {
     func testEditEntry() {
         loginToEntryListView()
 
-        // Tap on Username69
-        app.tables.cells.element(boundBy: 4).tap()
+        // Tap on the 5th entry
+        openEntryDetails(entryItemOrder: 4)
+        navigator.nowAt(Screen.EntryDetails)
 
         // Edit the entry adding 1
-        app.buttons["Edit"].tap()
-        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).tap()
-        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).typeText("1")
+        navigator.goto(Screen.EditEntryDetails)
+        userState.userName = "1"
+        navigator.performAction(Action.EditUsername)
 
         // Discard changes
-        app.buttons["Cancel"].tap()
-        app.alerts.scrollViews.buttons["Discard"].tap()
+         navigator.performAction(Action.DiscardEditChanges)
+
         // Go back to Edit detail
         // Check that username has not changed
-        // Disabled due to issue 1172
+        // Disabled due to issue #1172
         // let userNameValueDiscard = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value
         // XCTAssertEqual(userNameValueDiscard as! String, "fakeTester69")
 
         // Tap again on Edit
-        app.buttons["Edit"].tap()
-        // Tap on Cancel without doing changes
-        app.buttons["Cancel"].tap()
-        app.alerts.scrollViews.buttons["Cancel"].tap()
+        navigator.nowAt(Screen.EntryDetails)
+        waitforExistence(app.buttons["Edit"], timeout: 5)
+        navigator.performAction(Action.OpenEditView)
 
-        // Undo the changes by removing the char
-        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).tap()
-        app.cells["userNameItemDetail"].textFields.element(boundBy: 0).typeText("\u{0008}")
-        app.buttons["Save"].tap()
+        // Tap on Cancel without doing changes
+        navigator.performAction(Action.CancelEditChanges)
+        navigator.nowAt(Screen.EditEntryDetails)
+
+        // Undo the changes by removing the char and save it
+        userState.userName = "\u{0008}"
+        navigator.performAction(Action.EditUsername)
+        navigator.performAction(Action.SaveEditChanges)
 
         // Check that entry has not changed
         let userNameValue = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value
         XCTAssertEqual(userNameValue as! String, "fakeTester69")
-        app.buttons["Back"].tap()
+
+        // This back fails on iPad
+        if !iPad() {
+            navigator.goto(Screen.LockwiseMainPage)
+        } else {
+            navigator.nowAt(Screen.LockwiseMainPage)
+        }
     }
 }

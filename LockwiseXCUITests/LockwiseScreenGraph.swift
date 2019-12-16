@@ -39,6 +39,8 @@ class Screen {
     static let SortEntriesMenu = "SortEntriesMenu"
 
     static let EntryDetails = "EntryDetails"
+
+    static let EditEntryDetails = "EditEntryDetails"
 }
 
 class Action {
@@ -64,6 +66,12 @@ class Action {
 
     static let RevealPassword = "RevealPassword"
     static let OpenWebsite = "OpenWebsite"
+
+    static let EditUsername = "EditUsername"
+    static let SaveEditChanges = "SaveEditChanges"
+    static let CancelEditChanges = "CancelEditChanges"
+    static let DiscardEditChanges = "DiscardEditChanges"
+    static let OpenEditView = "OpenEditView"
 }
 
 @objcMembers
@@ -75,6 +83,8 @@ class LockwiseUserState: MMUserState {
 
     var fxaUsername: String? = nil
     var fxaPassword: String? = nil
+
+    var userName: String? = nil
 }
 
 func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<LockwiseUserState> {
@@ -149,7 +159,33 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.OpenWebsite) { userState in
             app.buttons["open.button"].tap()
         }
-        screenState.backAction = navigationControllerBackAction
+
+        screenState.gesture(forAction: Action.OpenEditView, transitionTo: Screen.EditEntryDetails) { userState in
+            app.buttons["Edit"].tap()
+        }
+
+       screenState.tap(app.buttons["Back"], to: Screen.LockwiseMainPage)
+    }
+
+    map.addScreenState(Screen.EditEntryDetails) { screenState in
+        screenState.gesture(forAction: Action.EditUsername) { userState in
+            app.cells["userNameItemDetail"].textFields.element(boundBy: 0).tap()
+            app.cells["userNameItemDetail"].textFields.element(boundBy: 0).typeText(userState.userName!)
+        }
+
+       screenState.gesture(forAction: Action.SaveEditChanges, transitionTo: Screen.EntryDetails) { userState in
+            app.buttons["Save"].tap()
+        }
+
+        screenState.gesture(forAction: Action.CancelEditChanges, transitionTo: Screen.EntryDetails) { userState in
+            app.buttons["Cancel"].firstMatch.tap()
+            app.alerts.scrollViews.buttons["Cancel"].tap()
+        }
+
+        screenState.gesture(forAction: Action.DiscardEditChanges, transitionTo: Screen.EntryDetails) { userState in
+            app.buttons["Cancel"].tap()
+            app.alerts.scrollViews.buttons["Discard"].tap()
+        }
     }
 
     map.addScreenState(Screen.SortEntriesMenu) { screenState in
@@ -278,5 +314,9 @@ extension BaseTestCase {
         }
         waitforExistence(settings.cells.staticTexts["Lockwise"])
         settings.cells.staticTexts["Lockwise"].tap()
+    }
+
+    func openEntryDetails(entryItemOrder: Int) {
+        app.tables.cells.element(boundBy: entryItemOrder).tap()
     }
 }
