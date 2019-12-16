@@ -163,8 +163,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.OpenEditView, transitionTo: Screen.EditEntryDetails) { userState in
             app.buttons["Edit"].tap()
         }
-
-       screenState.tap(app.buttons["Back"], to: Screen.LockwiseMainPage)
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            screenState.tap(app.buttons["Back"], to: Screen.LockwiseMainPage)
+        }
     }
 
     map.addScreenState(Screen.EditEntryDetails) { screenState in

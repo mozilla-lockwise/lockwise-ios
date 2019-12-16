@@ -348,10 +348,9 @@ class LockwiseXCUITests: BaseTestCase {
         let userNameValue = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value
         XCTAssertEqual(userNameValue as! String, "fakeTester69")
 
-        // This back fails on iPad
-        if !iPad() {
-            navigator.goto(Screen.LockwiseMainPage)
-        } else {
+        // This is needed so that the tearDown works.
+        // While on iPhone there is a back button, on iPad the view is the same
+        if iPad() {
             navigator.nowAt(Screen.LockwiseMainPage)
         }
     }
