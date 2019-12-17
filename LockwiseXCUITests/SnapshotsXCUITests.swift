@@ -28,35 +28,34 @@ class SnapshotsXCUITests: BaseTestCase {
     func testCheckEntryDetailsViewSnapshot() {
         snapshot("01Welcome" + CONTENT_SIZE)
         loginToEntryListView()
-        
+
         snapshot("02EntryList" + CONTENT_SIZE)
         navigator.goto(Screen.EntryDetails)
-        
+
         // The fields appear
         snapshot("03EntryDetail" + CONTENT_SIZE)
         // The value in each field is correct
-        let userNameValue = app.cells["userNameItemDetail"].staticTexts.element(boundBy: 1).label
+        let userNameValue = app.cells["userNameItemDetail"].textFields.element(boundBy: 0).value as! String
         XCTAssertEqual(userNameValue, firstEntryEmail)
-        
-        let passwordValue = app.cells["passwordItemDetail"].staticTexts.element(boundBy: 1).label
+
+        let passwordValue = app.cells["passwordItemDetail"].textFields.element(boundBy: 0).value as! String
         XCTAssertEqual(passwordValue, "•••••••••••••")
-        
-        // Check the reveal Button
-        navigator.performAction(Action.RevealPassword)
-        
-        let passwordValueReveal = app.cells["passwordItemDetail"].staticTexts.element(boundBy: 1).label
-        XCTAssertEqual(passwordValueReveal, passwordTestAccountLogins)
-        
+
         // Check the copy functionality with user name
         let userNameField = app.cells["userNameItemDetail"]
         userNameField.press(forDuration: 1)
         snapshot("04CopyBanner" + CONTENT_SIZE)
-        
+
         // Check the copy functionality for password
         let passwordField = app.cells["passwordItemDetail"]
         passwordField.press(forDuration: 1)
         snapshot("17CopyBanner" + CONTENT_SIZE)
 
+        // Edit view
+        navigator.performAction(Action.OpenEditView)
+        snapshot("EditView" + CONTENT_SIZE)
+
+        navigator.performAction(Action.DiscardEditChanges)
         navigator.goto(Screen.LockwiseMainPage)
     }
     
@@ -96,35 +95,35 @@ class SnapshotsXCUITests: BaseTestCase {
         let firstEntryRecentOrder = "arncyvuzox.co.uk"
         let firstEntryAphabeticallyOrder = "accounts.firefox.com"
         loginToEntryListView()
-        
+
         // Checking if doing the steps directly works on bb
         waitforExistence(app.buttons["sorting.button"], timeout: 5)
         app.buttons["sorting.button"].tap()
         snapshot("07SortingMenu" + CONTENT_SIZE)
-        
+
         app.sheets.buttons.element(boundBy: 1).tap()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-        
+
         snapshot("08ListSortByRecent" + CONTENT_SIZE)
         // Check that the order has changed
         let firstCellRecent = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellRecent, firstEntryRecentOrder )
-        
+
         app.buttons["sorting.button"].tap()
         waitforExistence(app.sheets.buttons.element(boundBy: 1))
         app.sheets.buttons.element(boundBy: 0).tap()
         waitforExistence(app.navigationBars["firefoxLockwise.navigationBar"])
-        
+
         // Check that the order has changed again to its initial state
         let firstCellAlphabetically = app.tables.cells.element(boundBy: 0).staticTexts.element(boundBy: 0).label
         XCTAssertEqual(firstCellAlphabetically, firstEntryAphabeticallyOrder)
-        
+
         // Search entries options
         let searchTextField = app.searchFields.firstMatch
         waitforExistence(searchTextField, timeout: 3)
         searchTextField.tap()
         snapshot("09SearchOptions" + CONTENT_SIZE)
-        
+
         // There should not be any matches
         searchTextField.typeText("accx")
         waitforExistence(app.cells.staticTexts["noMatchingEntries.label"])

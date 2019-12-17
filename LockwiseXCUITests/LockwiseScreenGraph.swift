@@ -161,10 +161,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.OpenEditView, transitionTo: Screen.EditEntryDetails) { userState in
-            app.buttons["Edit"].tap()
+            app.buttons["rightEditView.button"].tap()
         }
         if UIDevice.current.userInterfaceIdiom != .pad {
-            screenState.tap(app.buttons["Back"], to: Screen.LockwiseMainPage)
+            screenState.tap(app.buttons["backEditView.button"], to: Screen.LockwiseMainPage)
         }
     }
 
@@ -175,16 +175,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
        screenState.gesture(forAction: Action.SaveEditChanges, transitionTo: Screen.EntryDetails) { userState in
-            app.buttons["Save"].tap()
+            app.buttons["rightEditViewButton"].tap()
         }
 
         screenState.gesture(forAction: Action.CancelEditChanges, transitionTo: Screen.EntryDetails) { userState in
-            app.buttons["Cancel"].firstMatch.tap()
+            app.buttons["backEditViewButton"].firstMatch.tap()
             app.alerts.scrollViews.buttons["Cancel"].tap()
         }
 
         screenState.gesture(forAction: Action.DiscardEditChanges, transitionTo: Screen.EntryDetails) { userState in
-            app.buttons["Cancel"].tap()
+            app.buttons["backEditViewButton"].tap()
+            snapshot("DialogAlertEditView" + CONTENT_SIZE)
             app.alerts.scrollViews.buttons["Discard"].tap()
         }
     }

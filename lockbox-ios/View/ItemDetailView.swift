@@ -140,12 +140,14 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
 
         let leftButton = UIButton(title: Constant.string.back, imageName: "back")
         leftButton.titleLabel?.font = .navigationButtonFont
+        leftButton.accessibilityIdentifier = "backEditView.button"
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         // Only allow edit functionality on debug builds
         if FeatureFlags.crudEdit {
             let rightButton = UIButton(title: Constant.string.edit, imageName: nil)
             rightButton.titleLabel?.font = .navigationButtonFont
+            rightButton.accessibilityIdentifier = "rightEditView.button"
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)
         }
         navigationItem.largeTitleDisplayMode = .always
