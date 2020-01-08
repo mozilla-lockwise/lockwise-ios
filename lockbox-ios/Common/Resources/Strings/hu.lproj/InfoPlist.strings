@@ -1,0 +1,9 @@
+/* Bundle display name */
+"CFBundleDisplayName" = "Lockwise";
+
+/* Bundle name */
+"CFBundleName" = "Firefox Lockbox";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "A Firefox Lockwise a Face ID használatával fogja bejelentkeztetni az alkalmazásba.";
+

@@ -1,0 +1,192 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Účet";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Abecedne";
+
+/* Back button title */
+"back" = "Späť";
+
+/* Cancel button title */
+"cancel" = "Zrušiť";
+
+/* Close button title */
+"close" = "Zavrieť";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Odpojiť %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Pokračovať";
+
+/* Delete button title */
+"delete" = "Odstrániť";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Odstrániť tieto prihlasovacie údaje?";
+
+/* Text on button to close settings */
+"done" = "Hotovo";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Začíname";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(žiadne používateľské meno)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Nepoužívate kód.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Poznámky";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256-bitové šifrovanie";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Víta vás %@";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Heslo";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Vyžaduje sa opätovné overenie";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Hľadať";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Nastavenie kódu";
+
+/* Account option in settings */
+"settings.account" = "Účet";
+
+/* App Version setting label */
+"settings.appVersion" = "Verzia aplikácie";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Automatické uzamknutie";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "Po 15 minútach";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "Po 5 minútach";
+
+/* Never */
+"settings.autoLock.never" = "Nikdy";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "Po 1 hodine";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "Po 1 minúte";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "Po 30 minútach";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "Po 12 hodinách";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "Po 24 hodinách";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Obľúbený prehliadač";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* FAQ option in settings */
+"settings.faq" = "Často kladené otázky";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Položiť otázku";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Ďalšie informácie";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Odoslať spätnú väzbu";
+
+/* Support section label in settings */
+"settings.support.header" = "PODPORA";
+
+/* Title on settings screen */
+"settings.title" = "Nastavenia";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Odpojiť %@";
+
+/* Setting to send usage data */
+"settings.usageData" = "Odosielať údaje o používaní";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla sa usiluje zbierať len údaje, ktoré potrebujeme na vylepšenie aplikácie %@ pre všetkých. ";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Nastavenia";
+
+/* Sign in button text */
+"signIn" = "Prihlásiť sa";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Preskočiť";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Usporiadať prihlasovacie údaje";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Odpojiť";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Toto odomkne aplikáciu.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Odomknúť pomocou Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Odomknúť pomocou kódu";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Odomknúť pomocou Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "nepomenovaný záznam";
+
+/* Section title text for username on the item detail screen */
+"username" = "Používateľské meno";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(žiadne používateľské meno)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Webová adresa";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Odomknúť";
+

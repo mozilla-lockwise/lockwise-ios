@@ -1,0 +1,27 @@
+/* Cancel button title */
+"cancel" = "Zrušiť";
+
+/* Delete button title */
+"delete" = "Odstrániť";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Hľadať";
+
+/* Sign in button text */
+"signIn" = "Prihlásiť sa";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Toto vám umožňuje odomknúť aplikáciu.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(žiadne používateľské meno)";
+

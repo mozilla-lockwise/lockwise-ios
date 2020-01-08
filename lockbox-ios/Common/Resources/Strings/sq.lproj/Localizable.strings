@@ -1,0 +1,267 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Llogari";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Alfabetikisht";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Për shkak të një përditësimi të aplikacionit së fundi, do t’ju duhet të ribëni hyrjen. Kërkojmë ndjesë për sikletin.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Po përditësohet AutoFill-i…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "U përfundua përditësimi i AutoFill-it";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Hyrja Është e Domosdoshme";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Duhet të keni bërë hyrjen në %@ përpara se AutoFill të lejojë hyrje në fjalëkalimet brenda tij.";
+
+/* Back button title */
+"back" = "Mbrapsht";
+
+/* Cancel button title */
+"cancel" = "Anuloje";
+
+/* Close button title */
+"close" = "Mbylle";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Kjo do të fshijë të dhëna të Llogarisë tuaj Firefox dhe krejt kredencialet e ruajtura nga %@.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Të shkëputet %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Vazhdo";
+
+/* Text on button to close settings */
+"done" = "U bë";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "U bë Njëkohësimi i kredencialeve tuaja të hyrjes";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ u kopjua";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Fillojani";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ është e çaktivizuar, instaloni këtë shfletues që të mund të kihet";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ ju lejon të përdorni fjalëkalimet që keni ruajtur tashmë në Firefox. Për të parë këtu kredenciale tuajt për hyrje, do t’ju duhet të bëni hyrjen dhe njëkohësim me Firefox-in.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(pa emër përdoruesi)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "S’po përdorni kodkalim.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Shënime";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "Fshehtëzim 256-bit";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Mirë se vini te %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Që të mund të kyçet %@, te pajisja juaj duhet ujdisur një kodkalim. Pa një kodkalim, cilido që ka në dorë pajisjen tuaj, mund të hyjë te të dhënat e ruajtura atje.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Që të kyçni pajisjen tuaj, duhet të përdorni një kodkalim. Pa një kodkalim, cilido që ka në dorë pajisjen tuaj, mund të hyjë te të dhënat e ruajtura atje.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Fjalëkalim";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Fjalëkalim: prekeni dy herë që të kopjohet %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Lypset Rimirëfilltësim";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Së fundi";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Përdorur Së Fundi";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Kërkoni te kredenciale hyrjesh";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Bëni njëkohësim mes pajisjesh me fshehtëzim të sigurt 256-bitësh";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Caktoni Kodkalim";
+
+/* Account option in settings */
+"settings.account" = "Llogari";
+
+/* App Version setting label */
+"settings.appVersion" = "Version Aplikacioni";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Udhëzime AutoFill-i";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Vetëkyçje";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 minuta";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 minuta";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Përzgjidhni kur të kyçet, pas një periudhe plogështie";
+
+/* Never */
+"settings.autoLock.never" = "Kurrë";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 orë";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 minutë";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 minuta";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 orë";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 orë";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Shfletues i Parapëlqyer";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Përzgjidhni cili shfletues të përdoret me Lockwise-in";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "FORMËSIM";
+
+/* FAQ option in settings */
+"settings.faq" = "FAQ";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Bëni një Pyetje";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Mësoni Më Tepër";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Dërgojini Përshtypjet";
+
+/* Support section label in settings */
+"settings.support.header" = "ASISTENCË";
+
+/* Title on settings screen */
+"settings.title" = "Rregullime";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Shkëpute %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Kjo bën heqjen nga %@ të kredencialeve të hyrjeve të njëkohësuara, por s’do të fshijë prej Firefox-i kredencialet tuaja të hyrjeve.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Dërgo të Dhëna Përdorimi";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla rreket të grumbullojë vetëm sa na duhen për të ofruar dhe përmirësuar %@-in për këdo.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Rregullime";
+
+/* Sign in button text */
+"signIn" = "Hyni";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Anashkaloje";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Renditni Kredenciale Hyrjesh";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Përzgjidhni mundësi për renditjen e listës së kredencialeve tuaja për hyrje (aktualisht %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Njëkohësimit i mbaroi koha";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Po njëkohësohen kredencialet tuaja të hyrjeve";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Shkëputu";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Kjo do ta shkyçë aplikacionin.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Shkyçe me Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Shkyçe me Kodkalim";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Shkyçe me Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "zë pa emër";
+
+/* Section title text for username on the item detail screen */
+"username" = "Emër përdoruesi";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Emër përdoruesi: prekeni dy herë që të kopjohet %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(pa emër përdoruesi)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Adresë Web";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Adresë Web: prekeni dy herë që të hapet në shfletues %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Që të përdorni %@, do t’ju duhet një Llogari Firefox me kredenciale të ruajtura në të.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Shkyçe";
+

@@ -40,6 +40,18 @@
 /* Button title when agreeing to proceed to access the application. */
 "continue" = "Continue";
 
+/* Delete button title */
+"delete" = "Delete";
+
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "This will delete the entry from both %@ and Firefox.";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Delete this login?";
+
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "%@ deleted";
+
 /* Text on button to close settings */
 "done" = "Done";
 
@@ -164,7 +176,7 @@
 "settings.browser.focus" = "Firefox Focus";
 
 /* Header displayed above browser choice settings. */
-"settings.browser.header" = "Select which browser to use with Lockwise";
+"settings.browser.header" = "Select which browser use with Lockwise";
 
 /* Klar Browser */
 "settings.browser.klar" = "Firefox Klar";

@@ -1,0 +1,267 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Cyfrif";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Yn nhrefn yr wyddor";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Oherwydd diweddariad ap diweddar, bydd angen i chi fewngofnodi eto. Ymddiheuriadau am yr anghyfleustra.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Diweddaru AutoFill…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Wedi gorffen diweddaru AutoFill";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Mae angen Mewngofnodi";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Rhaid i chi fewngofnodi i %@ cyn y bydd AutoFill yn caniatáu mynediad at gyfrineiriau o'i fewn.";
+
+/* Back button title */
+"back" = "Nôl";
+
+/* Cancel button title */
+"cancel" = "Diddymu";
+
+/* Close button title */
+"close" = "Cau";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Bydd hyn yn dileu manylion eich Cyfrif Firefox a'r holl fewngofnodion a gadwyd o %@.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Datgysylltu %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Parhau";
+
+/* Text on button to close settings */
+"done" = "Gorffen";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Wedi cwblhau cydweddu eich mewngofnodion";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "Copïwyd %@";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Cychwyn Arni";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ wedi'u hanalluogi, gosodwch y porwr hwn i sicrhau ei fod ar gael";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "Mae %@ yn gadael i chi gael mynediad i gyfrineiriau rydych chi eisoes wedi'u cadw i Firefox. I weld eich mewngofnodion yma, bydd angen i chi fewngofnodi a chydweddu gyda Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(dim enw defnyddiwr)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Nid ydych yn defnyddio cyfringod.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Nodiadau";
+
+/* Ok button title */
+"ok" = "Iawn";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "Amgryptio 256-did";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Croeso i %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Er mwyn cloi %@, rhaid gosod cyfringod ar eich dyfais. Heb cyfringod, gall unrhyw un sydd â'ch dyfais gyrchu'r wybodaeth sy'n cael eu cadw yma.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Dylech ddefnyddio cyfringod i gloi'ch dyfais. Heb gyfringod, gall unrhyw un sydd â'ch dyfais gael mynediad i'r wybodaeth sy'n cael ei gadw yma.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Cyfrinair";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Cyfrinair: tap dwbl i gopïo %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Angen Ail Ddilysu";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Diweddar";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Defnyddiwyd yn Ddiweddar";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Chwilio mewngofnodion";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Cydweddu rhwng dyfeisiau ag amgryptio 256-did diogel";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Gosod Cyfringod";
+
+/* Account option in settings */
+"settings.account" = "Cyfrif";
+
+/* App Version setting label */
+"settings.appVersion" = "Fersiwn Ap";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Cyfarwyddiadau AutoFill";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Clo Awto";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 munud";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 munud";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Dewis pryd i gloi ar ôl cyfnod o anactifedd";
+
+/* Never */
+"settings.autoLock.never" = "Byth";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 awr";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 munud";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 munud";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 awr";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 awr";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Porwr Cymeradwy";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Dewiswch pa borwr i'w ddefnyddio gyda Lockwise";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "FFURFWEDDU";
+
+/* FAQ option in settings */
+"settings.faq" = "CWESTIYNAU CYFFREDIN";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Gofyn Cwestiwn";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Dysgu Rhagor";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Anfon Adborth";
+
+/* Support section label in settings */
+"settings.support.header" = "CEFNOGAETH";
+
+/* Title on settings screen */
+"settings.title" = "Gosodiadau";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Datgysylltu %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Mae hyn yn tynnu mewngofnodion wedi'u cydweddu o %@, ond ni fydd yn dileu eich mewngofnodion o Firefox.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Anfon Data Defnydd";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mae Mozilla'n ceisio casglu dim ond yr hyn sydd ei angen arnom i ddarparu a gwella %@ ar gyfer pawb.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Gosodiadau";
+
+/* Sign in button text */
+"signIn" = "Mewngofnodi";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Hepgor";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Trefnu Mewngofnodion";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Dewiswch opsiynau ar gyfer didoli'ch rhestr o fewngofnodion (%@ ar hyn o bryd)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Cydweddu wedi dod i ben";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Cydweddu eich mewngofnodion";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Datgysylltu";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Bydd hyn yn datgloi'r ap.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Datgloi gyda Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Datgloi gyda Chyfringod";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Datgloi gyda Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "cofnod dienw";
+
+/* Section title text for username on the item detail screen */
+"username" = "Enw Defnyddiwr";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Enw defnyddiwr: tap dwbl i gopïo %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(dim enw defnyddiwr)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Cyfeiriad Gwe";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Cyfeiriad gwe: tap dwbl i agor yn y porwr %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "I ddefnyddio %@, bydd angen Cyfrif Firefox arnoch gyda mewngofnodion wedi'u cadw.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Datgloi";
+
