@@ -1,0 +1,42 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Оновлення автозаповнення…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Оновлення автозаповнення завершено";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Необхідно увійти";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Ви повинні увійти до %@, перш ніж автозаповнення дозволить отримати доступ до паролів.";
+
+/* Cancel button title */
+"cancel" = "Скасувати";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ дозволяє отримати доступ до паролів, які ви вже зберегли у Firefox. Щоб переглянути тут свої паролі, вам необхідно буде увійти та синхронізуватися з Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "Гаразд";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Шукати паролі";
+
+/* Sign in button text */
+"signIn" = "Увійти";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Час синхронізації минув";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Це розблокує додаток.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(без імені користувача)";
+

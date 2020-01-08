@@ -1,0 +1,267 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z 字母排序";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "帳號";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "按字母順序";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "由於近期的應用程式更新，需要請您重新登入。造成不便敬請見諒。";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "正在更新自動填寫資料…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "自動填寫資料更新完成";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "需要登入";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "必須先登入 %@，自動填寫功能才可使用當中儲存的密碼。";
+
+/* Back button title */
+"back" = "返回";
+
+/* Cancel button title */
+"cancel" = "取消";
+
+/* Close button title */
+"close" = "關閉";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "將從 %@ 刪除您的 Firefox 帳號資訊與所有儲存的登入資訊。";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "要與 %@ 取消連線？";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "繼續";
+
+/* Text on button to close settings */
+"done" = "完成";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "登入資訊同步完成";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "已複製 %@";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "開始使用";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "已停用 %@，請安裝此瀏覽器方可使用";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ 讓您可以使用儲存於 Firefox 的密碼。若要在此檢視登入資訊，需要先登入並與 Firefox 同步。";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "（無使用者名稱）";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "您沒有設定解鎖碼。";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "附註";
+
+/* Ok button title */
+"ok" = "確定";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256-bit 加密";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "歡迎使用 %@！";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "若要鎖定 %@，必須設定裝置的解鎖碼。若沒有解鎖碼，任何碰得到您的裝置的人，都可以獲得您的登入資訊。";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "您應該為裝置設定解鎖碼。若沒有解鎖碼，任何碰得到您的裝置的人，都可以獲得您的登入資訊。";
+
+/* Section title text for the password on the item detail screen */
+"password" = "密碼";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "密碼: 雙擊即可複製 %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "需要重新驗證";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "最近使用";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "最近使用";
+
+/* Placeholder text for search field */
+"search.placeholder" = "搜尋登入資訊";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "使用 256 位元加密，安全於裝置間同步";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "設定解鎖碼";
+
+/* Account option in settings */
+"settings.account" = "帳號";
+
+/* App Version setting label */
+"settings.appVersion" = "應用程式版本";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "自動填寫功能使用說明";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "自動鎖定";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 分鐘";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 分鐘";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "選擇不使用裝置多久後就鎖定資料";
+
+/* Never */
+"settings.autoLock.never" = "永不";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 小時";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 分鐘";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 分鐘";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 小時";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 小時";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "偏好使用的瀏覽器";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "選擇要在 Lockwise 中使用哪套瀏覽器";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "設定";
+
+/* FAQ option in settings */
+"settings.faq" = "常見問題集";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "問個問題";
+
+/* Label for link to learn more */
+"settings.learnMore" = "了解更多";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "傳送意見回饋";
+
+/* Support section label in settings */
+"settings.support.header" = "技術支援";
+
+/* Title on settings screen */
+"settings.title" = "設定";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "與 %@ 取消連線";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "將從 %@ 移除同步的登入資訊，但不會刪除您儲存於 Firefox 的登入資訊。";
+
+/* Setting to send usage data */
+"settings.usageData" = "傳送使用資料";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla 致力於只收集用來為眾人改善 %@ 所需的必要資料。";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "設定";
+
+/* Sign in button text */
+"signIn" = "登入";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "略過";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "排序登入資訊";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "選擇要如何排序您的登入資訊（目前為 %@）";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "同步逾時";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "正在同步您的登入資訊";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "取消連線";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "將解鎖應用程式。";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "使用 Face ID 解鎖";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "使用解鎖碼解鎖";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "使用 Touch ID 解鎖";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "未命名項目";
+
+/* Section title text for username on the item detail screen */
+"username" = "使用者名稱";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "使用者名稱: 雙擊即可複製 %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "（無使用者名稱）";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "網址";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "網址: 雙擊用 %@ 瀏覽器開啟";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "若要使用 %@，需要有儲存了登入資訊的 Firefox 帳號。";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "解鎖";
+

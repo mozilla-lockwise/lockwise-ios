@@ -1,0 +1,12 @@
+/* Class = "UIButton"; normalTitle = "Finish"; ObjectID = "GdN-75-tz4"; */
+"GdN-75-tz4.normalTitle" = "Gorffen";
+
+/* Class = "UILabel"; text = "Access logins saved to Firefox for desktop from your device"; ObjectID = "afK-Kw-Hqs"; Note = "Explains the app gives the user the ability to access their Firefox logins. Firefox for desktop should match the intended product name"; */
+"afK-Kw-Hqs.text" = "Cewch fynediad i fewngofnodion sydd wedi'u cadw ar Firefox bwrdd gwaith o'ch dyfais";
+
+/* Class = "UITextView"; text = "Sync between devices with secure 256-bit encryption"; ObjectID = "o0t-1T-rrA"; Note = "Explains the app securely synchronizes the user's data"; */
+"o0t-1T-rrA.text" = "Cydweddu rhwng dyfeisiau gydag amgryptio 256-did diogel";
+
+/* Class = "UILabel"; text = "Unlock the app with ease using Touch ID or Face ID"; ObjectID = "sKa-b5-lgD"; Note = "Explains the user can lock and unlock using the system biometrics features. Touch ID and Face ID should be consistently translated to match Apple's system feature names"; */
+"sKa-b5-lgD.text" = "Datglowch yr ap yn rhwydd gan ddefnyddio Touch ID neu Face ID";
+

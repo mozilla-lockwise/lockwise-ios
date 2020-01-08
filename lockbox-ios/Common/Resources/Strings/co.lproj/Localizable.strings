@@ -1,0 +1,279 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A à Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Contu";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Alfabeticamente";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Per via d’un rinnovu recente di l’appiecazione, ci vole à ricunnettavvi torna. Scusateci per stu penseru.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Rinnovu di u riempiimentu autumaticu…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Rinnovu di u riempiimentu autumaticu compiu";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Autenticazione richiesta";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Ci vole à esse cunnettu à %@ per chì u riempiimentu autumaticu permette l’accessu à e parolle d’entrata ch’ellu cuntene.";
+
+/* Back button title */
+"back" = "Precedente";
+
+/* Cancel button title */
+"cancel" = "Abbandunà";
+
+/* Close button title */
+"close" = "Chjode";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "St’azzione squasserà da %@ l’infurmazioni di u vostru contu Firefox è tutte l’identificazioni di cunnessione arregistrate.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Disghjunghje %@ ?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Cuntinuà";
+
+/* Delete button title */
+"delete" = "Squassà";
+
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "St’azzione squasserà l’elementu da %@ è ancu da Firefox.";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Squassà st’identificazione di cunnessione";
+
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "%@ squassatu";
+
+/* Text on button to close settings */
+"done" = "Compiu";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Sincrunizazione di e vostre identificazioni di cunnessione compia";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ cupiatu";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Firefox Lockwise";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ hè disattivatu, installate stu navigatore per rendelu dispunibule";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ vi permette d’accede à e vostre parolle d’entrata chì voi avete dighjà arregistrate in Firefox. Per affissà e vostre identificazioni di cunnessione quì, ci vole à cunnettassi à Firefox è attivà a sincrunizazione.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(alcunu nome d’utilizatore)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Ùn impiegate micca di codice d’accessu.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Note";
+
+/* Ok button title */
+"ok" = "Vai";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "Cifratura 256-bit";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Benvenuta in %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Per ammarchjunà %@, un codice d’accessu deve esse definitu nant’à u vostru apparechju. Osinnò, qualvogliasia chì hà st’apparechju pò accede à l’infurmazioni chì ci sò arregistrate.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Duveriate impiegà un codice d’accessu per ammarchjunà u vostru apparechju. Osinnò, qualvogliasia chì hà st’apparechju pò accede à l’infurmazioni chì ci sò arregistrate.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Parolla d’entrata";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Parolla d’entrata : picchichjà duie volte per cupià %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Nova autenticazione richiesta";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Recente";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Impiegati pocu fà";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Circà identificazioni di cunnessione";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Sincrunizate i vostri apparechji cù una cifratura assicurizata à 256-bit";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Definisce un codice d’accessu";
+
+/* Account option in settings */
+"settings.account" = "Contu";
+
+/* App Version setting label */
+"settings.appVersion" = "Versione di l’appiecazione";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Instruzzioni per u riempiimentu autumaticu";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Chjuditura autumatica";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 minuti";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 minuti";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Selezziunà quandu ammarchjunà dopu à una durata d’inattività";
+
+/* Never */
+"settings.autoLock.never" = "Mai";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 ora";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 minutu";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 minuti";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 ore";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 ore";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Navigatore preferitu";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "FireFox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Selezziunà u navigatore à impiegà cù Lockwise";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "CUNFIGURAZIONE";
+
+/* FAQ option in settings */
+"settings.faq" = "FAQ";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Fà una dumanda";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Sapene di più";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Dà u mo avisu";
+
+/* Support section label in settings */
+"settings.support.header" = "ASSISTENZA";
+
+/* Title on settings screen */
+"settings.title" = "Preferenze";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Disghjunghje %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "St’azzione caccierà da %@ l’infurmazioni di cunnessione sincrunizate, ma ùn e squasserà micca da Firefox.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Mandà dati d’adopru";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla face casu à cullettà solu i dati chì sò ghjuvevule per rigalà è amendà %@ à tutti. ";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Preferenze";
+
+/* Sign in button text */
+"signIn" = "Cunnettassi";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Ignurà";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Classificà l’identificazioni di cunnessione";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Selezziunate l’ozzioni per classificà a vostra lista d’identificazioni di cunnessione (attualmente %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Cumportu di sincrunizazione eccidutu";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Sincrunizazione di e vostre identificazioni di cunnessione";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Disghjunghjesi";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Quessu à da sbluccà l’appiecazione.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Sbluccà cù Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Sbluccà cù u codice d’accessu";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Sbluccà cù Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "elementu senza nome";
+
+/* Section title text for username on the item detail screen */
+"username" = "Nome d’utilizatore";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Nome d’utilizatore : picchichjà duie volte per cupià %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(alcunu nome d’utilizatore)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Indirizzu web";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Indirizzu web : picchichjà duie volte per cupià %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Per impiegà %@, averete bisognu d’un contu Firefox cù identificazioni di cunnessione arregistrate.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Sbluccà";
+

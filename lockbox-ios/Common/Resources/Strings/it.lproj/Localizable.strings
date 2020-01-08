@@ -40,6 +40,18 @@
 /* Button title when agreeing to proceed to access the application. */
 "continue" = "Continua";
 
+/* Delete button title */
+"delete" = "Elimina";
+
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "Le credenziali verranno eliminate sia da %@ che da Firefox.";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Eliminare queste credenziali?";
+
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "%@ eliminato";
+
 /* Text on button to close settings */
 "done" = "Fatto";
 

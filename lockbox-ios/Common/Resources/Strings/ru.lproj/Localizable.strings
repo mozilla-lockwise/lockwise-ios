@@ -1,0 +1,255 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "А–Я";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Аккаунт";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "По алфавиту";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Из-за недавнего обновления приложения, вам необходимо войти заново. Извините за неудобства.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Обновление автозаполнения…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Обновление автозаполнения завершено";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Необходимо войти";
+
+/* Back button title */
+"back" = "Назад";
+
+/* Cancel button title */
+"cancel" = "Отмена";
+
+/* Close button title */
+"close" = "Закрыть";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Это действие удалит ваш Аккаунт Firefox и все сохранённые логины из %@.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Отсоединить %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Продолжить";
+
+/* Text on button to close settings */
+"done" = "Готово";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Синхронизация ваших логинов закончена";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ скопировано";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Начать";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ отключён, установите этот браузер, чтобы сделать его доступным";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ позволяет получить доступ к паролям, которые вы уже сохранили в Firefox. Чтобы просмотреть ваши логины здесь, вам нужно войти и синхронизироваться с Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(нет имени пользователя)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Вы не используете код-пароль.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Примечания";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256-битное шифрование";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Добро пожаловать в %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Чтобы заблокировать %@, необходимо установить код-пароль на ваше устройство. Без код-пароля, любой человек, использующий ваше устройство, сможет получить доступ к сохранённой здесь информации.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Вам необходимо использовать код-пароль, чтобы заблокировать ваше устройство. Без код-пароля, любой человек, использующий ваше устройство, сможет получить доступ к сохранённой здесь информации.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Пароль";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Пароль: нажмите дважды, чтобы скопировать %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Требуется повторная аутентификация";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Последние";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "По последнему использованию";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Поиск логинов";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Синхронизация между устройствами с безопасным 256-битным шифрованием";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Установить код-пароль";
+
+/* Account option in settings */
+"settings.account" = "Аккаунт";
+
+/* App Version setting label */
+"settings.appVersion" = "Версия приложения";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Инструкции по автозаполнению";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Автоблокировка";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 минут";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 минут";
+
+/* Never */
+"settings.autoLock.never" = "Никогда";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 час";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 минута";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 минут";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 часов";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 часа";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Предпочитаемый браузер";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Выберите, какой браузер использовать с Lockwise";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "КОНФИГУРАЦИЯ";
+
+/* FAQ option in settings */
+"settings.faq" = "ЧЗВ";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Задать вопрос";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Подробнее";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Отправить отзыв";
+
+/* Support section label in settings */
+"settings.support.header" = "ПОДДЕРЖКА";
+
+/* Title on settings screen */
+"settings.title" = "Параметры";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Отсоединить %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Это действие удалит синхронизируемые логины из %@, но не удалит ваши логины из Firefox.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Отправлять данные об использовании";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla обязуется собирать только ту информацию, которая необходима для работы %@ и его улучшения в будущем.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Параметры";
+
+/* Sign in button text */
+"signIn" = "Войти";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Пропустить";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Сортировать логины";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Синхронизирую ваши логины";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Отсоединить";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Приложение будет разблокировано.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Разблокировать с помощью Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Разблокировать с помощью код-пароля";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Разблокировать с помощью Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "безымянная запись";
+
+/* Section title text for username on the item detail screen */
+"username" = "Имя пользователя";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Имя пользователя: нажмите дважды, чтобы скопировать %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(нет имени пользователя)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Веб-адрес";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Веб-адрес: нажмите дважды, чтобы открыть в браузере %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Для использования %@, вам необходим Аккаунт Firefox с сохранёнными логинами.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Разблокировать";
+

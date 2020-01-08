@@ -40,6 +40,18 @@
 /* Button title when agreeing to proceed to access the application. */
 "continue" = "Weiter";
 
+/* Delete button title */
+"delete" = "Löschen";
+
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "Dies löscht diesen Eintrag von %@ und Firefox.";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Diese Zugangsdaten löschen?";
+
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "%@ gelöscht";
+
 /* Text on button to close settings */
 "done" = "Fertig";
 
