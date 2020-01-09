@@ -83,8 +83,31 @@ class BaseDataStore {
     public var storageState: Observable<LoginStoreState> {
         return self.storageStateSubject.asObservable()
     }
+    
+    internal lazy var loginsDatabasePath: String? = {
+        let filename = "logins.db"
+        let profileDirName = "profile.lockbox-profile)"
 
-    // From: https://github.com/mozilla-lockwise/lockwise-ios-fxa-sync/blob/120bcb10967ea0f2015fc47bbf8293db57043568/Providers/Profile.swift#L168
+        // Bug 1147262: First option is for device, second is for simulator.
+        var rootPath: String
+        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
+        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
+            rootPath = url.path
+        } else {
+            print("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
+            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+        }
+
+        let files = File(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
+        do {
+            let filePath = try files.getAndEnsureDirectory()
+            return URL(fileURLWithPath: filePath).appendingPathComponent(filename).path
+        } catch {
+            dispatcher.dispatch(action: SentryAction(title: "BaseDataStoreError accessing loginsDatabasePath", error: error, line: nil))
+            return nil
+        }
+    }()
+
     internal var loginsKey: String? {
         let key = "sqlcipher.key.logins.db"
         if self.keychainWrapper.hasValue(forKey: key) {
@@ -96,6 +119,8 @@ class BaseDataStore {
         self.keychainWrapper.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
         return secret
     }
+    
+    private var salt: String?
 
     var unlockInfo: SyncUnlockInfo?
 
@@ -359,11 +384,12 @@ extension BaseDataStore {
     }
 
     private func unlockInternal() {
-        guard let loginsStorage = self.loginsStorage,
-            let loginsKey = self.loginsKey else { return }
+        guard let loginsStorage = loginsStorage,
+            let loginsKey = loginsKey,
+            let salt = salt else { return }
 
         do {
-            try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
+            try loginsStorage.ensureUnlockedWithKeyAndSalt(key: loginsKey, salt: salt)
             self.storageStateSubject.onNext(.Unlocked)
         } catch let error as LoginsStoreError {
             pushError(error)
@@ -414,12 +440,13 @@ extension BaseDataStore {
 
     private func reset() {
         guard let loginsStorage = self.loginsStorage,
-            let loginsKey = self.loginsKey else { return }
+            let loginsKey = self.loginsKey,
+            let salt = salt else { return }
 
         queue.async {
             do {
                 self.storageStateSubject.onNext(.Unprepared)
-                try loginsStorage.ensureUnlocked(withEncryptionKey: loginsKey)
+                try loginsStorage.ensureUnlockedWithKeyAndSalt(key: loginsKey, salt: salt)
                 try loginsStorage.wipeLocal()
             } catch let error as LoginsStoreError {
                 self.pushError(error)
@@ -430,27 +457,46 @@ extension BaseDataStore {
     }
 
     private func shutdown() {
-        self.loginsStorage?.close()
+        loginsStorage?.close()
     }
 
     private func initializeLoginsStorage() {
-        let filename = "logins.db"
-
-        let profileDirName = "profile.lockbox-profile)"
-
-        // Bug 1147262: First option is for device, second is for simulator.
-        var rootPath: String
-        let sharedContainerIdentifier = AppInfo.sharedContainerIdentifier
-        if let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: sharedContainerIdentifier) {
-            rootPath = url.path
+        guard let loginsDatabasePath = loginsDatabasePath else { return }
+        setupSalt()
+        loginsStorage = dataStoreSupport.createLoginsStorage(databasePath: loginsDatabasePath)
+    }
+    
+    private func setupSalt() {
+        guard let loginsDatabasePath = loginsDatabasePath,
+            let loginsKey = loginsKey else { return }
+        let salt: String
+        let key = "sqlcipher.key.logins.salt"
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
+        if keychain.hasValue(forKey: key), let val = keychain.string(forKey: key) {
+            salt = val
         } else {
-            print("Unable to find the shared container. Defaulting profile location to ~/Documents instead.")
-            rootPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
+            salt = setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
+            keychain.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
         }
-
-        let files = File(rootPath: URL(fileURLWithPath: rootPath).appendingPathComponent(profileDirName).path)
-        let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
-
-        self.loginsStorage = dataStoreSupport.createLoginsStorage(databasePath: file)
+        self.salt = salt
+    }
+    
+    // Migrate and return the salt, or create a new salt
+    // Also, in the event of an error, returns a new salt.
+    private func setupPlaintextHeaderAndGetSalt(databasePath: String, encryptionKey: String) -> String {
+        do {
+            if FileManager.default.fileExists(atPath: databasePath) {
+                let db = LoginsStorage(databasePath: databasePath)
+                let salt = try db.getDbSaltForKey(key: encryptionKey)
+                try db.migrateToPlaintextHeader(key: encryptionKey, salt: salt)
+                return salt
+            }
+        } catch {
+            print("setupPlaintextHeaderAndGetSalt failed with error: \(error)")
+            self.dispatcher.dispatch(action: SentryAction(title: "setupPlaintextHeaderAndGetSalt failed", error: error, line: nil))
+        }
+        let saltOf32Chars = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        return saltOf32Chars
     }
 }
