@@ -258,10 +258,19 @@ extension BaseDataStore {
 // list operations
 extension BaseDataStore {
     private func sync(supressNotification: Bool = false) {
-        guard let loginsStorage = self.loginsStorage,
-            let syncInfo = self.syncUnlockInfo,
-            !loginsStorage.isLocked()
-            else { return }
+        let autofillErrorPrefix = "Autofill error: BaseDataStore: "
+        guard let loginsStorage = self.loginsStorage else {
+            sendSentryEvent(title: autofillErrorPrefix + "loginsStorage is nil", error: nil)
+            return
+        }
+        guard let syncInfo = self.syncUnlockInfo else {
+            sendSentryEvent(title: autofillErrorPrefix + "syncInfo is nil", error: nil)
+            return
+        }
+        guard !loginsStorage.isLocked() else {
+            sendSentryEvent(title: autofillErrorPrefix + "loginsStorage is locked", error: nil)
+            return
+        }
 
         if (networkStore.isConnectedToNetwork) {
             self.syncSubject.accept(SyncState.Syncing(supressNotification: supressNotification))
@@ -275,7 +284,7 @@ extension BaseDataStore {
                 // this block serves to "cancel" the sync if the operation is running slowly
                 if (self.syncSubject.value != .Synced) {
                     self.syncSubject.accept(.TimedOut)
-                    self.dispatcher.dispatch(action: SentryAction(title: "Sync timeout without error", error: nil, line: ""))
+                    self.sendSentryEvent(title: autofillErrorPrefix + "Sync timeout without error", error: nil)
                     self.dispatcher.dispatch(action: DataStoreAction.syncTimeout)
                 }
             })
@@ -284,13 +293,25 @@ extension BaseDataStore {
                 _ = try self.loginsStorage?.sync(unlockInfo: syncInfo)
             } catch let error as LoginsStoreError {
                 self.pushError(error)
+                self.sendSentryEvent(title: autofillErrorPrefix + "loginsStorage sync failure", error: error)
                 self.dispatcher.dispatch(action: DataStoreAction.syncError(error: error.errorDescription ?? ""))
             } catch let error {
+                self.sendSentryEvent(title: autofillErrorPrefix + "loginsStorage sync failure", error: error)
+
                 NSLog("DATASTORE:: Unknown error syncing: \(error)")
             }
             self.syncSubject.accept(SyncState.Synced)
             self.dispatcher.dispatch(action: DataStoreAction.syncEnd)
         }
+    }
+    
+    private func sendSentryEvent(title: String, error: Error?) {
+        let sentryAction = SentryAction(
+            title: title,
+            error: error,
+            line: nil
+        )
+        dispatcher.dispatch(action: sentryAction)
     }
 
     private func updateList() {

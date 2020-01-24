@@ -47,58 +47,60 @@ class BaseAccountStore {
     }
 
     internal func populateAccountInformation(_ isNew: Bool) {
+        var errMessage = "Autofill error: BaseAccountStore: "
         guard let fxa = self.fxa else {
+            errMessage = errMessage + "fxa is nil"
+            sendSentryEvent(title: errMessage, error: nil)
             return
         }
 
-        fxa.getProfile { (profile: Profile?, _) in
-            self._profile.onNext(profile)
+        fxa.getProfile { [weak self] (profile: Profile?, error) in
+            self?._profile.onNext(profile)
+            if profile == nil {
+                self?.sendSentryEvent(title: errMessage + "profile is nil", error: error)
+            }
         }
 
         if !networkStore.isConnectedToNetwork {
             self._syncCredentials.onNext(OfflineSyncCredential)
+            errMessage = errMessage + "isConnectedToNetwork false"
+            sendSentryEvent(title: errMessage, error: nil)
             return
         }
 
         fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
             if let error = err as? FirefoxAccountError {
-                var errMessage = ""
                 switch error {
                 case .network(let message):
-                    errMessage = "Network error: " + message
+                    errMessage = errMessage + "Network error: " + message
                 case .unspecified(let message):
-                    errMessage = "Unspecified error: " + message
+                    errMessage = errMessage + "Unspecified error: " + message
                 case .unauthorized(let message):
-                    errMessage = "Unauthorized error: " + message
+                    errMessage = errMessage + "Unauthorized error: " + message
                 case .panic(let message):
-                    errMessage = "Panic error: " + message
+                    errMessage = errMessage + "Panic error: " + message
                 }
-                let sentryAction = SentryAction(
-                    title: "FxAException: " + errMessage,
-                    error: error,
-                    line: "\(#line)"
-                )
-                self?.dispatcher.dispatch(action: sentryAction)
+                self?.sendSentryEvent(title: "FxAException: " + errMessage, error: error)
                 NSLog("Unexpected error getting access token: \(error.localizedDescription)")
                 self?._syncCredentials.onNext(nil)
             } else if let error = err {
-                let sentryAction = SentryAction(
-                        title: "Unexpected exception: ",
-                        error: error,
-                        line: "\(#line)"
-                )
-                self?.dispatcher.dispatch(action: sentryAction)
+                self?.sendSentryEvent(title: errMessage + "Unexpected exception: ", error: error)
                 self?._syncCredentials.onNext(nil)
             }
 
-            guard let key = accessToken?.key,
-                let token = accessToken?.token
-                else {
-                    self?._syncCredentials.onNext(nil)
-                    return
+            guard let key = accessToken?.key else {
+                self?.sendSentryEvent(title: errMessage + "key is nil", error: nil)
+                self?._syncCredentials.onNext(nil)
+                return
             }
-
+            guard let token = accessToken?.token else {
+                self?.sendSentryEvent(title: errMessage + "token is nil", error: nil)
+                self?._syncCredentials.onNext(nil)
+                return
+            }
+            
             guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else {
+                self?.sendSentryEvent(title: errMessage + "tokenURL is nil", error: nil)
                 self?._syncCredentials.onNext(nil)
                 return
             }
@@ -113,10 +115,23 @@ class BaseAccountStore {
             self?._syncCredentials.onNext(
                 SyncCredential(syncInfo: syncInfo, isNew: isNew)
             )
-
-            if let accountJSON = try? fxa.toJSON() {
+            
+            do {
+                let accountJSON = try fxa.toJSON()
                 self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
+            } catch {
+                self?.sendSentryEvent(title: errMessage + "fxa to JSON failed", error: error)
             }
+            
         }
+    }
+    
+    private func sendSentryEvent(title: String, error: Error?) {
+        let sentryAction = SentryAction(
+            title: title,
+            error: error,
+            line: nil
+        )
+        dispatcher.dispatch(action: sentryAction)
     }
 }
