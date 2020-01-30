@@ -214,8 +214,7 @@ extension BaseItemListPresenter {
     fileprivate func configurationsFromItems(_ items: [LoginRecord], detailItemId: String) -> [LoginListCellConfiguration] {
         let loginCells = items.map { login -> LoginListCellConfiguration in
             let titleText = login.hostname.titleFromHostname()
-            let usernameEmpty = login.username == ""
-            let usernameText = usernameEmpty ? Constant.string.usernamePlaceholder : login.username
+            let usernameText = login.username.isEmpty ? Constant.string.usernamePlaceholder : login.username
 
             return LoginListCellConfiguration.Item(
                 title: titleText,

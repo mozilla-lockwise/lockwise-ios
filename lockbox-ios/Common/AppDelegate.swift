@@ -13,8 +13,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var isFirstRun: Bool {
+        get {
+            return UserDefaults.standard.string(forKey: PostFirstRunKey) == nil
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: PostFirstRunKey)
+        }
+    }
+    
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        if isFirstRun {
+            KeychainWrapper.wipeKeychain()
+        }
         _ = AccountStore.shared
         _ = DataStore.shared
         _ = ExternalLinkStore.shared
@@ -33,14 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
 
         // This key will not be set on the first run of the application, only on subsequent runs.
-        let firstRun = UserDefaults.standard.string(forKey: PostFirstRunKey) == nil
-        if firstRun {
+        if isFirstRun {
             Dispatcher.shared.dispatch(action: AccountAction.clear)
             Dispatcher.shared.dispatch(action: DataStoreAction.reset)
-            UserDefaults.standard.set(false, forKey: PostFirstRunKey)
+            isFirstRun = false
         }
 
-        if !firstRun {
+        if !isFirstRun {
             self.checkForUpgrades()
         }
         UserDefaults.standard.set(Constant.app.appVersionCode, forKey: LocalUserDefaultKey.appVersionCode.rawValue)

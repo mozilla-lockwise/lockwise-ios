@@ -439,19 +439,16 @@ extension BaseDataStore {
     }
 
     private func reset() {
-        guard let loginsStorage = self.loginsStorage,
-            let loginsKey = self.loginsKey,
-            let salt = salt else { return }
+        guard let loginsStorage = self.loginsStorage else { return }
 
         queue.async {
             do {
                 self.storageStateSubject.onNext(.Unprepared)
-                try loginsStorage.ensureUnlockedWithKeyAndSalt(key: loginsKey, salt: salt)
                 try loginsStorage.wipeLocal()
             } catch let error as LoginsStoreError {
                 self.pushError(error)
             } catch let error {
-                NSLog("Unknown error wiping database: \(error.localizedDescription)")
+                print("Unknown error wiping database: \(error.localizedDescription)")
             }
         }
     }
@@ -471,13 +468,11 @@ extension BaseDataStore {
             let loginsKey = loginsKey else { return }
         let salt: String
         let key = "sqlcipher.key.logins.salt"
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
-        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
-        if keychain.hasValue(forKey: key), let val = keychain.string(forKey: key) {
+        if let val = keychainWrapper.string(forKey: key) {
             salt = val
         } else {
             salt = setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
-            keychain.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
+            keychainWrapper.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
         }
         self.salt = salt
     }
@@ -499,4 +494,5 @@ extension BaseDataStore {
         let saltOf32Chars = UUID().uuidString.replacingOccurrences(of: "-", with: "")
         return saltOf32Chars
     }
+    
 }
