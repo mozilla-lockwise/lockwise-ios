@@ -467,12 +467,11 @@ extension BaseDataStore {
         guard let loginsDatabasePath = loginsDatabasePath,
             let loginsKey = loginsKey else { return }
         let salt: String
-        let key = "sqlcipher.key.logins.salt"
-        if let val = keychainWrapper.string(forKey: key) {
+        if let val = keychainWrapper.string(forKey: KeychainKey.salt.rawValue) {
             salt = val
         } else {
             salt = setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
-            keychainWrapper.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
+            keychainWrapper.set(salt, forKey: KeychainKey.salt.rawValue, withAccessibility: .afterFirstUnlock)
         }
         self.salt = salt
     }

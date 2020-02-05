@@ -103,9 +103,13 @@ enum UserDefaultKey: String {
 enum KeychainKey: String {
     // note: these additional keys are holdovers from the previous Lockbox-owned style of
     // authentication
-    case email, displayName, avatarURL, accountJSON
+    case email
+    case displayName
+    case avatarURL
+    case accountJSON
+    case salt = "sqlcipher.key.logins.salt"
 
-    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .salt]
     
     static let oldAccountValues: [KeychainKey] = [.email, .displayName, .avatarURL]
 }

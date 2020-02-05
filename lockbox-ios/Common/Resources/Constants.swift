@@ -8,7 +8,7 @@ import UIKit
 
 extension Constant.app {
     static let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    static let appVersionCode = 3 // this is the version of the app that will drive updates.
+    static let appVersionCode = 4 // this is the version of the app that will drive updates.
     static let sumoURL = "https://support.mozilla.org/en-US/kb/"
     static let privacyURL = sumoURL + "firefox-lockwise-and-privacy"
     static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
