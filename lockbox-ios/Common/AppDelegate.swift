@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         if isFirstRun {
             KeychainWrapper.wipeKeychain()
+        } else {
+            checkForKeychainVersionAbnormalities()
         }
         _ = AccountStore.shared
         _ = DataStore.shared
@@ -92,6 +94,20 @@ extension AppDelegate {
             // We may want to consider another lifecycle event (.upgradeComplete) to upgrade in stages
             // e.g. between version 1 to 3 may need an asynchronous upgrade event to go from 1 to 2, then from 2 to 3.
             Dispatcher.shared.dispatch(action: LifecycleAction.upgrade(from: previous, to: current))
+        }
+    }
+    
+    func checkForKeychainVersionAbnormalities() {
+        let current = Constant.app.appVersionCode
+        let previous = UserDefaults.standard.integer(forKey: LocalUserDefaultKey.appVersionCode.rawValue)
+        let keychainWrapper = KeychainWrapper.sharedAppContainerKeychain
+        if previous == 3 && current == 4 {
+            //if we already have keychain value for salt and came from a version that should not have this data, delete it
+            keychainWrapper.removeObject(forKey: KeychainKey.salt.rawValue)
+        } else if previous > current {
+            //this would mean a user had an upgraded test version and has now downgraded to a previous version
+            //we should wipe keychain data to remove any possible abnormalities
+            KeychainWrapper.wipeKeychain()
         }
     }
 }
