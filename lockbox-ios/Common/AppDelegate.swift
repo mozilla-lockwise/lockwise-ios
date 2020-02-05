@@ -39,21 +39,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
 
-        self.window?.rootViewController = RootView()
-        self.window?.makeKeyAndVisible()
+        window?.rootViewController = RootView()
+        window?.makeKeyAndVisible()
 
         // This key will not be set on the first run of the application, only on subsequent runs.
         if isFirstRun {
             Dispatcher.shared.dispatch(action: AccountAction.clear)
             Dispatcher.shared.dispatch(action: DataStoreAction.reset)
             isFirstRun = false
+        } else {
+            checkForUpgrades()
         }
 
-        if !isFirstRun {
-            self.checkForUpgrades()
-        }
         UserDefaults.standard.set(Constant.app.appVersionCode, forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
         AppearanceHelper.shared.setupAppearance()
