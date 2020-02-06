@@ -36,7 +36,7 @@ class BaseDataStoreSpec: QuickSpec {
             return lockedStub
         }
 
-        func ensureUnlocked(withEncryptionKey key: String) throws {
+        func ensureUnlockedWithKeyAndSalt(key: String, salt: String) throws {
             self.ensureUnlockedArgument = key
         }
 
