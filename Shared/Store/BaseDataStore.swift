@@ -119,8 +119,10 @@ class BaseDataStore {
         self.keychainWrapper.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
         return secret
     }
-    
-    private var salt: String?
+
+    private var salt: String? {
+        return setupSalt()
+    }
 
     var unlockInfo: SyncUnlockInfo?
 
@@ -459,39 +461,47 @@ extension BaseDataStore {
 
     private func initializeLoginsStorage() {
         guard let loginsDatabasePath = loginsDatabasePath else { return }
-        setupSalt()
         loginsStorage = dataStoreSupport.createLoginsStorage(databasePath: loginsDatabasePath)
     }
     
-    private func setupSalt() {
+    private func setupSalt() -> String? {
         guard let loginsDatabasePath = loginsDatabasePath,
-            let loginsKey = loginsKey else { return }
-        let salt: String
-        if let val = keychainWrapper.string(forKey: KeychainKey.salt.rawValue) {
-            salt = val
-        } else {
-            salt = setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
-            keychainWrapper.set(salt, forKey: KeychainKey.salt.rawValue, withAccessibility: .afterFirstUnlock)
+            let loginsKey = loginsKey else { return nil }
+
+        let key = KeychainKey.salt.rawValue
+        if keychainWrapper.hasValue(forKey: key, withAccessibility: .afterFirstUnlock) {
+            return keychainWrapper.string(forKey: key, withAccessibility: .afterFirstUnlock)
         }
-        self.salt = salt
+
+        let val = setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
+        keychainWrapper.set(val, forKey: key, withAccessibility: .afterFirstUnlock)
+        return val
     }
     
     // Migrate and return the salt, or create a new salt
     // Also, in the event of an error, returns a new salt.
     private func setupPlaintextHeaderAndGetSalt(databasePath: String, encryptionKey: String) -> String {
+        guard FileManager.default.fileExists(atPath: databasePath) else {
+            return createRandomSalt()
+        }
+        guard let db = loginsStorage as? LoginsStorage else {
+            return createRandomSalt()
+        }
+
         do {
-            if FileManager.default.fileExists(atPath: databasePath) {
-                let db = LoginsStorage(databasePath: databasePath)
-                let salt = try db.getDbSaltForKey(key: encryptionKey)
-                try db.migrateToPlaintextHeader(key: encryptionKey, salt: salt)
-                return salt
-            }
+            let salt = try db.getDbSaltForKey(key: encryptionKey)
+            try db.migrateToPlaintextHeader(key: encryptionKey, salt: salt)
+            return salt
         } catch {
             print("setupPlaintextHeaderAndGetSalt failed with error: \(error)")
             self.dispatcher.dispatch(action: SentryAction(title: "setupPlaintextHeaderAndGetSalt failed", error: error, line: nil))
+            // the database exists. but we didn't store the salt?
+            return createRandomSalt()
         }
-        let saltOf32Chars = UUID().uuidString.replacingOccurrences(of: "-", with: "")
-        return saltOf32Chars
+    }
+
+    private func createRandomSalt() -> String {
+        return UUID().uuidString.replacingOccurrences(of: "-", with: "")
     }
     
 }

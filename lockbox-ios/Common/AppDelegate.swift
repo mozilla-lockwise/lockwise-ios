@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return UserDefaults.standard.string(forKey: PostFirstRunKey) == nil
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: PostFirstRunKey)
+            UserDefaults.standard.set(newValue ? nil : "NO", forKey: PostFirstRunKey)
         }
     }
     
