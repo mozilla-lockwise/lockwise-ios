@@ -13,3 +13,47 @@ public extension KeychainWrapper {
         return KeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
     }
 }
+
+public extension KeychainWrapper {
+    func ensureStringItemAccessibility(_ accessibility: SwiftKeychainWrapper.KeychainItemAccessibility, forKey key: String) {
+        if self.hasValue(forKey: key) {
+            if self.accessibilityOfKey(key) != .afterFirstUnlock {
+                debugPrint("updating item \(key) with \(accessibility)")
+
+                guard let value = self.string(forKey: key) else {
+                    debugPrint("failed to get item \(key)")
+                    return
+                }
+
+                if !self.removeObject(forKey: key) {
+                    debugPrint("failed to remove item \(key)")
+                }
+
+                if !self.set(value, forKey: key, withAccessibility: accessibility) {
+                    debugPrint("failed to update item \(key)")
+                }
+            }
+        }
+    }
+
+    func ensureObjectItemAccessibility(_ accessibility: SwiftKeychainWrapper.KeychainItemAccessibility, forKey key: String) {
+        if self.hasValue(forKey: key) {
+            if self.accessibilityOfKey(key) != .afterFirstUnlock {
+                debugPrint("updating item \(key) with \(accessibility)")
+
+                guard let value = self.object(forKey: key) else {
+                    debugPrint("failed to get item \(key)")
+                    return
+                }
+
+                if !self.removeObject(forKey: key) {
+                    debugPrint("failed to remove item \(key)")
+                }
+
+                if !self.set(value, forKey: key, withAccessibility: accessibility) {
+                    debugPrint("failed to update item \(key)")
+                }
+            }
+        }
+    }
+}

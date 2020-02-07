@@ -8,7 +8,7 @@ import MozillaAppServices
 public protocol LoginsStorageProtocol {
     func close()
     func isLocked() -> Bool
-    func ensureUnlocked(withEncryptionKey key: String) throws
+    func ensureUnlockedWithKeyAndSalt(key: String, salt: String) throws
     func ensureLocked()
     func sync(unlockInfo: MozillaAppServices.SyncUnlockInfo) throws -> String
     func wipeLocal() throws

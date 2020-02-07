@@ -13,8 +13,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    var isFirstRun: Bool {
+        get {
+            return UserDefaults.standard.string(forKey: PostFirstRunKey) == nil
+        }
+        set {
+            UserDefaults.standard.set(newValue ? nil : "NO", forKey: PostFirstRunKey)
+        }
+    }
+    
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        if isFirstRun {
+            KeychainWrapper.wipeKeychain()
+        } else {
+            checkForKeychainVersionAbnormalities()
+        }
         _ = AccountStore.shared
         _ = DataStore.shared
         _ = ExternalLinkStore.shared
@@ -27,22 +41,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(frame: UIScreen.main.bounds)
 
-        self.window?.rootViewController = RootView()
-        self.window?.makeKeyAndVisible()
+        window?.rootViewController = RootView()
+        window?.makeKeyAndVisible()
 
         // This key will not be set on the first run of the application, only on subsequent runs.
-        let firstRun = UserDefaults.standard.string(forKey: PostFirstRunKey) == nil
-        if firstRun {
+        if isFirstRun {
             Dispatcher.shared.dispatch(action: AccountAction.clear)
             Dispatcher.shared.dispatch(action: DataStoreAction.reset)
-            UserDefaults.standard.set(false, forKey: PostFirstRunKey)
+            isFirstRun = false
+        } else {
+            checkForUpgrades()
         }
 
-        if !firstRun {
-            self.checkForUpgrades()
-        }
         UserDefaults.standard.set(Constant.app.appVersionCode, forKey: LocalUserDefaultKey.appVersionCode.rawValue)
 
         AppearanceHelper.shared.setupAppearance()
@@ -82,6 +94,20 @@ extension AppDelegate {
             // We may want to consider another lifecycle event (.upgradeComplete) to upgrade in stages
             // e.g. between version 1 to 3 may need an asynchronous upgrade event to go from 1 to 2, then from 2 to 3.
             Dispatcher.shared.dispatch(action: LifecycleAction.upgrade(from: previous, to: current))
+        }
+    }
+    
+    func checkForKeychainVersionAbnormalities() {
+        let current = Constant.app.appVersionCode
+        let previous = UserDefaults.standard.integer(forKey: LocalUserDefaultKey.appVersionCode.rawValue)
+        let keychainWrapper = KeychainWrapper.sharedAppContainerKeychain
+        if previous == 3 && current == 4 {
+            //if we already have keychain value for salt and came from a version that should not have this data, delete it
+            keychainWrapper.removeObject(forKey: KeychainKey.salt.rawValue)
+        } else if previous > current {
+            //this would mean a user had an upgraded test version and has now downgraded to a previous version
+            //we should wipe keychain data to remove any possible abnormalities
+            KeychainWrapper.wipeKeychain()
         }
     }
 }
