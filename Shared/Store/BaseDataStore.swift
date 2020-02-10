@@ -109,7 +109,7 @@ class BaseDataStore {
     }()
 
     internal var loginsKey: String? {
-        let key = "sqlcipher.key.logins.db"
+        let key = KeychainKey.loginsKey.rawValue
         if self.keychainWrapper.hasValue(forKey: key) {
             return self.keychainWrapper.string(forKey: key)
         }

@@ -142,7 +142,7 @@ extension AccountStore {
     }
 
     private func clear() {
-        KeychainWrapper.wipeKeychain()
+        keychainWrapper.clearAllValues(for: .account)
 
         self.webData.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
             self.webData.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records) { }

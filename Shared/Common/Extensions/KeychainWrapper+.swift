@@ -56,4 +56,20 @@ public extension KeychainWrapper {
             }
         }
     }
+    
+    internal func clearAllValues(for valueType: KeychainKey.valueType) {
+        //This does not wipe entire keychain, but rather clears values defined in KeychainKey
+        switch valueType {
+        //Removes sync account values: email, displayName, accountJSON, avatarURL
+        case .account:
+            for identifier in KeychainKey.accountValues {
+                _ = self.removeObject(forKey: identifier.rawValue)
+            }
+        //Removes database encryption values: salt, key
+        case .database:
+            for identifier in KeychainKey.databaseValues {
+                _ = self.removeObject(forKey: identifier.rawValue)
+            }
+        }
+    }
 }
