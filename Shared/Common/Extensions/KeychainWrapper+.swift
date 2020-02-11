@@ -70,6 +70,11 @@ public extension KeychainWrapper {
             for identifier in KeychainKey.databaseValues {
                 _ = self.removeObject(forKey: identifier.rawValue)
             }
+        //Removes both sync account values and database encryption values
+        case .all:
+            for identifier in KeychainKey.allValues {
+                _ = self.removeObject(forKey: identifier.rawValue)
+            }
         }
     }
 }

@@ -113,10 +113,12 @@ enum KeychainKey: String {
     public enum valueType {
         case account
         case database
+        case all
     }
 
     static let accountValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
     static let databaseValues: [KeychainKey] = [.salt, .loginsKey]
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .salt, .loginsKey]
     
     static let oldAccountValues: [KeychainKey] = [.email, .displayName, .avatarURL]
 }
