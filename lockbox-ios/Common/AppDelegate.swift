@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         if isFirstRun {
-            KeychainWrapper.wipeKeychain()
+            KeychainWrapper.sharedAppContainerKeychain.clearAllValues(for: .all)
         } else {
             checkForKeychainVersionAbnormalities()
         }
@@ -107,7 +107,7 @@ extension AppDelegate {
         } else if previous > current {
             //this would mean a user had an upgraded test version and has now downgraded to a previous version
             //we should wipe keychain data to remove any possible abnormalities
-            KeychainWrapper.wipeKeychain()
+            KeychainWrapper.sharedAppContainerKeychain.clearAllValues(for: .all)
         }
     }
 }

@@ -108,8 +108,17 @@ enum KeychainKey: String {
     case avatarURL
     case accountJSON
     case salt = "sqlcipher.key.logins.salt"
+    case loginsKey = "sqlcipher.key.logins.db"
+    
+    public enum valueType {
+        case account
+        case database
+        case all
+    }
 
-    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .salt]
+    static let accountValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL]
+    static let databaseValues: [KeychainKey] = [.salt, .loginsKey]
+    static let allValues: [KeychainKey] = [.accountJSON, .email, .displayName, .avatarURL, .salt, .loginsKey]
     
     static let oldAccountValues: [KeychainKey] = [.email, .displayName, .avatarURL]
 }

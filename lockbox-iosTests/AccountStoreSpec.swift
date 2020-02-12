@@ -263,11 +263,7 @@ class AccountStoreSpec: QuickSpec {
                 }
 
                 it("clears all available keychain keys") {
-                    for key in KeychainKey.allValues {
-                        expect(self.keychainManager.removeArguments).to(contain(key.rawValue))
-                    }
-
-                    for key in KeychainKey.allValues {
+                    for key in KeychainKey.accountValues {
                         expect(self.keychainManager.removeArguments).to(contain(key.rawValue))
                     }
                 }
