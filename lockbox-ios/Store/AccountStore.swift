@@ -152,9 +152,7 @@ extension AccountStore {
 
         _profile.onNext(nil)
         _syncCredentials.onNext(nil)
-        DispatchQueue.global(qos: .background).async {
-            self.initFxa()
-        }
+        initFxa()
     }
 
     private func clearOldKeychainValues() {
