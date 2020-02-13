@@ -136,8 +136,33 @@ class ItemDetailPresenter {
         if FeatureFlags.crudEdit {
             setupEdit()
         }
+        setupDelete()
         setupCopy(itemObservable: itemObservable)
         setupNavigation(itemObservable: itemObservable)
+    }
+    
+    private func setupDelete() {
+        view?.deleteTapped
+        .subscribe(onNext: { (_) in
+            self.view?.displayAlertController(
+                buttons: [
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.cancel,
+                        tapObserver: nil,
+                        style: .cancel
+                    ),
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.delete,
+                        tapObserver: self.deleteObserver,
+                        style: .destructive)
+                ],
+                title: Constant.string.confirmDeleteLoginDialogTitle,
+                message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                Constant.string.productNameShort),
+                style: .alert,
+                barButtonItem: nil)
+        })
+        .disposed(by: disposeBag)
     }
 
     private func setupEdit() {
@@ -149,28 +174,6 @@ class ItemDetailPresenter {
         itemDetailStore.isEditing
                 .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
                 .disposed(by: disposeBag)
-
-        view?.deleteTapped
-            .subscribe(onNext: { (_) in
-                self.view?.displayAlertController(
-                    buttons: [
-                        AlertActionButtonConfiguration(
-                            title: Constant.string.cancel,
-                            tapObserver: nil,
-                            style: .cancel
-                        ),
-                        AlertActionButtonConfiguration(
-                            title: Constant.string.delete,
-                            tapObserver: self.deleteObserver,
-                            style: .destructive)
-                    ],
-                    title: Constant.string.confirmDeleteLoginDialogTitle,
-                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
-                                    Constant.string.productNameShort),
-                    style: .alert,
-                    barButtonItem: nil)
-            })
-            .disposed(by: disposeBag)
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
