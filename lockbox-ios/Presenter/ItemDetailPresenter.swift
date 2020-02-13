@@ -136,20 +136,12 @@ class ItemDetailPresenter {
         if FeatureFlags.crudEdit {
             setupEdit()
         }
+        setupDelete()
         setupCopy(itemObservable: itemObservable)
         setupNavigation(itemObservable: itemObservable)
     }
-
-    private func setupEdit() {
-        itemDetailStore.isEditing
-                .map { !$0 }
-                .subscribe(view!.deleteHidden)
-                .disposed(by: disposeBag)
-
-        itemDetailStore.isEditing
-                .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
-                .disposed(by: disposeBag)
-
+    
+    private func setupDelete() {
         view?.deleteTapped
             .subscribe(onNext: { (_) in
                 self.view?.displayAlertController(
@@ -171,6 +163,17 @@ class ItemDetailPresenter {
                     barButtonItem: nil)
             })
             .disposed(by: disposeBag)
+    }
+
+    private func setupEdit() {
+        itemDetailStore.isEditing
+                .map { !$0 }
+                .subscribe(view!.deleteHidden)
+                .disposed(by: disposeBag)
+
+        itemDetailStore.isEditing
+                .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
+                .disposed(by: disposeBag)
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
