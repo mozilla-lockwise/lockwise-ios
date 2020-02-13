@@ -143,26 +143,26 @@ class ItemDetailPresenter {
     
     private func setupDelete() {
         view?.deleteTapped
-        .subscribe(onNext: { (_) in
-            self.view?.displayAlertController(
-                buttons: [
-                    AlertActionButtonConfiguration(
-                        title: Constant.string.cancel,
-                        tapObserver: nil,
-                        style: .cancel
-                    ),
-                    AlertActionButtonConfiguration(
-                        title: Constant.string.delete,
-                        tapObserver: self.deleteObserver,
-                        style: .destructive)
-                ],
-                title: Constant.string.confirmDeleteLoginDialogTitle,
-                message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
-                                Constant.string.productNameShort),
-                style: .alert,
-                barButtonItem: nil)
-        })
-        .disposed(by: disposeBag)
+            .subscribe(onNext: { (_) in
+                self.view?.displayAlertController(
+                    buttons: [
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.cancel,
+                            tapObserver: nil,
+                            style: .cancel
+                        ),
+                        AlertActionButtonConfiguration(
+                            title: Constant.string.delete,
+                            tapObserver: self.deleteObserver,
+                            style: .destructive)
+                    ],
+                    title: Constant.string.confirmDeleteLoginDialogTitle,
+                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                    Constant.string.productNameShort),
+                    style: .alert,
+                    barButtonItem: nil)
+            })
+            .disposed(by: disposeBag)
     }
 
     private func setupEdit() {
