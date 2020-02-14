@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        redirectConsoleLogToDocumentFolder()
         _ = AccountStore.shared
         _ = DataStore.shared
         _ = ExternalLinkStore.shared
@@ -82,6 +83,14 @@ extension AppDelegate {
             // We may want to consider another lifecycle event (.upgradeComplete) to upgrade in stages
             // e.g. between version 1 to 3 may need an asynchronous upgrade event to go from 1 to 2, then from 2 to 3.
             Dispatcher.shared.dispatch(action: LifecycleAction.upgrade(from: previous, to: current))
+        }
+    }
+    
+    func redirectConsoleLogToDocumentFolder() {
+        if let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
+            let documentsDirectory = NSURL(fileURLWithPath: path)
+            let logPath = documentsDirectory.appendingPathComponent("console.log")!
+            freopen(logPath.absoluteString, "a+", stderr)
         }
     }
 }

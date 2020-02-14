@@ -41,34 +41,72 @@ class BaseAccountStore {
 
         self.initialized()
     }
+    
+    private func setupRustLogging() {
+        // Set up logging from Rust.
+        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
+            let logString = "[RUST-LOG][\(tag ?? "no-tag")] \(message)"
+
+            switch level {
+            case .trace:
+                NSLog(logString)
+            case .debug:
+                NSLog(logString)
+            case .info:
+                NSLog(logString)
+            case .warn:
+                NSLog(logString)
+            case .error:
+                self.sendSentryEvent(title: logString, error: nil)
+                NSLog("LOGGING RUST ERROR: \(logString)")
+            }
+            return true
+        }) {
+            NSLog("ERROR: Unable to enable logging from Rust")
+        }
+
+        // By default, filter logging from Rust below `.info` level.
+        try? RustLog.shared.setLevelFilter(filter: .info)
+    }
 
     internal func initialized() {
         fatalError("not implemented!")
     }
 
     internal func populateAccountInformation(_ isNew: Bool) {
+        let autofillLogPrefix = "Autofill-1070: "
         var errMessage = "Autofill error: BaseAccountStore: "
+        
+        NSLog("\(autofillLogPrefix) AS001 - starting to populate account information")
         guard let fxa = self.fxa else {
             errMessage = errMessage + "fxa is nil"
+            NSLog("\(autofillLogPrefix) \(errMessage)")
             sendSentryEvent(title: errMessage, error: nil)
             return
         }
-
+        NSLog("\(autofillLogPrefix) AS002 - about to call fxa.getProfile")
         fxa.getProfile { [weak self] (profile: Profile?, error) in
             self?._profile.onNext(profile)
             if profile == nil {
+                NSLog("\(autofillLogPrefix) \(errMessage) profile is nil")
                 self?.sendSentryEvent(title: errMessage + "profile is nil", error: error)
+            } else {
+                NSLog("\(autofillLogPrefix) AS003 - fxa profile is not nil")
             }
         }
 
         if !networkStore.isConnectedToNetwork {
+            NSLog("\(autofillLogPrefix) isConnectedToNetwork false - BaseAccountStore line 98")
             self._syncCredentials.onNext(OfflineSyncCredential)
             errMessage = errMessage + "isConnectedToNetwork false"
             sendSentryEvent(title: errMessage, error: nil)
             return
+        } else {
+            NSLog("\(autofillLogPrefix) AS004 - connected to network - getting access token")
         }
 
         fxa.getAccessToken(scope: Constant.fxa.oldSyncScope) { [weak self] (accessToken, err) in
+            NSLog("\(autofillLogPrefix) AS005 - entering fxa.getAccessToken closure")
             if let error = err as? FirefoxAccountError {
                 switch error {
                 case .network(let message):
@@ -80,49 +118,57 @@ class BaseAccountStore {
                 case .panic(let message):
                     errMessage = errMessage + "Panic error: " + message
                 }
+                NSLog("\(autofillLogPrefix) FxAException: \(errMessage)")
                 self?.sendSentryEvent(title: "FxAException: " + errMessage, error: error)
                 NSLog("Unexpected error getting access token: \(error.localizedDescription)")
                 self?._syncCredentials.onNext(nil)
             } else if let error = err {
+                NSLog("\(autofillLogPrefix) Unexpected exception: \(error.localizedDescription)")
                 self?.sendSentryEvent(title: errMessage + "Unexpected exception: ", error: error)
                 self?._syncCredentials.onNext(nil)
             }
-
+            NSLog("\(autofillLogPrefix) AS006 - no error in fxa.getAccessToken, about to unwrap key data")
             guard let key = accessToken?.key else {
+                NSLog("\(autofillLogPrefix) accessToken.key is nil")
                 self?.sendSentryEvent(title: errMessage + "key is nil", error: nil)
                 self?._syncCredentials.onNext(nil)
                 return
             }
+            NSLog("\(autofillLogPrefix) AS007 - unwrapped accessToken.key successfully")
             guard let token = accessToken?.token else {
+                NSLog("\(autofillLogPrefix) accessToken.token is nil")
                 self?.sendSentryEvent(title: errMessage + "token is nil", error: nil)
                 self?._syncCredentials.onNext(nil)
                 return
             }
-            
+            NSLog("\(autofillLogPrefix) AS008 - unwrapped accessToken.token successfully")
             guard let tokenURL = try? self?.fxa?.getTokenServerEndpointURL() else {
+                NSLog("\(autofillLogPrefix) tokenURL is nil")
                 self?.sendSentryEvent(title: errMessage + "tokenURL is nil", error: nil)
                 self?._syncCredentials.onNext(nil)
                 return
             }
-
+            NSLog("\(autofillLogPrefix) AS009 - unwrapped tokenURL successfully")
             let syncInfo = SyncUnlockInfo(
                 kid: key.kid,
                 fxaAccessToken: token,
                 syncKey: key.k,
                 tokenserverURL: tokenURL.absoluteString
             )
-
+            NSLog("\(autofillLogPrefix) AS010 - sending syncCredentials.onNext")
             self?._syncCredentials.onNext(
                 SyncCredential(syncInfo: syncInfo, isNew: isNew)
             )
-            
+            NSLog("\(autofillLogPrefix) AS011 - about to try fxa.toJSON")
             do {
                 let accountJSON = try fxa.toJSON()
+                NSLog("\(autofillLogPrefix) AS012 - fxa.toJSON successful, setting KeychainKey")
                 self?.keychainWrapper.set(accountJSON, forKey: KeychainKey.accountJSON.rawValue)
             } catch {
+                NSLog("\(autofillLogPrefix) fxa.toJSON failed: \(error.localizedDescription)")
                 self?.sendSentryEvent(title: errMessage + "fxa to JSON failed", error: error)
             }
-            
+            NSLog("\(autofillLogPrefix) AS013 - leaving populationAccountInformation()")
         }
     }
     

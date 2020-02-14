@@ -258,31 +258,44 @@ extension BaseDataStore {
 // list operations
 extension BaseDataStore {
     private func sync(supressNotification: Bool = false) {
+        let autofillLogPrefix = "Autofill-1070: "
         let autofillErrorPrefix = "Autofill error: BaseDataStore: "
+        
+        NSLog("\(autofillLogPrefix) DS001 - in sync function, about to start unwrapping required info")
         guard let loginsStorage = self.loginsStorage else {
+            NSLog("\(autofillLogPrefix) DSError - loginsStorage is nil")
             sendSentryEvent(title: autofillErrorPrefix + "loginsStorage is nil", error: nil)
             return
         }
+        NSLog("\(autofillLogPrefix) DS002 - loginsStorage not nil")
         guard let syncInfo = self.syncUnlockInfo else {
+            NSLog("\(autofillLogPrefix) DSError - syncInfo is nil")
             sendSentryEvent(title: autofillErrorPrefix + "syncInfo is nil", error: nil)
             return
         }
+        NSLog("\(autofillLogPrefix) DS003 - syncInfo not nil")
         guard !loginsStorage.isLocked() else {
+            NSLog("\(autofillLogPrefix) DSError - loginsStorage is locked")
             sendSentryEvent(title: autofillErrorPrefix + "loginsStorage is locked", error: nil)
             return
         }
+        NSLog("\(autofillLogPrefix) DS004 - loginsStorage is unlocked, about to check network connectivity")
 
         if (networkStore.isConnectedToNetwork) {
+            NSLog("\(autofillLogPrefix) DS005 - connected to network and set sync state to syncing")
             self.syncSubject.accept(SyncState.Syncing(supressNotification: supressNotification))
         } else {
+            NSLog("\(autofillLogPrefix) DSError - not connected to network, sync state set to sync")
             self.syncSubject.accept(SyncState.Synced)
             return
         }
 
+        NSLog("\(autofillLogPrefix) DS006 - about to call async app timeout block")
         queue.async {
             self.queue.asyncAfter(deadline: .now() + Constant.app.syncTimeout, execute: {
                 // this block serves to "cancel" the sync if the operation is running slowly
                 if (self.syncSubject.value != .Synced) {
+                    NSLog("\(autofillLogPrefix) DSError - sync timeout without error")
                     self.syncSubject.accept(.TimedOut)
                     self.sendSentryEvent(title: autofillErrorPrefix + "Sync timeout without error", error: nil)
                     self.dispatcher.dispatch(action: DataStoreAction.syncTimeout)
@@ -290,16 +303,20 @@ extension BaseDataStore {
             })
 
             do {
+                NSLog("\(autofillLogPrefix) DS007 - about to try loginsStorage.sync")
                 _ = try self.loginsStorage?.sync(unlockInfo: syncInfo)
+                NSLog("\(autofillLogPrefix) DS008 - loginsStorage.sync successful")
             } catch let error as LoginsStoreError {
+                NSLog("\(autofillLogPrefix) DSError - logingStorage.sync catch LoginsStoreError: \(error.localizedDescription)")
                 self.pushError(error)
                 self.sendSentryEvent(title: autofillErrorPrefix + "loginsStorage sync failure", error: error)
                 self.dispatcher.dispatch(action: DataStoreAction.syncError(error: error.errorDescription ?? ""))
             } catch let error {
+                NSLog("\(autofillLogPrefix) DSError - logingStorage.sync catch unknown error: \(error.localizedDescription)")
                 self.sendSentryEvent(title: autofillErrorPrefix + "loginsStorage sync failure", error: error)
-
                 NSLog("DATASTORE:: Unknown error syncing: \(error)")
             }
+            NSLog("\(autofillLogPrefix) DS009 - Successful sync: about to change SyncState to `Synced` and dispatch DataStoreAction `syncEnd`")
             self.syncSubject.accept(SyncState.Synced)
             self.dispatcher.dispatch(action: DataStoreAction.syncEnd)
         }
