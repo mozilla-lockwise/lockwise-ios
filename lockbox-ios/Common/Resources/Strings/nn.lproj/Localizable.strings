@@ -1,0 +1,279 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Å";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Konto";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "Alfabetisk";
+
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "På grunn av den siste app-oppdateringa, vil du måtte logge inn igjen. Beklagar ulempa.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Oppdaterer Autoutfylling…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Ferdig med oppdatering av Autoutfylling";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Innlogging påkravd";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Du må vere innlogga på %@ før Autoutfylling gir tilgang til passorda den inneheld.";
+
+/* Back button title */
+"back" = "Tilbake";
+
+/* Cancel button title */
+"cancel" = "Avbryt";
+
+/* Close button title */
+"close" = "Lat att";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Dette vil fjerne Firefox-kontoi-nformasjonenen din og alle lagra innloggingar frå %@.";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Kople frå %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Fortset";
+
+/* Delete button title */
+"delete" = "Slett";
+
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "Dette vil slette oppføringa frå både %@ og Firefox.";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Slett denne innlogginga?";
+
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "%@ sletta";
+
+/* Text on button to close settings */
+"done" = "Ferdig";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Ferdig med synkronisering av innloggingar";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "%@ kopiert";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Kom i gang";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "%@ deaktivert, installer denne nettlesaren for å gjere han tilgjengeleg";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ lar deg få tilgang til passord du allereie har lagra i Firefox. For å sjå innloggingane dine her, må du logge på og synkronisere med Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(ingen brukernamn)";
+
+/* Title for dialog box with passcode setting information */
+"not_using_passcode" = "Du brukar ikkje kode.";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Notat";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Name of link to algorithm used by application for encryption */
+"onboarding.encryption" = "256-bit kryptering";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Velkomen til %@";
+
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "For å låse %@, må det settast opp ein kode på eininga di. Utan kode kan alle som har eininga di få tilgang til informasjonen som er lagra her.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Du bør bruke ein kode for å låse eininga. Utan kode kan alle som har eininga di få tilgang til informasjonen som er lagra her.";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Passord";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Passord: dobbeltrykk for å kopiere %@";
+
+/* Title of dialog box displayed when users need to reauthenticate */
+"reauth_required" = "Reautentisering er nødvendig";
+
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Nyleg";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Nyleg brukt";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Søk innloggingar";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Synkroniser mellom einingar med sikker 256-bit kryptering";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Angi kode";
+
+/* Account option in settings */
+"settings.account" = "Konto";
+
+/* App Version setting label */
+"settings.appVersion" = "App-versjon";
+
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Instruksjonar for Autoutfylling";
+
+/* Auto Lock option in settings */
+"settings.autoLock" = "Automatisk lås";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 minutt";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 minutt";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Vel når du vil låse etter ein periode med inaktivitet";
+
+/* Never */
+"settings.autoLock.never" = "Aldri";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 time";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 minutt";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 minutt";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 timar";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 timar";
+
+/* Preferred Browser option in settings */
+"settings.browser" = "Føretrekt nettlesar";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Vel kva for nettlesar som skal brukast med Lockwise";
+
+/* Klar Browser */
+"settings.browser.klar" = "Firefox Klar";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "KONFIGURASJON";
+
+/* FAQ option in settings */
+"settings.faq" = "Ofte stilte spørsmål";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Still eit spørsmål";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Les meir";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Send tilbakemelding";
+
+/* Support section label in settings */
+"settings.support.header" = "BRUKARSTØTTE";
+
+/* Title on settings screen */
+"settings.title" = "Innstillingar";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Kople frå %@";
+
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Dette fjernar synkroniserte innloggingar frå %@, men slettar ikkje innloggingane dine frå Firefox.";
+
+/* Setting to send usage data */
+"settings.usageData" = "Send bruksdata";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla strevar etter å berre samle inn det vi treng for å tilby og forbetre %@ for alle. ";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Innstillingar";
+
+/* Sign in button text */
+"signIn" = "Logg inn";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Hopp over";
+
+/* Title for the option sheet allowing users to sort logins */
+"sort_entries" = "Sorter innloggingar";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Vel alternativ for å sortere lista over innloggingar (akkurat no %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Synkroniseringa fekk tidsavbrot";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Synkroniserer innloggingane dine";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Kople frå";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Dette vil låse opp appen.";
+
+/* Label for the button to unlock the device using Face ID */
+"unlock_with_faceid" = "Lås opp med Face ID";
+
+/* Label for the button to unlock the device using a device passcode */
+"unlock_with_pin" = "Lås opp med kode";
+
+/* Label for the button to unlock the device using Touch ID */
+"unlock_with_touchid" = "Lås opp med Touch ID";
+
+/* Placeholder text for when there is no login name */
+"unnamed_entry" = "namnlaus oppføring";
+
+/* Section title text for username on the item detail screen */
+"username" = "Brukarnamn";
+
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Brukarnamn: dobbeltrykk for å kopiere %@";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(ingen brukarnamn)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Nettadresse";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Nettadresse: dobbeltrykk for å opne i nettlesar %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "For å bruke %@, treng du ein Firefox-konto med lagra innloggingar.";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Lås opp";
+

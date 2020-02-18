@@ -1,3 +1,6 @@
+/* Class = "UILabel"; text = "To make changes to your account, log in to your Firefox Account from any browser."; ObjectID = "6A6-i9-hvw"; Note = "Instructions for the user to follow to make account changes outside of the application. Firefox Account should be consistently translated to match the product name"; */
+"6A6-i9-hvw.text" = "Hogy módosításokat végezzen a fiókjában, jelentkezzen be a Firefox-fiókjába bármelyik böngészőből.";
+
 /* Class = "UILabel"; text = "Firefox Account"; ObjectID = "f32-KR-4Nm"; Note = "Placeholder string if the user's Firefox Account name is not returned. Firefox Account should be consistently translated to match the product name"; */
 "f32-KR-4Nm.text" = "Firefox-fiók";
 

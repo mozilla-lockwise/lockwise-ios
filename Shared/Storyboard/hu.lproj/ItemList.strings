@@ -4,6 +4,12 @@
 /* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "5gN-a0-N6V"; Note = "This is the text suggestion the user open an informational page to learn more about this condition"; */
 "5gN-a0-N6V.normalTitle" = "További tudnivalók";
 
+/* Class = "UILabel"; text = "To see more logins here, you’ll need to save them to Firefox."; ObjectID = "JpV-eG-grp"; Note = "This message appears if there are no logins available to this account and suggests the user needs to save and sync logins for them to appear"; */
+"JpV-eG-grp.text" = "Hogy több bejelentkezést lásson itt, el kell mentenie azokat a Firefoxba.";
+
+/* Class = "UILabel"; text = "Select a password to fill"; ObjectID = "RpZ-Z7-u0I"; Note = "This is an instruction for the user to select a login when in AutoFill mode "; */
+"RpZ-Z7-u0I.text" = "Válasszon egy jelszót a kitöltéshez";
+
 /* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "aQB-Vr-ObR"; Note = "This is the text suggestion the user open an informational page to learn more about this condition"; */
 "aQB-Vr-ObR.normalTitle" = "További tudnivalók";
 

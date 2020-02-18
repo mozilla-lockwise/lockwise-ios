@@ -1,0 +1,150 @@
+/* Label for the button allowing users to sort the logins list alphabetically */
+"a_to_z" = "A-Z";
+
+/* Title for settings page letting users manage their accounts */
+"account" = "Amiḍan";
+
+/* Label for the option sheet action allowing users to sort the logins list alphabetically */
+"alphabetically" = "S ugemmay";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Aleqqem n AutoFill…";
+
+/* Back button title */
+"back" = "Ɣer deffir";
+
+/* Cancel button title */
+"cancel" = "Sefsex";
+
+/* Close button title */
+"close" = "Mdel";
+
+/* Confirm dialog title. %@ will be replaced with the application name */
+"confirm_dialog_title" = "Ffeɣ %@?";
+
+/* Button title when agreeing to proceed to access the application. */
+"continue" = "Kemmel";
+
+/* Delete button title */
+"delete" = "Kkes";
+
+/* Title for confirmation dialog when a login is deleted */
+"delete.confirmDialogTitle" = "Kkes anekcam-agi?";
+
+/* Text on button to close settings */
+"done" = "Immed";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Title for the FxA login screen. */
+"get.started" = "Bdu";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* placeholder text when there is no username */
+"no_username" = "(ulas isem n useqdac)";
+
+/* Section title for the notes field on the item detail screen */
+"notes" = "Tizmilin";
+
+/* Ok button title */
+"ok" = "IH";
+
+/* Title on onboarding screen. %@ will be replaced with the application name */
+"onboarding.title" = "Ansuf ɣer %@";
+
+/* Section title text for the password on the item detail screen */
+"password" = "Awal uffir";
+
+/* Label for button allowing users to go to passcode settings */
+"set_passcode" = "Sbadu azamul uffir";
+
+/* Account option in settings */
+"settings.account" = "Amiḍan";
+
+/* 15 minutes auto lock setting */
+"settings.autoLock.fifteenMinutes" = "15 n tesdatin";
+
+/* 5 minutes auto lock setting */
+"settings.autoLock.fiveMinutes" = "5 n tesdatin";
+
+/* Never */
+"settings.autoLock.never" = "Weṛǧin";
+
+/* 1 hour auto lock setting */
+"settings.autoLock.oneHour" = "1 n usrag";
+
+/* 1 minute auto lock setting */
+"settings.autoLock.oneMinute" = "1 n tesdat";
+
+/* 30 minutes auto lock setting */
+"settings.autoLock.thirtyMinutes" = "30 n tesdatin";
+
+/* 12 hours auto lock setting */
+"settings.autoLock.twelveHour" = "12 n yesragen";
+
+/* 24 hours auto lock setting */
+"settings.autoLock.twentyFourHour" = "24 n yisragen";
+
+/* Chrome Browser */
+"settings.browser.chrome" = "Google Chrome";
+
+/* Firefox Browser */
+"settings.browser.firefox" = "Firefox";
+
+/* Focus Browser */
+"settings.browser.focus" = "Firefox Focus";
+
+/* Safari Browser */
+"settings.browser.safari" = "Safari";
+
+/* FAQ option in settings */
+"settings.faq" = "Isteqsiyen FAQ";
+
+/* Support link to Discourse discussion forum */
+"settings.getSupport" = "Efk-d asteqsi";
+
+/* Label for link to learn more */
+"settings.learnMore" = "Issin ugar";
+
+/* Send feedback option in settings */
+"settings.provideFeedback" = "Azen tikti";
+
+/* Title on settings screen */
+"settings.title" = "Iɣewwaṛen";
+
+/* Text on button to unlink account. %@ will be replaced with the application name */
+"settings.unlinkAccount" = "Ffeɣ %@";
+
+/* Setting to send usage data */
+"settings.usageData" = "Azen isefka n useqdec";
+
+/* The subtitle for the telemetry (data usage) setting explaining why and how Mozilla collects data. %@ will be replaced with the application name */
+"settings.usageData.subtitle" = "Mozilla tettennaɣ akken ad telqeḍ kan ayen tesra i usnulfu d usnerni n %@ i yal yiwen.";
+
+/* Accessibility identifier for the settings button */
+"settings_button" = "Iɣewwaṛen";
+
+/* Sign in button text */
+"signIn" = "Kcem";
+
+/* Label for button allowing users to skip setting passcode or biometrics on device */
+"skip" = "Suref";
+
+/* Unlink aka Disconnect button title */
+"unlink" = "Ffeɣ";
+
+/* Section title text for username on the item detail screen */
+"username" = "Isem n useqdac";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(ulas isem n useqdac)";
+
+/* Section title text for the web address on the item detail screen */
+"web_address" = "Tansa Web";
+
+/* Text on button to unlock app */
+"welcome.unlockButton" = "Serreḥ";
+

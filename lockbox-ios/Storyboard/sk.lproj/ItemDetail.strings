@@ -1,3 +1,15 @@
+/* Class = "UIButton"; accessibilityLabel = "Copy value"; ObjectID = "HfY-Wo-gMH"; Note = "The instruction a screenreader gives that this is how to copy the value of this item"; */
+"HfY-Wo-gMH.accessibilityLabel" = "Kopírovať hodnotu";
+
+/* Class = "UIButton"; accessibilityLabel = "Reveal password in plaintext"; ObjectID = "Mhp-Pp-rfw"; Note = "This is the screenreader instruction that this button will reveal the password and then can be read"; */
+"Mhp-Pp-rfw.accessibilityLabel" = "Zobraziť heslá ako text";
+
+/* Class = "UIButton"; accessibilityLabel = "Open this web address in browser"; ObjectID = "Tbk-ki-qGK"; Note = "This is the screenreader instruction that this button will open the web address in a web browser"; */
+"Tbk-ki-qGK.accessibilityLabel" = "Otvoriť adresu v prehliadači";
+
+/* Class = "UIButton"; normalTitle = "Learn how to edit this entry"; ObjectID = "YaD-WB-pbb"; Note = "This is the text on a link to open an informational page on how to edit this entry outside of the application"; */
+"YaD-WB-pbb.normalTitle" = "Ako upraviť tento záznam";
+
 /* Class = "UILabel"; text = "Label"; ObjectID = "t0H-71-xTp"; Note = "This is a placeholder string for development purposes only"; */
 "t0H-71-xTp.text" = "Popis";
 

@@ -13,6 +13,9 @@
 /* Cancel button title */
 "cancel" = "Cancelar";
 
+/* Delete button title */
+"delete" = "Eliminar";
+
 /* Product Name */
 "firefoxLockbox" = "Firefox Lockwise";
 

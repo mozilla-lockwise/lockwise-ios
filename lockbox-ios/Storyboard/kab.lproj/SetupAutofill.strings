@@ -1,0 +1,6 @@
+/* Class = "UIButton"; normalTitle = "Got it"; ObjectID = "KnK-nY-NyH"; Note = "The message on a confirmation button that the user understands or followed the instructions and will close out of these instructions"; */
+"KnK-nY-NyH.normalTitle" = "Awi-t";
+
+/* Class = "UILabel"; text = "Select Lockwise"; ObjectID = "r0I-o4-2Ym"; Note = "The instruction to tap the name of this application. Lockwise should not be translated"; */
+"r0I-o4-2Ym.text" = "Fren Lockwise";
+

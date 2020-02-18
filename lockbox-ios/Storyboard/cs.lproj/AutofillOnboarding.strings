@@ -1,3 +1,6 @@
 /* Class = "UIButton"; normalTitle = "Not Now"; ObjectID = "GdN-75-tz4"; Note = "This is the text on the button to allow the user to bypass the onboarding instructions on how to enable AutoFill"; */
 "GdN-75-tz4.normalTitle" = "Teď ne";
 
+/* Class = "UILabel"; text = "Easily fill usernames and passwords where you need them most."; ObjectID = "xVH-GK-wIb"; Note = "This is explaning the value of the AutoFill feature to encourage the user to enable it"; */
+"xVH-GK-wIb.text" = "Nechte si vyplnit přihlašovací údaje kamkoliv, kde je potřebujete.";
+

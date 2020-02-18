@@ -1,0 +1,45 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Atualizando o preenchimento automático…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Concluída a atualização do preenchimento automático";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "É preciso autenticar";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Você deve entrar no %@ para que o preenchimento automático permita acessar senhas nele.";
+
+/* Cancel button title */
+"cancel" = "Cancelar";
+
+/* Delete button title */
+"delete" = "Excluir";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "O %@ permite acessar senhas que você já salvou no Firefox. Para ver suas contas aqui, você precisa entrar e sincronizar com o Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Pesquisar contas";
+
+/* Sign in button text */
+"signIn" = "Entrar";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Tempo de sincronização excedido";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Isso desbloqueará o aplicativo.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(sem nome de usuário)";
+

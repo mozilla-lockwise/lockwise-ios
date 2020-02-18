@@ -245,7 +245,7 @@
 "unnamed_entry" = "sin nomine";
 
 /* Section title text for username on the item detail screen */
-"username" = "Nomine del usator";
+"username" = "Nomine de usator";
 
 /* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
 "username_accessibility_instructions" = "Nomine de usator: toccar duple pro copiar %@";

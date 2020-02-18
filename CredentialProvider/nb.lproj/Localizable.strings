@@ -1,0 +1,45 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Oppdaterer Autoutfylling…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Ferdig med oppdatering av Autoutfylling";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Innlogging kreves";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Du må være logget inn på %@ før Autoutfylling gir tilgang til passordene den inneholder.";
+
+/* Cancel button title */
+"cancel" = "Avbryt";
+
+/* Delete button title */
+"delete" = "Slett";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ lar deg få tilgang til passord du allerede har lagret i Firefox. For å se innloggingene dine her, må du logge på og synkronisere med Firefox.";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "OK";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Søk innlogginger";
+
+/* Sign in button text */
+"signIn" = "Logg inn";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Synkroniseringen fikk tidsavbrudd";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "Dette vil låse opp appen.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(ingen brukernavn)";
+
