@@ -1,5 +1,20 @@
 # Release Notes
 
+## 1.7.2 (Build 4087)
+
+_Date: 2020-02-18_
+
+Additions: Integrated new Glean framework, fixes SQLite database crash by updating to Application Services version 0.48.3 and incorporating database salt and plain text header changes, fixes issue where user is automatically logged in again after deleting and reinstalling the app, fixes issue where login is not deleted when tapping the "delete" button, fixes issue where domain name does not show when autofilling if iOS user has dark mode enabled
+
+All changes since version 1.7.2:
+
+- Update Localization Strings (#1160, #1177)
+- Resolve SQLite database crash in Credential Provider (#1170, #1176, #1189, #1190, #1181, #1180)
+- Use new Telemetry SDK (Glean) on iOS (#1129)
+- Autofill Credential Provider domain names in Dark Mode (#1182)
+- Delete button non-responsive (#1188)
+- User still logged in after uninstalling/reinstalling the app (#955)
+
 ## 1.7.1 (Build 3997)
 
 _Date: 2019-12-12_
