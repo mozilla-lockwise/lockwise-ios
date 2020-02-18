@@ -1,3 +1,15 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Aktualizujem AutoFill…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Dokončujem aktualizáciu funkcie AutoFill";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Vyžaduje sa prihlásenie";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Predtým ako bude mať funkcia AutoFill prístup k heslám v rámci aplikácie %@, musíte sa do nej prihlásiť.";
+
 /* Cancel button title */
 "cancel" = "Zrušiť";
 
@@ -6,6 +18,9 @@
 
 /* Product Name */
 "firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "Aplikácia %@ vám poskytuje prístup k heslám uloženým vo Firefoxe. Pre ich zobrazenie a synchronizáciu sa budete musieť prihlásiť.";
 
 /* This is the name displayed instead of Firefox Lockwise in some places */
 "lockwise" = "Lockwise";
@@ -18,6 +33,9 @@
 
 /* Sign in button text */
 "signIn" = "Prihlásiť sa";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Časový limit synchronizácie vypršal";
 
 /* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
 "unlock_placeholder" = "Toto vám umožňuje odomknúť aplikáciu.";

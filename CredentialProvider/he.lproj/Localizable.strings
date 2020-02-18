@@ -1,0 +1,24 @@
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "נדרשת התחברות";
+
+/* Cancel button title */
+"cancel" = "ביטול";
+
+/* Delete button title */
+"delete" = "מחיקה";
+
+/* Ok button title */
+"ok" = "אישור";
+
+/* Sign in button text */
+"signIn" = "התחברות";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "תם הזמן שהוקצב לסנכרון";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "פעולה זו תשחרר את היישומון.";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(אין שם משתמש)";
+

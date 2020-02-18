@@ -1,0 +1,27 @@
+/* Class = "UIButton"; normalTitle = "Got it"; ObjectID = "KnK-nY-NyH"; Note = "The message on a confirmation button that the user understands or followed the instructions and will close out of these instructions"; */
+"KnK-nY-NyH.normalTitle" = "明白了";
+
+/* Class = "UILabel"; text = "Tap into AutoFill Passwords"; ObjectID = "YaL-kM-bTV"; Note = "The instruction to open the system setting. AutoFill Passwords should match the system setting menu name"; */
+"YaL-kM-bTV.text" = "点按“自动填写密码”";
+
+/* Class = "UILabel"; text = "Complete the following steps in order to use Lockwise as an AutoFill provider."; ObjectID = "Ycw-sN-cFL"; Note = "The description that appears indicating there are instructions to be followed to enable the AutoFill feature. AutoFill should be localized to match the proper name for Apple’s system feature"; */
+"Ycw-sN-cFL.text" = "完成以下步骤，即可使用 Lockwise 进行自动填写。";
+
+/* Class = "UILabel"; text = "Turn on AutoFill Passwords"; ObjectID = "Ys5-RP-RQg"; Note = "The instruction to enable the setting. AutoFill Passwords should match the system setting item"; */
+"Ys5-RP-RQg.text" = "启用自动填写密码";
+
+/* Class = "UILabel"; text = "Tap into Passwords & Accounts"; ObjectID = "daO-QU-3p5"; Note = "The instruction to open the system settings. Passwords & Accounts should match the system setting menu name"; */
+"daO-QU-3p5.text" = "点按“密码与帐户”";
+
+/* Class = "UILabel"; text = "How to Set up AutoFill"; ObjectID = "dbo-05-zWe"; Note = "The heading for instructions on how to enable the AutoFill feature in iOS. AutoFill should be localized to match the proper name for Apple’s system feature "; */
+"dbo-05-zWe.text" = "如何设置自动填写";
+
+/* Class = "UILabel"; text = "Select Lockwise"; ObjectID = "r0I-o4-2Ym"; Note = "The instruction to tap the name of this application. Lockwise should not be translated"; */
+"r0I-o4-2Ym.text" = "选择 Lockwise";
+
+/* Class = "UILabel"; text = "Deselect iCloud Keychain"; ObjectID = "vcZ-pI-Mgz"; Note = "The instruction to unselect a default setting. iCloud Keychain should match the system setting item name"; */
+"vcZ-pI-Mgz.text" = "取消选择 iCloud 钥匙串";
+
+/* Class = "UILabel"; text = "Open the Settings app"; ObjectID = "xig-s8-dim"; Note = "The instruction to open the system Settings app"; */
+"xig-s8-dim.text" = "打开“设置”应用程序";
+

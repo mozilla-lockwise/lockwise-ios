@@ -7,6 +7,21 @@
 /* Label for the option sheet action allowing users to sort the logins list alphabetically */
 "alphabetically" = "Abecedne";
 
+/* Message in dialog box when users need to reauthenticate explaining application update */
+"app_update_explanation" = "Kvôli nedávnej aktualizácii aplikácie sa musíte opäť prihlásiť. Ospravedlňujeme sa za spôsobené nepríjemnosti.";
+
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Aktualizujem AutoFill…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "Dokončujem aktualizáciu funkcie AutoFill";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "Vyžaduje sa prihlásenie";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "Predtým ako bude mať funkcia AutoFill prístup k heslám v rámci aplikácie %@, musíte sa do nej prihlásiť.";
+
 /* Back button title */
 "back" = "Späť";
 
@@ -15,6 +30,9 @@
 
 /* Close button title */
 "close" = "Zavrieť";
+
+/* Confirm dialog message */
+"confirm_dialog_message" = "Týmto z aplikácie %@ odstránite údaje zo svojho účtu Firefox a všetky uložené prihlasovacie údaje.";
 
 /* Confirm dialog title. %@ will be replaced with the application name */
 "confirm_dialog_title" = "Odpojiť %@?";
@@ -25,17 +43,35 @@
 /* Delete button title */
 "delete" = "Odstrániť";
 
+/* Message in confirmation dialog when a login is deleted */
+"delete.confirmDeleteLoginDialogMessage" = "Týmto odstránite prihlasovacie údaje z aplikácie %@ aj z Firefoxu.";
+
 /* Title for confirmation dialog when a login is deleted */
 "delete.confirmDialogTitle" = "Odstrániť tieto prihlasovacie údaje?";
 
+/* Text in the status alert after a login has been deleted. %@ is the hostname of the login */
+"delete.statusAlert" = "Prihlasovacie údaje pre %@ boli odstránené";
+
 /* Text on button to close settings */
 "done" = "Hotovo";
+
+/* Accessibility callout for finishing Syncing your logins */
+"done_syncing_entries" = "Synchronizácia prihlasovacích údajov dokončená";
+
+/* Alert text when a field has been copied. %@ will be replaced with the field name that was copied */
+"fieldNameCopied" = "Pole %@ bolo skopírované";
 
 /* Product Name */
 "firefoxLockbox" = "Firefox Lockwise";
 
 /* Title for the FxA login screen. */
 "get.started" = "Začíname";
+
+/* Accessibility instructions for disabled web browser options. %@ will be replaced with the browser name */
+"install_browser_prompt" = "Aplikácia %@ bola vypnutá, nainštalujte si tento prehliadač, aby ste ju sprevádzkovali";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "Aplikácia %@ vám poskytuje prístup k heslám uloženým vo Firefoxe. Pre ich zobrazenie a synchronizáciu sa budete musieť prihlásiť.";
 
 /* This is the name displayed instead of Firefox Lockwise in some places */
 "lockwise" = "Lockwise";
@@ -58,14 +94,32 @@
 /* Title on onboarding screen. %@ will be replaced with the application name */
 "onboarding.title" = "Víta vás %@";
 
+/* Message for dialog box with passcode reminder. %@ will be replaced with the application name */
+"passcode_detail_information" = "Ak chcete zamknúť aplikáciu %@, musíte na svojom zariadení nastaviť kód. Bez kódu môže ktokoľvek pristupovať k tu uloženým informáciám.";
+
+/* Informative text about the security need for a passcode */
+"passcode_info" = "Na uzamknutie zariadenia by ste mali používať kód. Bez kódu môže ktokoľvek pristupovať k tu uloženým informáciám.";
+
 /* Section title text for the password on the item detail screen */
 "password" = "Heslo";
+
+/* Accessibility label and instructions for password section of login details. %@ will be replaced with the password value */
+"password_accessibility_instructions" = "Heslo: dvojitým ťuknutím ho skopírujete - %@";
 
 /* Title of dialog box displayed when users need to reauthenticate */
 "reauth_required" = "Vyžaduje sa opätovné overenie";
 
+/* Button title when logins list is sorted by most recently used login */
+"recent" = "Naposledy použité";
+
+/* Label for the option sheet action allowing users to sort the logins list by the most recently used logins */
+"recently_used" = "Naposledy použité";
+
 /* Placeholder text for search field */
 "search.placeholder" = "Hľadať";
+
+/* Text shown on security screen during onboarding. */
+"securityTheather.syncBetweenDevices" = "Synchronizácia medzi zariadeniami je zabezpečená 256-bitovým šifrovaním";
 
 /* Label for button allowing users to go to passcode settings */
 "set_passcode" = "Nastavenie kódu";
@@ -76,6 +130,9 @@
 /* App Version setting label */
 "settings.appVersion" = "Verzia aplikácie";
 
+/* Label to link to instructions about setting up AutoFill. AutoFill should be localized to match the proper name for Apple’s system feature */
+"settings.autoFillSettings" = "Inštrukcie pre AutoFill";
+
 /* Auto Lock option in settings */
 "settings.autoLock" = "Automatické uzamknutie";
 
@@ -84,6 +141,9 @@
 
 /* 5 minutes auto lock setting */
 "settings.autoLock.fiveMinutes" = "Po 5 minútach";
+
+/* Header displayed above auto lock settings. */
+"settings.autoLock.header" = "Vyberte si, po akej dobe neaktivity chcete uzamknúť aplikáciu";
 
 /* Never */
 "settings.autoLock.never" = "Nikdy";
@@ -115,11 +175,17 @@
 /* Focus Browser */
 "settings.browser.focus" = "Firefox Focus";
 
+/* Header displayed above browser choice settings. */
+"settings.browser.header" = "Vyberte, ktorý prehliadač má Lockwise používať";
+
 /* Klar Browser */
 "settings.browser.klar" = "Firefox Klar";
 
 /* Safari Browser */
 "settings.browser.safari" = "Safari";
+
+/* Configuration label in settings */
+"settings.configuration.header" = "KONFIGURÁCIA";
 
 /* FAQ option in settings */
 "settings.faq" = "Často kladené otázky";
@@ -142,6 +208,9 @@
 /* Text on button to unlink account. %@ will be replaced with the application name */
 "settings.unlinkAccount" = "Odpojiť %@";
 
+/* Label on account setting explaining unlink. %@ will be replaced with the application name */
+"settings.unlinkDisclaimer" = "Týmto z aplikácie %@ odstránite synchronizované prihlasovacie údaje. Vo vašom Firefoxe ale zostanú naďalej uložené.";
+
 /* Setting to send usage data */
 "settings.usageData" = "Odosielať údaje o používaní";
 
@@ -159,6 +228,15 @@
 
 /* Title for the option sheet allowing users to sort logins */
 "sort_entries" = "Usporiadať prihlasovacie údaje";
+
+/* Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option */
+"sorting_options" = "Vyberte si, akým spôsobom chcete usporiadať svoje údaje (momentálne je vybraná možnosť %@)";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "Časový limit synchronizácie vypršal";
+
+/* Label and accessibility callout for Syncing your logins spinner and HUD */
+"syncing_entries" = "Synchronizácia prihlasovacích údajov";
 
 /* Unlink aka Disconnect button title */
 "unlink" = "Odpojiť";
@@ -181,11 +259,20 @@
 /* Section title text for username on the item detail screen */
 "username" = "Používateľské meno";
 
+/* Accessibility label and instructions for username section of login details. %@ will be replaced with the username value */
+"username_accessibility_instructions" = "Používateľské meno: dvojitým ťuknutím ho skopírujete - %@";
+
 /* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
 "username_placeholder" = "(žiadne používateľské meno)";
 
 /* Section title text for the web address on the item detail screen */
 "web_address" = "Webová adresa";
+
+/* Accessibility label and instructions for web address section of login details */
+"website_accessibility_instructions" = "Webová adresa: dvojitým ťuknutím ju otvoríte v prehliadači - %@";
+
+/* Access message displayed to user on welcome screen. %@ will be replaced with the application name */
+"welcome.accessProduct" = "Pre použitie aplikácie %@ budete potrebovať účet Firefox s uloženými prihlasovacími údajmi.";
 
 /* Text on button to unlock app */
 "welcome.unlockButton" = "Odomknúť";

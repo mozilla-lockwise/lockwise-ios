@@ -1,0 +1,30 @@
+/* Class = "UILabel"; text = "Label"; ObjectID = "3A5-nI-aV6"; Note = "This is a placeholder string for development purposes only"; */
+"3A5-nI-aV6.text" = "Etikett";
+
+/* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "5gN-a0-N6V"; Note = "This is the text suggestion the user open an informational page to learn more about this condition"; */
+"5gN-a0-N6V.normalTitle" = "Les meir";
+
+/* Class = "UILabel"; text = "To see more logins here, you’ll need to save them to Firefox."; ObjectID = "JpV-eG-grp"; Note = "This message appears if there are no logins available to this account and suggests the user needs to save and sync logins for them to appear"; */
+"JpV-eG-grp.text" = "Viss du vil sjå fleire innloggingar her, må du lagre dei i Firefox.";
+
+/* Class = "UILabel"; text = "Select a password to fill"; ObjectID = "RpZ-Z7-u0I"; Note = "This is an instruction for the user to select a login when in AutoFill mode "; */
+"RpZ-Z7-u0I.text" = "Vel eit passord som skal fyllast inn";
+
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "SWH-yo-sI7"; */
+"SWH-yo-sI7.normalTitle" = "Prøv igjen";
+
+/* Class = "UILabel"; text = "No Internet Connection"; ObjectID = "V5S-CG-n11"; Note = "This is an instruction for the user to select a login when in AutoFill mode "; */
+"V5S-CG-n11.text" = "Inkje internettsamband";
+
+/* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "aQB-Vr-ObR"; Note = "This is the text suggestion the user open an informational page to learn more about this condition"; */
+"aQB-Vr-ObR.normalTitle" = "Les meir";
+
+/* Class = "UILabel"; text = "No logins found."; ObjectID = "gQr-4J-xpv"; Note = "This is the message informing the user the account has no logins available"; */
+"gQr-4J-xpv.text" = "Fann ingen innloggingar.";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "n2T-XM-ua9"; Note = "This is a placeholder string for development purposes only"; */
+"n2T-XM-ua9.text" = "Etikett";
+
+/* Class = "UILabel"; text = "No matching logins."; ObjectID = "qZc-w1-SRT"; Note = "This message is displayed when a user searches and no matches can be found against the search query"; */
+"qZc-w1-SRT.text" = "Ingen samsvarande innloggingar.";
+

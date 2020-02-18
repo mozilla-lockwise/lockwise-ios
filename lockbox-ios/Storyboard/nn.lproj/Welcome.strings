@@ -1,0 +1,15 @@
+/* Class = "UIButton"; normalTitle = "Unlock"; ObjectID = "8rH-vt-4bG"; Note = "This is the text on the unlock button when the app is opened and locked"; */
+"8rH-vt-4bG.normalTitle" = "Lås opp";
+
+/* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "JTP-OD-6TF"; Note = "This is an link for the user to learn more about how the application requires a Firefox Account"; */
+"JTP-OD-6TF.normalTitle" = "Les meir";
+
+/* Class = "UIButton"; normalTitle = "Get Started"; ObjectID = "cuz-yd-F4J"; Note = "This message appears on the button for the user begin the sign in authorization flow"; */
+"cuz-yd-F4J.normalTitle" = "Kom i gang";
+
+/* Class = "UILabel"; text = "Take your passwords everywhere"; ObjectID = "hwO-wS-oS4"; Note = "This is the sentence consistently used across marketing and other applications"; */
+"hwO-wS-oS4.text" = "Ta med deg passorda dine overalt";
+
+/* Class = "UILabel"; text = "To use Firefox Lockwise, you’ll need a Firefox Account with saved logins."; ObjectID = "xyY-bk-Xw8"; Note = "These are instructions that to use the application, a Firefox Account is need. Firefox Account and Lockwise should be consistently translated to match the product names"; */
+"xyY-bk-Xw8.text" = "For å bruke Firefox Lockwise, treng du ein Firefox-konto med lagra innloggingar.";
+

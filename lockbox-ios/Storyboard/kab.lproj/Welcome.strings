@@ -1,0 +1,12 @@
+/* Class = "UIButton"; normalTitle = "Unlock"; ObjectID = "8rH-vt-4bG"; Note = "This is the text on the unlock button when the app is opened and locked"; */
+"8rH-vt-4bG.normalTitle" = "Serreḥ";
+
+/* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "JTP-OD-6TF"; Note = "This is an link for the user to learn more about how the application requires a Firefox Account"; */
+"JTP-OD-6TF.normalTitle" = "Issin ugar";
+
+/* Class = "UIButton"; normalTitle = "Get Started"; ObjectID = "cuz-yd-F4J"; Note = "This message appears on the button for the user begin the sign in authorization flow"; */
+"cuz-yd-F4J.normalTitle" = "Bdu";
+
+/* Class = "UILabel"; text = "Take your passwords everywhere"; ObjectID = "hwO-wS-oS4"; Note = "This is the sentence consistently used across marketing and other applications"; */
+"hwO-wS-oS4.text" = "Awi awalen uffiren anda teddiḍ";
+

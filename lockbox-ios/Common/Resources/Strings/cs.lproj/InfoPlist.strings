@@ -5,5 +5,5 @@
 "CFBundleName" = "Firefox Lockbox";
 
 /* Privacy - Face ID Usage Description */
-"NSFaceIDUsageDescription" = "Firefox Lockwise will use Face ID to sign you in to the app.";
+"NSFaceIDUsageDescription" = "Firefox Lockwise použije pro přihlašování do aplikace Face ID.";
 

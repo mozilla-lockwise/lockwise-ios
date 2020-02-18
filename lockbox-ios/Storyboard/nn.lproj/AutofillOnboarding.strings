@@ -1,0 +1,12 @@
+/* Class = "UIButton"; normalTitle = "Not Now"; ObjectID = "GdN-75-tz4"; Note = "This is the text on the button to allow the user to bypass the onboarding instructions on how to enable AutoFill"; */
+"GdN-75-tz4.normalTitle" = "Ikkje no";
+
+/* Class = "UILabel"; text = "AutoFill your logins right from your browser or app."; ObjectID = "Krc-YI-yKW"; Note = "This is the heading to instruct the user they can use the AutoFill feature in iOS. AutoFill should be localized to match the proper name for Apple’s system feature"; */
+"Krc-YI-yKW.text" = "Auto-utfyll innloggingane dine automatisk frå nettlesaren eller appen din.";
+
+/* Class = "UILabel"; text = "Easily fill usernames and passwords where you need them most."; ObjectID = "xVH-GK-wIb"; Note = "This is explaning the value of the AutoFill feature to encourage the user to enable it"; */
+"xVH-GK-wIb.text" = "Fyll enkelt inn brukarnamn og passord der du treng dei mest.";
+
+/* Class = "UIButton"; normalTitle = "Set Up AutoFill"; ObjectID = "yEI-pU-vMZ"; Note = "This is the text on the button to instruct the user how to enable AutoFill in iOS. AutoFill should be localized to match the proper name for Apple’s system feature"; */
+"yEI-pU-vMZ.normalTitle" = "Konfigurer Autoutfylling";
+

@@ -1,0 +1,9 @@
+/* Class = "UIButton"; accessibilityLabel = "Copy value"; ObjectID = "HfY-Wo-gMH"; Note = "The instruction a screenreader gives that this is how to copy the value of this item"; */
+"HfY-Wo-gMH.accessibilityLabel" = "Nɣel azal";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "t0H-71-xTp"; Note = "This is a placeholder string for development purposes only"; */
+"t0H-71-xTp.text" = "Tabzimt";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "tuK-Xc-guT"; Note = "This is a placeholder string for development purposes only"; */
+"tuK-Xc-guT.text" = "Tabzimt";
+

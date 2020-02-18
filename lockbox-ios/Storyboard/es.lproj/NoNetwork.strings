@@ -1,6 +1,6 @@
-
 /* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "5P1-M2-UaK"; */
-"5P1-M2-UaK.normalTitle" = "Retry";
+"5P1-M2-UaK.normalTitle" = "Volver a intentarlo";
 
 /* Class = "UILabel"; text = "No Internet Connection"; ObjectID = "Js7-wv-X33"; */
-"Js7-wv-X33.text" = "No Internet Connection";
+"Js7-wv-X33.text" = "No hay conexión a Internet";
+

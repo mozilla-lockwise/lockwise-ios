@@ -1,0 +1,45 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "正在更新自动填写数据…";
+
+/* Accessibility notification when AutoFill is done being enabled */
+"autofill.finished_enabling" = "自动填写数据更新完毕";
+
+/* Title for alert dialog explaining that a user must be signed in to use AutoFill. */
+"autofill.signInRequired" = "需要登录";
+
+/* Body for alert dialog explaining that a user must be signed in to use AutoFill. AutoFill should be localized to match the proper name for Apple's system feature. %1$@ and %2$@ will be replaced with the application name */
+"autofill.signInRequiredBody" = "您须先登录 %@，自动填写功能才能访问存放的密码。";
+
+/* Cancel button title */
+"cancel" = "取消";
+
+/* Delete button title */
+"delete" = "删除";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* Label shown when there are no logins to list. %@ will be replaced with the application name */
+"list.empty" = "%@ 可让您访问存放到 Firefox 的密码。若要在此查看登录信息，您需要登录并与 Firefox 同步。";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "确定";
+
+/* Placeholder text for search field */
+"search.placeholder" = "搜索登录信息";
+
+/* Sign in button text */
+"signIn" = "登录";
+
+/* This is the message displayed when syncing entries from the server times out */
+"sync.timeout" = "同步超时";
+
+/* Placeholder text when the user’s email is unavailable while unlocking the app, shown in Touch ID and passcode prompts */
+"unlock_placeholder" = "这将解锁该应用程序。";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "（无用户名）";
+

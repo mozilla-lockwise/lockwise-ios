@@ -10,6 +10,12 @@
 /* Class = "UILabel"; text = "Select a password to fill"; ObjectID = "RpZ-Z7-u0I"; Note = "This is an instruction for the user to select a login when in AutoFill mode "; */
 "RpZ-Z7-u0I.text" = "Selecciona una contraseña para completar";
 
+/* Class = "UIButton"; normalTitle = "Retry"; ObjectID = "SWH-yo-sI7"; */
+"SWH-yo-sI7.normalTitle" = "Volver a intentarlo";
+
+/* Class = "UILabel"; text = "No Internet Connection"; ObjectID = "V5S-CG-n11"; Note = "This is an instruction for the user to select a login when in AutoFill mode "; */
+"V5S-CG-n11.text" = "No hay conexión a Internet";
+
 /* Class = "UIButton"; normalTitle = "Learn more"; ObjectID = "aQB-Vr-ObR"; Note = "This is the text suggestion the user open an informational page to learn more about this condition"; */
 "aQB-Vr-ObR.normalTitle" = "Descubre más";
 

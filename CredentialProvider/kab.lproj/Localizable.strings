@@ -1,0 +1,27 @@
+/* Text displayed while AutoFill credentials are being populated. AutoFill should be localized to match the proper name for Apple’s system feature */
+"autofill.enabling" = "Aleqqem n AutoFill…";
+
+/* Cancel button title */
+"cancel" = "Sefsex";
+
+/* Delete button title */
+"delete" = "Kkes";
+
+/* Product Name */
+"firefoxLockbox" = "Firefox Lockwise";
+
+/* This is the name displayed instead of Firefox Lockwise in some places */
+"lockwise" = "Lockwise";
+
+/* Ok button title */
+"ok" = "IH";
+
+/* Placeholder text for search field */
+"search.placeholder" = "Nadi inekcam";
+
+/* Sign in button text */
+"signIn" = "Kcem";
+
+/* Placeholder text when there is no username. String should include appropriate open/close parenthetical or similar symbols to indicate this is a placeholder, not a real username. */
+"username_placeholder" = "(ulas isem n useqdac)";
+

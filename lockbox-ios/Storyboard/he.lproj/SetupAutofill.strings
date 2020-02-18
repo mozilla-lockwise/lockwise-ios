@@ -1,0 +1,6 @@
+/* Class = "UIButton"; normalTitle = "Got it"; ObjectID = "KnK-nY-NyH"; Note = "The message on a confirmation button that the user understands or followed the instructions and will close out of these instructions"; */
+"KnK-nY-NyH.normalTitle" = "הבנתי";
+
+/* Class = "UILabel"; text = "Open the Settings app"; ObjectID = "xig-s8-dim"; Note = "The instruction to open the system Settings app"; */
+"xig-s8-dim.text" = "פתיחת יישומון ההגדרות";
+
