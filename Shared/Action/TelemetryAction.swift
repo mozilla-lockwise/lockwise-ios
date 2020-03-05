@@ -83,7 +83,10 @@ class GleanActionHandler: ActionHandler {
             onDisposed: nil
         ).disposed(by: self.disposeBag)
         
-        glean.initialize()
+        // Since we are guaranteed to receive the invocation of
+        // setUploadEnabled above, we can rely on getUploadEnabled to
+        // retrieve the current telemetry preference state.
+        glean.initialize(uploadEnabled: glean.getUploadEnabled())
     }
 }
 
