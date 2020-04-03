@@ -388,13 +388,17 @@ extension BaseDataStore {
     private func unlockInternal() {
         guard let loginsStorage = loginsStorage,
             let loginsKey = loginsKey,
-            let salt = salt else { return }
+            let salt = salt,
+            let loginsDatabasePath = loginsDatabasePath else { return }
 
         do {
             try loginsStorage.ensureUnlockedWithKeyAndSalt(key: loginsKey, salt: salt)
             self.storageStateSubject.onNext(.Unlocked)
         } catch let error as LoginsStoreError {
             pushError(error)
+            // If we can not access database with current salt and key, need to delete local database and migrate to replacement salt
+            // This only deletes the local database file, does not delete the user's sync data
+            _ = handleDatabaseAccessFailure(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
         } catch let error {
             NSLog("Unknown error unlocking: \(error)")
         }
@@ -468,13 +472,13 @@ extension BaseDataStore {
         guard let loginsDatabasePath = loginsDatabasePath,
             let loginsKey = loginsKey else { return nil }
 
-        let key = KeychainKey.salt.rawValue
-        if keychainWrapper.hasValue(forKey: key, withAccessibility: .afterFirstUnlock) {
-            return keychainWrapper.string(forKey: key, withAccessibility: .afterFirstUnlock)
+        let saltKey = KeychainKey.salt.rawValue
+        if keychainWrapper.hasValue(forKey: saltKey, withAccessibility: .afterFirstUnlock) {
+            return keychainWrapper.string(forKey: saltKey, withAccessibility: .afterFirstUnlock)
         }
 
         let val = setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
-        keychainWrapper.set(val, forKey: key, withAccessibility: .afterFirstUnlock)
+        keychainWrapper.set(val, forKey: saltKey, withAccessibility: .afterFirstUnlock)
         return val
     }
     
@@ -487,19 +491,59 @@ extension BaseDataStore {
         guard let db = loginsStorage as? LoginsStorage else {
             return createRandomSalt()
         }
-
+        
         do {
             let salt = try db.getDbSaltForKey(key: encryptionKey)
             try db.migrateToPlaintextHeader(key: encryptionKey, salt: salt)
             return salt
         } catch {
-            print("setupPlaintextHeaderAndGetSalt failed with error: \(error)")
             self.dispatcher.dispatch(action: SentryAction(title: "setupPlaintextHeaderAndGetSalt failed", error: error, line: nil))
-            // the database exists. but we didn't store the salt?
             return createRandomSalt()
         }
     }
-
+    
+    // Closes database
+    // Deletes database file
+    // Creates new database and syncs
+    private func handleDatabaseAccessFailure(databasePath: String, encryptionKey: String) -> String? {
+        let saltKey = KeychainKey.salt.rawValue
+        if keychainWrapper.hasValue(forKey: saltKey, withAccessibility: .afterFirstUnlock) {
+            keychainWrapper.removeObject(forKey: saltKey)
+        }
+        guard let database = loginsStorage as? LoginsStorage else { return nil }
+        database.close()
+        do {
+            if FileManager.default.fileExists(atPath: databasePath) {
+                try FileManager.default.removeItem(atPath: databasePath)
+                loginsStorage = nil
+                return createNewDatabase()
+            } else {
+                loginsStorage = nil
+                return createNewDatabase()
+            }
+        } catch {
+            self.dispatcher.dispatch(action: SentryAction(title: "handleDatabaseAccessFailure failed", error: error, line: nil))
+            return nil
+        }
+    }
+    
+    private func createNewDatabase() -> String? {
+        guard let encryptionKey = loginsKey else { return nil }
+        do {
+            initializeLoginsStorage()
+            guard let newDatabase = loginsStorage as? LoginsStorage else { return nil }
+            let salt = createRandomSalt()
+            try newDatabase.ensureUnlockedWithKeyAndSalt(key: encryptionKey, salt: salt)
+            let saltKey = KeychainKey.salt.rawValue
+            keychainWrapper.set(salt, forKey: saltKey, withAccessibility: .afterFirstUnlock)
+            self.storageStateSubject.onNext(.Unlocked)
+            return salt
+        } catch {
+            self.dispatcher.dispatch(action: SentryAction(title: "handleDatabaseAccessFailure failed", error: error, line: nil))
+            return nil
+        }
+    }
+    
     private func createRandomSalt() -> String {
         return UUID().uuidString.replacingOccurrences(of: "-", with: "")
     }
