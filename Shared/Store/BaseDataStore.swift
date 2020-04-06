@@ -398,7 +398,7 @@ extension BaseDataStore {
             pushError(error)
             // If we can not access database with current salt and key, need to delete local database and migrate to replacement salt
             // This only deletes the local database file, does not delete the user's sync data
-            _ = handleDatabaseAccessFailure(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
+            handleDatabaseAccessFailure(databasePath: loginsDatabasePath, encryptionKey: loginsKey)
         } catch let error {
             NSLog("Unknown error unlocking: \(error)")
         }
@@ -505,7 +505,7 @@ extension BaseDataStore {
     // Closes database
     // Deletes database file
     // Creates new database and syncs
-    private func handleDatabaseAccessFailure(databasePath: String, encryptionKey: String) -> String? {
+    private func handleDatabaseAccessFailure(databasePath: String, encryptionKey: String) {
         let saltKey = KeychainKey.salt.rawValue
         if keychainWrapper.hasValue(forKey: saltKey, withAccessibility: .afterFirstUnlock) {
             keychainWrapper.removeObject(forKey: saltKey)
@@ -517,16 +517,13 @@ extension BaseDataStore {
             if FileManager.default.fileExists(atPath: databasePath) {
                 try FileManager.default.removeItem(atPath: databasePath)
                 loginsStorage = nil
-                let newSalt = try createNewDatabase()
-                return newSalt
+                try createNewDatabase()
             } else {
                 loginsStorage = nil
-                let newSalt = try createNewDatabase()
-                return newSalt
+                try createNewDatabase()
             }
         } catch {
             self.dispatcher.dispatch(action: SentryAction(title: "handleDatabaseAccessFailure failed", error: error, line: nil))
-            return nil
         }
     }
     
@@ -535,7 +532,7 @@ extension BaseDataStore {
         case issueCreatingDatabase(description: String)
     }
     
-    private func createNewDatabase() throws -> String {
+    private func createNewDatabase() throws {
         guard let encryptionKey = loginsKey else { throw DatabaseError.issueCreatingDatabase(description: "logins database key is nil") }
         do {
             initializeLoginsStorage()
@@ -545,7 +542,6 @@ extension BaseDataStore {
             let saltKey = KeychainKey.salt.rawValue
             keychainWrapper.set(salt, forKey: saltKey, withAccessibility: .afterFirstUnlock)
             self.storageStateSubject.onNext(.Unlocked)
-            return salt
         } catch {
             self.dispatcher.dispatch(action: SentryAction(title: "handleDatabaseAccessFailure failed", error: error, line: nil))
             throw DatabaseError.issueCreatingDatabase(description: "failed to unlock new database with key and salt:\(error)")
