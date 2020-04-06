@@ -510,16 +510,19 @@ extension BaseDataStore {
         if keychainWrapper.hasValue(forKey: saltKey, withAccessibility: .afterFirstUnlock) {
             keychainWrapper.removeObject(forKey: saltKey)
         }
-        guard let database = loginsStorage as? LoginsStorage else { return nil }
-        database.close()
         do {
+            if let database = loginsStorage as? LoginsStorage {
+                database.close()
+            }
             if FileManager.default.fileExists(atPath: databasePath) {
                 try FileManager.default.removeItem(atPath: databasePath)
                 loginsStorage = nil
-                return createNewDatabase()
+                let newSalt = try createNewDatabase()
+                return newSalt
             } else {
                 loginsStorage = nil
-                return createNewDatabase()
+                let newSalt = try createNewDatabase()
+                return newSalt
             }
         } catch {
             self.dispatcher.dispatch(action: SentryAction(title: "handleDatabaseAccessFailure failed", error: error, line: nil))
@@ -527,11 +530,16 @@ extension BaseDataStore {
         }
     }
     
-    private func createNewDatabase() -> String? {
-        guard let encryptionKey = loginsKey else { return nil }
+    enum DatabaseError: Error {
+        case issueDeletingDatabase(description: String)
+        case issueCreatingDatabase(description: String)
+    }
+    
+    private func createNewDatabase() throws -> String {
+        guard let encryptionKey = loginsKey else { throw DatabaseError.issueCreatingDatabase(description: "logins database key is nil") }
         do {
             initializeLoginsStorage()
-            guard let newDatabase = loginsStorage as? LoginsStorage else { return nil }
+            guard let newDatabase = loginsStorage as? LoginsStorage else { throw DatabaseError.issueCreatingDatabase(description: "initializing new database failed") }
             let salt = createRandomSalt()
             try newDatabase.ensureUnlockedWithKeyAndSalt(key: encryptionKey, salt: salt)
             let saltKey = KeychainKey.salt.rawValue
@@ -540,7 +548,7 @@ extension BaseDataStore {
             return salt
         } catch {
             self.dispatcher.dispatch(action: SentryAction(title: "handleDatabaseAccessFailure failed", error: error, line: nil))
-            return nil
+            throw DatabaseError.issueCreatingDatabase(description: "failed to unlock new database with key and salt:\(error)")
         }
     }
     
