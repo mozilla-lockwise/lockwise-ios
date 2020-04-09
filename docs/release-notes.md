@@ -1,12 +1,23 @@
 # Release Notes
 
+## 1.7.3 (Build 4110)
+
+_Date: 2020-04-19__
+
+Additions: Previous version (1.7.2) salt and plain text header database changes resulted in a failed local database migration for some users.  This version includes a fix to remedy an inaccessible local database to prevent users from being stuck on a purple screen or empty login list.
+
+All changes since version 1.7.2:
+
+- Lockwise block on purple screen during launch #1201
+- Resolve local database access issues #1202
+
 ## 1.7.2 (Build 4087)
 
 _Date: 2020-02-18_
 
 Additions: Integrated new Glean framework, fixes SQLite database crash by updating to Application Services version 0.48.3 and incorporating database salt and plain text header changes, fixes issue where user is automatically logged in again after deleting and reinstalling the app, fixes issue where login is not deleted when tapping the "delete" button, fixes issue where domain name does not show when autofilling if iOS user has dark mode enabled
 
-All changes since version 1.7.2:
+All changes since version 1.7.1:
 
 - Update Localization Strings (#1160, #1177)
 - Resolve SQLite database crash in Credential Provider (#1170, #1176, #1189, #1190, #1181, #1180)
@@ -22,7 +33,7 @@ _Date: 2019-12-12_
 Additions: Updates to FAQ links, Feature Flags for new feature development
 We fixed bugs related to: launch crashes, data in telemetry events, test fixes
 
-All changes since version 1.7.1:
+All changes since version 1.7.0:
 
 - Update FAQ links (#1093)
 - Launch crash due to expired auth token (#1147)
