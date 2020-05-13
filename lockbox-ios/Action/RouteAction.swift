@@ -25,7 +25,7 @@ extension ExternalWebsiteRouteAction: TelemetryAction {
 
     var eventObject: TelemetryEventObject {
         switch self.urlString {
-        case let str where str.contains(Constant.app.provideFeedbackURL):
+        case let str where str.contains(Constant.app.supportURL):
             return .settingsProvideFeedback
         case Constant.app.getSupportURL:
             return .settingsGetSupport

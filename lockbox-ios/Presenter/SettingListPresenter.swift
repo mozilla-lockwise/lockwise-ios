@@ -58,13 +58,14 @@ class SettingListPresenter {
 
     private var staticSupportSettingSection: SettingSectionModel {
         return SettingSectionModel(model: 0, items: [
+            // Issue #1166
             SettingCellConfiguration(
-                    text: Constant.string.settingsProvideFeedback,
+                    text: Constant.string.settingsSupport,
                     routeAction: ExternalWebsiteRouteAction(
-                            urlString: Constant.app.provideFeedbackURL,
-                            title: Constant.string.settingsProvideFeedback,
+                            urlString: Constant.app.supportURL,
+                            title: Constant.string.settingsSupport,
                             returnRoute: SettingRouteAction.list),
-                            accessibilityId: "sendFeedbackSettingOption"),
+                            accessibilityId: "supportSettingOption"),
             SettingCellConfiguration(
                 text: Constant.string.settingsGetSupport,
                 routeAction: ExternalWebsiteRouteAction(

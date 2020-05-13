@@ -11,7 +11,8 @@ extension Constant.app {
     static let appVersionCode = 4 // this is the version of the app that will drive updates.
     static let sumoURL = "https://support.mozilla.org/en-US/kb/"
     static let privacyURL = sumoURL + "firefox-lockwise-and-privacy"
-    static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
+//    static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
+    static let supportURL = "https://support.mozilla.org/en-US/products/firefox-lockwise"
     static let getSupportURL = "https://discourse.mozilla.org/c/test-pilot/lockbox"
     static let faqURLtop = sumoURL + "getting-started-firefox-lockwise"
     static let lockwiseSetupFAQ = faqURLtop + "#w_step-1-sign-up-for-firefox-accounts"
@@ -53,7 +54,8 @@ extension Constant.string {
     static let settingsSupportSectionHeader = NSLocalizedString("settings.support.header", value: "SUPPORT", comment: "Support section label in settings")
     static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
     static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
-    static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
+    static let settingsSupport = NSLocalizedString("settings.support", value: "Get Support", comment: "Support link to Firefox Lockwise Support page")
+    //static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
     static let faq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
     static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
     static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
