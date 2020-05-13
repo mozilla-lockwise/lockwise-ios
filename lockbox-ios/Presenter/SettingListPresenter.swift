@@ -58,7 +58,6 @@ class SettingListPresenter {
 
     private var staticSupportSettingSection: SettingSectionModel {
         return SettingSectionModel(model: 0, items: [
-            // Issue #1166
             SettingCellConfiguration(
                     text: Constant.string.settingsGetSupport,
                     routeAction: ExternalWebsiteRouteAction(
