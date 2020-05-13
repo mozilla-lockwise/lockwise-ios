@@ -72,6 +72,10 @@ class BaseAccountStore {
                     errMessage = "Unauthorized error: " + message
                 case .panic(let message):
                     errMessage = "Panic error: " + message
+                case .noExistingAuthFlow:
+                    errMessage = "No Existing Auth Flow error"
+                case .wrongAuthFlow:
+                    errMessage = "Wrong Auth Flow error"
                 }
                 let sentryAction = SentryAction(
                     title: "FxAException: " + errMessage,
