@@ -4,7 +4,7 @@ github "ReactiveX/RxSwift" "4b42d62e34e278f677e9788c1e4c2db2a65f88ce"
 github "RxSwiftCommunity/RxDataSources" "8d4ef9abd7fd093b9225aa3e833b46171c00cc38"
 github "RxSwiftCommunity/RxOptional" ~> 3.1.3
 github "adjust/ios_sdk" ~> 4.14.1
-github "apple/swift-protobuf" "1.5.0"
+github "apple/swift-protobuf" "1.8.0"
 github "ashleymills/Reachability.swift" "v4.3.0"
 github "getsentry/sentry-cocoa" "4.3.4"
 github "jrendel/SwiftKeychainWrapper" "3.4.0"
