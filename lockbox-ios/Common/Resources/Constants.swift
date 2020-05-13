@@ -12,8 +12,8 @@ extension Constant.app {
     static let sumoURL = "https://support.mozilla.org/en-US/kb/"
     static let privacyURL = sumoURL + "firefox-lockwise-and-privacy"
 //    static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
-    static let supportURL = "https://support.mozilla.org/en-US/products/firefox-lockwise"
-    static let getSupportURL = "https://discourse.mozilla.org/c/test-pilot/lockbox"
+    static let getSupportURL = "https://support.mozilla.org/en-US/products/firefox-lockwise"
+    static let askQuestionURL = "https://discourse.mozilla.org/c/test-pilot/lockbox"
     static let faqURLtop = sumoURL + "getting-started-firefox-lockwise"
     static let lockwiseSetupFAQ = faqURLtop + "#w_step-1-sign-up-for-firefox-accounts"
     static let enableSyncFAQ = sumoURL + "sync-logins-firefox-ios"
@@ -54,8 +54,7 @@ extension Constant.string {
     static let settingsSupportSectionHeader = NSLocalizedString("settings.support.header", value: "SUPPORT", comment: "Support section label in settings")
     static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
     static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
-    static let settingsSupport = NSLocalizedString("settings.support", value: "Get Support", comment: "Support link to Firefox Lockwise Support page")
-    //static let settingsProvideFeedback = NSLocalizedString("settings.provideFeedback", value: "Send Feedback", comment: "Send feedback option in settings")
+    static let settingsGetSupport = NSLocalizedString("settings.getSupport", value: "Get Support", comment: "Support link to Firefox Lockwise Support page")
     static let faq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
     static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
     static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
@@ -87,7 +86,7 @@ extension Constant.string {
     static let setPasscode = NSLocalizedString("set_passcode", value: "Set Passcode", comment: "Label for button allowing users to go to passcode settings")
     static let sortOptionsAccessibilityID = NSLocalizedString("sorting_options", value: "Select options for sorting your list of logins (currently %@)", comment: "Accessibility identifier for the sorting options button. %@ will be replaced with the currently-set sort option")
     static let settingsAccessibilityID = NSLocalizedString("settings_button", value: "Settings", comment: "Accessibility identifier for the settings button")
-    static let settingsGetSupport = NSLocalizedString("settings.getSupport", value: "Ask a Question", comment: "Support link to Discourse discussion forum")
+    static let settingsAskQuestion = NSLocalizedString("settings.askQuestion", value: "Ask a Question", comment: "Support link to Discourse discussion forum")
     static let websiteCellAccessibilityLabel = NSLocalizedString("website_accessibility_instructions", value: "Web address: double tap to open in browser %@", comment: "Accessibility label and instructions for web address section of login details")
     static let usernameCellAccessibilityLabel = NSLocalizedString("username_accessibility_instructions", value: "Username: double tap to copy %@", comment: "Accessibility label and instructions for username section of login details. %@ will be replaced with the username value")
     static let passwordCellAccessibilityLabel = NSLocalizedString("password_accessibility_instructions", value: "Password: double tap to copy", comment: "Accessibility label and instructions for password section of login details.")

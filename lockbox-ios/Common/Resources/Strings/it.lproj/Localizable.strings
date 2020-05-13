@@ -191,11 +191,11 @@
 "settings.faq" = "FAQ";
 
 /* Support link to Discourse discussion forum */
-"settings.getSupport" = "Fai una domanda";
+"settings.askQuestion" = "Fai una domanda";
 
 // TODO: - Italian
 /* Support link to Firefox Lockwise Support page */
-"settings.support" = "Get Support";
+"settings.getSupport" = "Get Support";
 
 /* Label for link to learn more */
 "settings.learnMore" = "Ulteriori informazioni";

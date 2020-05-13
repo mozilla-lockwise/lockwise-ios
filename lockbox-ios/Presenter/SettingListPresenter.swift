@@ -60,19 +60,19 @@ class SettingListPresenter {
         return SettingSectionModel(model: 0, items: [
             // Issue #1166
             SettingCellConfiguration(
-                    text: Constant.string.settingsSupport,
+                    text: Constant.string.settingsGetSupport,
                     routeAction: ExternalWebsiteRouteAction(
-                            urlString: Constant.app.supportURL,
-                            title: Constant.string.settingsSupport,
+                        urlString: Constant.app.getSupportURL,
+                            title: Constant.string.settingsGetSupport,
                             returnRoute: SettingRouteAction.list),
                             accessibilityId: "supportSettingOption"),
             SettingCellConfiguration(
-                text: Constant.string.settingsGetSupport,
+                text: Constant.string.settingsAskQuestion,
                 routeAction: ExternalWebsiteRouteAction(
-                    urlString: Constant.app.getSupportURL,
-                    title: Constant.string.settingsGetSupport,
+                    urlString: Constant.app.askQuestionURL,
+                    title: Constant.string.settingsAskQuestion,
                     returnRoute: SettingRouteAction.list),
-                accessibilityId: "getSupportSettingOption"),
+                accessibilityId: "askQuestionSettingOption"),
             SettingCellConfiguration(
                     text: Constant.string.faq,
                     routeAction: ExternalWebsiteRouteAction(
