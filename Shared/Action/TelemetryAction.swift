@@ -83,6 +83,11 @@ class GleanActionHandler: ActionHandler {
             onDisposed: nil
         ).disposed(by: self.disposeBag)
         
+        // Get legacy telemetry ID
+        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
+            GleanMetrics.LegacyIds.clientId.set(uuid)
+        }
+        
         // Since we are guaranteed to receive the invocation of
         // setUploadEnabled above, we can rely on getUploadEnabled to
         // retrieve the current telemetry preference state.

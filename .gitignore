@@ -12,4 +12,5 @@ lockwiseios-l10n
 
 // Glean
 .venv/
+Shared/Common/Generated
 /Generated
