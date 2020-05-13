@@ -39,6 +39,10 @@ class BaseAccountStore {
         self.keychainWrapper = keychainWrapper
         self.networkStore = networkStore
 
+        // Set-up Rust network stack. Note that this has to be called
+        // before any Application Services component gets used.
+        Viaduct.shared.useReqwestBackend()
+        
         self.initialized()
     }
 
