@@ -11,7 +11,6 @@ extension Constant.app {
     static let appVersionCode = 4 // this is the version of the app that will drive updates.
     static let sumoURL = "https://support.mozilla.org/en-US/kb/"
     static let privacyURL = sumoURL + "firefox-lockwise-and-privacy"
-//    static let provideFeedbackURL = "https://qsurvey.mozilla.com/s3/Lockbox-Input?ver=\(appVersion ?? "1.1")"
     static let getSupportURL = "https://support.mozilla.org/en-US/products/firefox-lockwise"
     static let askQuestionURL = "https://discourse.mozilla.org/c/test-pilot/lockbox"
     static let faqURLtop = sumoURL + "getting-started-firefox-lockwise"
