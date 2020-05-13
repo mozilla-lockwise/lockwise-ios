@@ -193,9 +193,8 @@
 /* Support link to Discourse discussion forum */
 "settings.askQuestion" = "Stelle eine Frage";
 
-// TODO: - German
 /* Support link to Firefox Lockwise Support page */
-"settings.getSupport" = "Get Support";
+"settings.getSupport" = "Hole dir Unterstützung";
 
 /* Label for link to learn more */
 "settings.learnMore" = "Weitere Informationen";
