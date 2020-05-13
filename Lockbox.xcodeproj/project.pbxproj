@@ -1622,6 +1622,7 @@
 			buildPhases = (
 				7D651D68203CE50700BD9B6E /* ShellScript */,
 				7D5F1D792086693F00688DEA /* Run Script */,
+				CD6C44AE246C624E00FF261B /* Glean SDK Generator Script */,
 				7D5DF86F1F87F2600039B23E /* Sources */,
 				7D5DF8701F87F2600039B23E /* Frameworks */,
 				7D5DF8711F87F2600039B23E /* Resources */,
@@ -1873,6 +1874,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		CD6C44AE246C624E00FF261B /* Glean SDK Generator Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/lockbox-ios/Common/Resources/metrics.yaml",
+			);
+			name = "Glean SDK Generator Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/lockbox-ios/Common/Resources/Generated/LegacyIds.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbash $PWD/sdk_generator.sh\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
