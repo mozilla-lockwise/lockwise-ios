@@ -161,6 +161,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     fatalError("couldn't find the right cell!")
                 }
                 
+                // Issue #1151
                 cell.title.text = cellConfiguration.title
                 if (cellConfiguration.title == Constant.string.webAddress) {
                     cell.textValue.isEnabled = false
