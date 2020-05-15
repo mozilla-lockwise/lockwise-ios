@@ -28,6 +28,17 @@ class ItemListView: BaseItemListView {
         presenter?.onViewReady()
         backgroundModeObserver()
     }
+
+    override func styleNavigationBar() {
+        super.styleNavigationBar()
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
+    }
+
+    override func createPresenter() -> BaseItemListPresenter {
+        return ItemListPresenter(view: self)
+    }
     
     private func backgroundModeObserver() {
         NotificationCenter.default.addObserver(self,
@@ -40,17 +51,6 @@ class ItemListView: BaseItemListView {
         self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                    at: UITableView.ScrollPosition.top,
                                    animated: true)
-    }
-
-    override func styleNavigationBar() {
-        super.styleNavigationBar()
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.prefButton)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.sortingButton)
-    }
-
-    override func createPresenter() -> BaseItemListPresenter {
-        return ItemListPresenter(view: self)
     }
 }
 
