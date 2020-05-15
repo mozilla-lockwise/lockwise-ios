@@ -39,6 +39,10 @@ class BaseAccountStore {
         self.keychainWrapper = keychainWrapper
         self.networkStore = networkStore
 
+        // Set-up Rust network stack. Note that this has to be called
+        // before any Application Services component gets used.
+        Viaduct.shared.useReqwestBackend()
+        
         self.initialized()
     }
 
@@ -72,6 +76,10 @@ class BaseAccountStore {
                     errMessage = "Unauthorized error: " + message
                 case .panic(let message):
                     errMessage = "Panic error: " + message
+                case .noExistingAuthFlow:
+                    errMessage = "No Existing Auth Flow error"
+                case .wrongAuthFlow:
+                    errMessage = "Wrong Auth Flow error"
                 }
                 let sentryAction = SentryAction(
                     title: "FxAException: " + errMessage,
