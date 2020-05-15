@@ -43,14 +43,16 @@ class ItemListView: BaseItemListView {
     private func backgroundModeObserver() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(scrollTableViewToTop),
-                                               name: UIApplication.didEnterBackgroundNotification,
+                                               name: UIApplication.willResignActiveNotification,
                                                object: nil)
     }
     
     @objc private func scrollTableViewToTop() {
-        self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
-                                   at: UITableView.ScrollPosition.top,
-                                   animated: true)
+        if (self.tableView.numberOfRows(inSection: 0) > 0) {
+            self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                       at: UITableView.ScrollPosition.top,
+                                       animated: true)
+        }
     }
 }
 
