@@ -115,11 +115,11 @@ class AccountStore: BaseAccountStore {
 extension AccountStore {
     private func initFxa() {
         if let accountJSON = self.storedAccountJSON {
-            self.fxa = try? FirefoxAccount.fromJSON(state: accountJSON)
+            self.fxa = try? FirefoxAccount.init(fromJsonState: accountJSON)
             self.generateLoginURL()
             self.populateAccountInformation(false)
         } else {
-            let config = FxAConfig.release(clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
+            let config = FxAConfig(server: .release, clientId: Constant.fxa.clientID, redirectUri: Constant.fxa.redirectURI)
 
             self.fxa = try? FirefoxAccount(config: config)
             self.generateLoginURL()
