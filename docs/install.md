@@ -1,4 +1,4 @@
-1. Install Xcode version 11.3 + Swift 5.1.3
+1. Install Xcode version 11.4.1 + Swift 5.2.2
 
 2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
 
