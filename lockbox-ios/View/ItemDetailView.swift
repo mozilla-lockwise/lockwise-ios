@@ -168,6 +168,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                     .disposed(by: cell.disposeBag)
                 
                 cell.textValue.textColor = cellConfiguration.valueFontColor
+                cell.textValue.textAlignment = .right
                 
                 cell.accessibilityLabel = cellConfiguration.accessibilityLabel
                 cell.accessibilityIdentifier = cellConfiguration.accessibilityId
