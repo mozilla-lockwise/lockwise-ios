@@ -183,19 +183,29 @@ class ItemDetailPresenter {
     
     private func disableWebAddressOnEdit(editing: Bool) {
         if let view: ItemDetailView = self.view as? ItemDetailView {
-            guard let tableView = view.tableView else { return }
             
+            guard let tableView = view.tableView else { return }
             let indexPath = IndexPath(item: 0, section: 0)
+            
             if let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell {
-                
                 if cell.title.text == Constant.string.webAddress {
-                    if editing { cell.isUserInteractionEnabled = false }
-                    else { cell.isUserInteractionEnabled = true }
-                }
+                    if editing {
+                    
                 
+                        cell.backgroundColor = #colorLiteral(red: 0.9608519673, green: 0.9606127143, blue: 0.9735968709, alpha: 1)
+                        cell.textValue.textColor = #colorLiteral(red: 0.6119456291, green: 0.590236485, blue: 0.6646512747, alpha: 1)
+                        cell.isUserInteractionEnabled = false
+                        
+                    } else {
+                        
+                        cell.backgroundColor = .white
+                        cell.isUserInteractionEnabled = true
+                        cell.textValue.textColor = Constant.color.lockBoxViolet
+                        
+                    }
+                }
             }
         }
-        
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
