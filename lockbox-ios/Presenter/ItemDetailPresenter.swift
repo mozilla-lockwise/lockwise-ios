@@ -312,7 +312,6 @@ class ItemDetailPresenter {
             
             itemDetailStore.isEditing
                 .map { editing in
-                    // Maybe here
                     return editing ? Constant.string.save : Constant.string.edit
             }
             .subscribe(view!.rightButtonText)
