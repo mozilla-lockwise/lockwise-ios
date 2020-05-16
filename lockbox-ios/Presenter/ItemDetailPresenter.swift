@@ -184,28 +184,33 @@ class ItemDetailPresenter {
     private func disableWebAddressOnEdit(editing: Bool) {
         if let view: ItemDetailView = self.view as? ItemDetailView {
             
-            guard let tableView = view.tableView else { return }
+            // Get web address cell
             let indexPath = IndexPath(item: 0, section: 0)
+            guard let tableView = view.tableView else { return }
+            guard let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell else { return }
             
-            if let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell {
-                if cell.title.text == Constant.string.webAddress {
-                    if editing {
-                    
-                
-                        cell.backgroundColor = #colorLiteral(red: 0.9608519673, green: 0.9606127143, blue: 0.9735968709, alpha: 1)
-                        cell.textValue.textColor = #colorLiteral(red: 0.6119456291, green: 0.590236485, blue: 0.6646512747, alpha: 1)
-                        cell.isUserInteractionEnabled = false
-                        
-                    } else {
-                        
-                        cell.backgroundColor = .white
-                        cell.isUserInteractionEnabled = true
-                        cell.textValue.textColor = Constant.color.lockBoxViolet
-                        
-                    }
+            if cell.title.text == Constant.string.webAddress {
+                if editing {
+                    // Change UI color of web address cell and disabled editing
+                    self.updateWebCellUI(cell: cell, enabled: false,
+                                         textColor: Constant.color.disabledButtonTextColor,
+                                         backgroundColor: Constant.color.disabledButtonBackgroundColor)
+                } else {
+                    // Change UI color of web address cell back to normal
+                    self.updateWebCellUI(cell: cell)
                 }
             }
         }
+    }
+    
+    private func updateWebCellUI(cell: ItemDetailCell,
+                              enabled: Bool = true,
+                              textColor: UIColor = Constant.color.lockBoxViolet,
+                              backgroundColor: UIColor = UIColor.white) {
+        
+        cell.textValue.textColor = textColor
+        cell.backgroundColor = backgroundColor
+        cell.isUserInteractionEnabled = enabled
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
