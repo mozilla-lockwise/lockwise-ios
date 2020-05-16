@@ -172,8 +172,30 @@ class ItemDetailPresenter {
                 .disposed(by: disposeBag)
 
         itemDetailStore.isEditing
-                .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
+                .subscribe(onNext: { editing in
+                    
+                    self.disableWebAddressOnEdit(editing: editing)
+                    self.view?.enableLargeTitle(enabled: !editing)
+                    
+                })
                 .disposed(by: disposeBag)
+    }
+    
+    private func disableWebAddressOnEdit(editing: Bool) {
+        if let view: ItemDetailView = self.view as? ItemDetailView {
+            guard let tableView = view.tableView else { return }
+            
+            let indexPath = IndexPath(item: 0, section: 0)
+            if let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell {
+                
+                if cell.title.text == Constant.string.webAddress {
+                    if editing { cell.isUserInteractionEnabled = false }
+                    else { cell.isUserInteractionEnabled = true }
+                }
+                
+            }
+        }
+        
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
@@ -290,6 +312,7 @@ class ItemDetailPresenter {
             
             itemDetailStore.isEditing
                 .map { editing in
+                    // Maybe here
                     return editing ? Constant.string.save : Constant.string.edit
             }
             .subscribe(view!.rightButtonText)
@@ -373,7 +396,7 @@ extension ItemDetailPresenter {
                         title: Constant.string.webAddress,
                         value: Driver.just(hostname),
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
-                        valueFontColor: Constant.color.lockBoxViolet,
+                        valueFontColor: Constant.color.lockBoxViolet, 
                         accessibilityId: "webAddressItemDetail",
                         textFieldEnabled: isEditing,
                         openButtonHidden: isEditing,

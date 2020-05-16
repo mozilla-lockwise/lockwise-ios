@@ -162,9 +162,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                 }
                 
                 cell.title.text = cellConfiguration.title
-                if (cellConfiguration.title == Constant.string.webAddress) {
-                    cell.textValue.isEnabled = false
-                }
                 
                 cellConfiguration.value
                     .drive(cell.textValue.rx.text)
