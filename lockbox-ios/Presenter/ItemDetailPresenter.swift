@@ -165,14 +165,24 @@ class ItemDetailPresenter {
             .disposed(by: disposeBag)
     }
 
+    /**
+     
+        Observes the editing state of Item Detail View. Hides the Delete Login button and enables large navigation tite when not editing.
+     
+     */
     private func setupEdit() {
+        // If not editing, hide Delete Login button
         itemDetailStore.isEditing
                 .map { !$0 }
                 .subscribe(view!.deleteHidden)
                 .disposed(by: disposeBag)
-
+        
+        // Enable large title when not editing mode
+        // If in editing mode, enable normal title
         itemDetailStore.isEditing
-                .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
+                .subscribe(onNext: { editing in
+                    self.view?.enableLargeTitle(enabled: !editing)
+                })
                 .disposed(by: disposeBag)
     }
 
