@@ -34,43 +34,65 @@ class ItemDetailPresenter {
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
 
+    /**
+     Observes a change in the Reveal Password toggle switch.
+     */
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()
     }()
 
+    /**
+     Observes when the user swipes right on page.
+     */
     lazy private(set) var onRightSwipe: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
     }()
 
+    /**
+     Observes the discard state. This observer is called when the Discard button is pressed by the user.
+     */
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            // Change display to view mode (from editing mode)
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
-            }.asObserver()
+        }.asObserver()
     }()
-
+    
+    /**
+     Observes changes in the Username state. The observer is called when the string is initialized, enters editing, and when value is changed.
+     */
     lazy private var usernameObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
+                // Save value
                 target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
             }
         }.asObserver()
     }()
 
+    /**
+     Observes changes in the Password state. The observer is called when the string is initialized, enters editing, and when value is changed.
+     */
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
+                // Save value
                 target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
             }
         }.asObserver()
     }()
 
+    /**
+     Observes changes in the Web Address (Hostname) state. The observer is called when the string is initialized, enters editing, and when value is changed.
+     */
     lazy private var webAddressObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
+                // Save value
                 target.dispatcher.dispatch(action: ItemEditAction.editWebAddress(value: val))
             }
         }.asObserver()
