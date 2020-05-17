@@ -108,7 +108,14 @@ class ItemDetailPresenter {
         self.sizeClassStore = sizeClassStore
     }
 
+    /**
+     
+     Initializes observers for ItemDetailView and maps LoginRecord data to appropriate UITableViewCell.
+     
+     */
+    
     func onViewReady() {
+        // Gets login data
         let itemObservable = dataStore.locked
                 .filter { !$0 }
                 .take(1)
@@ -116,15 +123,19 @@ class ItemDetailPresenter {
                 .take(1)
                 .flatMap { self.dataStore.get($0) }
 
+        // Map login information to UITableViewCell
         itemObservable.asDriver(onErrorJustReturn: nil)
                 .filterNil()
                 .map { self.configurationForLogin($0) }
                 .drive(view!.itemDetailObserver)
                 .disposed(by: disposeBag)
-
+        
+        // Sets Navigation Bar title
         itemObservable
                 .filterNil()
                 .map { item -> String in
+                    // Navigation bar title set to Hostname
+                    // Or Constant.string.unnamedEntry if there is not hostname
                     let title = item.hostname.titleFromHostname()
                     return title.isEmpty ? Constant.string.unnamedEntry : title
                 }
@@ -132,30 +143,42 @@ class ItemDetailPresenter {
                 .drive(view!.titleText)
                 .disposed(by: disposeBag)
 
-        // Only allow edit functionality on debug builds
+        // Only allow edit functionality on debug builds only
         if FeatureFlags.crudEdit {
             setupEdit()
         }
+        
+        // Initialize delete, copy, and navigation bar observers
         setupDelete()
         setupCopy(itemObservable: itemObservable)
         setupNavigation(itemObservable: itemObservable)
     }
     
+    /**
+     
+        Oberserves when Delete Login is tapped and presents a UIAlertController to confirm the user's decision.
+     
+     */
     private func setupDelete() {
+        // Observe if delete is tapped
         view?.deleteTapped
             .subscribe(onNext: { (_) in
+                // Present alert controller
                 self.view?.displayAlertController(
                     buttons: [
+                        // Alert controller Cancel option
                         AlertActionButtonConfiguration(
                             title: Constant.string.cancel,
                             tapObserver: nil,
                             style: .cancel
                         ),
+                        // Alert controller Confirm Delete option
                         AlertActionButtonConfiguration(
                             title: Constant.string.delete,
                             tapObserver: self.deleteObserver,
                             style: .destructive)
                     ],
+                    // Alert controller title and message
                     title: Constant.string.confirmDeleteLoginDialogTitle,
                     message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
                                     Constant.string.productNameShort),
@@ -167,7 +190,7 @@ class ItemDetailPresenter {
 
     /**
      
-        Observes the editing state of Item Detail View. Hides the Delete Login button and enables large navigation tite when not editing.
+        Observes the editing state of ItemDetailView. Hides the Delete Login button and enables large navigation bar tite when not editing.
      
      */
     private func setupEdit() {
