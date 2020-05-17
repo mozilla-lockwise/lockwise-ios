@@ -50,10 +50,10 @@ class ItemDetailPresenter {
 
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
-            let PasswordIndexPath = IndexPath(item: 1, section: 1)
-            
+            // Updates username cell
             self.updateCellOnDiscard(value: self.savedLoginInfo[Constant.string.username],
                                 forIndexPath: IndexPath(item: 0, section: 1))
+            // Updates password cell
             self.updateCellOnDiscard(value: self.savedLoginInfo[Constant.string.password],
                                 forIndexPath: IndexPath(item: 1, section: 1))
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
