@@ -34,7 +34,7 @@ class ItemDetailPresenter {
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
     
-    var savedLoginInfo: [String: String?] = ["username": nil, "password": nil]
+    var savedLoginInfo: [String: String?] = [Constant.string.username: nil, Constant.string.password: nil]
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
@@ -52,9 +52,9 @@ class ItemDetailPresenter {
         return Binder(self) { target, _ in
             let PasswordIndexPath = IndexPath(item: 1, section: 1)
             
-            self.updateCellOnDiscard(value: self.savedLoginInfo["username"],
+            self.updateCellOnDiscard(value: self.savedLoginInfo[Constant.string.username],
                                 forIndexPath: IndexPath(item: 0, section: 1))
-            self.updateCellOnDiscard(value: self.savedLoginInfo["password"],
+            self.updateCellOnDiscard(value: self.savedLoginInfo[Constant.string.password],
                                 forIndexPath: IndexPath(item: 1, section: 1))
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
         }.asObserver()
@@ -72,8 +72,8 @@ class ItemDetailPresenter {
     lazy private var usernameObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
-                if let _: String = self.savedLoginInfo["username"] as? String {}
-                else { self.savedLoginInfo["username"] = val }
+                if let _: String = self.savedLoginInfo[Constant.string.username] as? String {}
+                else { self.savedLoginInfo[Constant.string.username] = val }
                 target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
             }
         }.asObserver()
@@ -82,8 +82,8 @@ class ItemDetailPresenter {
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
-                if let _: String = self.savedLoginInfo["password"] as? String {}
-                else { self.savedLoginInfo["password"] = val }
+                if let _: String = self.savedLoginInfo[Constant.string.password] as? String {}
+                else { self.savedLoginInfo[Constant.string.password] = val }
                 target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
             }
         }.asObserver()
@@ -293,8 +293,8 @@ class ItemDetailPresenter {
                             item.username = username
                             item.password = password
                             item.hostname = webAddress
-                            self.savedLoginInfo["username"] = username
-                            self.savedLoginInfo["password"] = password
+                            self.savedLoginInfo[Constant.string.username] = username
+                            self.savedLoginInfo[Constant.string.password] = password
                             return [DataStoreAction.update(login: item),
                                     ItemDetailDisplayAction.viewMode]
                         }
