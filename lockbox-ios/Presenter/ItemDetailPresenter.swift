@@ -113,7 +113,6 @@ class ItemDetailPresenter {
      Initializes observers for ItemDetailView and maps LoginRecord data to appropriate UITableViewCell.
      
      */
-    
     func onViewReady() {
         // Gets login data
         let itemObservable = dataStore.locked
