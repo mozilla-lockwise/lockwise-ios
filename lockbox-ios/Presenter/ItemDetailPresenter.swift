@@ -110,7 +110,7 @@ class ItemDetailPresenter {
 
     /**
      
-     Initializes observers for ItemDetailView and maps LoginRecord data to appropriate UITableViewCell.
+     Initializes observers for `ItemDetailView` and maps LoginRecord data to appropriate `UITableViewCell`.
      
      */
     func onViewReady() {
@@ -142,7 +142,7 @@ class ItemDetailPresenter {
                 .drive(view!.titleText)
                 .disposed(by: disposeBag)
 
-        // Only allow edit functionality on debug builds 
+        // Only allow edit functionality on debug builds
         if FeatureFlags.crudEdit {
             setupEdit()
         }
@@ -155,7 +155,7 @@ class ItemDetailPresenter {
     
     /**
      
-        Oberserves when Delete Login is tapped and presents a UIAlertController to confirm the user's decision.
+        Oberserves when Delete Login is tapped and presents a `UIAlertController` to confirm the user's decision.
      
      */
     private func setupDelete() {
@@ -189,7 +189,7 @@ class ItemDetailPresenter {
 
     /**
      
-        Observes the editing state of ItemDetailView. Hides the Delete Login button and enables large navigation bar tite when not editing.
+        Observes the editing state of `ItemDetailView`. Hides the Delete Login button and enables large navigation bar tite when not editing.
      
      */
     private func setupEdit() {
@@ -209,14 +209,16 @@ class ItemDetailPresenter {
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
-        // use the behaviorrelay to cache the most recent version of the LoginRecord
+        // Use the behaviorrelay to cache the most recent version of the LoginRecord
         let itemDetailRelay = BehaviorRelay<LoginRecord?>(value: nil)
 
+        // Observe changes in LoginRecord
         itemObservable
                 .asDriver(onErrorJustReturn: nil)
                 .drive(itemDetailRelay)
                 .disposed(by: disposeBag)
-
+        
+        // Observe when UITableViewCell is tapped
         view?.cellTapped
                 .withLatestFrom(itemDetailStore.isEditing) { cellTitle, isEditing -> String? in
                     return !isEditing ? cellTitle : nil
@@ -260,26 +262,33 @@ class ItemDetailPresenter {
     }
 
     private func setupNavigation(itemObservable: Observable<LoginRecord?>) {
+        // Observe when Back/Cancel button is tapped
         view?.leftBarButtonTapped
                 .withLatestFrom(itemDetailStore.isEditing) { _, editing -> Action? in
+                    // If editing, present alert controller to discard changes or cancel
+                    // If not editing, dismiss page and return to ItemListView
                     if editing {
                         self.view?.displayAlertController(
                             buttons: [
+                                // Alert controller Cancel option
                                 AlertActionButtonConfiguration(
                                     title: Constant.string.cancel,
                                     tapObserver: nil,
                                     style: .cancel
                                 ),
+                                // Alert controller Confirm Discard Changes option
                                 AlertActionButtonConfiguration(
                                     title: Constant.string.discard,
                                     tapObserver: self.discardChangesObserver,
                                     style: .destructive)
                             ],
+                            // Alert controller title, message, and format
                             title: Constant.string.discardChangesTitle,
                             message: Constant.string.discardChangesMessage,
                             style: .alert,
                             barButtonItem: nil)
                     } else {
+                        // Dismiss and return to ItemListView
                         return MainRouteAction.list
                     }
                     return nil
@@ -288,6 +297,7 @@ class ItemDetailPresenter {
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: disposeBag)
 
+        // Observe changes to itemDetailStore
         let editingObservable = Observable.combineLatest(itemDetailStore.usernameEditValue,
                                                          itemDetailStore.passwordEditValue,
                                                          itemDetailStore.webAddressEditValue,
