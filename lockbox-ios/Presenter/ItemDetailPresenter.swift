@@ -142,7 +142,7 @@ class ItemDetailPresenter {
                 .drive(view!.titleText)
                 .disposed(by: disposeBag)
 
-        // Only allow edit functionality on debug builds only
+        // Only allow edit functionality on debug builds 
         if FeatureFlags.crudEdit {
             setupEdit()
         }
