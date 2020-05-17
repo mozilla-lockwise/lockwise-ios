@@ -38,6 +38,7 @@ class ItemDetailPresenter {
      Observes a change in the Reveal Password toggle switch.
      */
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
+        // Perform action for when password toggle changes
         return Binder(self) { target, revealed in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: revealed))
         }.asObserver()
@@ -47,6 +48,7 @@ class ItemDetailPresenter {
      Observes when the user swipes right on page.
      */
     lazy private(set) var onRightSwipe: AnyObserver<Void> = {
+        // Dismiss current view and return to previous view that contains the list of all LoginDetails
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: MainRouteAction.list)
         }.asObserver()
@@ -56,8 +58,8 @@ class ItemDetailPresenter {
      Observes the discard state. This observer is called when the Discard button is pressed by the user.
      */
     lazy private var discardChangesObserver: AnyObserver<Void> = {
+        // Discard all changes made and change display to view mode (from editing mode)
         return Binder(self) { target, _ in
-            // Change display to view mode (from editing mode)
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
         }.asObserver()
     }()
@@ -67,8 +69,8 @@ class ItemDetailPresenter {
      */
     lazy private var usernameObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
+            // Save if username value is not nil
             if let val = val {
-                // Save value
                 target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
             }
         }.asObserver()
@@ -79,8 +81,8 @@ class ItemDetailPresenter {
      */
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
+            // Save if password value is not nil
             if let val = val {
-                // Save value
                 target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
             }
         }.asObserver()
@@ -90,9 +92,9 @@ class ItemDetailPresenter {
      Observes changes in the Web Address (Hostname) state. The observer is called when the string is initialized, enters editing, and when value is changed.
      */
     lazy private var webAddressObserver: AnyObserver<String?> = {
+        // Save if web address value is not nil
         return Binder(self) { target, val in
             if let val = val {
-                // Save value
                 target.dispatcher.dispatch(action: ItemEditAction.editWebAddress(value: val))
             }
         }.asObserver()
