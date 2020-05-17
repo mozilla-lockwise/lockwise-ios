@@ -33,6 +33,8 @@ class ItemDetailPresenter {
     private var copyDisplayStore: CopyDisplayStore
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
+    
+    var savedLoginInfo: [String: String?] = ["username": nil, "password": nil]
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
@@ -48,13 +50,30 @@ class ItemDetailPresenter {
 
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            let PasswordIndexPath = IndexPath(item: 1, section: 1)
+            
+            self.updateCellOnDiscard(value: self.savedLoginInfo["username"],
+                                forIndexPath: IndexPath(item: 0, section: 1))
+            self.updateCellOnDiscard(value: self.savedLoginInfo["password"],
+                                forIndexPath: IndexPath(item: 1, section: 1))
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
-            }.asObserver()
+        }.asObserver()
     }()
+    
+    private func updateCellOnDiscard(value: String??, forIndexPath: IndexPath) {
+        if let view: ItemDetailView = self.view as? ItemDetailView {
+            guard let tableView = view.tableView else { return }
+            guard let cell: ItemDetailCell = tableView.cellForRow(at: forIndexPath) as? ItemDetailCell else { return }
+            guard let value = value else { return }
+            cell.textValue.text = value
+        }
+    }
 
     lazy private var usernameObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
+                if let _: String = self.savedLoginInfo["username"] as? String {}
+                else { self.savedLoginInfo["username"] = val }
                 target.dispatcher.dispatch(action: ItemEditAction.editUsername(value: val))
             }
         }.asObserver()
@@ -63,6 +82,8 @@ class ItemDetailPresenter {
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
+                if let _: String = self.savedLoginInfo["password"] as? String {}
+                else { self.savedLoginInfo["password"] = val }
                 target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
             }
         }.asObserver()
@@ -272,6 +293,8 @@ class ItemDetailPresenter {
                             item.username = username
                             item.password = password
                             item.hostname = webAddress
+                            self.savedLoginInfo["username"] = username
+                            self.savedLoginInfo["password"] = password
                             return [DataStoreAction.update(login: item),
                                     ItemDetailDisplayAction.viewMode]
                         }
