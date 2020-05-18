@@ -100,17 +100,22 @@ class ItemDetailPresenter {
         }.asObserver()
     }()
 
+    /**
+     Observes `LoginRecord` deletion by user. Delete action takes place when a user click Delete Login button.
+     */
     lazy private var deleteObserver: AnyObserver<Void>? = {
         return Binder(self) { target, _ in
             target.itemDetailStore.itemDetailId
                 .take(1)
                 .map { id -> [Action] in
+                    // Deletes login data that is associated with unique ID
                     return [DataStoreAction.delete(id: id),
                         MainRouteAction.list,
                         ItemDetailDisplayAction.viewMode]
                 }
                 .subscribe(onNext: { actions in
                     for action in actions {
+                        // Performs delete action
                         self.dispatcher.dispatch(action: action)
                     }
                 })
@@ -133,9 +138,8 @@ class ItemDetailPresenter {
     }
 
     /**
-     
+
      Initializes observers for `ItemDetailView` and maps LoginRecord data to appropriate `UITableViewCell`.
-     
      */
     func onViewReady() {
         // Gets login data
@@ -144,7 +148,7 @@ class ItemDetailPresenter {
                 .take(1)
                 .flatMap { _ in self.itemDetailStore.itemDetailId }
                 .take(1)
-                .flatMap { self.dataStore.get($0) }
+                .flatMap {self.dataStore.get($0) }
 
         // Map login information to UITableViewCell
         itemObservable.asDriver(onErrorJustReturn: nil)
@@ -235,8 +239,6 @@ class ItemDetailPresenter {
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
         // Use the behaviorrelay to cache the most recent version of the LoginRecord
         let itemDetailRelay = BehaviorRelay<LoginRecord?>(value: nil)
-
-        // Observe changes in LoginRecord
         itemObservable
                 .asDriver(onErrorJustReturn: nil)
                 .drive(itemDetailRelay)

@@ -149,6 +149,7 @@ extension BaseItemListPresenter {
                                           networkConnectivityObservable: Observable<Bool>,
                                           itemDetailIdObservable: Observable<String>,
                                           sidebarObservable: Observable<Bool>) -> Driver<[ItemSectionModel]> {
+        
         // only run on a delay for UI purposes; keep tests from blocking
         let listThrottle: DispatchTimeInterval = isRunningTest ? .seconds(0) : .seconds(1)
         let stateThrottle: DispatchTimeInterval = isRunningTest ? .seconds(0) : .seconds(2)
@@ -170,6 +171,7 @@ extension BaseItemListPresenter {
             sidebarObservable
             )
             .map { (latest: ([LoginRecord], ItemListFilterAction, Setting.ItemListSort, SyncState, LoginStoreState, Bool, String, Bool)) -> LoginListTextSort in
+                
                 return LoginListTextSort(
                     logins: latest.0,
                     text: latest.1.filteringText,
