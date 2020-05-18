@@ -354,6 +354,13 @@ class ItemDetailPresenter {
 // helpers
 extension ItemDetailPresenter {
     private func configurationForLogin(_ login: LoginRecord?) -> [ItemDetailSectionModel] {
+        
+        // MARK: Create an observer similar to `rightBarButtonTapped` to get the latest values being editted withLatestFrom(editingObservable)
+        // MARK: Replace `login?.password ?? ""` below with the values observed (described above)
+        // MARK: Reason: configurationForLogin(_ login: LoginRecord?) is called once during initialization
+        // MARK: We need something that is overridden everything the textfield is editted.
+        // MARK: Need to make sure to not take the value directly from textfield because it will return something like this: "•••••••••••••"
+        
         let itemPassword: String = login?.password ?? ""
 
         let passwordTextDriver = itemDetailStore.passwordRevealed
