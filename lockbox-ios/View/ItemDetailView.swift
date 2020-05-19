@@ -194,7 +194,8 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                 }
                 
                 if let revealObserver = cellConfiguration.revealPasswordObserver {
-                    cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
+                    // Font is not consistent with app. Uncomment this line out if this was intentional 
+//                    cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
                     
                     cell.revealButton.rx.tap
                         .map { _ -> Bool in

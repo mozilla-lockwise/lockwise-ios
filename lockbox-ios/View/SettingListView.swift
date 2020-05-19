@@ -177,6 +177,7 @@ extension SettingListView {
         footerView.frame = frame
 
         self.tableView.tableFooterView = footerView
+        self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 18, right: 0)
     }
 }
 
