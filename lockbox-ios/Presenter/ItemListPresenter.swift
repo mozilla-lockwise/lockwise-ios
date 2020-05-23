@@ -83,7 +83,7 @@ class ItemListPresenter: BaseItemListPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = DataStore.shared,
          itemListDisplayStore: ItemListDisplayStore = ItemListDisplayStore.shared,
-         userDefaultStore: UserDefaultStore = .shared,
+         settingStore: SettingStore = .shared,
          itemDetailStore: ItemDetailStore = .shared,
          networkStore: NetworkStore = .shared,
          sizeClassStore: SizeClassStore = .shared) {
@@ -92,7 +92,7 @@ class ItemListPresenter: BaseItemListPresenter {
                    dispatcher: dispatcher,
                    dataStore: dataStore,
                    itemListDisplayStore: itemListDisplayStore,
-                   userDefaultStore: userDefaultStore,
+                   settingStore: settingStore,
                    itemDetailStore: itemDetailStore,
                    networkStore: networkStore,
                    sizeClassStore: sizeClassStore)
@@ -102,7 +102,7 @@ class ItemListPresenter: BaseItemListPresenter {
         super.onViewReady()
         self.setupSpinnerDisplay()
 
-        let itemSortObservable = self.userDefaultStore.itemListSort
+        let itemSortObservable = self.settingStore.itemListSort
         itemSortObservable.bind(to: self.listSortedObserver).disposed(by: self.disposeBag)
 
         guard let view = self.view,
@@ -131,7 +131,7 @@ class ItemListPresenter: BaseItemListPresenter {
 
         if let onSortingButtonPressed = self.view?.onSortingButtonPressed {
             onSortingButtonPressed.subscribe { _ in
-                self.userDefaultStore.itemListSort
+                self.settingStore.itemListSort
                     .take(1)
                     .subscribe(onNext: { [weak self] evt in
                         guard let strongSelf = self else { return }

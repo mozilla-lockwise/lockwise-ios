@@ -29,7 +29,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserDefaultStore: UserDefaultStore {
+    class FakeSettingStore: SettingStore {
         let autoLockStub = PublishSubject<Setting.AutoLock>()
 
         override var autoLockTime: Observable<Setting.AutoLock> {
@@ -39,7 +39,7 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
 
     private var view: FakeAutoLockSettingsView!
     private var dispatcher: FakeDispatcher!
-    private var userDefaultStore: FakeUserDefaultStore!
+    private var settingStore: FakeSettingStore!
     private var scheduler = TestScheduler(initialClock: 0)
 
     var subject: AutoLockSettingPresenter!
@@ -48,19 +48,19 @@ class AutoLockSettingsPresenterSpec: QuickSpec {
         beforeEach {
             self.view = FakeAutoLockSettingsView()
             self.dispatcher = FakeDispatcher()
-            self.userDefaultStore = FakeUserDefaultStore()
+            self.settingStore = FakeSettingStore()
 
             self.subject = AutoLockSettingPresenter(
                     view: self.view,
                     dispatcher: self.dispatcher,
-                    userDefaultStore: self.userDefaultStore)
+                    settingStore: self.settingStore)
         }
 
         it("delivers updated values when autoLock setting changes") {
             self.view.itemsObserver = self.scheduler.createObserver([AutoLockSettingSectionModel].self)
             self.subject.onViewReady()
 
-            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.FiveMinutes)
+            self.settingStore.autoLockStub.onNext(Setting.AutoLock.FiveMinutes)
 
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 for item in settings[0].items {

@@ -8,8 +8,8 @@ import RxSwift
 class AutoLockSupport {
     static let shared = AutoLockSupport()
 
-    private let userDefaultStore: UserDefaultStore
-    private let userDefaults: UserDefaults
+    private let settingStore: SettingStore
+    private let userDefaults: UserDefaults // issue #910
     private let disposeBag = DisposeBag()
 
     var lockCurrentlyRequired: Bool {
@@ -19,14 +19,14 @@ class AutoLockSupport {
         return autoLockTimerDate <= currentSystemTime
     }
 
-    init(userDefaultStore: UserDefaultStore = UserDefaultStore.shared,
+    init(settingStore: SettingStore = SettingStore.shared,
          userDefaults: UserDefaults = UserDefaults(suiteName: Constant.app.group) ?? .standard) {
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
         self.userDefaults = userDefaults
     }
 
     func storeNextAutolockTime() {
-        userDefaultStore.autoLockTime
+        settingStore.autoLockTime
             .take(1)
             .subscribe(onNext: { [weak self] autoLockSetting in self?.updateNextLockTime(autoLockSetting)
             })

@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ = AccountStore.shared
         _ = DataStore.shared
         _ = ExternalLinkStore.shared
-        _ = UserDefaultStore.shared
+        _ = SettingStore.shared
         if #available(iOS 12, *) {
             _ = CredentialProviderStore.shared
         }

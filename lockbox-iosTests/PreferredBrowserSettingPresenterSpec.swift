@@ -29,7 +29,7 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserDefaultStore: UserDefaultStore {
+    class FakeSettingStore: SettingStore {
         var preferredBrowserStub = PublishSubject<Setting.PreferredBrowser>()
 
         override var preferredBrowser: Observable<Setting.PreferredBrowser> {
@@ -40,18 +40,18 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
     var subject: PreferredBrowserSettingPresenter!
     var view: FakePreferredBrowserView!
     var dispatcher: FakeDispatcher!
-    var userDefaultStore: FakeUserDefaultStore!
+    var settingStore: FakeSettingStore!
     var scheduler = TestScheduler(initialClock: 0)
 
     override func spec() {
         beforeEach {
             self.view = FakePreferredBrowserView()
             self.dispatcher = FakeDispatcher()
-            self.userDefaultStore = FakeUserDefaultStore()
+            self.settingStore = FakeSettingStore()
             self.subject = PreferredBrowserSettingPresenter(
                     view: self.view,
                     dispatcher: self.dispatcher,
-                    userDefaultStore: self.userDefaultStore
+                    settingStore: self.settingStore
             )
         }
 
@@ -59,7 +59,7 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
             self.view.itemsObserver = self.scheduler.createObserver([PreferredBrowserSettingSectionModel].self)
             self.subject.onViewReady()
 
-            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Firefox)
+            self.settingStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Firefox)
 
             if let settings = self.view.itemsObserver.events.last?.value.element {
                 expect(settings.count).to(be(1))

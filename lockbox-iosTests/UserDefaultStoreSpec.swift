@@ -10,7 +10,7 @@ import RxBlocking
 
 @testable import Lockbox
 
-class UserDefaultStoreSpec: QuickSpec {
+class SettingStoreSpec: QuickSpec {
     class FakeDispatcher: Dispatcher {
         let registerStub = PublishSubject<Action>()
 
@@ -20,12 +20,12 @@ class UserDefaultStoreSpec: QuickSpec {
     }
 
     var dispatcher: FakeDispatcher!
-    var subject: UserDefaultStore!
+    var subject: SettingStore!
 
     let userDefaults = UserDefaults(suiteName: Constant.app.group)!
 
     override func spec() {
-        describe("UserDefaultStore") {
+        describe("SettingStore") {
             beforeEach {
                 self.userDefaults.set(
                         Constant.setting.defaultPreferredBrowser.rawValue,
@@ -38,7 +38,7 @@ class UserDefaultStoreSpec: QuickSpec {
                 self.userDefaults.removeObject(forKey: UserDefaultKey.itemListSort.rawValue)
 
                 self.dispatcher = FakeDispatcher()
-                self.subject = UserDefaultStore(dispatcher: self.dispatcher)
+                self.subject = SettingStore(dispatcher: self.dispatcher)
             }
 
             it("populates all nil values with the default on initialization") {

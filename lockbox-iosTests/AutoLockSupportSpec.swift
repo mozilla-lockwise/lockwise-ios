@@ -10,7 +10,7 @@ import RxSwift
 @testable import Lockbox
 
 class AutoLockSupportSpec: QuickSpec {
-    class FakeUserDefaultStore: UserDefaultStore {
+    class FakeSettingStore: SettingStore {
         let autoLockStub = PublishSubject<Setting.AutoLock>()
 
         override var autoLockTime: Observable<Setting.AutoLock> {
@@ -33,17 +33,17 @@ class AutoLockSupportSpec: QuickSpec {
         }
     }
 
-    var userDefaultStore: FakeUserDefaultStore!
+    var settingStore: FakeSettingStore!
     var userDefaults: FakeUserDefaults!
     var subject: AutoLockSupport!
 
     override func spec() {
         describe("AutoLockSupport") {
             beforeEach {
-                self.userDefaultStore = FakeUserDefaultStore()
+                self.settingStore = FakeSettingStore()
                 self.userDefaults = FakeUserDefaults()
                 self.subject = AutoLockSupport(
-                    userDefaultStore: self.userDefaultStore,
+                    settingStore: self.settingStore,
                     userDefaults: self.userDefaults
                 )
             }
@@ -56,7 +56,7 @@ class AutoLockSupportSpec: QuickSpec {
                 describe("when the autolocktime is not never") {
                     let currentAutoLock = Setting.AutoLock.FifteenMinutes
                     beforeEach {
-                        self.userDefaultStore.autoLockStub.onNext(currentAutoLock)
+                        self.settingStore.autoLockStub.onNext(currentAutoLock)
                     }
 
                     it("stores the next expected autolocktime") {
@@ -70,7 +70,7 @@ class AutoLockSupportSpec: QuickSpec {
                 describe("when the autolocktime is never") {
                     let currentAutoLock = Setting.AutoLock.Never
                     beforeEach {
-                        self.userDefaultStore.autoLockStub.onNext(currentAutoLock)
+                        self.settingStore.autoLockStub.onNext(currentAutoLock)
                     }
 
                     it("stores double.MAX as the autolocktimerdate") {

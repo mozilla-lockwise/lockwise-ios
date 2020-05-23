@@ -22,7 +22,7 @@ class CredentialProviderPresenter {
     private let dispatcher: Dispatcher
     private let accountStore: AccountStore
     private let telemetryStore: TelemetryStore
-    private let userDefaultStore: UserDefaultStore
+    private let settingStore: SettingStore
     fileprivate let dataStore: DataStore
     private let telemetryActionHandler: TelemetryActionHandler
     private let gleanActionHandler: GleanActionHandler
@@ -34,7 +34,7 @@ class CredentialProviderPresenter {
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = .shared,
          telemetryStore: TelemetryStore = .shared,
-         userDefaultStore: UserDefaultStore = .shared,
+         settingStore: SettingStore = .shared,
          dataStore: DataStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          gleanActionHandler: GleanActionHandler = GleanActionHandler(),
@@ -44,7 +44,7 @@ class CredentialProviderPresenter {
         self.dispatcher = dispatcher
         self.accountStore = accountStore
         self.telemetryStore = telemetryStore
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
         self.dataStore = dataStore
         self.telemetryActionHandler = telemetryActionHandler
         self.gleanActionHandler = gleanActionHandler
@@ -185,7 +185,7 @@ extension CredentialProviderPresenter {
 @available(iOS 12, *)
 extension CredentialProviderPresenter {
     fileprivate func startTelemetry() {
-        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaultStore.recordUsageData)
+        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.settingStore.recordUsageData)
             .filter { $0.1 }
             .map { $0.0 }
             .bind(to: self.telemetryActionHandler.telemetryActionListener)

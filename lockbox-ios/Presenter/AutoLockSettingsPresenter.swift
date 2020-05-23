@@ -14,7 +14,7 @@ protocol AutoLockSettingViewProtocol {
 class AutoLockSettingPresenter {
     private var view: AutoLockSettingViewProtocol
     private let dispatcher: Dispatcher
-    private var userDefaultStore: UserDefaultStore
+    private var settingStore: SettingStore
     private var disposeBag = DisposeBag()
 
     lazy var initialSettings = [
@@ -46,14 +46,14 @@ class AutoLockSettingPresenter {
 
     init(view: AutoLockSettingViewProtocol,
          dispatcher: Dispatcher = .shared,
-         userDefaultStore: UserDefaultStore = .shared) {
+         settingStore: SettingStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
     }
 
     func onViewReady() {
-        let driver = self.userDefaultStore.autoLockTime
+        let driver = self.settingStore.autoLockTime
                 .map { setting -> [CheckmarkSettingCellConfiguration] in
                     return self.initialSettings.map { (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                         cellConfiguration.isChecked =

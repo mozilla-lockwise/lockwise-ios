@@ -15,7 +15,7 @@ class ItemDetailStore: BaseItemDetailStore {
     private var dataStore: DataStore
     private var sizeClassStore: SizeClassStore
     private var lifecycleStore: LifecycleStore
-    private var userDefaultStore: UserDefaultStore
+    private var settingStore: SettingStore
     private var routeStore: RouteStore
     private var itemListDisplayStore: ItemListDisplayStore
 
@@ -55,14 +55,14 @@ class ItemDetailStore: BaseItemDetailStore {
             dataStore: DataStore = .shared,
             sizeClassStore: SizeClassStore = .shared,
             lifecycleStore: LifecycleStore = .shared,
-            userDefaultStore: UserDefaultStore = .shared,
+            settingStore: SettingStore = .shared,
             routeStore: RouteStore = .shared,
             itemListDisplayStore: ItemListDisplayStore = .shared
     ) {
         self.dataStore = dataStore
         self.sizeClassStore = sizeClassStore
         self.lifecycleStore = lifecycleStore
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
         self.routeStore = routeStore
         self.itemListDisplayStore = itemListDisplayStore
 
@@ -144,7 +144,7 @@ class ItemDetailStore: BaseItemDetailStore {
         Observable.combineLatest(sizeClassStore.shouldDisplaySidebar,
                                  self.dataStore.list,
                                  self.itemDetailId,
-                                 self.userDefaultStore.itemListSort)
+                                 self.settingStore.itemListSort)
             .filter({ (displayingSidebar, list, itemId, sort) -> Bool in
                 return displayingSidebar && list.count > 0 && itemId == ""
             })

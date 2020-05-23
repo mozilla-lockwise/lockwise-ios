@@ -74,7 +74,7 @@ class UserDefaultSpec: QuickSpec {
 
             it("triggers Glean.setUploadEnabled() before Glean.initialize()") {
                 // Set the default value to false since Glean upload enabled flag defaults to true.
-                UserDefaultStore.shared.userDefaults
+                SettingStore.shared.userDefaults
                     .set(false, forKey: LocalUserDefaultKey.recordUsageData.rawValue)
                 // Create the ActionHandler which will should call `Glean.shared.setUploadEnabled()`
                 // and `Glean.shared.initialize()`.  Since upload defaults to true in Glean, if this

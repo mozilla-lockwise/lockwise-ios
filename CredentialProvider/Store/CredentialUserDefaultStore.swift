@@ -4,8 +4,8 @@
 
 import Foundation
 
-class UserDefaultStore: BaseUserDefaultStore {
-    static let shared = UserDefaultStore()
+class SettingStore: BaseSettingStore {
+    static let shared = SettingStore()
 
     override func initialized() {
         // NOP

@@ -14,7 +14,7 @@ protocol PreferredBrowserSettingViewProtocol: class {
 class PreferredBrowserSettingPresenter {
     private weak var view: PreferredBrowserSettingViewProtocol?
     private let dispatcher: Dispatcher
-    private let userDefaultStore: UserDefaultStore
+    private let settingStore: SettingStore
     private let disposeBag = DisposeBag()
 
     lazy var initialSettings = [
@@ -38,10 +38,10 @@ class PreferredBrowserSettingPresenter {
 
     init(view: PreferredBrowserSettingViewProtocol,
          dispatcher: Dispatcher = .shared,
-         userDefaultStore: UserDefaultStore = .shared) {
+         settingStore: SettingStore = .shared) {
         self.view = view
         self.dispatcher = dispatcher
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
     }
 
     func onViewReady() {
@@ -49,7 +49,7 @@ class PreferredBrowserSettingPresenter {
             self.initialSettings.insert(browser, at: 1)
         }
 
-        let driver = self.userDefaultStore.preferredBrowser
+        let driver = self.settingStore.preferredBrowser
             .map { setting -> [CheckmarkSettingCellConfiguration] in
                 return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                     cellConfiguration.isChecked =

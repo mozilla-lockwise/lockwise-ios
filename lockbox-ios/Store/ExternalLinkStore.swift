@@ -12,14 +12,14 @@ class ExternalLinkStore {
     private let disposeBag = DisposeBag()
     private let dispatcher: Dispatcher
     private let application: OpenUrlProtocol
-    private let userDefaultStore: UserDefaultStore
+    private let settingStore: SettingStore
 
     init(dispatcher: Dispatcher = Dispatcher.shared,
          application: OpenUrlProtocol = UIApplication.shared,
-         userDefaultStore: UserDefaultStore = .shared) {
+         settingStore: SettingStore = .shared) {
         self.dispatcher = dispatcher
         self.application = application
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
 
         self.dispatcher.register
             .filterByType(class: ExternalLinkAction.self)
@@ -36,7 +36,7 @@ class ExternalLinkStore {
     // MARK: - Private
 
     private func openUrl(string url: String) {
-        self.userDefaultStore.preferredBrowser
+        self.settingStore.preferredBrowser
             .take(1)
             .subscribe(onNext: { (latest: Setting.PreferredBrowser) in
                 latest.openUrl(url: url, application: self.application)

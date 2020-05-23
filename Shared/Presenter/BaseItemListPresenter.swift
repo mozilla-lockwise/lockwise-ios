@@ -41,7 +41,7 @@ class BaseItemListPresenter {
     internal let dispatcher: Dispatcher
     internal let dataStore: DataStore
     internal let itemListDisplayStore: ItemListDisplayStore
-    internal let userDefaultStore: UserDefaultStore
+    internal let settingStore: SettingStore
     internal let itemDetailStore: BaseItemDetailStore
     internal let networkStore: NetworkStore
     internal let sizeClassStore: SizeClassStore
@@ -96,7 +96,7 @@ class BaseItemListPresenter {
          dispatcher: Dispatcher = .shared,
          dataStore: DataStore = .shared,
          itemListDisplayStore: ItemListDisplayStore = .shared,
-         userDefaultStore: UserDefaultStore = .shared,
+         settingStore: SettingStore = .shared,
          itemDetailStore: ItemDetailStore = .shared,
          networkStore: NetworkStore = .shared,
          sizeClassStore: SizeClassStore = .shared) {
@@ -104,14 +104,14 @@ class BaseItemListPresenter {
         self.dispatcher = dispatcher
         self.dataStore = dataStore
         self.itemListDisplayStore = itemListDisplayStore
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
         self.itemDetailStore = itemDetailStore
         self.networkStore = networkStore
         self.sizeClassStore = sizeClassStore
     }
 
     func onViewReady() {
-        let itemSortObservable = self.userDefaultStore.itemListSort
+        let itemSortObservable = self.settingStore.itemListSort
 
         let filterTextObservable = self.itemListDisplayStore.listDisplay
             .filterByType(class: ItemListFilterAction.self)

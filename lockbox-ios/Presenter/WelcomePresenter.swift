@@ -23,7 +23,7 @@ protocol WelcomeViewProtocol: BaseWelcomeViewProtocol {
 }
 
 class WelcomePresenter: BaseWelcomePresenter {
-    private var userDefaultStore: UserDefaultStore
+    private var settingStore: SettingStore
 
     weak var view: WelcomeViewProtocol? {
         return self.baseView as? WelcomeViewProtocol
@@ -35,9 +35,9 @@ class WelcomePresenter: BaseWelcomePresenter {
          dataStore: DataStore = DataStore.shared,
          lifecycleStore: LifecycleStore = LifecycleStore.shared,
          biometryManager: BiometryManager = BiometryManager(),
-         userDefaultStore: UserDefaultStore = UserDefaultStore.shared) {
+         settingStore: SettingStore = SettingStore.shared) {
 
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
 
         super.init(view: view,
                    dispatcher: dispatcher,
@@ -138,7 +138,7 @@ extension WelcomePresenter {
         let coldStartObservable = Observable.combineLatest(
             self.accountStore.profile,
             self.dataStore.locked.distinctUntilChanged(),
-            self.userDefaultStore.forceLock)
+            self.settingStore.forceLock)
             .take(1)
             .filter { !$0.2 }
             .map { ($0.0, $0.1) }

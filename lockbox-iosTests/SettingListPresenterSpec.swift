@@ -48,7 +48,7 @@ class SettingListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserDefaultStore: UserDefaultStore {
+    class FakeSettingStore: SettingStore {
         let autoLockStub = PublishSubject<Setting.AutoLock>()
         let preferredBrowserStub = PublishSubject<Setting.PreferredBrowser>()
         let recordUsageDataStub = PublishSubject<Bool>()
@@ -76,7 +76,7 @@ class SettingListPresenterSpec: QuickSpec {
 
     private var view: FakeSettingsView!
     private var dispatcher: FakeDispatcher!
-    private var userDefaultStore: FakeUserDefaultStore!
+    private var settingStore: FakeSettingStore!
     private var biometryManager: FakeBiometryManager!
     private var scheduler = TestScheduler(initialClock: 0)
     private var disposeBag = DisposeBag()
@@ -90,12 +90,12 @@ class SettingListPresenterSpec: QuickSpec {
                 self.view.itemsObserver = self.scheduler.createObserver([SettingSectionModel].self)
 
                 self.dispatcher = FakeDispatcher()
-                self.userDefaultStore = FakeUserDefaultStore()
+                self.settingStore = FakeSettingStore()
                 self.biometryManager = FakeBiometryManager()
 
                 self.subject = SettingListPresenter(view: self.view,
                                                     dispatcher: self.dispatcher,
-                                                    userDefaultStore: self.userDefaultStore,
+                                                    settingStore: self.settingStore,
                                                     biometryManager: self.biometryManager)
             }
 
@@ -126,9 +126,9 @@ class SettingListPresenterSpec: QuickSpec {
                     describe("detail values on view modules") {
                         beforeEach {
                             self.subject.onViewReady()
-                            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
-                            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
-                            self.userDefaultStore.recordUsageDataStub.onNext(true)
+                            self.settingStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
+                            self.settingStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
+                            self.settingStore.recordUsageDataStub.onNext(true)
                         }
 
                         it("sets detail value for autolock") {
@@ -172,9 +172,9 @@ class SettingListPresenterSpec: QuickSpec {
                     describe("detail values on view modules") {
                         beforeEach {
                             self.subject.onViewReady()
-                            self.userDefaultStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
-                            self.userDefaultStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
-                            self.userDefaultStore.recordUsageDataStub.onNext(true)
+                            self.settingStore.autoLockStub.onNext(Setting.AutoLock.OneHour)
+                            self.settingStore.preferredBrowserStub.onNext(Setting.PreferredBrowser.Focus)
+                            self.settingStore.recordUsageDataStub.onNext(true)
                         }
 
                         it("does not show autolock") {

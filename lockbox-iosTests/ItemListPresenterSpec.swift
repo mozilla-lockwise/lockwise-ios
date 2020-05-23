@@ -155,7 +155,7 @@ class ItemListPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserDefaultStore: UserDefaultStore {
+    class FakeSettingStore: SettingStore {
         var itemListSortStub = PublishSubject<Setting.ItemListSort>()
 
         override var itemListSort: Observable<Setting.ItemListSort> {
@@ -191,7 +191,7 @@ class ItemListPresenterSpec: QuickSpec {
     private var dispatcher: FakeDispatcher!
     private var dataStore: FakeDataStore!
     private var itemListDisplayStore: FakeItemListDisplayStore!
-    private var userDefaultStore: FakeUserDefaultStore!
+    private var settingStore: FakeSettingStore!
     private var itemDetailStore: FakeItemDetailStore!
     private var sizeClassStore: FakeSizeClassStore!
     private var networkStore: FakeNetworkStore!
@@ -206,7 +206,7 @@ class ItemListPresenterSpec: QuickSpec {
                 self.dispatcher = FakeDispatcher()
                 self.dataStore = FakeDataStore(dispatcher: self.dispatcher)
                 self.itemListDisplayStore = FakeItemListDisplayStore()
-                self.userDefaultStore = FakeUserDefaultStore()
+                self.settingStore = FakeSettingStore()
                 self.itemDetailStore = FakeItemDetailStore()
                 self.sizeClassStore = FakeSizeClassStore()
                 self.networkStore = FakeNetworkStore()
@@ -223,7 +223,7 @@ class ItemListPresenterSpec: QuickSpec {
                         dispatcher: self.dispatcher,
                         dataStore: self.dataStore,
                         itemListDisplayStore: self.itemListDisplayStore,
-                        userDefaultStore: self.userDefaultStore,
+                        settingStore: self.settingStore,
                         itemDetailStore: self.itemDetailStore,
                         networkStore: self.networkStore,
                         sizeClassStore: self.sizeClassStore
@@ -239,7 +239,7 @@ class ItemListPresenterSpec: QuickSpec {
                         self.subject.onViewReady()
                         self.dataStore.itemListStub.onNext([])
                         self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                        self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                        self.settingStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                     }
 
                     describe("when the datastore is still syncing & prepared") {
@@ -383,7 +383,7 @@ class ItemListPresenterSpec: QuickSpec {
                             self.subject.onViewReady()
                             self.dataStore.itemListStub.onNext(items)
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                            self.settingStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                             self.dataStore.syncStateStub.onNext(SyncState.Synced)
                             self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
@@ -408,7 +408,7 @@ class ItemListPresenterSpec: QuickSpec {
                             self.subject.onViewReady()
                             self.dataStore.itemListStub.onNext(items)
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                            self.settingStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                             self.dataStore.syncStateStub.onNext(SyncState.Synced)
                             self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
@@ -484,7 +484,7 @@ class ItemListPresenterSpec: QuickSpec {
                             self.subject.onViewReady()
                             self.dataStore.itemListStub.onNext(items)
                             self.itemListDisplayStore.itemListDisplaySubject.onNext(ItemListFilterAction(filteringText: ""))
-                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                            self.settingStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                             self.dataStore.syncStateStub.onNext(SyncState.Synced)
                             self.dataStore.storageStateStub.onNext(LoginStoreState.Unlocked)
                         }
@@ -521,7 +521,7 @@ class ItemListPresenterSpec: QuickSpec {
                     xdescribe("when sorting method switches to recently used") {
                         // pended until it's possible to construct Logins with recently_used dates
                         beforeEach {
-                            self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.recentlyUsed)
+                            self.settingStore.itemListSortStub.onNext(Setting.ItemListSort.recentlyUsed)
                         }
 
                         it("pushes the new configuration with the items") {
@@ -649,7 +649,7 @@ class ItemListPresenterSpec: QuickSpec {
                     self.view.fakeOnSortingButtonPressed.onNext(())
 
                     self.scheduler.start()
-                    self.userDefaultStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
+                    self.settingStore.itemListSortStub.onNext(Setting.ItemListSort.alphabetically)
                 }
 
                 it("tells the view to display an option sheet") {

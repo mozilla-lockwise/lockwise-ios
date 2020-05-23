@@ -49,7 +49,7 @@ class RootPresenter {
     fileprivate let dataStore: DataStore
     fileprivate let telemetryStore: TelemetryStore
     fileprivate let accountStore: AccountStore
-    fileprivate let userDefaultStore: UserDefaultStore
+    fileprivate let settingStore: SettingStore
     fileprivate let lifecycleStore: LifecycleStore
     fileprivate let telemetryActionHandler: TelemetryActionHandler
     fileprivate let gleanActionHandler: GleanActionHandler
@@ -70,7 +70,7 @@ class RootPresenter {
          dataStore: DataStore = DataStore.shared,
          telemetryStore: TelemetryStore = TelemetryStore.shared,
          accountStore: AccountStore = AccountStore.shared,
-         userDefaultStore: UserDefaultStore = .shared,
+         settingStore: SettingStore = .shared,
          lifecycleStore: LifecycleStore = .shared,
          telemetryActionHandler: TelemetryActionHandler = TelemetryActionHandler(accountStore: AccountStore.shared),
          gleanActionHandler: GleanActionHandler = GleanActionHandler(),
@@ -87,7 +87,7 @@ class RootPresenter {
         self.dataStore = dataStore
         self.telemetryStore = telemetryStore
         self.accountStore = accountStore
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
         self.lifecycleStore = lifecycleStore
         self.telemetryActionHandler = telemetryActionHandler
         self.gleanActionHandler = gleanActionHandler
@@ -321,7 +321,7 @@ class RootPresenter {
 
 extension RootPresenter {
     fileprivate func startTelemetry() {
-        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.userDefaultStore.recordUsageData)
+        Observable.combineLatest(self.telemetryStore.telemetryFilter, self.settingStore.recordUsageData)
                 .filter { $0.1 }
                 .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
@@ -329,7 +329,7 @@ extension RootPresenter {
     }
 
     fileprivate func startAdjust() {
-        self.userDefaultStore.recordUsageData
+        self.settingStore.recordUsageData
                 .subscribe(onNext: { enabled in
                     self.adjustManager.setEnabled(enabled)
                 })
@@ -337,7 +337,7 @@ extension RootPresenter {
     }
 
     fileprivate func startSentry() {
-        self.userDefaultStore.recordUsageData
+        self.settingStore.recordUsageData
                 .subscribe(onNext: { enabled in
                     self.sentryManager.setup(sendUsageData: enabled)
                 })

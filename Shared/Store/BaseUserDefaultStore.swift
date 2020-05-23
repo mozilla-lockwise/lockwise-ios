@@ -5,7 +5,7 @@
 import Foundation
 import RxSwift
 
-class BaseUserDefaultStore {
+class BaseSettingStore {
     internal let disposeBag = DisposeBag()
 
     internal let dispatcher: Dispatcher

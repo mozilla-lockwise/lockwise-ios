@@ -173,7 +173,7 @@ class RootPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeUserDefaultStore: UserDefaultStore {
+    class FakeSettingStore: SettingStore {
         var recordUsageStub = PublishSubject<Bool>()
 
         override var recordUsageData: Observable<Bool> {
@@ -242,7 +242,7 @@ class RootPresenterSpec: QuickSpec {
     private var dataStore: FakeDataStore!
     private var telemetryStore: FakeTelemetryStore!
     private var accountStore: FakeAccountStore!
-    private var userDefaultStore: FakeUserDefaultStore!
+    private var settingStore: FakeSettingStore!
     private var telemetryActionHandler: FakeTelemetryActionHandler!
     private var biometryManager: FakeBiometryManager!
     private var sentryManager: FakeSentryManager!
@@ -261,7 +261,7 @@ class RootPresenterSpec: QuickSpec {
                 self.dataStore = FakeDataStore(dispatcher: self.dispatcher, keychainWrapper: KeychainWrapper.standard)
                 self.telemetryStore = FakeTelemetryStore()
                 self.accountStore = FakeAccountStore()
-                self.userDefaultStore = FakeUserDefaultStore()
+                self.settingStore = FakeSettingStore()
                 self.telemetryActionHandler = FakeTelemetryActionHandler(accountStore: self.accountStore)
                 self.biometryManager = FakeBiometryManager()
                 self.sentryManager = FakeSentryManager()
@@ -278,7 +278,7 @@ class RootPresenterSpec: QuickSpec {
                         dataStore: self.dataStore,
                         telemetryStore: self.telemetryStore,
                         accountStore: self.accountStore,
-                        userDefaultStore: self.userDefaultStore,
+                        settingStore: self.settingStore,
                         lifecycleStore: self.lifecycleStore,
                         telemetryActionHandler: self.telemetryActionHandler,
                         biometryManager: self.biometryManager,
@@ -1289,7 +1289,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data can be recorded") {
                         beforeEach {
-                            self.userDefaultStore.recordUsageStub.onNext(true)
+                            self.settingStore.recordUsageStub.onNext(true)
                             self.telemetryStore.telemetryStub.onNext(action)
                         }
 
@@ -1305,7 +1305,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data cannot be recorded") {
                         beforeEach {
-                            self.userDefaultStore.recordUsageStub.onNext(false)
+                            self.settingStore.recordUsageStub.onNext(false)
                             self.telemetryStore.telemetryStub.onNext(action)
                         }
 
@@ -1321,7 +1321,7 @@ class RootPresenterSpec: QuickSpec {
                 describe("usage") {
                     describe("when usage data can be recorded") {
                         beforeEach {
-                            self.userDefaultStore.recordUsageStub.onNext(true)
+                            self.settingStore.recordUsageStub.onNext(true)
                             self.sentryManager.setup(sendUsageData: true)
                         }
 
@@ -1335,7 +1335,7 @@ class RootPresenterSpec: QuickSpec {
 
                     describe("when usage data cannot be recorded") {
                         beforeEach {
-                            self.userDefaultStore.recordUsageStub.onNext(false)
+                            self.settingStore.recordUsageStub.onNext(false)
                             self.sentryManager.setup(sendUsageData: false)
                         }
 

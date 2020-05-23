@@ -67,7 +67,7 @@ class GleanActionHandler: ActionHandler {
     private var disposeBag = DisposeBag()
     
     init(glean: Glean = Glean.shared,
-         store: UserDefaultStore = UserDefaultStore.shared) {
+         store: SettingStore = SettingStore.shared) {
         store.recordUsageData
             .observeOn(MainScheduler.instance)
             .subscribe(

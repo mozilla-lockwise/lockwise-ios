@@ -17,7 +17,7 @@ protocol SettingListViewProtocol: class, AlertControllerView {
 class SettingListPresenter {
     weak private var view: SettingListViewProtocol?
     private let dispatcher: Dispatcher
-    private let userDefaultStore: UserDefaultStore
+    private let settingStore: SettingStore
     private let biometryManager: BiometryManager
     private let disposeBag = DisposeBag()
 
@@ -84,19 +84,19 @@ class SettingListPresenter {
 
     init(view: SettingListViewProtocol,
          dispatcher: Dispatcher = .shared,
-         userDefaultStore: UserDefaultStore = .shared,
+         settingStore: SettingStore = .shared,
          biometryManager: BiometryManager = BiometryManager()) {
         self.view = view
         self.dispatcher = dispatcher
-        self.userDefaultStore = userDefaultStore
+        self.settingStore = settingStore
         self.biometryManager = biometryManager
     }
 
     func onViewReady() {
         let settingsConfigDriver = Observable.combineLatest(
-                        self.userDefaultStore.autoLockTime,
-                        self.userDefaultStore.preferredBrowser,
-                        self.userDefaultStore.recordUsageData
+                        self.settingStore.autoLockTime,
+                        self.settingStore.preferredBrowser,
+                        self.settingStore.recordUsageData
                 )
                 .map { (latest: (Setting.AutoLock, Setting.PreferredBrowser, Bool)) -> [SettingSectionModel] in
                     return self.getSettings(

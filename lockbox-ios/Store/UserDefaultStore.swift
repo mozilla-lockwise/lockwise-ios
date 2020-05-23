@@ -5,8 +5,8 @@
 import Foundation
 import RxSwift
 
-class UserDefaultStore: BaseUserDefaultStore {
-    static let shared = UserDefaultStore()
+class SettingStore: BaseSettingStore {
+    static let shared = SettingStore()
 
     public var preferredBrowser: Observable<Setting.PreferredBrowser> {
         return self.userDefaults.onPreferredBrowser
@@ -77,7 +77,7 @@ class UserDefaultStore: BaseUserDefaultStore {
     }
 }
 
-extension UserDefaultStore {
+extension SettingStore {
     private func readValuesFrom(_ userDefaults: UserDefaults) {
         for key in LocalUserDefaultKey.allValues {
             if let value = userDefaults.value(forKey: key.rawValue) {
