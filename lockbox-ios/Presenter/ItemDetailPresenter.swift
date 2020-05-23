@@ -33,6 +33,9 @@ class ItemDetailPresenter {
     private var copyDisplayStore: CopyDisplayStore
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
+    
+    private var initialPassword: String = ""
+    private var editedPassword: String = ""
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
@@ -49,7 +52,7 @@ class ItemDetailPresenter {
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
-            }.asObserver()
+        }.asObserver()
     }()
 
     lazy private var usernameObserver: AnyObserver<String?> = {
@@ -63,6 +66,20 @@ class ItemDetailPresenter {
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
+                
+                if val.count > self.editedPassword.count {
+                    
+                    let index = val.index(val.startIndex, offsetBy: self.editedPassword.count)
+                    self.editedPassword = self.editedPassword + val.suffix(from: index)
+                    
+                } else {
+                    
+                    let index = val.index(val.startIndex, offsetBy: val.count)
+                    self.editedPassword = String(self.editedPassword.prefix(upTo: index))
+                    
+                }
+                
+                
                 target.dispatcher.dispatch(action: ItemEditAction.editPassword(value: val))
             }
         }.asObserver()
@@ -118,7 +135,11 @@ class ItemDetailPresenter {
 
         itemObservable.asDriver(onErrorJustReturn: nil)
                 .filterNil()
-                .map { self.configurationForLogin($0) }
+                .map {
+                    self.initialPassword = $0.password
+                    self.editedPassword = $0.password
+                    return self.configurationForLogin($0)
+                }
                 .drive(view!.itemDetailObserver)
                 .disposed(by: disposeBag)
 
@@ -266,11 +287,11 @@ class ItemDetailPresenter {
         if FeatureFlags.crudEdit {
             view?.rightBarButtonTapped
                 .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
-                    let (username, password, webAddress, editing, item) = tuple
+                    let (username, _, webAddress, editing, item) = tuple
                     if editing {
                         if let item = item {
                             item.username = username
-                            item.password = password
+                            item.password = self.editedPassword
                             item.hostname = webAddress
                             return [DataStoreAction.update(login: item),
                                     ItemDetailDisplayAction.viewMode]
