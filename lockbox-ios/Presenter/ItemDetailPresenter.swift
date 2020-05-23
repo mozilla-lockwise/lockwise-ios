@@ -34,8 +34,8 @@ class ItemDetailPresenter {
     private var sizeClassStore: SizeClassStore
     private var disposeBag = DisposeBag()
     
-    private var initialPassword: String = ""
     private var editedPassword: String = ""
+    private var savedLoginInfo: [String: String?] = [Constant.string.username: nil, Constant.string.password: nil]
 
     lazy private(set) var onPasswordToggle: AnyObserver<Bool> = {
         return Binder(self) { target, revealed in
@@ -51,9 +51,24 @@ class ItemDetailPresenter {
 
     lazy private var discardChangesObserver: AnyObserver<Void> = {
         return Binder(self) { target, _ in
+            // Updates username cell
+             self.updateCellOnDiscard(value: self.savedLoginInfo[Constant.string.username],
+                                 forIndexPath: IndexPath(item: 0, section: 1))
+             // Updates password cell
+             self.updateCellOnDiscard(value: self.savedLoginInfo[Constant.string.password],
+                                 forIndexPath: IndexPath(item: 1, section: 1))
             target.dispatcher.dispatch(action: ItemDetailDisplayAction.viewMode)
         }.asObserver()
     }()
+    
+    private func updateCellOnDiscard(value: String??, forIndexPath: IndexPath) {
+        if let view: ItemDetailView = self.view as? ItemDetailView {
+            guard let tableView = view.tableView else { return }
+            guard let cell: ItemDetailCell = tableView.cellForRow(at: forIndexPath) as? ItemDetailCell else { return }
+            guard let value = value else { return }
+            cell.textValue.text = value
+        }
+    }
 
     lazy private var usernameObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
@@ -136,8 +151,9 @@ class ItemDetailPresenter {
         itemObservable.asDriver(onErrorJustReturn: nil)
                 .filterNil()
                 .map {
-                    self.initialPassword = $0.password
                     self.editedPassword = $0.password
+                    self.savedLoginInfo[Constant.string.username] = $0.username
+                    self.savedLoginInfo[Constant.string.password] = $0.password
                     return self.configurationForLogin($0)
                 }
                 .drive(view!.itemDetailObserver)
@@ -290,9 +306,11 @@ class ItemDetailPresenter {
                     let (username, _, webAddress, editing, item) = tuple
                     if editing {
                         if let item = item {
+                            item.hostname = webAddress
                             item.username = username
                             item.password = self.editedPassword
-                            item.hostname = webAddress
+                            self.savedLoginInfo[Constant.string.username] = item.username
+                            self.savedLoginInfo[Constant.string.password] = item.password
                             return [DataStoreAction.update(login: item),
                                     ItemDetailDisplayAction.viewMode]
                         }
@@ -375,18 +393,9 @@ class ItemDetailPresenter {
 // helpers
 extension ItemDetailPresenter {
     private func configurationForLogin(_ login: LoginRecord?) -> [ItemDetailSectionModel] {
-        
-        // MARK: Create an observer similar to `rightBarButtonTapped` to get the latest values being editted withLatestFrom(editingObservable)
-        // MARK: Replace `login?.password ?? ""` below with the values observed (described above)
-        // MARK: Reason: configurationForLogin(_ login: LoginRecord?) is called once during initialization
-        // MARK: We need something that is overridden everything the textfield is editted.
-        // MARK: Need to make sure to not take the value directly from textfield because it will return something like this: "•••••••••••••"
-        
-        let itemPassword: String = login?.password ?? ""
-
         let passwordTextDriver = itemDetailStore.passwordRevealed
                 .map { revealed -> String in
-                    return revealed ? itemPassword : String(repeating: "•", count: itemPassword.count)
+                    return revealed ? self.editedPassword : String(repeating: "•", count: self.editedPassword.count)
                 }
                 .asDriver(onErrorJustReturn: "")
 

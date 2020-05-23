@@ -41,6 +41,7 @@ extension Constant.string {
     static let fieldNameCopied = NSLocalizedString("fieldNameCopied", value: "%@ copied", comment: "Alert text when a field has been copied. %@ will be replaced with the field name that was copied")
     static let notes = NSLocalizedString("notes", value: "Notes", comment: "Section title for the notes field on the item detail screen")
     static let password = NSLocalizedString("password", value: "Password", comment: "Section title text for the password on the item detail screen")
+    static let editedPassword = NSLocalizedString("editedPassword", value: "editedPassword", comment: "Used within ItemDetailView")
     static let recent = NSLocalizedString("recent", value: "Recent", comment: "Button title when logins list is sorted by most recently used login")
     static let recentlyUsed = NSLocalizedString("recently_used", value: "Recently Used", comment: "Label for the option sheet action allowing users to sort the logins list by the most recently used logins")
     static let unlockFaceID = NSLocalizedString("unlock_with_faceid", value: "Unlock with Face ID", comment: "Label for the button to unlock the device using Face ID")
