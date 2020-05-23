@@ -85,7 +85,7 @@ class ItemDetailPresenter {
                 if val.count > self.editedPassword.count {
                     
                     let index = val.index(val.startIndex, offsetBy: self.editedPassword.count)
-                    self.editedPassword = self.editedPassword + val.suffix(from: index)
+                    self.editedPassword = "\(self.editedPassword)\(val.suffix(from: index))"
                     
                 } else {
                     
