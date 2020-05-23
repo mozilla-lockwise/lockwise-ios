@@ -306,13 +306,22 @@ class ItemDetailPresenter {
                     let (username, _, webAddress, editing, item) = tuple
                     if editing {
                         if let item = item {
-                            item.hostname = webAddress
-                            item.username = username
-                            item.password = self.editedPassword
-                            self.savedLoginInfo[Constant.string.username] = item.username
-                            self.savedLoginInfo[Constant.string.password] = item.password
-                            return [DataStoreAction.update(login: item),
-                                    ItemDetailDisplayAction.viewMode]
+                            if !username.isEmpty && !self.editedPassword.isEmpty {
+                                
+                                item.hostname = webAddress
+                                item.username = username
+                                item.password = self.editedPassword
+                                self.savedLoginInfo[Constant.string.username] = item.username
+                                self.savedLoginInfo[Constant.string.password] = item.password
+                                return [DataStoreAction.update(login: item),
+                                        ItemDetailDisplayAction.viewMode]
+                                
+                            } else {
+                                
+                                // End editing
+                                // Make textfield background light red
+                                
+                            }
                         }
                     } else {
                         return [ItemDetailDisplayAction.editMode]
