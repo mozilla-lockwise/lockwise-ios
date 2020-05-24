@@ -310,7 +310,8 @@ class ItemDetailPresenter {
                             
                             // Saves edited login credentials
                             // Displays error if username or password is empy
-                            if !username.isEmpty && !self.editedPassword.isEmpty {
+                            if !username.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                && !self.editedPassword.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                                 
                                 // clear errors
                                 self.dismissErrors()
