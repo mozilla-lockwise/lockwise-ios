@@ -47,6 +47,7 @@ class Constant {
         static let activeNavSearchBackgroundColor = UIColor(red: 39, green: 25, blue: 72)
         static let navSerachTextColor = UIColor.white
         static let navSearchPlaceholderTextColor = UIColor(white: 1.0, alpha: 0.8)
+        static let itemDetailHeaderGray = UIColor(hex: 0x737373)
     }
 
     struct number {

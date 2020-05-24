@@ -62,6 +62,8 @@ class ItemDetailPresenter {
     }()
     
     private func updateCellOnDiscard(value: String??, forIndexPath: IndexPath) {
+        // clear errors
+        self.dismissErrors()
         if let view: ItemDetailView = self.view as? ItemDetailView {
             guard let tableView = view.tableView else { return }
             guard let cell: ItemDetailCell = tableView.cellForRow(at: forIndexPath) as? ItemDetailCell else { return }
@@ -81,7 +83,6 @@ class ItemDetailPresenter {
     lazy private var passwordObserver: AnyObserver<String?> = {
         return Binder(self) { target, val in
             if let val = val {
-                
                 if val.count > self.editedPassword.count {
                     
                     let index = val.index(val.startIndex, offsetBy: self.editedPassword.count)
@@ -306,8 +307,15 @@ class ItemDetailPresenter {
                     let (username, _, webAddress, editing, item) = tuple
                     if editing {
                         if let item = item {
+                            
+                            // Saves edited login credentials
+                            // Displays error if username or password is empy
                             if !username.isEmpty && !self.editedPassword.isEmpty {
                                 
+                                // clear errors
+                                self.dismissErrors()
+                                
+                                // Save login
                                 item.hostname = webAddress
                                 item.username = username
                                 item.password = self.editedPassword
@@ -318,8 +326,15 @@ class ItemDetailPresenter {
                                 
                             } else {
                                 
-                                // End editing
-                                // Make textfield background light red
+                                // Display error on username
+                                if username.isEmpty {
+                                    self.showErrorAtIndex(indexPath: IndexPath(item: 0, section: 1))
+                                }
+                                
+                                // Display error on password
+                                if self.editedPassword.isEmpty {
+                                    self.showErrorAtIndex(indexPath: IndexPath(item: 1, section: 1))
+                                }
                                 
                             }
                         }
@@ -373,6 +388,29 @@ class ItemDetailPresenter {
                 .disposed(by: disposeBag)
     }
 
+    private func showErrorAtIndex(indexPath index: IndexPath) {
+        if let view: ItemDetailView = self.view as? ItemDetailView {
+            guard let tableView = view.tableView else { return }
+            guard let cell: ItemDetailCell = tableView.cellForRow(at: index) as? ItemDetailCell else { return }
+            cell.title.textColor = UIColor(red: 0.844532907, green: 0.01005453058, blue: 0.1331021488, alpha: 1)
+            
+            // Haptic feedback
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.error)
+        }
+    }
+    
+    private func dismissErrors() {
+        if let view: ItemDetailView = self.view as? ItemDetailView {
+            for i in 0...1 {
+                let indexPath = IndexPath(item: i, section: 1)
+                guard let tableView = view.tableView else { return }
+                guard let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell else { return }
+                cell.title.textColor = Constant.color.itemDetailHeaderGray
+            }
+        }
+    }
+    
     func onViewDisappear() {
         self.dispatcher.dispatch(action: ItemDetailDisplayAction.togglePassword(displayed: false))
     }
