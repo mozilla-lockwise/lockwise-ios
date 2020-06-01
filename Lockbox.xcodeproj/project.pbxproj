@@ -259,14 +259,13 @@
 		7DFF2EF4213857E100F001ED /* CredentialProviderPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFF2EF3213857E100F001ED /* CredentialProviderPresenterSpec.swift */; };
 		9BFB48C59623367F328FE265 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BCAF40329CC78C0CBF5E632C /* Localizable.strings */; };
 		A1B04DCCB276B7FD665F1C96 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 135D40AD8E5C6CC264F33683 /* InfoPlist.strings */; };
-		CD6C44B3246C80CB00FF261B /* LegacyIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C44B2246C80CB00FF261B /* LegacyIds.swift */; };
-		CD6C44B8246C81D300FF261B /* LegacyIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C44B2246C80CB00FF261B /* LegacyIds.swift */; };
 		CD7DFE7C2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
 		CD7DFE7D2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
 		CD7DFE7E2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
 		CD7DFE7F2376322B004FB690 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */; };
 		CDBBCC032374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */; };
 		CDBBCC042374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */; };
+		CDEAB3E62485B88100686FB4 /* LegacyIds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDEAB3E52485B88100686FB4 /* LegacyIds.swift */; };
 		D4AC7F5522980EEC00F75ACF /* SnapshotsXCUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4AC7F5422980EEC00F75ACF /* SnapshotsXCUITests.swift */; };
 		D5BCA68D229DA4A800CF980C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BCA68B229DA4A800CF980C /* InfoPlist.strings */; };
 		D5BCA694229DA4E000CF980C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D5BCA692229DA4E000CF980C /* Localizable.strings */; };
@@ -782,9 +781,9 @@
 		CBC74E6FA84326B716988EFB /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/CredentialWelcome.strings"; sourceTree = "<group>"; };
 		CC7F4B00985C34EF62FD6DED /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/OnboardingConfirmation.strings; sourceTree = "<group>"; };
 		CD5B1A4423C5469E0042ED05 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/NoNetwork.strings; sourceTree = "<group>"; };
-		CD6C44B2246C80CB00FF261B /* LegacyIds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyIds.swift; sourceTree = "<group>"; };
 		CD7DFE7B2376322B004FB690 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 		CDBBCC022374D22D0030BF80 /* NavigationControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerExtension.swift; sourceTree = "<group>"; };
+		CDEAB3E52485B88100686FB4 /* LegacyIds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyIds.swift; sourceTree = "<group>"; };
 		CFB1458F91F299A6AA73AB63 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/ItemDetail.strings; sourceTree = "<group>"; };
 		D0AD44A2BCD1B3C487001D10 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/OnboardingConfirmation.strings; sourceTree = "<group>"; };
 		D19C4E33B192A448CB6043A5 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
@@ -1557,7 +1556,7 @@
 		CD6C44B1246C80CB00FF261B /* Generated */ = {
 			isa = PBXGroup;
 			children = (
-				CD6C44B2246C80CB00FF261B /* LegacyIds.swift */,
+				CDEAB3E52485B88100686FB4 /* LegacyIds.swift */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -2083,7 +2082,7 @@
 				D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift in Sources */,
 				7D4396532135B0C200B96FA9 /* CredentialProviderAction.swift in Sources */,
 				7AA547376945C001B151491A /* ItemDetailAction.swift in Sources */,
-				CD6C44B3246C80CB00FF261B /* LegacyIds.swift in Sources */,
+				CDEAB3E62485B88100686FB4 /* LegacyIds.swift in Sources */,
 				D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */,
 				CDBBCC032374D22D0030BF80 /* NavigationControllerExtension.swift in Sources */,
 				7AA544AA5AE3DE25FE0B0B74 /* CopyAction.swift in Sources */,
@@ -2186,7 +2185,6 @@
 				7DB9DEA42140D41E00239D31 /* UIFont+.swift in Sources */,
 				7D80F30B2118DCC700DA191B /* CredentialProviderView.swift in Sources */,
 				7D96A73322B020AD00E8FA5C /* AccountAction.swift in Sources */,
-				CD6C44B8246C81D300FF261B /* LegacyIds.swift in Sources */,
 				D80D41C321FD6D48008A7B11 /* CredentialItemDetailStore.swift in Sources */,
 				7D09B2492125DD6100794CA2 /* BaseDataStore.swift in Sources */,
 				7D92423D224D7B9E009F84B5 /* FxAClient+.swift in Sources */,
@@ -2917,6 +2915,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				OTHER_CFLAGS = "-DLOCKWISE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Firefox Lockbox";
@@ -2956,6 +2955,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				OTHER_CFLAGS = "-RLOCKWISE";
+				"OTHER_CFLAGS[arch=*]" = LOCKWISE;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Firefox Lockbox";
@@ -2988,6 +2989,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				"OTHER_CFLAGS[arch=*]" = "-DCREDENTIAL_PROVIDER";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3014,6 +3017,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				"OTHER_CFLAGS[arch=*]" = "-BCREDENTIAL_PROVIDER";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.adhoc.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3040,6 +3045,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
+				OTHER_CFLAGS = "";
+				"OTHER_CFLAGS[arch=*]" = "-RCREDENTIAL_PROVIDER";
 				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Lockbox.CredentialProvider;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3138,6 +3145,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
+				OTHER_CFLAGS = "-BLOCKWISE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.ios.Lockbox${BUNDLE_ID_SUFFIX}";
 				PRODUCT_MODULE_NAME = "Lockbox$(:c99extidentifier)";
 				PRODUCT_NAME = "Lockbox-Branch";

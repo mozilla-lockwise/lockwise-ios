@@ -82,11 +82,13 @@ class GleanActionHandler: ActionHandler {
             onCompleted: nil,
             onDisposed: nil
         ).disposed(by: self.disposeBag)
-        
-        // Get legacy telemetry ID
-        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
-            GleanMetrics.LegacyIds.clientId.set(uuid)
-        }
+                
+        // Get legacy telemetry ID if not in extension
+        #if LOCKWISE
+            if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
+                GleanMetrics.LegacyIds.clientId.set(uuid)
+            }
+        #endif
         
         // Since we are guaranteed to receive the invocation of
         // setUploadEnabled above, we can rely on getUploadEnabled to
