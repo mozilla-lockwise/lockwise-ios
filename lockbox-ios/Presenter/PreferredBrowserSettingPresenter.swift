@@ -53,7 +53,8 @@ class PreferredBrowserSettingPresenter {
             .map { setting -> [CheckmarkSettingCellConfiguration] in
                 return self.initialSettings.map({ (cellConfiguration) -> CheckmarkSettingCellConfiguration in
                     cellConfiguration.isChecked =
-                        cellConfiguration.valueWhenChecked as? Setting.PreferredBrowser == setting
+                        (cellConfiguration.valueWhenChecked as? Setting.PreferredBrowser == setting)
+                        && ((cellConfiguration.valueWhenChecked as? Setting.PreferredBrowser)?.canOpenBrowser() ?? false)
                     cellConfiguration.enabled =
                         (cellConfiguration.valueWhenChecked as? Setting.PreferredBrowser)?.canOpenBrowser() ?? false
                     return cellConfiguration
