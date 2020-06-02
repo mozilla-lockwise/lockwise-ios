@@ -26,6 +26,7 @@ class ItemListView: BaseItemListView {
         setupRefresh()
         setupSwipeDelete()
         presenter?.onViewReady()
+        backgroundModeObserver()
     }
 
     override func styleNavigationBar() {
@@ -37,6 +38,23 @@ class ItemListView: BaseItemListView {
 
     override func createPresenter() -> BaseItemListPresenter {
         return ItemListPresenter(view: self)
+    }
+    
+    private func backgroundModeObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(scrollTableViewToTop),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+    }
+    
+    @objc private func scrollTableViewToTop() {
+        if (self.tableView.numberOfRows(inSection: 0) > 0) {
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
+                                           at: UITableView.ScrollPosition.top,
+                                           animated: true)
+            }
+        }
     }
 }
 
