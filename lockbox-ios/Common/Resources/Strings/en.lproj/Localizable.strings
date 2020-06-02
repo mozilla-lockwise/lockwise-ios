@@ -191,10 +191,10 @@
 "settings.faq" = "FAQ";
 
 /* Support link to Discourse discussion forum */
-"settings.askQuestion" = "Ask a Question";
+"settings.getSupport" = "Ask a Question";
 
 /* Support link to Firefox Lockwise Support page */
-"settings.getSupport" = "Get Support";
+"settings.support" = "Get Support";
 
 /* Label for link to learn more */
 "settings.learnMore" = "Learn More";

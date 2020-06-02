@@ -53,7 +53,7 @@ extension Constant.string {
     static let settingsSupportSectionHeader = NSLocalizedString("settings.support.header", value: "SUPPORT", comment: "Support section label in settings")
     static let settingsConfigurationSectionHeader = NSLocalizedString("settings.configuration.header", value: "CONFIGURATION", comment: "Configuration label in settings")
     static let settingsTitle = NSLocalizedString("settings.title", value: "Settings", comment: "Title on settings screen")
-    static let settingsGetSupport = NSLocalizedString("settings.getSupport", value: "Get Support", comment: "Support link to Firefox Lockwise Support page")
+    static let settingsGetSupport = NSLocalizedString("settings.support", value: "Get Support", comment: "Support link to Firefox Lockwise Support page")
     static let faq = NSLocalizedString("settings.faq", value: "FAQ", comment: "FAQ option in settings")
     static let settingsAccount = NSLocalizedString("settings.account", value: "Account", comment: "Account option in settings")
     static let settingsAutoLock = NSLocalizedString("settings.autoLock", value: "Auto Lock", comment: "Auto Lock option in settings")
