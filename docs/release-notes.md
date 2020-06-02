@@ -1,5 +1,23 @@
 # Release Notes
 
+## 1.7.4 
+
+_Date: 2020-04-19__
+
+Additions: Updated Glean and Application Services. Added Glean scripts for sending user data delete ping. 
+
+All changes since version 1.7.3:
+
+- Update Glean and delete ping(#1212)
+- Update application services and Xcode(#1214)
+- Handle deletion of default browser(#1124, #361)
+- Tableview scrolls to the top when backgrounded(#1133, #1205)
+
+Beta edit feature fixes hidden behind feature flag:
+
+- Disabled ability to edit hostname(#1216)
+- Cancel button in edit mode no longer shows back arrow(#1230)
+
 ## 1.7.3 (Build 4110)
 
 _Date: 2020-04-19__
