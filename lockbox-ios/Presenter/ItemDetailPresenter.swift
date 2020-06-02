@@ -210,8 +210,45 @@ class ItemDetailPresenter {
                 .disposed(by: disposeBag)
 
         itemDetailStore.isEditing
-                .subscribe(onNext: { editing in self.view?.enableLargeTitle(enabled: !editing) })
+                .subscribe(onNext: { editing in
+                    
+                    self.disableWebAddressOnEdit(editing: editing)
+                    self.view?.enableLargeTitle(enabled: !editing)
+                    
+                })
                 .disposed(by: disposeBag)
+    }
+    
+    private func disableWebAddressOnEdit(editing: Bool) {
+        if let view: ItemDetailView = self.view as? ItemDetailView {
+            
+            // Get web address cell
+            let indexPath = IndexPath(item: 0, section: 0)
+            guard let tableView = view.tableView else { return }
+            guard let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell else { return }
+            
+            if cell.title.text == Constant.string.webAddress {
+                if editing {
+                    // Change UI color of web address cell and disabled editing
+                    self.updateWebCellUI(cell: cell, enabled: false,
+                                         textColor: Constant.color.disabledButtonTextColor,
+                                         backgroundColor: Constant.color.disabledButtonBackgroundColor)
+                } else {
+                    // Change UI color of web address cell back to normal
+                    self.updateWebCellUI(cell: cell)
+                }
+            }
+        }
+    }
+    
+    private func updateWebCellUI(cell: ItemDetailCell,
+                              enabled: Bool = true,
+                              textColor: UIColor = Constant.color.lockBoxViolet,
+                              backgroundColor: UIColor = UIColor.white) {
+        
+        cell.textValue.textColor = textColor
+        cell.backgroundColor = backgroundColor
+        cell.isUserInteractionEnabled = enabled
     }
 
     private func setupCopy(itemObservable: Observable<LoginRecord?>) {
@@ -458,7 +495,7 @@ extension ItemDetailPresenter {
                         title: Constant.string.webAddress,
                         value: Driver.just(hostname),
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
-                        valueFontColor: Constant.color.lockBoxViolet,
+                        valueFontColor: Constant.color.lockBoxViolet, 
                         accessibilityId: "webAddressItemDetail",
                         textFieldEnabled: isEditing,
                         openButtonHidden: isEditing,
