@@ -66,7 +66,8 @@ class PreferredBrowserSettingPresenterSpec: QuickSpec {
                 expect(settings[0].items.count).to(be(3))
 
                 for item in settings[0].items {
-                    if item.valueWhenChecked as? Setting.PreferredBrowser == Setting.PreferredBrowser.Firefox {
+                    if (item.valueWhenChecked as? Setting.PreferredBrowser == Setting.PreferredBrowser.Firefox)
+                        && (Setting.PreferredBrowser.Firefox.canOpenBrowser()) {
                         expect(item.isChecked).to(beTrue())
                     } else {
                         expect(item.isChecked).to(beFalse())
