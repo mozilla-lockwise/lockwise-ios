@@ -138,16 +138,15 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .font: UIFont.navigationTitleFont
         ]
 
-        let leftButton = UIButton(title: Constant.string.back, imageName: "back")
+        let leftButton = UIButton(title: Constant.string.back, imageName: nil)
         leftButton.titleLabel?.font = .navigationButtonFont
         leftButton.accessibilityIdentifier = "backEditView.button"
         
-        let leftBarItem = UIBarButtonItem(customView: leftButton)
-        if let customView = leftBarItem.customView {
-            // Adjust this value to preferred spacing
-            customView.bounds = customView.frame.insetBy(dx: -5.0, dy: 0)
-        }
-        navigationItem.leftBarButtonItem = leftBarItem
+        leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
+        leftButton.frame.size.width = 60
+        leftButton.titleLabel?.textAlignment = .left
+        leftButton.contentHorizontalAlignment = .left
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         // Only allow edit functionality on debug builds
         if FeatureFlags.crudEdit {
@@ -200,7 +199,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                 }
                 
                 if let revealObserver = cellConfiguration.revealPasswordObserver {
-                    cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
                     
                     cell.revealButton.rx.tap
                         .map { _ -> Bool in

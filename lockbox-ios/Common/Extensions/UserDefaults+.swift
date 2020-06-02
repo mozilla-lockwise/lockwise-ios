@@ -9,6 +9,12 @@ import RxCocoa
 extension UserDefaults {
     var onPreferredBrowser: Observable<Setting.PreferredBrowser> {
         return self.on(setting: LocalUserDefaultKey.preferredBrowser.rawValue, type: String.self)
-            .map { Setting.PreferredBrowser(rawValue: $0) ?? Constant.setting.defaultPreferredBrowser }
+            .map {
+                guard let preferredBrowser = Setting.PreferredBrowser(rawValue: $0)
+                    else { return Constant.setting.defaultPreferredBrowser }
+                if preferredBrowser.canOpenBrowser() {
+                    return preferredBrowser
+                } else { return Constant.setting.defaultPreferredBrowser  }
+        }
     }
 }
