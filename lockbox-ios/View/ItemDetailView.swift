@@ -138,18 +138,14 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
             .font: UIFont.navigationTitleFont
         ]
 
-        // Bug for issue #1082 fixed by adding `nil` to `imageName`
         let leftButton = UIButton(title: Constant.string.back, imageName: nil)
         leftButton.titleLabel?.font = .navigationButtonFont
         leftButton.accessibilityIdentifier = "backEditView.button"
         
-        // Fixing bug for issue #1082 created another bug
-        // Below fixes it, but could be handled better by autosizing to fit content
         leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
         leftButton.frame.size.width = 60
         leftButton.titleLabel?.textAlignment = .left
         leftButton.contentHorizontalAlignment = .left
-        
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: leftButton)
 
         // Only allow edit functionality on debug builds
@@ -203,7 +199,6 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                 }
                 
                 if let revealObserver = cellConfiguration.revealPasswordObserver {
-                    cell.textValue.font = UIFont(name: "Menlo-Regular", size: 16)
                     
                     cell.revealButton.rx.tap
                         .map { _ -> Bool in
