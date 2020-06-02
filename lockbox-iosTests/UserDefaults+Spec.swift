@@ -53,10 +53,38 @@ class UserDefaultSpec: QuickSpec {
 
             it("pushes new values for theUserDefaultKey to observers") {
                 UserDefaults.standard.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
-                expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Firefox))
+                if Setting.PreferredBrowser.Firefox.canOpenBrowser() {
+                    expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Firefox))
+                } else {
+                    expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Safari))
+                }
             }
         }
+        
+        describe("preferredBrowserNotOpen") {
+            // Tests case where preferred browser cannot be opened
+            // This case can occur if a user sets preferred browser to a third-party browser then deletes that app
+            // If browser cannot be opened, preferred browser remains stored but defaults to Safari within the client
+            let canOpenBrowser = false
+            var preferredBrowserSettingObserver: TestableObserver<Setting.PreferredBrowser>!
 
+            beforeEach {
+                preferredBrowserSettingObserver = self.scheduler.createObserver(Setting.PreferredBrowser.self)
+                UserDefaults.standard.onPreferredBrowser
+                        .subscribe(preferredBrowserSettingObserver)
+                        .disposed(by: self.disposeBag)
+            }
+
+            it("pushes new values for theUserDefaultKey to observers") {
+                UserDefaults.standard.set(Setting.PreferredBrowser.Firefox.rawValue, forKey: LocalUserDefaultKey.preferredBrowser.rawValue)
+                if canOpenBrowser {
+                    expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Firefox))
+                } else {
+                    expect(preferredBrowserSettingObserver.events.last!.value.element).to(equal(Setting.PreferredBrowser.Safari))
+                }
+            }
+        }
+        
         describe("onRecordUsageData") {
             var recordUsageDataSettingObserver: TestableObserver<Bool>!
 
