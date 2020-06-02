@@ -36,7 +36,7 @@ class MainNavigationControllerSpec: QuickSpec {
 
             it("respects root view controller navbar theme") {
                 let navController = UINavigationController(rootViewController: LightNavBarController())
-                expect(navController.preferredStatusBarStyle).to(equal(UIStatusBarStyle.lightContent))
+                expect(navController.preferredStatusBarStyle).to(equal(UIStatusBarStyle.default))
             }
         }
     }
