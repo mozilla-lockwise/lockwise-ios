@@ -23,4 +23,6 @@ legacy.ids:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
     notification_emails:
       - firefox-ios@mozilla.com
+      - lockwise-dev@mozilla.com
+      - kgalway@mozilla.com
     expires: never
