@@ -150,6 +150,7 @@ class UserDefaultStoreSpec: QuickSpec {
             describe(".upgrade") {
                 let autoLockTime = Setting.AutoLock.OneHour
                 let preferredBrowser = Setting.PreferredBrowser.Firefox
+                let preferredDefaultBrowser = Setting.PreferredBrowser.Safari
                 let recordUsageData = false
                 let itemListSort = Setting.ItemListSort.recentlyUsed
 
@@ -164,9 +165,17 @@ class UserDefaultStoreSpec: QuickSpec {
 
                 it("reads settings values from UserDefaults.standard") {
                     expect(try! self.subject.autoLockTime.toBlocking().first()!).to(equal(autoLockTime))
-                    expect(try! self.subject.preferredBrowser.toBlocking().first()!).to(equal(preferredBrowser))
                     expect(try! self.subject.recordUsageData.toBlocking().first()!).to(equal(recordUsageData))
                     expect(try! self.subject.itemListSort.toBlocking().first()!).to(equal(itemListSort))
+                    
+                    // Tests case where preferred browser cannot be opened
+                    // This case can occur if a user sets preferred browser to a third-party browser then deletes that app
+                    // If browser cannot be opened, preferred browser remains stored but defaults to Safari within the client
+                    if Setting.PreferredBrowser.Firefox.canOpenBrowser() {
+                        expect(try! self.subject.preferredBrowser.toBlocking().first()!).to(equal(preferredBrowser))
+                    } else {
+                        expect(try! self.subject.preferredBrowser.toBlocking().first()!).to(equal(preferredDefaultBrowser))
+                    }
                 }
             }
         }
