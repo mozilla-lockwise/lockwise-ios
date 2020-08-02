@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		08454B9A21486BCF00328040 /* TelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08454B9921486BCE00328040 /* TelemetryStore.swift */; };
 		08454B9B21486BCF00328040 /* TelemetryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08454B9921486BCE00328040 /* TelemetryStore.swift */; };
+		147EB8F224D7108800E285B7 /* DispatchTimeInterval.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147EB8F124D7108800E285B7 /* DispatchTimeInterval.swift */; };
 		1F33DE14237E32500002BA6B /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1F33DE0D237E036B0002BA6B /* Glean.framework */; };
 		22336C7221111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22336C7121111087004E7B50 /* OnboardingConfirmationPresenterSpec.swift */; };
 		224A6C7D212C8C2B008C7A3F /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224A6C7C212C8C2B008C7A3F /* UIFont+.swift */; };
@@ -405,6 +406,7 @@
 		1261419DA21D4CF6518963ED /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/AutofillOnboarding.strings; sourceTree = "<group>"; };
 		1279415A849F6864952EE98F /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/NoNetwork.strings; sourceTree = "<group>"; };
 		145540E18E45B22A45F38614 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/NoNetwork.strings"; sourceTree = "<group>"; };
+		147EB8F124D7108800E285B7 /* DispatchTimeInterval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchTimeInterval.swift; sourceTree = "<group>"; };
 		15254E93BE5E69AE3A586F3B /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/NoNetwork.strings; sourceTree = "<group>"; };
 		17A14465BD2C92887E2B95D2 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/AccountSetting.strings; sourceTree = "<group>"; };
 		1996486FB06220463B404697 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -1273,6 +1275,7 @@
 				D819A4B821BAF988004EE6F3 /* LoginRecord+.swift */,
 				D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */,
 				7AA542AADC5CB559B59FB3AD /* FxAClient+.swift */,
+				147EB8F124D7108800E285B7 /* DispatchTimeInterval.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2028,6 +2031,7 @@
 				7D440889201786E4001873F6 /* WelcomeView.swift in Sources */,
 				7AA543A00DEEDF6947B578EC /* AccountStore.swift in Sources */,
 				7AA543D5D705C1B0B7B78CBD /* AccountAction.swift in Sources */,
+				147EB8F224D7108800E285B7 /* DispatchTimeInterval.swift in Sources */,
 				7AA54BF8B62177DC348BFDA6 /* UIImage+.swift in Sources */,
 				7DA4C6932028FB0900B61DD8 /* UIColor+.swift in Sources */,
 				226E3FF02127759C00185D11 /* ExternalLinkStore.swift in Sources */,

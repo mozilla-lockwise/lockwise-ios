@@ -691,13 +691,13 @@ class ItemDetailPresenterSpec: QuickSpec {
                     it("tells the view to display a password temporary alert") {
                         self.copyDisplayStore.copyDisplayStub.onNext(CopyField.password)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.password)))
-                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
+                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength.timeInterval()))
                     }
 
                     it("tells the view to display a username temporary alert") {
                         self.copyDisplayStore.copyDisplayStub.onNext(CopyField.username)
                         expect(self.view.tempAlertMessage).to(equal(String(format: Constant.string.fieldNameCopied, Constant.string.username)))
-                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength))
+                        expect(self.view.tempAlertTimeout).to(equal(Constant.number.displayStatusAlertLength.timeInterval()))
                     }
                 }
 

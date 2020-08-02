@@ -88,7 +88,7 @@ class ViewControllerSpec: QuickSpec {
 
             xit("dismisses the spinner on new dismiss events after a given delay") {
                 dismissStub.onNext(())
-                expect(self.subject.view.subviews.first).toEventually(beNil(), timeout: Constant.number.minimumSpinnerHUDTime + 1.0)
+                expect(self.subject.view.subviews.first).toEventually(beNil(), timeout: Constant.number.minimumSpinnerHUDTime.timeInterval() + 1.0)
             }
         }
     }

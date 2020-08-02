@@ -52,14 +52,18 @@ class Constant {
     }
 
     struct number {
-        static let displayStatusAlertLength = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.5)
+        static let displayStatusAlertLength = isRunningTest
+            ? DispatchTimeInterval.seconds(0)
+            : DispatchTimeInterval.milliseconds(1500)
         static let displayAlertFade = isRunningTest ? TimeInterval(0.0) : TimeInterval(0.3)
         static let displayAlertOpacity: CGFloat = 0.75
         static let displayAlertYPercentage: CGFloat = 0.4
         static let fxaButtonTopSpaceFirstLogin: CGFloat = 88.0
         static let fxaButtonTopSpaceUnlock: CGFloat = 40.0
         static let copyExpireTimeSecs = 60
-        static let minimumSpinnerHUDTime = isRunningTest ? TimeInterval(0.0) : TimeInterval(1.0)
+        static let minimumSpinnerHUDTime = isRunningTest
+            ? DispatchTimeInterval.seconds(0)
+            : DispatchTimeInterval.seconds(1)
     }
 
     class string {
