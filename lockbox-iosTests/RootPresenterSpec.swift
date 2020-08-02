@@ -188,8 +188,8 @@ class RootPresenterSpec: QuickSpec {
             get {
                 return self.telemetryListener.asObserver()
             }
-
-            set {
+            set {// swiftlint:disable:this unused_setter_value
+                // related issue -> https://github.com/realm/SwiftLint/issues/2585
             }
         }
     }

@@ -31,7 +31,7 @@ class ItemDetailViewSpec: QuickSpec {
         }
 
         override var onPasswordToggle: AnyObserver<Bool> {
-            return Binder(self) { target, revealed in
+            return Binder(self) { target, _ in
                 target.onPasswordToggleActionDispatched = true
             }.asObserver()
         }

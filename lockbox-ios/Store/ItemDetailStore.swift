@@ -134,7 +134,7 @@ class ItemDetailStore: BaseItemDetailStore {
         self.itemListDisplayStore.listDisplay
             .filterByType(class: ItemDeletedAction.self)
             .filter { self._itemDetailId.value == $0.id }
-            .subscribe(onNext: { (action) in
+            .subscribe(onNext: { (_) in
                 self._itemDetailId.accept("")
             })
             .disposed(by: self.disposeBag)
@@ -145,10 +145,10 @@ class ItemDetailStore: BaseItemDetailStore {
                                  self.dataStore.list,
                                  self.itemDetailId,
                                  self.userDefaultStore.itemListSort)
-            .filter({ (displayingSidebar, list, itemId, sort) -> Bool in
+            .filter({ (displayingSidebar, list, itemId, _) -> Bool in
                 return displayingSidebar && list.count > 0 && itemId == ""
             })
-            .subscribe(onNext: { (displayingSidebar, list, itemId, sort) in
+            .subscribe(onNext: { (_, list, _, sort) in
                 let sortedList = list.sorted { lhs, rhs -> Bool in
                     switch sort {
                     case .alphabetically:

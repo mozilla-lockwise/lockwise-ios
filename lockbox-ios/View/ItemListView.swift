@@ -48,7 +48,7 @@ class ItemListView: BaseItemListView {
     }
 
     @objc private func scrollTableViewToTop() {
-        if (self.tableView.numberOfRows(inSection: 0) > 0) {
+        if self.tableView.numberOfRows(inSection: 0) > 0 {
             DispatchQueue.main.async {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0),
                                            at: UITableView.ScrollPosition.top,

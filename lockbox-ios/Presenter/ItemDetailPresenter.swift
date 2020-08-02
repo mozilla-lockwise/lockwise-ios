@@ -204,9 +204,9 @@ class ItemDetailPresenter {
     }
 
     private func updateWebCellUI(cell: ItemDetailCell,
-                              enabled: Bool = true,
-                              textColor: UIColor = Constant.color.lockBoxViolet,
-                              backgroundColor: UIColor = UIColor.white) {
+                                 enabled: Bool = true,
+                                 textColor: UIColor = Constant.color.lockBoxViolet,
+                                 backgroundColor: UIColor = UIColor.white) {
 
         cell.textValue.textColor = textColor
         cell.backgroundColor = backgroundColor
