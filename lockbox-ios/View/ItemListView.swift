@@ -39,14 +39,14 @@ class ItemListView: BaseItemListView {
     override func createPresenter() -> BaseItemListPresenter {
         return ItemListPresenter(view: self)
     }
-    
+
     private func backgroundModeObserver() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(scrollTableViewToTop),
                                                name: UIApplication.willResignActiveNotification,
                                                object: nil)
     }
-    
+
     @objc private func scrollTableViewToTop() {
         if (self.tableView.numberOfRows(inSection: 0) > 0) {
             DispatchQueue.main.async {

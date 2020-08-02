@@ -167,7 +167,7 @@ class UserDefaultStoreSpec: QuickSpec {
                     expect(try! self.subject.autoLockTime.toBlocking().first()!).to(equal(autoLockTime))
                     expect(try! self.subject.recordUsageData.toBlocking().first()!).to(equal(recordUsageData))
                     expect(try! self.subject.itemListSort.toBlocking().first()!).to(equal(itemListSort))
-                    
+
                     // Tests case where preferred browser cannot be opened
                     // This case can occur if a user sets preferred browser to a third-party browser then deletes that app
                     // If browser cannot be opened, preferred browser remains stored but defaults to Safari within the client

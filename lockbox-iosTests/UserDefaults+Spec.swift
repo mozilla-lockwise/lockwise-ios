@@ -60,7 +60,7 @@ class UserDefaultSpec: QuickSpec {
                 }
             }
         }
-        
+
         describe("preferredBrowserNotOpen") {
             // Tests case where preferred browser cannot be opened
             // This case can occur if a user sets preferred browser to a third-party browser then deletes that app
@@ -84,7 +84,7 @@ class UserDefaultSpec: QuickSpec {
                 }
             }
         }
-        
+
         describe("onRecordUsageData") {
             var recordUsageDataSettingObserver: TestableObserver<Bool>!
 

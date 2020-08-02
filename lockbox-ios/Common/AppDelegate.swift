@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.set(newValue ? nil : "NO", forKey: PostFirstRunKey)
         }
     }
-    
+
     func application(_ application: UIApplication, willFinishLaunchingWithOptions
                      launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         if isFirstRun {
@@ -96,7 +96,7 @@ extension AppDelegate {
             Dispatcher.shared.dispatch(action: LifecycleAction.upgrade(from: previous, to: current))
         }
     }
-    
+
     func checkForKeychainVersionAbnormalities() {
         let current = Constant.app.appVersionCode
         let previous = UserDefaults.standard.integer(forKey: LocalUserDefaultKey.appVersionCode.rawValue)

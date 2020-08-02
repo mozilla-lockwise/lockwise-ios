@@ -51,7 +51,7 @@ extension ItemDetailView: ItemDetailViewProtocol {
                 guard let selectedCell = self.tableView.cellForRow(at: path) as? ItemDetailCell else {
                     return nil
                 }
-                
+
                 return selectedCell.title.text
         }
     }
@@ -141,7 +141,7 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
         let leftButton = UIButton(title: Constant.string.back, imageName: nil)
         leftButton.titleLabel?.font = .navigationButtonFont
         leftButton.accessibilityIdentifier = "backEditView.button"
-        
+
         leftButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 0)
         leftButton.frame.size.width = 60
         leftButton.titleLabel?.textAlignment = .left
@@ -165,51 +165,51 @@ extension ItemDetailView: UIGestureRecognizerDelegate {
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemdetailcell") as? ItemDetailCell else {
                     fatalError("couldn't find the right cell!")
                 }
-                
+
                 cell.title.text = cellConfiguration.title
-                
+
                 cellConfiguration.value
                     .drive(cell.textValue.rx.text)
                     .disposed(by: cell.disposeBag)
-                
+
                 cell.textValue.textColor = cellConfiguration.valueFontColor
-                
+
                 cell.accessibilityLabel = cellConfiguration.accessibilityLabel
                 cell.accessibilityIdentifier = cellConfiguration.accessibilityId
-                
+
                 cell.revealButton.isHidden = cellConfiguration.revealPasswordObserver == nil
-                
+
                 cellConfiguration.textFieldEnabled
                     .drive(cell.textValue.rx.isUserInteractionEnabled)
                     .disposed(by: cell.disposeBag)
-                
+
                 cellConfiguration.copyButtonHidden
                     .drive(cell.copyButton.rx.isHidden)
                     .disposed(by: cell.disposeBag)
-                
+
                 cellConfiguration.openButtonHidden
                     .drive(cell.openButton.rx.isHidden)
                     .disposed(by: cell.disposeBag)
-                
+
                 cell.dragValue = cellConfiguration.dragValue
-                
+
                 if let textObserver = cellConfiguration.textObserver {
                     cell.textValue.rx.text.bind(to: textObserver)
                         .disposed(by: cell.disposeBag)
                 }
-                
+
                 if let revealObserver = cellConfiguration.revealPasswordObserver {
-                    
+
                     cell.revealButton.rx.tap
                         .map { _ -> Bool in
                             cell.revealButton.isSelected = !cell.revealButton.isSelected
-                            
+
                             return cell.revealButton.isSelected
                     }
                     .bind(to: revealObserver)
                     .disposed(by: cell.disposeBag)
                 }
-                
+
                 return cell
         })
     }

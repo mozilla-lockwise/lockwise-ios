@@ -140,7 +140,7 @@ class ItemDetailPresenter {
         setupCopy(itemObservable: itemObservable)
         setupNavigation(itemObservable: itemObservable)
     }
-    
+
     private func setupDelete() {
         view?.deleteTapped
             .subscribe(onNext: { (_) in
@@ -173,22 +173,22 @@ class ItemDetailPresenter {
 
         itemDetailStore.isEditing
                 .subscribe(onNext: { editing in
-                    
+
                     self.disableWebAddressOnEdit(editing: editing)
                     self.view?.enableLargeTitle(enabled: !editing)
-                    
+
                 })
                 .disposed(by: disposeBag)
     }
-    
+
     private func disableWebAddressOnEdit(editing: Bool) {
         if let view: ItemDetailView = self.view as? ItemDetailView {
-            
+
             // Get web address cell
             let indexPath = IndexPath(item: 0, section: 0)
             guard let tableView = view.tableView else { return }
             guard let cell: ItemDetailCell = tableView.cellForRow(at: indexPath) as? ItemDetailCell else { return }
-            
+
             if cell.title.text == Constant.string.webAddress {
                 if editing {
                     // Change UI color of web address cell and disabled editing
@@ -202,12 +202,12 @@ class ItemDetailPresenter {
             }
         }
     }
-    
+
     private func updateWebCellUI(cell: ItemDetailCell,
                               enabled: Bool = true,
                               textColor: UIColor = Constant.color.lockBoxViolet,
                               backgroundColor: UIColor = UIColor.white) {
-        
+
         cell.textValue.textColor = textColor
         cell.backgroundColor = backgroundColor
         cell.isUserInteractionEnabled = enabled
@@ -315,7 +315,7 @@ class ItemDetailPresenter {
                     } else {
                         return [ItemDetailDisplayAction.editMode]
                     }
-                    
+
                     return []
             }
             .subscribe(onNext: { actions in
@@ -324,14 +324,14 @@ class ItemDetailPresenter {
                 }
             })
                 .disposed(by: disposeBag)
-            
+
             itemDetailStore.isEditing
                 .map { editing in
                     return editing ? Constant.string.save : Constant.string.edit
             }
             .subscribe(view!.rightButtonText)
             .disposed(by: disposeBag)
-            
+
             itemDetailStore.isEditing
                 .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> String? in
                     if editing {
@@ -343,7 +343,7 @@ class ItemDetailPresenter {
             }
             .subscribe(view!.leftButtonText)
             .disposed(by: disposeBag)
-            
+
             itemDetailStore.isEditing
                 .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
                     if !editing && !sidebar {
@@ -354,7 +354,7 @@ class ItemDetailPresenter {
             .subscribe(view!.leftButtonIcon)
             .disposed(by: disposeBag)
         }
-        
+
         sizeClassStore.shouldDisplaySidebar
                 .subscribe(onNext: { (enableSidebar) in
                     self.view?.enableSwipeNavigation(enabled: !enableSidebar)
@@ -410,7 +410,7 @@ extension ItemDetailPresenter {
                         title: Constant.string.webAddress,
                         value: Driver.just(hostname),
                         accessibilityLabel: String(format: Constant.string.websiteCellAccessibilityLabel, hostname),
-                        valueFontColor: Constant.color.lockBoxViolet, 
+                        valueFontColor: Constant.color.lockBoxViolet,
                         accessibilityId: "webAddressItemDetail",
                         textFieldEnabled: isEditing,
                         openButtonHidden: isEditing,
