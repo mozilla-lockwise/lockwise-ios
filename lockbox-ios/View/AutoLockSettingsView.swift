@@ -75,14 +75,38 @@ extension AutoLockSettingView {
         self.tableView.backgroundColor = Constant.color.viewBackground
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints([
-            NSLayoutConstraint(item: self.tableView, attribute: .width, relatedBy: .equal, toItem: self.view, attribute: .width, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .height, relatedBy: .equal, toItem: self.view, attribute: .height, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0.0)
+            NSLayoutConstraint(item: self.tableView,
+                               attribute: .width,
+                               relatedBy: .equal,
+                               toItem: self.view,
+                               attribute: .width,
+                               multiplier: 1.0,
+                               constant: 0.0),
+            NSLayoutConstraint(item: self.tableView,
+                               attribute: .height,
+                               relatedBy: .equal,
+                               toItem: self.view,
+                               attribute: .height,
+                               multiplier: 1.0,
+                               constant: 0.0),
+            NSLayoutConstraint(item: self.tableView,
+                               attribute: .centerX,
+                               relatedBy: .equal,
+                               toItem: self.view,
+                               attribute: .centerX,
+                               multiplier: 1.0,
+                               constant: 0.0)
             ])
 
         if self.view.traitCollection.horizontalSizeClass == .regular &&
             self.view.traitCollection.verticalSizeClass == .regular {
-            self.view.addConstraint(NSLayoutConstraint(item: self.tableView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: 568))
+            self.view.addConstraint(NSLayoutConstraint(item: self.tableView,
+                                                       attribute: .width,
+                                                       relatedBy: .equal,
+                                                       toItem: nil,
+                                                       attribute: .width,
+                                                       multiplier: 1.0,
+                                                       constant: 568))
         }
     }
 

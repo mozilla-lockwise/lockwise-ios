@@ -209,7 +209,8 @@ class RootPresenter {
                 }
             case .onboardingConfirmation:
                 if !view.topViewIs(OnboardingConfirmationView.self) {
-                    view.push(view: self.viewFactory.make(storyboardName: "OnboardingConfirmation", identifier: "onboardingconfirmation"))
+                    view.push(view: self.viewFactory.make(storyboardName: "OnboardingConfirmation",
+                                                          identifier: "onboardingconfirmation"))
                 }
             case .autofillOnboarding:
                 if !view.topViewIs(AutofillOnboardingView.self) {
@@ -377,11 +378,14 @@ extension RootPresenter: UISplitViewControllerDelegate {
         return nil
     }
 
-    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
+    func splitViewController(_ splitViewController: UISplitViewController,
+                             collapseSecondary secondaryViewController: UIViewController,
+                             onto primaryViewController: UIViewController) -> Bool {
         return true
     }
 
-    func splitViewController(_ splitViewController: UISplitViewController, separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
+    func splitViewController(_ splitViewController: UISplitViewController,
+                             separateSecondaryFrom primaryViewController: UIViewController) -> UIViewController? {
 
         if let navController = primaryViewController as? UINavigationController {
             if navController.popViewController(animated: false) as? ItemDetailView != nil {
