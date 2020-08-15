@@ -17,13 +17,13 @@ class RootViewSpec: QuickSpec {
         }
     }
 
-    class SVDelegate: UISplitViewControllerDelegate {
+    class SVDelegateImpl: UISplitViewControllerDelegate {
 
     }
 
     private var presenter: FakeRootPresenter!
     var subject: RootView!
-    private var svDelegate: SVDelegate!
+    private var svDelegateImpl: SVDelegateImpl!
     var viewFactory: ViewFactory!
 
     override func spec() {
@@ -32,7 +32,7 @@ class RootViewSpec: QuickSpec {
         describe("RootView") {
             beforeEach {
                 self.subject = RootView()
-                self.svDelegate = SVDelegate()
+                self.svDelegateImpl = SVDelegateImpl()
                 self.presenter = FakeRootPresenter(view: self.subject)
                 self.viewFactory = ViewFactory()
                 self.subject.presenter = self.presenter
@@ -147,7 +147,7 @@ class RootViewSpec: QuickSpec {
             if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
                 describe("pushing sidebar views") {
                     beforeEach {
-                        self.subject.startMainStack(SplitView(delegate: self.svDelegate))
+                        self.subject.startMainStack(SplitView(delegate: self.svDelegateImpl))
                         self.subject.pushSidebar(view: self.viewFactory.make(storyboardName: "ItemList", identifier: "itemlist"))
                     }
 
@@ -158,7 +158,7 @@ class RootViewSpec: QuickSpec {
 
                 describe("pushing detail views") {
                     beforeEach {
-                        self.subject.startMainStack(SplitView(delegate: self.svDelegate))
+                        self.subject.startMainStack(SplitView(delegate: self.svDelegateImpl))
                         self.subject.pushDetail(view: self.viewFactory.make(storyboardName: "ItemDetail", identifier: "itemdetailview"))
                     }
 

@@ -12,17 +12,17 @@ import RxTest
 
 class SplitViewSpec: QuickSpec {
     private var subject: SplitView!
-    private var delegate: SVDelegate!
+    private var svDelegateImpl: SVDelegateImpl!
 
-    class SVDelegate: UISplitViewControllerDelegate {
+    class SVDelegateImpl: UISplitViewControllerDelegate {
 
     }
 
     override func spec() {
         describe("SplitView") {
             beforeEach {
-                self.delegate = SVDelegate()
-                self.subject = SplitView(delegate: self.delegate)
+                self.svDelegateImpl = SVDelegateImpl()
+                self.subject = SplitView(delegate: self.svDelegateImpl)
             }
 
             it("sets preferredDisplayMode") {
