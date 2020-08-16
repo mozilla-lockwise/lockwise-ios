@@ -69,7 +69,7 @@ class LockwiseXCUITests: BaseTestCase {
         // Check the reveal Button
         navigator.performAction(Action.RevealPassword)
 
-        let passwordValueReveal = app.cells["passwordItemDetail"].textFields.element(boundBy: 0).value as! String
+        _ = app.cells["passwordItemDetail"].textFields.element(boundBy: 0).value as! String
         // Disabling this check, running automated tests the password is not revealed
         // XCTAssertEqual(passwordValueReveal, passwordTestAccountLogins)
 
