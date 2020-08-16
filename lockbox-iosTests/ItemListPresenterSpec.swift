@@ -463,7 +463,7 @@ class ItemListPresenterSpec: QuickSpec {
                                 }
 
                                 it("updates the view with the appropriate items") {
-                                    let fakeObserver = self.scheduler.createObserver(Void.self).asObserver()
+                                    _ = self.scheduler.createObserver(Void.self).asObserver()
                                     let expectedItemConfigurations = [
                                         LoginListCellConfiguration.NoResults
                                     ]

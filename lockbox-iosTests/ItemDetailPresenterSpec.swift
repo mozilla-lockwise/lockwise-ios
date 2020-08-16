@@ -734,7 +734,7 @@ class ItemDetailPresenterSpec: QuickSpec {
 
                         it("dispatches the edit mode action") {
                             expect(self.dispatcher.dispatchActionArgument).notTo(beEmpty())
-                            expect(self.dispatcher.dispatchActionArgument.popLast() as! MainRouteAction)
+                            expect(self.dispatcher.dispatchActionArgument.popLast() as? MainRouteAction)
                                     .to(equal(MainRouteAction.list))
                         }
                     }
