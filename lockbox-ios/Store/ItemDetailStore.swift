@@ -68,6 +68,21 @@ class ItemDetailStore: BaseItemDetailStore {
 
         super.init(dispatcher: dispatcher)
 
+        setupItemDetailDisplayAction()
+        setupItemEditAction()
+
+        self.lifecycleStore.lifecycleEvents
+                .filter { $0 == .background }
+                .map { _ in false }
+                .bind(to: self._passwordRevealed)
+                .disposed(by: self.disposeBag)
+
+        setupMainRouteAction()
+        setupItemDeletedAction()
+        setupSplitView()
+    }
+
+    private func setupItemDetailDisplayAction() {
         self.dispatcher.register
                 .filterByType(class: ItemDetailDisplayAction.self)
                 .map { action -> Bool? in
@@ -96,49 +111,51 @@ class ItemDetailStore: BaseItemDetailStore {
                 .filterNil()
                 .bind(to: self._isEditing)
                 .disposed(by: self.disposeBag)
+    }
 
+    private func setupItemEditAction() {
         self.dispatcher.register
-            .filterByType(class: ItemEditAction.self)
-            .subscribe(onNext: { (action) in
-                switch action {
-                case .editUsername(let newVal):
-                    self._usernameEditValue.onNext(newVal)
-                case .editPassword(let newVal):
-                    self._passwordEditValue.onNext(newVal)
-                case .editWebAddress(let newVal):
-                    self._webAddressEditValue.onNext(newVal)
-                }
-            })
-            .disposed(by: self.disposeBag)
+        .filterByType(class: ItemEditAction.self)
+        .subscribe(onNext: { (action) in
+            switch action {
+            case .editUsername(let newVal):
+                self._usernameEditValue.onNext(newVal)
+            case .editPassword(let newVal):
+                self._passwordEditValue.onNext(newVal)
+            case .editWebAddress(let newVal):
+                self._webAddressEditValue.onNext(newVal)
+            }
+        })
+        .disposed(by: self.disposeBag)
+    }
 
-        self.lifecycleStore.lifecycleEvents
-                .filter { $0 == .background }
-                .map { _ in false }
-                .bind(to: self._passwordRevealed)
-                .disposed(by: self.disposeBag)
-
+    private func setupMainRouteAction() {
         self.routeStore.onRoute
-                .filterByType(class: MainRouteAction.self)
-                .map { route -> String? in
-                    switch route {
-                    case .detail(let itemId):
-                        return itemId
-                    case .list:
-                        return nil
-                    }
-                }
-                .filterNil()
-                .bind(to: self._itemDetailId)
-                .disposed(by: self.disposeBag)
+        .filterByType(class: MainRouteAction.self)
+        .map { route -> String? in
+            switch route {
+            case .detail(let itemId):
+                return itemId
+            case .list:
+                return nil
+            }
+        }
+        .filterNil()
+        .bind(to: self._itemDetailId)
+        .disposed(by: self.disposeBag)
+    }
 
+    private func setupItemDeletedAction() {
         self.itemListDisplayStore.listDisplay
-            .filterByType(class: ItemDeletedAction.self)
-            .filter { self._itemDetailId.value == $0.id }
-            .subscribe(onNext: { (_) in
-                self._itemDetailId.accept("")
-            })
-            .disposed(by: self.disposeBag)
+        .filterByType(class: ItemDeletedAction.self)
+        .filter { self._itemDetailId.value == $0.id }
+        .subscribe(onNext: { (_) in
+            self._itemDetailId.accept("")
+        })
+        .disposed(by: self.disposeBag)
+    }
 
+    private func setupSplitView() {
         // If the splitview is being show
         // then after sync, select one item from the datastore to show
         Observable.combineLatest(sizeClassStore.shouldDisplaySidebar,

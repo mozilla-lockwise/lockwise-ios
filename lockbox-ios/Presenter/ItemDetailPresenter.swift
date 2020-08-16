@@ -295,66 +295,9 @@ class ItemDetailPresenter {
                 .subscribe(onNext: { self.dispatcher.dispatch(action: $0) })
                 .disposed(by: disposeBag)
 
-        let editingObservable = Observable.combineLatest(itemDetailStore.usernameEditValue,
-                                                         itemDetailStore.passwordEditValue,
-                                                         itemDetailStore.webAddressEditValue,
-                                                         itemDetailStore.isEditing,
-                                                         itemObservable)
-
         //Only allow edit functional on debug builds
         if FeatureFlags.crudEdit {
-            view?.rightBarButtonTapped
-                .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
-                    let (username, password, webAddress, editing, item) = tuple
-                    if editing {
-                        if let item = item {
-                            item.username = username
-                            item.password = password
-                            item.hostname = webAddress
-                            return [DataStoreAction.update(login: item),
-                                    ItemDetailDisplayAction.viewMode]
-                        }
-                    } else {
-                        return [ItemDetailDisplayAction.editMode]
-                    }
-
-                    return []
-            }
-            .subscribe(onNext: { actions in
-                for action in actions {
-                    self.dispatcher.dispatch(action: action)
-                }
-            })
-                .disposed(by: disposeBag)
-
-            itemDetailStore.isEditing
-                .map { editing in
-                    return editing ? Constant.string.save : Constant.string.edit
-            }
-            .subscribe(view!.rightButtonText)
-            .disposed(by: disposeBag)
-
-            itemDetailStore.isEditing
-                .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> String? in
-                    if editing {
-                        return Constant.string.cancel
-                    } else if !sidebar {
-                        return Constant.string.back
-                    }
-                    return nil
-            }
-            .subscribe(view!.leftButtonText)
-            .disposed(by: disposeBag)
-
-            itemDetailStore.isEditing
-                .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
-                    if !editing && !sidebar {
-                        return UIImage(named: "back")
-                    }
-                    return nil
-            }
-            .subscribe(view!.leftButtonIcon)
-            .disposed(by: disposeBag)
+            setupCredentialEdit(itemObservable: itemObservable)
         }
 
         sizeClassStore.shouldDisplaySidebar
@@ -362,6 +305,67 @@ class ItemDetailPresenter {
                     self.view?.enableSwipeNavigation(enabled: !enableSidebar)
                 })
                 .disposed(by: disposeBag)
+    }
+
+    func setupCredentialEdit(itemObservable: Observable<LoginRecord?>) {
+        let editingObservable = Observable.combineLatest(itemDetailStore.usernameEditValue,
+                                                         itemDetailStore.passwordEditValue,
+                                                         itemDetailStore.webAddressEditValue,
+                                                         itemDetailStore.isEditing,
+                                                         itemObservable)
+
+        view?.rightBarButtonTapped
+            .withLatestFrom(editingObservable) { (_, tuple) -> [Action] in
+                let (username, password, webAddress, editing, item) = tuple
+                if editing {
+                    if let item = item {
+                        item.username = username
+                        item.password = password
+                        item.hostname = webAddress
+                        return [DataStoreAction.update(login: item),
+                                ItemDetailDisplayAction.viewMode]
+                    }
+                } else {
+                    return [ItemDetailDisplayAction.editMode]
+                }
+
+                return []
+        }
+        .subscribe(onNext: { actions in
+            for action in actions {
+                self.dispatcher.dispatch(action: action)
+            }
+        })
+            .disposed(by: disposeBag)
+
+        itemDetailStore.isEditing
+            .map { editing in
+                return editing ? Constant.string.save : Constant.string.edit
+        }
+        .subscribe(view!.rightButtonText)
+        .disposed(by: disposeBag)
+
+        itemDetailStore.isEditing
+            .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> String? in
+                if editing {
+                    return Constant.string.cancel
+                } else if !sidebar {
+                    return Constant.string.back
+                }
+                return nil
+        }
+        .subscribe(view!.leftButtonText)
+        .disposed(by: disposeBag)
+
+        itemDetailStore.isEditing
+            .withLatestFrom(sizeClassStore.shouldDisplaySidebar) { (editing: Bool, sidebar: Bool) -> UIImage? in
+                if !editing && !sidebar {
+                    return UIImage(named: "back")
+                }
+                return nil
+        }
+        .subscribe(view!.leftButtonIcon)
+        .disposed(by: disposeBag)
     }
 
     func onViewDisappear() {

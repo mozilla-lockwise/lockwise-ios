@@ -130,61 +130,11 @@ class ItemListPresenter: BaseItemListPresenter {
         }
 
         if let onSortingButtonPressed = self.view?.onSortingButtonPressed {
-            onSortingButtonPressed.subscribe { _ in
-                self.userDefaultStore.itemListSort
-                    .take(1)
-                    .subscribe(onNext: { [weak self] evt in
-                        guard let strongSelf = self else { return }
-                        let latest = evt
-                        view.displayAlertController(
-                            buttons: [
-                                AlertActionButtonConfiguration(
-                                    title: Constant.string.alphabetically,
-                                    tapObserver: strongSelf.alphabeticSortObserver,
-                                    style: .default,
-                                    checked: latest == Setting.ItemListSort.alphabetically),
-                                AlertActionButtonConfiguration(
-                                    title: Constant.string.recentlyUsed,
-                                    tapObserver: strongSelf.recentlyUsedSortObserver,
-                                    style: .default,
-                                    checked: latest == Setting.ItemListSort.recentlyUsed),
-                                AlertActionButtonConfiguration(
-                                    title: Constant.string.cancel,
-                                    tapObserver: nil,
-                                    style: .cancel)
-                            ],
-                            title: Constant.string.sortEntries,
-                            message: nil,
-                            style: .actionSheet,
-                            barButtonItem: self?.view?.sortButton)
-                    })
-                    .disposed(by: self.disposeBag)
-            }
-            .disposed(by: self.disposeBag)
-
+            setupOnSortingButtonPressed(onSortingButtonPressed)
         }
 
         if let itemDeleted = self.view?.itemDeleted {
-            itemDeleted.subscribe(onNext: { (id) in
-                self.view?.displayAlertController(
-                    buttons: [
-                        AlertActionButtonConfiguration(
-                            title: Constant.string.cancel,
-                            tapObserver: nil,
-                            style: .cancel
-                        ),
-                        AlertActionButtonConfiguration(
-                            title: Constant.string.delete,
-                            tapObserver: self.getDeletedItemObserver(id: id),
-                            style: .destructive)
-                    ],
-                    title: Constant.string.confirmDeleteLoginDialogTitle,
-                    message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
-                                    Constant.string.productNameShort),
-                    style: .alert,
-                    barButtonItem: nil)
-            })
-            .disposed(by: self.disposeBag)
+            setupItemDeleted(itemDeleted)
         }
 
         self.itemListDisplayStore.listDisplay
@@ -194,6 +144,65 @@ class ItemListPresenter: BaseItemListPresenter {
                     String(format: Constant.string.deletedStatusAlert, action.name))
             })
             .disposed(by: self.disposeBag)
+    }
+
+    private func setupOnSortingButtonPressed(_ onSortingButtonPressed: ControlEvent<Void>) {
+        guard let view = self.view else { return }
+
+        onSortingButtonPressed.subscribe { _ in
+            self.userDefaultStore.itemListSort
+                .take(1)
+                .subscribe(onNext: { [weak self] evt in
+                    guard let strongSelf = self else { return }
+                    let latest = evt
+                    view.displayAlertController(
+                        buttons: [
+                            AlertActionButtonConfiguration(
+                                title: Constant.string.alphabetically,
+                                tapObserver: strongSelf.alphabeticSortObserver,
+                                style: .default,
+                                checked: latest == Setting.ItemListSort.alphabetically),
+                            AlertActionButtonConfiguration(
+                                title: Constant.string.recentlyUsed,
+                                tapObserver: strongSelf.recentlyUsedSortObserver,
+                                style: .default,
+                                checked: latest == Setting.ItemListSort.recentlyUsed),
+                            AlertActionButtonConfiguration(
+                                title: Constant.string.cancel,
+                                tapObserver: nil,
+                                style: .cancel)
+                        ],
+                        title: Constant.string.sortEntries,
+                        message: nil,
+                        style: .actionSheet,
+                        barButtonItem: self?.view?.sortButton)
+                })
+                .disposed(by: self.disposeBag)
+        }
+        .disposed(by: self.disposeBag)
+    }
+
+    private func setupItemDeleted(_ itemDeleted: Observable<String>) {
+        itemDeleted.subscribe(onNext: { (id) in
+            self.view?.displayAlertController(
+                buttons: [
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.cancel,
+                        tapObserver: nil,
+                        style: .cancel
+                    ),
+                    AlertActionButtonConfiguration(
+                        title: Constant.string.delete,
+                        tapObserver: self.getDeletedItemObserver(id: id),
+                        style: .destructive)
+                ],
+                title: Constant.string.confirmDeleteLoginDialogTitle,
+                message: String(format: Constant.string.confirmDeleteLoginDialogMessage,
+                                Constant.string.productNameShort),
+                style: .alert,
+                barButtonItem: nil)
+        })
+        .disposed(by: self.disposeBag)
     }
 
     private func getDeletedItemObserver(id: String) -> AnyObserver<Void> {
