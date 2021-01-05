@@ -15,6 +15,8 @@ enum AccountAction: Action {
     case oauthSignInMessageRead
 }
 
+// Testing if builds work
+
 extension AccountAction: Equatable {
     static func ==(lhs: AccountAction, rhs: AccountAction) -> Bool {
         switch (lhs, rhs) {
