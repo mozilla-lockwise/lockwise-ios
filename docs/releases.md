@@ -1,3 +1,5 @@
+> 🚨 As of January 2021 the release process has been simplified to make maintenance mode simpler. Releases are still created from `master`, but instead of the process describes below, we simply create a `releases_v1.8.0` branch on which all `1.8.x` releases can be made. Commits for the `1.8.x` release can land directly or be uplifted to that branch. When a release needs to be made, create a dot release (including the initial `1.8.0` through the GitHub release UI. BuddyBuild still builds these and the build that was tagged can be uploaded to App Store Connect. Contact @st3fan for more details.
+
 # Release Instructions
 
 Some assumptions:
