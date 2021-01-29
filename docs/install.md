@@ -1,6 +1,12 @@
-1. Install Xcode version 11.4.1 + Swift 5.2.2
+> As of January 28, 2021, Lockwise iOS only builds with Xcode 11.7 and the Swift 5.2.4 that comes with it. Any other version, older or newer is not supported.
 
-2. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple
+1. Install Xcode version 11.7
+
+2. Make the command line tools that ship with Xcode the default:
+
+    ```
+    sudo xcode-select -s /Applications/Xcode.app
+    ```
 
 3. Install Carthage
 
