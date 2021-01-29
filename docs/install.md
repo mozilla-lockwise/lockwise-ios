@@ -1,4 +1,4 @@
-> As of January 28, 2021, Lockwise iOS only builds with Xcode 11.7 and the Swift 5.2.4 that comes with it. Any other version, older or newer is not supported.
+> 🚨 **Important** As of January 28, 2021, Lockwise iOS _only_ builds with Xcode 11.7 and the Swift 5.2.4 that comes with it. Any other version, older or newer is not supported. To get the correct match of command line tools, do not install the command line tools manually - instead, use step 2 below to point the command line tools to those that come with Xcode 11.7.
 
 1. Install Xcode version 11.7
 
