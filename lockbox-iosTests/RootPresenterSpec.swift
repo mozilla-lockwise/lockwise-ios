@@ -1309,9 +1309,6 @@ class RootPresenterSpec: QuickSpec {
                         it("sends data to Sentry") {
                             expect(self.sentryManager.setupCalled).to(equal(true))
                         }
-                        it("sends data to Adjust") {
-                            // TODO: add Adjust spec
-                        }
                     }
 
                     describe("when usage data cannot be recorded") {
@@ -1322,9 +1319,6 @@ class RootPresenterSpec: QuickSpec {
 
                         it("does not send data to Sentry") {
                             expect(self.sentryManager.setupCalled).to(equal(false))
-                        }
-                        it("does not send data to Adjust") {
-                            // TODO: add Adjust spec
                         }
                     }
                 }
