@@ -7,7 +7,6 @@ import Nimble
 import UIKit
 import WebKit
 import RxSwift
-import AdjustSdk
 import RxTest
 
 @testable import Lockbox

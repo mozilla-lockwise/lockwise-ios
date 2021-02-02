@@ -65,20 +65,11 @@ class FxAPresenterSpec: QuickSpec {
         }
     }
 
-    class FakeAdjustManager: AdjustManager {
-        var eventSent: AdjustManager.AdjustEvent?
-
-        override func trackEvent(_ event: AdjustManager.AdjustEvent) {
-            self.eventSent = event
-        }
-    }
-
     private var view: FakeFxAView!
     private var dispatcher: FakeDispatcher!
     private var accountStore: FakeAccountStore!
     private var networkStore: FakeNetworkStore!
     private var credentialProviderStore: Any!
-    private var adjustManager: FakeAdjustManager!
     var subject: FxAPresenter!
     private var scheduler = TestScheduler(initialClock: 0)
 
@@ -92,7 +83,6 @@ class FxAPresenterSpec: QuickSpec {
                 self.dispatcher = FakeDispatcher()
                 self.accountStore = FakeAccountStore()
                 self.networkStore = FakeNetworkStore()
-                self.adjustManager = FakeAdjustManager()
 
                 if #available(iOS 12.0, *) {
                     self.credentialProviderStore = FakeCredentialProviderStore()
@@ -101,8 +91,7 @@ class FxAPresenterSpec: QuickSpec {
                         dispatcher: self.dispatcher,
                         accountStore: self.accountStore,
                         networkStore: self.networkStore,
-                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore,
-                        adjustManager: self.adjustManager
+                        credentialProviderStore: self.credentialProviderStore as! CredentialProviderStore
                     )
 
                 } else {
@@ -110,8 +99,7 @@ class FxAPresenterSpec: QuickSpec {
                             view: self.view,
                             dispatcher: self.dispatcher,
                             accountStore: self.accountStore,
-                            networkStore: self.networkStore,
-                            adjustManager: self.adjustManager
+                            networkStore: self.networkStore
                     )
                 }
             }
@@ -187,10 +175,6 @@ class FxAPresenterSpec: QuickSpec {
 
                     let onboardingAction = self.dispatcher.dispatchedActions.popLast() as! OnboardingStatusAction
                     expect(onboardingAction.onboardingInProgress).to(beTrue())
-                }
-
-                it("sends adjust event") {
-                    expect(self.adjustManager.eventSent!.rawValue).to(equal("cuahml"))
                 }
             }
         }

@@ -59,8 +59,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         AppearanceHelper.shared.setupAppearance()
 
-        setupAdjust()
-
         Dispatcher.shared.dispatch(action: LifecycleAction.startup)
 
         return true
@@ -76,10 +74,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         Dispatcher.shared.dispatch(action: LifecycleAction.shutdown)
-    }
-
-    private func setupAdjust() {
-        _ = AdjustManager.shared
     }
 }
 
