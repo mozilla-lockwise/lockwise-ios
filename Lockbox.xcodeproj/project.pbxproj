@@ -330,6 +330,7 @@
 		D8DD93072140D8D900F8041D /* AutofillOnboardingPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD93052140D7CA00F8041D /* AutofillOnboardingPresenterSpec.swift */; };
 		D8DD93092140DB1100F8041D /* AutofillOnboardingViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DD93082140DB1100F8041D /* AutofillOnboardingViewSpec.swift */; };
 		D8E8E4F920DDEFE5003ADEBE /* NoResultsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E8E4F820DDEFE5003ADEBE /* NoResultsCell.swift */; };
+		F85B5E0E25CA3DBA00FDCD9D /* NSAttributedText+.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85B5E0D25CA3DBA00FDCD9D /* NSAttributedText+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -933,6 +934,7 @@
 		F0914C23B21D6B56F2A02B38 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/AccountSetting.strings; sourceTree = "<group>"; };
 		F1F845EDA33F9E7D212EE1EF /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F8374CE28673E8B22CB46665 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/AutofillOnboarding.strings"; sourceTree = "<group>"; };
+		F85B5E0D25CA3DBA00FDCD9D /* NSAttributedText+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedText+.swift"; sourceTree = "<group>"; };
 		F87A44BFB8B4B82563DC0F58 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/SetupAutofill.strings; sourceTree = "<group>"; };
 		FB1340C49A156FC23C64D812 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/ItemDetail.strings"; sourceTree = "<group>"; };
 		FCF346A5ADDEB0FC0D71DAE4 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/CredentialWelcome.strings; sourceTree = "<group>"; };
@@ -1153,6 +1155,7 @@
 			isa = PBXGroup;
 			children = (
 				7AA5404248F72FC87CC4978B /* Date+.swift */,
+				F85B5E0D25CA3DBA00FDCD9D /* NSAttributedText+.swift */,
 				7AA54BF70B374C370B51ECB9 /* UIView+.swift */,
 				D86A307520829B7F00589CA8 /* UIApplication+.swift */,
 				7D078EE62124DC5800D10D1B /* UserDefaults+.swift */,
@@ -2022,6 +2025,7 @@
 				D83CBE2C2085488D008245A7 /* SettingCell.swift in Sources */,
 				7DDEAA712124CEB100A7D521 /* DataStore.swift in Sources */,
 				D8DA03D8215B34AA00656455 /* AutofillInstructionsView.swift in Sources */,
+				F85B5E0E25CA3DBA00FDCD9D /* NSAttributedText+.swift in Sources */,
 				D8783613207C080300C19BC7 /* ExternalLinkAction.swift in Sources */,
 				7AA546A2A19976883EB9CFE4 /* BaseDataStore.swift in Sources */,
 				7AA54DDC2527A59C773FAC3D /* Constants.swift in Sources */,
