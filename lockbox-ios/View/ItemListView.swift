@@ -24,64 +24,58 @@ class ItemListView: BaseItemListView {
     var messageContainerView: UIView!
     var messageLabel: UILabel!
 
-    func messageViewHeight() -> CGFloat {
-        return 72
-    }
-    
-    func messageURL() -> URL {
-        return URL(string: "https://www.mozilla.org")!
-    }
-    
+    let messagePadding = CGFloat(12)
+    let messageText = "<span style=\"font-family: -apple-system; font-size: 15px\"><b>Hello Test:</b> This is an in-app message view. We can add a few more words and see what happens to it then. <a href=\"#\">More Information</a></span>"
+    let messageLink = URL(string: "https://www.mozilla.org")!
+
     @objc func handleMessageLabelTap() {
-        UIApplication.shared.open(messageURL())
+        UIApplication.shared.open(messageLink)
     }
     
     func setupMessageView() {
-        self.messageContainerView = UIView()
+        messageContainerView = UIView()
         messageContainerView.backgroundColor = UIColor.init(red: 0xff, green: 0xcc, blue: 0xbb)
-        self.view.addSubview(messageContainerView)
+        view.addSubview(messageContainerView)
         
-        self.messageLabel = UILabel()
-        self.messageLabel.backgroundColor = UIColor.clear
-        self.messageLabel.numberOfLines = 0
+        messageLabel = UILabel()
+        messageLabel.backgroundColor = UIColor.clear
+        messageLabel.numberOfLines = 0
 
-        let html = "<p style=\"font-family: -apple-system; font-size: 15px\"><b>Hello Test:</b> This is an in-app message view. We can add a few more words and see what happens to it then. <a href=\"#\">More Information</a></p>"
-        if let data = html.data(using: .utf8), let text = try? NSAttributedString(data: data,
+        if let data = messageText.data(using: .utf8), let text = try? NSAttributedString(data: data,
                                            options: [.documentType: NSAttributedString.DocumentType.html],
                                            documentAttributes: nil) {
             self.messageLabel.attributedText = text
         }
         
-        self.messageContainerView.addSubview(self.messageLabel)
+        messageContainerView.addSubview(self.messageLabel)
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleMessageLabelTap))
-        self.messageLabel.isUserInteractionEnabled = true
-        self.messageLabel.addGestureRecognizer(tapGestureRecognizer)
+        messageLabel.isUserInteractionEnabled = true
+        messageLabel.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func layoutMessageView() {
         let padding = CGFloat(12.0)
 
-        let containerWidth = self.view.frame.width
+        let containerWidth = view.frame.width
         let textWidth = containerWidth - (2.0 * padding)
+        let labelSizeThatFits = messageLabel.sizeThatFits(CGSize(width: textWidth, height: .greatestFiniteMagnitude))
+        let containerHeight = labelSizeThatFits.height + (2 * padding)
 
-        let textHeight = messageLabel.attributedText!.height(withWidth: textWidth)
-        let containerHeight = textHeight // Why doesn't this need + (2 * padding)
-
-        self.tableView.frame.size.height = self.view.frame.height - containerHeight
+        tableView.frame.size.height = view.frame.height - containerHeight
         
-        self.messageContainerView.frame = CGRect(
+        messageContainerView.frame = CGRect(
             x: 0,
             y: self.tableView.frame.size.height,
             width: containerWidth,
             height: containerHeight
         )
         
-        self.messageLabel.frame = CGRect(
+        messageLabel.frame = CGRect(
             x: padding,
-            y: padding + 4.0,
-            width: textWidth,
-            height: textHeight
+            y: padding,
+            width: labelSizeThatFits.width,
+            height: labelSizeThatFits.height
         )
     }
     
