@@ -23,7 +23,6 @@ class FxAPresenter {
     fileprivate let dispatcher: Dispatcher
     fileprivate let accountStore: AccountStore
     fileprivate let networkStore: NetworkStore
-    private let adjustManager: AdjustManager
 
     fileprivate var _credentialProviderStore: Any?
 
@@ -53,14 +52,12 @@ class FxAPresenter {
     init(view: FxAViewProtocol,
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = .shared,
-         networkStore: NetworkStore = .shared,
-         adjustManager: AdjustManager = .shared
+         networkStore: NetworkStore = .shared
     ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
         self.networkStore = networkStore
-        self.adjustManager = adjustManager
     }
 
     @available(iOS 12, *)
@@ -68,15 +65,13 @@ class FxAPresenter {
          dispatcher: Dispatcher = .shared,
          accountStore: AccountStore = AccountStore.shared,
          networkStore: NetworkStore = .shared,
-         credentialProviderStore: CredentialProviderStore = CredentialProviderStore.shared,
-         adjustManager: AdjustManager = AdjustManager.shared
+         credentialProviderStore: CredentialProviderStore = CredentialProviderStore.shared
         ) {
         self.view = view
         self.dispatcher = dispatcher
         self.accountStore = accountStore
         self.networkStore = networkStore
         self._credentialProviderStore = credentialProviderStore
-        self.adjustManager = adjustManager
     }
 
     func onViewReady() {
@@ -119,6 +114,5 @@ extension FxAPresenter {
                 self.dispatcher.dispatch(action: action)
             }).disposed(by: self.disposeBag)
         self.dispatcher.dispatch(action: AccountAction.oauthRedirect(url: navigationURL))
-        self.adjustManager.trackEvent(.FxaComplete)
     }
 }
