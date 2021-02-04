@@ -290,8 +290,6 @@
 		D819A4C321BB2686004EE6F3 /* Bytes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C121BB2686004EE6F3 /* Bytes.swift */; };
 		D819A4C521BB2D52004EE6F3 /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */; };
 		D819A4C621BB2D78004EE6F3 /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */; };
-		D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */; };
-		D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */; };
 		D8256F7D227510A700FA96ED /* OnboardingConfirmation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8256F7F227510A700FA96ED /* OnboardingConfirmation.storyboard */; };
 		D8256F80227510B900FA96ED /* AutofillOnboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8256F82227510B900FA96ED /* AutofillOnboarding.storyboard */; };
 		D8256F83227510C400FA96ED /* SetupAutofill.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8256F85227510C400FA96ED /* SetupAutofill.storyboard */; };
@@ -303,7 +301,6 @@
 		D84BF226215DD66900990618 /* AutofillInstructionsNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */; };
 		D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */; };
 		D84BF22A2160067900990618 /* AutofillInstructionsPresenterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */; };
-		D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8551EBD211954E00056B24A /* AdjustSdk.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		D85CB81C21D437AB00E19118 /* SplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81B21D437AB00E19118 /* SplitView.swift */; };
 		D85CB82121DDCE9F00E19118 /* SplitViewSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */; };
 		D85CB82321DED0E100E19118 /* ViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85CB82221DED0E100E19118 /* ViewFactory.swift */; };
@@ -866,8 +863,6 @@
 		D819A4BE21BB2622004EE6F3 /* AppInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
 		D819A4C121BB2686004EE6F3 /* Bytes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bytes.swift; sourceTree = "<group>"; };
 		D819A4C421BB2D52004EE6F3 /* KeychainWrapper+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift"; sourceTree = "<group>"; };
-		D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManager.swift; sourceTree = "<group>"; };
-		D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustManagerSpec.swift; sourceTree = "<group>"; };
 		D8256F7E227510A700FA96ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/OnboardingConfirmation.storyboard; sourceTree = "<group>"; };
 		D8256F81227510B900FA96ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/AutofillOnboarding.storyboard; sourceTree = "<group>"; };
 		D8256F84227510C400FA96ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SetupAutofill.storyboard; sourceTree = "<group>"; };
@@ -880,9 +875,6 @@
 		D84BF225215DD66900990618 /* AutofillInstructionsNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsNavigationController.swift; sourceTree = "<group>"; };
 		D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsViewSpec.swift; sourceTree = "<group>"; };
 		D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofillInstructionsPresenterSpec.swift; sourceTree = "<group>"; };
-		D8551EB9211950AF0056B24A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
-		D8551EBB211950BF0056B24A /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
-		D8551EBD211954E00056B24A /* AdjustSdk.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdjustSdk.framework; path = Carthage/Build/iOS/AdjustSdk.framework; sourceTree = "<group>"; };
 		D85CB81B21D437AB00E19118 /* SplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitView.swift; sourceTree = "<group>"; };
 		D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewSpec.swift; sourceTree = "<group>"; };
 		D85CB82221DED0E100E19118 /* ViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFactory.swift; sourceTree = "<group>"; };
@@ -966,7 +958,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8551EBE211954E00056B24A /* AdjustSdk.framework in Frameworks */,
 				7D5F1D8120866D8200688DEA /* Differentiator.framework in Frameworks */,
 				7D5F1D7A20866A9400688DEA /* RxCocoa.framework in Frameworks */,
 				391233752090E56F00CB0233 /* SwiftKeychainWrapper.framework in Frameworks */,
@@ -1079,7 +1070,6 @@
 			children = (
 				3931871D214C12C5003C9E4A /* AppearanceHelper.swift */,
 				7AA5408D5D52952F11E20EEC /* BiometryManager.swift */,
-				D81F9A4D2184ED7900B1E157 /* AdjustManager.swift */,
 				D819A4BB21BAFA6F004EE6F3 /* File.swift */,
 				D819A4BE21BB2622004EE6F3 /* AppInfo.swift */,
 				D819A4C121BB2686004EE6F3 /* Bytes.swift */,
@@ -1317,9 +1307,6 @@
 				7D1E758C224A7B3F00C06B4C /* SwiftProtobuf.framework */,
 				7D1E758A224A7A8800C06B4C /* MozillaAppServices.framework */,
 				7D4396562135D79700B96FA9 /* Sentry.framework */,
-				D8551EBD211954E00056B24A /* AdjustSdk.framework */,
-				D8551EBB211950BF0056B24A /* iAd.framework */,
-				D8551EB9211950AF0056B24A /* AdSupport.framework */,
 				2C2EC55F20ADAA8100AF8C44 /* MappaMundi.framework */,
 				391233722090E56E00CB0233 /* SwiftKeychainWrapper.framework */,
 				7D92DAF220586FBA00195A1B /* RxOptional.framework */,
@@ -1403,7 +1390,6 @@
 				7DA4B08F21401C2D00C9EFEA /* CredentialStatusActionSpec.swift */,
 				D84BF2272160058800990618 /* AutofillInstructionsViewSpec.swift */,
 				D84BF2292160067900990618 /* AutofillInstructionsPresenterSpec.swift */,
-				D81F9A4F2184F30700B1E157 /* AdjustManagerSpec.swift */,
 				D85CB81F21DDCE9F00E19118 /* SplitViewSpec.swift */,
 				D80D41BD21F67E95008A7B11 /* SizeClassStoreSpec.swift */,
 				7D897EAA2260F96100257946 /* NetworkStoreSpec.swift */,
@@ -1834,7 +1820,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Differentiator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftKeychainWrapper.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/AdjustSdk.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
@@ -1851,7 +1836,6 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differentiator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftKeychainWrapper.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/SwiftProtobuf.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AdjustSdk.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Sentry.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Reachability.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxRelay.framework",
@@ -1897,7 +1881,6 @@
 				7DA4C68D2028F99200B61DD8 /* ItemListViewSpec.swift in Sources */,
 				D831FEE5205C522200EAE19A /* SettingListPresenterSpec.swift in Sources */,
 				7D1B1AD41F9902C600C1F5FF /* DataStoreActionSpec.swift in Sources */,
-				D81F9A502184F30700B1E157 /* AdjustManagerSpec.swift in Sources */,
 				7D44088F20178713001873F6 /* WelcomeViewSpec.swift in Sources */,
 				D84BF2282160058800990618 /* AutofillInstructionsViewSpec.swift in Sources */,
 				7AA545A229A2E0E5DBF7461C /* String+Spec.swift in Sources */,
@@ -1972,7 +1955,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D897EAF2261074700257946 /* NetworkProtocols.swift in Sources */,
-				D81F9A4E2184ED7900B1E157 /* AdjustManager.swift in Sources */,
 				393F9E7820E6DA4F0004C503 /* OnboardingConfirmationView.swift in Sources */,
 				D831FEDE204C925100EAE19A /* SettingListView.swift in Sources */,
 				7DB9DE962140C5F400239D31 /* BaseItemListPresenter.swift in Sources */,

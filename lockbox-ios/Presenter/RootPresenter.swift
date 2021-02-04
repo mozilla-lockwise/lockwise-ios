@@ -55,7 +55,6 @@ class RootPresenter {
     fileprivate let gleanActionHandler: GleanActionHandler
     fileprivate let biometryManager: BiometryManager
     fileprivate let sentryManager: SentryStore
-    fileprivate let adjustManager: AdjustManager
     fileprivate let viewFactory: ViewFactory
     fileprivate let sizeClassStore: SizeClassStore
     fileprivate let itemDetailStore: ItemDetailStore
@@ -76,7 +75,6 @@ class RootPresenter {
          gleanActionHandler: GleanActionHandler = GleanActionHandler(),
          biometryManager: BiometryManager = BiometryManager(),
          sentryManager: SentryStore = SentryStore.shared,
-         adjustManager: AdjustManager = AdjustManager.shared,
          viewFactory: ViewFactory = ViewFactory.shared,
          sizeClassStore: SizeClassStore = SizeClassStore.shared,
          itemDetailStore: ItemDetailStore = .shared
@@ -93,7 +91,6 @@ class RootPresenter {
         self.gleanActionHandler = gleanActionHandler
         self.biometryManager = biometryManager
         self.sentryManager = sentryManager
-        self.adjustManager = adjustManager
         self.viewFactory = viewFactory
         self.sizeClassStore = sizeClassStore
         self.itemDetailStore = itemDetailStore
@@ -143,7 +140,6 @@ class RootPresenter {
             .disposed(by: self.disposeBag)
 
         self.startTelemetry()
-        self.startAdjust()
         self.startSentry()
     }
 
@@ -325,14 +321,6 @@ extension RootPresenter {
                 .filter { $0.1 }
                 .map { $0.0 }
                 .bind(to: self.telemetryActionHandler.telemetryActionListener)
-                .disposed(by: self.disposeBag)
-    }
-
-    fileprivate func startAdjust() {
-        self.userDefaultStore.recordUsageData
-                .subscribe(onNext: { enabled in
-                    self.adjustManager.setEnabled(enabled)
-                })
                 .disposed(by: self.disposeBag)
     }
 

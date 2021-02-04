@@ -23,7 +23,7 @@ class FxAView: UIViewController {
         self.webView = webView
         self.networkView = NoNetworkView.instanceFromNib()
         super.init(nibName: nil, bundle: nil)
-        self.presenter = FxAPresenter(view: self, adjustManager: AdjustManager.shared)
+        self.presenter = FxAPresenter(view: self)
     }
 
     convenience override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
