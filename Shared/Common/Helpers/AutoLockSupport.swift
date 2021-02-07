@@ -5,6 +5,15 @@
 import Foundation
 import RxSwift
 
+/// Return the CLOCK_MONOTONIC_RAW clock as a TimeInterval. If for some reason the time could not be read, zero is returned.
+func getRawMonotonicClock() -> TimeInterval {
+    var uptime = timespec()
+    if clock_gettime(CLOCK_MONOTONIC_RAW, &uptime) != 0 {
+        return 0
+    }
+    return TimeInterval(uptime.tv_sec)
+}
+
 class AutoLockSupport {
     static let shared = AutoLockSupport()
 
@@ -14,7 +23,7 @@ class AutoLockSupport {
 
     var lockCurrentlyRequired: Bool {
         let autoLockTimerDate = userDefaults.double(forKey: UserDefaultKey.autoLockTimerDate.rawValue)
-        let currentSystemTime = Date.timeIntervalSinceReferenceDate
+        let currentSystemTime = getRawMonotonicClock()
 
         return autoLockTimerDate <= currentSystemTime
     }
@@ -45,7 +54,7 @@ class AutoLockSupport {
         if (autoLockTime == Setting.AutoLock.Never) {
             forwardDateNextLockTime()
         } else {
-            storeAutoLockTimerDate(dateTime: Date.timeIntervalSinceReferenceDate + Double(autoLockTime.seconds))
+            storeAutoLockTimerDate(dateTime: getRawMonotonicClock() + Double(autoLockTime.seconds))
         }
     }
 
