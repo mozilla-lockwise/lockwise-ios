@@ -340,6 +340,20 @@ extension BaseDataStore {
     }
 }
 
+/// Return kern.bootsessionuuid, which is a unique UUID that is set at device boot. The returned String can be nil or empty.
+private func getBootSessionUUID() -> String? {
+    if let key = "kern.bootsessionuuid".cString(using: String.Encoding.utf8) {
+        var size: Int = 0
+        if sysctlbyname(key, nil, &size, nil, 0) == 0 && size > 0 {
+            var value = [CChar](repeating: 0, count: size)
+            if sysctlbyname(key, &value, &size, nil, 0) == 0 {
+                return String(cString: value)
+            }
+        }
+    }
+    return nil
+}
+
 // locking management
 extension BaseDataStore {
     private func setupAutolock() {
@@ -364,6 +378,25 @@ extension BaseDataStore {
                     self?.handleLock()
                 })
                 .disposed(by: self.disposeBag)
+
+        // Lock the app on first run but only if the device was restarted. We keep track of reboots
+        // by looking at the kern.bootsessionuuidm, wich is set to a random value at device boot.
+        
+        // Grab the Boot Session UUID - If not available, lock and we're done.
+        guard let currentBootSessionUUID = getBootSessionUUID(), currentBootSessionUUID.isNotEmpty else {
+            lock()
+            return
+        }
+        
+        let LastBootSessionUUIDKey = "lastBootSessionUUID"
+
+        // Grab the last seen Boot Session UUID. If it is different from the current Boot Session then
+        // the device was rebooted and we lock the app.
+        let lastBootSessionUUID = UserDefaults.standard.string(forKey: LastBootSessionUUIDKey) ?? ""
+        if currentBootSessionUUID != lastBootSessionUUID {
+            UserDefaults.standard.set(currentBootSessionUUID, forKey: LastBootSessionUUIDKey)
+            lock()
+        }
     }
 
     private func unlock() {
