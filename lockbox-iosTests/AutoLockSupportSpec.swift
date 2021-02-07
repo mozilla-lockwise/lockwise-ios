@@ -60,7 +60,7 @@ class AutoLockSupportSpec: QuickSpec {
                     }
 
                     it("stores the next expected autolocktime") {
-                        let expected = Double(currentAutoLock.seconds) + Date.timeIntervalSinceReferenceDate
+                        let expected = Double(currentAutoLock.seconds) + getRawMonotonicClock()
 
                         expect(self.userDefaults.setArg).to(beCloseTo(expected))
                         expect(self.userDefaults.setArgKey).to(equal(UserDefaultKey.autoLockTimerDate.rawValue))
