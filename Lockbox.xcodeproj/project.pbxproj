@@ -1606,7 +1606,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D5DF8901F87F2600039B23E /* Build configuration list for PBXNativeTarget "Firefox Lockbox" */;
 			buildPhases = (
-				7D651D68203CE50700BD9B6E /* ShellScript */,
 				7D5F1D792086693F00688DEA /* Run Script */,
 				7D5DF86F1F87F2600039B23E /* Sources */,
 				7D5DF8701F87F2600039B23E /* Frameworks */,
@@ -1844,19 +1843,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-		7D651D68203CE50700BD9B6E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
